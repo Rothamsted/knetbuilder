@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<config>
+	<part>
+		<name>default</name>
+		<options>
+			<filename>config/examples/TimepointDataEC.txt</filename>
+			<separator>0</separator>
+			<rowstoskip>0</rowstoskip>
+			<firstlineheader>false</firstlineheader>
+		</options>
+	</part>
+	<part>
+		<name>advanced</name>
+		<options>
+			<comboBoxEditable>false</comboBoxEditable>
+			<copyHeaderNames>false</copyHeaderNames>
+		</options>
+	</part>	
+	<part>
+		<name>first</name>
+		<options>
+			<head>Step 1 - Choose a file</head>
+			<text>Enter a filename in the textfield below or use the filechooser at the right.</text>
+			<textsize>370</textsize>
+		</options>
+	</part>
+	<part>
+		<name>second</name>
+		<options>
+			<head>Step 2 - Select rows</head>
+			<text>Use the checkboxes on the left and above the table to select rows for further use.</text>
+			<textsize>400</textsize>
+		</options>
+	</part>
+	<part>
+		<name>third</name>
+		<options>
+			<head>Step 3 - Identify rows</head>
+			<text>Use the dropdown lists to join each row with its corresponding unique id label.</text>
+			<textsize>400</textsize>
+		</options>
+	</part>
+	<part>
+		<name>cells</name>
+		<options>
+			<cacc>concept accession</cacc>
+			<cname>concept name</cname>
+			<value>expression value</value>
+		</options>
+	</part>
+	<part>
+		<name>conditions</name>
+		<options>
+			<required>cacc value</required>
+		</options>
+	</part>
+	<part>
+		<name>mappings</name>
+		<options>
+			<default>none</default>
+		</options>
+	</part>
+</config>

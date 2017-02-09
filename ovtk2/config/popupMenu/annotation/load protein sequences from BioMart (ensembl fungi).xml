@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_22" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>try {
+	
+	mainLoadAniBioMart(getPickedConcepts())
+	
+} catch(e) {
+	monitorComplete()
+	alert(e.name+&quot;\nsee console output&quot;)
+	out(e.message)
+}
+	
+</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Gene</string>
+  </void>
+  <void property="libraries">
+   <string>toolbox.js, monitor.js, orthologous.js</string>
+  </void>
+  <void property="name">
+   <string>load protein sequences from BioMart (ensembl fungi)</string>
+  </void>
+ </object>
+</java>

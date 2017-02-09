@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_22" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>importPackage(Packages.uk.ac.ebi.webservices.axis1)
+
+function main() {
+	
+	// accession type IPR
+	getActiveGraph().getMetaData().createDataSource(&quot;IPR&quot;, &quot;InterPro&quot;, &quot;&quot;)
+
+	try {
+		var client = IPRScanClient()
+	} catch (e if e instanceof ReferenceError) {
+		var message = e.name + &quot;  &quot; + e.message
+		message+=&quot;\n\nThis error most likely occoured, because the IPRScan library is missing.&quot;
+		message+=&quot;\nDownload the IPRScan_Axis .jar client and required libraries and put them into the ondex lib/ path.&quot;
+		message+=&quot;\nExclude the file xercesImpl.jar to prevent version conflicts. Ondex provides a newer version.&quot;
+		message+=&quot;\nAt the time of writing, you could download all you need at&quot;
+		message+=&quot;\nhttp://www.ebi.ac.uk/Tools/webservices/services/pfa/iprscan_soap&quot; 
+		alert(message)
+		return
+	}
+	
+	downloadPNG = confirm(&quot;Download visualized results (png)?\n(Takes longer)&quot;)
+	
+	var proteins = getPickedConcepts()
+	var params = Packages.uk.ac.ebi.webservices.axis1.stubs.iprscan.InputParameters()
+	runJobPool(client, params, &quot;InterProScan (EBI)&quot;,  proteins)
+	
+	if(!nextState(&quot;Merging... &quot;)) return
+	doMergeAndLayout(&quot;InterPro&quot;,proteins)
+
+	monitorComplete()
+
+}
+
+
+function evaluateFinishedJob(client, jobPool, index) {
+	
+	// problems with image link
+	// WinVis: sub pathes do not work as href link in item info window
+	// linux: X11 error with basePath=&quot;&quot;
+	var basePath = &quot;data/interproscan/&quot;
+	
+	// job and corresponding protein
+	var job = jobPool[index][0]
+	var protein = jobPool[index][1]
+		
+	// read png
+	var link=&quot;&quot;
+	if(downloadPNG) {
+		var pathpng = getJobResults(client, jobPool, index, &quot;visual-png&quot;, basePath)
+		link = &quot;visual-png see &quot;+pathpng // &quot;&lt;a href=&apos;&quot;+pathpng+&quot;&apos;&gt;&quot;+job+&quot;&lt;/a&gt;&quot; // file://
+	}
+	
+	// read xml results
+	var pathxml = getJobResults(client, jobPool, index, &quot;xml&quot;, basePath)
+	var doc = createDocumentBuilderFactory().newDocumentBuilder().parse(pathxml).getDocumentElement()
+	
+	var nodeList = doc.getElementsByTagName(&quot;interpro&quot;)
+	var conceptIDList=Array()
+	for(var i=0; i&lt;nodeList.getLength();i++) {
+		var item = nodeList.item(i)
+		var iprID = item.getAttribute(&quot;id&quot;)
+		var iprName = item.getAttribute(&quot;name&quot;)
+		var ergebnis = iprName.search(/unintegrated/)
+		if (ergebnis != -1) continue
+		var iprType = item.getAttribute(&quot;type&quot;)
+		
+		var anno = &quot;Type: &quot;+iprType+&quot;&lt;br&gt;Name: &quot;+iprName
+		
+		var c=createConcept(&quot;custom popup script&quot;,anno,link,&quot;IterProScan_EBI&quot;,&quot;InterPro&quot;)
+		c.createConceptAccession(iprID, &quot;IPR&quot;, false)
+		createAndShowRelation(protein,c,&quot;interpro_scan&quot;)
+		conceptIDList[i]=c.getId()
+	}
+	
+	// do a proper layout
+	layoutNeighbours(protein.getId(), conceptIDList)
+	
+}
+
+
+try {
+
+	main()
+
+} catch (e) {
+	monitorComplete()
+	alert(e.name + &quot;\n&quot; + e.message)
+	delete email
+}</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Protein</string>
+  </void>
+  <void property="libraries">
+   <string>toolbox.js, monitor.js, xml.js, ebi.js</string>
+  </void>
+  <void property="name">
+   <string>do InterProScan (ebi online)</string>
+  </void>
+ </object>
+</java>

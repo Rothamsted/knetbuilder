@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_20" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>
+function main() {
+	doDownloadReference = confirm(&quot;Download Reference details for PMID mapping?\nIt&apos;s very time consuming and not needed for full text search.&quot;)
+
+	var concepts =  getPickedConcepts()
+	
+	// show progress bar
+	startMonitor(&quot;search for publications&quot;, concepts.size()+2)
+
+	var i = concepts.iterator()
+	var j = 1
+	while(i.hasNext()) {
+		if(!nextState(&quot;Processing concept &quot;+(j++)+&quot; of &quot;+concepts.size())) return
+		eSearch(i.next())
+	}
+
+	if(!nextState(&quot;Merging...&quot;)) return
+	doMergeAndLinkSame(concepts)
+	monitorComplete()
+}
+
+// access xml from entrez http api
+function eSearch(gene)
+{
+	// put together search term
+	var term = &quot;nidulans+(&quot;
+	
+	var accs = gene.getConceptAccessions()
+	var i = accs.iterator()
+	while(i.hasNext()) {
+		var acc = i.next()
+		var id = acc.getElementOf().getId()
+		if(id ==&quot;CADREGeneID&quot; || id ==  &quot;Alias&quot; || id == &quot;EnsemblGeneID&quot;  || id == &quot;AspGDID&quot; || id == &quot;Synonyms&quot; )
+			term+=acc.getAccession()+&quot;+OR+&quot;
+	}
+	term = term.substr(0,term.length-4)
+
+	if(!getActiveGraph().getMetaData().checkAttributeName(&quot;GENE_NAME&quot;))
+		getActiveGraph().getMetaData().createAttributeName(&quot;GENE_NAME&quot;,&quot;GENE_NAME&quot;,&quot;&quot;,&quot;null&quot;,java.lang.String,&quot;null&quot;)
+
+	if( null!=gene.getAttribute(&quot;GENE_NAME&quot;)  &amp;&amp;  null!=gene.getAttribute(&quot;GENE_NAME&quot;).unwrap() &amp;&amp;  !&quot;(null)&quot;.equals( gene.getAttribute(&quot;GENE_NAME&quot;).getValue() ) )
+		term+=&quot;+OR+&quot;+gene.getAttribute(&quot;GENE_NAME&quot;).getValue()
+	term+=&quot;)&quot;
+
+	dbf = createDocumentBuilderFactory()
+	var db = dbf.newDocumentBuilder()
+	var dom = db.parse(&quot;http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pmc&amp;term=&quot;+term+&quot;&amp;retmode=xml&quot;)
+	var docEle = dom.getDocumentElement()
+	var nl = docEle.getElementsByTagName(&quot;Id&quot;)
+
+	// create new Concept for each search result
+	if(nl!=null) {
+		// create &quot;pmc&quot; data source
+		var cv = getActiveGraph().getMetaData().getDataSource(&quot;pmc&quot;)
+		if(cv.unwrap()==null)
+			cv=getActiveGraph().getMetaData().createDataSource(&quot;pmc&quot;, &quot;PubMed Central&quot;,&quot;&quot;)
+
+		// evidence type: IMPD
+		var list = java.util.ArrayList()
+		var et=getActiveGraph().getMetaData().getEvidenceType(&quot;IMPD&quot;)
+		list.add(et.unwrap())
+
+		// concept class: Publication
+		var cc = getActiveGraph().getMetaData().getConceptClass(&quot;Publication&quot;)
+
+		// accession type PMCID and PMID
+		getActiveGraph().getMetaData().createDataSource(&quot;PMCID&quot;, &quot;PubMed Central ID&quot;, &quot;&quot;)
+		getActiveGraph().getMetaData().createDataSource(&quot;PMID&quot;, &quot;PubMed ID&quot;, &quot;&quot;)
+
+		// download full text for each search result
+		var publications = new Array()
+		var db2 = dbf.newDocumentBuilder()
+		for(var i=0;i&lt;nl.getLength();i++) {
+			var el = nl.item(i)
+			var id = el.getFirstChild().getNodeValue()
+
+			var refTitle=&quot;&quot;
+			if(doDownloadReference) {
+				var docEle = db2.parse(&quot;http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&amp;id=&quot;+id+&quot;&amp;retmode=xml&quot;).getDocumentElement()
+				var refTitle = getXMLElementContent(docEle, &quot;article-title&quot;)
+				var refAuthor = getXMLElementContent(docEle, &quot;contrib&quot;, &quot;contrib-type&quot;, &quot;author&quot;)
+				var refYear =  getXMLElementContent(docEle, &quot;year&quot;)
+				var refJournal = getXMLElementContent(docEle, &quot;journal-title&quot;)
+				var refPMID = getXMLElementContent(docEle, &quot;article-id&quot;, &quot;pub-id-type&quot;, &quot;pmid&quot;)
+				// getDocumentElement().getTextContent()
+			}
+
+			var link = &quot;&lt;a href=&apos;http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&amp;id=&quot;+id+&quot;&amp;retmode=xml&apos;&gt;PMCID &quot;+id+&quot;&lt;/a&gt;&quot;
+			var c=getActiveGraph().createConcept(&quot;custom popup script&quot;,link,refTitle,cv,cc,list)
+			if(doDownloadReference)
+				c.createConceptName(refAuthor+&quot; (&quot;+refYear+&quot;), &quot;+refJournal, true)
+			createAndShowRelation(gene,c,&quot;pub_in&quot;)
+
+			// set PMCID, PMID accession of new concept
+			c.createConceptAccession(id, &quot;PMCID&quot;, false)
+			if(refPMID!=null)
+				c.createConceptAccession(refPMID, &quot;PMID&quot;, false)
+
+			publications[i] = c.getId()
+		}
+		// do a proper layout
+		layoutNeighbours(gene.getId(), publications)
+
+	}
+} // function eSearch
+
+// merge publication concepts
+function doMergeAndLinkSame(concepts) {
+
+	doMergeAndLayout(&quot;Publication&quot;, concepts)
+	
+	// same publication concepts - relation
+	applyPlugin(
+		&quot;net.sourceforge.ondex.mapping.lowmemoryaccessionbased.Mapping&quot;,
+		getActiveGraph(),
+		&quot;aspgdPublication,Publication&quot;,
+		null,
+		null,
+		&quot;true&quot;,
+		&quot;is_same&quot;,
+		&quot;true&quot;,
+		&quot;Publication&quot;,
+		&quot;PMID&quot;);
+
+}
+
+main()</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Gene</string>
+  </void>
+  <void property="libraries">
+   <string>xml.js, toolbox.js, monitor.js</string>
+  </void>
+  <void property="name">
+   <string>annotation/search for publications (PubMed Central online)</string>
+  </void>
+ </object>
+</java>
