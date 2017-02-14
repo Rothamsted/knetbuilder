@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Ondex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ONDEXParameters.xsd">
+
+	<DefaultGraph name="psimi-test" type="memory">
+		<Parameter name="ReplaceExisting">true</Parameter>
+	</DefaultGraph>
+
+	<Parser name="psimi25">
+		<Parameter name="InputFile">${psimifile}</Parameter>
+	</Parser>
+
+	<Export name="oxl">
+		<Parameter name="ExportFile">${oxlfile}</Parameter>
+		<Parameter name="GZip">true</Parameter>
+	</Export>
+
+</Ondex>
+

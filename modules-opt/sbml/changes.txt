@@ -1,0 +1,8 @@
+Version 0.0.2
+=============
+  * New metadata file used
+  * New argument defined: DataSource
+    * This makes guideline-conform use of the type CV
+  * Evidence type corrected to IMPD
+  * System.loadLibrary() deleted due to new version of ondex-mini, which loads it in the main class loader.
+  * Missing SBO annotations now lead to exceptions being thrown.

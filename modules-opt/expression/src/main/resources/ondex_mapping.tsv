@@ -1,0 +1,5 @@
+homologue	Gene homologue Gene
+metabolic_path	Gene en_by Polypeptide is_part_of Protein part_act Process gives Metabolite takes Process part_act Protein is_part_of Polypeptide en_by Gene
+regulation	Gene en_by Polypeptide is_part_of TF regulates Gene
+physical_interaction	Gene en_by Polypeptide participates_in MI:0914 participates_in Polypeptide en_by Gene
+genetic_interaction	Gene participates_in MI:0208 participates_in Gene

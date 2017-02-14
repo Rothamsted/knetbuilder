@@ -1,0 +1,21 @@
+[comment] This template name is hmm_aa_vs_hmm
+[comment] HMM analysis amino vs HMM
+
+[comment] The following block should not be changed by the user
+[algorithm] hmm
+[target path] %TARGETPATH%
+[result path] %RESULTPATH%
+[query type] aa
+[query search] 1
+[target type] aa
+[target frames] 1
+
+[comment] The following block will often be changed by the user
+[null2] on
+[jstate] 1
+[hmm thresholds] GA
+[max scores] 100
+[max alignments] 50
+[significance] evalue
+[threshold] significance=10
+[output format] text percentage

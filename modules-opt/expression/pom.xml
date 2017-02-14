@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>modules</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>0.6.0-SNAPSHOT</version>
+   </parent>
+
+   <groupId>uk.ac.ncl.cs</groupId>
+   <artifactId>nclondexexpression</artifactId>
+   <packaging>jar</packaging>
+
+   <name>NCL Ondex Expression</name>
+
+   <dependencies>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>memory</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>oxl</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <!-- Missing dependencies from "ondex.parent" -->      <!--
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+    </dependency>
+-->      <!-- Missing dependencies from "modules" -->      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>base</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>tools</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>workflow-api</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <!-- Missing dependencies from "oxl" -->      <dependency>
+         <groupId>com.thoughtworks.xstream</groupId>
+         <artifactId>xstream</artifactId>
+         <version>1.3.1</version>
+         <type>jar</type>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.codehaus.woodstox</groupId>
+         <artifactId>woodstox-core-lgpl</artifactId>
+         <version>4.0.6</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.codehaus.woodstox</groupId>
+         <artifactId>stax2-api</artifactId>
+         <version>3.0.1</version>
+         <scope>test</scope>
+      </dependency>
+
+      <!-- Keypathway miner dependency -->
+
+      <dependency>
+         <groupId>de.mpg.mpiinf.csb</groupId>
+         <artifactId>KPM</artifactId>
+         <version>1.0</version>
+         <!-- changed from -SNAPSHOT -->
+      </dependency>
+
+      <!--reinstating fastutil-->      <dependency>
+         <groupId>it.unimi.dsi</groupId>
+         <artifactId>fastutil</artifactId>
+         <version>6.3</version>
+      </dependency>
+
+      <!-- JUNG dependenceis -->
+
+      <dependency>
+         <groupId>colt</groupId>
+         <artifactId>colt</artifactId>
+         <version>1.2.0</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.collections</groupId>
+         <artifactId>collections-generic</artifactId>
+         <version>4.01</version>
+      </dependency>
+      <dependency>
+         <groupId>concurrent</groupId>
+         <artifactId>concurrent</artifactId>
+         <version>1.3.4</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-algorithms</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-api</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-graph-impl</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-io</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-jai</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>stax</groupId>
+         <artifactId>stax-api</artifactId>
+         <version>1.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>java3d</groupId>
+         <artifactId>vecmath</artifactId>
+         <version>1.3.1</version>
+      </dependency>
+      <dependency>
+         <groupId>org.codehaus.woodstox</groupId>
+         <artifactId>wstx-asl</artifactId>
+         <version>3.2.6</version>
+      </dependency>
+   </dependencies>
+</project>

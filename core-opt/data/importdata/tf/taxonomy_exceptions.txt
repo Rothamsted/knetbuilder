@@ -1,0 +1,56 @@
+********************************
+* taxonomy exception list    
+* for biobsase transfac 10.1
+********************************
+* database	taxonomy file
+hamster	hamsters
+sea urchin	sea urchins
+bovine papilloma virus type 1	bovine papillomavirus
+human papilloma virus type 16	human papillomavirus
+Autographa californica	Autographa californica multicapsid nuclear polyhedrosis virus
+Lycopsersicon peruvianum	Lycopersicon peruvianum
+Mus domesticus Torino strain	Mus domesticus
+Marsh marigold	Caltha palustris
+Anthirrhinum majus	Antirrhinum majus
+Mus spec.	mouse
+Rattus spec.	rat
+Hordeum vulgare L.	Hordeum vulgare
+Darnel ryegrass	Lolium temulentum
+Lycopodium spec.	Lycopodium
+herpes simplex virus	Simplexvirus
+taxonomic class Mammalia	Mammalia
+Equus spec	Equus
+Orchid	Orchis
+hamster	hamsters
+sea urchin	sea urchins
+bovine papilloma virus type 1	bovine papillomavirus
+Autographa californica	Autographa californica multicapsid nuclear polyhedrosis virus
+Lycopsersicon peruvianum	Lycopersicon peruvianum
+Anthirrhinum majus	Antirrhinum majus
+JC polyoma virus	polyoma virus JC JCV
+lymphotropic papova virus	lymphotropic papovavirus
+SL3-3 virus	Murine retrovirus SL3-3
+SL3-3 retrovirus	Murine retrovirus SL3-3
+Pseudocentrotus miliaris	Pseudocentrotus
+human papilloma virus type 11	human papillomavirus
+human papilloma virus type 18	human papillomavirus
+human papilloma virus type 8	human papillomavirus
+Avena sativa L.	Avena sativa
+polyoma virus/murine	polyoma virus JC JCV
+rous-associated virus 0	rous-associated virus
+Sesbania rostrata + A.	Sesbania rostrata
+Avena sativa L. vc. Gary	Avena sativa
+polyoma virus	polyoma virus JC JCV
+polyoma virus/murine cellular origin	polyoma virus JC JCV
+Sesbania rostrata + A. caulonidans	Sesbania rostrata
+Kaplan radiation leukemia virus	Radiation murine leukemia virus (strain Kaplan)	
+Agrobacterium tumefaciens T-DNA	Agrobacterium tumefaciens
+Glycine max cv. Provar	Glycine max
+taxonomic class Vertebrata	Vertebrata
+Sesbania rostrata + A	Sesbania rostrata
+rous-associated virus	Rous-associated virus type 0
+Hepatitis C virus, genotype 1A, isolate H77	Hepatitis C virus 1
+Hepatitis C virus Genotype 1A isolate H	Hepatitis C virus 1
+E26 AEV	Avian erythroblastosis virus E26
+E.coli, Escherichia coli	Escherichia coli
+Eucalyptus globulus subsp	Eucalyptus globulus
