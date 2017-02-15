@@ -14,7 +14,7 @@
    <packaging>pom</packaging>
 
    <name>ONDEX Optional Components</name>
-
+ 
    <modules>
       <module>core-opt</module>
       <module>modules-opt</module>
