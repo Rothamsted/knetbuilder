@@ -3,10 +3,10 @@
 # you see empty ondex-xxx folders)
 # 
 cd "$(dirname $0)"
-printf "\n\n\n\tSetting up submodules\n\n"
+echo -e "\n\n\tSetting up submodules\n"
 git submodule update --init --recursive
 
-printf "\n\n\n\tSwitching to master branch in each module\n\n"
+printf "\n\n\tSwitching to master branch in each module\n"
 for repo in ondex-base ondex-desktop ondex-integration-tests ondex-opt ondex-base	ondex-doc	ondex-knet-builder
 do
   echo -e "\n\n$repo"
