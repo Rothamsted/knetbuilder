@@ -17,7 +17,7 @@
 
    <modules>
       <module>core-opt</module>
-      <!-- module>modules</module -->
+      <module>modules-opt</module>
    </modules>
 
 </project>
