@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <artifactId>knet-builder</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>0.6.0-SNAPSHOT</version>
+   </parent>
+   <artifactId>modules</artifactId>
+   <packaging>pom</packaging>
+   <name>modules</name>
+
+   <modules>
+      <!-- module>arabidopsis</module -->
+      <!-- module>aries</module -->
+      <!-- module>biobase</module -->
+      <!-- module>blast</module -->
+      <!-- module>carbs</module -->
+      <!-- module>clustering</module -->
+      <module>cyc-pathwaydbs</module>
+      <module>cyjs_json</module>
+      <!-- module>decypher</module -->
+      <!-- module>enzymatics</module -->
+      <!-- module>experimental</module -->
+      <!-- module>expression</module -->
+      <module>generic</module>
+      <module>go</module>
+      <!-- module>grain</module -->
+      <!-- module>graphalgo</module -->
+      <!-- module>graph-query</module -->
+      <!-- module>gsk</module -->
+      <!-- module>habitat</module -->
+      <!-- module>iah</module -->
+      <!-- module>interaction</module -->
+      <module>json</module>
+      <!-- module>kegg</module -->
+      <!-- module>legacy</module -->
+      <module>oxl</module>
+      <module>phenotypes</module>
+      <!-- module>plants</module -->
+      <!-- module>poplar</module -->
+      <!-- module>prolog</module -->
+      <!-- module>protein-structure</module -->
+      <!-- module>psimi25</module -->
+      <!-- module>rdf</module -->
+      <!-- module>relevance</module -->
+      <!-- module>sbml</module -->
+      <module>sequence</module>
+      <module>tab</module>
+      <module>tab-tools</module>
+      <module>tab-parser-2</module>
+      <module>js-plugin</module>
+      <!-- module>taxonomy</module -->
+      <module>textmining</module>
+      <module>validator</module>
+   </modules>
+
+   <reporting>
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>taglist-maven-plugin</artifactId>
+            <version>${mojo.taglist.maven.plugin.version}</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <version>${maven.surefire.report.plugin.version}</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>${maven.project.info.reports.plugin.version}</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>${maven.pmd.plugin.version}</version>
+            <configuration>
+               <linkXref>true</linkXref>
+               <sourceEncoding>ISO-8859-1</sourceEncoding>
+               <minimumTokens>100</minimumTokens>
+               <targetJdk>${java.version}</targetJdk>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${maven.javadoc.plugin.version}</version>
+            <configuration>
+               <stylesheet>maven</stylesheet>
+               <additionalparam>
+						-link http://java.sun.com/javase/6/docs/api/
+						-link http://www.oracle.com/technology/documentation/berkeley-db/je/java
+						-link http://junit.sourceforge.net/javadoc/
+                    </additionalparam>
+            </configuration>
+         </plugin>
+      </plugins>
+   </reporting>
+
+   <build>
+      <plugins>
+         <plugin><!--
+				  TODO: doesn't work when you invoke compile/test-compile
+				-->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${maven.dependency.plugin.version}</version>
+            <executions>
+               <execution>
+                  <id>unpack</id>
+                  <phase>compile</phase>
+                  <goals>
+                     <goal>unpack</goal>
+                  </goals>
+                  <configuration>
+                     <artifactItems><!--artifactItem> <groupId>net.sourceforge.ondex</groupId> <artifactId>datadir</artifactId>
+									<type>zip</type> <classifier>data</classifier> <overWrite>false</overWrite>
+									<outputDirectory>${basedir}</outputDirectory> <includes>**/*</includes> </artifactItem -->
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.core</groupId>
+                           <artifactId>workflow-component-descriptor</artifactId>
+                           <version>${project.version}</version>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}</outputDirectory>
+                           <includes>assemblies/*.xml,wf-descriptor/*.xsl</includes>
+                        </artifactItem>
+                     </artifactItems>
+                     <overWriteReleases>false</overWriteReleases>
+                     <overWriteSnapshots>true</overWriteSnapshots>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>copy-dependencies</id>
+                  <phase>compile</phase>
+                  <goals>
+                     <goal>copy-dependencies</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>${project.build.directory}/libs4javadoc</outputDirectory>
+                     <overWriteReleases>true</overWriteReleases>
+                     <overWriteSnapshots>true</overWriteSnapshots>
+                     <overWriteIfNewer>true</overWriteIfNewer>
+                     <includeTypes>jar</includeTypes>
+                     <excludeArtifactIds>${project.artifactId}</excludeArtifactIds>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${maven.javadoc.plugin.version}</version>
+            <executions>
+               <execution>
+                  <phase>compile</phase>
+                  <goals>
+                     <goal>javadoc</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <doclet>net.sourceforge.ondex.doclet.PluginDoclet</doclet>
+               <useStandardDocletOptions>false</useStandardDocletOptions>
+               <docletArtifact>
+                  <groupId>net.sourceforge.ondex.core</groupId>
+                  <artifactId>workflow-api</artifactId>
+                  <version>${project.version}</version>
+               </docletArtifact>
+               <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
+               <sourcepath>${project.build.sourceDirectory}</sourcepath>
+               <additionalparam>
+						-filename
+						${project.build.directory}/classes/workflow-component-description.xml
+						-artifactId ${project.artifactId}
+						-groupId ${project.groupId}
+						-version ${project.version}
+						-classdir ${project.build.directory}/classes
+						${project.build.directory}/libs4javadoc
+            </additionalparam>
+            </configuration>
+         </plugin>
+
+
+
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>${maven.assembly.plugin.version}</version>
+            <executions>
+               <execution>
+                  <id>make-assembly-packaged_with_jars</id>
+                  <!-- this is used for inheritance merges -->
+                  <phase>package</phase>
+                  <!-- append to the packaging phase. -->
+                  <goals>
+                     <goal>attached</goal>
+                     <!-- goals == mojos -->
+                  </goals>
+                  <configuration>
+                     <descriptors>
+                        <descriptor>${project.build.directory}/assemblies/packaged_with_jars.xml</descriptor>
+                     </descriptors>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>make-assembly-wf-descriptor</id>
+                  <!-- this is used for inheritance merges -->
+                  <phase>package</phase>
+                  <!-- append to the packaging phase. -->
+                  <goals>
+                     <goal>attached</goal>
+                     <!-- goals == mojos -->
+                  </goals>
+                  <configuration>
+                     <descriptors>
+                        <descriptor>${project.build.directory}/assemblies/wf-descriptor.xml</descriptor>
+                     </descriptors>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>jar-with-module-descriptor</id>
+                  <!-- this is used for inheritance merges -->
+                  <phase>package</phase>
+                  <!-- append to the packaging phase. -->
+                  <goals>
+                     <goal>attached</goal>
+                     <!-- goals == mojos -->
+                  </goals>
+                  <configuration>
+                     <descriptors>
+                        <descriptor>${project.build.directory}/assemblies/default_package.xml
+                                </descriptor>
+                     </descriptors>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+   <dependencies>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>base</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>tools</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>workflow-component-descriptor</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>workflow-api</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex</groupId>
+         <artifactId>datadir</artifactId>
+         <version>${project.version}</version>
+         <type>zip</type>
+         <classifier>data</classifier>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+</project>

@@ -1,0 +1,42 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<parser 
+	xmlns="http://www.ondex.org/xml/schema/tab_parser" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ondex.org/xml/schema/tab_parser ../../../../main/resources/tab_parser.xsd ">
+
+	<delimiter>\t</delimiter>
+	<start-line>1</start-line>
+		
+	<concept id = "c1">
+		<class>Gene</class>
+		<accession data-source = "ENSEMBL" ambiguous="true">
+			<column index = '0' />
+		</accession>
+		<name><column index = '0' /></name>
+		<data-source>ENSEMBL</data-source>
+		<attribute name="TAXID" type = "TEXT" indexed = 'false'>9606</attribute>
+		<attribute name="Chromosome" type = "INTEGER">
+			<column index = '2'></column>
+		</attribute>
+		<attribute name="BEGIN" type = "INTEGER"><!-- indexed is false by default -->
+			<column index = '3'></column>
+		</attribute>
+		<attribute name="END" type = "INTEGER">
+			<column index = '4'></column>
+		</attribute>
+	</concept>
+	
+
+	<concept id = 'c2'>
+		<class>Protein</class>
+		<accession data-source="UNIPROTKB"><!-- ambiguous is false by default -->
+			<column index = '1'/>
+		</accession>
+		<data-source>ENSEMBL</data-source>
+	</concept>
+
+
+	<relation source-ref = 'c1' target-ref = 'c2'>
+		<type>enc</type>
+	</relation>
+
+</parser>

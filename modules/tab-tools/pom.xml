@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>modules</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>0.6.0-SNAPSHOT</version>
+   </parent>
+
+   <groupId>net.sourceforge.ondex.modules</groupId>
+   <artifactId>tab-tools</artifactId>
+   <name>tab-tools</name>
+   <packaging>jar</packaging>
+
+   <dependencies><!-- ONDEX deps -->
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>validator</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>tools</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>workflow-api</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+   </dependencies>
+</project>
