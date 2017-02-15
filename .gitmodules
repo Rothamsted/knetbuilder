@@ -16,3 +16,6 @@
 [submodule "ondex-integration-tests"]
 	path = ondex-integration-tests
 	url = git@github.com:Rothamsted/ondex-integration-tests
+[submodule "ondex-old-components"]
+	path = ondex-old-components
+	url = git@github.com:Rothamsted/ondex-old-components
