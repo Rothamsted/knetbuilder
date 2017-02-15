@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <parent>
+      <artifactId>knet-builder</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>0.6.0-SNAPSHOT</version>
+   </parent>
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>net.sourceforge.ondex.apps</groupId>
+   <artifactId>ondex-mini</artifactId>
+   <name>ondex-mini</name>
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <mainClass>net.sourceforge.ondex.OndexMiniMain</mainClass>
+                     <addClasspath>true</addClasspath>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                     <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                  </manifest>
+               </archive>
+            </configuration>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+               <descriptors>
+                  <descriptor>src/main/assembly/zip_distro.xml</descriptor>
+               </descriptors>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>make-assembly</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>attached</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+   <dependencies><!-- Dependencies for maven-jar-plugin -->
+      <dependency>
+         <groupId>commons-lang</groupId>
+         <artifactId>commons-lang</artifactId>
+         <version>2.4</version>
+      </dependency>
+      <dependency>
+         <groupId>org.codehaus.plexus</groupId>
+         <artifactId>plexus-utils</artifactId>
+         <version>1.1</version>
+      </dependency>
+
+
+
+      <!-- Dependencies required for compilation -->      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>workflow-base</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+
+      <!-- Dependencies required for the lib directory, promoted from 'provided' 
+			to 'runtime' -->      <dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.collections</groupId>
+         <artifactId>collections-generic</artifactId>
+         <scope>runtime</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.jexcelapi</groupId>
+         <artifactId>jxl</artifactId>
+         <scope>runtime</scope>
+      </dependency>
+
+      <!-- Dependencies required for the archive -->      <dependency>
+         <groupId>net.sourceforge.ondex</groupId>
+         <artifactId>datadir</artifactId>
+         <version>${project.version}</version>
+         <classifier>data</classifier>
+         <type>zip</type>
+         <scope>runtime</scope>
+      </dependency>
+
+      <!-- bundled plugins - this is a hack to get them into the plugins/ directory. 
+			zip_distro.xml picks up test deps from the modules group and puts them into 
+			plugins/ for us. -->      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>tab-tools</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>tab-parser-2</artifactId>
+         <version>${ondex.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>js-plugin</artifactId>
+         <version>${ondex.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>oxl</artifactId>
+         <version>${project.version}</version>
+         <type>jar</type>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>generic</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>validator</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+</project>
