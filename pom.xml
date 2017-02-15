@@ -14,7 +14,7 @@
    <packaging>pom</packaging>
 
    <name>ONDEX Base components</name>
-
+ 
    <modules>
       <module>core</module>
       <!-- module>modules</module -->
