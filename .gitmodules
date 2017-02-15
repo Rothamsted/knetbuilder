@@ -1,0 +1,3 @@
+[submodule "ondex-base"]
+	path = ondex-base
+	url = git@github.com:Rothamsted/ondex-base.git
