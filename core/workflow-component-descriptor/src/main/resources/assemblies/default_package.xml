@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+    <id>jar-with-module-descriptor</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <unpack>true</unpack>
+            <scope>runtime</scope>
+            <unpackOptions>
+                <filtered>true</filtered>
+                <excludes>
+                    <exclude>META-INF</exclude>
+                    <exclude>**/MANIFEST.MF</exclude>
+                </excludes>
+            </unpackOptions>
+            <includes>
+                <include>${project.groupId}:${project.artifactId}</include>
+            </includes>
+            <useDefaultExcludes>true</useDefaultExcludes>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/wf-descriptor</directory>
+            <includes>
+                <include>*.xml</include>
+                <include>*.xsl</include>
+            </includes>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

@@ -1,0 +1,31 @@
+[comment] This template name is tera-blastn
+[comment] Tera-BLASTN search nucleic vs nucleic
+
+[comment] The following block should not be changed by the user
+[algorithm] tera-blastnh
+[target path] %TARGETPATH%
+[result path] %RESULTPATH%
+[query type] nt
+[target type] nt
+[target frames] d
+
+[comment] The following block will rarely be changed by the user
+[query search] d c
+[word size] 9
+[query increment] 3
+[extension threshold] 20
+[gapped alignment] banded
+[nucleic match] 1
+[nucleic mismatch] -1
+[open penalty] -10
+[extend penalty] 0
+
+[comment] The following block will often be changed by the user
+[query filter] f
+[max scores] 200
+[max alignments] 100
+[significance] evalue
+[threshold] significance=10
+
+[output format] tab percentage fieldrecord
+[field] querynumber targetlocus targetdescription targetaccession targetlength score significance querystart queryend targetstart targetend queryframe targetframe percentalignment simpercentalignment gaps alignmentlength querynt targetnt   

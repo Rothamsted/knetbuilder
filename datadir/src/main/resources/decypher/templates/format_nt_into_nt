@@ -1,0 +1,6 @@
+[COMMENT] Format nucleic source into nucleic target
+[ALGORITHM] TB
+[QUERY TYPE] NT
+[OPTIONS] -O4DC
+[TARGET PATH] %TARGETPATH%
+[TARGET SET] NEW_DB

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+  <id>workflow-component-description</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>${project.build.directory}/wf-descriptor</directory>
+      <includes>
+      	<include>*.xml</include>
+      	<include>*.xsl</include>
+      </includes>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <files>
+  	<file>
+  		<source>${basedir}/pom.xml</source> <!-- This is added as the jar can never be empty or an error occurs -->
+  		<outputDirectory>/</outputDirectory>
+  	</file>
+  </files>
+</assembly>
