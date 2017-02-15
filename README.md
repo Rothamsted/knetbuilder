@@ -6,7 +6,7 @@ to work on a single component, you can clone the needed sub-repository separatel
 
 ## Usage
 
-Clone the usual way, then run `git-cmds/download_all.sh` to download the component GitHub repositories. 
+Clone the usual way, **then run `git-cmds/download_all.sh`** to download the component GitHub repositories. 
 Once you've done this, you'll have this repository in the `ondex-full/` folder and, inside it, 
 sub-folders (e.g., `ondex-base/`, `knet-builder/`) which are clones of the respective repositories
 (this uses the [git submodule](https://github.com/blog/2104-working-with-submodules) mechanism).
