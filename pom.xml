@@ -21,7 +21,7 @@
       <module>datadir</module>
       <!-- module>doc</module -->
       <!--module>apps</module -->
-      <!-- module>integration</module -->
+      <!-- module>integration</module --> 
    </modules>
 
 </project>
