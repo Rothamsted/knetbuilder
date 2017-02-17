@@ -16,8 +16,8 @@ sub-folders (e.g., `ondex-base/`, `knet-builder/`) which are clones of the respe
 
 **WARNING!**
 This is repository is using other GitHub repositories as [submodules](https://github.com/blog/2104-working-with-submodules). This means you have to commit changes made to submodules/subrepos one by one, from the local clones of the various submodules. Moreover, this top repository points to subrepos by referring to a specific commit. This means that, once
-you have updated/pushed/etc a subrepo, **you do need to update the reference to it** that is hereby (you find convenience
-Bash scripts to do so in `git-cmds/`).
+you have updated/pushed/etc a subrepo, **you do need to update the reference to it** that is hereby. You find convenience
+Bash scripts to do so in `git-cmds/`. [SmartGit](http://www.syntevo.com/smartgit) is another tool that manages this way to organise submodules.
 
 See these notes on [how to manage submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to learn more. Further details are available [here](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 
