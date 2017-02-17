@@ -1,8 +1,11 @@
-#ondex-full
+#ONDEX
+
+[ONDEX](http://www.ondex.org/) is a framework for text mining, data integration and data analysis. 
+
+##ondex-full
 This is an aggregator repository, used to download and build all about ONDEX.
 
-This repo is normally not needed, unless you have to work on the whole ONDEX (e.g., to rename something in the whole code base), if you need
-to work on a single component, you can clone the needed sub-repository separately (see below).
+This repo is normally not needed, unless you have to work on the whole ONDEX (e.g., to rename something in the whole code base), if you need to work on a single component, you can clone the needed sub-repository separately (see below).
 
 ##Usage
 
@@ -12,15 +15,14 @@ sub-folders (e.g., `ondex-base/`, `knet-builder/`) which are clones of the respe
 (this uses the [git submodule](https://github.com/blog/2104-working-with-submodules) mechanism).
 
 **WARNING!**
-This is repository is using other GitHub repositories as [submodules](https://github.com/blog/2104-working-with-submodules). This means
-you have to commit changes made to submodules/subrepos one by one, from the local clones of the various submodules.
+This is repository is using other GitHub repositories as [submodules](https://github.com/blog/2104-working-with-submodules). This means you have to commit changes made to submodules/subrepos one by one, from the local clones of the various submodules. Moreover, this top repository points to subrepos by referring to a specific commit. This means that, once
+you have updated/pushed/etc a subrepo, **you do need to update the reference to it** that is hereby (you find convenience
+Bash scripts to do so in `git-cmds/`).
 
-See this notes on [how to manage submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to learn more. Further details are
-available [here](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+See these notes on [how to manage submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to learn more. Further details are available [here](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 
-Note that `download_all.sh` command above switch the submodules clones onto the master branch, it does not keep the detached HEAD that git normally
-downloads for submodules. In the same `git-cmds` folder you find commands to update all this repository and linked repositories/submodules in one
-go.
+Note that the `download_all.sh` command above switches the submodules clones onto the master branch, it does not keep the detached `HEAD` that git normally downloads for submodules. 
+
 
 ##Included Repositories
 
@@ -29,7 +31,7 @@ The following are all the repositories that ONDEX is composed of and which are l
 
 If you need to develop your own ONDEX extension, you can make it dependant on this same POM, by means of the following:
 
-```XML
+```xml
 <project ...>
   ...
   <parent>
@@ -49,7 +51,7 @@ If you need to develop your own ONDEX extension, you can make it dependant on th
      </repository>
   </repositories>
   ...
-</project>  
+</project>
 ```
 
 If you only need ONDEX dependencies, you can list our Maven repository listed above, without the `<parent>` section.
@@ -70,10 +72,7 @@ Documentation and tutorials.
 Integrations tests for ONDEX.
 
 [ondex-opt](https://github.com/Rothamsted/ondex-opt.git)
-Optional components. **NOTE**: this are still linked by the components above (so, not so optional), but we usually build them separately. If
-you build the whole ONDEX from there, they will be build from (the local clone of) this repository, if you build an ONDEX component independently
-(e.g., by cloning `ondex-base` and building from its local copy), some of these 'optional' components are still downloaded from our Maven
-repositories as dependendencies. This is because it is currently hard to modularise things further (we would need to inspect the Java code).
+Optional components. **NOTE**: these are still linked by the components above (so, not so optional), but we usually build them separately. If you build the whole ONDEX from there, they will be build from (the local clone of) this repository, if you build an ONDEX component independently (e.g., by cloning `ondex-base` and building from its local copy), some of these 'optional' components are still downloaded from our Maven repositories as dependencies. This is because it is currently hard to modularise things further (we would need to inspect the Java code).
 
 [ondex-old-components](https://github.com/Rothamsted/ondex-old-components)
-Old components, which are no longer used by ONDEX, not even as dependencies taken from our Maven reposiory.
+Old components, which are no longer used by ONDEX, not even as dependencies taken from our Maven repository.
