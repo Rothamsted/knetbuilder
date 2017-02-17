@@ -25,7 +25,7 @@ public class CyjsJsonExportTest {
         // Using .oxl test file located under src/test/resources/.
         ClassLoader classLoader= getClass().getClassLoader();
         // example .oxl file to Test.
-//	File oxlTestFile= new File(classLoader.getResource("wheat_eq4_colaIssue.oxl").getFile());
+//	File oxlTestFile= new File(classLoader.getResource("oxlnetwork.oxl").getFile());
 	File oxlTestFile= new File(classLoader.getResource("MyNetwork_NeuroDisease_subset.oxl").getFile()); // human disease network subset
 
         // output file (with timestamped filename) to get exported network graph data in JSON format.
