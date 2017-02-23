@@ -3,5 +3,4 @@ jdk:
 - oraclejdk8
 install: true
 script:
-- cat pom.xml
 - mvn deploy --update-snapshots --settings settings.xml
