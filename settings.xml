@@ -5,5 +5,10 @@
       <username>${env.REPO_USER}</username>
       <password>${env.REPO_PWD}</password>
     </server>
+    <server>
+      <id>ondex-releases</id>
+      <username>${env.REPO_USER}</username>
+      <password>${env.REPO_PWD}</password>
+    </server>
   </servers>
 </settings>
