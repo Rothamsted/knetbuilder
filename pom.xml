@@ -32,7 +32,7 @@
 
      This is a super-pom that... TODO
     </description>
-   <url>http://ondex.sourceforge.net/</url>
+   <url>http://www.ondex.org/</url>
 
    <ciManagement>
       <system>hudson</system>
@@ -45,9 +45,8 @@
    </organization>
 
    <scm>
-      <connection>scm:svn:https://svn.code.sf.net/p/ondex/code/trunk</connection>
-      <developerConnection>scm:svn:https://svn.code.sf.net/p/ondex/code/trunk</developerConnection>
-      <url>https://svn.code.sf.net/p/ondex/code/trunk</url>
+      <connection>scm:git:https://github.com/Rothamsted/ondex-full.git</connection>
+      <url>https://github.com/Rothamsted/ondex-full</url>
    </scm>
 
    <distributionManagement>
