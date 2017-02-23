@@ -301,14 +301,14 @@
       <repository>
          <id>ondex-releases</id>
          <name>Internal Releases</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
          <releases><enabled>true</enabled></releases>
          <snapshots><enabled>false</enabled></snapshots>
       </repository>
       <repository>
          <id>ondex-snapshots</id>
          <name>Internal Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshotss</url>
          <releases><enabled>false</enabled></releases>
          <snapshots><enabled>true</enabled></snapshots>
       </repository>
