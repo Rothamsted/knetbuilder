@@ -1,5 +1,5 @@
 #!/bin/bash
-MEMORY=1200M
+MEMORY=2G
 DATA=data/
 echo "Running OVTK with $MEMORY and data dir $DATA edit runme.sh to change this amount"
 
