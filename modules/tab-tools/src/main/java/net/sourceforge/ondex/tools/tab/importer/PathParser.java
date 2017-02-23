@@ -53,11 +53,24 @@ public class PathParser {
 		processingFlags.clear();	
 	}
 	
-	public PathParser(ONDEXGraph  graph, DelimitedReader dataReader) {
+	public PathParser(ONDEXGraph graph, DataReader dataReader) 
+	{
 		this(graph);
 		this.dataReader = dataReader;
-
 	}
+	
+	/**
+	 * TODO: BAD PRACTICE! Find where it is used and remove!!!
+	 * 
+	 * @deprecated I (M. Brandizi) have found this here and it's bad practice to redefine methods that just change
+	 * parameter order. Please do not use this, as we plan to remove it as soon as possible, use the 
+	 * {@link #PathParser(ONDEXGraph, DataReader) first version} instead. 
+	 */
+	@Deprecated
+	public PathParser(DataReader dataReader, ONDEXGraph  graph) {
+		this(graph, dataReader );
+	}
+
 	
 	public PathParser(ONDEXGraph  graph) {
 		this.graph = graph;
@@ -177,13 +190,7 @@ public class PathParser {
 			}
 		}
 	}
-	
-	public PathParser(DataReader dataReader, ONDEXGraph  graph) {
-		this(graph);
-		this.dataReader = dataReader;
-		processingFlags.add(MERGE_ACC);
-	}
-	
+		
 	private static String now(String dateFormat) {
 	    Calendar cal = Calendar.getInstance();
 	    SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);

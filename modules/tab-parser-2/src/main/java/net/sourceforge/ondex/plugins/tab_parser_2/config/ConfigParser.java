@@ -44,7 +44,9 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.tools.subgraph.AttributePrototype;
 import net.sourceforge.ondex.tools.subgraph.DefConst;
+import net.sourceforge.ondex.tools.tab.importer.BlankLinesFilterDataReader;
 import net.sourceforge.ondex.tools.tab.importer.ConceptPrototype;
+import net.sourceforge.ondex.tools.tab.importer.DataReader;
 import net.sourceforge.ondex.tools.tab.importer.DelimitedReader;
 import net.sourceforge.ondex.tools.tab.importer.GraphEntityPrototype;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
@@ -144,7 +146,7 @@ public class ConfigParser
 		
 		// TODO: quote/encoding not supported at this time
 		
-		DelimitedReader reader = new DelimitedReader ( inputPath, delim, startLine );
+		DataReader reader = new BlankLinesFilterDataReader ( new DelimitedReader ( inputPath, delim, startLine ) );
 		PathParser pp = new PathParser ( graph, reader );
 
 		Map<String, ConceptPrototype> concepts = new HashMap<String, ConceptPrototype> ();
@@ -471,8 +473,7 @@ public class ConfigParser
 	/**
 	 * Facility to take the children of parentElem of type childElemsName and invokes nodeFunc on all of them.
 	 */
-	static void invokeOnChildren (
-		Element parentElem, String childElemsName, Consumer<Element> nodeFunc )
+	static void invokeOnChildren ( Element parentElem, String childElemsName, Consumer<Element> nodeFunc )
 	{
 		NodeList attrNodes = (NodeList) xpath ( parentElem, childElemsName, XPathConstants.NODESET ).orNull ();
 		if ( attrNodes != null ) for ( int i = 0; i < attrNodes.getLength (); i++ )

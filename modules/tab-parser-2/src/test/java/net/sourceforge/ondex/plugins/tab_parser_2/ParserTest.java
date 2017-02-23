@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.plugins.tab_parser_2;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -141,5 +142,27 @@ public class ParserTest
 		  	return false;
 		  })
 		);			
+	}
+	
+	
+	
+	/**
+	 * Tests blank lines.
+	 */
+	@Test
+	public void testBlankLinesFilter () throws Exception
+	{
+		Reader schemaReader = new InputStreamReader ( 
+			Resources.getResource ( this.getClass (), "/multi_attr_test/Arabidopsis_protDomain_config.xml" ).openStream (),
+			"UTF-8"
+		);
+		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
+
+		PathParser pp = ConfigParser.parseConfigXml ( 
+			schemaReader, graph, "target/test-classes//multi_attr_test/protDomain_empty_rows.tsv" 
+		);
+		pp.parse ();
+		
+		assertEquals ( "Wrong no of retrieved relations!", 7, graph.getRelations ().size () );
 	}
 }

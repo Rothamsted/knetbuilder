@@ -110,7 +110,7 @@ public class JavaScriptPlugin extends ONDEXTransformer
 
 	public String getVersion ()
 	{
-		return "1.0-SNAPSHOT";
+		return "1.0";
 	}
 
 	public ArgumentDefinition<?>[] getArgumentDefinitions ()

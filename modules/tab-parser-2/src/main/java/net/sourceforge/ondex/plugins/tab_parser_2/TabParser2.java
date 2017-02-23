@@ -43,7 +43,7 @@ public class TabParser2 extends ONDEXParser
 
 	public String getVersion ()
 	{
-		return "1.0-SNAPSHOT";
+		return "1.0";
 	}
 
 	public ArgumentDefinition<?>[] getArgumentDefinitions ()
