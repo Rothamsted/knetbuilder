@@ -52,12 +52,12 @@
 
    <distributionManagement>
       <repository>
-         <id>releases</id>
+         <id>ondex-releases</id>
          <name>Internal Releases</name>
          <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
       </repository>
       <snapshotRepository>
-         <id>snapshots</id>
+         <id>ondex-snapshots</id>
          <name>Internal Snapshots</name>
          <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
       </snapshotRepository>
