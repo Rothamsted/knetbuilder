@@ -17,12 +17,11 @@
    <name>berkeley</name>
    <dependencies>
       <dependency>
-				<groupId>com.sleepycat</groupId>
-				<artifactId>je</artifactId>
-				<version>5.0.84</version>
-				<scope>compile</scope>
+         <groupId>com.sleepycat</groupId>
+         <artifactId>je</artifactId>
+         <version>4.0.71</version>
+         <scope>compile</scope>
       </dependency>
-      
       <!-- ONDEX deps -->
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
@@ -44,12 +43,4 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
-
-	 <repositories>
-	 		<!-- sleepycat -->
-	 		<repository>
-	 			<id>boundlessgeo</id>
-	 			<url>http://repo.boundlessgeo.com/main</url>
-	 		</repository>	 
-	 </repositories>
 </project>
