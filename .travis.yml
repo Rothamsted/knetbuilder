@@ -5,4 +5,4 @@ jdk:
 
 install: true
 script:
-- mvn deploy --update-snapshots --settings settings.xml
+- mvn deploy --settings settings.xml
