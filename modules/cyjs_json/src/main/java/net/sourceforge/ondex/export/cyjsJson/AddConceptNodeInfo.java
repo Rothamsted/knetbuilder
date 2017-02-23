@@ -229,7 +229,7 @@ public class AddConceptNodeInfo {
     }
   else if(conType.equals(ConceptType.Disease.toString())) {
      shape= ConceptShape.triangle.toString();
-     colour= ConceptColour.darkGreen.toString();
+     colour= ConceptColour.lightGreen.toString();
     }
   else if(conType.equals(ConceptType.Pathway.toString())) {
      shape= ConceptShape.star.toString();
