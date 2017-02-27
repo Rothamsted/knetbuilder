@@ -66,6 +66,8 @@
                </execution>
             </executions>
          </plugin>
+
+				 <!-- Prepares the plugins to be shipped with the final binary-->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
@@ -79,6 +81,7 @@
                   </goals>
                   <configuration>
                      <artifactItems>
+                     
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.apps</groupId>
                            <artifactId>ovtk2-default</artifactId>
@@ -90,6 +93,7 @@
                            <includes>**/*</includes>
                            <destFileName>ovtk2-default-distribution.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.apps</groupId>
                            <artifactId>ovtk2-experimental</artifactId>
@@ -101,6 +105,7 @@
                            <includes>**/*</includes>
                            <destFileName>ovtk2-experimental-distribution.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.apps</groupId>
                            <artifactId>ovtk2-poplar</artifactId>
@@ -112,6 +117,7 @@
                            <includes>**/*</includes>
                            <destFileName>ovtk2-poplar-distribution.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>arabidopsis</artifactId>
@@ -123,6 +129,7 @@
                            <includes>**/*</includes>
                            <destFileName>arabidopsis-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>biobase</artifactId>
@@ -134,6 +141,7 @@
                            <includes>**/*</includes>
                            <destFileName>biobase-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>blast</artifactId>
@@ -145,6 +153,7 @@
                            <includes>**/*</includes>
                            <destFileName>blast-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>carbs</artifactId>
@@ -156,6 +165,7 @@
                            <includes>**/*</includes>
                            <destFileName>carbs-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>clustering</artifactId>
@@ -167,6 +177,7 @@
                            <includes>**/*</includes>
                            <destFileName>clustering-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>cyc-pathwaydbs</artifactId>
@@ -178,6 +189,7 @@
                            <includes>**/*</includes>
                            <destFileName>cyc-pathwaydbs-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>cyjs_json</artifactId>
@@ -189,6 +201,7 @@
                            <includes>**/*</includes>
                            <destFileName>cyjs_json-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>decypher</artifactId>
@@ -200,6 +213,7 @@
                            <includes>**/*</includes>
                            <destFileName>decypher-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>enzymatics</artifactId>
@@ -211,6 +225,7 @@
                            <includes>**/*</includes>
                            <destFileName>enzymatics-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>experimental</artifactId>
@@ -222,6 +237,7 @@
                            <includes>**/*</includes>
                            <destFileName>experimental-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>generic</artifactId>
@@ -233,6 +249,7 @@
                            <includes>**/*</includes>
                            <destFileName>generic-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>go</artifactId>
@@ -244,6 +261,7 @@
                            <includes>**/*</includes>
                            <destFileName>go-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>grain</artifactId>
@@ -255,6 +273,7 @@
                            <includes>**/*</includes>
                            <destFileName>grain-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>graph-query</artifactId>
@@ -266,6 +285,7 @@
                            <includes>**/*</includes>
                            <destFileName>graph-query-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>graphalgo</artifactId>
@@ -277,6 +297,7 @@
                            <includes>**/*</includes>
                            <destFileName>graphalgo-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>gsk</artifactId>
@@ -288,6 +309,7 @@
                            <includes>**/*</includes>
                            <destFileName>gsk-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>habitat</artifactId>
@@ -299,6 +321,7 @@
                            <includes>**/*</includes>
                            <destFileName>habitat-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>iah</artifactId>
@@ -310,6 +333,7 @@
                            <includes>**/*</includes>
                            <destFileName>iah-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>interaction</artifactId>
@@ -321,6 +345,7 @@
                            <includes>**/*</includes>
                            <destFileName>interaction-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>json</artifactId>
@@ -332,6 +357,7 @@
                            <includes>**/*</includes>
                            <destFileName>json-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>kegg</artifactId>
@@ -343,6 +369,7 @@
                            <includes>**/*</includes>
                            <destFileName>kegg-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>legacy</artifactId>
@@ -354,6 +381,7 @@
                            <includes>**/*</includes>
                            <destFileName>legacy-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>oxl</artifactId>
@@ -365,6 +393,7 @@
                            <includes>**/*</includes>
                            <destFileName>oxl-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>phenotypes</artifactId>
@@ -376,6 +405,7 @@
                            <includes>**/*</includes>
                            <destFileName>phenotypes-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>plants</artifactId>
@@ -387,6 +417,7 @@
                            <includes>**/*</includes>
                            <destFileName>plants-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>poplar</artifactId>
@@ -398,6 +429,7 @@
                            <includes>**/*</includes>
                            <destFileName>poplar-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>prolog</artifactId>
@@ -409,6 +441,7 @@
                            <includes>**/*</includes>
                            <destFileName>prolog-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>protein-structure</artifactId>
@@ -420,6 +453,7 @@
                            <includes>**/*</includes>
                            <destFileName>protein-structure-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>rdf</artifactId>
@@ -431,6 +465,7 @@
                            <includes>**/*</includes>
                            <destFileName>rdf-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>relevance</artifactId>
@@ -442,6 +477,7 @@
                            <includes>**/*</includes>
                            <destFileName>relevance-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>sbml</artifactId>
@@ -453,6 +489,7 @@
                            <includes>**/*</includes>
                            <destFileName>sbml-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>sequence</artifactId>
@@ -464,6 +501,7 @@
                            <includes>**/*</includes>
                            <destFileName>sequence-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>tab</artifactId>
@@ -499,6 +537,7 @@
                            <includes>**/*</includes>
                            <destFileName>js-plugin-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>taxonomy</artifactId>
@@ -510,6 +549,7 @@
                            <includes>**/*</includes>
                            <destFileName>taxonomy-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>textmining</artifactId>
@@ -521,6 +561,7 @@
                            <includes>**/*</includes>
                            <destFileName>textmining-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>validator</artifactId>
@@ -532,6 +573,7 @@
                            <includes>**/*</includes>
                            <destFileName>validator-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                         <artifactItem>
                            <groupId>uk.ac.ncl.cs</groupId>
                            <artifactId>psimi2ondex</artifactId>
@@ -543,6 +585,7 @@
                            <includes>**/*</includes>
                            <destFileName>psimi2ondex-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
+                        
                      </artifactItems>
                      <overWriteReleases>false</overWriteReleases>
                      <overWriteSnapshots>true</overWriteSnapshots>
@@ -550,6 +593,7 @@
                </execution>
             </executions>
          </plugin>
+         
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <version>2.2-beta-4</version>

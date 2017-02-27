@@ -13,6 +13,59 @@
    <name>ondex-mini</name>
    <build>
       <plugins>
+				 <!-- 
+				 	Prepares the plugins to be shipped with the final binary
+				 	PLEASE NOTE: this approach is used for those plugins that need the *-with-dependencies.jar to be
+				 	craned. Those that already contains everything in their own jar are put in place by the 'test'
+				 	dependencies below.
+				 -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${maven.dependency.plugin.version}</version>            
+            <executions>
+               <execution>
+                  <id>copy</id>
+                  <phase>initialize</phase>
+                  <goals>
+                     <goal>copy</goal>
+                  </goals>
+                  <configuration>
+                     <artifactItems>
+
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>tab-parser-2</artifactId>
+                           <version>${project.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                           <includes>**/*</includes>
+                           <destFileName>tab-parser-2-jar-with-dependencies.jar</destFileName>
+                        </artifactItem>
+
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>js-plugin</artifactId>
+                           <version>${ondex.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                           <includes>**/*</includes>
+                           <destFileName>js-plugin-jar-with-dependencies.jar</destFileName>
+                        </artifactItem>
+                        
+                     </artifactItems>
+                     <overWriteReleases>false</overWriteReleases>
+                     <overWriteSnapshots>true</overWriteSnapshots>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>      
+      
+      
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
@@ -72,8 +125,11 @@
          <scope>compile</scope>
       </dependency>
 
-      <!-- Dependencies required for the lib directory, promoted from 'provided' 
-			to 'runtime' -->      
+      <!-- 
+        Dependencies required for the lib directory, promoted from 'provided' 
+				to 'runtime' 
+			  TODO: what does it mean?
+			-->      
 			<dependency>
          <groupId>log4j</groupId>
          <artifactId>log4j</artifactId>
@@ -99,27 +155,13 @@
          <scope>runtime</scope>
       </dependency>
 
-      <!-- bundled plugins - this is a hack to get them into the plugins/ directory. 
-			zip_distro.xml picks up test deps from the modules group and puts them into 
-			plugins/ for us. -->      
-			<dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>tab-tools</artifactId>
-         <version>${project.version}</version>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>tab-parser-2</artifactId>
-         <version>${ondex.version}</version>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>js-plugin</artifactId>
-         <version>${ondex.version}</version>
-         <scope>test</scope>
-      </dependency>
+      <!-- 
+        bundled plugins - this is a hack to get them into the plugins/ directory. 
+			  zip_distro.xml picks up test deps from the modules group and puts them into 
+			  plugins/ for us. 
+			 
+			  SEE ALSO the note above linked to the dependency plugin
+			-->      
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>oxl</artifactId>
