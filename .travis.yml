@@ -4,11 +4,14 @@ jdk:
 - oraclejdk8
 
 sudo: required
+
 before_script:
   - sudo apt-get update
   # We need this due to: https://github.com/lukaszlenart/launch4j-maven-plugin/issues/29
   - sudo apt-get install libc6:i386 libstdc++6:i386
+  - echo "export MAVEN_OPTS='-Xms1G -Xmx4G -Dsun.net.client.defaultConnectTimeout=600000 -Dsun.net.client.defaultReadTimeout=600000'" >~/.mavenrc
 
 install: true
+
 script:
 - mvn deploy --settings settings.xml
