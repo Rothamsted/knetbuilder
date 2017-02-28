@@ -7,12 +7,12 @@
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<dependencySets>
-        <dependencySet>
-            <outputDirectory>${artifactId}-${artifact.baseVersion}/lib</outputDirectory>
-            <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
-            <useTransitiveDependencies>true</useTransitiveDependencies>
-            <scope>runtime</scope>
-        </dependencySet>
+    <dependencySet>
+        <outputDirectory>${artifactId}-${artifact.baseVersion}/lib</outputDirectory>
+        <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+        <useTransitiveDependencies>true</useTransitiveDependencies>
+        <scope>runtime</scope>
+    </dependencySet>
 		<dependencySet>
 			<outputDirectory>${artifactId}-${artifact.baseVersion}/plugins</outputDirectory>
 			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
@@ -32,6 +32,17 @@
 		</dependencySet>
 	</dependencySets>
 	<fileSets>
+		<fileSet>
+			<!-- Plugins that need *-with-dependencies.jar -->
+			<outputDirectory>${artifactId}-${artifact.baseVersion}/plugins</outputDirectory>
+			<directory>${project.build.directory}/plugins</directory>
+			<includes>
+				<include>**/*.*</include>
+				<include>**/*</include>
+			</includes>
+			<excludes>
+			</excludes>
+		</fileSet>	
 		<fileSet>
 			<directory>${basedir}/data</directory>
 			<outputDirectory>${artifactId}-${artifact.baseVersion}/data</outputDirectory>

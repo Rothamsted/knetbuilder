@@ -42,7 +42,7 @@
                            <overWrite>true</overWrite>
                            <outputDirectory>${project.build.directory}/plugins</outputDirectory>
                            <includes>**/*</includes>
-                           <destFileName>tab-parser-2-jar-with-dependencies.jar</destFileName>
+<!--                            <destFileName>tab-parser-2-jar-with-dependencies.jar</destFileName> -->
                         </artifactItem>
 
                         <artifactItem>
@@ -54,7 +54,7 @@
                            <overWrite>true</overWrite>
                            <outputDirectory>${project.build.directory}/plugins</outputDirectory>
                            <includes>**/*</includes>
-                           <destFileName>js-plugin-jar-with-dependencies.jar</destFileName>
+<!--                            <destFileName>js-plugin-jar-with-dependencies.jar</destFileName> -->
                         </artifactItem>
                         
                      </artifactItems>
