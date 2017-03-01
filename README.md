@@ -7,7 +7,7 @@
  
 ##Execution
 
- 1. Download the latest KnetBuilder release and unzip
+ 1. Download the latest [KnetBuilder release](https://github.com/Rothamsted/KnetBuilder/releases) and unzip
  
  2. Download the [tutorial files](https://rrescloud.rothamsted.ac.uk/index.php/s/H6sl0RIT9CoMaUI) and unzip
  
