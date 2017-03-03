@@ -7,7 +7,7 @@
    <parent>
       <artifactId>modules-opt</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0.1-TEST</version>
    </parent>
    <groupId>net.sourceforge.ondex.modules</groupId>
    <artifactId>interaction</artifactId>
