@@ -10,7 +10,7 @@
    <parent>
       <artifactId>ondex-full</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>1.0.1-TEST</version>
+      <version>1.0.1-SNAPSHOT</version>
    </parent>
 
    <modules>

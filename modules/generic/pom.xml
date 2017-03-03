@@ -7,7 +7,7 @@
    <parent>
       <artifactId>modules</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>1.0.1-TEST</version>
+      <version>1.0.1-SNAPSHOT</version>
    </parent>
    <groupId>net.sourceforge.ondex.modules</groupId>
    <artifactId>generic</artifactId>
