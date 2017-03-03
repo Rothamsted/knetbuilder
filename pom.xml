@@ -8,7 +8,7 @@
    <parent>
      <groupId>net.sourceforge.ondex</groupId>
      <artifactId>ondex-full</artifactId>
-     <version>1.0.1-TEST</version>
+     <version>1.0.1-SNAPSHOT</version>
    </parent>
 
    <artifactId>ondex-opt</artifactId>
