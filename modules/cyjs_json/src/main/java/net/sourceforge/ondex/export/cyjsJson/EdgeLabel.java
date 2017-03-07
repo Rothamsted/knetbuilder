@@ -2,7 +2,7 @@ package net.sourceforge.ondex.export.cyjsJson;
 
 /**
  * @author Ajit Singh
- * @version 04/02/17
+ * @version 07/03/17
  */
 public enum EdgeLabel {
  encodes, interacts_with, published_in, participates_in, cooccurs_with, has_function, has_similar_sequence, 

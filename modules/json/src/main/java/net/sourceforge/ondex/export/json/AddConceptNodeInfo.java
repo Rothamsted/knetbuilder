@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document;
 /**
  * Build node json objects using their various attributes.
  * @author Ajit Singh
- * @version 04/02/17
+ * @version 07/03/17
  */
 public class AddConceptNodeInfo {
 
@@ -97,7 +97,7 @@ public class AddConceptNodeInfo {
      }
 //    System.out.println("\t \t Selected (preferred) concept Name: "+ conceptName +"\n");
    }
-//  System.out.println("AddConceptNodeInfo: conceptID: "+ conceptID +", type: "+ conceptType +", name: "+ conceptName);
+  //System.out.println("AddConceptNodeInfo: conceptID: "+ conceptID +", type: "+ conceptType +", name: "+ conceptName);
 
   String conceptShape;
   String conceptColour;
@@ -118,7 +118,7 @@ public class AddConceptNodeInfo {
     }
   // Trim the label's (conceptName) length.
   if(val.length()>30) { val= val.substring(0, 29) +"...";}
-//  System.out.println("concept: trimmed displayValue: "+ val);
+  //System.out.println("concept: trimmed displayValue: "+ val);
   
   nodeData.put(JSONAttributeNames.ID, conceptID);
   nodeData.put(JSONAttributeNames.VALUE, conceptName);
@@ -229,7 +229,11 @@ public class AddConceptNodeInfo {
     }
   else if(conType.equals(ConceptType.Disease.toString())) {
      shape= ConceptShape.triangle.toString();
-     colour= ConceptColour.darkGreen.toString();
+     colour= ConceptColour.lightGreen.toString();
+    }
+  else if(conType.equals(ConceptType.DGES.toString())) {
+     shape= ConceptShape.triangle.toString();
+     colour= ConceptColour.tan.toString();
     }
   else if(conType.equals(ConceptType.Pathway.toString())) {
      shape= ConceptShape.star.toString();

@@ -2,7 +2,7 @@ package net.sourceforge.ondex.export.cyjsJson;
 
 /**
  * @author Ajit Singh
- * @version 04/02/17
+ * @version 07/03/17
  */
 public enum ConceptType {
  Gene, Protein, Compound, SNP, Cellular_Component, Pathway, Reaction, Enzyme, Enzyme_Classification, 
