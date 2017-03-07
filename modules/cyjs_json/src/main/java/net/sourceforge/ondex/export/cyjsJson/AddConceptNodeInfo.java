@@ -231,6 +231,10 @@ public class AddConceptNodeInfo {
      shape= ConceptShape.triangle.toString();
      colour= ConceptColour.lightGreen.toString();
     }
+  else if(conType.equals(ConceptType.DGES.toString())) {
+     shape= ConceptShape.triangle.toString();
+     colour= ConceptColour.tan.toString();
+    }
   else if(conType.equals(ConceptType.Pathway.toString())) {
      shape= ConceptShape.star.toString();
      colour= ConceptColour.springGreen.toString();

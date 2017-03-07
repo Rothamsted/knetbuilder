@@ -105,6 +105,12 @@ public class AddRelationEdgeInfo {
   else if(edgeLbl.equals(EdgeLabel.interacts_with.toString())) {
      colour= EdgeColour.steelBlue.toString();
     }
+  else if(edgeLbl.equals(EdgeLabel.associated_with.toString())) { // For Trait/ GWAS
+     colour= EdgeColour.black.toString();
+    }
+  else if(edgeLbl.equals(EdgeLabel.differentially_expressed.toString())) {  // For DGES
+     colour= EdgeColour.tan.toString();
+    }
   else if(edgeLbl.equals(EdgeLabel.located_in.toString())) {
      colour= EdgeColour.springGreen.toString();
     }
