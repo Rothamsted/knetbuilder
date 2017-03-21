@@ -12,7 +12,9 @@
   </dependencySets>
   <fileSets>
     <fileSet>
-      <directory>${project.build.outputDirectory}</directory>
+      <directory>${project.build.outputDirectory}</directory>      
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>      
     </fileSet>
     <fileSet>
       <directory>${basedir}/config</directory>
@@ -20,6 +22,8 @@
         <include>*.xml</include>
       </includes>
       <outputDirectory>config</outputDirectory>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>      
     </fileSet>
   </fileSets>
 </assembly>

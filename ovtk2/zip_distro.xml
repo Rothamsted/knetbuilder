@@ -35,21 +35,21 @@
 		 <source>${basedir}/config/runme.sh</source>
 		 <outputDirectory></outputDirectory>
 		 <destName>${artifactId}/runme.sh</destName>
-		 <fileMode>755</fileMode>
+     <fileMode>0755</fileMode>
 		 <lineEnding>unix</lineEnding>
 		</file>
 		<file>
 		 <source>${basedir}/config/runme.bat</source>
 		 <outputDirectory></outputDirectory>
 		 <destName>${artifactId}/runme.bat</destName>
-		 <fileMode>755</fileMode>
+		 <fileMode>0755</fileMode>
 		 <lineEnding>dos</lineEnding>
 		</file>
 		<file>
 		 <source>${basedir}/config/ovtk2.l4j.ini</source>
 		 <outputDirectory></outputDirectory>
 		 <destName>${artifactId}/ovtk2.l4j.ini</destName>
-		 <fileMode>644</fileMode>
+		 <fileMode>0644</fileMode>
 		 <lineEnding>dos</lineEnding>
 		</file>
 	</files>
@@ -64,6 +64,8 @@
 			<excludes>
    		 		<exclude>**/aspgd.org/**</exclude>
 			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>      
 		</fileSet>
 		<fileSet>
 			<directory>${basedir}/config</directory>
@@ -76,12 +78,17 @@
    		 		<exclude>dbs/**</exclude>
    				<exclude>seqs/**</exclude>
    				<exclude>**/tutorial/**</exclude>
+	        <!-- Defined above, with x permissions, non-executables only here -->
+	        <exclude>**/*.sh</exclude>
+	        <exclude>**/*.bat</exclude>
 			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>      			
 		</fileSet>
 		<fileSet>
 			<directory>${basedir}/config</directory>
 			<outputDirectory>${artifactId}</outputDirectory>
-			<fileMode>644</fileMode>
+			<fileMode>0644</fileMode>
 			<includes>
 				<include>README*.*</include>
 				<include>readme*.*</include>
@@ -90,7 +97,7 @@
 		<fileSet>
 			<directory>${basedir}/plugins</directory>
 			<outputDirectory>${artifactId}/plugins</outputDirectory>
-			<fileMode>644</fileMode>
+			<fileMode>0644</fileMode>
 			<includes>
 				<include>README*.*</include>
 				<include>readme*.*</include>
