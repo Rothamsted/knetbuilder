@@ -5,17 +5,17 @@
 		<format>tar.gz</format>
 		<format>zip</format>
 	</formats>
-	<includeBaseDirectory>false</includeBaseDirectory>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<baseDirectory>ondex-mini</baseDirectory>
+	
 	<dependencySets>
     <dependencySet>
-        <outputDirectory>${artifactId}-${artifact.baseVersion}/lib</outputDirectory>
-        <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+        <outputDirectory>/lib</outputDirectory>
         <useTransitiveDependencies>true</useTransitiveDependencies>
         <scope>runtime</scope>
     </dependencySet>
 		<dependencySet>
-			<outputDirectory>${artifactId}-${artifact.baseVersion}/plugins</outputDirectory>
-			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<outputDirectory>/plugins</outputDirectory>
 			<useTransitiveDependencies>true</useTransitiveDependencies>
 			<scope>test</scope>
 			<includes>
@@ -23,7 +23,7 @@
 			</includes>
 		</dependencySet>
 		<dependencySet>
-			<outputDirectory>${artifactId}-${artifact.baseVersion}</outputDirectory>
+			<outputDirectory></outputDirectory>
 			<scope>runtime</scope>			
 			<includes>
 				<include>net.sourceforge.ondex:datadir:*</include>
@@ -34,7 +34,7 @@
 	<fileSets>
 		<fileSet>
 			<!-- Plugins that need *-with-dependencies.jar -->
-			<outputDirectory>${artifactId}-${artifact.baseVersion}/plugins</outputDirectory>
+			<outputDirectory>/plugins</outputDirectory>
 			<directory>${project.build.directory}/plugins</directory>
 			<includes>
 				<include>**/*.*</include>
@@ -42,10 +42,12 @@
 			</includes>
 			<excludes>
 			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
 		</fileSet>	
 		<fileSet>
 			<directory>${basedir}/data</directory>
-			<outputDirectory>${artifactId}-${artifact.baseVersion}/data</outputDirectory>
+			<outputDirectory>/data</outputDirectory>
 			<includes>
 				<include>**/*.*</include>
 				<include>**/*</include>
@@ -54,24 +56,29 @@
    		 		<exclude>dbs/**</exclude>
    				<exclude>seqs/**</exclude>
 			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
 		</fileSet>
 		<fileSet>
 			<directory>${basedir}</directory>
-			<outputDirectory>${artifactId}-${artifact.baseVersion}</outputDirectory>
+			<outputDirectory></outputDirectory>
 			<includes>
 				<include>changes.txt</include>
 				<include>LICENSE*.*</include>
 				<include>README*.*</include>
 			</includes>
-			<fileMode>644</fileMode>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
 		</fileSet>
 		<fileSet>
 			<directory>src/main/scripts</directory>
-			<outputDirectory>${artifactId}-${artifact.baseVersion}</outputDirectory>
+			<outputDirectory></outputDirectory>
 			<includes>
-				<include>runme*.*</include>
+        <include>**/*.sh</include>
+        <include>**/*.bat</include>
 			</includes>
-			<fileMode>755</fileMode>
+      <fileMode>0755</fileMode>
+			<directoryMode>0755</directoryMode>			
 			<filtered>true</filtered>			
 		</fileSet>
 	</fileSets>

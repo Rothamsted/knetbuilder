@@ -44,14 +44,14 @@
 			<source>${basedir}/runme.sh</source>
 			<outputDirectory></outputDirectory>
 			<destName>${artifactId}-${project.version}/runme.sh</destName>
-			<fileMode>755</fileMode>
+      <fileMode>0755</fileMode>
 			<lineEnding>unix</lineEnding>
 		</file>
 		<file>
 			<source>${basedir}/runme.bat</source>
 			<outputDirectory></outputDirectory>
 			<destName>${artifactId}-${project.version}/runme.bat</destName>
-			<fileMode>755</fileMode>
+      <fileMode>0755</fileMode>
 			<lineEnding>dos</lineEnding>
 		</file>
 	</files>
@@ -68,6 +68,8 @@
 				<exclude>dbs/**</exclude>
 				<exclude>seqs/**</exclude>
 			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>      
 		</fileSet>
 	</fileSets>
 </assembly>

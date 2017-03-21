@@ -237,7 +237,7 @@
          </plugin>
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.2-beta-4</version>
+            <version>${maven.assembly.plugin.version}</version>
             <configuration>
                <descriptorRefs>
                   <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -250,7 +250,7 @@
                   <phase>package</phase>
                   <!-- append to the packaging phase. -->
                   <goals>
-                     <goal>attached</goal>
+                     <goal>single</goal>
                      <!-- goals == mojos -->
                   </goals>
                </execution>

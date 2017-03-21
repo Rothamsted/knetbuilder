@@ -7,6 +7,16 @@
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
+	  <fileSet>
+			<directory>target/ovtk2</directory>
+			<outputDirectory>ondex</outputDirectory>
+			<includes>
+				<include>**/*.sh</include>
+				<include>**/*.bat</include>
+			</includes>
+      <fileMode>0755</fileMode>
+			<directoryMode>0755</directoryMode>			
+	  </fileSet>
 		<fileSet>
 			<directory>target/ovtk2</directory>
 			<outputDirectory>ondex</outputDirectory>
@@ -15,7 +25,12 @@
 				<include>**/*</include>
 			</includes>
 			<excludes>
+        <!-- Defined elsewhere, with x permissions, non-executables only here -->
+        <exclude>**/*.sh</exclude>
+        <exclude>**/*.bat</exclude>
 			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
 		</fileSet>
 		<fileSet>
 			<directory>target/plugins</directory>
@@ -26,6 +41,8 @@
 			</includes>
 			<excludes>
 			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
 		</fileSet>
 	</fileSets>
 </assembly>
