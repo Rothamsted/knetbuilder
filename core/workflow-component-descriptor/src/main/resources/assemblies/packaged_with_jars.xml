@@ -19,7 +19,6 @@
         <excludes>
            	<exclude>META-INF</exclude>
          </excludes>
-      <useDefaultExcludes>true</useDefaultExcludes>
     </dependencySet>
   </dependencySets>
   <fileSets>
@@ -30,6 +29,8 @@
       	<include>*.xsl</include>
       </includes>
       <outputDirectory>/</outputDirectory>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>            
     </fileSet>
   </fileSets>
 </assembly>

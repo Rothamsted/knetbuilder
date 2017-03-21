@@ -13,12 +13,15 @@
       	<include>*.xsl</include>
       </includes>
       <outputDirectory>/</outputDirectory>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>            
     </fileSet>
   </fileSets>
   <files>
   	<file>
   		<source>${basedir}/pom.xml</source> <!-- This is added as the jar can never be empty or an error occurs -->
   		<outputDirectory>/</outputDirectory>
+      <fileMode>0644</fileMode>
   	</file>
   </files>
 </assembly>
