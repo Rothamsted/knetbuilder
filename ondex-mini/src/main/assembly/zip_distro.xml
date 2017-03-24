@@ -11,11 +11,13 @@
 	<dependencySets>
     <dependencySet>
         <outputDirectory>/lib</outputDirectory>
+        <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
         <useTransitiveDependencies>true</useTransitiveDependencies>
         <scope>runtime</scope>
     </dependencySet>
 		<dependencySet>
 			<outputDirectory>/plugins</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
 			<useTransitiveDependencies>true</useTransitiveDependencies>
 			<scope>test</scope>
 			<includes>

@@ -198,7 +198,7 @@
                   <phase>package</phase>
                   <!-- append to the packaging phase. -->
                   <goals>
-                     <goal>single</goal>
+                     <goal>attached</goal>
                      <!-- goals == mojos -->
                   </goals>
                   <configuration>
@@ -213,7 +213,7 @@
                   <phase>package</phase>
                   <!-- append to the packaging phase. -->
                   <goals>
-                     <goal>single</goal>
+                     <goal>attached</goal>
                      <!-- goals == mojos -->
                   </goals>
                   <configuration>
@@ -228,7 +228,7 @@
                   <phase>package</phase>
                   <!-- append to the packaging phase. -->
                   <goals>
-                     <goal>single</goal>
+                     <goal>attached</goal>
                      <!-- goals == mojos -->
                   </goals>
                   <configuration>

@@ -111,7 +111,7 @@
                   <id>make-assembly-packaged_with_jars</id>
                   <phase>package</phase>
                   <goals>
-                     <goal>single</goal>
+                     <goal>attached</goal>
                   </goals>
                   <configuration>
                      <descriptors><!-- This adds up to the ones coming from workflow-component-descriptor and overrides 

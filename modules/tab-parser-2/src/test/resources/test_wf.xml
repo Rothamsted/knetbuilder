@@ -6,10 +6,9 @@
       <Arg name="graphId">default</Arg>
     </Graph>
     <Parser name="tabParser2">
-      <Arg name="InputFile">/Users/brandizi/Documents/Work/RRes/ondex-code/modules/tab-parser-2/src/test/resources/ppi_example.tsv</Arg>
-      <Arg name="configFile">/Users/brandizi/Documents/Work/RRes/ondex-code/modules/tab-parser-2/src/test/resources/test_tab_spec_1.xml</Arg>
+      <Arg name="InputFile">/Users/brandizi/Documents/Work/RRes/ondex_git/ondex-full/ondex-knet-builder/modules/tab-parser-2/src/test/resources/ppi_example.tsv</Arg>
+      <Arg name="configFile">/Users/brandizi/Documents/Work/RRes/ondex_git/ondex-full/ondex-knet-builder/modules/tab-parser-2/src/test/resources/test_tab_spec_1.xml</Arg>
       <Arg name="graphId">default</Arg>
     </Parser>
   </Workflow>
 </Ondex>
-
