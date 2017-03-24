@@ -222,7 +222,11 @@
       <!--Plugin Properties -->
       <!-- was 2.2.6 First that works is 2.2.11 -->
       <cxf.version>2.2.11</cxf.version>
-      <maven.assembly.plugin.version>3.0.0</maven.assembly.plugin.version>
+      <!-- 
+        TODO: this is the last version known to work, except for the fact it creates directories with the wrong
+        permissions. 
+       -->
+      <maven.assembly.plugin.version>2.2-beta-5</maven.assembly.plugin.version>
       <maven.compiler.plugin.version>2.1</maven.compiler.plugin.version>
       <maven.dependency.plugin.version>3.0.0</maven.dependency.plugin.version>
       <maven.failsafe.plugin.version>2.6</maven.failsafe.plugin.version>
