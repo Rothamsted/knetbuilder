@@ -146,7 +146,7 @@
          <scope>runtime</scope>
       </dependency>
 
-      <!-- Dependencies required for the archive -->      
+      <!-- Dependencies required for the distro archive -->      
       <dependency>
          <groupId>net.sourceforge.ondex</groupId>
          <artifactId>datadir</artifactId>

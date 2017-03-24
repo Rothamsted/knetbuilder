@@ -9,4 +9,9 @@ do
   shift
 done
 
+for J in lib/*jar
+do
+  CLASSPATH=$CLASSPATH":"$J
+done
+
 java -Xmx2G -Dondex.dir=./data -jar lib/ondex-mini-${project.version}.jar -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS

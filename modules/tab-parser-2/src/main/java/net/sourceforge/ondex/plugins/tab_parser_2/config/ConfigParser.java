@@ -53,7 +53,7 @@ import net.sourceforge.ondex.tools.tab.importer.PathParser;
 import net.sourceforge.ondex.tools.tab.importer.RelationPrototype;
 
 /**
- * The parser of the XML mapping schema. 
+ * The parser for the XML mapping schema. 
  * 
  * This has the purpose of taking an XML mapping file (see project README) and instantiate an ONDEX {@link PathParser}
  * according to the declarations in the XML. 

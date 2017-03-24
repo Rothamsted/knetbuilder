@@ -117,9 +117,16 @@
                      <goal>unpack</goal>
                   </goals>
                   <configuration>
-                     <artifactItems><!--artifactItem> <groupId>net.sourceforge.ondex</groupId> <artifactId>datadir</artifactId>
-									<type>zip</type> <classifier>data</classifier> <overWrite>false</overWrite>
-									<outputDirectory>${basedir}</outputDirectory> <includes>**/*</includes> </artifactItem -->
+                     <artifactItems>
+												<!-- artifactItem>
+												 <groupId>net.sourceforge.ondex</groupId>
+												 <artifactId>datadir</artifactId>
+												 <type>zip</type>
+												 <classifier>data</classifier>
+												 <overWrite>false</overWrite>
+												 <outputDirectory>${basedir}</outputDirectory>
+												 <includes>**/*</includes> 
+												</artifactItem -->
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.core</groupId>
                            <artifactId>workflow-component-descriptor</artifactId>

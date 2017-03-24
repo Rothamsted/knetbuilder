@@ -10,10 +10,9 @@
 		<dependencySet>
 			<outputDirectory>${artifactId}-${project.version}/lib
 			</outputDirectory>
-			<outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
-			</outputFileNameMapping>
+			<outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
 			<useTransitiveDependencies>true</useTransitiveDependencies>
-			<scope>runtime</scope>
+			<scope>compile</scope>
 			<excludes>
 				<exclude>*:zip</exclude>
 			</excludes>
