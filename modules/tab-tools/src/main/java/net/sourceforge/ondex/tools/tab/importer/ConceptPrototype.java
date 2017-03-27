@@ -171,7 +171,7 @@ public class ConceptPrototype extends GraphEntityPrototype {
         for (String[] prot : listSets[2]) {
             if (prot[3].equals("") || prot[3] == null)
                 continue;
-            System.err.println(Arrays.asList(prot).toString());
+        //    System.err.println(Arrays.asList(prot).toString());
             try {
                 boolean isAmbiguous = Boolean.valueOf(prot[1]);
                 currentValue.createConceptAccession(prot[3].trim().toUpperCase(), createDataSource(meta, prot[2]), isAmbiguous);
