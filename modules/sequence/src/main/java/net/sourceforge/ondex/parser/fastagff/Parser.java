@@ -107,14 +107,14 @@ public class Parser extends ONDEXParser {
 			dsConcept = md.getDataSource(dsName);
 		} else {
 			dsConcept = md.createDataSource(dsName, dsName, dsName);
-			System.out.println("New data source object was created: " + dsName);
+			System.out.println("New concept Data Source object was created: " + dsName);
 		}
 
 		if (md.getDataSource(xref) != null) {
 			dsAccession = md.getDataSource(xref);
 		} else {
 			dsAccession = md.createDataSource(xref, xref, xref);
-			System.out.println("New data source object was created: " + xref);
+			System.out.println("New accession XRef object was created: " + xref);
 		}
 
 		// creates hashmaps between ondex and concept classes
@@ -131,6 +131,7 @@ public class Parser extends ONDEXParser {
 		// create Hashmaps for gene properties retrieved from the gff3 file
         HashMap<String,String> geneProps = new HashMap<String,String>();
 
+		boolean parserError= false;
 		try {
 
 			gffFile = new File(GFFFilePath);
@@ -150,7 +151,7 @@ public class Parser extends ONDEXParser {
 				}
 
 				String geneId = "";
-				String geneDescription = "";
+			//	String geneDescription = ""; // not needed
 				String geneCName = null;
 				String biotype = "";
 				// Remove gene: from TAB column
@@ -165,12 +166,12 @@ public class Parser extends ONDEXParser {
 					// geneId = col[0].split("=")[1].toUpperCase();
 					// geneDescription = col[1].split("=")[1].toUpperCase();
 					geneId = geneProps.get("ID");
-					geneDescription = geneProps.get("DESCRIPTION");
+			//		geneDescription = geneProps.get("DESCRIPTION");
 					geneCName = geneProps.get("NAME");
 					biotype = geneProps.get("BIOTYPE");
 				} else {
 					geneId = splited[8].split("=")[1].toUpperCase();
-					geneDescription = splited[8].split("=")[1];
+			//		geneDescription = splited[8].split("=")[1];
 				}
 
 				String chromosome = splited[0];
@@ -239,6 +240,7 @@ public class Parser extends ONDEXParser {
 				geneProps.clear(); // clear hashmap
 			}
 		} catch (Exception e) {
+                        parserError= true;
 			e.printStackTrace();
 		} finally {
 			try {
@@ -252,12 +254,13 @@ public class Parser extends ONDEXParser {
 
 		// parse FASTA and create protein concepts
 		// ---------------------------------------
+	    if(parserError = false) {
 		String FASTAFilePath = (String) args.getUniqueValue(ArgumentNames.FASTA_ARG);
 		File FASTAFile = null;
 		FileReader FASTAfr = null;
 		BufferedReader FASTAbr = null;
 
-		try {
+                    try {
 
 			FASTAFile = new File(FASTAFilePath);
 			FASTAfr = new FileReader(FASTAFile);
@@ -299,6 +302,7 @@ public class Parser extends ONDEXParser {
 			c2.createAttribute(anSecuenceAA, secuence, false);
 			ondex2protein.put(secuenceName, c2.getId());
 		} catch (Exception e) {
+                        parserError= true;
 			e.printStackTrace();
 		} finally {
 
@@ -310,9 +314,11 @@ public class Parser extends ONDEXParser {
 				e2.printStackTrace();
 			}
 		}
+            }
 
 		// parse mapping file and create relations
 		// ---------------------------------------
+	    if(parserError = false) {
 		System.out.println("Parse Mapping file, if exists...");
 		String MappingFilePath = null;
 		MappingFilePath = (String) args.getUniqueValue(ArgumentNames.MAPPING_ARG);
@@ -360,6 +366,7 @@ public class Parser extends ONDEXParser {
 				System.out.println("Amount of missing genes: " + missingGenes);
 				System.out.println("Amount of missing proteins: " + missingProteins);
 			} catch (Exception e) {
+                                parserError= true;
 				e.printStackTrace();
 			} finally {
 
@@ -407,6 +414,7 @@ public class Parser extends ONDEXParser {
 			System.out.println("Amount of missing genes: " + missingGenes);
 			System.out.println("Amount of missing proteins: " + missingProteins);
 		}
+            }
 	}
 
 	@Override
