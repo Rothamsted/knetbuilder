@@ -167,7 +167,8 @@ public class Transformer {
         dataSources.put("PRINTS", mdu.safeFetchDataSource(MetaData.CV_PRINTS));
         dataSources.put("TAIR", mdu.safeFetchDataSource(MetaData.CV_TAIR));
         dataSources.put("MIM", mdu.safeFetchDataSource(MetaData.CV_OMIM));
-        dataSources.put("ENSEMBLFUNGI", mdu.safeFetchDataSource(MetaData.CV_SGD));
+        dataSources.put("ENSEMBLFUNGI", mdu.safeFetchDataSource(MetaData.CV_ENSEMBL));
+	dataSources.put("SGD", mdu.safeFetchDataSource(MetaData.CV_SGD));
 
         umambigProtinMetaData = new HashSet<String>();
         umambigProtinMetaData.add(MetaData.CV_UniProt);
@@ -239,7 +240,7 @@ public class Transformer {
 //                            System.out.println("2: "+value);
                         }
                     } else if (umambigProtinMetaData.contains(dataSource.getId())) {
-                    	if(dataSource.getId().equals(MetaData.CV_UniProt) || dataSource.getId().equals(MetaData.CV_SGD)){
+                    	if(dataSource.getId().equals(MetaData.CV_UniProt)){
                         	proteinConcept.createConceptAccession(value, dataSource, false);
 //                        	System.out.println("unambig: " + value);
                         }
@@ -277,7 +278,7 @@ public class Transformer {
                     } else if (dataSource.getId().equals(MetaData.CV_GO) && goTree != null) {
                         lookforGOAccessions(dbLink, proteinConcept);
                     } else if (umambigProtinMetaData.contains(dataSource.getId())) {
-                    	if(dataSource.getId().equals(MetaData.CV_UniProt) || dataSource.getId().equals(MetaData.CV_SGD)){
+                    	if(dataSource.getId().equals(MetaData.CV_UniProt)){
                         	proteinConcept.createConceptAccession(value, dataSource, false);
 //                        	System.out.println("unambig2: " + value);
                         }
