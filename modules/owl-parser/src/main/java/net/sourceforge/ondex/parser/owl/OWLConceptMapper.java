@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.parser.owl;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -23,15 +22,15 @@ import net.sourceforge.ondex.parser.IdMapper;
  */
 public class OWLConceptMapper implements ConceptMapper<OntModel>
 {
-	private OWLConceptClassMapper topClassMapper;
+	private OWLConceptClassMapper conceptClassMapper;
 	private IdMapper<String, OntModel> idMapper = new IRIBasedIdMapper<> ();
 	
 	@Override
 	public Set<ONDEXConcept> map ( OntModel model, ONDEXGraph graph )
 	{
-		String topClassUri = topClassMapper.getClassUri ();
+		String topClassUri = conceptClassMapper.getClassIri ();
 		OntClass topOntCls = model.getOntClass ( topClassUri );
-		ConceptClass cc = topClassMapper.map ( model, graph );
+		ConceptClass cc = conceptClassMapper.map ( model, graph );
 		topOntCls.listSubClasses ( true ).forEachRemaining ( ontCls -> this.mapTree ( ontCls, cc, graph ) );
 		return graph.getConcepts ();
 	}
@@ -61,14 +60,14 @@ public class OWLConceptMapper implements ConceptMapper<OntModel>
 		return concept;
 	}
 
-	public OWLConceptClassMapper getTopClassMapper ()
+	public OWLConceptClassMapper getConceptClassMapper ()
 	{
-		return topClassMapper;
+		return conceptClassMapper;
 	}
 
-	public void setTopClassMapper ( OWLConceptClassMapper topClassMapper )
+	public void setConceptClassMapper ( OWLConceptClassMapper ccMapper )
 	{
-		this.topClassMapper = topClassMapper;
+		this.conceptClassMapper = ccMapper;
 	}
 
 	public IdMapper<String, OntModel> getIdMapper ()

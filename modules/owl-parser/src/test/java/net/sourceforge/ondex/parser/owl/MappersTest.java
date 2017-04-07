@@ -4,16 +4,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashSet;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -27,33 +29,74 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  *
  */
 public class MappersTest
-{
-	public static final String FOO_NS = "http://www.example.com/foo#";
+{	
+	private OntModel model;
+	private String topClsId; 
+	private OntClass topCls;
+	private OntClass ontCls;
+	private String clsId;
+	
+	@Before
+	public void initTestData ()
+	{
+		model = ModelFactory.createOntologyModel ();
+		
+		topClsId = "TopClass";
+		topCls = model.createClass ( NamespaceUtils.iri ( "foo", topClsId ) );
+		topCls.setLabel ( "Top Class", "en" );
+		topCls.setComment ( "Top Class Description", "en" );
+		
+		clsId = "ClassA";
+		ontCls = model.createClass ( NamespaceUtils.iri ( "foo", clsId ) );
+		ontCls.setLabel ( "Class A Label", "en" );
+		ontCls.setComment ( "Class A Description", "en" );
+
+		topCls.addSubClass ( ontCls );		
+	}
 	
 	@Test
 	public void testBasics ()
 	{
-		OntModel model = ModelFactory.createOntologyModel ();
-		
-		String topClsId = "TopClass";
-		OntClass topCls = model.createClass ( FOO_NS + topClsId );
-		topCls.setLabel ( "Top Class", "en" );
-		topCls.setComment ( "Top Class Description", "en" );
-		
-		String clsId = "ClassA";
-		OntClass ontCls = model.createClass ( FOO_NS + clsId );
-		ontCls.setLabel ( "Class A Label", "en" );
-		ontCls.setComment ( "Class A Description", "en" );
-
-		topCls.addSubClass ( ontCls );
 		
 		OWLConceptClassMapper ccmap = new OWLConceptClassMapper ();
-		ccmap.setClassUri ( FOO_NS + "TopClass" );
+		ccmap.setClassIri ( topCls.getURI () );
+
 		OWLConceptMapper conceptMap = new OWLConceptMapper ();
-		conceptMap.setTopClassMapper ( ccmap );
+		conceptMap.setConceptClassMapper ( ccmap );
 
 		OWLMapper owlMap = new OWLMapper ();
 		owlMap.setConceptMappers ( new HashSet<> ( Arrays.asList ( conceptMap ) ) );
+
+		ONDEXGraph graph = owlMap.map ( model );
+		
+		final ONDEXConcept[] ct = new ONDEXConcept [ 1 ];
+		
+		Assert.assertTrue ( 
+			"Test Concept not found!", 
+			graph
+			.getConcepts ()
+			.stream ()
+			.anyMatch ( c -> "ClassA".equals ( c.getPID () ) && ( ct [ 0 ] = c ) != null )
+		);
+		
+		DataSource ds = graph.getMetaData ().createDataSource ( "owlParser", "The OWL Parser", "" );
+
+		assertNotNull ( "Concept accession is wrong!", ct[ 0 ].getConceptAccession ( clsId, ds ) );
+		assertNotNull ( "Concept label is wrong!", ct[ 0 ].getConceptName ( ontCls.getLabel ( "en" ) ) );
+		assertEquals ( "Concept description is wrong!", ontCls.getComment ( "en" ), ct[ 0 ].getDescription () );
+		
+		ConceptClass cct = ct [ 0 ].getOfType ();
+		assertEquals ( "Concept Class ID is wrong!", topClsId, cct.getId () );
+		assertEquals ( "Concept label is wrong!",  topCls.getLabel ( "en" ), cct.getFullname () );
+		assertEquals ( "Concept description is wrong!", topCls.getComment ( "en" ), cct.getDescription () );
+	}
+	
+	
+	@Test
+	public void testSpringBootstrap ()
+	{
+		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "mapper_cfg_ex.xml" );
+		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 
 		ONDEXGraph graph = owlMap.map ( model );
 		

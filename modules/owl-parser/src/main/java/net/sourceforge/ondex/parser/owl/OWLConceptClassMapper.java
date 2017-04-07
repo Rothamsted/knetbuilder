@@ -17,13 +17,13 @@ import net.sourceforge.ondex.parser.IdMapper;
  */
 public class OWLConceptClassMapper implements ConceptClassMapper<OntModel>
 {
-	private String classUri;
+	private String classIri;
 	private IdMapper<String, OntModel> idMapper = new IRIBasedIdMapper<> (); 
 	
 	@Override
 	public ConceptClass map ( OntModel model, ONDEXGraph graph )
 	{
-		OntClass ontCls = model.getOntClass ( classUri );
+		OntClass ontCls = model.getOntClass ( classIri );
 		String clsLabel = ontCls.getLabel ( "en" ); // TODO: custom mapper. TODO: null check
 		String clsId = this.idMapper.map ( ontCls.getURI (), model ); 
 		String description = ontCls.getComment ( "en" ); // TODO: configurable
@@ -31,14 +31,14 @@ public class OWLConceptClassMapper implements ConceptClassMapper<OntModel>
 		return cc;
 	}
 
-	public String getClassUri ()
+	public String getClassIri ()
 	{
-		return classUri;
+		return classIri;
 	}
 
-	public void setClassUri ( String classUri )
+	public void setClassIri ( String classIri )
 	{
-		this.classUri = classUri;
+		this.classIri = classIri;
 	}
 
 	public IdMapper<String, OntModel> getIdMapper ()

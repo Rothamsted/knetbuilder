@@ -4,7 +4,6 @@ import java.util.Set;
 
 import org.apache.jena.ontology.OntModel;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser.ConceptMapper;
