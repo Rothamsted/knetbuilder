@@ -3,9 +3,9 @@ package net.sourceforge.ondex.parser.owl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntClass;
 
-import net.sourceforge.ondex.parser.IdMapper;
+import net.sourceforge.ondex.parser.SimpleIdMapper;
 
 /**
  * TODO: comment me!
@@ -14,17 +14,17 @@ import net.sourceforge.ondex.parser.IdMapper;
  * <dl><dt>Date:</dt><dd>6 Apr 2017</dd></dl>
  *
  */
-public class IRIBasedIdMapper<S> implements IdMapper<String, OntModel>
+public class IRIBasedIdMapper implements SimpleIdMapper<OntClass>
 {
 	private String splitRegEx = "[#/]";
 	
-	
 	@Override
-	public String map ( String iri, OntModel source )
+	public String map ( OntClass ontCls )
 	{
+		// TODO: null
+		String iri= ontCls.getURI (); 
 		try
 		{
-			// TODO: null
 			String[] frags = iri.split ( splitRegEx );
 			String lastFrag = frags [ frags.length - 1 ];
 			lastFrag = URLDecoder.decode ( lastFrag, "UTF-8" );

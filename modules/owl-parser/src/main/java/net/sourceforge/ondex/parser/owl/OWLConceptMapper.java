@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.parser.owl;
 
-import java.util.Set;
-
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
@@ -10,8 +8,10 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 import net.sourceforge.ondex.parser.ConceptMapper;
-import net.sourceforge.ondex.parser.IdMapper;
+import net.sourceforge.ondex.parser.SimpleIdMapper;
+import net.sourceforge.ondex.parser.SimpleLabelMapper;
 
 /**
  * TODO: comment me!
@@ -20,41 +20,34 @@ import net.sourceforge.ondex.parser.IdMapper;
  * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
  *
  */
-public class OWLConceptMapper implements ConceptMapper<OntModel>
+public class OWLConceptMapper implements ConceptMapper<OntClass>
 {
 	private OWLConceptClassMapper conceptClassMapper;
-	private IdMapper<String, OntModel> idMapper = new IRIBasedIdMapper<> ();
+	
+	private SimpleIdMapper<OntClass> idMapper;
+	private SimpleLabelMapper<OntClass> labelMapper;
+	private SimpleLabelMapper<OntClass> descriptionMapper;
+
 	
 	@Override
-	public Set<ONDEXConcept> map ( OntModel model, ONDEXGraph graph )
+	public ONDEXConcept map ( OntClass ontCls, ONDEXGraph graph )
 	{
-		String topClassUri = conceptClassMapper.getClassIri ();
-		OntClass topOntCls = model.getOntClass ( topClassUri );
-		ConceptClass cc = conceptClassMapper.map ( model, graph );
-		topOntCls.listSubClasses ( true ).forEachRemaining ( ontCls -> this.mapTree ( ontCls, cc, graph ) );
-		return graph.getConcepts ();
-	}
-
-	protected void mapTree ( OntClass ontClass, ConceptClass cc, ONDEXGraph graph )
-	{
-		this.mapClass ( ontClass, cc, graph );
-		ontClass.listSubClasses ( true ).forEachRemaining ( ontCls -> this.mapTree ( ontCls, cc, graph ) );
-	}
-	
-	protected ONDEXConcept mapClass ( OntClass ontClass, ConceptClass cc, ONDEXGraph graph )
-	{
-		OntModel model = ontClass.getOntModel ();
-		String clsLabel = ontClass.getLabel ( "en" );
-		String conceptId = idMapper.map ( ontClass.getURI (), model );
-		String description = ontClass.getComment ( "en" ); // TODO: configurable
+		OntModel model = ontCls.getOntModel ();
+		String conceptId = idMapper.map ( ontCls );
+		String clsLabel = labelMapper.map ( ontCls );
+		String description = descriptionMapper.map ( ontCls );
+		
+		ConceptClass cc = this.conceptClassMapper.map ( model, graph );
+		
+		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
 		
 		// TODO: what is it?!
-		EvidenceType evidence = graph.getMetaData ().createEvidenceType ( "IMPD", "IMPD", "" );
+		EvidenceType evidence = graphw.getEvidenceType ( "IMPD", "IMPD", "" );
 		
 		// TODO: attach the file?
-		DataSource ds = graph.getMetaData ().createDataSource ( "owlParser", "The OWL Parser", "" );
+		DataSource ds = graphw.getDataSource ( "owlParser", "The OWL Parser", "" );
 		
-		ONDEXConcept concept = graph.getFactory ().createConcept ( conceptId, "", description, ds, cc, evidence );
+		ONDEXConcept concept = graphw.getConcept ( conceptId, "", description, ds, cc, evidence );
 		concept.createConceptName ( clsLabel, true );
 		concept.createConceptAccession ( conceptId, ds, false );
 		return concept;
@@ -65,19 +58,42 @@ public class OWLConceptMapper implements ConceptMapper<OntModel>
 		return conceptClassMapper;
 	}
 
-	public void setConceptClassMapper ( OWLConceptClassMapper ccMapper )
+	/**
+	 * If this remains null, it's set by the component using it, e.g., @see the {@link OwlSubClassRelMapper}.
+	 */	
+	public void setConceptClassMapper ( OWLConceptClassMapper conceptClassMapper )
 	{
-		this.conceptClassMapper = ccMapper;
+		this.conceptClassMapper = conceptClassMapper;
 	}
 
-	public IdMapper<String, OntModel> getIdMapper ()
+	public SimpleIdMapper<OntClass> getIdMapper ()
 	{
 		return idMapper;
 	}
 
-	public void setIdMapper ( IdMapper<String, OntModel> idMapper )
+	public void setIdMapper ( SimpleIdMapper<OntClass> idMapper )
 	{
 		this.idMapper = idMapper;
+	}
+
+	public SimpleLabelMapper<OntClass> getLabelMapper ()
+	{
+		return labelMapper;
+	}
+
+	public void setLabelMapper ( SimpleLabelMapper<OntClass> labelMapper )
+	{
+		this.labelMapper = labelMapper;
+	}
+
+	public SimpleLabelMapper<OntClass> getDescriptionMapper ()
+	{
+		return descriptionMapper;
+	}
+
+	public void setDescriptionMapper ( SimpleLabelMapper<OntClass> descriptionMapper )
+	{
+		this.descriptionMapper = descriptionMapper;
 	}
 	
 }

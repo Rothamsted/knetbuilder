@@ -7,20 +7,21 @@
 	An example of Spring configuration for the OWL parser that is based on mapping components. 
 	]]></description>
 
+	<import resource="default_mappings.xml" />
 
 	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
 		<!-- 
 			The root component. Subcomponents are added here and their parameters are set to customise the parser.
 			
-			For instance, an OWL mapper is configured with concept mappers, which map all descendants of a top OWL class
-			(eg, 'go:biological process' to ONDEX concepts. Such top class can be specified via a concept class mapper, 
-			which maps the top OWL class to an ONDEX concept class. 
+			The typical pattern is to pass relation mappers, which traverses the ontology following relations like
+			owl:subClassOf or part-of and map the subclasses it meets along the way to ONDEX concepts, which in turn 
+			enables the mapping of root classes to ONDEX concept classes. 
 		 -->
-	  <property name = "conceptMappers">
+	  <property name = "relationsMappers">
 	  	<set>
-	  		<bean class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper">
+	  		<bean parent = "subClassMapper">
 	  			<property name="conceptClassMapper">
-	  				<bean class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" >
+	  				<bean parent = "conceptClassMapper">
 	  					<!-- This is the Spring way to call Java stuff (see SpEl documentation) -->
 	  					<property name = "classIri" value="#{ns.iri ( 'foo:TopClass' )}" />
 	  				</bean>
@@ -30,6 +31,4 @@
 	  </property>
 	</bean>
 		
-		
-	<bean id = "ns" class = "info.marcobrandizi.rdfutils.namespaces.NamespaceUtils" />		
 </beans>

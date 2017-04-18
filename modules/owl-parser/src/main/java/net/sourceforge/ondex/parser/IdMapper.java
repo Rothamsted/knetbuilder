@@ -9,5 +9,4 @@ package net.sourceforge.ondex.parser;
  */
 public interface IdMapper<P, S> extends ParametricMapper<String, P, S>
 {
-
 }

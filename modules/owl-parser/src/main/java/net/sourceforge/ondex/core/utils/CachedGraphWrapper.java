@@ -1,0 +1,107 @@
+package net.sourceforge.ondex.core.utils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+
+/**
+ * TODO: comment me!
+ *
+ * @author brandizi
+ * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
+ *
+ */
+public class CachedGraphWrapper
+{
+	private ONDEXGraph graph; 
+	private Table<Class<Object>, String, Object> cache = HashBasedTable.create ();
+	
+	private static Map<ONDEXGraph, CachedGraphWrapper> instances = new HashMap<> ();
+	
+	public CachedGraphWrapper ( ONDEXGraph graph )
+	{
+		this.graph = graph;
+	}
+
+	public static CachedGraphWrapper getInstance ( ONDEXGraph graph ) 
+	{
+		return instances.computeIfAbsent ( graph, g -> new CachedGraphWrapper ( g ) );
+	}
+	
+	
+	public ConceptClass getConceptClass ( String id, String fullName, String description, ConceptClass specialisationOf )
+	{
+		return this.cacheGet ( 
+			ConceptClass.class, id, 
+			() -> this.graph.getMetaData ().createConceptClass ( id, fullName, description, specialisationOf )
+		);
+	}
+	
+	public ONDEXConcept getConcept (
+		String id, String annotation, String description, DataSource ds, ConceptClass conceptClass, EvidenceType evidence
+	)
+	{
+		return this.cacheGet ( 
+			ONDEXConcept.class, id, 
+			() -> this.graph.getFactory ().createConcept ( id, annotation, description, ds, conceptClass, evidence )
+		);
+	}
+
+	public RelationType getRelationType ( 
+		String id, boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitive 
+	)
+	{
+		return this.cacheGet ( 
+			RelationType.class, id, 
+			() -> this.graph.getMetaData ().getFactory ().createRelationType (
+				id, isAntisymmetric, isReflexive, isSymmetric, isTransitive 
+			)
+		);
+	}
+	
+	public ONDEXRelation getRelation ( ONDEXConcept from, ONDEXConcept to, RelationType type, EvidenceType evidence )
+	{
+		String id = from.getPID () + to.getPID () + type.getId () + evidence.getId ();
+		return this.cacheGet ( 
+				ONDEXRelation.class, id, 
+			() -> this.graph.getFactory ().createRelation ( from, to, type, evidence )
+		);
+	}
+	
+	public EvidenceType getEvidenceType ( String id, String fullName, String description )
+	{
+		return this.cacheGet ( 
+			EvidenceType.class, id, 
+			() -> this.graph.getMetaData ().createEvidenceType ( id, fullName, description ) 
+		);
+	}
+	
+	public DataSource getDataSource ( String id, String fullName, String description )
+	{
+		return this.cacheGet ( 
+			DataSource.class, id, 
+			() -> this.graph.getMetaData ().createDataSource ( id, fullName, description ) 
+		);
+	}
+	
+	@SuppressWarnings ( "unchecked" )
+	private <V> V cacheGet ( Class<? super V> type, String key, Supplier<V> newValueGenerator )
+	{
+		V result = (V) this.cache.get ( type, key );
+		if ( result != null ) return result;
+		
+		this.cache.put ( (Class<Object>) type, key, result = newValueGenerator.get () );
+		return result;
+	}
+}

@@ -39,7 +39,6 @@
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>memory</artifactId>
          <version>${project.version}</version>
-         <scope>test</scope>
       </dependency>
             
       <dependency>
@@ -47,6 +46,15 @@
          <artifactId>log4j</artifactId>
          <scope>provided</scope>
       </dependency>
+
+			<!-- Routes SLF4J to LOG4j, which is the ONDEX logger -->
+			<!-- TODO: move to top pom -->      
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.25</version>
+			</dependency>
+      
       
 			<dependency>
 			  <groupId>info.marcobrandizi</groupId>
@@ -87,8 +95,40 @@
                </execution>
             </executions>
          </plugin>
+         
+			  <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <configuration>
+			      <properties>
+			        <property>
+			        	<!-- Prints out spaces and test name before/after every test method and automatically -->
+			          <name>listener</name>
+			          <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
+			        </property>
+			       </properties>
+			    </configuration>
+			  </plugin>
+         
       </plugins>
 
    </build>
+
+   <repositories>
+      <repository>
+         <id>ondex-releases-all</id>
+         <name>Internal Releases</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
+         <releases><enabled>true</enabled></releases>
+         <snapshots><enabled>false</enabled></snapshots>
+      </repository>
+      <repository>
+         <id>ondex-snapshots-all</id>
+         <name>Internal Snapshots</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshotss</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+      </repository>
+   </repositories>
 
 </project>

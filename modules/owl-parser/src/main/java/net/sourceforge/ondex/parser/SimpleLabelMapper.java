@@ -7,7 +7,6 @@ package net.sourceforge.ondex.parser;
  * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
  *
  */
-public interface ParametricMapper<O, P, S>
+public interface SimpleLabelMapper<P> extends Mapper<String, P>
 {
-	public O map ( P param, S source );
 }

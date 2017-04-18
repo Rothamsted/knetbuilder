@@ -22,6 +22,7 @@ public class ONDEXNamespaces implements Namespaces
 		{{
 			// Just to make tests and examples
 			put ( "foo", "http://www.example.com/foo#" );
+			put ( "obo", "http://purl.obolibrary.org/obo/" );
 		}};
 	}
 }

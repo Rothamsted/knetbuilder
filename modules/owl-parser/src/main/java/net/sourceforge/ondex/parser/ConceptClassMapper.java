@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.parser;
 
-import java.util.stream.Stream;
-
 import net.sourceforge.ondex.core.ConceptClass;
 
 /**

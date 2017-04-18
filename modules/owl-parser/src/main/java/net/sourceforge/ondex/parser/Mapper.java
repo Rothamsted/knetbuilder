@@ -7,7 +7,7 @@ package net.sourceforge.ondex.parser;
  * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
  *
  */
-public interface ParametricMapper<O, P, S>
+public interface Mapper<O, S>
 {
-	public O map ( P param, S source );
+	public O map ( S source );
 }
