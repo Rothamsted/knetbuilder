@@ -18,7 +18,10 @@ import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 import net.sourceforge.ondex.parser.RelationsMapper;
 
 /**
- * TODO: comment me!
+ * The mapper that follows the tree of rdfs:subClassOf relations from a root OWL class, which is taken from 
+ * {@link #getConceptClassMapper()}.
+ * 
+ * @see OWLMapper.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
@@ -30,6 +33,9 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel>
 	
 	private OWLConceptMapper conceptMapper;	
 	
+	/**
+	 * @see above.
+	 */
 	public Stream<ONDEXRelation> map ( OntModel model, ONDEXGraph graph ) 
 	{
 		OWLConceptMapper conceptMapper = this.getConceptMapper ();
@@ -51,6 +57,9 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel>
 			.flatMap ( ontChild -> this.map ( ontChild, graph ) );
 	}
 	
+	/**
+	 * Manages the recursion described above from the subtree rooted at rootCls. 
+	 */
 	protected Stream<ONDEXRelation> map ( OntClass rootCls, ONDEXGraph graph )
 	{
 		OWLConceptMapper conceptMapper = this.getConceptMapper ();
@@ -80,6 +89,10 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel>
 	}
 	
 	
+	/**
+	 * @return is_a, which is attached to all of the links found by {@link #map(OntClass, ONDEXGraph)}.
+	 * TODO: make it configurable.
+	 */
 	public RelationType getRelationType ( ONDEXGraph graph )
 	{
 		return CachedGraphWrapper.getInstance ( graph ).getRelationType ( 
@@ -91,12 +104,17 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel>
 		);
 	}
 
+	/**
+	 * TODO: make it configurable, @return IMPD for the time being.
+	 */
 	public EvidenceType getEvidenceType ( ONDEXGraph graph )
 	{
 		return CachedGraphWrapper.getInstance ( graph ).getEvidenceType ( "IMPD", "IMPD", "" );
 	}
 
-	
+	/**
+	 * Used to map the root class and know the top level in the source ontology to start from.
+	 */
 	public OWLConceptClassMapper getConceptClassMapper ()
 	{
 		return this.conceptClassMapper;
@@ -107,6 +125,10 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel>
 		this.conceptClassMapper = conceptClassMapper;
 	}
 
+	/**
+	 * Every new owl:Class that is met by {@link #map(OntClass, ONDEXGraph)} is mapped to an {@link ONDEXConcept}
+	 * by means of this mapper.
+	 */
 	public OWLConceptMapper getConceptMapper ()
 	{
 		return conceptMapper;

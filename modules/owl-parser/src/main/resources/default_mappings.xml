@@ -4,15 +4,15 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<description><![CDATA[
-	TODO 
+	The default mapping for net.sourceforge.ondex.parser.owl.OWLMapper. This uses mappings from common elements in OWL
+	files, such as rdfs:label or rdfs:comment. 
 	]]></description>
 
 
 	<!-- 
-		These are defaults that are automatically mapped, either where there is interface/class compatibility or
-		where there is the same bean reference (the class uses @Autowired/@Qualifier)  
+		These are defaults that are automatically mapped, usually using name reference associations (e.g. getIdMapper is
+		associated to the bean named "idMapper". 
 	 -->
-	 
 	<bean id = "idMapper" class = "net.sourceforge.ondex.parser.owl.IRIBasedIdMapper" /> 
 
 	<!-- Default label based on rdfs:label -->

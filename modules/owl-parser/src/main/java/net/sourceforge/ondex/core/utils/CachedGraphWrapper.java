@@ -16,7 +16,16 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 
 /**
- * TODO: comment me!
+ * <p>A wrapper for {@link ONDEXGraph} that has the main scope of avoiding to create duplicates when creating new
+ * ONDEX entities. Methods are similar to createXXX methods in the {@link ONDEXGraph} interface, each method
+ * calls the corresponding underlining creation method, but only if the required object hasn't been created yet.</p>
+ * 
+ * <p>Clearly, this is based on an internal static set of caches, that can be on a per-graph basis 
+ * (see {@link #getInstance(ONDEXGraph)}).</p>
+ * 
+ * <p>Note that this class would normally be a <a href = "https://en.wikipedia.org/wiki/Decorator_pattern">decorator</a>, 
+ * but we prefer not to implement this way here (for the time being), for it would require too much review of 
+ * existing code.</p> 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
@@ -34,6 +43,11 @@ public class CachedGraphWrapper
 		this.graph = graph;
 	}
 
+	/**
+	 * We recommend to use this to get a wrapper that caches this graph.
+	 *  
+	 * @param graph
+	 */
 	public static CachedGraphWrapper getInstance ( ONDEXGraph graph ) 
 	{
 		return instances.computeIfAbsent ( graph, g -> new CachedGraphWrapper ( g ) );

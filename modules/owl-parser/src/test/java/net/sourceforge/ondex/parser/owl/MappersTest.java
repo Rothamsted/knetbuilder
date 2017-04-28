@@ -28,8 +28,9 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 
 /**
- * TODO: comment me!
- *
+ * Tests {@link OWLMapper} and shows typical examples of how to use both the specific OWL mapping components and the 
+ * components from the {@code net.sourceforge.ondex.parser} framework. 
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>6 Apr 2017</dd></dl>
  *
@@ -74,10 +75,13 @@ public class MappersTest
 
 		ontCls.addSubClass ( ontSubCls );
 		
+		// ---- Examples of mappers setup.
+		
 		ccmap = new OWLConceptClassMapper ();
 		ccmap.setClassIri ( topCls.getURI () );
 		ccmap.setIdMapper ( new IRIBasedIdMapper () );
 		
+		// You don't usually need this facility, Spring Beans is much better.
 		Function<String, TextPropertyMapper> txtMap = puri -> { 
 			TextPropertyMapper map = new TextPropertyMapper ();
 			map.setPropertyIri ( puri );

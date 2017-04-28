@@ -10,7 +10,11 @@ import net.sourceforge.ondex.parser.GraphMapper;
 import net.sourceforge.ondex.parser.RelationsMapper;
 
 /**
- * TODO: comment me!
+ * <p>This is the top level. Usually a class of this type is configured via 
+ * <a href = "https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html">Spring Beans</a>, 
+ * equipping it with mappers that are specific to the ontology type that is being parsed and mapped to ONDEX.</p>
+ *
+ * <p>See examples in tests and default configurations.</p>
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
@@ -32,6 +36,10 @@ public class OWLMapper implements GraphMapper<OntModel>
 		return graph;
 	}
 
+	/**
+	 * The parser starts up from relation mappers, each configured with a {@link OWLConceptClassMapper}, which tells
+	 * the relation mapper the root class to start from.
+	 */
 	public Set<RelationsMapper<OntModel>> getRelationsMappers ()
 	{
 		return relationsMappers;

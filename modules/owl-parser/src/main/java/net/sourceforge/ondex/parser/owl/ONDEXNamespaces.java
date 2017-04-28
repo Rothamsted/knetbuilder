@@ -6,8 +6,8 @@ import java.util.Map;
 import info.marcobrandizi.rdfutils.namespaces.Namespaces;
 
 /**
- * TODO: comment me!
- *
+ * ONDEX-related IRI/RDF namespaces.
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>7 Apr 2017</dd></dl>
  *

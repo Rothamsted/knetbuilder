@@ -9,8 +9,8 @@ import net.sourceforge.ondex.parser.SimpleDescriptionMapper;
 import net.sourceforge.ondex.parser.SimpleLabelMapper;
 
 /**
- * TODO: comment me!
- *
+ * Maps a literal property (eg, rdfs:label) of OWL classes to a string label. 
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>17 Apr 2017</dd></dl>
  *
@@ -19,6 +19,9 @@ public class TextPropertyMapper implements SimpleLabelMapper<OntClass>, SimpleDe
 {
 	private String propertyIri;
 
+	/**
+	 * The parameter must have a single value for the property {@link #getPropertyIri()}, else the result is undetermined.
+	 */
 	@Override
 	public String map ( OntClass ontCls )
 	{
@@ -28,6 +31,9 @@ public class TextPropertyMapper implements SimpleLabelMapper<OntClass>, SimpleDe
 		return nval.asLiteral ().getLexicalForm ();
 	}
 
+	/**
+	 * The property that this mapper deals with. Examples are rdfs:label, rdfs:comment, skos:label.
+	 */
 	public String getPropertyIri ()
 	{
 		return propertyIri;

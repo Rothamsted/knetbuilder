@@ -14,8 +14,10 @@ import net.sourceforge.ondex.parser.SimpleIdMapper;
 import net.sourceforge.ondex.parser.SimpleLabelMapper;
 
 /**
- * TODO: comment me!
- *
+ * Maps an owl:Class to an {@link ONDEXConcept}. This is similar to {@link OWLConceptClassMapper}, except it
+ * hasn't any root IRI property, and has {@link #getConceptClassMapper()} instead, to associate every mapped
+ * ONDEX concept to a concept class. 
+ *  
  * @author brandizi
  * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
  *
@@ -28,7 +30,9 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	private SimpleLabelMapper<OntClass> labelMapper;
 	private SimpleLabelMapper<OntClass> descriptionMapper;
 
-	
+	/**
+	 * @see above.
+	 */
 	@Override
 	public ONDEXConcept map ( OntClass ontCls, ONDEXGraph graph )
 	{
@@ -66,6 +70,10 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		this.conceptClassMapper = conceptClassMapper;
 	}
 
+	/**
+	 * The ID mapper that is used to create an {@link ConceptClass#getId() identifier for the mapped concept class}.
+	 * This is usually {@link IRIBasedIdMapper}. 
+	 */	
 	public SimpleIdMapper<OntClass> getIdMapper ()
 	{
 		return idMapper;
@@ -76,6 +84,10 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		this.idMapper = idMapper;
 	}
 
+	/**
+	 * A label mapper that is used to map a literal property of an owl:Class to {@link ConceptClass#getFullname()}-
+	 * For instance, this might be {@link TextPropertyMapper} configured with rdfs:label.
+	 */	
 	public SimpleLabelMapper<OntClass> getLabelMapper ()
 	{
 		return labelMapper;
@@ -86,6 +98,10 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		this.labelMapper = labelMapper;
 	}
 
+	/**
+	 * A label mapper that is used to map a literal property of an owl:Class to {@link ConceptClass#getDescription()}-
+	 * For instance, this might be {@link TextPropertyMapper} configured with rdfs:comment.
+	 */		
 	public SimpleLabelMapper<OntClass> getDescriptionMapper ()
 	{
 		return descriptionMapper;
