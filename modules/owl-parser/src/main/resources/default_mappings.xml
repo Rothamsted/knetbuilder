@@ -33,7 +33,7 @@
 		<!-- This way it's initialised by its container, dynamically -->
 		<property name = "conceptClassMapper" value = "#{ null }" />
 		<property name = "idMapper" ref = "idMapper" />
-		<property name = "labelMapper" ref = "labelMapper" />
+		<property name = "preferredNameMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
 	</bean>
 	
@@ -52,5 +52,6 @@
 	</bean>
 		
 	<!-- This is called via SpEl -->
-	<bean id = "ns" class = "info.marcobrandizi.rdfutils.namespaces.NamespaceUtils" />		
+	<bean id = "ns" class = "info.marcobrandizi.rdfutils.namespaces.NamespaceUtils" />
+	
 </beans>

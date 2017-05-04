@@ -10,7 +10,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
  *
  */
-public interface GraphMapper<S> extends ONDEXMapper<ONDEXGraph, S>
+public interface GraphMapper<S> extends ONDEXMapper<ONDEXGraph, S, ONDEXGraph>
 {
 	/**
 	 * Invokes {@link #map(Object, ONDEXGraph)} with a null graph. The implementation of such method should generate

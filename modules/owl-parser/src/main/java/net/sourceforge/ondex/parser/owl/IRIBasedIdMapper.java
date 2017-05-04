@@ -29,7 +29,7 @@ public class IRIBasedIdMapper implements SimpleIdMapper<OntClass>
 			String[] frags = iri.split ( splitRegEx );
 			String lastFrag = frags [ frags.length - 1 ];
 			lastFrag = URLDecoder.decode ( lastFrag, "UTF-8" );
-			lastFrag = lastFrag.replaceAll ( "[\\s+-:.?]", "_" );
+			lastFrag = lastFrag.replaceAll ( "[\\s\\+\\-\\:\\.\\?]", "_" );
 			return lastFrag;
 		}
 		catch ( UnsupportedEncodingException ex ) {

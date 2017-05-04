@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.parser.owl;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
@@ -9,6 +13,8 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
+import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
+import net.sourceforge.ondex.parser.AccessionsMapper;
 import net.sourceforge.ondex.parser.ConceptMapper;
 import net.sourceforge.ondex.parser.SimpleIdMapper;
 import net.sourceforge.ondex.parser.SimpleLabelMapper;
@@ -27,8 +33,12 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	private OWLConceptClassMapper conceptClassMapper;
 	
 	private SimpleIdMapper<OntClass> idMapper;
-	private SimpleLabelMapper<OntClass> labelMapper;
+	private SimpleLabelMapper<OntClass> preferredNameMapper;
+	private Set<OWLNamesMapper> additionalNameMappers = Collections.emptySet ();
 	private SimpleLabelMapper<OntClass> descriptionMapper;
+	
+	private Set<OWLAccessionsMapper> accessionsMappers = Collections.emptySet ();
+	
 
 	/**
 	 * @see above.
@@ -38,7 +48,6 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	{
 		OntModel model = ontCls.getOntModel ();
 		String conceptId = idMapper.map ( ontCls );
-		String clsLabel = labelMapper.map ( ontCls );
 		String description = descriptionMapper.map ( ontCls );
 		
 		ConceptClass cc = this.conceptClassMapper.map ( model, graph );
@@ -52,8 +61,26 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		DataSource ds = graphw.getDataSource ( "owlParser", "The OWL Parser", "" );
 		
 		ONDEXConcept concept = graphw.getConcept ( conceptId, "", description, ds, cc, evidence );
-		concept.createConceptName ( clsLabel, true );
-		concept.createConceptAccession ( conceptId, ds, false );
+
+		if ( this.preferredNameMapper != null )
+		{
+			String clsLabel = preferredNameMapper.map ( ontCls );
+			if ( clsLabel != null )
+				concept.createConceptName ( clsLabel, true );
+		}
+		
+		ONDEXElemWrapper<ONDEXConcept> conceptw = new ONDEXElemWrapper<ONDEXConcept> ( concept, graph );
+
+		// Additional names
+		this.additionalNameMappers
+		.stream ()
+		.forEach ( mapper -> mapper.map ( ontCls, conceptw ).count () );
+				
+		// Accessions
+		this.accessionsMappers
+		.stream ()
+		.forEach ( mapper -> mapper.map ( ontCls, conceptw ).count () );
+				
 		return concept;
 	}
 
@@ -85,17 +112,30 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	}
 
 	/**
-	 * A label mapper that is used to map a literal property of an owl:Class to {@link ConceptClass#getFullname()}-
+	 * A label mapper that is used to map an RDF literal property of an owl:Class to a preferred name.-
 	 * For instance, this might be {@link TextPropertyMapper} configured with rdfs:label.
 	 */	
-	public SimpleLabelMapper<OntClass> getLabelMapper ()
+	public SimpleLabelMapper<OntClass> getPreferredNameMapper ()
 	{
-		return labelMapper;
+		return preferredNameMapper;
 	}
 
-	public void setLabelMapper ( SimpleLabelMapper<OntClass> labelMapper )
+	public void setPreferredNameMapper ( SimpleLabelMapper<OntClass> nameMapper )
 	{
-		this.labelMapper = labelMapper;
+		this.preferredNameMapper = nameMapper;
+	}
+
+	/**
+	 * Additional name mappers, which work like {@link #getPreferredNameMapper()}.
+	 */
+	public Set<OWLNamesMapper> getAdditionalNameMappers ()
+	{
+		return additionalNameMappers;
+	}
+
+	public void setAdditionalNameMappers ( Set<OWLNamesMapper> additionalNameMappers )
+	{
+		this.additionalNameMappers = additionalNameMappers;
 	}
 
 	/**
@@ -110,6 +150,16 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	public void setDescriptionMapper ( SimpleLabelMapper<OntClass> descriptionMapper )
 	{
 		this.descriptionMapper = descriptionMapper;
+	}
+
+	public Set<OWLAccessionsMapper> getAccessionsMappers ()
+	{
+		return accessionsMappers;
+	}
+
+	public void setAccessionsMappers ( Set<OWLAccessionsMapper> accessionsMappers )
+	{
+		this.accessionsMappers = accessionsMappers;
 	}
 	
 }

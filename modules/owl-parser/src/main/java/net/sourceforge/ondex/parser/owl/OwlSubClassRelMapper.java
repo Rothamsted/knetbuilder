@@ -8,6 +8,8 @@ import java.util.stream.StreamSupport;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -27,11 +29,12 @@ import net.sourceforge.ondex.parser.RelationsMapper;
  * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
  *
  */
-public class OwlSubClassRelMapper implements RelationsMapper<OntModel>
+public class OwlSubClassRelMapper implements RelationsMapper<OntModel, ONDEXGraph>
 {
 	private OWLConceptClassMapper conceptClassMapper;
+	private OWLConceptMapper conceptMapper;
 	
-	private OWLConceptMapper conceptMapper;	
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	/**
 	 * @see above.
@@ -46,8 +49,14 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel>
 		// all other descendants are instances too, plus they have subclass relations, but they don't have the suclass
 		// relation to the top class (which isn't even a concept)
 		//
-		OntClass topOntCls = model.getOntClass ( this.getConceptClassMapper ().getClassIri () );
-
+		String topClsIri = this.getConceptClassMapper ().getClassIri ();
+		OntClass topOntCls = model.getOntClass ( topClsIri );
+		if ( topOntCls == null )
+		{
+			log.warn ( "No subclass found for top class <{}>", topClsIri );
+			return Stream.empty ();
+		}
+		
 		return
 			StreamSupport.stream (
 				Spliterators
@@ -75,6 +84,7 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel>
 				.spliteratorUnknownSize ( rootCls.listSubClasses ( true ), Spliterator.IMMUTABLE ),
 				true
 			)
+			.filter ( child -> !child.isAnon () ) // These are usually restrictions and we don't follow them here
 			.map ( child -> CachedGraphWrapper.getInstance ( graph ).getRelation ( 
 				conceptMapper.map ( child, graph ), rootConcept, relType, evidence 
 			));

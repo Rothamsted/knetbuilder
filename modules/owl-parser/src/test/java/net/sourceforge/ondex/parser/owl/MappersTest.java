@@ -1,11 +1,15 @@
 package net.sourceforge.ondex.parser.owl;
 
+import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
+import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -19,6 +23,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -57,14 +62,16 @@ public class MappersTest
 		model = ModelFactory.createOntologyModel ();
 		
 		topClsId = "TopClass";
-		topCls = model.createClass ( NamespaceUtils.iri ( "foo", topClsId ) );
+		topCls = model.createClass ( iri ( "foo", topClsId ) );
 		topCls.setLabel ( "Top Class", "en" );
 		topCls.setComment ( "Top Class Description", "en" );
+		
 		
 		clsId = "ClassA";
 		ontCls = model.createClass ( NamespaceUtils.iri ( "foo", clsId ) );
 		ontCls.setLabel ( "Class A Label", "en" );
 		ontCls.setComment ( "Class A Description", "en" );
+		JENAUTILS.assertLiteral ( model, ontCls.getURI (), iri ( "dcterms:identifier" ), clsId );
 
 		topCls.addSubClass ( ontCls );		
 
@@ -72,6 +79,8 @@ public class MappersTest
 		ontSubCls = model.createClass ( NamespaceUtils.iri ( "foo", subClsId ) );
 		ontSubCls.setLabel ( "Class B Label", "en" );
 		ontSubCls.setComment ( "Class B Description", "en" );
+		JENAUTILS.assertLiteral ( model, ontSubCls.getURI (), iri ( "dcterms:identifier" ), subClsId );
+		
 
 		ontCls.addSubClass ( ontSubCls );
 		
@@ -94,7 +103,12 @@ public class MappersTest
 		conceptMap = new OWLConceptMapper ();
 		conceptMap.setConceptClassMapper ( ccmap );
 		conceptMap.setIdMapper ( new IRIBasedIdMapper () );
-		conceptMap.setLabelMapper ( txtMap.apply ( RDFS.label.getURI () )  );
+		conceptMap.setPreferredNameMapper ( txtMap.apply ( RDFS.label.getURI () )  );
+
+		OWLAccessionsMapper accMap = new OWLAccessionsMapper ();
+		accMap.setPropertyIri ( iri ( "dcterms:identifier" ) );
+		conceptMap.setAccessionsMappers ( new HashSet<> ( Arrays.asList ( accMap ) ) );
+		
 		conceptMap.setDescriptionMapper ( txtMap.apply ( RDFS.comment.getURI () ) );		
 		
 		graph = new MemoryONDEXGraph ( "test" );

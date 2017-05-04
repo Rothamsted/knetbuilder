@@ -22,16 +22,17 @@ import net.sourceforge.ondex.parser.RelationsMapper;
  */
 public class OWLMapper implements GraphMapper<OntModel>
 {
-	private Set<RelationsMapper<OntModel>> relationsMappers;
+	private Set<RelationsMapper<OntModel, ONDEXGraph>> relationsMappers;
 
 	@Override
 	public ONDEXGraph map ( OntModel model, ONDEXGraph graph )
 	{
 		if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
 		
-		for ( RelationsMapper<OntModel> relMap: this.getRelationsMappers () )
-			// we must consume it, there are stream procedures that need to be invoked
-			relMap.map ( model, graph ).count ();
+		for ( RelationsMapper<OntModel, ONDEXGraph> relMap: this.getRelationsMappers () )
+			relMap
+			.map ( model, graph )
+			.count (); // we must consume it, there are stream procedures that need to be triggered
 
 		return graph;
 	}
@@ -40,12 +41,12 @@ public class OWLMapper implements GraphMapper<OntModel>
 	 * The parser starts up from relation mappers, each configured with a {@link OWLConceptClassMapper}, which tells
 	 * the relation mapper the root class to start from.
 	 */
-	public Set<RelationsMapper<OntModel>> getRelationsMappers ()
+	public Set<RelationsMapper<OntModel, ONDEXGraph>> getRelationsMappers ()
 	{
 		return relationsMappers;
 	}
 
-	public void setRelationsMappers ( Set<RelationsMapper<OntModel>> relationsMappers )
+	public void setRelationsMappers ( Set<RelationsMapper<OntModel, ONDEXGraph>> relationsMappers )
 	{
 		this.relationsMappers = relationsMappers;
 	}

@@ -61,6 +61,7 @@ public class CachedGraphWrapper
 			() -> this.graph.getMetaData ().createConceptClass ( id, fullName, description, specialisationOf )
 		);
 	}
+
 	
 	public ONDEXConcept getConcept (
 		String id, String annotation, String description, DataSource ds, ConceptClass conceptClass, EvidenceType evidence
@@ -71,7 +72,8 @@ public class CachedGraphWrapper
 			() -> this.graph.getFactory ().createConcept ( id, annotation, description, ds, conceptClass, evidence )
 		);
 	}
-
+	
+	
 	public RelationType getRelationType ( 
 		String id, boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitive 
 	)

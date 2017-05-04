@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.parser.owl;
 
+import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
+
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Literal;
@@ -15,10 +17,11 @@ import net.sourceforge.ondex.parser.SimpleLabelMapper;
  * <dl><dt>Date:</dt><dd>17 Apr 2017</dd></dl>
  *
  */
-public class TextPropertyMapper implements SimpleLabelMapper<OntClass>, SimpleDescriptionMapper<OntClass>
+public class TextPropertyMapper 
+	implements SimpleLabelMapper<OntClass>, SimpleDescriptionMapper<OntClass>
 {
-	private String propertyIri;
-
+	protected String propertyIri;
+	
 	/**
 	 * The parameter must have a single value for the property {@link #getPropertyIri()}, else the result is undetermined.
 	 */
@@ -26,10 +29,11 @@ public class TextPropertyMapper implements SimpleLabelMapper<OntClass>, SimpleDe
 	public String map ( OntClass ontCls )
 	{
 		OntModel model = ontCls.getOntModel ();
-		RDFNode nval = ontCls.getPropertyValue ( model.getProperty ( propertyIri ) );
-		if ( nval == null || !nval.canAs ( Literal.class ) ) return "";
-		return nval.asLiteral ().getLexicalForm ();
-	}
+		return JENAUTILS
+			.getObject ( model, ontCls, model.getProperty ( getPropertyIri() ), true )
+			.flatMap ( JENAUTILS::literal2Value )
+			.orElse ( null );
+	}	
 
 	/**
 	 * The property that this mapper deals with. Examples are rdfs:label, rdfs:comment, skos:label.
@@ -42,5 +46,6 @@ public class TextPropertyMapper implements SimpleLabelMapper<OntClass>, SimpleDe
 	public void setPropertyIri ( String propertyIri )
 	{
 		this.propertyIri = propertyIri;
-	}	
+	}
+
 }
