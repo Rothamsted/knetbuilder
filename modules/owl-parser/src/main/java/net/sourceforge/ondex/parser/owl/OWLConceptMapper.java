@@ -37,7 +37,7 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	
 	private Set<OWLAccessionsMapper> accessionsMappers = Collections.emptySet ();
 	
-	private Set<OwlSomeRelMapper> conceptRelationMappers = Collections.emptySet ();
+	private Set<OWLSomeRelMapper> conceptRelationMappers = Collections.emptySet ();
 	
 
 	/**
@@ -168,12 +168,12 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		this.accessionsMappers = accessionsMappers;
 	}
 
-	public Set<OwlSomeRelMapper> getConceptRelationMappers ()
+	public Set<OWLSomeRelMapper> getConceptRelationMappers ()
 	{
 		return conceptRelationMappers;
 	}
 
-	public void setConceptRelationMappers ( Set<OwlSomeRelMapper> conceptRelationMappers )
+	public void setConceptRelationMappers ( Set<OWLSomeRelMapper> conceptRelationMappers )
 	{
 		this.conceptRelationMappers = conceptRelationMappers;
 	}

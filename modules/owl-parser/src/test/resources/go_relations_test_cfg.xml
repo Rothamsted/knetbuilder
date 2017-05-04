@@ -34,7 +34,7 @@
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
 		<property name = "conceptRelationMappers">
 			<set>
-				<bean id = "someMapper" class = "net.sourceforge.ondex.parser.owl.OwlSomeRelMapper">
+				<bean id = "someMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
 					<property name="propertyIri" value="#{ns.iri ( 'obo:BFO_0000050' )}" /><!-- part of -->
 				</bean>
 			</set>

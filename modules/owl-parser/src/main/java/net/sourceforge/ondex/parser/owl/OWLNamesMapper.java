@@ -9,16 +9,11 @@ import java.util.stream.StreamSupport;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 
-import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
-import net.sourceforge.ondex.parser.AccessionsMapper;
 import net.sourceforge.ondex.parser.NamesMapper;
 
 /**

@@ -1,8 +1,5 @@
 package net.sourceforge.ondex.parser.owl;
 
-import java.util.Collections;
-import java.util.Set;
-
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 

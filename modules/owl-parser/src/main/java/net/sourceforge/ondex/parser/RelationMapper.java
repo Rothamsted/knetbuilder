@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.parser;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**

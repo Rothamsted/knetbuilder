@@ -23,7 +23,6 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;

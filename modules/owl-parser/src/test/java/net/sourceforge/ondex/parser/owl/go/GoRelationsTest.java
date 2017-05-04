@@ -1,21 +1,17 @@
 package net.sourceforge.ondex.parser.owl.go;
 
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.Closeable;
 
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.common.io.Resources;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.parser.owl.OWLMapper;

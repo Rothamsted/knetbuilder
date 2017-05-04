@@ -9,8 +9,6 @@ import java.util.stream.StreamSupport;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 
 import net.sourceforge.ondex.core.ConceptAccession;

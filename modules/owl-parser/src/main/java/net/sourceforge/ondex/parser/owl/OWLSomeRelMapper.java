@@ -27,7 +27,7 @@ import net.sourceforge.ondex.parser.RelationsMapper;
  * <dl><dt>Date:</dt><dd>3 May 2017</dd></dl>
  *
  */
-public class OwlSomeRelMapper
+public class OWLSomeRelMapper
   extends RdfPropertyMapper<Stream<ONDEXRelation>, ONDEXElemWrapper<ONDEXConcept>>
   implements RelationsMapper<OntClass, ONDEXElemWrapper<ONDEXConcept>>
 {

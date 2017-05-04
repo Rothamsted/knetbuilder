@@ -4,8 +4,6 @@ import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.RDFNode;
 
 import net.sourceforge.ondex.parser.SimpleDescriptionMapper;
 import net.sourceforge.ondex.parser.SimpleLabelMapper;
