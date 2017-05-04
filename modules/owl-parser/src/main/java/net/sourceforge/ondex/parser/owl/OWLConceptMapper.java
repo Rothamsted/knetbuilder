@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.parser.owl;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jena.ontology.OntClass;
@@ -14,7 +13,6 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
-import net.sourceforge.ondex.parser.AccessionsMapper;
 import net.sourceforge.ondex.parser.ConceptMapper;
 import net.sourceforge.ondex.parser.SimpleIdMapper;
 import net.sourceforge.ondex.parser.SimpleLabelMapper;
@@ -38,6 +36,8 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	private SimpleLabelMapper<OntClass> descriptionMapper;
 	
 	private Set<OWLAccessionsMapper> accessionsMappers = Collections.emptySet ();
+	
+	private Set<OwlSomeRelMapper> conceptRelationMappers = Collections.emptySet ();
 	
 
 	/**
@@ -80,7 +80,13 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		this.accessionsMappers
 		.stream ()
 		.forEach ( mapper -> mapper.map ( ontCls, conceptw ).count () );
-				
+
+		// non sub class relations
+		this.conceptRelationMappers
+		.stream ()
+		.peek ( mapper -> { if ( mapper.getConceptMapper () == null ) mapper.setConceptMapper ( this ); } ) 
+		.forEach ( mapper -> mapper.map ( ontCls, conceptw ).count () );
+		
 		return concept;
 	}
 
@@ -160,6 +166,16 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	public void setAccessionsMappers ( Set<OWLAccessionsMapper> accessionsMappers )
 	{
 		this.accessionsMappers = accessionsMappers;
+	}
+
+	public Set<OwlSomeRelMapper> getConceptRelationMappers ()
+	{
+		return conceptRelationMappers;
+	}
+
+	public void setConceptRelationMappers ( Set<OwlSomeRelMapper> conceptRelationMappers )
+	{
+		this.conceptRelationMappers = conceptRelationMappers;
 	}
 	
 }

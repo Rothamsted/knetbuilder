@@ -44,7 +44,13 @@ public class OwlSomeRelMapper
 		Stream<OntClass> superClasses = JENAUTILS.toStream ( ontCls.listSuperClasses ( false ) ); 
 		
 		// And equivalents in intersections
-		superClasses = Stream.concat ( superClasses, JENAUTILS.toStream ( ontCls.listEquivalentClasses () ) );
+		Stream<OntClass> eqMembers = JENAUTILS
+		.toStream ( ontCls.listEquivalentClasses () )
+		.filter ( eq -> eq.isIntersectionClass () )
+		.map ( eq -> eq.asIntersectionClass () )
+		.flatMap ( intrs -> JENAUTILS.toStream ( intrs.listOperands () ) );
+		
+		superClasses = Stream.concat ( superClasses, eqMembers );
 		
 		// And now filter the someValueFrom restrictions and process them
 		//

@@ -34,6 +34,7 @@ public class GoClassPropsTest
 	public void testAccessions () throws Exception
 	{
 		OntModel model = ModelFactory.createOntologyModel ();
+		model.read ( Resources.getResource ( "go_tests_common.owl" ).toString (), "", "RDF/XML" );
 		model.read ( Resources.getResource ( "go_basic_tests.owl" ).toString (), "", "RDF/XML" );
 		
 		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "go_accessions_test_cfg.xml" );
@@ -69,6 +70,7 @@ public class GoClassPropsTest
 	public void testNames () throws Exception
 	{
 		OntModel model = ModelFactory.createOntologyModel ();
+		model.read ( Resources.getResource ( "go_tests_common.owl" ).toString (), "", "RDF/XML" );		
 		model.read ( Resources.getResource ( "go_basic_tests.owl" ).toString (), "", "RDF/XML" );
 		
 		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "go_names_test_cfg.xml" );
