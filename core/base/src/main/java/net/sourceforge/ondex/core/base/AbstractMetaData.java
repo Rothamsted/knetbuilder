@@ -44,7 +44,7 @@ public abstract class AbstractMetaData extends AbstractONDEXEntity
 	 * @param description
 	 *            description of this information entity
 	 */
-	AbstractMetaData(long sid, String id, String fullname, String description) {
+	protected AbstractMetaData(long sid, String id, String fullname, String description) {
 		this.sid = sid;
 		this.id = id.intern();
 		this.fullname = fullname.intern();
