@@ -30,6 +30,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
 
 /**
  * Tests {@link OWLMapper} and shows typical examples of how to use both the specific OWL mapping components and the 
@@ -83,8 +84,8 @@ public class MappersTest
 
 		ontCls.addSubClass ( ontSubCls );
 		
-		// ---- Examples of mappers setup.
-		
+		// ---- Examples of mappers setup. You don't want to do this programmatically, Spring is much better
+		// 		
 		ccmap = new OWLConceptClassMapper ();
 		ccmap.setClassIri ( topCls.getURI () );
 		ccmap.setIdMapper ( new IRIBasedIdMapper () );
@@ -147,6 +148,7 @@ public class MappersTest
 		OwlSubClassRelMapper subClsMap = new OwlSubClassRelMapper ();
 		subClsMap.setConceptClassMapper ( ccmap );
 		subClsMap.setConceptMapper ( conceptMap );
+		subClsMap.setEvidenceTypePrototype ( new EvidenceTypePrototype ( "IMDP", "IMDP", "" ) );
 		
 		OWLMapper map = new OWLMapper ();
 		map.setRelationsMappers ( Collections.singleton ( subClsMap ) );

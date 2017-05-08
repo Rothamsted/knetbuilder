@@ -36,6 +36,15 @@
 			<set>
 				<bean id = "someMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
 					<property name="propertyIri" value="#{ns.iri ( 'obo:BFO_0000050' )}" /><!-- part of -->
+					<property name="relationTypePrototype">
+						<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+							<property name="id" value = "part_of" />
+							<property name="fullname" value = "part of" />
+							<property name="antisymmetric" value = "true" />
+							<property name="transitiv" value = "true" />
+						</bean>
+					</property>
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
 				</bean>
 			</set>
 		</property>

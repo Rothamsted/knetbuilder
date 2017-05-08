@@ -13,7 +13,7 @@ import net.sourceforge.ondex.parser.ONDEXMapper;
  */
 public abstract class RdfPropertyMapper<O, OT> implements ONDEXMapper<O, OntClass, OT>
 {
-	protected String propertyIri;
+	private String propertyIri;
 
 	/**
 	 * The property that this mapper deals with. Examples are rdfs:label, rdfs:comment, skos:label.

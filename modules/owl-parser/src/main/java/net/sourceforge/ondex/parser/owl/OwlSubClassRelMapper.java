@@ -1,9 +1,6 @@
 package net.sourceforge.ondex.parser.owl;
 
-import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -11,13 +8,14 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.parser.RelationsMapper;
+import net.sourceforge.ondex.core.utils.RelationTypePrototype;
 
 /**
  * The mapper that follows the tree of rdfs:subClassOf relations from a root OWL class, which is taken from 
@@ -29,13 +27,27 @@ import net.sourceforge.ondex.parser.RelationsMapper;
  * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
  *
  */
-public class OwlSubClassRelMapper implements RelationsMapper<OntModel, ONDEXGraph>
+public class OwlSubClassRelMapper extends OWLRelMapper<OntModel, ONDEXGraph>
 {
-	private OWLConceptClassMapper conceptClassMapper;
-	private OWLConceptMapper conceptMapper;
-	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
+	public OwlSubClassRelMapper ()
+	{
+		super ();
+		
+		this.setRelationTypePrototype ( new RelationTypePrototype ( 
+			"is_a", // id 
+			"is a", // fullname
+			"", // descr
+			"", // inverseName
+			true, // antisymmetric, 
+			true, // reflexive, 
+			false, // symmetic, 
+			true, // transitive, 
+			null // specialisationof 
+		));
+	}
+
 	/**
 	 * @see above.
 	 */
@@ -43,7 +55,7 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel, ONDEXGrap
 	{
 		OWLConceptMapper conceptMapper = this.getConceptMapper ();
 		if ( conceptMapper.getConceptClassMapper () == null ) 
-			conceptMapper.setConceptClassMapper ( conceptClassMapper );
+			conceptMapper.setConceptClassMapper ( this.getConceptClassMapper () );
 		
 		// The top ontology class is a concept class, ontology subclasses are instances of the top class, 
 		// all other descendants are instances too, plus they have subclass relations, but they don't have the suclass
@@ -58,11 +70,7 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel, ONDEXGrap
 		}
 		
 		return
-			StreamSupport.stream (
-				Spliterators
-				.spliteratorUnknownSize ( topOntCls.listSubClasses ( true ), Spliterator.IMMUTABLE ),
-				true
-			)
+			JenaGraphUtils.JENAUTILS.toStream ( topOntCls.listSubClasses ( true ), true )	
 			.flatMap ( ontChild -> this.map ( ontChild, graph ) );
 	}
 	
@@ -72,18 +80,18 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel, ONDEXGrap
 	protected Stream<ONDEXRelation> map ( OntClass rootCls, ONDEXGraph graph )
 	{
 		OWLConceptMapper conceptMapper = this.getConceptMapper ();
-		RelationType relType = this.getRelationType ( graph );
-		EvidenceType evidence = this.getEvidenceType ( graph );
+		
+		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
+		RelationType relType = graphw.getRelationType ( this.getRelationTypePrototype () );
+		EvidenceType evidence = graphw.getEvidenceType ( this.getEvidenceTypePrototype () );
 		
 		ONDEXConcept rootConcept = conceptMapper.map ( rootCls, graph );
 		
+		JenaGraphUtils.JENAUTILS.toStream ( rootCls.listSubClasses ( true ), true );
+		
 		// First get all the links at this hierarchical level
 		Stream<ONDEXRelation> result =
-			StreamSupport.stream (
-				Spliterators
-				.spliteratorUnknownSize ( rootCls.listSubClasses ( true ), Spliterator.IMMUTABLE ),
-				true
-			)
+			JenaGraphUtils.JENAUTILS.toStream ( rootCls.listSubClasses ( true ), true )
 			.filter ( child -> !child.isAnon () ) // These are usually restrictions and we don't follow them here
 			.map ( child -> CachedGraphWrapper.getInstance ( graph ).getRelation ( 
 				conceptMapper.map ( child, graph ), rootConcept, relType, evidence 
@@ -97,55 +105,5 @@ public class OwlSubClassRelMapper implements RelationsMapper<OntModel, ONDEXGrap
 		);
 		return result;
 	}
-	
-	
-	/**
-	 * @return is_a, which is attached to all of the links found by {@link #map(OntClass, ONDEXGraph)}.
-	 * TODO: make it configurable.
-	 */
-	public RelationType getRelationType ( ONDEXGraph graph )
-	{
-		return CachedGraphWrapper.getInstance ( graph ).getRelationType ( 
-			"is_a", 
-			true, // isAntisymmetric, 
-			true, // isReflexive, 
-			false, // isSymmetric, 
-			true // isTransitive 
-		);
-	}
 
-	/**
-	 * TODO: make it configurable, @return IMPD for the time being.
-	 */
-	public EvidenceType getEvidenceType ( ONDEXGraph graph )
-	{
-		return CachedGraphWrapper.getInstance ( graph ).getEvidenceType ( "IMPD", "IMPD", "" );
-	}
-
-	/**
-	 * Used to map the root class and know the top level in the source ontology to start from.
-	 */
-	public OWLConceptClassMapper getConceptClassMapper ()
-	{
-		return this.conceptClassMapper;
-	}
-
-	public void setConceptClassMapper ( OWLConceptClassMapper conceptClassMapper )
-	{
-		this.conceptClassMapper = conceptClassMapper;
-	}
-
-	/**
-	 * Every new owl:Class that is met by {@link #map(OntClass, ONDEXGraph)} is mapped to an {@link ONDEXConcept}
-	 * by means of this mapper.
-	 */
-	public OWLConceptMapper getConceptMapper ()
-	{
-		return conceptMapper;
-	}
-
-	public void setConceptMapper ( OWLConceptMapper conceptMapper )
-	{
-		this.conceptMapper = conceptMapper;
-	}
 }

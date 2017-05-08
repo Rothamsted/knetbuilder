@@ -85,6 +85,18 @@ public class CachedGraphWrapper
 			)
 		);
 	}
+
+	public RelationType getRelationType ( RelationTypePrototype proto )
+	{
+		return this.cacheGet ( 
+			RelationType.class, proto.getId (), 
+			() -> this.graph.getMetaData ().getFactory ().createRelationType ( 
+				proto.getId (), proto.getFullname (), proto.getDescription (), 
+				proto.isAntisymmetric (), proto.isReflexive (), proto.isSymmetric (), proto.isTransitiv (), 
+				proto.getSpecialisationOf () )
+		);
+	}
+	
 	
 	public ONDEXRelation getRelation ( ONDEXConcept from, ONDEXConcept to, RelationType type, EvidenceType evidence )
 	{
@@ -102,6 +114,12 @@ public class CachedGraphWrapper
 			() -> this.graph.getMetaData ().createEvidenceType ( id, fullName, description ) 
 		);
 	}
+	
+	public EvidenceType getEvidenceType ( EvidenceTypePrototype proto )
+	{
+		return this.getEvidenceType ( proto.getId (), proto.getFullname (), proto.getDescription () );
+	}
+	
 	
 	public DataSource getDataSource ( String id, String fullName, String description )
 	{
