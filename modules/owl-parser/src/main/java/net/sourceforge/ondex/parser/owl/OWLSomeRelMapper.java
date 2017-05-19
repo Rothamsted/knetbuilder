@@ -5,17 +5,6 @@ import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
-import net.sourceforge.ondex.parser.RelationsMapper;
 
 /**
  * 
@@ -34,11 +23,9 @@ public class OWLSomeRelMapper extends OWLSimpleConceptRelMapper
 	@Override
 	protected Stream<OntClass> getRelatedClasses ( OntClass fromCls )
 	{
-		// Super classes and equivalents
-		//
 		Stream<OntClass> superClasses = JENAUTILS.toStream ( fromCls.listSuperClasses ( false ) ); 
 		
-		// And equivalents in intersections
+		// Add up members of intersections
 		Stream<OntClass> eqMembers = JENAUTILS
 		.toStream ( fromCls.listEquivalentClasses () )
 		.filter ( eq -> eq.isIntersectionClass () )

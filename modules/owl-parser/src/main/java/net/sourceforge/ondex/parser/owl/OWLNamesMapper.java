@@ -2,10 +2,7 @@ package net.sourceforge.ondex.parser.owl;
 
 import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 
-import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -35,14 +32,10 @@ public class OWLNamesMapper
 		
 		OntModel model = ontCls.getOntModel ();
 				
-		Stream<RDFNode> nameNodes = StreamSupport.stream (
-			Spliterators
-			.spliteratorUnknownSize ( 
-				ontCls.listPropertyValues ( model.getProperty ( this.getPropertyIri () ) ), Spliterator.IMMUTABLE 
-			),
-			true
+		Stream<RDFNode> nameNodes = JENAUTILS.toStream ( 
+			ontCls.listPropertyValues ( model.getProperty ( this.getPropertyIri () ) ), true 
 		);
-		
+				
 		return nameNodes
 		.map ( nameNode -> JENAUTILS.literal2Value ( nameNode ).get () )
 		.map ( name -> concept.createConceptName ( name, false ) );

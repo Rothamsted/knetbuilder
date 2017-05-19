@@ -14,7 +14,20 @@ import net.sourceforge.ondex.exception.type.NullValueException;
 @SuppressWarnings ( "serial" )
 public class RelationTypePrototype extends RelationTypeImpl
 {
-	private String id; 
+	public static final RelationTypePrototype IS_A_PROTOTYPE = new RelationTypePrototype ( 
+		"is_a", // id 
+		"is a", // fullname
+		"", // descr
+		"", // inverseName
+		true, // antisymmetric, 
+		true, // reflexive, 
+		false, // symmetic, 
+		true, // transitive, 
+		null // specialisationof 
+	);
+	
+	private String id;
+	private RelationTypePrototype parentPrototype;
 
 	public RelationTypePrototype () {
 		this ( "", "", "", "", false, false, false, false, null );
@@ -79,5 +92,15 @@ public class RelationTypePrototype extends RelationTypeImpl
 	public void setFullname ( String fullname ) throws NullValueException, UnsupportedOperationException
 	{
 		this.fullname = fullname;
+	}
+
+	public RelationTypePrototype getParentPrototype ()
+	{
+		return parentPrototype;
+	}
+
+	public void setParentPrototype ( RelationTypePrototype parentPrototype )
+	{
+		this.parentPrototype = parentPrototype;
 	}
 }

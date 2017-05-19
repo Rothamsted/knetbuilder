@@ -3,10 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<description><![CDATA[Test configuration used to test relations like someValuesFrom]]></description>
+	<description><![CDATA[Tests a comphreensive mapping for GO]]></description>
 
 	<import resource="default_mappings.xml" />
-
+	
+		
 	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
 	  <property name = "relationsMappers">
 	  	<set>
@@ -32,6 +33,49 @@
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "preferredNameMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
+		<property name = "additionalNameMappers">
+			<set>
+				<bean id = "synonymNameMapper" class = "net.sourceforge.ondex.parser.owl.OWLNamesMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasExactSynonym' )}" />
+				</bean>
+			</set>
+		</property>
+		<property name = "accessionsMappers">
+			<set>
+				<bean id = "idAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:id' )}" />
+					<property name="dataSourcePrototype" ref = "goDataSource" />
+					<property name="dataSourcePrefix" value = "GO:" />
+				</bean>	
+				<bean id = "altIdAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasAlternativeId' )}" />
+					<property name="dataSourcePrototype" ref = "goDataSource" />
+					<property name="dataSourcePrefix" value = "GO:" />
+				</bean>	
+				<!-- Any additional external ref is mapped this way in OBO -->
+				<bean id = "wpAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
+					<property name="dataSourcePrefix" value="Wikipedia:" />
+					<property name="dataSourcePrototype">
+						<bean id = "wpDs" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+							<property name="id" value = "Wikipedia" />
+							<property name="fullname" value = "Wikipedia" />
+						</bean>
+					</property>
+				</bean>
+				<bean id = "ecAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
+					<property name="dataSourcePrefix" value="EC:" />
+					<property name="dataSourcePrototype">
+						<bean id = "ecDs" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+							<property name="id" value = "EC" />
+							<property name="fullname" value = "Enzyme Nomenclature Database" />
+							<property name="description" value = "ENZYME is a repository of information relative to the nomenclature of enzymes (http://enzyme.expasy.org)." />
+						</bean>
+					</property>
+				</bean>
+			</set>
+		</property>
 		<property name = "conceptRelationMappers">
 			<set>
 				<bean id = "equivClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLEqIntersctRel" >
@@ -60,8 +104,8 @@
 			</set>
 		</property>
 	</bean>
-
 	
+
 	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" scope = "prototype">
 		<property name = "classIri" value = "#{ null }" />
 		<property name = "idMapper" ref = "idMapper" />
@@ -99,5 +143,11 @@
 		<property name="transitiv" value = "true" />
 		<property name="parentPrototype" ref = "regulatesRelPrototype"></property>
 	</bean>
-		
+	
+	<bean id = "goDataSource" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+		<property name="id" value = "GO" />
+		<property name="fullname" value = "Gene Ontology" />
+	</bean> 
+	
 </beans>
+	

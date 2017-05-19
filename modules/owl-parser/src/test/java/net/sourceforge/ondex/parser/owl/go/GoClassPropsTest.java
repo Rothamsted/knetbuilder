@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotNull;
 import java.io.Closeable;
 
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -33,11 +32,12 @@ public class GoClassPropsTest
 	@Test
 	public void testAccessions () throws Exception
 	{
-		OntModel model = ModelFactory.createOntologyModel ();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "go_accessions_test_cfg.xml" );
+		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
+		
 		model.read ( Resources.getResource ( "go_tests_common.owl" ).toString (), "", "RDF/XML" );
 		model.read ( Resources.getResource ( "go_basic_tests.owl" ).toString (), "", "RDF/XML" );
 		
-		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "go_accessions_test_cfg.xml" );
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 
 		ONDEXGraph graph = owlMap.map ( model );
@@ -46,9 +46,9 @@ public class GoClassPropsTest
 		
 		ONDEXConcept c = graph.getConcepts ().iterator ().next ();
 
-		DataSource ds = graph.getMetaData ().createDataSource ( "owlParser", "The OWL Parser", "" );
+		DataSource ds = graph.getMetaData ().createDataSource ( "GO", "Gene Ontology", "" );
 		
-		assertNotNull ( "Concept accession is wrong!", c.getConceptAccession ( "GO:0000003", ds ) );
+		assertNotNull ( "Concept accession is wrong!", c.getConceptAccession ( "0000003", ds ) );
 		assertNotNull ( "Concept label is wrong!", c.getConceptName ( "reproduction" ) );
 		Assert.assertTrue ( 
 			"Concept definition is wrong!", 
@@ -63,17 +63,21 @@ public class GoClassPropsTest
 			cc.getDescription ().startsWith ( "Any process specifically pertinent to" ) 
 		);
 		
+		ds = graph.getMetaData ().createDataSource ( "Wikipedia", "Wikipedia", "" );
+		assertNotNull ( "Additional x-ref to Wikipedia is wrong!", c.getConceptAccession ( "Reproduction", ds ) );
+		
 		( (Closeable) ctx ).close ();
 	}
 	
 	@Test
 	public void testNames () throws Exception
 	{
-		OntModel model = ModelFactory.createOntologyModel ();
+		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "go_names_test_cfg.xml" );
+		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
+
 		model.read ( Resources.getResource ( "go_tests_common.owl" ).toString (), "", "RDF/XML" );		
 		model.read ( Resources.getResource ( "go_basic_tests.owl" ).toString (), "", "RDF/XML" );
 		
-		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "go_names_test_cfg.xml" );
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 
 		ONDEXGraph graph = owlMap.map ( model );

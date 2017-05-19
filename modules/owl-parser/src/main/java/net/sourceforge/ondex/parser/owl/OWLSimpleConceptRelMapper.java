@@ -11,7 +11,6 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
-import net.sourceforge.ondex.parser.RelationsMapper;
 
 /**
  * 

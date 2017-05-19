@@ -62,4 +62,10 @@
 	<!-- This is called via SpEl -->
 	<bean id = "ns" class = "info.marcobrandizi.rdfutils.namespaces.NamespaceUtils" />
 	
+	<bean id = "jenaOntModel" class = "org.apache.jena.rdf.model.ModelFactory" 
+		scope = "prototype"
+		factory-method="createOntologyModel">
+		<constructor-arg value="#{T( org.apache.jena.ontology.OntModelSpec ).OWL_MEM }"></constructor-arg>
+	</bean>
+		
 </beans>
