@@ -62,6 +62,11 @@
 	<!-- This is called via SpEl -->
 	<bean id = "ns" class = "info.marcobrandizi.rdfutils.namespaces.NamespaceUtils" />
 	
+	<!-- 
+		This is the default OntModel that we use to load the input OWL. As you can see, we disable any type of 
+	  inference, the default model, which as some basic entailments enabled, causes endless waitings and eventual
+	  crashes 
+	-->
 	<bean id = "jenaOntModel" class = "org.apache.jena.rdf.model.ModelFactory" 
 		scope = "prototype"
 		factory-method="createOntologyModel">
