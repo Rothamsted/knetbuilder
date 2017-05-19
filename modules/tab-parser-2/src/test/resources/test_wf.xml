@@ -10,12 +10,5 @@
       <Arg name="configFile">/Users/brandizi/Documents/Work/RRes/ondex_git/ondex-full/ondex-knet-builder/modules/tab-parser-2/src/test/resources/test_tab_spec_1.xml</Arg>
       <Arg name="graphId">default</Arg>
     </Parser>
-    <Export name="oxl">
-      <Arg name="pretty">true</Arg>
-      <Arg name="ExportIsolatedConcepts">true</Arg>
-      <Arg name="GZip">false</Arg>
-      <Arg name="ExportFile">/tmp/test.oxl</Arg>
-      <Arg name="graphId">default</Arg>
-    </Export>    
   </Workflow>
 </Ondex>

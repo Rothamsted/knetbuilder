@@ -107,14 +107,14 @@ public class Parser extends ONDEXParser {
 			dsConcept = md.getDataSource(dsName);
 		} else {
 			dsConcept = md.createDataSource(dsName, dsName, dsName);
-			System.out.println("New concept Data Source object was created: " + dsName);
+			System.out.println("New data source object was created: " + dsName);
 		}
 
 		if (md.getDataSource(xref) != null) {
 			dsAccession = md.getDataSource(xref);
 		} else {
 			dsAccession = md.createDataSource(xref, xref, xref);
-			System.out.println("New accession XRef object was created: " + xref);
+			System.out.println("New data source object was created: " + xref);
 		}
 
 		// creates hashmaps between ondex and concept classes
@@ -131,7 +131,6 @@ public class Parser extends ONDEXParser {
 		// create Hashmaps for gene properties retrieved from the gff3 file
         HashMap<String,String> geneProps = new HashMap<String,String>();
 
-		boolean parserError= false;
 		try {
 
 			gffFile = new File(GFFFilePath);
@@ -151,7 +150,7 @@ public class Parser extends ONDEXParser {
 				}
 
 				String geneId = "";
-			//	String geneDescription = ""; // not needed
+				String geneDescription = "";
 				String geneCName = null;
 				String biotype = "";
 				// Remove gene: from TAB column
@@ -166,12 +165,14 @@ public class Parser extends ONDEXParser {
 					// geneId = col[0].split("=")[1].toUpperCase();
 					// geneDescription = col[1].split("=")[1].toUpperCase();
 					geneId = geneProps.get("ID");
-			//		geneDescription = geneProps.get("DESCRIPTION");
+					if(geneProps.containsKey("DESCRIPTION"))
+					    geneDescription = geneProps.get("DESCRIPTION");
 					geneCName = geneProps.get("NAME");
-					biotype = geneProps.get("BIOTYPE");
+					if(geneProps.containsKey("BIOTYPE"))
+					    biotype = geneProps.get("BIOTYPE");
 				} else {
 					geneId = splited[8].split("=")[1].toUpperCase();
-			//		geneDescription = splited[8].split("=")[1];
+					geneDescription = splited[8].split("=")[1];
 				}
 
 				String chromosome = splited[0];
@@ -201,9 +202,11 @@ public class Parser extends ONDEXParser {
 
 				/*
 				 * For chromosomes in Wheat gff3 file Added 04/08/2016
+				 * Wheat taxid(4565)
 				 */
 				String chr_from_scaffold = null;
-				if (chromosome.contains("_")) {
+				if(taxid.equals("4565")){
+				    if (chromosome.contains("_")) {
 					String[] chrArr = splited[0].split("_");
 					if (chrArr[chrArr.length - 1].length() <= 2) {
 						chr_from_scaffold = chrArr[chrArr.length - 1];
@@ -212,12 +215,13 @@ public class Parser extends ONDEXParser {
 						// geneChrName= chrArr[chrArr.length-1].substring(0,1);
 						chr_from_scaffold = chrArr[chrArr.length - 1].substring(0, 2);
 					}
+				    }
 				}
-
 				// Integer geneChr = Integer.parseInt(geneChrName);
 				Integer geneBegin = Integer.parseInt(splited[3]);
 				Integer geneEnd = Integer.parseInt(splited[4]);
-
+//				System.out.println("GeneId:" + geneId);
+//				System.out.println("GeneCName:"  + geneCName);
 				ONDEXConcept c1 = graph.getFactory().createConcept(geneId, biotype, "", dsConcept, ccGene, etIMPD);
 				c1.createConceptName(geneId, true);
 				if (geneCName != null) { // add 2nd preferred concept name
@@ -229,7 +233,26 @@ public class Parser extends ONDEXParser {
 				c1.createAttribute(anBegin, geneBegin, false);
 				c1.createAttribute(anEnd, geneEnd, false);
 
-				if (chr_from_scaffold == null)
+				String chr_U = "U";
+				String regex = "[1-7]";
+				/*
+				* For chromosomes in Barley gff3 (taxid:112509) 
+				* and Poplar gff3 (taxid:3694)
+				* Check if chromosome equals 1-7, Pt or contains "Chr", 
+				* else add as location and set chromosome to "U"
+				* 
+				*/
+				if(taxid.equals("112509")||taxid.equals("3694")){
+				    //if(chromosome.equals("1")||chromosome.equals("2")||chromosome.equals("3")||chromosome.equals("4")||chromosome.equals("5")||chromosome.equals("6")||chromosome.equals("7")||chromosome.equals("Pt")){
+				    if(chromosome.matches(regex)||chromosome.equals("Pt")||chromosome.contains("Chr")){
+					c1.createAttribute(anChromosome, chromosome, false);
+				    }
+				    else{
+					c1.createAttribute(anLocation, chromosome, false);
+					c1.createAttribute(anChromosome, chr_U, false);
+				    }
+				}
+				else if (chr_from_scaffold == null)
 					c1.createAttribute(anChromosome, chromosome, false);
 				else {
 					c1.createAttribute(anChromosome, chr_from_scaffold, false);
@@ -240,7 +263,6 @@ public class Parser extends ONDEXParser {
 				geneProps.clear(); // clear hashmap
 			}
 		} catch (Exception e) {
-                        parserError= true;
 			e.printStackTrace();
 		} finally {
 			try {
@@ -254,13 +276,12 @@ public class Parser extends ONDEXParser {
 
 		// parse FASTA and create protein concepts
 		// ---------------------------------------
-	    if(parserError = false) {
 		String FASTAFilePath = (String) args.getUniqueValue(ArgumentNames.FASTA_ARG);
 		File FASTAFile = null;
 		FileReader FASTAfr = null;
 		BufferedReader FASTAbr = null;
 
-                    try {
+		try {
 
 			FASTAFile = new File(FASTAFilePath);
 			FASTAfr = new FileReader(FASTAFile);
@@ -302,7 +323,6 @@ public class Parser extends ONDEXParser {
 			c2.createAttribute(anSecuenceAA, secuence, false);
 			ondex2protein.put(secuenceName, c2.getId());
 		} catch (Exception e) {
-                        parserError= true;
 			e.printStackTrace();
 		} finally {
 
@@ -314,11 +334,9 @@ public class Parser extends ONDEXParser {
 				e2.printStackTrace();
 			}
 		}
-            }
 
 		// parse mapping file and create relations
 		// ---------------------------------------
-	    if(parserError = false) {
 		System.out.println("Parse Mapping file, if exists...");
 		String MappingFilePath = null;
 		MappingFilePath = (String) args.getUniqueValue(ArgumentNames.MAPPING_ARG);
@@ -366,7 +384,6 @@ public class Parser extends ONDEXParser {
 				System.out.println("Amount of missing genes: " + missingGenes);
 				System.out.println("Amount of missing proteins: " + missingProteins);
 			} catch (Exception e) {
-                                parserError= true;
 				e.printStackTrace();
 			} finally {
 
@@ -414,7 +431,6 @@ public class Parser extends ONDEXParser {
 			System.out.println("Amount of missing genes: " + missingGenes);
 			System.out.println("Amount of missing proteins: " + missingProteins);
 		}
-            }
 	}
 
 	@Override
