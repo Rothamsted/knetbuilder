@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<description><![CDATA[
+	An example of Spring configuration for the OWL parser that is based on mapping components. 
+	]]></description>
+
+	<import resource="default_mappings.xml" />
+
+	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
+		<!-- 
+			The root component. Subcomponents are added here and their parameters are set to customise the parser.
+			
+			The typical pattern is to pass relation mappers, which traverses the ontology following relations like
+			owl:subClassOf or part-of and map the subclasses it meets along the way to ONDEX concepts, which in turn 
+			enables the mapping of root classes to ONDEX concept classes. 
+		 -->
+	  <property name = "relationsMappers">
+	  	<set>
+	  		<bean parent = "subClassMapper">
+	  			<property name="conceptClassMapper">
+	  				<bean parent = "conceptClassMapper">
+	  					<!-- This is the Spring way to call Java stuff (see SpEl documentation) -->
+	  					<property name = "classIri" value="#{ns.iri ( 'foo:TopClass' )}" />
+	  				</bean>
+	  			</property>
+	  		</bean>
+	  	</set>
+	  </property>
+	</bean>
+		
+	<!-- 
+	  prototype scope is preferable, since every concept mapper will have its own concept class mapper, to
+	  know its top class and CC to map to.
+	 -->
+	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper" scope = "prototype">
+		<!-- This way it's initialised by its container, dynamically -->
+		<property name = "conceptClassMapper" value = "#{ null }" />
+		<property name = "idMapper" ref = "idMapper" />
+		<property name = "preferredNameMapper" ref = "labelMapper" />
+		<property name = "descriptionMapper" ref = "descriptionMapper" />
+		<property name="accessionsMappers">
+			<set>
+				<bean id = "dcAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name = "propertyIri" value = "#{ns.iri ( 'dcterms:identifier' )}" />
+				</bean>
+			</set>
+		</property>
+	</bean>
+		
+</beans>
