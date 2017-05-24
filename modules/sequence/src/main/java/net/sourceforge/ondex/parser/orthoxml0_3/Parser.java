@@ -501,11 +501,11 @@ public class Parser extends ONDEXParser {
 			cvId = "ENSEMBL";
 		}
                 // If "ARATH" (a. thaliana), cvId= "TAIR"
-                else if(name.equalsIgnoreCase("ARATH")){
+                else if(name.equalsIgnoreCase("ARATH")|| name.equalsIgnoreCase("arabi")){
 			cvId = "TAIR";
 		}
                 // If "POTRI" (poplar), cvId= "JCI"
-                else if(name.equalsIgnoreCase("PHYTOZOME_POTRI")){
+                else if(name.equalsIgnoreCase("PHYTOZOME_POTRI")||name.equalsIgnoreCase("potri")){
 			cvId = "PHYTOZOME";
 		}
                 else if(name.equalsIgnoreCase("PHYTOZOME_SAPUR")){
@@ -513,7 +513,10 @@ public class Parser extends ONDEXParser {
 		}
                 else if(name.equalsIgnoreCase("UNIPROTKB") || name.equalsIgnoreCase("UNIPROTKB/TrEMBL") || name.equalsIgnoreCase("UNIPROTKB/Swiss-prot")){
                 	cvId = "UNIPROTKB";
-        }
+		}
+		else if(name.equalsIgnoreCase("yeast")){
+		    cvId = "SGD";
+		}
                 
 		
 		return cvId;
