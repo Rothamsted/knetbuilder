@@ -1,8 +1,13 @@
 package net.sourceforge.ondex.parser.owl;
 
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jena.ontology.OntModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
@@ -23,18 +28,37 @@ import net.sourceforge.ondex.parser.RelationsMapper;
 public class OWLMapper implements GraphMapper<OntModel>
 {
 	private Set<RelationsMapper<OntModel, ONDEXGraph>> relationsMappers;
+	
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
 
 	@Override
 	public ONDEXGraph map ( OntModel model, ONDEXGraph graph )
 	{
-		if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
+		ScheduledExecutorService timerService = Executors.newScheduledThreadPool ( 1 );
 		
-		for ( RelationsMapper<OntModel, ONDEXGraph> relMap: this.getRelationsMappers () )
-			relMap
-			.map ( model, graph )
-			.count (); // we must consume it, there are stream procedures that need to be triggered
-
-		return graph;
+		try
+		{
+			if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
+			final ONDEXGraph graph1 = graph; // just because the timer below needs a final
+			
+			// Before delving into the mapping, let's setup some reporter, to give a sense that we're going ahead
+			timerService.scheduleAtFixedRate (
+				() -> log.info ( "Mapped {} GO classes", graph1.getConcepts ().size () ), 
+				30, 30, TimeUnit.SECONDS 
+			);
+			
+			for ( RelationsMapper<OntModel, ONDEXGraph> relMap: this.getRelationsMappers () )
+				relMap
+				.map ( model, graph )
+				.count (); // we must consume it, there are stream procedures that need to be triggered
+	
+			log.info ( "Everything from the OWL file mapped. Total classes: {}", graph.getConcepts ().size () );
+			return graph;
+		}
+		finally {
+			timerService.shutdownNow ();			
+		}
 	}
 
 	/**

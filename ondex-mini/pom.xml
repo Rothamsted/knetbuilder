@@ -14,7 +14,8 @@
    <build>
       <plugins>
 				 <!-- 
-				 	Prepares the plugins to be shipped with the final binary
+				 	Prepares the plugins to be shipped with the final binary.
+				 	
 				 	PLEASE NOTE: this approach is used for those plugins that need the *-with-dependencies.jar to be
 				 	craned. Those that already contains everything in their own jar are put in place by the 'test'
 				 	dependencies below.
@@ -45,6 +46,7 @@
 <!--                            <destFileName>tab-parser-2-jar-with-dependencies.jar</destFileName> -->
                         </artifactItem>
 
+
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>js-plugin</artifactId>
@@ -62,6 +64,32 @@
                      <overWriteSnapshots>true</overWriteSnapshots>
                   </configuration>
                </execution>
+               <execution>
+                  <id>unpack</id>
+                  <phase>initialize</phase>
+                  <goals>
+                    <goal>unpack</goal>
+                  </goals>
+                  <configuration>
+										<artifactItems>
+											<!-- 
+											  See the installer for an explanation of why we need to unpack this.  
+											-->                        
+	                    <artifactItem>
+	                       <groupId>net.sourceforge.ondex.modules</groupId>
+	                       <artifactId>owl-parser</artifactId>
+	                       <version>${project.version}</version>
+	                       <classifier>bundle</classifier>
+	                       <type>zip</type>
+	                       <overWrite>true</overWrite>
+	                       <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+	                       <includes>**/*</includes>
+	                    </artifactItem>
+											<overWriteReleases>false</overWriteReleases>
+											<overWriteSnapshots>true</overWriteSnapshots>	                    
+										</artifactItems>
+									</configuration>
+							 </execution>         							       
             </executions>
          </plugin>      
       

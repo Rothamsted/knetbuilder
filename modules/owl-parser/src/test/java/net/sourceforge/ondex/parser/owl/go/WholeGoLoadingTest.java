@@ -3,15 +3,10 @@ package net.sourceforge.ondex.parser.owl.go;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.FileReader;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.jena.ontology.OntModel;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -28,8 +23,6 @@ import net.sourceforge.ondex.parser.owl.OWLMapper;
  */
 public class WholeGoLoadingTest
 {
-	private Logger log = LoggerFactory.getLogger ( this.getClass () );
-	
 	@Test
 	@Ignore ( "Not a real test, very time consuming" )
 	public void testLoadAllBioProcess () throws Exception
@@ -43,17 +36,8 @@ public class WholeGoLoadingTest
 		);		
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-
-		final ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
-		
-		ScheduledExecutorService timerService = Executors.newScheduledThreadPool ( 1 );
-		timerService.scheduleAtFixedRate (
-			() -> log.info ( "Mapped {} GO classes", graph.getConcepts ().size () ), 
-			30, 30, TimeUnit.SECONDS 
-		);
-		
-		owlMap.map ( model, graph );
-		
+		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );				
+		owlMap.map ( model, graph );		
 		((Closeable) ctx ).close ();
 	}
 }

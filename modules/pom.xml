@@ -51,6 +51,7 @@
       <module>tab</module>
       <module>tab-tools</module>
       <module>tab-parser-2</module>
+      <module>owl-parser</module>
       <module>js-plugin</module>
       <!-- module>taxonomy</module -->
       <module>textmining</module>

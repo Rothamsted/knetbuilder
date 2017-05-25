@@ -67,35 +67,27 @@
 				<artifactId>spring-context</artifactId>
 				<version>4.3.6.RELEASE</version>
 			</dependency>
-      
+			      
    </dependencies>
    
    <build>
+   
+			<testResources>
+			  <!--  This is stuff used both in the binary distribution and in tests -->
+			  <testResource>
+			    <directory>src/main/assembly/resources/config</directory>
+			    <includes>
+			    	<include>default_mappings.xml</include>
+			    </includes>
+			  </testResource>
+			  <!-- This is the usual Maven conventions -->
+			  <testResource>
+			    <directory>src/test/resources</directory>
+			  </testResource>
+		  </testResources>   
+   
       <plugins>
-         <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>${maven.assembly.plugin.version}</version>
-            <executions>
-               <execution>
-                  <id>make-assembly-packaged_with_jars</id>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>attached</goal>
-                  </goals>
-                  <configuration>
-                     <descriptors>
-                     <!-- This adds up to the ones coming from workflow-component-descriptor and overrides 
-              			 the execution/descriptor with the same name. 
-              			 
-              			 TODO: Not sure it's needed here
-              			 -->
-                     <descriptor>src/main/assembly/packaged_with_jars.xml</descriptor>
-                     </descriptors>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
-         
+      
 			  <plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-surefire-plugin</artifactId>
@@ -114,7 +106,33 @@
              <argLine>-Xms6G -Xmx12G -Dondex.dir=/tmp</argLine>
 			    </configuration>
 			  </plugin>
-         
+      
+      
+        <plugin>
+	        <artifactId>maven-assembly-plugin</artifactId>
+	        <version>${maven.assembly.plugin.version}</version>
+	        <executions>
+	        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+						<execution>
+							<id>make-assembly-packaged_with_jars</id>
+							<phase />
+						</execution>    
+	             
+						<execution>
+						  <id>assembly-bundle</id>
+						  <phase>package</phase>
+						  <goals>
+						     <goal>attached</goal>
+						  </goals>
+						  <configuration>
+						     <descriptors>
+						     	<descriptor>src/main/assembly/bundle.xml</descriptor>
+						     </descriptors>
+						  </configuration>
+						</execution>
+	        </executions>
+        </plugin>
+				         
       </plugins>
 
    </build>
