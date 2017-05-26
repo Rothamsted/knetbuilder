@@ -150,6 +150,14 @@
          <releases><enabled>false</enabled></releases>
          <snapshots><enabled>true</enabled></snapshots>
       </repository>
+			<repository>
+				<id>marcobrandizi.info</id>
+				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+			</repository>
+			<repository>
+				<id>marcobrandizi.info</id>
+				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+			</repository>
    </repositories>
 
 </project>
