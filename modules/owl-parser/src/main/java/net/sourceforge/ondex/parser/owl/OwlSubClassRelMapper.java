@@ -29,6 +29,8 @@ public class OwlSubClassRelMapper extends OwlRecursiveRelMapper
 	protected Stream<OntClass> getRelatedClasses ( OntClass fromCls )
 	{
 		return JenaGraphUtils.JENAUTILS.toStream ( fromCls.listSubClasses ( true ), true )
-		.filter ( cls -> !cls.isAnon () ); // These are usually other restrictions and we catch them elsewhere		
+		.filter ( cls -> !cls.isAnon () ); // These are usually other restrictions and we catch them elsewhere
+
+		// That's it! All the rest, namely following the hierarchy and mapping the nodes met, is done by the Java parent class.
 	}
 }

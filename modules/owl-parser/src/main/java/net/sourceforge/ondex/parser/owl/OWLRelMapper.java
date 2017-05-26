@@ -9,7 +9,8 @@ import net.sourceforge.ondex.core.utils.RelationTypePrototype;
 import net.sourceforge.ondex.parser.RelationsMapper;
 
 /**
- * TODO: comment me!
+ * Generic class that links the mapping of an OWL/RDF relation to two ONDEX concepts, instances of an ONDEX concept 
+ * class and mapped to an ONDEX relation type. Additional attributes might be set, such as evidence type.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>8 May 2017</dd></dl>

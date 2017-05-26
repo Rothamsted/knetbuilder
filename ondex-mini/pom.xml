@@ -73,7 +73,7 @@
                   <configuration>
 										<artifactItems>
 											<!-- 
-											  See the installer for an explanation of why we need to unpack this.  
+											  See the installer for an explanation of how we unpack this.  
 											-->                        
 	                    <artifactItem>
 	                       <groupId>net.sourceforge.ondex.modules</groupId>
@@ -82,12 +82,12 @@
 	                       <classifier>bundle</classifier>
 	                       <type>zip</type>
 	                       <overWrite>true</overWrite>
-	                       <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+	                       <outputDirectory>${project.build.directory}</outputDirectory>
 	                       <includes>**/*</includes>
 	                    </artifactItem>
-											<overWriteReleases>false</overWriteReleases>
-											<overWriteSnapshots>true</overWriteSnapshots>	                    
 										</artifactItems>
+										<overWriteReleases>false</overWriteReleases>
+										<overWriteSnapshots>true</overWriteSnapshots>
 									</configuration>
 							 </execution>         							       
             </executions>

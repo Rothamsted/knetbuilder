@@ -12,6 +12,7 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
+import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 import net.sourceforge.ondex.parser.ConceptMapper;
 import net.sourceforge.ondex.parser.SimpleIdMapper;
@@ -20,7 +21,9 @@ import net.sourceforge.ondex.parser.SimpleLabelMapper;
 /**
  * Maps an owl:Class to an {@link ONDEXConcept}. This is similar to {@link OWLConceptClassMapper}, except it
  * hasn't any root IRI property, and has {@link #getConceptClassMapper()} instead, to associate every mapped
- * ONDEX concept to a concept class. 
+ * ONDEX concept to a concept class. Moreover, an ONDEX concept has additional attributes (e.g., names) and 
+ * further relations (in addition to {@link OwlRecursiveRelMapper} such as {@link OwlSubClassRelMapper}) that are 
+ * followed from the concept itself ({@link #getConceptRelationMappers()}).
  *  
  * @author brandizi
  * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
@@ -54,11 +57,11 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		
 		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
 		
-		// TODO: what is it?!
+		// TODO: factorise
 		EvidenceType evidence = graphw.getEvidenceType ( "IMPD", "IMPD", "" );
 		
 		// TODO: attach the file?
-		DataSource ds = graphw.getDataSource ( "owlParser", "The OWL Parser", "" );
+		DataSource ds = graphw.getDataSource ( DataSourcePrototype.OWL_PARSER );
 		
 		ONDEXConcept concept = graphw.getConcept ( conceptId, "", description, ds, cc, evidence );
 
@@ -81,7 +84,7 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		.stream ()
 		.forEach ( mapper -> mapper.map ( ontCls, conceptw ).count () );
 
-		// non sub class relations
+		// typically non sub class relations
 		this.conceptRelationMappers
 		.stream ()
 		.peek ( mapper -> { if ( mapper.getConceptMapper () == null ) mapper.setConceptMapper ( this ); } ) 
@@ -96,7 +99,7 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	}
 
 	/**
-	 * If this remains null, it's set by the component using it, e.g., @see the {@link OwlSubClassRelMapper}.
+	 * If this remains null, it's set by the component using it, e.g., @see the {@link OwlRecursiveRelMapper}.
 	 */	
 	public void setConceptClassMapper ( OWLConceptClassMapper conceptClassMapper )
 	{
@@ -145,7 +148,7 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	}
 
 	/**
-	 * A label mapper that is used to map a literal property of an owl:Class to {@link ConceptClass#getDescription()}-
+	 * A description mapper that is used to map a literal property of an owl:Class to {@link ConceptClass#getDescription()}-
 	 * For instance, this might be {@link TextPropertyMapper} configured with rdfs:comment.
 	 */		
 	public SimpleLabelMapper<OntClass> getDescriptionMapper ()

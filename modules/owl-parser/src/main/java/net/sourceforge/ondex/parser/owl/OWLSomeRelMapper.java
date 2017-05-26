@@ -7,10 +7,11 @@ import java.util.stream.Stream;
 import org.apache.jena.ontology.OntClass;
 
 /**
+ * Maps OWL axioms like A subclassOf ( part-of ( some C ) ) or A equivalent ( B and (part-of ( some C ) )
+ * to an ONDEX relation like A part-of C. The mapping of the equivalent B is left to {@link OWLEqIntersctRel}.
  * 
- * TODO: comment me!
- *
- * TODO: add the class mentioned in equivalent.
+ * The relation (part-of in this example) is configurable via {@link #getPropertyIri()}, which is mapped 
+ * to {@link #getRelationTypePrototype()}. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 May 2017</dd></dl>

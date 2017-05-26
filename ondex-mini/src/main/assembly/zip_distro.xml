@@ -83,5 +83,20 @@
 			<directoryMode>0755</directoryMode>			
 			<filtered>true</filtered>			
 		</fileSet>
+
+		<!-- OWL Parser Stuff -->
+		<fileSet>
+			<directory>target/owl-parser-plugin/lib</directory>
+			<outputDirectory>/plugins</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/owl-parser-plugin/config</directory>
+			<outputDirectory>/config/owl-parser</outputDirectory>
+		</fileSet>		
+		<fileSet>
+			<directory>target/owl-parser-plugin/examples</directory>
+			<outputDirectory>/data/examples/owl-parser</outputDirectory>
+		</fileSet>		
+		
 	</fileSets>
 </assembly>

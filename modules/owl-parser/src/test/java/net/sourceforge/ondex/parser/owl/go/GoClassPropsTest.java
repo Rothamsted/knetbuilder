@@ -21,7 +21,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.owl.OWLMapper;
 
 /**
- * TODO: comment me!
+ * Basic tests for Gene Ontology.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>1 May 2017</dd></dl>

@@ -15,7 +15,7 @@ import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser.owl.OWLMapper;
 
 /**
- * TODO: comment me!
+ * A scrap test to ensure the whole GO can be loaded.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>15 May 2017</dd></dl>
@@ -27,7 +27,7 @@ public class WholeGoLoadingTest
 	@Ignore ( "Not a real test, very time consuming" )
 	public void testLoadAllBioProcess () throws Exception
 	{
-		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "go_all_test_cfg.xml" );
+		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "go_cfg.xml" );
 
 		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
 		model.read ( 

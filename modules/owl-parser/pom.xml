@@ -76,9 +76,6 @@
 			  <!--  This is stuff used both in the binary distribution and in tests -->
 			  <testResource>
 			    <directory>src/main/assembly/resources/config</directory>
-			    <includes>
-			    	<include>default_mappings.xml</include>
-			    </includes>
 			  </testResource>
 			  <!-- This is the usual Maven conventions -->
 			  <testResource>
@@ -102,8 +99,9 @@
 			       </properties>
              <forkMode>always</forkMode>
              <forkCount>1</forkCount>
-             <forkedProcessTimeoutInSeconds>0</forkedProcessTimeoutInSeconds>
-             <argLine>-Xms6G -Xmx12G -Dondex.dir=/tmp</argLine>
+             <!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
+             <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
+             <argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>             
 			    </configuration>
 			  </plugin>
       

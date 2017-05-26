@@ -15,12 +15,12 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.owl.OWLMapper;
 
 /**
- * TODO: comment me!
+ * The {@link ONDEXParser} wrapper for the OWL parser. As usually, this makes it an ONDEX plug-in, which can be used
+ * in a workflow for the integrator or ONDEX mini.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 May 2017</dd></dl>

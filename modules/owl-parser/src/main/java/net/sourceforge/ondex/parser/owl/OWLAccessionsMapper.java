@@ -18,9 +18,9 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 import net.sourceforge.ondex.parser.AccessionsMapper;
 
 /**
+ * Maps OWL annotation properties corresponding to the the accessions of a class onto ONDEX accessions of 
+ * the corresponding concept. 
  * 
- * TODO: comment me!
- *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>28 Apr 2017</dd></dl>
  *
@@ -72,6 +72,9 @@ public class OWLAccessionsMapper
 		this.isAmbiguous = isAmbiguous;
 	}
 
+	/**
+	 * This is added to every accession.
+	 */
 	public DataSourcePrototype getDataSourcePrototype ()
 	{
 		return dataSourcePrototype;
@@ -82,6 +85,11 @@ public class OWLAccessionsMapper
 		this.dataSourcePrototype = dataSourcePrototype;
 	}
 
+	/**
+	 * Accessions might be in forms like "EZ:12345". Set a prefix like "EZ:" here, to process only accessions of interest
+	 * and have their prefix removed from the final ID (the {@link #getDataSourcePrototype() data source} still tracks
+	 * the type). 
+	 */
 	public String getDataSourcePrefix ()
 	{
 		return dataSourcePrefix;

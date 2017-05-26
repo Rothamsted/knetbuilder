@@ -9,7 +9,7 @@ import net.sourceforge.ondex.parser.SimpleDescriptionMapper;
 import net.sourceforge.ondex.parser.SimpleLabelMapper;
 
 /**
- * Maps a literal property (eg, rdfs:label) of OWL classes to a string label. 
+ * Maps a literal property (eg, rdfs:label) of OWL classes (or, in general, RDF resources) to a string label. 
  * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>17 Apr 2017</dd></dl>

@@ -15,8 +15,9 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 
 /**
- * 
- * TODO: comment me!
+ * The recursive mapper. This starts from a top level OWL class, which is mapped as a concept class 
+ * ({@link #getConceptClassMapper()}), and recursively follow some relation (e.g., rdfs:subClassOf) downwards, 
+ * invoking {@link #getConceptMapper()} for all new OWL classes that are visited.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>15 May 2017</dd></dl>
@@ -51,6 +52,8 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 			log.warn ( "No subclass found for top class <{}>", topClsIri );
 			return Stream.empty ();
 		}
+
+		log.info ( "Scanning from the top class <{}>", topClsIri );
 		
 		return
 			this
@@ -86,6 +89,10 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 		return result;
 	}
 
-	
+	/**
+	 * At each new node met during the {@link #map(OntClass, ONDEXGraph) recursive visit} of this mapper, new 
+	 * (typically downward) OWL classes to follow are told by this method. It's also up to it to avoid circular paths and 
+	 * infinite loops. Normally, OWL ontologies don't have this problems on explicit relations like owl:subClassOf.   
+	 */
 	protected abstract Stream<OntClass> getRelatedClasses ( OntClass fromCls );
 }

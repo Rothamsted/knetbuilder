@@ -5,14 +5,18 @@
 
 	<description><![CDATA[
 	The default mapping for net.sourceforge.ondex.parser.owl.OWLMapper. This uses mappings from common elements in OWL
-	files, such as rdfs:label or rdfs:comment. 
+	files, such as rdfs:label or rdfs:comment.
+	
+	This file is usually imported by a configuration that is specific to a particular ontology file.
+	
+	Hae a look at the Spring documentation, eg, https://www.tutorialspoint.com/spring/spring_bean_definition.htm
+	to know how this file works. Also, see the OWL parser code to figure out which Java components are available for 
+	mapping your ontology to ONDEX.
 	]]></description>
 
 
-
-	<!-- 
-		These are defaults that are automatically mapped, usually using name reference associations (e.g. getIdMapper is
-		associated to the bean named "idMapper". 
+	<!--
+		Defaults that are referred by other components. 
 	 -->
 	 
 	<bean id = "evidenceTypePrototype" class = "net.sourceforge.ondex.core.utils.EvidenceTypePrototype">

@@ -14,8 +14,7 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 import net.sourceforge.ondex.parser.NamesMapper;
 
 /**
- * 
- * TODO: comment me!
+ * Maps the values of an OWL datatype proeprty to ONDEX concept names. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>28 Apr 2017</dd></dl>
