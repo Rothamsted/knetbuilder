@@ -138,15 +138,15 @@
    <repositories>
       <repository>
          <id>ondex-releases-all</id>
-         <name>Internal Releases</name>
+         <name>ONDEX Releases</name>
          <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
          <releases><enabled>true</enabled></releases>
          <snapshots><enabled>false</enabled></snapshots>
       </repository>
       <repository>
          <id>ondex-snapshots-all</id>
-         <name>Internal Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshotss</url>
+         <name>ONDEX Snapshots</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
          <releases><enabled>false</enabled></releases>
          <snapshots><enabled>true</enabled></snapshots>
       </repository>
