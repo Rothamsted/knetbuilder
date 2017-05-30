@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<description><![CDATA[ONDEX OWL Parser configuration for importing Gene Ontology]]></description>
+	<description><![CDATA[ONDEX OWL Parser configuration for importing the Plant Trait Ontology (https://github.com/Planteome/plant-trait-ontology).]]></description>
 
 	<import resource="default_mappings.xml" />
 
@@ -58,10 +58,10 @@
 					<property name="dataSourcePrefix" value = "TO:" />
 				</bean>	
 				
-				<!-- Any additional external ref is mapped this way in OBO -->
-				<!-- TODO: requires the mapping of OWL annotations -->
-				<bean id = "wpAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
-					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
+				<!-- These are declared via owl:Axiom instances, so we need its special mapper -->
+				<bean id = "wpAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccsMapperFromAxiom">
+					<property name="propertyIri" value="#{ns.iri ( 'obo:IAO_0000115' )}" /> <!-- definition -->
+					<property name="mappedPropertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
 					<property name="dataSourcePrefix" value="Wikipedia:" />
 					<property name="dataSourcePrototype">
 						<bean id = "wpDs" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
@@ -70,7 +70,7 @@
 						</bean>
 					</property>
 				</bean>
-				<bean id = "ecAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+				<bean id = "ecAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccsMapperFromAxiom">
 					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
 					<property name="dataSourcePrefix" value="EC:" />
 					<property name="dataSourcePrototype">
@@ -124,6 +124,12 @@
 		<property name="id" value = "TO" />
 		<property name="fullname" value = "Plant Trait Ontology" />
 	</bean> 
+	
+	<bean id = "jenaOntModel" class = "org.apache.jena.rdf.model.ModelFactory" 
+		scope = "prototype"
+		factory-method="createOntologyModel">
+		<constructor-arg value="#{T( org.apache.jena.ontology.OntModelSpec ).OWL_MEM }"></constructor-arg>
+	</bean>
 	
 </beans>
 	

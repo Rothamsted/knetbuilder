@@ -40,18 +40,11 @@ public class OWLAccessionsMapper
 		ONDEXConcept concept = conceptw.getElement ();
 		ONDEXGraph graph = conceptw.getGraph ();
 		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
-		
-		OntModel model = ontCls.getOntModel ();
-				
-		Stream<RDFNode> accNodes = JENAUTILS.toStream ( 
-			ontCls.listPropertyValues ( model.getProperty ( this.getPropertyIri () ) ), true 
-		);
-				
+										
 		DataSourcePrototype dsProto = this.getDataSourcePrototype ();
 		String dsPrefix = this.getDataSourcePrefix ();
 		
-		return accNodes
-		.map ( accNode -> JENAUTILS.literal2Value ( accNode ).get () )
+		return this.getAccessionStrings ( ontCls )
 		.filter ( accStr -> dsPrefix == null || accStr.startsWith ( dsPrefix ) )
 		.map ( accStr -> 
 		{
@@ -64,6 +57,22 @@ public class OWLAccessionsMapper
 		});
 	}
 
+	/**
+	 * Helper that gets the accession values from the current OWL class. Can be useful for extensions.
+	 *  
+	 */
+	protected Stream<String> getAccessionStrings ( OntClass ontCls )
+	{
+		OntModel model = ontCls.getOntModel ();
+		
+		Stream<RDFNode> accNodes = JENAUTILS.toStream ( 
+			ontCls.listPropertyValues ( model.getProperty ( this.getPropertyIri () ) ), true 
+		);
+
+		return accNodes.map ( accNode -> JENAUTILS.literal2Value ( accNode ).get () );
+	}
+	
+	
 	/**
 	 * This is usually known from the ontology you're importing
 	 */

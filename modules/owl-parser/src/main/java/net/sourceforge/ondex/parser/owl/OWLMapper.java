@@ -39,6 +39,9 @@ public class OWLMapper implements GraphMapper<OntModel>
 		
 		try
 		{
+			// The OWL files we parse are not perfect, so let's try this 
+			model.setStrictMode ( false );
+			
 			if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
 			final ONDEXGraph graph1 = graph; // just because the timer below needs a final
 			
