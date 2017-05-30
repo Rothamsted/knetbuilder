@@ -3,6 +3,7 @@ package net.sourceforge.ondex.parser.owl;
 import java.util.Collections;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
@@ -56,7 +57,7 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	{
 		OntModel model = ontCls.getOntModel ();
 		String conceptId = idMapper.map ( ontCls );
-		String description = descriptionMapper.map ( ontCls );
+		String description = StringUtils.trimToEmpty ( descriptionMapper.map ( ontCls ) );
 		
 		ConceptClass cc = this.conceptClassMapper.map ( model, graph );
 		
