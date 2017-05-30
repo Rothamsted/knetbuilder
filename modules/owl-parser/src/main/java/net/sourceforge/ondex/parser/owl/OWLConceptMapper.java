@@ -13,6 +13,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 import net.sourceforge.ondex.core.utils.DataSourcePrototype;
+import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 import net.sourceforge.ondex.parser.ConceptMapper;
 import net.sourceforge.ondex.parser.SimpleIdMapper;
@@ -34,14 +35,18 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	private OWLConceptClassMapper conceptClassMapper;
 	
 	private SimpleIdMapper<OntClass> idMapper;
+	private SimpleLabelMapper<OntClass> descriptionMapper;
+
 	private SimpleLabelMapper<OntClass> preferredNameMapper;
 	private Set<OWLNamesMapper> additionalNameMappers = Collections.emptySet ();
-	private SimpleLabelMapper<OntClass> descriptionMapper;
-	
 	private Set<OWLAccessionsMapper> accessionsMappers = Collections.emptySet ();
 	
 	private Set<OWLSimpleConceptRelMapper> conceptRelationMappers = Collections.emptySet ();
 	
+	private EvidenceTypePrototype evidenceTypePrototype = EvidenceTypePrototype.IMPD;
+	
+	private DataSourcePrototype dataSourcePrototype = DataSourcePrototype.OWL_PARSER;
+
 
 	/**
 	 * @see above.
@@ -57,11 +62,8 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		
 		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
 		
-		// TODO: factorise
-		EvidenceType evidence = graphw.getEvidenceType ( "IMPD", "IMPD", "" );
-		
-		// TODO: attach the file?
-		DataSource ds = graphw.getDataSource ( DataSourcePrototype.OWL_PARSER );
+		EvidenceType evidence = graphw.getEvidenceType ( this.getEvidenceTypePrototype () );
+		DataSource ds = graphw.getDataSource ( this.getDataSourcePrototype () );
 		
 		ONDEXConcept concept = graphw.getConcept ( conceptId, "", description, ds, cc, evidence );
 
@@ -179,6 +181,32 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	public void setConceptRelationMappers ( Set<OWLSimpleConceptRelMapper> conceptRelationMappers )
 	{
 		this.conceptRelationMappers = conceptRelationMappers;
+	}
+
+	/**
+	 * Defaults to {@link EvidenceTypePrototype#IMPD}
+	 */
+	public EvidenceTypePrototype getEvidenceTypePrototype ()
+	{
+		return evidenceTypePrototype;
+	}
+
+	public void setEvidenceTypePrototype ( EvidenceTypePrototype evidenceTypePrototype )
+	{
+		this.evidenceTypePrototype = evidenceTypePrototype;
+	}
+
+	/**
+	 * Defaults to {@link DataSourcePrototype#OWL_PARSER}
+	 */
+	public DataSourcePrototype getDataSourcePrototype ()
+	{
+		return dataSourcePrototype;
+	}
+
+	public void setDataSourcePrototype ( DataSourcePrototype dataSourcePrototype )
+	{
+		this.dataSourcePrototype = dataSourcePrototype;
 	}
 	
 }

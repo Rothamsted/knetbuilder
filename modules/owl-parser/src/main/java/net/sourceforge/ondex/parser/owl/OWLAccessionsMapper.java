@@ -58,10 +58,15 @@ public class OWLAccessionsMapper
 			if ( dsPrefix != null ) accStr = accStr.substring ( dsPrefix.length () );
 			
 			DataSource ds = graphw.getDataSource ( dsProto );
+			
+			// We don't need to check for duplicates, since it already does it well.  
 			return concept.createConceptAccession ( accStr, ds, isAmbiguous () );
 		});
 	}
 
+	/**
+	 * This is usually known from the ontology you're importing
+	 */
 	public boolean isAmbiguous ()
 	{
 		return isAmbiguous;

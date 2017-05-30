@@ -46,6 +46,8 @@ public class OWLSomeRelMapper extends OWLSimpleConceptRelMapper
 		.map ( restr -> restr.asSomeValuesFromRestriction () )
 		.filter ( someRestr -> propIri.equals ( someRestr.getOnProperty ().getURI () ) )
 		.map ( someRestr -> someRestr.getSomeValuesFrom ().as ( OntClass.class ) );
+		
+		// That's all! Now the classes will be processed by the Java' parent.
 	}
 	
 

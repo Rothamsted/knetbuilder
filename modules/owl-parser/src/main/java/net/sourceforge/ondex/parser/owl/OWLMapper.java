@@ -42,7 +42,7 @@ public class OWLMapper implements GraphMapper<OntModel>
 			if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
 			final ONDEXGraph graph1 = graph; // just because the timer below needs a final
 			
-			// Before delving into the mapping, let's setup some reporter, to give a sense that we're going ahead
+			// Before delving into the mapping, let's setup a reporter, to give a sense that we're going ahead
 			timerService.scheduleAtFixedRate (
 				() -> log.info ( "Mapped {} GO classes", graph1.getConcepts ().size () ), 
 				30, 30, TimeUnit.SECONDS 

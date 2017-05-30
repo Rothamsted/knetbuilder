@@ -5,7 +5,7 @@ import net.sourceforge.ondex.core.base.DataSourceImpl;
 import net.sourceforge.ondex.exception.type.NullValueException;
 
 /**
- * These prototype are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 
+ * These prototypes are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 
  * with the necessary parameters. They're also designed to be used with IoC frameworks like Spring.
  * 
  * TODO: move to core, as most of the classes in this package.
