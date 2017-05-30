@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<description><![CDATA[Tests a comphreensive mapping for GO]]></description>
+	<description><![CDATA[ONDEX OWL Parser configuration for importing Gene Ontology]]></description>
 
 	<import resource="default_mappings.xml" />
 
