@@ -18,9 +18,12 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 import net.sourceforge.ondex.parser.owl.OWLConceptClassMapper;
 import net.sourceforge.ondex.parser.owl.OWLConceptMapper;
+import net.sourceforge.ondex.parser.owl.OWLMapper;
 
 /**
  * Tests for The Trait Ontology
@@ -34,25 +37,22 @@ public class TOAxiomRelTest
 	@Test
 	public void testOwlAxiomRelations () throws Exception
 	{
-		ONDEXGraph graph = new MemoryONDEXGraph ( "test" );
-
 		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "to_cfg.xml" );
 
 		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
+		model.setStrictMode ( false );
 		model.read ( Resources.getResource ( "to_owl_axiom.owl" ).toString (), "", "RDF/XML" );
 		
-		OWLConceptMapper conceptMapper = (OWLConceptMapper) ctx.getBean ( "conceptMapper" );
-		OWLConceptClassMapper ccMapper = (OWLConceptClassMapper) ctx.getBean ( "conceptClassMapper" );
-		ccMapper.setClassIri ( iri ( "obo:TO_0020095"  ) );
-		conceptMapper.setConceptClassMapper ( ccMapper );
-		conceptMapper.map ( model.getOntClass ( iri ( "obo:TO_0000523" ) ), graph );
-		
-		assertEquals ( "Wrong no of concepts!", 1, graph.getConcepts ().size () );
-		
-		ONDEXConcept c = graph.getConcepts ().iterator ().next ();
+		OWLMapper mapper = (OWLMapper) ctx.getBean ( "owlMapper" );
+		ONDEXGraph graph = mapper.map ( model );
+				
+		ONDEXConcept c = graph.getConcepts ()
+		.stream ()
+		.filter ( ci -> "TO_0000523".equals ( ci.getPID () ) )
+		.findAny ()
+		.orElseThrow ( () -> new RuntimeException ( "Test Concept not found!" ) );
 
 		DataSource ds = graph.getMetaData ().createDataSource ( "TO", "Plant Trait Ontology", "" );
-		
 		
 		assertNotNull ( "Concept accession is wrong!", c.getConceptAccession ( "0000523", ds ) );
 		assertNotNull ( "Concept label is wrong!", c.getConceptName ( "stomatal resistance" ) );
@@ -62,16 +62,38 @@ public class TOAxiomRelTest
 		);
 
 		ConceptClass cc = c.getOfType ();
-		assertEquals ( "Concept Class ID is wrong!", "TO_0020095", cc.getId () );
-		assertEquals ( "Concept Class label is wrong!",  "stomatal process related trait", cc.getFullname () );
+		assertEquals ( "Concept Class ID is wrong!", "TO_0000387", cc.getId () );
+		assertEquals ( "Concept Class label is wrong!",  "plant trait", cc.getFullname () );
 		Assert.assertTrue ( 
 			"Concept Class definition is wrong!", 
-			cc.getDescription ().startsWith ( "Trait associated with any of the stomatal" ) 
+			cc.getDescription ().startsWith ( "A measurable or observable" ) 
 		);
 		
 		ds = graph.getMetaData ().createDataSource ( "Wikipedia", "Wikipedia", "" );
 		assertNotNull ( "Additional x-ref to Wikipedia is wrong!", c.getConceptAccession ( "Stomatal_conductance", ds ) );
+				
+		// Inferred super-classes
+		ONDEXRelation relation = graph
+		.getRelations ()
+		.stream ()
+		.filter ( r -> "is_a".equals ( r.getOfType ().getId () ) )
+		.filter ( r -> "TO_0000839".equals ( r.getToConcept ().getPID () ) )
+		.findFirst ()
+		.orElse ( null );
 		
+		assertNotNull ( "subClass inferred relation not found!", relation );
+
+		
+		relation = graph
+		.getRelations ()
+		.stream ()
+		.filter ( r -> "part_of".equals ( r.getOfType ().getId () ) )
+		.filter ( r -> "PO_0009072".equals ( r.getToConcept ().getPID () ) )
+		.findFirst ()
+		.orElse ( null );
+		
+		assertNotNull ( "subClass inferred relation not found!", relation );
+
 		( (Closeable) ctx ).close ();
 	
 	}

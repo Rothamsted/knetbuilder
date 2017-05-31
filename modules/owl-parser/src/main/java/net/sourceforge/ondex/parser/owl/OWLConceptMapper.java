@@ -2,6 +2,7 @@ package net.sourceforge.ondex.parser.owl;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ontology.OntClass;
@@ -47,14 +48,14 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	private EvidenceTypePrototype evidenceTypePrototype = EvidenceTypePrototype.IMPD;
 	
 	private DataSourcePrototype dataSourcePrototype = DataSourcePrototype.OWL_PARSER;
-
-
+	
+	
 	/**
 	 * @see above.
 	 */
 	@Override
 	public ONDEXConcept map ( OntClass ontCls, ONDEXGraph graph )
-	{
+	{		
 		OntModel model = ontCls.getOntModel ();
 		String conceptId = idMapper.map ( ontCls );
 		String description = StringUtils.trimToEmpty ( descriptionMapper.map ( ontCls ) );
@@ -209,5 +210,5 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	{
 		this.dataSourcePrototype = dataSourcePrototype;
 	}
-	
+
 }

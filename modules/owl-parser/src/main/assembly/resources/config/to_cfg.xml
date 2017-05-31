@@ -9,7 +9,7 @@
 
 
 	<!-- This is the entry point, it starts from top OWL classes and recurse on rdfs:subClasOf -->		
-	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
+	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLInfMapper">
 	  <!-- The recursive subClassOf mapper with one instance per top class -->
 	  <property name = "relationsMappers">
 	  	<set>
