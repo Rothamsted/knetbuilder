@@ -234,15 +234,15 @@ public class Parser extends ONDEXParser {
 				c1.createAttribute(anEnd, geneEnd, false);
 
 				String chr_U = "U";
-				String regex = "[1-7]";
+				String regex = "(\\d{1,2})";
 				/*
-				* For chromosomes in Barley gff3 (taxid:112509) 
-				* and Poplar gff3 (taxid:3694)
-				* Check if chromosome equals 1-7, Pt or contains "Chr", 
+				* For chromosomes in Barley gff3 (taxid:112509), 
+				* Poplar gff3 (taxid:3694), Maize (taxid:4577)
+				* Check if chromosome is 1-20, Pt or contains "Chr", 
 				* else add as location and set chromosome to "U"
 				* 
 				*/
-				if(taxid.equals("112509")||taxid.equals("3694")){
+				if(taxid.equals("112509")||taxid.equals("3694")||taxid.equals("4577")){
 				    //if(chromosome.equals("1")||chromosome.equals("2")||chromosome.equals("3")||chromosome.equals("4")||chromosome.equals("5")||chromosome.equals("6")||chromosome.equals("7")||chromosome.equals("Pt")){
 				    if(chromosome.matches(regex)||chromosome.equals("Pt")||chromosome.contains("Chr")){
 					c1.createAttribute(anChromosome, chromosome, false);
