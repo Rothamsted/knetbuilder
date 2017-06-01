@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <artifactId>modules</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>1.0.4-SNAPSHOT</version>
+   </parent>
+   <groupId>net.sourceforge.ondex.modules</groupId>
+   <artifactId>owl-parser</artifactId>
+
+   <name>OWL Parser</name>
+   <description>TODO</description>
+   <developers>
+      <developer>
+         <name>Marco Brandizi</name>
+      </developer>
+   </developers>
+   
+   <dependencies>
+   
+   		<dependency>
+   			<artifactId>api</artifactId>
+  		  <groupId>net.sourceforge.ondex.core</groupId>
+   		  <version>${project.version}</version>
+        <scope>provided</scope>   		  
+   		</dependency>
+   		
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>workflow-api</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>memory</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+            
+      <dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+         <scope>provided</scope>
+      </dependency>
+
+			<!-- Routes SLF4J to LOG4j, which is the ONDEX logger -->
+			<!-- TODO: move to top pom -->      
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.25</version>
+			</dependency>
+      
+      
+			<dependency>
+			  <groupId>info.marcobrandizi</groupId>
+			  <artifactId>rdfutils-jena</artifactId>
+			  <version>1.0.1-SNAPSHOT</version>
+			</dependency>
+      
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>4.3.6.RELEASE</version>
+			</dependency>
+      
+   </dependencies>
+   
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>${maven.assembly.plugin.version}</version>
+            <executions>
+               <execution>
+                  <id>make-assembly-packaged_with_jars</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>attached</goal>
+                  </goals>
+                  <configuration>
+                     <descriptors>
+                     <!-- This adds up to the ones coming from workflow-component-descriptor and overrides 
+              			 the execution/descriptor with the same name. 
+              			 
+              			 TODO: Not sure it's needed here
+              			 -->
+                     <descriptor>src/main/assembly/packaged_with_jars.xml</descriptor>
+                     </descriptors>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         
+			  <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <configuration>
+			      <properties>
+			        <property>
+			        	<!-- Prints out spaces and test name before/after every test method and automatically -->
+			          <name>listener</name>
+			          <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
+			        </property>
+			       </properties>
+			    </configuration>
+			  </plugin>
+         
+      </plugins>
+
+   </build>
+
+   <repositories>
+      <repository>
+         <id>ondex-releases-all</id>
+         <name>Internal Releases</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
+         <releases><enabled>true</enabled></releases>
+         <snapshots><enabled>false</enabled></snapshots>
+      </repository>
+      <repository>
+         <id>ondex-snapshots-all</id>
+         <name>Internal Snapshots</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshotss</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+      </repository>
+   </repositories>
+
+</project>
