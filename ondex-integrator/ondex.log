@@ -1,0 +1,30 @@
+2017-02-27 12:01:59,518 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Reading configuration from jar - true
+2017-02-27 12:01:59,531 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Scanning lib directory for plugins
+2017-02-27 12:02:00,032 [main] WARN  net.sourceforge.ondex.init.PluginRegistry - Loaded 0 plugins
+2017-02-27 12:02:00,032 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry -   []
+2017-02-27 12:02:15,696 [AWT-EventQueue-0] INFO  net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO - Reading task description file: N:\outreach\training\EBI-IntegrativeOmics\2017\tutorial_files\workflow\Exercise_04_parser.xml
+2017-02-27 12:02:16,513 [AWT-EventQueue-0] DEBUG net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO - Version: 3.0
+2017-02-27 12:03:12,839 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Reading configuration from jar - true
+2017-02-27 12:03:12,839 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Scanning lib directory for plugins
+2017-02-27 12:03:12,947 [main] WARN  net.sourceforge.ondex.init.PluginRegistry - Loaded 0 plugins
+2017-02-27 12:03:12,947 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry -   []
+2017-02-27 12:08:53,581 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Reading configuration from jar - true
+2017-02-27 12:08:53,582 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Scanning lib directory for plugins
+2017-02-27 12:08:53,694 [main] WARN  net.sourceforge.ondex.init.PluginRegistry - Loaded 0 plugins
+2017-02-27 12:08:53,694 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry -   []
+2017-02-27 12:12:48,232 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Reading configuration from jar - true
+2017-02-27 12:12:48,234 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Scanning lib directory for plugins
+2017-02-27 12:12:48,359 [main] WARN  net.sourceforge.ondex.init.PluginRegistry - Loaded 0 plugins
+2017-02-27 12:12:48,359 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry -   []
+2017-02-27 12:19:19,035 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Reading configuration from jar - true
+2017-02-27 12:19:19,058 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Scanning lib directory for plugins
+2017-02-27 12:19:19,278 [main] WARN  net.sourceforge.ondex.init.PluginRegistry - Loaded 0 plugins
+2017-02-27 12:19:19,278 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry -   []
+2017-03-22 12:29:44,267 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Reading configuration from jar - true
+2017-03-22 12:29:44,285 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Scanning lib directory for plugins
+2017-03-22 12:30:06,785 [main] WARN  net.sourceforge.ondex.init.PluginRegistry - Loaded 0 plugins
+2017-03-22 12:30:06,785 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry -   []
+2017-05-16 15:37:11,048 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Reading configuration from jar - true
+2017-05-16 15:37:11,058 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry - Scanning lib directory for plugins
+2017-05-16 15:37:29,170 [main] WARN  net.sourceforge.ondex.init.PluginRegistry - Loaded 0 plugins
+2017-05-16 15:37:29,170 [main] DEBUG net.sourceforge.ondex.init.PluginRegistry -   []
