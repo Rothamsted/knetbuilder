@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<description><![CDATA[
+	The default mapping for net.sourceforge.ondex.parser.owl.OWLMapper. This uses mappings from common elements in OWL
+	files, such as rdfs:label or rdfs:comment.
+	
+	This file is usually imported by a configuration that is specific to a particular ontology file.
+	
+	Hae a look at the Spring documentation, eg, https://www.tutorialspoint.com/spring/spring_bean_definition.htm
+	to know how this file works. Also, see the OWL parser code to figure out which Java components are available for 
+	mapping your ontology to ONDEX.
+	]]></description>
+
+
+	<!--
+		Defaults that are referred by other components. 
+	 -->
+	 
+	<bean id = "evidenceTypePrototype" class = "net.sourceforge.ondex.core.utils.EvidenceTypePrototype">
+		<property name="id" value = "IMPD" />
+		<property name="fullname" value = "IMPD" />
+	</bean>	 
+	 
+	<bean id = "idMapper" class = "net.sourceforge.ondex.parser.owl.IRIBasedIdMapper" /> 
+
+	<!-- Default label based on rdfs:label -->
+	<bean id = "labelMapper" class = "net.sourceforge.ondex.parser.owl.TextPropertyMapper">
+		<property name="propertyIri" value="#{ns.iri ( 'rdfs:label' )}"></property>
+	</bean>		
+
+	<!-- Default description/definition based on rdfs:comment -->
+	<bean id = "descriptionMapper" class = "net.sourceforge.ondex.parser.owl.TextPropertyMapper">
+		<property name="propertyIri" value="#{ns.iri ( 'rdfs:comment' )}"></property>
+	</bean>		
+
+	<!-- 
+	  prototype scope is preferable, since every concept mapper will have its own concept class mapper, to
+	  know its top class and CC to map to.
+	 -->
+	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper" scope = "prototype">
+		<!-- This way it's initialised by its container, dynamically -->
+		<property name = "conceptClassMapper" value = "#{ null }" />
+		<property name = "idMapper" ref = "idMapper" />
+		<property name = "preferredNameMapper" ref = "labelMapper" />
+		<property name = "descriptionMapper" ref = "descriptionMapper" />
+	</bean>
+	
+	<!-- Same as above -->
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" scope = "prototype">
+		<property name = "classIri" value = "#{ null }" />
+		<property name = "idMapper" ref = "idMapper" />
+		<property name = "labelMapper" ref = "labelMapper" />
+		<property name = "descriptionMapper" ref = "descriptionMapper" />
+	</bean>
+	
+	<!-- and again -->
+	<bean id = "subClassMapper" class = "net.sourceforge.ondex.parser.owl.OwlSubClassRelMapper" scope = "prototype">
+		<property name="conceptClassMapper" value = "#{ null }" />
+		<property name="conceptMapper" ref = "conceptMapper" />
+		<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+	</bean>
+		
+	<!-- This is called via SpEl -->
+	<bean id = "ns" class = "info.marcobrandizi.rdfutils.namespaces.NamespaceUtils" />
+	
+	<!-- 
+		This is the default OntModel that we use to load the input OWL. As you can see, we disable any type of 
+	  inference, the default model, which as some basic entailments enabled, causes endless waitings and eventual
+	  crashes 
+	-->
+	<bean id = "jenaOntModel" class = "org.apache.jena.rdf.model.ModelFactory" 
+		scope = "prototype"
+		factory-method="createOntologyModel">
+		<constructor-arg value="#{T( org.apache.jena.ontology.OntModelSpec ).OWL_MEM }"></constructor-arg>
+	</bean>
+		
+</beans>

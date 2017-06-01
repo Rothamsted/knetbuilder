@@ -36,10 +36,25 @@
 			<set>
 				<bean id = "idAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
 					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:id' )}" />
+					<property name="dataSourcePrototype" ref = "goDataSource" />
+					<property name="dataSourcePrefix" value = "GO:" />
 				</bean>	
 				<bean id = "altIdAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
 					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasAlternativeId' )}" />
+					<property name="dataSourcePrototype" ref = "goDataSource" />
+					<property name="dataSourcePrefix" value = "GO:" />
 				</bean>	
+				<!-- Any additional external ref is mapped this way in OBO -->
+				<bean id = "wpAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
+					<property name="dataSourcePrefix" value="Wikipedia:" />
+					<property name="dataSourcePrototype">
+						<bean id = "wpDs" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+							<property name="id" value = "Wikipedia" />
+							<property name="fullname" value = "Wikipedia" />
+						</bean>
+					</property>
+				</bean>
 			</set>
 		</property>
 	</bean>
@@ -52,4 +67,8 @@
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
 	</bean>
 		
+	<bean id = "goDataSource" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+		<property name="id" value = "GO" />
+		<property name="fullname" value = "Gene Ontology" />
+	</bean> 
 </beans>

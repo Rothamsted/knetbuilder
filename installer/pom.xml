@@ -47,6 +47,31 @@
                            <outputDirectory>${project.build.directory}</outputDirectory>
                            <includes>**/*</includes>
                         </artifactItem>
+
+												<!-- 
+												  Plugin bundle, containing both the plugin jar and all its dependencies, packed into jars.
+												  Putting this in the unpack goal causes all the .jars to be poured into plugin/, the jars
+												  themselves are not unpacked. We need this because there are multiple files with the same
+												  names (e.g., SPI files in META-INF/services) which clash when we try to pack everything
+												  in a single .jar.
+												  
+												  Moreover, we send other files (config, examples) to other ONDEX directories.
+												  
+												  Because of these multiple directories in the plug-in bundle, we first unpack it here
+												  onto target/owl-parser-plug-in and then let the assembly to move files in the final 
+												  ONDEX binary (see zip_distro.xml). 
+												-->                        
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>owl-parser</artifactId>
+                           <version>${project.version}</version>
+                           <classifier>bundle</classifier>
+                           <type>zip</type>
+                           <overWrite>true</overWrite>
+                           <includes>**/*</includes>
+                           <outputDirectory>${project.build.directory}</outputDirectory>
+                        </artifactItem>
+                        
                         
                         <!-- TODO: outdated and not building 
                         <artifactItem>
@@ -59,6 +84,7 @@
                            <outputDirectory>${project.build.directory}/ovtk2</outputDirectory>
                            <includes>**/*</includes>
                         </artifactItem> -->
+                                                
                      </artifactItems>
                      <overWriteReleases>false</overWriteReleases>
                      <overWriteSnapshots>true</overWriteSnapshots>

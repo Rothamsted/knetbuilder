@@ -34,28 +34,70 @@
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
 		<property name = "conceptRelationMappers">
 			<set>
-				<bean id = "someMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
+				<bean id = "equivClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLEqIntersctRel" >
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+				<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
 					<property name="propertyIri" value="#{ns.iri ( 'obo:BFO_0000050' )}" /><!-- part of -->
-					<property name="relationTypePrototype">
-						<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
-							<property name="id" value = "part_of" />
-							<property name="fullname" value = "part of" />
-							<property name="antisymmetric" value = "true" />
-							<property name="transitiv" value = "true" />
-						</bean>
-					</property>
+					<property name="relationTypePrototype" ref = "partOfRelPrototype" />
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+				<bean id = "regulatesMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002211' )}" /><!-- regulates -->
+					<property name="relationTypePrototype" ref = "regulatesRelPrototype" />
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+				<bean id = "posRegMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002213' )}" /><!-- pos regulates -->
+					<property name="relationTypePrototype" ref = "posRegulatesRelPrototype" />
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+				<bean id = "negRegMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002212' )}" /><!-- neg regulates -->
+					<property name="relationTypePrototype" ref = "negRegulatesRelPrototype" />
 					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
 				</bean>
 			</set>
 		</property>
 	</bean>
+
 	
-	<!-- Same as above -->
 	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" scope = "prototype">
 		<property name = "classIri" value = "#{ null }" />
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "labelMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
+	</bean>
+
+	
+	<bean id = "partOfRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+		<property name="id" value = "part_of" />
+		<property name="fullname" value = "part of" />
+		<property name="antisymmetric" value = "true" />
+		<property name="transitiv" value = "true" />
+	</bean>
+	
+	<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+		<property name="id" value = "regulates" />
+		<property name="fullname" value = "regulates" />
+		<property name="antisymmetric" value = "true" />
+		<property name="transitiv" value = "true" />
+	</bean>
+
+	<bean id = "posRegulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+		<property name="id" value = "pos_reg" />
+		<property name="fullname" value = "positively regulates" />
+		<property name="antisymmetric" value = "true" />
+		<property name="transitiv" value = "true" />
+		<property name="parentPrototype" ref = "regulatesRelPrototype"></property>
+	</bean>
+
+	<bean id = "negRegulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+		<property name="id" value = "neg_reg" />
+		<property name="fullname" value = "negatively regulates" />
+		<property name="antisymmetric" value = "true" />
+		<property name="transitiv" value = "true" />
+		<property name="parentPrototype" ref = "regulatesRelPrototype"></property>
 	</bean>
 		
 </beans>

@@ -13,7 +13,7 @@
     <Export name="oxl">
       <Arg name="pretty">true</Arg>
       <Arg name="ExportIsolatedConcepts">true</Arg>
-      <Arg name="GZip">false</Arg>
+      <Arg name="GZip">true</Arg>
       <Arg name="ExportFile">/tmp/test.oxl</Arg>
       <Arg name="graphId">default</Arg>
     </Export>    

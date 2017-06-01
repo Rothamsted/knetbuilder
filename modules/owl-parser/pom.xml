@@ -67,49 +67,70 @@
 				<artifactId>spring-context</artifactId>
 				<version>4.3.6.RELEASE</version>
 			</dependency>
-      
+			      
    </dependencies>
    
    <build>
+   
+			<testResources>
+			  <!--  This is stuff used both in the binary distribution and in tests -->
+			  <testResource>
+			    <directory>src/main/assembly/resources/config</directory>
+			  </testResource>
+			  <!-- This is the usual Maven conventions -->
+			  <testResource>
+			    <directory>src/test/resources</directory>
+			  </testResource>
+		  </testResources>   
+   
       <plugins>
-         <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>${maven.assembly.plugin.version}</version>
-            <executions>
-               <execution>
-                  <id>make-assembly-packaged_with_jars</id>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>attached</goal>
-                  </goals>
-                  <configuration>
-                     <descriptors>
-                     <!-- This adds up to the ones coming from workflow-component-descriptor and overrides 
-              			 the execution/descriptor with the same name. 
-              			 
-              			 TODO: Not sure it's needed here
-              			 -->
-                     <descriptor>src/main/assembly/packaged_with_jars.xml</descriptor>
-                     </descriptors>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
-         
+      
 			  <plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-surefire-plugin</artifactId>
+			    <version>2.20</version>
 			    <configuration>
 			      <properties>
 			        <property>
 			        	<!-- Prints out spaces and test name before/after every test method and automatically -->
 			          <name>listener</name>
-			          <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
+			          <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>			          
 			        </property>
 			       </properties>
+             <forkMode>always</forkMode>
+             <forkCount>1</forkCount>
+             <!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
+             <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
+             <argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>             
 			    </configuration>
 			  </plugin>
-         
+      
+      
+        <plugin>
+	        <artifactId>maven-assembly-plugin</artifactId>
+	        <version>${maven.assembly.plugin.version}</version>
+	        <executions>
+	        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+						<execution>
+							<id>make-assembly-packaged_with_jars</id>
+							<phase />
+						</execution>    
+	             
+						<execution>
+						  <id>assembly-bundle</id>
+						  <phase>package</phase>
+						  <goals>
+						     <goal>attached</goal>
+						  </goals>
+						  <configuration>
+						     <descriptors>
+						     	<descriptor>src/main/assembly/bundle.xml</descriptor>
+						     </descriptors>
+						  </configuration>
+						</execution>
+	        </executions>
+        </plugin>
+				         
       </plugins>
 
    </build>
@@ -117,18 +138,24 @@
    <repositories>
       <repository>
          <id>ondex-releases-all</id>
-         <name>Internal Releases</name>
+         <name>ONDEX Releases</name>
          <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
          <releases><enabled>true</enabled></releases>
          <snapshots><enabled>false</enabled></snapshots>
       </repository>
       <repository>
          <id>ondex-snapshots-all</id>
-         <name>Internal Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshotss</url>
+         <name>ONDEX Snapshots</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
          <releases><enabled>false</enabled></releases>
          <snapshots><enabled>true</enabled></snapshots>
       </repository>
+			<repository>
+				<id>marcobrandizi.info</id>
+				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+				<releases><enabled>true</enabled></releases>
+				<snapshots><enabled>true</enabled></snapshots>
+			</repository>
    </repositories>
 
 </project>

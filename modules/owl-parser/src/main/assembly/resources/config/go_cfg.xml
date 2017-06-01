@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<description><![CDATA[ONDEX OWL Parser configuration for importing Gene Ontology]]></description>
+
+	<import resource="default_mappings.xml" />
+
+
+	<!-- This is the entry point, it starts from top OWL classes and recurse on rdfs:subClasOf -->		
+	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
+	  <!-- The recursive subClassOf mapper with one instance per top class -->
+	  <property name = "relationsMappers">
+	  	<set>
+	  		<bean parent = "subClassMapper">
+	  			<property name="conceptClassMapper">
+	  				<bean parent = "conceptClassMapper">
+	  					<property name = "classIri" value="#{ns.iri ( 'obo:GO_0008150' )}" /><!-- BioProcess -->
+	  				</bean>
+	  			</property>
+	  		</bean>
+	  		<bean parent = "subClassMapper">
+	  			<property name="conceptClassMapper">
+	  				<bean parent = "conceptClassMapper">
+	  					<property name = "classIri" value="#{ns.iri ( 'obo:GO_0003674' )}" /><!-- Mol Function -->
+	  				</bean>
+	  			</property>
+	  		</bean>
+	  		<bean parent = "subClassMapper">
+	  			<property name="conceptClassMapper">
+	  				<bean parent = "conceptClassMapper">
+	  					<property name = "classIri" value="#{ns.iri ( 'obo:GO_0005575' )}" /><!-- Cell Component -->
+	  				</bean>
+	  			</property>
+	  		</bean>
+	  	</set>
+	  </property>
+	</bean>
+		
+		
+	<bean id = "descriptionMapper" class = "net.sourceforge.ondex.parser.owl.TextPropertyMapper" >
+		<property name="propertyIri" value="#{ns.iri ( 'obo:IAO_0000115' )}" /><!-- definition -->
+	</bean>
+	
+	<!-- Mapper for the single concept -->
+	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper" scope = "prototype">
+		<!-- This way it's initialised by its container, dynamically -->
+		<property name = "conceptClassMapper" value = "#{ null }" />
+		<property name = "idMapper" ref = "idMapper" />
+		<property name = "preferredNameMapper" ref = "labelMapper" />
+		<property name = "descriptionMapper" ref = "descriptionMapper" />
+		<property name = "additionalNameMappers">
+			<set>
+				<!-- Synonyms -->
+				<bean id = "synonymNameMapper" class = "net.sourceforge.ondex.parser.owl.OWLNamesMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasExactSynonym' )}" />
+				</bean>
+			</set>
+		</property>
+		<!-- Accessions -->
+		<property name = "accessionsMappers">
+			<set>
+				<bean id = "idAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:id' )}" />
+					<property name="dataSourcePrototype" ref = "goDataSource" />
+					<property name="dataSourcePrefix" value = "GO:" />
+				</bean>	
+				<bean id = "altIdAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasAlternativeId' )}" />
+					<property name="dataSourcePrototype" ref = "goDataSource" />
+					<property name="dataSourcePrefix" value = "GO:" />
+				</bean>	
+				<!-- Any additional external ref is mapped this way in OBO -->
+				<bean id = "wpAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
+					<property name="dataSourcePrefix" value="Wikipedia:" />
+					<property name="dataSourcePrototype">
+						<bean id = "wpDs" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+							<property name="id" value = "Wikipedia" />
+							<property name="fullname" value = "Wikipedia" />
+						</bean>
+					</property>
+				</bean>
+				<bean id = "ecAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
+					<property name="dataSourcePrefix" value="EC:" />
+					<property name="dataSourcePrototype">
+						<bean id = "ecDs" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+							<property name="id" value = "EC" />
+							<property name="fullname" value = "Enzyme Nomenclature Database" />
+							<property name="description" value = "ENZYME is a repository of information relative to the nomenclature of enzymes (http://enzyme.expasy.org)." />
+						</bean>
+					</property>
+				</bean>
+			</set>
+		</property>
+		<!-- Additional relations that are not followed recursively -->
+		<property name = "conceptRelationMappers">
+			<set>
+				<bean id = "equivClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLEqIntersctRel" >
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+				<!-- part of -->
+				<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'obo:BFO_0000050' )}" />
+					<property name="relationTypePrototype" ref = "partOfRelPrototype" />
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+				<!-- regulates -->
+				<bean id = "regulatesMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002211' )}" />
+					<property name="relationTypePrototype" ref = "regulatesRelPrototype" />
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+				<!-- positively regulates -->
+				<bean id = "posRegMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002213' )}" />
+					<property name="relationTypePrototype" ref = "posRegulatesRelPrototype" />
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+				<!-- negatively regulates -->
+				<bean id = "negRegMapper" class = "net.sourceforge.ondex.parser.owl.OWLSomeRelMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002212' )}" />
+					<property name="relationTypePrototype" ref = "negRegulatesRelPrototype" />
+					<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+				</bean>
+			</set>
+		</property>
+	</bean>
+	
+	<!-- Generates ONDEX concept classes from top OWL classes -->
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" scope = "prototype">
+		<property name = "classIri" value = "#{ null }" />
+		<property name = "idMapper" ref = "idMapper" />
+		<property name = "labelMapper" ref = "labelMapper" />
+		<property name = "descriptionMapper" ref = "descriptionMapper" />
+	</bean>
+
+
+	<!-- Several ONDEX relation types, used in the components above -->
+
+	<!-- part-of -->
+	<bean id = "partOfRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+		<property name="id" value = "part_of" />
+		<property name="fullname" value = "part of" />
+		<property name="antisymmetric" value = "true" />
+		<property name="transitiv" value = "true" />
+	</bean>
+	
+	<!-- regulates -->
+	<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+		<property name="id" value = "regulates" />
+		<property name="fullname" value = "regulates" />
+		<property name="antisymmetric" value = "true" />
+		<property name="transitiv" value = "true" />
+	</bean>
+
+	<!-- positively regulates -->
+	<bean id = "posRegulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+		<property name="id" value = "pos_reg" />
+		<property name="fullname" value = "positively regulates" />
+		<property name="antisymmetric" value = "true" />
+		<property name="transitiv" value = "true" />
+		<property name="parentPrototype" ref = "regulatesRelPrototype"></property>
+	</bean>
+
+	<!-- negatively regulates -->
+	<bean id = "negRegulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+		<property name="id" value = "neg_reg" />
+		<property name="fullname" value = "negatively regulates" />
+		<property name="antisymmetric" value = "true" />
+		<property name="transitiv" value = "true" />
+		<property name="parentPrototype" ref = "regulatesRelPrototype"></property>
+	</bean>
+	
+	<!-- Data source that represents Gene Ontology itself and used on several components -->
+	<bean id = "goDataSource" class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+		<property name="id" value = "GO" />
+		<property name="fullname" value = "Gene Ontology" />
+	</bean> 
+	
+</beans>
+	

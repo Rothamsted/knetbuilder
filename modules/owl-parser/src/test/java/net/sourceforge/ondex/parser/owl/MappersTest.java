@@ -15,6 +15,7 @@ import java.util.function.Function;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.vocabulary.RDFS;
 import org.junit.Assert;
@@ -59,7 +60,7 @@ public class MappersTest
 	@Before
 	public void initTestData ()
 	{
-		model = ModelFactory.createOntologyModel ();
+		model = ModelFactory.createOntologyModel ( OntModelSpec.OWL_MEM );
 		
 		topClsId = "TopClass";
 		topCls = model.createClass ( iri ( "foo", topClsId ) );

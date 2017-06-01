@@ -1,11 +1,13 @@
 package net.sourceforge.ondex.core.utils;
 
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.base.RelationTypeImpl;
 import net.sourceforge.ondex.exception.type.NullValueException;
 
 /**
- * TODO: comment me!
+ * These prototypes are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 
+ * with the necessary parameters. They're also designed to be used with IoC frameworks like Spring.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>8 May 2017</dd></dl>
@@ -14,7 +16,20 @@ import net.sourceforge.ondex.exception.type.NullValueException;
 @SuppressWarnings ( "serial" )
 public class RelationTypePrototype extends RelationTypeImpl
 {
-	private String id; 
+	public static final RelationTypePrototype IS_A_PROTOTYPE = new RelationTypePrototype ( 
+		"is_a", // id 
+		"is a", // fullname
+		"", // descr
+		"", // inverseName
+		true, // antisymmetric, 
+		true, // reflexive, 
+		false, // symmetic, 
+		true, // transitive, 
+		null // specialisationof 
+	);
+	
+	private String id;
+	private RelationTypePrototype parentPrototype;
 
 	public RelationTypePrototype () {
 		this ( "", "", "", "", false, false, false, false, null );
@@ -79,5 +94,15 @@ public class RelationTypePrototype extends RelationTypeImpl
 	public void setFullname ( String fullname ) throws NullValueException, UnsupportedOperationException
 	{
 		this.fullname = fullname;
+	}
+
+	public RelationTypePrototype getParentPrototype ()
+	{
+		return parentPrototype;
+	}
+
+	public void setParentPrototype ( RelationTypePrototype parentPrototype )
+	{
+		this.parentPrototype = parentPrototype;
 	}
 }

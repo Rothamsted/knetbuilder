@@ -5,23 +5,13 @@ import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
-import net.sourceforge.ondex.parser.RelationsMapper;
 
 /**
+ * Maps OWL axioms like A subclassOf ( part-of ( some C ) ) or A equivalent ( B and (part-of ( some C ) )
+ * to an ONDEX relation like A part-of C. The mapping of the equivalent B is left to {@link OWLEqIntersctRel}.
  * 
- * TODO: comment me!
- *
- * TODO: add the class mentioned in equivalent.
+ * The relation (part-of in this example) is configurable via {@link #getPropertyIri()}, which is mapped 
+ * to {@link #getRelationTypePrototype()}. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 May 2017</dd></dl>
@@ -34,11 +24,9 @@ public class OWLSomeRelMapper extends OWLSimpleConceptRelMapper
 	@Override
 	protected Stream<OntClass> getRelatedClasses ( OntClass fromCls )
 	{
-		// Super classes and equivalents
-		//
 		Stream<OntClass> superClasses = JENAUTILS.toStream ( fromCls.listSuperClasses ( false ) ); 
 		
-		// And equivalents in intersections
+		// Add up members of intersections
 		Stream<OntClass> eqMembers = JENAUTILS
 		.toStream ( fromCls.listEquivalentClasses () )
 		.filter ( eq -> eq.isIntersectionClass () )
@@ -58,6 +46,8 @@ public class OWLSomeRelMapper extends OWLSimpleConceptRelMapper
 		.map ( restr -> restr.asSomeValuesFromRestriction () )
 		.filter ( someRestr -> propIri.equals ( someRestr.getOnProperty ().getURI () ) )
 		.map ( someRestr -> someRestr.getSomeValuesFrom ().as ( OntClass.class ) );
+		
+		// That's all! Now the classes will be processed by the Java' parent.
 	}
 	
 

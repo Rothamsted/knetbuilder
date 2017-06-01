@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
@@ -35,6 +38,7 @@ public class CachedGraphWrapper
 {
 	private ONDEXGraph graph; 
 	private Table<Class<Object>, String, Object> cache = HashBasedTable.create ();
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	private static Map<ONDEXGraph, CachedGraphWrapper> instances = new HashMap<> ();
 	
@@ -88,13 +92,30 @@ public class CachedGraphWrapper
 
 	public RelationType getRelationType ( RelationTypePrototype proto )
 	{
-		return this.cacheGet ( 
-			RelationType.class, proto.getId (), 
-			() -> this.graph.getMetaData ().getFactory ().createRelationType ( 
-				proto.getId (), proto.getFullname (), proto.getDescription (), 
-				proto.isAntisymmetric (), proto.isReflexive (), proto.isSymmetric (), proto.isTransitiv (), 
-				proto.getSpecialisationOf () )
-		);
+		try 
+		{
+			// Let's see if it has a parent
+			if ( proto.getSpecialisationOf () == null )
+			{
+				// Or a prototype to build it. In case of loops, this will lead to stack overflow
+				RelationTypePrototype parentProto = proto.getParentPrototype ();
+				if ( parentProto != null )
+						proto.setSpecialisationOf ( this.getRelationType ( parentProto ) );
+			}
+			
+			return this.cacheGet ( 
+				RelationType.class, proto.getId (), 
+				() -> this.graph.getMetaData ().getFactory ().createRelationType ( 
+					proto.getId (), proto.getFullname (), proto.getDescription (), 
+					proto.isAntisymmetric (), proto.isReflexive (), proto.isSymmetric (), proto.isTransitiv (), 
+					proto.getSpecialisationOf () )
+			);
+		}
+		catch ( StackOverflowError ex ) 
+		{
+			log.error ( "Stackoverflow error while creating relation '{}'. Do you have circular references?", proto.getId () );
+			throw ex;
+		}
 	}
 	
 	
@@ -128,6 +149,11 @@ public class CachedGraphWrapper
 			() -> this.graph.getMetaData ().createDataSource ( id, fullName, description ) 
 		);
 	}
+
+	public DataSource getDataSource ( DataSourcePrototype proto )
+	{
+		return this.getDataSource ( proto.getId (), proto.getFullname (), proto.getDescription () );
+	}
 	
 	@SuppressWarnings ( "unchecked" )
 	private <V> V cacheGet ( Class<? super V> type, String key, Supplier<V> newValueGenerator )
@@ -138,4 +164,5 @@ public class CachedGraphWrapper
 		this.cache.put ( (Class<Object>) type, key, result = newValueGenerator.get () );
 		return result;
 	}
+
 }

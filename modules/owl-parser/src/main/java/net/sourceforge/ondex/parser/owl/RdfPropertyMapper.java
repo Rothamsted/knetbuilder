@@ -5,7 +5,7 @@ import org.apache.jena.ontology.OntClass;
 import net.sourceforge.ondex.parser.ONDEXMapper;
 
 /**
- * TODO: comment me!
+ * A simple container for all those mappers based on a {@link #getPropertyIri() OWL/RDF property}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>28 Apr 2017</dd></dl>
