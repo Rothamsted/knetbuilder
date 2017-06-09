@@ -138,7 +138,7 @@ public class CachedGraphWrapper
 	
 	public EvidenceType getEvidenceType ( EvidenceTypePrototype proto )
 	{
-		return this.getEvidenceType ( proto.getId (), proto.getFullname (), proto.getDescription () );
+		return this.getEvidenceType ( proto.getId (), proto.getFullName (), proto.getDescription () );
 	}
 	
 	
@@ -152,7 +152,7 @@ public class CachedGraphWrapper
 
 	public DataSource getDataSource ( DataSourcePrototype proto )
 	{
-		return this.getDataSource ( proto.getId (), proto.getFullname (), proto.getDescription () );
+		return this.getDataSource ( proto.getId (), proto.getFullName (), proto.getDescription () );
 	}
 	
 	@SuppressWarnings ( "unchecked" )

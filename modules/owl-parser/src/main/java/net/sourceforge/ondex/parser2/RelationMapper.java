@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.parser2;
 
-import java.util.stream.Stream;
-
+import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
@@ -12,7 +11,8 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-public abstract class PairsScanner<S, O> implements ParserScanner<S, Stream<ONDEXElemWrapper<ONDEXRelation>>>
+public abstract class RelationMapper 
+  implements PairMapper<ONDEXElemWrapper<ONDEXConcept>, ONDEXElemWrapper<ONDEXConcept>, ONDEXElemWrapper<ONDEXRelation>> 
 {
-	
+
 }

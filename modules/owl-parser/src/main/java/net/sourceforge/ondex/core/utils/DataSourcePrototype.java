@@ -14,44 +14,18 @@ import net.sourceforge.ondex.exception.type.NullValueException;
  * <dl><dt>Date:</dt><dd>8 May 2017</dd></dl>
  *
  */
-@SuppressWarnings ( "serial" )
-public class DataSourcePrototype extends DataSourceImpl 
+public class DataSourcePrototype extends DescribeablePrototype 
 {
 	public static final DataSourcePrototype OWL_PARSER = new DataSourcePrototype ( "owlParser", "The OWL Parser", "" );
 	
 	private String id; 
 
-	public DataSourcePrototype ( String id, String fullname, String description ) 
-	{
-		super ( -1, id, fullname, description );
-		this.setId ( id );
-	}
-
-	
 	public DataSourcePrototype () {
-		this ( "", "", "" );
+		this ( null, null, null );
 	}
 
-	public String getId () {
-		return this.id;
-	}
-	
-	public void setId ( String id ) {
-		this.id = id;
-	}
-
-
-	@Override
-	public void setFullname ( String fullname ) throws NullValueException, UnsupportedOperationException
+	public DataSourcePrototype ( String id, String fullName, String description ) 
 	{
-		this.fullname = fullname;
+		super ( id, fullName, description );
 	}
-
-
-	@Override
-	public void setDescription ( String description ) throws NullValueException, UnsupportedOperationException
-	{
-		this.description = description;
-	}	
-
 }

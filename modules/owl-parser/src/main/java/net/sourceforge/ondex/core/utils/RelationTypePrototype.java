@@ -35,9 +35,10 @@ public class RelationTypePrototype extends RelationTypeImpl
 		this ( "", "", "", "", false, false, false, false, null );
 	}
 
-	public RelationTypePrototype ( String id, String fullname, String description, String inverseName,
-			boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitiv,
-			RelationType specialisationOf )
+	public RelationTypePrototype ( 
+		String id, String fullname, String description, String inverseName,
+		boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitiv,
+		RelationType specialisationOf )
 	{
 		super ( 
 			-1, id, fullname, description, inverseName, isAntisymmetric, isReflexive, isSymmetric, isTransitiv,
@@ -46,6 +47,16 @@ public class RelationTypePrototype extends RelationTypeImpl
 		this.setId ( id );
 	}
 
+	public RelationTypePrototype ( 
+		String id, String fullname, String description, String inverseName,
+		boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitiv,
+		RelationTypePrototype specialisationOf )
+	{
+		this ( id, fullname, description, inverseName, isAntisymmetric, isReflexive, isSymmetric, isTransitiv, (RelationType) null );
+		this.setParentPrototype ( specialisationOf );
+	}
+	
+	
 	public String getId () {
 		return this.id;
 	}
