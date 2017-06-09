@@ -12,7 +12,7 @@ EOT
   exit 1
 fi
 
-
+# Simple (and buggy) function to get the value of a tag from some XML (in the stdin)
 function get_tag
 {
   text="$1"
@@ -22,6 +22,9 @@ function get_tag
   echo $result
 }
 
+# Gets the tail about the last version that Nexus append to an artifact in the repo, after name and snapshot version. 
+# This is usually a timestamp plus a build number. 
+#
 function get_snapshot_tail 
 {
   url_prefix="$1"
@@ -36,6 +39,7 @@ function get_snapshot_tail
   echo "$ts-$build"
 }
 
+# Gets the last release of an artifact, wether it is a stable release or a snapshot 
 function get_last_release
 {
   url_root="$1"
@@ -43,7 +47,9 @@ function get_last_release
   get_tag "$xml" latest
 }
 
-
+# Instantiates a template, replacing place holders named by the $3/$4 parameters with version-related values 
+# about the given artifact's URI
+#
 function make_doc
 {
   project_path="$1"
@@ -59,7 +65,7 @@ function make_doc
   snap_ver=$(get_last_release "$snap_url_root")
 
   snap_tail=$(get_snapshot_tail "$snap_url_root" "$snap_ver")
-  snap_ver_no=$(echo "$snap_ver" | sed s/'-SNAPSHOT'/''/)
+  snap_ver_no=$(echo "$snap_ver" | sed s/'-SNAPSHOT'/''/) # It has this shape on Nexus
 
   cat \
     | sed s/"\%version%"/"$ver"/g \
@@ -83,8 +89,4 @@ cat "$mydir/Downloads_template.md" \
 	'net/sourceforge/ondex/apps/ondex-mini' \
 	"$ver" \
 	"$snap_ver" \
-	snapTailMini \
->"$mydir/../../../Downloads.md"
-	
-
-
+	snapTailMini

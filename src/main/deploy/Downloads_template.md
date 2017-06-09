@@ -7,13 +7,16 @@
 
   * [Latest Stable Release](http://ondex.rothamsted.ac.uk/nexus/content/groups/public/net/sourceforge/ondex/apps/installer/%version%/installer-%version%-packaged-distro.zip)
   * [Latest Dev Release](http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots/net/sourceforge/ondex/apps/installer/%snapVersionNo%-SNAPSHOT/installer-%snapVersionNo%-%snapTailOndex%-packaged-distro.zip)
-
+  * [Older Releases](http://ondex.rothamsted.ac.uk/nexus/content/groups/public/net/sourceforge/ondex/apps/installer)
+  * [Older Dev Releases](http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots/net/sourceforge/ondex/apps/installer)
 
 
 ## ONDEX Mini (i.e., command line application)
 
   * [Latest Stable Release](http://ondex.rothamsted.ac.uk/nexus/content/groups/public/net/sourceforge/ondex/apps/ondex-mini/%version%/ondex-mini-%version%-packaged-distro.zip)
   * [Latest Dev Release](http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots/net/sourceforge/ondex/apps/ondex-mini/%snapVersionNo%-SNAPSHOT/ondex-mini-%snapVersionNo%-%snapTailMini%-packaged-distro.zip)
+  * [Older Releases](http://ondex.rothamsted.ac.uk/nexus/content/groups/public/net/sourceforge/ondex/apps/ondex-mini)
+  * [Older Dev Releases](http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots/net/sourceforge/ondex/apps/ondex-mini)
    
 
 To install these packages, just explode the respective zip to some folder, and then launch `run.sh`, or `run.bat` from it.
