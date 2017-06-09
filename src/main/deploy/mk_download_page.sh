@@ -1,7 +1,4 @@
-ver="$1"
-snap_ver="$2"
-
-if [ "$snap_ver" == "" ]; then
+if [ "$1" == "--help" ]; then
 
   cat <<EOT
   
@@ -39,14 +36,29 @@ function get_snapshot_tail
   echo "$ts-$build"
 }
 
+function get_last_release
+{
+  url_root="$1"
+  xml=$(wget -O - --quiet "$url_root/maven-metadata.xml")
+  get_tag "$xml" latest
+}
+
+
 function make_doc
 {
-  snap_url_prefix="$1"
+  project_path="$1"
   ver="$2"
   snap_ver="$3"
   snap_tail_var="$4"
 
-  snap_tail=$(get_snapshot_tail "$snap_url_prefix" "$snap_ver")
+	url_prefix="http://ondex.rothamsted.ac.uk/nexus/content/groups"
+	stable_url_root="$url_prefix/public/$project_path"
+	snap_url_root="$url_prefix/public-snapshots/$project_path"
+
+  ver=$(get_last_release "$stable_url_root")
+  snap_ver=$(get_last_release "$snap_url_root")
+
+  snap_tail=$(get_snapshot_tail "$snap_url_root" "$snap_ver")
   snap_ver_no=$(echo "$snap_ver" | sed s/'-SNAPSHOT'/''/)
 
   cat \
@@ -63,12 +75,12 @@ cd "$wdir"
 
 cat "$mydir/Downloads_template.md" \
 | make_doc \
-	'http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots/net/sourceforge/ondex/apps/installer' \
+	'net/sourceforge/ondex/apps/installer' \
 	"$ver" \
 	"$snap_ver" \
 	snapTailOndex \
 | make_doc \
-	'http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots/net/sourceforge/ondex/apps/ondex-mini' \
+	'net/sourceforge/ondex/apps/ondex-mini' \
 	"$ver" \
 	"$snap_ver" \
 	snapTailMini \
