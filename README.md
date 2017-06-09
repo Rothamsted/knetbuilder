@@ -8,7 +8,7 @@
 
 ## Downloads
 
- - See the [Downloads](Downloads.md) Page
+ - See the [Downloads](https://github.com/Rothamsted/ondex-knet-builder/wiki/Downloads) Page
 
 ## Execution
 
