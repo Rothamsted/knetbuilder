@@ -3,7 +3,7 @@ if [ "$1" == "--help" ]; then
   cat <<EOT
   
   
-    ./$(dirname $0) <stable-version> <snapshot-version> 
+    ./$(dirname $0)
     
 Makes the Downloads.md file, setting the links to download the required versions.
 
