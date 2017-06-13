@@ -18,8 +18,6 @@ public class DataSourcePrototype extends DescribeablePrototype
 {
 	public static final DataSourcePrototype OWL_PARSER = new DataSourcePrototype ( "owlParser", "The OWL Parser", "" );
 	
-	private String id; 
-
 	public DataSourcePrototype () {
 		this ( null, null, null );
 	}

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
@@ -95,20 +96,20 @@ public class CachedGraphWrapper
 		try 
 		{
 			// Let's see if it has a parent
-			if ( proto.getSpecialisationOf () == null )
+			if ( proto.getParent () == null )
 			{
 				// Or a prototype to build it. In case of loops, this will lead to stack overflow
 				RelationTypePrototype parentProto = proto.getParentPrototype ();
 				if ( parentProto != null )
-						proto.setSpecialisationOf ( this.getRelationType ( parentProto ) );
+						proto.setParent ( this.getRelationType ( parentProto ) );
 			}
 			
 			return this.cacheGet ( 
 				RelationType.class, proto.getId (), 
 				() -> this.graph.getMetaData ().getFactory ().createRelationType ( 
-					proto.getId (), proto.getFullname (), proto.getDescription (), 
-					proto.isAntisymmetric (), proto.isReflexive (), proto.isSymmetric (), proto.isTransitiv (), 
-					proto.getSpecialisationOf () )
+					proto.getId (), proto.getFullName (), proto.getDescription (), 
+					proto.isAntisymmetric (), proto.isReflexive (), proto.isSymmetric (), proto.isTransitive (), 
+					proto.getParent () )
 			);
 		}
 		catch ( StackOverflowError ex ) 
@@ -154,6 +155,25 @@ public class CachedGraphWrapper
 	{
 		return this.getDataSource ( proto.getId (), proto.getFullName (), proto.getDescription () );
 	}
+	
+	public ConceptAccession getAccession ( AccessionPrototype proto, ONDEXConcept concept )
+	{
+		// Let's see if it has a parent
+		if ( proto.getDataSource () == null )
+		{
+			// Or a prototype to build it. In case of loops, this will lead to stack overflow
+			DataSourcePrototype dsProto = proto.getDataSourcePrototype ();
+			if ( dsProto != null )
+					proto.setDataSource ( this.getDataSource ( dsProto ) );
+		}
+		
+		// TODO: is the ID unique? Is it concept-unique? 
+		return this.cacheGet ( 
+			ConceptAccession.class, proto.getId (),
+			() -> concept.createConceptAccession ( proto.getAccession (), proto.getDataSource (), proto.isAmbiguous () )
+		);
+	}	
+	
 	
 	@SuppressWarnings ( "unchecked" )
 	private <V> V cacheGet ( Class<? super V> type, String key, Supplier<V> newValueGenerator )

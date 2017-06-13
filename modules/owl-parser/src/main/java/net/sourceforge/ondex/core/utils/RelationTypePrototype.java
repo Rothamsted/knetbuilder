@@ -2,8 +2,6 @@ package net.sourceforge.ondex.core.utils;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.base.RelationTypeImpl;
-import net.sourceforge.ondex.exception.type.NullValueException;
 
 /**
  * These prototypes are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 
@@ -13,9 +11,8 @@ import net.sourceforge.ondex.exception.type.NullValueException;
  * <dl><dt>Date:</dt><dd>8 May 2017</dd></dl>
  *
  */
-@SuppressWarnings ( "serial" )
-public class RelationTypePrototype extends RelationTypeImpl
-{
+public class RelationTypePrototype extends DescribeablePrototype
+{	
 	public static final RelationTypePrototype IS_A_PROTOTYPE = new RelationTypePrototype ( 
 		"is_a", // id 
 		"is a", // fullname
@@ -25,26 +22,31 @@ public class RelationTypePrototype extends RelationTypeImpl
 		true, // reflexive, 
 		false, // symmetic, 
 		true, // transitive, 
-		null // specialisationof 
+		(RelationType) null // specialisationof 
 	);
 	
 	private String id;
+	private String inverseName;
+	private boolean isSymmetric, isAntisymmetric, isReflexive, isTransitive;
+	private RelationType parent;	
 	private RelationTypePrototype parentPrototype;
 
 	public RelationTypePrototype () {
-		this ( "", "", "", "", false, false, false, false, null );
+		this ( "", "", "", "", false, false, false, false, (RelationTypePrototype) null );
 	}
 
 	public RelationTypePrototype ( 
 		String id, String fullname, String description, String inverseName,
-		boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitiv,
+		boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitive,
 		RelationType specialisationOf )
 	{
-		super ( 
-			-1, id, fullname, description, inverseName, isAntisymmetric, isReflexive, isSymmetric, isTransitiv,
-			specialisationOf 
-		);
-		this.setId ( id );
+		super ( id, fullname, description );
+		this.setInverseName ( inverseName );
+		this.setAntisymmetric ( isAntisymmetric );
+		this.setReflexive ( isReflexive );
+		this.setSymmetric ( isSymmetric );
+		this.setTransitive ( isTransitive );
+		this.setParent ( specialisationOf );
 	}
 
 	public RelationTypePrototype ( 
@@ -65,46 +67,19 @@ public class RelationTypePrototype extends RelationTypeImpl
 		this.id = id;
 	}
 
-	@Override
-	public void setInverseName ( String inverseName ) throws NullValueException, UnsupportedOperationException
+	public void setInverseName ( String inverseName )
 	{
 		this.inverseName = inverseName;
 	}
 
-	@Override
-	public void setAntisymmetric ( boolean isAntisymmetric ) throws UnsupportedOperationException
-	{
-		this.isAntisymmetric = isAntisymmetric;
-	}
-
-	@Override
-	public void setReflexive ( boolean isReflexive ) throws UnsupportedOperationException
+	public void setReflexive ( boolean isReflexive )
 	{
 		this.isReflexive = isReflexive;
 	}
 
-	@Override
-	public void setSymmetric ( boolean isSymmetric ) throws UnsupportedOperationException
+	public void setSymmetric ( boolean isSymmetric )
 	{
 		this.isSymmetric = isSymmetric;
-	}
-
-	@Override
-	public void setTransitiv ( boolean isTransitiv ) throws UnsupportedOperationException
-	{
-		this.isTransitiv = isTransitiv;
-	}
-
-	@Override
-	public void setSpecialisationOf ( RelationType specialisationOf ) throws UnsupportedOperationException
-	{
-		this.specialisationOf = specialisationOf;
-	}
-
-	@Override
-	public void setFullname ( String fullname ) throws NullValueException, UnsupportedOperationException
-	{
-		this.fullname = fullname;
 	}
 
 	public RelationTypePrototype getParentPrototype ()
@@ -116,4 +91,50 @@ public class RelationTypePrototype extends RelationTypeImpl
 	{
 		this.parentPrototype = parentPrototype;
 	}
+
+	public boolean isAntisymmetric ()
+	{
+		return isAntisymmetric;
+	}
+
+	public void setAntisymmetric ( boolean isAntisymmetric )
+	{
+		this.isAntisymmetric = isAntisymmetric;
+	}
+
+	public boolean isTransitive ()
+	{
+		return isTransitive;
+	}
+
+	public void setTransitive ( boolean isTransitive )
+	{
+		this.isTransitive = isTransitive;
+	}
+
+	public RelationType getParent ()
+	{
+		return parent;
+	}
+
+	public void setParent ( RelationType parent )
+	{
+		this.parent = parent;
+	}
+
+	public String getInverseName ()
+	{
+		return inverseName;
+	}
+
+	public boolean isSymmetric ()
+	{
+		return isSymmetric;
+	}
+
+	public boolean isReflexive ()
+	{
+		return isReflexive;
+	}	
+	
 }

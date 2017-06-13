@@ -1,8 +1,6 @@
 package net.sourceforge.ondex.core.utils;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.base.EvidenceTypeImpl;
-import net.sourceforge.ondex.exception.type.NullValueException;
 
 /**
  * These prototypes are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 
