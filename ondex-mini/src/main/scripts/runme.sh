@@ -9,4 +9,8 @@ do
   shift
 done
 
-java -Xmx2G -Dondex.dir=./data -jar lib/ondex-mini-${project.version}.jar -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS
+# Enable the debugger, this is sometimes needed by developers 
+#DEBUG_OPTS='-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005'
+
+java $DEBUG_OPTS -Xmx2G -Dondex.dir=./data -jar lib/ondex-mini-${project.version}.jar \
+     -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS
