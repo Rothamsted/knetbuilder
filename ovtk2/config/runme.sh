@@ -9,5 +9,9 @@ do
   CLASSPATH=$CLASSPATH":"$J
 done
 
+# Enable the debugger, this is sometimes needed by developers 
+#DEBUG_OPTS='-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005'
+
 #echo "Classpath: " $CLASSPATH
-java -Xmx$MEMORY -Dondex.dir=$DATA -Dovtk.dir=$OVTK_DATA -Dplugin.scan.lib=false -classpath $CLASSPATH net.sourceforge.ondex.ovtk2.Main 
+java $DEBUG_OPTS -Xmx$MEMORY -Dondex.dir=$DATA -Dovtk.dir=$OVTK_DATA -Dplugin.scan.lib=false -classpath $CLASSPATH \
+     net.sourceforge.ondex.ovtk2.Main 
