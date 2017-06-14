@@ -59,6 +59,18 @@
 <!--                            <destFileName>js-plugin-jar-with-dependencies.jar</destFileName> -->
                         </artifactItem>
                         
+									      <artifactItem>
+									         <groupId>net.sourceforge.ondex.modules</groupId>
+									         <artifactId>cyc-pathwaydbs</artifactId>
+									         <version>${project.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+													 <type>jar</type>									         
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                           <includes>**/*</includes>
+									      </artifactItem>
+                        
+                        
                      </artifactItems>
                      <overWriteReleases>false</overWriteReleases>
                      <overWriteSnapshots>true</overWriteSnapshots>
@@ -239,12 +251,6 @@
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>go</artifactId>
-         <version>${project.version}</version>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>cyc-pathwaydbs</artifactId>
          <version>${project.version}</version>
          <scope>test</scope>
       </dependency>
