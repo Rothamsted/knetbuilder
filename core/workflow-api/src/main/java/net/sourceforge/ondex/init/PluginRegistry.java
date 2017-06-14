@@ -352,8 +352,12 @@ public class PluginRegistry {
                 	try{
                 		 pluginInstance = cls.asSubclass(ONDEXPlugin.class).getConstructor().newInstance();
                 	}
-                	catch(NoClassDefFoundError e){
-                		 LOG.debug("Class "+ cls.getCanonicalName()+" could not be loaded due to NoClassDefFoundError");
+                	catch(NoClassDefFoundError e)
+                	{
+                		 LOG.error ( 
+										   "Class "+ cls.getCanonicalName()+" could not be loaded due to NoClassDefFoundError: " + e.getMessage (), 
+											 e 
+                		 );
                 		continue;
                 	}
                     
