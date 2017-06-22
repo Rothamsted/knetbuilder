@@ -64,10 +64,23 @@ public abstract class OWLRelMapper<S, OT> implements RelationsMapper<S, OT>
 	/**
 	 * Every new owl:Class that is met by {@link #map(OntClass, ONDEXGraph)} is mapped to an {@link ONDEXConcept}
 	 * by means of this mapper.
+	 * 
 	 */
-	public OWLConceptMapper getConceptMapper ()
+	public OWLConceptMapper getConceptMapper () {
+		return this.getConceptMapper ( false );
+	}
+
+	/**
+	 * When true, does some initialisation of the existing CC mapper, ie, at the moment, sets up the class mapper
+	 * with {@link #getConceptClassMapper() the one in this class}, if it's null.
+	 *  
+	 */
+	public OWLConceptMapper getConceptMapper ( boolean init )
 	{
-		return conceptMapper;
+		if ( init && this.conceptMapper != null && this.conceptMapper.getConceptClassMapper () == null )
+			this.conceptMapper.setConceptClassMapper ( this.getConceptClassMapper () );
+		
+		return this.conceptMapper;
 	}
 
 	public void setConceptMapper ( OWLConceptMapper conceptMapper )

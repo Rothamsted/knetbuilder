@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.parser.owl;
 
+import java.util.Iterator;
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
@@ -26,39 +27,52 @@ import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEXGraph>
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+
+	private TopClassesProvider topClassesProvider = new ConceptClassTopClassesProvider ();
 	
 	public OwlRecursiveRelMapper ()
 	{
 		super ();
 	}
 
+	
 	/**
 	 * @see above.
 	 */
 	public Stream<ONDEXRelation> map ( OntModel model, ONDEXGraph graph ) 
-	{
-		OWLConceptMapper conceptMapper = this.getConceptMapper ();
-		if ( conceptMapper.getConceptClassMapper () == null ) 
-			conceptMapper.setConceptClassMapper ( this.getConceptClassMapper () );
-		
+	{		
 		// The top ontology class is a concept class, ontology subclasses are instances of the top class, 
-		// all other descendants are instances too, plus they have subclass relations, but they don't have the suclass
+		// all other descendants are instances too, plus they have subclass relations, but they don't have the subclass
 		// relation to the top class (which isn't even a concept)
 		//
-		String topClsIri = this.getConceptClassMapper ().getClassIri ();
-		OntClass topOntCls = model.getOntClass ( topClsIri );
-		if ( topOntCls == null )
+		TopClassesProvider topProv = this.getTopClassesProvider ();
+		if ( topProv instanceof ConceptClassTopClassesProvider )
+			( (ConceptClassTopClassesProvider) topProv ).setConceptClassMapper ( this.getConceptClassMapper () );
+
+		Iterator<OntClass> topItr = topProv.apply ( model );
+		if ( !topItr.hasNext () )
 		{
-			log.warn ( "No subclass found for top class <{}>", topClsIri );
+			log.warn ( "The top classes provider '' doesn't return anything", topItr.getClass ().getName () );
 			return Stream.empty ();
 		}
-
-		log.info ( "Scanning from the top class <{}>", topClsIri );
 		
-		return
-			this
-			.getRelatedClasses ( topOntCls )	
-			.flatMap ( ontChild -> this.map ( ontChild, graph ) );
+		@SuppressWarnings ( "unchecked" )
+		Stream<ONDEXRelation> result[] = new Stream [] { Stream.empty () };
+		
+		topProv.apply ( model ).forEachRemaining ( topOntCls -> 
+		{
+			String uri = topOntCls.getURI ();
+			if ( uri == null ) return;
+			
+			log.info ( "Scanning from the top class <{}>", uri );
+			
+			result [ 0 ] = Stream.concat ( result [ 0 ],  this
+				.getRelatedClasses ( topOntCls )	
+				.flatMap ( ontChild -> this.map ( ontChild, graph ) )
+			);
+		});
+
+		return result [ 0 ];
 	}
 	
 	/**
@@ -66,7 +80,7 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 	 */
 	protected Stream<ONDEXRelation> map ( OntClass rootCls, ONDEXGraph graph )
 	{
-		OWLConceptMapper conceptMapper = this.getConceptMapper ();
+		OWLConceptMapper conceptMapper = this.getConceptMapper ( true );
 		
 		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
 		RelationType relType = graphw.getRelationType ( this.getRelationTypePrototype () );
@@ -88,11 +102,26 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 		
 		return result;
 	}
-
+	
 	/**
 	 * At each new node met during the {@link #map(OntClass, ONDEXGraph) recursive visit} of this mapper, new 
 	 * (typically downward) OWL classes to follow are told by this method. It's also up to it to avoid circular paths and 
 	 * infinite loops. Normally, OWL ontologies don't have this problems on explicit relations like owl:subClassOf.   
 	 */
 	protected abstract Stream<OntClass> getRelatedClasses ( OntClass fromCls );
+
+	/**
+	 * This determines the strategy used to pick up the root classes that the mapper should tart from. 
+	 */
+	public TopClassesProvider getTopClassesProvider ()
+	{
+		return topClassesProvider;
+	}
+
+
+	public void setTopClassesProvider ( TopClassesProvider topClassesProvider )
+	{
+		this.topClassesProvider = topClassesProvider;
+	}
+	
 }

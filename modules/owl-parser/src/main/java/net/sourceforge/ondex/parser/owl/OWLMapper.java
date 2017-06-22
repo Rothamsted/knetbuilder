@@ -47,7 +47,7 @@ public class OWLMapper implements GraphMapper<OntModel>
 			
 			// Before delving into the mapping, let's setup a reporter, to give a sense that we're going ahead
 			timerService.scheduleAtFixedRate (
-				() -> log.info ( "Mapped {} GO classes", graph1.getConcepts ().size () ), 
+				() -> log.info ( "Mapped {} OWL Classes", graph1.getConcepts ().size () ), 
 				30, 30, TimeUnit.SECONDS 
 			);
 			
