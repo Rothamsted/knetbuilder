@@ -45,8 +45,7 @@
 	</bean>
 	
 	<!-- Same as above -->
-	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" scope = "prototype">
-		<property name = "classIri" value = "#{ null }" />
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLClassCCMapper" scope = "prototype">
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "labelMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
