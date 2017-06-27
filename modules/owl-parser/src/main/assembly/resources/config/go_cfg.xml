@@ -11,29 +11,35 @@
 	<!-- This is the entry point, it starts from top OWL classes and recurse on rdfs:subClasOf -->		
 	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
 	  <!-- The recursive subClassOf mapper with one instance per top class -->
-	  <property name = "relationsMappers">
-	  	<set>
-	  		<bean parent = "subClassMapper">
-	  			<property name="conceptClassMapper">
-	  				<bean parent = "conceptClassMapper">
-	  					<property name = "classIri" value="#{ns.iri ( 'obo:GO_0008150' )}" /><!-- BioProcess -->
-	  				</bean>
-	  			</property>
-	  		</bean>
-	  		<bean parent = "subClassMapper">
-	  			<property name="conceptClassMapper">
-	  				<bean parent = "conceptClassMapper">
-	  					<property name = "classIri" value="#{ns.iri ( 'obo:GO_0003674' )}" /><!-- Mol Function -->
-	  				</bean>
-	  			</property>
-	  		</bean>
-	  		<bean parent = "subClassMapper">
-	  			<property name="conceptClassMapper">
-	  				<bean parent = "conceptClassMapper">
-	  					<property name = "classIri" value="#{ns.iri ( 'obo:GO_0005575' )}" /><!-- Cell Component -->
-	  				</bean>
-	  			</property>
-	  		</bean>
+	  <property name = "relationsMappers">	  
+	  	<set>	  	
+	  		<!-- This will follow the hierarchy of terms. -->
+				<bean parent = "subClassMapper">
+					<property name="topClassesProvider">
+						<bean class = "net.sourceforge.ondex.parser.owl.IriBasedTopClassesProvider">
+							<!-- It will start from this class (bio-process) -->
+							<property name="topClassIri" value = "#{ns.iri ( 'obo:GO_0008150' )}" /><!-- Bio-Process -->
+						</bean>
+					</property>
+					<!-- Bio-process will be mapped to a concept class, but not to a concept -->
+					<property name="doMapRootsToConcepts" value = "false" />
+				</bean> 		
+				<bean parent = "subClassMapper">
+					<property name="topClassesProvider">
+						<bean class = "net.sourceforge.ondex.parser.owl.IriBasedTopClassesProvider">
+							<property name="topClassIri" value = "#{ns.iri ( 'obo:GO_0003674' )}" /><!-- Mol Function -->
+						</bean>
+					</property>
+					<property name="doMapRootsToConcepts" value = "false" />
+				</bean> 		
+				<bean parent = "subClassMapper">
+					<property name="topClassesProvider">
+						<bean class = "net.sourceforge.ondex.parser.owl.IriBasedTopClassesProvider">
+							<property name="topClassIri" value = "#{ns.iri ( 'obo:GO_0005575' )}" /><!-- Cell Component -->
+						</bean>
+					</property>
+					<property name="doMapRootsToConcepts" value = "false" />
+				</bean> 		
 	  	</set>
 	  </property>
 	</bean>
@@ -45,8 +51,6 @@
 	
 	<!-- Mapper for the single concept -->
 	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper" scope = "prototype">
-		<!-- This way it's initialised by its container, dynamically -->
-		<property name = "conceptClassMapper" value = "#{ null }" />
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "preferredNameMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
@@ -130,8 +134,7 @@
 	</bean>
 	
 	<!-- Generates ONDEX concept classes from top OWL classes -->
-	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" scope = "prototype">
-		<property name = "classIri" value = "#{ null }" />
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLClassCCMapper" scope = "prototype">
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "labelMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />

@@ -8,12 +8,14 @@ import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
+import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
  * The recursive mapper. This starts from a top level OWL class, which is mapped as a concept class 
@@ -28,7 +30,10 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 
-	private TopClassesProvider topClassesProvider = new ConceptClassTopClassesProvider ();
+	private TopClassesProvider topClassesProvider = new OwlRootClassesProvider ();
+	private boolean doMapRootsToConcepts = true;
+
+	private OWLConceptClassMapper conceptClassMapper;
 	
 	public OwlRecursiveRelMapper ()
 	{
@@ -46,8 +51,6 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 		// relation to the top class (which isn't even a concept)
 		//
 		TopClassesProvider topProv = this.getTopClassesProvider ();
-		if ( topProv instanceof ConceptClassTopClassesProvider )
-			( (ConceptClassTopClassesProvider) topProv ).setConceptClassMapper ( this.getConceptClassMapper () );
 
 		Iterator<OntClass> topItr = topProv.apply ( model );
 		if ( !topItr.hasNext () )
@@ -66,9 +69,16 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 			
 			log.info ( "Scanning from the top class <{}>", uri );
 			
-			result [ 0 ] = Stream.concat ( result [ 0 ],  this
+			ConceptClass cc = this.getConceptClassMapper ().map ( topOntCls, graph );
+			ONDEXElemWrapper<ConceptClass> ccw = ONDEXElemWrapper.of ( cc, graph );
+			OWLConceptMapper cmap = this.getConceptMapper ();
+			if ( this.isDoMapRootsToConcepts () ) cmap.map ( topOntCls, ccw );
+			
+			result [ 0 ] = Stream.concat ( 
+				result [ 0 ], 
+				this
 				.getRelatedClasses ( topOntCls )	
-				.flatMap ( ontChild -> this.map ( ontChild, graph ) )
+				.flatMap ( ontChild -> this.map ( ontChild, ccw ) )
 			);
 		});
 
@@ -78,27 +88,28 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 	/**
 	 * Manages the recursion described above from the subtree rooted at rootCls. 
 	 */
-	protected Stream<ONDEXRelation> map ( OntClass rootCls, ONDEXGraph graph )
+	protected Stream<ONDEXRelation> map ( OntClass rootCls, ONDEXElemWrapper<ConceptClass> ccw )
 	{
-		OWLConceptMapper conceptMapper = this.getConceptMapper ( true );
+		ONDEXGraph graph = ccw.getGraph ();
+		
+		OWLConceptMapper conceptMapper = this.getConceptMapper ();
 		
 		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
 		RelationType relType = graphw.getRelationType ( this.getRelationTypePrototype () );
 		EvidenceType evidence = graphw.getEvidenceType ( this.getEvidenceTypePrototype () );
 		
-		ONDEXConcept rootConcept = conceptMapper.map ( rootCls, graph );
-
+		ONDEXConcept rootConcept = conceptMapper.map ( rootCls, ccw );
 				
 		// First get all the links at this hierarchical level
 		Stream<ONDEXRelation> result =
 			this.getRelatedClasses ( rootCls )
 			.map ( child -> CachedGraphWrapper.getInstance ( graph ).getRelation ( 
-				conceptMapper.map ( child, graph ), rootConcept, relType, evidence 
+				conceptMapper.map ( child, ccw ), rootConcept, relType, evidence 
 			));
 		
 		// Next, recurse and add up more 
 		for ( OntClass child: (Iterable<OntClass>) () -> this.getRelatedClasses ( rootCls ).iterator () )
-			result = Stream.concat ( result, this.map ( child, graph ) );
+			result = Stream.concat ( result, this.map ( child, ccw ) );
 		
 		return result;
 	}
@@ -122,6 +133,33 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 	public void setTopClassesProvider ( TopClassesProvider topClassesProvider )
 	{
 		this.topClassesProvider = topClassesProvider;
+	}
+
+	/**
+	 * If this is true, root OWL classes selected by the {@link #getTopClassesProvider() root classes provider}, will be
+	 * mapped to concepts, possibly in addition to being mapped to concept classes (this depends on {@link #getConceptClassMapper()}).
+	 */
+	public boolean isDoMapRootsToConcepts ()
+	{
+		return doMapRootsToConcepts;
+	}
+
+
+	public void setDoMapRootsToConcepts ( boolean doMapRootsToConcepts )
+	{
+		this.doMapRootsToConcepts = doMapRootsToConcepts;
+	}
+
+
+	public OWLConceptClassMapper getConceptClassMapper ()
+	{
+		return conceptClassMapper;
+	}
+
+
+	public void setConceptClassMapper ( OWLConceptClassMapper conceptClassMapper )
+	{
+		this.conceptClassMapper = conceptClassMapper;
 	}
 	
 }

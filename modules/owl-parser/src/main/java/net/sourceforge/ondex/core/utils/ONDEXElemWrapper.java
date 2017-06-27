@@ -18,6 +18,13 @@ public class ONDEXElemWrapper<OE>
 	private OE element;
 	private ONDEXGraph graph;
 	
+	/**
+	 * A facility to get a new instance quickly
+	 */
+	public static <OE> ONDEXElemWrapper<OE> of ( OE elem, ONDEXGraph graph ) {
+		return new ONDEXElemWrapper<OE> ( elem, graph ); 
+	} 
+	
 	public ONDEXElemWrapper ( OE element, ONDEXGraph graph )
 	{
 		super ();

@@ -1,8 +1,6 @@
 package net.sourceforge.ondex.parser.owl;
 
 import org.apache.jena.ontology.OntModel;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.update.UpdateAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

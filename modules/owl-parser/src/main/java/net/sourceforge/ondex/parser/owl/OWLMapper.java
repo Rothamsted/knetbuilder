@@ -65,8 +65,8 @@ public class OWLMapper implements GraphMapper<OntModel>
 	}
 
 	/**
-	 * The parser starts up from relation mappers, each configured with a {@link OWLConceptClassMapper}, which tells
-	 * the relation mapper the root class to start from.
+	 * The parser starts up from relation mappers, each configured with a {@link #getRelationsMappers() set of relation mappers}, 
+	 * which scan the ontology starting from certain classes (e.g., roots) and following certain relations (e.g., subclassOf).
 	 */
 	public Set<RelationsMapper<OntModel, ONDEXGraph>> getRelationsMappers ()
 	{

@@ -12,7 +12,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.parser.owl.OWLMapper;
 
 /**
  * A scrap test to ensure the whole GO can be loaded.
@@ -25,13 +24,20 @@ public class LoadingTest
 {
 	@Test
 	@Ignore ( "Not a real test, very time consuming" )
-	public void testLoadAllBioProcess () throws Exception
+	public void testLoadDOID () throws Exception
 	{
-		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "doid_cfg.xml" );
+		String owlDir = "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/";
+		//load ( "go_cfg.xml", owlDir + "go.owl" );
+		load ( "doid_cfg.xml", owlDir + "doid.owl" );
+	}
+	
+	public static void load ( String cfgPath, String owlPath ) throws Exception
+	{
+		ApplicationContext ctx = new ClassPathXmlApplicationContext ( cfgPath );
 
 		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
 		model.read ( 
-			new BufferedReader ( new FileReader ( "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/doid.owl" ) ), 
+			new BufferedReader ( new FileReader ( owlPath ) ), 
 			"RDF/XML" 
 		);		
 		

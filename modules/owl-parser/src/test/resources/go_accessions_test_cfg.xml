@@ -10,13 +10,17 @@
 	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
 	  <property name = "relationsMappers">
 	  	<set>
-	  		<bean parent = "subClassMapper">
-	  			<property name="conceptClassMapper">
-	  				<bean parent = "conceptClassMapper">
-	  					<property name = "classIri" value="#{ns.iri ( 'obo:GO_0008150' )}" /><!-- BioProcess -->
-	  				</bean>
-	  			</property>
-	  		</bean>
+	  		<!-- This will follow the hierarchy of terms. -->
+				<bean parent = "subClassMapper">
+					<property name="topClassesProvider">
+						<bean class = "net.sourceforge.ondex.parser.owl.IriBasedTopClassesProvider">
+							<!-- It will start from this class (bio-process) -->
+							<property name="topClassIri" value = "#{ns.iri ( 'obo:GO_0008150' )}" />
+						</bean>
+					</property>
+					<!-- Bio-process will be mapped to a concept class, but not to a concept -->
+					<property name="doMapRootsToConcepts" value = "false" />
+				</bean> 		
 	  	</set>
 	  </property>
 	</bean>
@@ -27,8 +31,6 @@
 	</bean>
 	
 	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper" scope = "prototype">
-		<!-- This way it's initialised by its container, dynamically -->
-		<property name = "conceptClassMapper" value = "#{ null }" />
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "preferredNameMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
@@ -60,8 +62,7 @@
 	</bean>
 	
 	<!-- Same as above -->
-	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" scope = "prototype">
-		<property name = "classIri" value = "#{ null }" />
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLClassCCMapper" scope = "prototype">
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "labelMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />

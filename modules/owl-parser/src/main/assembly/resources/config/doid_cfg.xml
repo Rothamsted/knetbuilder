@@ -14,7 +14,6 @@
 	  <property name = "relationsMappers">
 	  	<set>
 	  		<bean parent = "subClassMapper">
-	  			<property name="conceptClassMapper" ref="conceptClassMapper" />
 	  			<property name="topClassesProvider">
 	  			  <bean class = "net.sourceforge.ondex.parser.owl.OwlRootClassesProvider" />
 	  			</property>
@@ -31,7 +30,6 @@
 	<!-- Mapper for the single concept -->
 	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper" scope = "prototype">
 		<!-- This way it's initialised by its container, dynamically -->
-		<property name = "conceptClassMapper" value = "#{ null }" />
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "preferredNameMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />

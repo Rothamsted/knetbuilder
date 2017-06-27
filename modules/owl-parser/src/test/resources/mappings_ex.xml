@@ -19,25 +19,23 @@
 		 -->
 	  <property name = "relationsMappers">
 	  	<set>
-	  		<bean parent = "subClassMapper">
-	  			<property name="conceptClassMapper">
-	  				<bean parent = "conceptClassMapper">
-	  					<!-- This is the Spring way to call Java stuff (see SpEl documentation) -->
-	  					<property name = "classIri" value="#{ns.iri ( 'foo:TopClass' )}" />
-	  				</bean>
-	  			</property>
-	  		</bean>
+				<bean id = "subClassesMapperEx" parent = "subClassMapper">
+					<property name="topClassesProvider">
+						<bean class = "net.sourceforge.ondex.parser.owl.IriBasedTopClassesProvider">
+							<property name="topClassIri" value = "#{ns.iri ( 'foo:TopClass' )}" />
+						</bean>
+					</property>
+					<property name="doMapRootsToConcepts" value = "false" />
+				</bean> 		
 	  	</set>
 	  </property>
 	</bean>
 		
-	<!-- 
-	  prototype scope is preferable, since every concept mapper will have its own concept class mapper, to
-	  know its top class and CC to map to.
+	<!--
+		This replaces the default, you might prefer to use 'parent' (see default_mappings.xml) 
 	 -->
-	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper" scope = "prototype">
+	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper">
 		<!-- This way it's initialised by its container, dynamically -->
-		<property name = "conceptClassMapper" value = "#{ null }" />
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "preferredNameMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />

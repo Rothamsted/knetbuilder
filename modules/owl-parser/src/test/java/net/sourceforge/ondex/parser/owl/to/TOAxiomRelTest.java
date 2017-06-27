@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.parser.owl.to;
 
-import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -19,10 +18,6 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.parser.owl.OWLConceptClassMapper;
-import net.sourceforge.ondex.parser.owl.OWLConceptMapper;
 import net.sourceforge.ondex.parser.owl.OWLMapper;
 
 /**

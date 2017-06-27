@@ -32,6 +32,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
+import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
  * Tests {@link OWLMapper} and shows typical examples of how to use both the specific OWL mapping components and the 
@@ -51,7 +52,7 @@ public class MappersTest
 	private OntClass ontSubCls;
 	private String subClsId;
 	
-	private OWLConceptClassMapper ccmap;
+	private OWLClassCCMapper ccmap;
 	private OWLConceptMapper conceptMap;
 	
 	private ONDEXGraph graph;
@@ -87,8 +88,7 @@ public class MappersTest
 		
 		// ---- Examples of mappers setup. You don't want to do this programmatically, Spring is much better
 		// 		
-		ccmap = new OWLConceptClassMapper ();
-		ccmap.setClassIri ( topCls.getURI () );
+		ccmap = new OWLClassCCMapper ();
 		ccmap.setIdMapper ( new IRIBasedIdMapper () );
 		
 		// You don't usually need this facility, Spring Beans is much better.
@@ -102,7 +102,6 @@ public class MappersTest
 		ccmap.setDescriptionMapper ( txtMap.apply ( RDFS.comment.getURI () ) );
 
 		conceptMap = new OWLConceptMapper ();
-		conceptMap.setConceptClassMapper ( ccmap );
 		conceptMap.setIdMapper ( new IRIBasedIdMapper () );
 		conceptMap.setPreferredNameMapper ( txtMap.apply ( RDFS.label.getURI () )  );
 
@@ -118,7 +117,8 @@ public class MappersTest
 	@Test
 	public void testConceptMapper ()
 	{
-		conceptMap.map ( this.ontCls, graph );
+		ConceptClass cc = ccmap.map ( topCls, graph );
+		conceptMap.map ( this.ontCls, ONDEXElemWrapper.of ( cc, graph ) );
 		
 		final ONDEXConcept[] ct = new ONDEXConcept [ 1 ];
 		
@@ -147,8 +147,12 @@ public class MappersTest
 	public void testMapper ()
 	{
 		OwlSubClassRelMapper subClsMap = new OwlSubClassRelMapper ();
-		subClsMap.setConceptClassMapper ( ccmap );
-		subClsMap.setConceptMapper ( conceptMap );
+		subClsMap.setTopClassesProvider ( 
+			new IriBasedTopClassesProvider ( this.topCls.getURI () )
+		);
+		subClsMap.setDoMapRootsToConcepts ( false );
+		subClsMap.setConceptClassMapper ( this.ccmap );
+		subClsMap.setConceptMapper ( this.conceptMap );
 		subClsMap.setEvidenceTypePrototype ( new EvidenceTypePrototype ( "IMDP", "IMDP", "" ) );
 		
 		OWLMapper map = new OWLMapper ();

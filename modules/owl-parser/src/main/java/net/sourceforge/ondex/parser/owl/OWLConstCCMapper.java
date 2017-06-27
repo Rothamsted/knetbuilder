@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.parser.owl;
 
-import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntClass;
 
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -14,13 +14,13 @@ import net.sourceforge.ondex.parser.ConstantConceptClassMapper;
  * <dl><dt>Date:</dt><dd>22 Jun 2017</dd></dl>
  *
  */
-public class OWLConstCCMapper extends OWLConceptClassMapper
+public class OWLConstCCMapper implements OWLConceptClassMapper
 {
-	ConstantConceptClassMapper<OntModel> delegate = new ConstantConceptClassMapper<> ();
+	ConstantConceptClassMapper<OntClass> delegate = new ConstantConceptClassMapper<> ();
 
-	public ConceptClass map ( OntModel source, ONDEXGraph graph )
+	public ConceptClass map ( OntClass ontCls, ONDEXGraph graph )
 	{
-		return delegate.map ( source, graph );
+		return delegate.map ( ontCls, graph );
 	}
 
 	public ConceptClassPrototype getValue ()

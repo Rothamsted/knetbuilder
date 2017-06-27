@@ -18,36 +18,36 @@ import net.sourceforge.ondex.parser.ConceptClassMapper;
  * <dl><dt>Date:</dt><dd>22 Jun 2017</dd></dl>
  *
  */
-public class ConceptClassTopClassesProvider implements TopClassesProvider
+public class IriBasedTopClassesProvider implements TopClassesProvider
 {
-	private OWLConceptClassMapper conceptClassMapper;
+	private String topClassIri;
 
-	public ConceptClassTopClassesProvider ()
+	public IriBasedTopClassesProvider ()
 	{
 		super ();
 	}
 
-	public ConceptClassTopClassesProvider ( OWLConceptClassMapper conceptClassMapper )
+	public IriBasedTopClassesProvider ( String topClassIri )
 	{
 		super ();
-		this.setConceptClassMapper ( conceptClassMapper );
+		this.setTopClassIri ( topClassIri ); 
 	}
 
-	public OWLConceptClassMapper getConceptClassMapper ()
+
+	public String getTopClassIri ()
 	{
-		return conceptClassMapper;
+		return topClassIri;
 	}
 
-	public void setConceptClassMapper ( OWLConceptClassMapper conceptClassMapper )
+	public void setTopClassIri ( String topClassIri )
 	{
-		this.conceptClassMapper = conceptClassMapper;
+		this.topClassIri = topClassIri;
 	}
 
 	@Override
 	public Iterator<OntClass> apply ( OntModel model )
 	{
-		OWLConceptClassMapper ccmap = this.getConceptClassMapper ();
-		String rootClass = ccmap.getClassIri ();
-		return Collections.singleton ( model.getOntClass ( rootClass ) ).iterator ();
+		String topClsIri = this.getTopClassIri ();
+		return Collections.singleton ( model.getOntClass ( topClsIri ) ).iterator ();
 	}
 }

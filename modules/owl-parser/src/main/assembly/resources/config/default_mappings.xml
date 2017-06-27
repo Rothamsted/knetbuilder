@@ -36,32 +36,58 @@
 		<property name="propertyIri" value="#{ns.iri ( 'rdfs:comment' )}"></property>
 	</bean>		
 
-	<!-- 
-	  prototype scope is preferable, since every concept mapper will have its own concept class mapper, to
-	  know its top class and CC to map to.
-	 -->
-	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper" scope = "prototype">
-		<!-- This way it's initialised by its container, dynamically -->
-		<property name = "conceptClassMapper" value = "#{ null }" />
+	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper">
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "preferredNameMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
 	</bean>
 	
-	<!-- Same as above -->
-	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptClassMapper" scope = "prototype">
-		<property name = "classIri" value = "#{ null }" />
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLClassCCMapper">
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "labelMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
 	</bean>
 	
-	<!-- and again -->
-	<bean id = "subClassMapper" class = "net.sourceforge.ondex.parser.owl.OwlSubClassRelMapper" scope = "prototype">
-		<property name="conceptClassMapper" value = "#{ null }" />
+	<!-- This is an example of alternative to conceptClassMapper -->
+	<bean id = "constCCMapper" class = "net.sourceforge.ondex.parser.owl.OWLConstCCMapper">
+		<property name="value">
+			<bean class = "net.sourceforge.ondex.core.utils.ConceptClassPrototype">
+				<property name = "id" value="EXID" />
+				<property name = "fullName" value="Example Concept Class" />
+				<property name= "description" value="This is just an example." />
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- This is based on the root classes in the OWL structure -->
+	<bean id = "subClassMapper" class = "net.sourceforge.ondex.parser.owl.OwlSubClassRelMapper">
+		<property name="conceptClassMapper" ref = "conceptClassMapper" />
 		<property name="conceptMapper" ref = "conceptMapper" />
 		<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
+		<!-- 
+			This means the root OWL classes, whatever the way they're picked by topClassesProvider, are mapped to 
+			ONDEX concepts. You might not want this, for example when you consider "Biological Concept" in GO a concept
+			class only.
+		-->
+		<property name="doMapRootsToConcepts" value = "true" />
+		<property name="topClassesProvider">
+			<bean class = "net.sourceforge.ondex.parser.owl.OwlRootClassesProvider" />
+		</property>
 	</bean>
+		
+	<!-- 
+	  And this is for the case where you have IRIs about the top classes. 
+		You need one per IRI and you too can use the parent 
+	-->
+	<bean id = "subClassesMapperEx" parent = "subClassMapper">
+		<property name="topClassesProvider">
+			<bean class = "net.sourceforge.ondex.parser.owl.IriBasedTopClassesProvider">
+				<property name="topClassIri" value = "#{ns.iri ( 'obo:GO_0008150' )}" /> <!-- BioProcess -->
+			</bean>
+		</property>
+		<!-- See above, in a case like this you might want this to be false. -->
+  	<property name="doMapRootsToConcepts" value = "false" />
+	</bean> 		
 		
 	<!-- This is called via SpEl -->
 	<bean id = "ns" class = "info.marcobrandizi.rdfutils.namespaces.NamespaceUtils" />
