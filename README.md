@@ -1,13 +1,13 @@
-#ONDEX (ondex-full)
+# ONDEX (ondex-full)
 
 [ONDEX](http://www.ondex.org/) is a framework for text mining, data integration and data analysis. 
 
-##ondex-full
+## ondex-full
 This is an aggregator repository, used to download and build all about ONDEX.
 
 This repo is normally not needed, unless you have to work on the whole ONDEX (e.g., to rename something in the whole code base), if you need to work on a single component, you can clone the needed sub-repository separately (see below).
 
-##Usage
+## Usage
 
 Clone the usual way, **then run `git-cmds/download_all.sh`** to download the component GitHub repositories.
 Once you've done this, you'll have this repository in the `ondex-full/` folder and, inside it,
@@ -24,7 +24,7 @@ See these notes on [how to manage submodules](https://git-scm.com/book/en/v2/Git
 Note that the `download_all.sh` command above switches the submodules clones onto the master branch, it does not keep the detached `HEAD` that git normally downloads for submodules. 
 
 
-##Included Repositories
+## Included Repositories
 
 The following are all the repositories that ONDEX is composed of and which are linked by this repo. Many of them rely on the POM present hereby
 (`artifactId=ondex-full`).
