@@ -60,7 +60,13 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		EvidenceType evidence = graphw.getEvidenceType ( this.getEvidenceTypePrototype () );
 		DataSource ds = graphw.getDataSource ( this.getDataSourcePrototype () );
 		
-		ONDEXConcept concept = graphw.getConcept ( conceptId, "", description, ds, cc, evidence );
+		ONDEXConcept concept = graphw.getConcept ( conceptId );
+
+		// We've already visited this, so let's stop here and let's prevent loops
+		if ( concept != null ) return concept;
+		
+		// This will certainly create it, a bit redundant, but it's OK.
+		concept = graphw.getConcept ( conceptId, "", description, ds, cc, evidence );
 
 		if ( this.preferredNameMapper != null )
 		{

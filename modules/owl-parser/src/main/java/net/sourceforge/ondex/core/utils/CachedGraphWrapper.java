@@ -23,6 +23,9 @@ import net.sourceforge.ondex.core.RelationType;
  * ONDEX entities. Methods are similar to createXXX methods in the {@link ONDEXGraph} interface, each method
  * calls the corresponding underlining creation method, but only if the required object hasn't been created yet.</p>
  * 
+ * <p>The version of cacheXXX that receives only the type/key parameters simply return the corresponding object in the
+ * cache, if it is present, null otherwise</p>
+ * 
  * <p>Clearly, this is based on an internal static set of caches, that can be on a per-graph basis 
  * (see {@link #getInstance(ONDEXGraph)}).</p>
  * 
@@ -104,6 +107,10 @@ public class CachedGraphWrapper
 			() -> this.graph.getFactory ().createConcept ( id, annotation, description, ds, conceptClass, evidence )
 		);
 	}
+
+	public ONDEXConcept getConcept ( String id ) {
+		return this.cacheGet ( ONDEXConcept.class, id );
+	}
 	
 	
 	public RelationType getRelationType ( 
@@ -183,6 +190,9 @@ public class CachedGraphWrapper
 		return this.getDataSource ( proto.getId (), proto.getFullname (), proto.getDescription () );
 	}
 	
+	/**
+	 * Facility to return cached objects, or, create and return them, if not already in the cache. 
+	 */
 	@SuppressWarnings ( "unchecked" )
 	private <V> V cacheGet ( Class<? super V> type, String key, Supplier<V> newValueGenerator )
 	{
@@ -191,6 +201,15 @@ public class CachedGraphWrapper
 		
 		this.cache.put ( (Class<Object>) type, key, result = newValueGenerator.get () );
 		return result;
+	}
+
+	/**
+	 * Like {@link #cacheGet(Class, String, Supplier)}, but just returns null if the type/key is not in the cache.  
+	 */
+	@SuppressWarnings ( "unchecked" )	
+	private <V> V cacheGet ( Class<? super V> type, String key )
+	{
+		return (V) this.cache.get ( type, key );
 	}
 
 }

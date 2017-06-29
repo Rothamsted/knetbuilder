@@ -24,11 +24,11 @@ public class LoadingTest
 {
 	@Test
 	@Ignore ( "Not a real test, very time consuming" )
-	public void testLoadDOID () throws Exception
+	public void testLoad () throws Exception
 	{
 		String owlDir = "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/";
-		//load ( "go_cfg.xml", owlDir + "go.owl" );
-		load ( "doid_cfg.xml", owlDir + "doid.owl" );
+		load ( "go_cfg.xml", owlDir + "go.owl" );
+		//load ( "doid_cfg.xml", owlDir + "doid.owl" );
 	}
 	
 	public static void load ( String cfgPath, String owlPath ) throws Exception
