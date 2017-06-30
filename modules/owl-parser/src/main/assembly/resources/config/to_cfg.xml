@@ -110,7 +110,7 @@
 	</bean -->
 
 	<!-- This instead creates a fixed CC, with constant attributes of your choice  -->
-	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConstCCMapper" scope = "singleton">
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConstCCMapper">
 		<property name="value">
 			<bean class = "net.sourceforge.ondex.core.utils.ConceptClassPrototype">
 				<property name = "id" value="TO" />
