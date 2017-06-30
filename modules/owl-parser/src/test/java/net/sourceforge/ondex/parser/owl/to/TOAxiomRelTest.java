@@ -57,12 +57,20 @@ public class TOAxiomRelTest
 		);
 
 		ConceptClass cc = c.getOfType ();
-		assertEquals ( "Concept Class ID is wrong!", "TO_0000387", cc.getId () );
-		assertEquals ( "Concept Class label is wrong!",  "plant trait", cc.getFullname () );
+		// These are for the version where the TO root class is mapped to a CC, without using a custom constant
+//		assertEquals ( "Concept Class ID is wrong!", "TO_0000387", cc.getId () );
+//		assertEquals ( "Concept Class label is wrong!",  "plant trait", cc.getFullname () );
+//		Assert.assertTrue ( 
+//			"Concept Class definition is wrong!", 
+//			cc.getDescription ().startsWith ( "A measurable or observable" ) 
+//		);
+		assertEquals ( "Concept Class ID is wrong!", "TO", cc.getId () );
+		assertEquals ( "Concept Class label is wrong!",  "Trait Ontology Term", cc.getFullname () );
 		Assert.assertTrue ( 
 			"Concept Class definition is wrong!", 
-			cc.getDescription ().startsWith ( "A measurable or observable" ) 
+			cc.getDescription ().startsWith ( "Term from the Trait Ontology (https://github.com/Planteome/plant-trait-ontology)" ) 
 		);
+
 		
 		ds = graph.getMetaData ().createDataSource ( "Wikipedia", "Wikipedia", "" );
 		assertNotNull ( "Additional x-ref to Wikipedia is wrong!", c.getConceptAccession ( "Stomatal_conductance", ds ) );

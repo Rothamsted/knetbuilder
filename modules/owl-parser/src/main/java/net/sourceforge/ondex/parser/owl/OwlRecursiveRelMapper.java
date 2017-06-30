@@ -71,15 +71,15 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 			
 			ConceptClass cc = this.getConceptClassMapper ().map ( topOntCls, graph );
 			ONDEXElemWrapper<ConceptClass> ccw = ONDEXElemWrapper.of ( cc, graph );
-			OWLConceptMapper cmap = this.getConceptMapper ();
-			if ( this.isDoMapRootsToConcepts () ) cmap.map ( topOntCls, ccw );
 			
-			result [ 0 ] = Stream.concat ( 
-				result [ 0 ], 
-				this
-				.getRelatedClasses ( topOntCls )	
-				.flatMap ( ontChild -> this.map ( ontChild, ccw ) )
-			);
+			result [ 0 ] = this.isDoMapRootsToConcepts () 
+				? this.map ( topOntCls, ccw )
+				: Stream.concat ( 
+						result [ 0 ], 
+						this
+						.getRelatedClasses ( topOntCls )	
+						.flatMap ( ontChild -> this.map ( ontChild, ccw ) )
+					);
 		});
 
 		return result [ 0 ];

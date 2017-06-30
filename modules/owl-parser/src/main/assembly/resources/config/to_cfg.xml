@@ -21,8 +21,9 @@
 							<property name="topClassIri" value = "#{ns.iri ( 'obo:TO_0000387' )}" /><!-- Plant Trait -->
 						</bean>
 					</property>
-					<!-- Bio-process will be mapped to a concept class, but not to a concept -->
-					<property name="doMapRootsToConcepts" value = "false" />
+					<!-- The root class above will be mapped to a concept, we use a generic 'TO' as a concept class -->
+					<property name="doMapRootsToConcepts" value = "true" />
+					<property name="conceptClassMapper" ref = "conceptClassMapper" />
 				</bean> 		
 	  	</set>
 	  </property>
@@ -101,11 +102,22 @@
 		</property>
 	</bean>
 	
-	<!-- Generates ONDEX concept classes from top OWL classes -->
-	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLClassCCMapper" scope = "prototype">
+	<!-- This maps an OWL root class to a concept class, using OWL information -->
+	<!-- bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLClassCCMapper" scope = "prototype">
 		<property name = "idMapper" ref = "idMapper" />
 		<property name = "labelMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
+	</bean -->
+
+	<!-- This instead creates a fixed CC, with constant attributes of your choice  -->
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLConstCCMapper" scope = "singleton">
+		<property name="value">
+			<bean class = "net.sourceforge.ondex.core.utils.ConceptClassPrototype">
+				<property name = "id" value="TO" />
+				<property name = "fullName" value="Trait Ontology Term" />
+				<property name= "description" value="Term from the Trait Ontology (https://github.com/Planteome/plant-trait-ontology)" />
+			</bean>
+		</property>
 	</bean>
 
 

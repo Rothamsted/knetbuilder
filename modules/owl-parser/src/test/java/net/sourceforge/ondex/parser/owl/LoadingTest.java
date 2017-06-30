@@ -27,8 +27,9 @@ public class LoadingTest
 	public void testLoad () throws Exception
 	{
 		String owlDir = "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/";
-		load ( "go_cfg.xml", owlDir + "go.owl" );
+		//load ( "go_cfg.xml", owlDir + "go.owl" );
 		//load ( "doid_cfg.xml", owlDir + "doid.owl" );
+		load ( "to_cfg.xml", owlDir + "trait_ontology.owl" );
 	}
 	
 	public static void load ( String cfgPath, String owlPath ) throws Exception
