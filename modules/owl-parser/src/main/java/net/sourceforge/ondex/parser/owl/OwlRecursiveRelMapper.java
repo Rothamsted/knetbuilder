@@ -103,9 +103,14 @@ public abstract class OwlRecursiveRelMapper extends OWLRelMapper<OntModel, ONDEX
 		// First get all the links at this hierarchical level
 		Stream<ONDEXRelation> result =
 			this.getRelatedClasses ( rootCls )
-			.map ( child -> CachedGraphWrapper.getInstance ( graph ).getRelation ( 
-				conceptMapper.map ( child, ccw ), rootConcept, relType, evidence 
-			));
+			.map ( child ->
+			{
+				synchronized ( this ) {
+					return CachedGraphWrapper.getInstance ( graph ).getRelation ( 
+						conceptMapper.map ( child, ccw ), rootConcept, relType, evidence 
+					);
+				}
+			});
 		
 		// Next, recurse and add up more 
 		for ( OntClass child: (Iterable<OntClass>) () -> this.getRelatedClasses ( rootCls ).iterator () )

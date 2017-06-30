@@ -25,7 +25,7 @@ public class OWLClassCCMapper implements OWLConceptClassMapper
 	private SimpleLabelMapper<OntClass> descriptionMapper;
 	
 	@Override
-	public ConceptClass map ( OntClass ontCls, ONDEXGraph graph )
+	public synchronized ConceptClass map ( OntClass ontCls, ONDEXGraph graph )
 	{
 		String clsId = this.idMapper.map ( ontCls ); 
 		String clsLabel = this.labelMapper.map ( ontCls );

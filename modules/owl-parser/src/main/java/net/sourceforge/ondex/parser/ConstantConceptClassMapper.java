@@ -17,7 +17,7 @@ public class ConstantConceptClassMapper<S> implements ConceptClassMapper<S>
 	private ConceptClassPrototype value;
 	
 	@Override
-	public ConceptClass map ( S source, ONDEXGraph graph )
+	public synchronized ConceptClass map ( S source, ONDEXGraph graph )
 	{
 		return CachedGraphWrapper.getInstance ( graph ).getConceptClass ( this.getValue () );
 	}

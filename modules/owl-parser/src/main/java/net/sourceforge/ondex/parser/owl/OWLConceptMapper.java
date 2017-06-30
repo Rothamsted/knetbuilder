@@ -47,7 +47,7 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	 * @see above.
 	 */
 	@Override
-	public ONDEXConcept map ( OntClass ontCls, ONDEXElemWrapper<ConceptClass> ccw )
+	public synchronized ONDEXConcept map ( OntClass ontCls, ONDEXElemWrapper<ConceptClass> ccw )
 	{		
 		String conceptId = idMapper.map ( ontCls );
 		String description = StringUtils.trimToEmpty ( descriptionMapper.map ( ontCls ) );
