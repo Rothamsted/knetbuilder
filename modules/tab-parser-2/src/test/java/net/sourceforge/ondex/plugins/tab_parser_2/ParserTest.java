@@ -172,7 +172,7 @@ public class ParserTest
 	
 	
 	@Test
-	@Ignore ( "It's a manual test to verify #8" )
+	//@Ignore ( "It's a manual test to verify #8" )
 	public void testDupedRelation () throws Exception
 	{
 		Reader schemaReader = new InputStreamReader ( 
@@ -180,14 +180,27 @@ public class ParserTest
 			"UTF-8"
 		);
 		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
-	
 
 		PathParser pp = ConfigParser.parseConfigXml ( 
 			schemaReader, graph, "target/test-classes/duped_relations/duped_rels.tsv" 
 		);
+		pp.setProcessingOptions ( PathParser.MERGE_ACC, PathParser.MERGE_NAME, PathParser.MERGE_GDS );
 		pp.parse ();
 		
 		log.info ( "Concepts: " + graph.getConcepts ().size () );
 		log.info ( "Relations: " + graph.getRelations ().size () );
+		
+		graph.getRelations ().forEach ( r -> 
+		{
+			log.info ( String.format ( 
+				"Relation: '%s', from: '%s', to: '%s'", 
+				r.getOfType ().getId (),
+				r.getFromConcept ().getConceptAccessions ().iterator ().next ().getAccession (),
+				r.getToConcept ().getConceptAccessions ().iterator ().next ().getAccession ()
+			));
+			r.getAttributes ().forEach ( a -> log.info ( String.format ( 
+				"\t attribute: '%s', '%s'", a.getOfType ().getFullname (), a.getValue ()  
+			)));
+		});
 	}
 }
