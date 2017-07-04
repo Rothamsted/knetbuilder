@@ -172,7 +172,7 @@ public class ParserTest
 	
 	
 	@Test
-	//@Ignore ( "It's a manual test to verify #8" )
+	@Ignore ( "It's a manual test to verify #8" )
 	public void testDupedRelation () throws Exception
 	{
 		Reader schemaReader = new InputStreamReader ( 
