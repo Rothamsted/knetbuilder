@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.io.Resources;
@@ -30,6 +32,8 @@ import net.sourceforge.ondex.tools.tab.importer.PathParser;
  */
 public class ParserTest
 {
+	private Logger log = Logger.getLogger ( this.getClass () );
+	
 	@Test
 	public void testTutorialGeneEx () throws Exception
 	{
@@ -164,5 +168,26 @@ public class ParserTest
 		pp.parse ();
 		
 		assertEquals ( "Wrong no of retrieved relations!", 7, graph.getRelations ().size () );
+	}
+	
+	
+	@Test
+	@Ignore ( "It's a manual test to verify #8" )
+	public void testDupedRelation () throws Exception
+	{
+		Reader schemaReader = new InputStreamReader ( 
+			Resources.getResource ( this.getClass (), "/duped_relations/duped_rels_cfg.xml" ).openStream (),
+			"UTF-8"
+		);
+		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
+	
+
+		PathParser pp = ConfigParser.parseConfigXml ( 
+			schemaReader, graph, "target/test-classes/duped_relations/duped_rels.tsv" 
+		);
+		pp.parse ();
+		
+		log.info ( "Concepts: " + graph.getConcepts ().size () );
+		log.info ( "Relations: " + graph.getRelations ().size () );
 	}
 }
