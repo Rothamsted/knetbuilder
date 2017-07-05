@@ -35,7 +35,7 @@
 		<property name = "preferredNameMapper" ref = "labelMapper" />
 		<property name = "descriptionMapper" ref = "descriptionMapper" />
 		<property name = "accessionsMappers">
-			<set>
+			<set>			
 				<bean id = "idAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
 					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:id' )}" />
 					<property name="dataSourcePrototype" ref = "goDataSource" />
@@ -57,6 +57,20 @@
 						</bean>
 					</property>
 				</bean>
+				<bean id = "idPrefxAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:id' )}" />
+					<property name="dataSourcePrototype" ref = "goDataSource" />
+					<property name="dataSourcePrefix" value = "GO:" />
+					<!-- Keeps the same prefix -->
+					<property name="addedPrefix" value = "GO:" />					
+				</bean>	
+				<bean id = "idChangedPrefxAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
+					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:id' )}" />
+					<property name="dataSourcePrototype" ref = "goDataSource" />
+					<property name="dataSourcePrefix" value = "GO:" />
+					<!-- After having removed 'GO' and kept the numerical part od the accession, add 'GenOnt:' -->
+					<property name="addedPrefix" value = "GenOnt:" />					
+				</bean>	
 			</set>
 		</property>
 	</bean>
