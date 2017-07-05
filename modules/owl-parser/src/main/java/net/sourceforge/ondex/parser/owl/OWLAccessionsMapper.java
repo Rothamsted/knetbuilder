@@ -4,6 +4,7 @@ import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.RDFNode;
@@ -32,6 +33,7 @@ public class OWLAccessionsMapper
 	private boolean isAmbiguous = false;
 	private DataSourcePrototype dataSourcePrototype = DataSourcePrototype.OWL_PARSER;
 	private String dataSourcePrefix = null;
+	private String addedPrefix = null;
 	
 	
 	@Override
@@ -43,13 +45,30 @@ public class OWLAccessionsMapper
 										
 		DataSourcePrototype dsProto = this.getDataSourcePrototype ();
 		String dsPrefix = this.getDataSourcePrefix ();
+		String addedPrefix = this.getAddedPrefix ();
 		
-		return this.getAccessionStrings ( ontCls )
-		.filter ( accStr -> dsPrefix == null || accStr.startsWith ( dsPrefix ) )
-		.map ( accStr -> 
+		Stream<String> accStrings = this.getAccessionStrings ( ontCls );
+		
+		if ( dsPrefix != null )
 		{
-			if ( dsPrefix != null ) accStr = accStr.substring ( dsPrefix.length () );
-			
+			accStrings = accStrings.filter ( accStr -> accStr.startsWith ( dsPrefix ) );
+			// if added prefix is the same, then you simply want to keep the one used for filtering
+			if ( !dsPrefix.equals ( addedPrefix ) )
+			{
+				// else, strip the original prefix away and add a non-null addedPrefix
+				accStrings = addedPrefix == null 
+					? accStrings.map ( accStr -> accStr.substring ( dsPrefix.length () ) )
+					: accStrings.map ( accStr -> addedPrefix + accStr.substring ( dsPrefix.length () ) );
+			}
+		}
+		else if ( addedPrefix != null )
+			// No prefix to remove, non-null addedPrefix to add
+			accStrings = accStrings.map ( accStr -> addedPrefix + accStr );
+		
+		// And now use the acc strings to build the accessions
+		//
+		return accStrings.map ( accStr -> 
+		{
 			DataSource ds = graphw.getDataSource ( dsProto );
 			
 			// We don't need to check for duplicates, since it already does it well.  
@@ -114,4 +133,17 @@ public class OWLAccessionsMapper
 		this.dataSourcePrefix = dataSourcePrefix;
 	}
 
+	/**
+	 * This is added to the final ONDEX result, after that the {@link #getDataSourcePrefix() possible original prefix} 
+	 */
+	public String getAddedPrefix ()
+	{
+		return addedPrefix;
+	}
+
+	public void setAddedPrefix ( String addedPrefix )
+	{
+		this.addedPrefix = addedPrefix;
+	}
+	
 }

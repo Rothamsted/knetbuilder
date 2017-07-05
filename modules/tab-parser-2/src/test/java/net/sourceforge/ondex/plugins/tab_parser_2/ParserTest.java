@@ -172,7 +172,7 @@ public class ParserTest
 	
 	
 	@Test
-	@Ignore ( "It's a manual test to verify #8" )
+	//@Ignore ( "It's a manual test to verify #8" )
 	public void testDupedRelation () throws Exception
 	{
 		Reader schemaReader = new InputStreamReader ( 
@@ -184,11 +184,20 @@ public class ParserTest
 		PathParser pp = ConfigParser.parseConfigXml ( 
 			schemaReader, graph, "target/test-classes/duped_relations/duped_rels.tsv" 
 		);
-		pp.setProcessingOptions ( PathParser.MERGE_ACC, PathParser.MERGE_NAME, PathParser.MERGE_GDS );
+		//pp.setProcessingOptions ( PathParser.MERGE_ACC, PathParser.MERGE_NAME, PathParser.MERGE_GDS );
+		pp.setProcessingOptions ( new String [ 0 ] );
 		pp.parse ();
 		
 		log.info ( "Concepts: " + graph.getConcepts ().size () );
 		log.info ( "Relations: " + graph.getRelations ().size () );
+		
+		graph.getConcepts ().forEach ( c -> 
+		  log.info ( String.format ( 
+		  	"Concept: '%d', '%s'", 
+		  	c.getId (), 
+		  	c.getConceptAccessions ().iterator ().next ().getAccession ()  
+		  ))
+		);
 		
 		graph.getRelations ().forEach ( r -> 
 		{
