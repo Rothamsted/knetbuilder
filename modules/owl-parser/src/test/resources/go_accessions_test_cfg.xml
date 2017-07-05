@@ -68,7 +68,7 @@
 					<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:id' )}" />
 					<property name="dataSourcePrototype" ref = "goDataSource" />
 					<property name="dataSourcePrefix" value = "GO:" />
-					<!-- After having removed 'GO' and kept the numerical part od the accession, add 'GenOnt:' -->
+					<!-- After having removed 'GO' and kept the numerical part of the accession, add 'GenOnt:' -->
 					<property name="addedPrefix" value = "GenOnt:" />					
 				</bean>	
 			</set>
