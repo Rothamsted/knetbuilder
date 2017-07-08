@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.parser2;
 
+import java.util.stream.Stream;
+
 /**
  * TODO: comment me!
  *
@@ -7,7 +9,8 @@ package net.sourceforge.ondex.parser2;
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-public interface ParserScanner<S, O>
+@FunctionalInterface
+public interface Scanner<S, SI>
 {
-	public O scan ( S source ); 
+	public Stream<SI> scan ( S source ); 
 }

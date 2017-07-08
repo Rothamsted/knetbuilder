@@ -9,6 +9,6 @@ import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
  * <dl><dt>Date:</dt><dd>6 Jun 2017</dd></dl>
  *
  */
-public interface EvidenceTypeMapper<S> extends SourceItemMapper<S, EvidenceTypePrototype>
+public interface EvidenceTypeMapper<S> extends Mapper<S, EvidenceTypePrototype>
 {
 }

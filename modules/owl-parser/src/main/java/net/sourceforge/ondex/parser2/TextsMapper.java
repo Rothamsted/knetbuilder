@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.parser2;
 
-import java.util.stream.Stream;
-
 /**
  * TODO: comment me!
  *
@@ -9,6 +7,6 @@ import java.util.stream.Stream;
  * <dl><dt>Date:</dt><dd>6 Jun 2017</dd></dl>
  *
  */
-public interface TextsMapper<S> extends SourceItemMapper<S, Stream<String>>
+public interface TextsMapper<S> extends StreamMapper<S, String>
 {
 }
