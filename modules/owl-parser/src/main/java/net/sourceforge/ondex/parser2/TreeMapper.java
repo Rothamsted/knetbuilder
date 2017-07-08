@@ -1,8 +1,11 @@
 package net.sourceforge.ondex.parser2;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
+import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
@@ -12,7 +15,7 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-public abstract class TreeMapper<S, SI> implements StreamMapper<S, ONDEXElemWrapper<ONDEXConcept>>
+public abstract class TreeMapper<S, SI> implements StreamMapper<ONDEXElemWrapper<S>, ONDEXConcept>
 {
 	private ConceptClassMapper<SI> conceptClassMapper;
 	private ConceptMapper<SI> conceptMapper;
@@ -25,7 +28,7 @@ public abstract class TreeMapper<S, SI> implements StreamMapper<S, ONDEXElemWrap
 	
 	
 	@Override
-	public Stream<ONDEXElemWrapper<ONDEXConcept>> map ( S source )
+	public Stream<ONDEXConcept> map ( ONDEXElemWrapper<S> source )
 	{
 		ConceptClassMapper<SI> ccMapper = this.getConceptClassMapper ();
 		final ConceptMapper<SI> conceptMapper = this.getConceptMapper ();
@@ -33,26 +36,29 @@ public abstract class TreeMapper<S, SI> implements StreamMapper<S, ONDEXElemWrap
 		@SuppressWarnings ( "unchecked" )
 		Stream<SI>[] result = new Stream[] { Stream.empty () };
 		
-		this.getRootsScanner ()
-		.scan ( source )
-		.forEach ( root -> result [ 0 ] = Stream.concat ( result [ 0 ], scanTree ( root ) ) );
+		ONDEXGraph graph = source.getGraph ();
 		
-		// TODO: che c-mapper receives an item and a c-class. The c-class is produced by the ccMapper, but 
-		// we don't have the graph! :-(
+		this.getRootsScanner ()
+		.scan ( source.getElement () )
+		.forEach ( root -> result [ 0 ] = Stream.concat ( result [ 0 ], scanTree ( ONDEXElemWrapper.of ( root, graph ) ) ) );
+		
 		// More TODO: doMapRootsToConcepts flag
-		return result [ 0 ].map ( srcItem -> conceptMapper.map ( srcItem, ccMapper.map ( srcItem ) ) );
+		// TODO: deal with the wrappers hell! RelationMapper receives too many stupid wrappers!
+			
+		return result [ 0 ].map ( si -> conceptMapper.map ( si, ccMapper, graph ) );
 	}
 
-	protected Stream<SI> scanTree ( SI rootSourceItem )
+	protected Stream<SI> scanTree ( ONDEXElemWrapper<SI> rootSourceItem )
 	{
+		ConceptClassMapper<SI> ccmapper = this.getConceptClassMapper ();
 		final ConceptMapper<SI> conceptMapper = this.getConceptMapper ();
-		ONDEXElemWrapper<ONDEXConcept> wrootConcept = conceptMapper.map ( rootSourceItem );
+		ONDEXConcept rootConcept = conceptMapper.map ( rootSourceItem, ccmapper );
 
 		@SuppressWarnings ( "unchecked" )
 		Stream<SI>[] result = new Stream[] { Stream.empty () };
 				
 		this.getChildrenScanner ()
-		.scan ( rootSourceItem )
+		.scan ( rootSourceItem.getElement () )
 		.forEach ( child -> 
 		{
 			ONDEXElemWrapper<ONDEXConcept> wchildConcept = conceptMapper.map ( child );
