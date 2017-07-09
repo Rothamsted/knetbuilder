@@ -12,7 +12,7 @@ EOT
   exit 1
 fi
 
-# Simple (and buggy) function to get the value of a tag from some XML (in the stdin)
+# Simple (and buggy) function to get the value of a tag from some XML
 function get_tag
 {
   text="$1"
