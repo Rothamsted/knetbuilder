@@ -47,8 +47,8 @@ function get_last_release
   get_tag "$xml" latest
 }
 
-# Instantiates a template, replacing place holders named by the $3/$4 parameters with version-related values 
-# about the given artifact's URI
+# Instantiates a template (sent in via stdin), replacing placeholders named by the $3/$4 parameters with version-related values 
+# about the given artifact's URI. Returns the result on the stdout.
 #
 function make_doc
 {
