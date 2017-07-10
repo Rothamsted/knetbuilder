@@ -113,7 +113,7 @@ public class Transformer {
         ConceptClass ccThing = graph.getMetaData().getConceptClass("Thing");
         if (ccThing == null)
         	graph.getMetaData().getFactory().createConceptClass("Thing");
-        
+
         etManuallyCurated = mdu.safeFetchEvidenceType(MetaData.IMPD_MANUALLY_CURATED);
         etAutomaticallyCurated = mdu.safeFetchEvidenceType(MetaData.IMPD_AUTOMATICALLY_CURATED);
         
@@ -475,7 +475,12 @@ public class Transformer {
             }
 
             ONDEXConcept goConcept;
-
+/*            int prefix = value.indexOf(":");
+            if (prefix > -1) { // remove GO: prefix
+                value = value.substring(prefix+1, value.length());
+               }
+//            System.out.println("lookforGOAccessions()... id: "+ id +", value= "+ value);
+*/
             //create GO concept
             if (goToConcept.get(value) == null) {
                 goConcept = graph.getFactory().createConcept(value, dataSourceUniProt, cc, ev);
