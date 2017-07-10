@@ -1,12 +1,9 @@
 package net.sourceforge.ondex.parser2;
 
-import java.util.function.Function;
 import java.util.stream.Stream;
 
-import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
  * TODO: comment me!
@@ -15,7 +12,7 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-public abstract class TreeMapper<S, SI> implements StreamMapper<ONDEXElemWrapper<S>, ONDEXConcept>
+public abstract class TreeMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 {
 	private ConceptClassMapper<SI> conceptClassMapper;
 	private ConceptMapper<SI> conceptMapper;
@@ -28,49 +25,34 @@ public abstract class TreeMapper<S, SI> implements StreamMapper<ONDEXElemWrapper
 	
 	
 	@Override
-	public Stream<ONDEXConcept> map ( ONDEXElemWrapper<S> source )
+	public Stream<ONDEXConcept> map ( S source, ONDEXGraph graph )
 	{
-		ConceptClassMapper<SI> ccMapper = this.getConceptClassMapper ();
-		final ConceptMapper<SI> conceptMapper = this.getConceptMapper ();
-		
-		@SuppressWarnings ( "unchecked" )
-		Stream<SI>[] result = new Stream[] { Stream.empty () };
-		
-		ONDEXGraph graph = source.getGraph ();
-		
-		this.getRootsScanner ()
-		.scan ( source.getElement () )
-		.forEach ( root -> result [ 0 ] = Stream.concat ( result [ 0 ], scanTree ( ONDEXElemWrapper.of ( root, graph ) ) ) );
-		
+		return this.getRootsScanner ()
+		.scan ( source )
+		.map ( root -> this.scanTree ( root, graph ) );
+
 		// More TODO: doMapRootsToConcepts flag
-		// TODO: deal with the wrappers hell! RelationMapper receives too many stupid wrappers!
-			
-		return result [ 0 ].map ( si -> conceptMapper.map ( si, ccMapper, graph ) );
+		// TODO: document that we're returning the root concepts
 	}
 
-	protected Stream<SI> scanTree ( ONDEXElemWrapper<SI> rootSourceItem )
+	protected ONDEXConcept scanTree ( SI rootSourceItem, ONDEXGraph graph )
 	{
 		ConceptClassMapper<SI> ccmapper = this.getConceptClassMapper ();
 		final ConceptMapper<SI> conceptMapper = this.getConceptMapper ();
-		ONDEXConcept rootConcept = conceptMapper.map ( rootSourceItem, ccmapper );
-
-		@SuppressWarnings ( "unchecked" )
-		Stream<SI>[] result = new Stream[] { Stream.empty () };
+		ONDEXConcept rootConcept = conceptMapper.map ( rootSourceItem, ccmapper, graph );
 				
 		this.getChildrenScanner ()
-		.scan ( rootSourceItem.getElement () )
+		.scan ( rootSourceItem )
 		.forEach ( child -> 
 		{
-			ONDEXElemWrapper<ONDEXConcept> wchildConcept = conceptMapper.map ( child );
+			ONDEXConcept childConcept = conceptMapper.map ( child, ccmapper, graph );
 			if ( isMappingDirectionUp )
-				relationMapper.map ( wchildConcept, wrootConcept );
+				relationMapper.map ( childConcept, rootConcept, graph );
 			else
-				relationMapper.map ( wrootConcept, wchildConcept );
-		
-			result [ 0 ] = Stream.concat ( result [ 0 ], scanTree ( child ) );
+				relationMapper.map ( rootConcept, childConcept );
 		});
 		
-		return result [ 0 ];
+		return rootConcept;
 	}
 	
 	
@@ -143,6 +125,4 @@ public abstract class TreeMapper<S, SI> implements StreamMapper<ONDEXElemWrapper
 	{
 		this.childrenScanner = childrenScanner;
 	}
-
-	
 }

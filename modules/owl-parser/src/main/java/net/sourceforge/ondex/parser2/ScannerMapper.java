@@ -2,6 +2,8 @@ package net.sourceforge.ondex.parser2;
 
 import java.util.stream.Stream;
 
+import net.sourceforge.ondex.core.ONDEXGraph;
+
 /**
  * TODO: comment me!
  *
@@ -22,8 +24,7 @@ public abstract class ScannerMapper<S, SI, OI> implements StreamMapper<S, OI>
 	}
 
 	@Override
-	public Stream<OI> map ( S source )
-	{
-		return scanner.scan ( source ).map ( sourceItemMapper::map );
+	public Stream<OI> map ( S source, ONDEXGraph graph ) {
+		return scanner.scan ( source ).map ( si -> sourceItemMapper.map ( si, graph ) );
 	}
 }

@@ -12,7 +12,7 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-public abstract class ConceptMapper<S> implements PairMapper<S, ONDEXElemWrapper<ConceptClass>, ONDEXConcept> 
+public abstract class ConceptMapper<S> implements PairMapper<S, ConceptClass, ONDEXConcept> 
 {
 	private TextMapper<S> idMapper;
 	private TextMapper<S> descriptionMapper;
@@ -21,19 +21,8 @@ public abstract class ConceptMapper<S> implements PairMapper<S, ONDEXElemWrapper
 	private EvidenceTypeMapper<S> evidenceMapper;
 	private DataSourceMapper<S> dataSourceMapper;
 	
-	public ONDEXConcept map ( S source, ConceptClassMapper<S> ccmapper, ONDEXGraph graph )
-	{
-		ONDEXElemWrapper<S> wsrc = ONDEXElemWrapper.of ( source, graph ); 
-		ConceptClass cc = ccmapper.map ( wsrc );
-		ONDEXElemWrapper<ConceptClass> ccw = ONDEXElemWrapper.of ( cc, graph );
-		return this.map ( source, ccw );
-	}
-
-	public ONDEXConcept map ( ONDEXElemWrapper<S> source, ConceptClassMapper<S> ccmapper )
-	{
-		ONDEXGraph graph = source.getGraph ();
-		ConceptClass cc = ccmapper.map ( source );
-		return this.map ( source.getElement (), ONDEXElemWrapper.of ( cc, graph ) );
+	public ONDEXConcept map ( S source, ConceptClassMapper<S> ccmapper, ONDEXGraph graph ) {
+		return this.map ( source, ccmapper.map ( source, graph ), graph );
 	}
 
 }

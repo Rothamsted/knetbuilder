@@ -12,7 +12,7 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
  *
  */
 public abstract class RelationMapper 
-  implements PairMapper<ONDEXElemWrapper<ONDEXConcept>, ONDEXElemWrapper<ONDEXConcept>, ONDEXElemWrapper<ONDEXRelation>> 
+  implements PairMapper<ONDEXConcept, ONDEXConcept, ONDEXRelation> 
 {
 
 }

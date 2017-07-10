@@ -10,6 +10,6 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
  * <dl><dt>Date:</dt><dd>8 Jul 2017</dd></dl>
  *
  */
-public abstract class ConceptClassMapper<S> implements Mapper<ONDEXElemWrapper<S>, ConceptClass>
+public abstract class ConceptClassMapper<S> implements Mapper<S, ConceptClass>
 {
 }
