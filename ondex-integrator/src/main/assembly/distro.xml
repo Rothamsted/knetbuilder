@@ -1,0 +1,88 @@
+<!-- 
+  File for the Maven Assembly plug-in.
+-->
+<assembly>
+  <id>distro</id>
+ 
+  <formats>
+    <format>zip</format>
+  </formats>
+  
+	<dependencySets>
+	
+		<dependencySet>
+		  <outputDirectory>/lib</outputDirectory>
+		</dependencySet>
+		
+	</dependencySets> 
+  
+
+  <fileSets>
+
+		<fileSet>
+			<!-- Plugins that need *-with-dependencies.jar -->
+			<directory>${project.build.directory}/plugins</directory>
+			<outputDirectory>/plugins</outputDirectory>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
+		</fileSet>	
+		
+		<fileSet>
+			<directory>${basedir}/data</directory>
+			<outputDirectory>/data</outputDirectory>
+			<excludes>
+   		 		<exclude>dbs/**</exclude>
+   				<exclude>seqs/**</exclude>
+			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
+		</fileSet>
+
+		<fileSet>
+			<!-- Plugins that need *-with-dependencies.jar -->
+			<directory>${project.build.directory}/plugins</directory>
+			<outputDirectory>/plugins</outputDirectory>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
+		</fileSet>	
+
+		<fileSet>
+			<directory>src/main/assembly/resources</directory>
+			<outputDirectory></outputDirectory>
+      <excludes>
+        <!-- Defined below, with x permissions, non-executables only here -->
+        <exclude>**/*.sh</exclude>
+      </excludes>  
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>      
+			<filtered>true</filtered>
+		</fileSet>
+
+		<fileSet>
+			<directory>src/main/assembly/resources</directory>
+			<outputDirectory></outputDirectory>
+      <includes>
+        <include>**/*.sh</include>
+      </includes>  
+      <fileMode>0755</fileMode>
+			<directoryMode>0755</directoryMode>      
+			<filtered>true</filtered>
+		</fileSet>
+
+		<!-- OWL Parser Stuff -->
+		<fileSet>
+			<directory>target/owl-parser-plugin/lib</directory>
+			<outputDirectory>/plugins</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/owl-parser-plugin/config</directory>
+			<outputDirectory>/config/owl-parser</outputDirectory>
+		</fileSet>		
+		<fileSet>
+			<directory>target/owl-parser-plugin/examples</directory>
+			<outputDirectory>/data/examples/owl-parser</outputDirectory>
+		</fileSet>		
+
+  </fileSets>
+
+</assembly>

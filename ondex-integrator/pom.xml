@@ -220,6 +220,14 @@
          <artifactId>graph-query</artifactId>
          <version>${project.version}</version>
       </dependency>
+      
+      <!-- Further libs added to the final distribution -->
+			<dependency>
+				<groupId>net.sourceforge.jexcelapi</groupId>
+				<artifactId>jxl</artifactId>
+				<scope>runtime</scope>
+			</dependency>
+      
    </dependencies>
 
    <build>
@@ -235,24 +243,157 @@
                </archive>
             </configuration>
          </plugin>
+         
+         
+         <!-- This downloads the plug-ins jars, which are then packed by the assembler -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${maven.dependency.plugin.version}</version>            
+            <executions>
+               <execution>
+                  <id>copy</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>copy</goal>
+                  </goals>
+                  <configuration>
+                     <artifactItems>
+
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>tab-parser-2</artifactId>
+                           <version>${project.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                        </artifactItem>
+
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>js-plugin</artifactId>
+                           <version>${ondex.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                        </artifactItem>
+                        
+									      <artifactItem>
+									         <groupId>net.sourceforge.ondex.modules</groupId>
+									         <artifactId>cyc-pathwaydbs</artifactId>
+									         <version>${project.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+													 <type>jar</type>									         
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>                           
+									      </artifactItem>
+                        
+												<artifactItem>
+													<groupId>net.sourceforge.ondex.modules</groupId>
+													<artifactId>json</artifactId>
+													<version>${project.version}</version>
+                          <classifier>jar-with-dependencies</classifier>
+ 												  <type>jar</type>									         
+                          <overWrite>true</overWrite>
+                          <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+												</artifactItem>                        
+
+												<artifactItem>
+													<groupId>net.sourceforge.ondex.modules</groupId>
+													<artifactId>cyjs_json</artifactId>
+													<version>${project.version}</version>
+                          <classifier>jar-with-dependencies</classifier>
+ 												  <type>jar</type>									         
+                          <overWrite>true</overWrite>
+                          <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+												</artifactItem>                        
+
+												<artifactItem>
+													<groupId>net.sourceforge.ondex.modules</groupId>
+													<artifactId>sequence</artifactId>
+													<version>${project.version}</version>
+                          <classifier>jar-with-dependencies</classifier>
+ 												  <type>jar</type>									         
+                          <overWrite>true</overWrite>
+                          <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+												</artifactItem>                        
+                        
+                     </artifactItems>
+                     <overWriteReleases>false</overWriteReleases>
+                     <overWriteSnapshots>true</overWriteSnapshots>
+                  </configuration>
+               </execution>
+               
+               <execution>
+                  <id>unpack</id>
+                  <phase>initialize</phase>
+                  <goals>
+                    <goal>unpack</goal>
+                  </goals>
+                  <configuration>
+										<artifactItems>
+											<!-- 
+											  See the installer for an explanation of how we unpack this.  
+											-->                        
+	                    <artifactItem>
+	                       <groupId>net.sourceforge.ondex.modules</groupId>
+	                       <artifactId>owl-parser</artifactId>
+	                       <version>${project.version}</version>
+	                       <classifier>bundle</classifier>
+	                       <type>zip</type>
+	                       <overWrite>true</overWrite>
+	                       <outputDirectory>${project.build.directory}</outputDirectory>
+	                    </artifactItem>
+	                    
+											<artifactItem>
+												<groupId>net.sourceforge.ondex</groupId>
+												<artifactId>datadir</artifactId>
+												<version>${project.version}</version>
+												<classifier>data</classifier>
+												<type>zip</type>
+												<outputDirectory>${project.build.directory}/data</outputDirectory>													
+											</artifactItem>
+	                    
+										</artifactItems>
+										<overWriteReleases>false</overWriteReleases>
+										<overWriteSnapshots>true</overWriteSnapshots>
+									</configuration>
+							 </execution>         							       
+            </executions>
+         </plugin>     
+                   
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <version>${maven.assembly.plugin.version}</version>
-            <configuration>
-               <descriptorRefs>
-                  <descriptorRef>jar-with-dependencies</descriptorRef>
-               </descriptorRefs>
-            </configuration>
             <executions>
                <execution>
-                  <id>make-assembly</id>
+                  <id>make-jar-with-deps</id>
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
                   <!-- append to the packaging phase. -->
                   <goals>
                      <goal>attached</goal>
-                     <!-- goals == mojos -->
                   </goals>
+									<configuration>
+									   <descriptorRefs>
+									      <descriptorRef>jar-with-dependencies</descriptorRef>
+									   </descriptorRefs>
+									</configuration>
+               </execution>
+               <execution>
+                  <id>make-distro</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>attached</goal>
+                  </goals>
+									<configuration>
+										<finalName>${project.artifactId}-${project.version}</finalName>
+										<descriptors>
+											<descriptor>src/main/assembly/distro.xml</descriptor>
+										</descriptors>
+									</configuration>
                </execution>
             </executions>
          </plugin>
