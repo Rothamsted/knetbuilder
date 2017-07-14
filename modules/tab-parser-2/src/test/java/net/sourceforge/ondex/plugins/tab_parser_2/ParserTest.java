@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.io.Resources;
@@ -187,6 +186,15 @@ public class ParserTest
 		//pp.setProcessingOptions ( PathParser.MERGE_ACC, PathParser.MERGE_NAME, PathParser.MERGE_GDS );
 		pp.setProcessingOptions ( new String [ 0 ] );
 		pp.parse ();
+		
+//		Mapping cmap = new Mapping ();
+//		ONDEXPluginArguments args = new ONDEXPluginArguments ( cmap.getArgumentDefinitions () );
+//		args.addOption ( ArgumentNames.IGNORE_AMBIGUOUS_ARG, false );
+//		args.addOption ( ArgumentNames.RELATION_TYPE_ARG, "enc" );
+//		args.addOption ( ArgumentNames.WITHIN_DATASOURCE_ARG, true );		
+//		cmap.setArguments ( args );;
+//		cmap.setONDEXGraph ( graph );
+//		cmap.start ();
 		
 		log.info ( "Concepts: " + graph.getConcepts ().size () );
 		log.info ( "Relations: " + graph.getRelations ().size () );

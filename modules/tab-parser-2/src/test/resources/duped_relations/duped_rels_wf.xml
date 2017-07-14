@@ -8,8 +8,26 @@
     <Parser name="tabParser2">
       <Arg name="InputFile">/Users/brandizi/Documents/Work/RRes/ondex_git/ondex-full/ondex-knet-builder/modules/tab-parser-2/src/test/resources/duped_relations/duped_rels.tsv</Arg>
       <Arg name="configFile">/Users/brandizi/Documents/Work/RRes/ondex_git/ondex-full/ondex-knet-builder/modules/tab-parser-2/src/test/resources/duped_relations/duped_rels_cfg.xml</Arg>
+      <Arg name="MERGE_ON_ACCESSIONS">false</Arg>
+      <Arg name="MERGE_ON_NAMES">false</Arg>
+      <Arg name="MERGE_ON_GDS">false</Arg>
       <Arg name="graphId">default</Arg>
     </Parser>
+    
+		<!-- Mapping name="lowmemoryaccessionbased">
+		  <Arg name="IgnoreAmbiguity">false</Arg>
+		  <!- - Arg name="RelationType">collapse_me</Arg - ->
+		  <Arg name="WithinDataSourceMapping">false</Arg>
+			<Arg name="graphId">default</Arg>
+	  </Mapping -->
+	  
+		<!-- Transformer name="relationcollapser">
+      <Arg name="CloneAttributes">true</Arg>
+      <Arg name="CopyTagReferences">true</Arg>
+      <Arg name="graphId">default</Arg>
+      <Arg name="RelationType">enc</Arg>
+    </Transformer -->
+	  
   </Workflow>
 </Ondex>
 

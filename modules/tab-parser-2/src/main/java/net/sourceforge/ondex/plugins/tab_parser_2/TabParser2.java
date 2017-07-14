@@ -2,12 +2,17 @@ package net.sourceforge.ondex.plugins.tab_parser_2;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Optional;
+import com.machinezoo.noexception.Exceptions;
 
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
@@ -58,17 +63,39 @@ public class TabParser2 extends ONDEXParser
       	true, // required 
       	true, // preExisting 
       	false // isDirectory
-      )
+      ),
+      new BooleanArgumentDefinition ( PathParser.MERGE_ACC, "Accession-based concept merging in the parser", false, true ),
+      new BooleanArgumentDefinition ( PathParser.MERGE_NAME, "Name-based concept merging in the parser", false, false ),
+      new BooleanArgumentDefinition ( PathParser.MERGE_GDS, "Data source-based concept merging in the parser", false, false )
 		};
 	}
 
 	public void start () throws Exception
 	{		
-    String tabInputPath = (String) getArguments().getUniqueValue( FileArgumentDefinition.INPUT_FILE );
-    String tabConfigXmlPath = (String) getArguments().getUniqueValue( "configFile" );
+		ONDEXPluginArguments args = getArguments ();
+    String tabInputPath = (String) args.getUniqueValue( FileArgumentDefinition.INPUT_FILE );
+    String tabConfigXmlPath = (String) args.getUniqueValue( "configFile" );
     
     // The mapping parser returns an ONDEX parser straight
     PathParser tabParser = ConfigParser.parseConfigXml ( tabConfigXmlPath, graph, tabInputPath );
+    
+    // Merging flags
+    //
+    String[] mergeFlags = (String[]) Stream.of ( PathParser.MERGE_ACC, PathParser.MERGE_NAME, PathParser.MERGE_GDS )
+    .filter ( flag ->
+    	// Keeps it if it's true, else this kind of merging won't happen, because it won't be in the final 
+    	// processing options.
+    	Boolean.TRUE.equals ( 
+    		Exceptions
+        // Wraps InvalidPluginArgumentException for getUniqueValue() into a RuntimeException   			
+    		.wrap ( ex -> new IllegalArgumentException ( "Plug-in argument error: " + ex.getMessage (), ex ) )
+    		.get ( () -> (Boolean) args.getUniqueValue ( flag ) )
+    	)
+    )
+    .collect ( Collectors.toList () )    
+    .toArray ( new String [ 0 ] );
+    
+    tabParser.setProcessingOptions ( mergeFlags );
     
     Subgraph newGraph = tabParser.parse ();
     int nconcepts = Optional.fromNullable ( newGraph.getConcepts () ).or ( Collections.<ONDEXConcept>emptySet () ).size ();
