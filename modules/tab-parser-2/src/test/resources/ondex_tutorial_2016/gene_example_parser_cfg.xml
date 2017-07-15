@@ -12,6 +12,8 @@
 			<column index = '0' />
 		</accession>
 		<name><column index = '0' /></name>
+		<parser-id><column index = '0' /></parser-id>
+
 		<data-source>ENSEMBL</data-source>
 		<attribute name="TAXID" type = "TEXT" indexed = 'false'>9606</attribute>
 		<attribute name="Chromosome" type = "INTEGER">
@@ -31,7 +33,9 @@
 		<accession data-source="UNIPROTKB"><!-- ambiguous is false by default -->
 			<column index = '1'/>
 		</accession>
-		<data-source>ENSEMBL</data-source>
+		<data-source>UNIPROTKB</data-source>
+		<name><column index = '1' /></name>
+		<parser-id><column index = '1' /></parser-id>		
 	</concept>
 
 

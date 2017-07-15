@@ -1,21 +1,19 @@
 package net.sourceforge.ondex.plugins.tab_parser_2;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
-import com.google.common.base.Optional;
+import com.machinezoo.noexception.CheckedExceptionHandler;
 import com.machinezoo.noexception.Exceptions;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.plugins.tab_parser_2.config.ConfigParser;
 import net.sourceforge.ondex.tools.subgraph.Subgraph;
@@ -33,7 +31,7 @@ import net.sourceforge.ondex.tools.tab.importer.PathParser;
  *
  */
 public class TabParser2 extends ONDEXParser
-{
+{		
   private Logger log = Logger.getLogger ( this.getClass() );
 
 	public String getId ()
@@ -53,7 +51,7 @@ public class TabParser2 extends ONDEXParser
 
 	public ArgumentDefinition<?>[] getArgumentDefinitions ()
 	{
-		return new ArgumentDefinition<?>[] {
+		return new ArgumentDefinition[] {
       new FileArgumentDefinition ( 
       	FileArgumentDefinition.INPUT_FILE, FileArgumentDefinition.INPUT_FILE_DESC, true, true, false, false
       ),
@@ -64,9 +62,16 @@ public class TabParser2 extends ONDEXParser
       	true, // preExisting 
       	false // isDirectory
       ),
-      new BooleanArgumentDefinition ( PathParser.MERGE_ACC, "Accession-based concept merging in the parser", false, true ),
-      new BooleanArgumentDefinition ( PathParser.MERGE_NAME, "Name-based concept merging in the parser", false, false ),
-      new BooleanArgumentDefinition ( PathParser.MERGE_GDS, "Data source-based concept merging in the parser", false, false )
+      new StringArgumentDefinition ( 
+      	"mergeOptions", 
+      	"Merging options passed to PathParser, valid values are: " 
+      	+ Arrays.toString ( PathParser.validFlags.toArray ( new String[ 0 ] ) )
+      	+ ", default is " + PathParser.MERGE_ACC
+      	+ ", use '-' to specify none", 
+      	false, // required
+      	PathParser.MERGE_ACC, // default 
+      	true  // multiple vals
+      )
 		};
 	}
 
@@ -79,33 +84,21 @@ public class TabParser2 extends ONDEXParser
     // The mapping parser returns an ONDEX parser straight
     PathParser tabParser = ConfigParser.parseConfigXml ( tabConfigXmlPath, graph, tabInputPath );
     
-    // Merging flags
-    //
-    String[] mergeFlags = (String[]) Stream.of ( PathParser.MERGE_ACC, PathParser.MERGE_NAME, PathParser.MERGE_GDS )
-    .filter ( flag ->
-    	// Keeps it if it's true, else this kind of merging won't happen, because it won't be in the final 
-    	// processing options.
-    	Boolean.TRUE.equals ( 
-    		Exceptions
-        // Wraps InvalidPluginArgumentException for getUniqueValue() into a RuntimeException   			
-    		.wrap ( ex -> new IllegalArgumentException ( "Plug-in argument error: " + ex.getMessage (), ex ) )
-    		.get ( () -> (Boolean) args.getUniqueValue ( flag ) )
-    	)
-    )
-    .collect ( Collectors.toList () )    
-    .toArray ( new String [ 0 ] );
-    
-    tabParser.setProcessingOptions ( mergeFlags );
+    String[] mergeFlags = (String[]) args.getObjectValueArray ( "mergeOptions" );
+    if ( ! ( mergeFlags == null || mergeFlags.length == 1 && "-".equals ( mergeFlags [ 0 ] ) ) )
+    	// Consider them if non null and non default
+    	tabParser.setProcessingOptions ( mergeFlags );
     
     Subgraph newGraph = tabParser.parse ();
-    int nconcepts = Optional.fromNullable ( newGraph.getConcepts () ).or ( Collections.<ONDEXConcept>emptySet () ).size ();
-    int nrelations = Optional.fromNullable ( newGraph.getRelations () ).or ( Collections.<ONDEXRelation>emptySet () ).size ();
+    int nconcepts = Optional.ofNullable ( newGraph.getConcepts () ).orElse ( Collections.emptySet () ).size ();
+    int nrelations = Optional.ofNullable ( newGraph.getRelations () ).orElse ( Collections.emptySet () ).size ();
 	
     log.info ( String.format ( 
     	"Got %d concepts and %d relations from '%s'", 
     	nconcepts, nrelations, new File ( tabInputPath ).getAbsolutePath () 
     ));
 	}
+	
 
 	public String[] requiresValidators ()
 	{
