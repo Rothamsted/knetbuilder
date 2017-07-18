@@ -11,7 +11,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  *
  */
 @FunctionalInterface
-public interface Mapper<S, O>
+public interface Mapper<S, O> extends Visitable<S>
 {
 	public O map ( S source, ONDEXGraph graph );
 	

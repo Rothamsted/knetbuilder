@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.parser2;
 
 import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**

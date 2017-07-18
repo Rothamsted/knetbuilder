@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.parser2;
 
 import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
  * TODO: comment me!

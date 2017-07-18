@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.parser2;
 
-import java.util.stream.Stream;
+import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**
  * TODO: comment me!
@@ -9,8 +9,6 @@ import java.util.stream.Stream;
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-@FunctionalInterface
-public interface Scanner<S, SI> extends Visitable<S>
+public interface ConceptBasedRelMapper extends RelationMapper<ONDEXConcept, ONDEXConcept> 
 {
-	public Stream<SI> scan ( S source ); 
 }

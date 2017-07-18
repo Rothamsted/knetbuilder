@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.parser2;
 
 import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
