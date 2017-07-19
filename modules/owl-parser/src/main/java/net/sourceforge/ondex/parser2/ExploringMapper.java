@@ -13,7 +13,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-public abstract class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
+public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 {
 	public static class LinkerConfiguration<SI>
 	{
@@ -68,7 +68,7 @@ public abstract class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXCon
 	}
 	
 	private ConceptClassMapper<SI> conceptClassMapper;
-	private ConceptMapper<SI> conceptMapper;
+	private ConceptMapper<SI> abstractConceptMapper;
 	
 	private boolean doMapRootsToConcepts = true;
 	
@@ -89,7 +89,7 @@ public abstract class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXCon
 	protected ONDEXConcept scanTree ( SI rootItem, SI topItem, ONDEXGraph graph )
 	{			
 		ConceptClassMapper<SI> ccmapper = this.getConceptClassMapper ();
-		final ConceptMapper<SI> conceptMapper = this.getConceptMapper ();
+		final ConceptMapper<SI> conceptMapper = this.getAbstractConceptMapper ();
 
 		// Map top items only if required by configuration. 
 		ONDEXConcept rootConcept = this.isDoMapRootsToConcepts () || !rootItem.equals ( topItem )
@@ -136,14 +136,14 @@ public abstract class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXCon
 		this.conceptClassMapper = conceptClassMapper;
 	}
 
-	public ConceptMapper<SI> getConceptMapper ()
+	public ConceptMapper<SI> getAbstractConceptMapper ()
 	{
-		return conceptMapper;
+		return abstractConceptMapper;
 	}
 
 	public void setConceptMapper ( ConceptMapper<SI> conceptMapper )
 	{
-		this.conceptMapper = conceptMapper;
+		this.abstractConceptMapper = conceptMapper;
 	}
 	
 	public List<LinkerConfiguration<SI>> getLinkers ()

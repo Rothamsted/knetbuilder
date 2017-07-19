@@ -29,22 +29,22 @@ public abstract class ScannerMapper<S, SI, OI> implements StreamMapper<S, OI>
 	}
 	
 
-	public Scanner<S, SI> getScanner ()
+	protected Scanner<S, SI> getScanner ()
 	{
 		return scanner;
 	}
 
-	public void setScanner ( Scanner<S, SI> scanner )
+	protected void setScanner ( Scanner<S, SI> scanner )
 	{
 		this.scanner = scanner;
 	}
 
-	public Mapper<SI, OI> getMapper ()
+	protected Mapper<SI, OI> getMapper ()
 	{
 		return mapper;
 	}
 
-	public void setMapper ( Mapper<SI, OI> mapper )
+	protected void setMapper ( Mapper<SI, OI> mapper )
 	{
 		this.mapper = mapper;
 	}

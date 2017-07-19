@@ -9,6 +9,6 @@ import net.sourceforge.ondex.core.ConceptClass;
  * <dl><dt>Date:</dt><dd>8 Jul 2017</dd></dl>
  *
  */
-public abstract class ConceptClassMapper<S> implements Mapper<S, ConceptClass>
+public interface ConceptClassMapper<S> extends Mapper<S, ConceptClass>
 {
 }

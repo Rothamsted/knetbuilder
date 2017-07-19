@@ -8,19 +8,14 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  * TODO: comment me!
  *
  * @author brandizi
- * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
+ * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>
  *
+ * @param <S>
  */
-public abstract class ConceptMapper<S> implements PairMapper<S, ConceptClass, ONDEXConcept> 
+public interface ConceptMapper<S> extends PairMapper<S, ConceptClass, ONDEXConcept>, Visitable<S>
 {
-	private TextMapper<S> idMapper;
-	private TextMapper<S> descriptionMapper;
-	private TextMapper<S> preferredNameMapper;
-	private TextsMapper<S> altNamesMapper;
-	private EvidenceTypeMapper<S> evidenceMapper;
-	private DataSourceMapper<S> dataSourceMapper;
-	
-	public ONDEXConcept map ( S source, ConceptClassMapper<S> ccmapper, ONDEXGraph graph ) {
+	public default ONDEXConcept map ( S source, ConceptClassMapper<S> ccmapper, ONDEXGraph graph ) 
+	{
 		return this.map ( source, ccmapper.map ( source, graph ), graph );
 	}
 

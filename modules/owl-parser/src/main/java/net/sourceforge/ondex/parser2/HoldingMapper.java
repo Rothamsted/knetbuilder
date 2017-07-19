@@ -9,7 +9,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  * <dl><dt>Date:</dt><dd>18 Jul 2017</dd></dl>
  *
  */
-public class HoldingMapper<S, O> extends FilterMapper<S, O> implements Mapper<S, O>
+public abstract class HoldingMapper<S, O> extends FilterMapper<S, O> implements Mapper<S, O>
 {
 	private O mappedValue = null;
 
