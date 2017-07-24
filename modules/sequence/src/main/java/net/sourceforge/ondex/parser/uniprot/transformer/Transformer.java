@@ -92,7 +92,7 @@ public class Transformer {
     private RelationType rtLocIn;
 
     private boolean addContextInformation = false;
-    private GOTreeParser goTree;
+  //  private GOTreeParser goTree;
 
     private HashMap<String, Integer> ecToConcept = new HashMap<String, Integer>();
     private HashMap<String, Integer> omimToConcept = new HashMap<String, Integer>();
@@ -103,11 +103,11 @@ public class Transformer {
 
     private Set<String> umambigProtinMetaData;
 
-    public Transformer(ONDEXGraph graph, ONDEXPluginArguments pa, boolean addContextInformation, GOTreeParser goTree) {
+    public Transformer(ONDEXGraph graph, ONDEXPluginArguments pa, boolean addContextInformation/*, GOTreeParser goTree*/) {
         this.graph = graph;
         this.pa = pa;
         this.addContextInformation = addContextInformation;
-        this.goTree = goTree;
+    //    this.goTree = goTree;
         
         MetaDataUtil mdu = new MetaDataUtil(graph.getMetaData(), null);
         ConceptClass ccThing = graph.getMetaData().getConceptClass("Thing");
@@ -275,7 +275,7 @@ public class Transformer {
                         lookforECAccession(value, dataSource, proteinConcept);
                     } else if (dataSource.getId().equals(MetaData.CV_OMIM)) {
                         lookforOMIMAccession(value, proteinConcept);
-                    } else if (dataSource.getId().equals(MetaData.CV_GO) && goTree != null) {
+                    } else if (dataSource.getId().equals(MetaData.CV_GO) /*&& goTree != null*/) {
                         lookforGOAccessions(dbLink, proteinConcept);
                     } else if (umambigProtinMetaData.contains(dataSource.getId())) {
                     	if(dataSource.getId().equals(MetaData.CV_UniProt)){
@@ -455,18 +455,19 @@ public class Transformer {
             RelationType rt = null;
 
             int id = Integer.parseInt(value.substring(3));
-            int namespace = goTree.getNamespaceOfTerm(id);
+            /*int*/String namespace = dblink.getNamespace();// goTree.getNamespaceOfTerm(id);
+            // namespace now retrieved as a dblink attribute instead of getting numeric codes from goTree via OBO file.
 
             switch (namespace) {
-                case GoTerm.DOMAIN_BIOLOGICAL_PROCESS:
+                case "P"/*GoTerm.DOMAIN_BIOLOGICAL_PROCESS*/:
                     cc = ccBioProc;
                     rt = rtHasPart;
                     break;
-                case GoTerm.DOMAIN_MOLECULAR_FUNCTION:
+                case "F"/*GoTerm.DOMAIN_MOLECULAR_FUNCTION*/:
                     cc = ccMolFunc;
                     rt = rtHasFunc;
                     break;
-                case GoTerm.DOMAIN_CELLULAR_COMPONENT:
+                case "C"/*GoTerm.DOMAIN_CELLULAR_COMPONENT*/:
                     cc = ccCelComp;
                     rt = rtLocIn;
                     break;

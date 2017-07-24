@@ -24,9 +24,9 @@ public interface ArgumentNames {
 	public final static String HIDE_LARGE_SCALE_PUBLICATIONS_ARG = "HideLargeScaleRef";
 	public final static String HIDE_LARGE_SCALE_PUBLICATIONS_ARG_DESC = "True,false. Hide large scale references (publications).";
 
-	public final static String GO_OBO_FILE_ARG = "GoFile";
+	/*public final static String GO_OBO_FILE_ARG = "GoFile";
 	public final static String GO_OBO_FILE_ARG_DESC = "GO OBO file. This will link proteins with proper GO concepts of ConcepClass MolFunc, BioProc and CelComp. If not specified GO accessions are part of proteins.";
-
+*/
 }
 
 

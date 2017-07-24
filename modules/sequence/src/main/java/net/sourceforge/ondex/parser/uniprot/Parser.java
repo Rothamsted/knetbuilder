@@ -16,7 +16,7 @@ import java.util.zip.GZIPInputStream;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
+//import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DataURL;
@@ -84,9 +84,8 @@ public class Parser extends ONDEXParser
     private static Parser instance;
 
     public boolean inManuallyCuratedFile = false;
+    // go tree parser removed
 
-    private GOTreeParser goTree;
-    
 	private int itemParsedCount = 0;
 	private int skippedCount = 0;
 	private int debugOutputSize = 10000;
@@ -128,20 +127,20 @@ public class Parser extends ONDEXParser
      */
     private void init() throws InvalidPluginArgumentException {
 
-        if (args.getUniqueValue(ArgumentNames.GO_OBO_FILE_ARG) != null) {
+     /*   if (args.getUniqueValue(ArgumentNames.GO_OBO_FILE_ARG) != null) {
             String goOboFile = (String) args
                     .getUniqueValue(ArgumentNames.GO_OBO_FILE_ARG);
+            
             try {
                 this.goTree = new GOTreeParser(goOboFile);
-                goTree.parseOboFile();
+                goTree.parseOboFile(); // Note: now replaced with parsing only the Uniprot file for GO entries as well
                 System.out.println("GO index created with "
                         + goTree.getNumEntries() + " entries");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        this.transformer = new Transformer(graph, args, false, goTree);
+        }*/
+        this.transformer = new Transformer(graph, args, false/*, goTree*/);
 
         delegates.put("dbReference", new DbReferenceBlockParser(filter
                 .get(FilterEnum.DatabaseReferenceFilter)));
@@ -358,13 +357,13 @@ public class Parser extends ONDEXParser
                 ArgumentNames.HIDE_LARGE_SCALE_PUBLICATIONS_ARG,
                 ArgumentNames.HIDE_LARGE_SCALE_PUBLICATIONS_ARG_DESC, false,
                 true);
-        FileArgumentDefinition goFile = new FileArgumentDefinition(
+      /*  FileArgumentDefinition goFile = new FileArgumentDefinition(
                 ArgumentNames.GO_OBO_FILE_ARG,
-                ArgumentNames.GO_OBO_FILE_ARG_DESC, false, true, false, false);
+                ArgumentNames.GO_OBO_FILE_ARG_DESC, false, true, false, false);*/
         FileArgumentDefinition inputDir = new FileArgumentDefinition(
                 FileArgumentDefinition.INPUT_FILE,
                 "UniProt XML file", true, true, false, false);
-        return new ArgumentDefinition<?>[]{inputDir, taxId, goFile, reference,
+        return new ArgumentDefinition<?>[]{inputDir, taxId, /*goFile,*/ reference,
                 accessions, accessionFile, contexts, hideLargeScaleRefs};
     }
 
