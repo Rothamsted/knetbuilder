@@ -11,6 +11,7 @@ public class DbLink {
 	private String dbName;
 	private String accession;
 	private Set<String> evidences = null;
+	private String namespace = null;
 
 	public String getAccession() {
 		return accession;
@@ -44,6 +45,14 @@ public class DbLink {
 			evidences = new HashSet<String>(1);
 		}
 		return evidences;
+	}
+
+        public void setNamespace(String namespace) {
+		this.namespace= namespace;
+	}
+
+	public String getNamespace() {
+		return namespace;
 	}
 
 	/*

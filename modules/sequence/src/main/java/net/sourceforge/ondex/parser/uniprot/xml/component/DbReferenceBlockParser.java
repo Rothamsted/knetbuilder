@@ -55,8 +55,11 @@ public class DbReferenceBlockParser extends AccessionBlockParser {
                     }
                 }
                 if (property_type != null) {
-                	if (property_type.equalsIgnoreCase("evidence")) {
-                		dblink.addEvidence(property_value);
+                    if (property_type.equalsIgnoreCase("evidence")) {
+                	 dblink.addEvidence(property_value);
+                	} 
+                    else if (property_type.equalsIgnoreCase("term")) { // get namespace
+                	 dblink.setNamespace(String.valueOf(property_value.charAt(0)));
                 	} 
                 	
                 	//105092739     <property type="protein sequence ID" value="ENSP00000269305"/>
