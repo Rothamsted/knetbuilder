@@ -6,7 +6,8 @@ import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 
 /**
- * TODO: comment me!
+ * Maps anything to constant {@link DataSource}, which can be defined in a Spring configuration file, by means of
+ * {@link DataSourcePrototype}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>

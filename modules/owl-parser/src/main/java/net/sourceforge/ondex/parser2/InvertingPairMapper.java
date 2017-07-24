@@ -3,13 +3,19 @@ package net.sourceforge.ondex.parser2;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * A utility {@link PairMapper}, which of {@link #map(Object, Object, ONDEXGraph) map() method} passes its two source 
+ * items to a {@link #getBaseMapper() base mapper} in reverse order.
+ * 
+ * An example where this can be useful is {@link ExploringMapper}, which, in case of top-bottom exploration of a tree
+ * data source structure, invokes its {@link ExploringMapper.LinkerConfiguration#getMapper() relation mappers} passing  
+ * first the parent node and then the child. If a mapper maps  a relation like 'is a', you want to wrap it into this
+ * inverter (thus making 'is a' going from child to parent) and then configure the explorer with it.   
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>17 Jul 2017</dd></dl>
  *
  */
-public class InvertingPairMapper<S1, S2, O> extends FilterPairMapper<S1, S2, O>
+public class InvertingPairMapper<S1, S2, O> extends DecoratingPairMapper<S1, S2, O>
 {
 	public InvertingPairMapper () {
 		super ();

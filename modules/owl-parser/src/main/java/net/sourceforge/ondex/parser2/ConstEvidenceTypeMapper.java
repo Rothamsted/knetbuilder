@@ -8,7 +8,8 @@ import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
 
 /**
- * TODO: comment me!
+ * Maps anything to constant {@link EvidenceType}, which can be defined in a Spring configuration file, by means of
+ * {@link EvidenceTypePrototype}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>

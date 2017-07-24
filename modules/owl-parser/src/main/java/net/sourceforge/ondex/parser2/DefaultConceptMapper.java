@@ -17,13 +17,16 @@ import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
- * TODO: comment me!
+ * The default concept mapper employs a set of mappers to the constituents of an {@link ONDEXConcept} and create a 
+ * new concept using the results from these mappers. 
+ * 
+ * This should be enough in the most common cases.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-public abstract class DefaultConceptMapper<S> implements ConceptMapper<S> 
+public class DefaultConceptMapper<S> implements ConceptMapper<S> 
 {
 	private TextMapper<S> idMapper;
 	private TextMapper<S> descriptionMapper;

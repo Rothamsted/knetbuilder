@@ -1,9 +1,10 @@
 package net.sourceforge.ondex.parser2;
 
+import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 
 /**
- * TODO: comment me!
+ * Wrapper interfaces that maps a {@link DataSource} mapper.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>6 Jun 2017</dd></dl>

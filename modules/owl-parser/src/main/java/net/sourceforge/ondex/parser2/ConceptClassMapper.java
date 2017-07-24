@@ -3,7 +3,7 @@ package net.sourceforge.ondex.parser2;
 import net.sourceforge.ondex.core.ConceptClass;
 
 /**
- * TODO: comment me!
+ * Wrapper interfaces that maps a {@link ConceptClass} mapper.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>8 Jul 2017</dd></dl>

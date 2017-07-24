@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * A composite mapper joins the results of multiple {@link StreamMapper}s.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>

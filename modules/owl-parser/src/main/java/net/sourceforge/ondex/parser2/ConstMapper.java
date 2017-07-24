@@ -3,7 +3,8 @@ package net.sourceforge.ondex.parser2;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * A constant mapper. This returns always the same value as result of mapping and can be used in Spring config files, 
+ * to define constants like fixed ONDEX evidence or ONDEX data sources.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>

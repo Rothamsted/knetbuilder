@@ -2,11 +2,13 @@ package net.sourceforge.ondex.plugins.tab_parser_2;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import com.google.common.base.Optional;
-
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -27,6 +29,7 @@ import net.sourceforge.ondex.tools.tab.importer.PathParser;
  * <dl><dt>Date:</dt><dd>30 Nov 2016</dd></dl>
  *
  */
+@Status( status = StatusType.STABLE )
 public class TabParser2 extends ONDEXParser
 {
   private Logger log = Logger.getLogger ( this.getClass() );
@@ -71,8 +74,8 @@ public class TabParser2 extends ONDEXParser
     PathParser tabParser = ConfigParser.parseConfigXml ( tabConfigXmlPath, graph, tabInputPath );
     
     Subgraph newGraph = tabParser.parse ();
-    int nconcepts = Optional.fromNullable ( newGraph.getConcepts () ).or ( Collections.<ONDEXConcept>emptySet () ).size ();
-    int nrelations = Optional.fromNullable ( newGraph.getRelations () ).or ( Collections.<ONDEXRelation>emptySet () ).size ();
+    int nconcepts = Optional.ofNullable ( newGraph.getConcepts () ).map ( Set::size ).orElse ( 0 );
+    int nrelations = Optional.ofNullable ( newGraph.getRelations () ).map ( Set::size ).orElse ( 0 );
 	
     log.info ( String.format ( 
     	"Got %d concepts and %d relations from '%s'", 

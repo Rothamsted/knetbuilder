@@ -8,7 +8,8 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * The default accession mapper takes a couple of mappers to the constituents of an {@link ONDEXConcept} and uses them
+ * to create a new accession. This is expected to be the accession mapper that you need in most common cases. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>

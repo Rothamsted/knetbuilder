@@ -1,38 +1,42 @@
 package net.sourceforge.ondex.parser2;
 
-import java.util.stream.Stream;
-
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * The default {@link AccessionsMapper} is based on {@link ScannerPairMapper}, that is, a {@link Scanner} decomposes an 
+ * initial data source into smaller items, each of which is mapped to an {@link ONDEXConcept} by means of 
+ * a {@link ConceptAccession single-accession mapper}. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>
  *
  */
-public class DefaultAccessionsMapper<S, SI> implements AccessionsMapper<S>
-{
-	private Scanner<S, SI> scanner;
-	private AccessionMapper<SI> accessionMapper;
-	
-	@Override
-	public Stream<ConceptAccession> map ( S src, ONDEXConcept concept, ONDEXGraph graph )
+public class DefaultAccessionsMapper<S, SI> 
+  extends ScannerPairMapper<S, SI, ONDEXConcept, ConceptAccession> 
+  implements AccessionsMapper<S>
+{	
+	public DefaultAccessionsMapper () 
 	{
-		return scanner.scan ( src )
-		.map ( si -> accessionMapper.map ( si, concept, graph ) );
+		this ( null, null );
+	}
+	
+	
+	@SuppressWarnings ( "unchecked" )
+	public DefaultAccessionsMapper ( Scanner<S, SI> scanner, AccessionMapper<S> accessionMapper )
+	{
+		super ( scanner, (AccessionMapper<SI>) accessionMapper );
 	}
 
+	
 	public AccessionMapper<SI> getAccessionMapper ()
 	{
-		return accessionMapper;
+		return (AccessionMapper<SI>) super.getMapper ();
 	}
 
 	public void setAccessionMapper ( AccessionMapper<SI> accessionMapper )
 	{
-		this.accessionMapper = accessionMapper;
+		super.setMapper ( (AccessionMapper<SI>) accessionMapper );
 	}
 
 	public Scanner<S, SI> getScanner ()

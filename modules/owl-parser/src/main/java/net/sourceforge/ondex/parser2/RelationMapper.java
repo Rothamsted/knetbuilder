@@ -3,7 +3,9 @@ package net.sourceforge.ondex.parser2;
 import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**
- * TODO: comment me!
+ * A marker of a mapper that produces new {@link ONDEXRelation} starting from two data source items.
+ * 
+ * @see ConceptBasedRelMapper.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>17 Jul 2017</dd></dl>

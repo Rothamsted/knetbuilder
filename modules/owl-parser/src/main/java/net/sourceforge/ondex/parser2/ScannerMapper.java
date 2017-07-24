@@ -5,7 +5,9 @@ import java.util.stream.Stream;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * A facility that combines a {@link Scanner} and passes the source items SI that this returns to an 
+ * {@link Mapper item mapper}. Hence, each source item resulting from the scan is mapped to an ONDEX element and 
+ * all the mapped elements are returned by the resulting Stream.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>7 Jul 2017</dd></dl>
