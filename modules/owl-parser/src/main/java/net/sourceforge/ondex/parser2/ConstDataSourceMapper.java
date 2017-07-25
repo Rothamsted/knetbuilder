@@ -15,6 +15,15 @@ import net.sourceforge.ondex.core.utils.DataSourcePrototype;
  */
 public class ConstDataSourceMapper<S> extends ConstMapper<S, DataSourcePrototype, DataSource>
 {
+	public ConstDataSourceMapper () {
+		this ( null );
+	}
+
+	public ConstDataSourceMapper ( DataSourcePrototype value ) {
+		super ( value );
+	}
+
+	
 	@Override
 	public DataSource map ( S source, ONDEXGraph graph )
 	{

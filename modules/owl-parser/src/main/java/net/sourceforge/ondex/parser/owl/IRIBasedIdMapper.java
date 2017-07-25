@@ -5,7 +5,9 @@ import java.net.URLDecoder;
 
 import org.apache.jena.ontology.OntClass;
 
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.SimpleIdMapper;
+import net.sourceforge.ondex.parser2.TextMapper;
 
 /**
  * An identifier mapper that is based on the extraction of the last part of an IRI/URI. For instance, it gets 
@@ -15,12 +17,12 @@ import net.sourceforge.ondex.parser.SimpleIdMapper;
  * <dl><dt>Date:</dt><dd>6 Apr 2017</dd></dl>
  *
  */
-public class IRIBasedIdMapper implements SimpleIdMapper<OntClass>
+public class IRIBasedIdMapper implements TextMapper<OntClass>
 {
 	private String splitRegEx = "[#/]";
 	
 	@Override
-	public String map ( OntClass ontCls )
+	public String map ( OntClass ontCls, ONDEXGraph graph )
 	{
 		// TODO: null
 		String iri= ontCls.getURI (); 

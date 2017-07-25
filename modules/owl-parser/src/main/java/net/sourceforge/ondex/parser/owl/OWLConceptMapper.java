@@ -3,8 +3,8 @@ package net.sourceforge.ondex.parser.owl;
 import java.util.Collections;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ontology.OntClass;
-import org.apache.jena.ontology.OntModel;
 
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -20,11 +20,8 @@ import net.sourceforge.ondex.parser.SimpleIdMapper;
 import net.sourceforge.ondex.parser.SimpleLabelMapper;
 
 /**
- * Maps an owl:Class to an {@link ONDEXConcept}. This is similar to {@link OWLConceptClassMapper}, except it
- * hasn't any root IRI property, and has {@link #getConceptClassMapper()} instead, to associate every mapped
- * ONDEX concept to a concept class. Moreover, an ONDEX concept has additional attributes (e.g., names) and 
- * further relations (in addition to {@link OwlRecursiveRelMapper} such as {@link OwlSubClassRelMapper}) that are 
- * followed from the concept itself ({@link #getConceptRelationMappers()}).
+ * Maps an owl:Class to an {@link ONDEXConcept}. Uses several helper mappers to map concept elements such as
+ * names or accessions. They can be configured via Spring (see existing XMLs).
  *  
  * @author brandizi
  * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
@@ -32,8 +29,6 @@ import net.sourceforge.ondex.parser.SimpleLabelMapper;
  */
 public class OWLConceptMapper implements ConceptMapper<OntClass>
 {
-	private OWLConceptClassMapper conceptClassMapper;
-	
 	private SimpleIdMapper<OntClass> idMapper;
 	private SimpleLabelMapper<OntClass> descriptionMapper;
 
@@ -46,26 +41,32 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	private EvidenceTypePrototype evidenceTypePrototype = EvidenceTypePrototype.IMPD;
 	
 	private DataSourcePrototype dataSourcePrototype = DataSourcePrototype.OWL_PARSER;
-
-
+	
+	
 	/**
 	 * @see above.
 	 */
 	@Override
-	public ONDEXConcept map ( OntClass ontCls, ONDEXGraph graph )
-	{
-		OntModel model = ontCls.getOntModel ();
+	public synchronized ONDEXConcept map ( OntClass ontCls, ONDEXElemWrapper<ConceptClass> ccw )
+	{		
 		String conceptId = idMapper.map ( ontCls );
-		String description = descriptionMapper.map ( ontCls );
+		String description = StringUtils.trimToEmpty ( descriptionMapper.map ( ontCls ) );
 		
-		ConceptClass cc = this.conceptClassMapper.map ( model, graph );
+		ConceptClass cc = ccw.getElement ();
+		ONDEXGraph graph = ccw.getGraph ();
 		
 		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
 		
 		EvidenceType evidence = graphw.getEvidenceType ( this.getEvidenceTypePrototype () );
 		DataSource ds = graphw.getDataSource ( this.getDataSourcePrototype () );
 		
-		ONDEXConcept concept = graphw.getConcept ( conceptId, "", description, ds, cc, evidence );
+		ONDEXConcept concept = graphw.getConcept ( conceptId );
+
+		// We've already visited this, so let's stop here and let's prevent loops
+		if ( concept != null ) return concept;
+		
+		// This will certainly create it, a bit redundant, but it's OK.
+		concept = graphw.getConcept ( conceptId, "", description, ds, cc, evidence );
 
 		if ( this.preferredNameMapper != null )
 		{
@@ -94,19 +95,8 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 		
 		return concept;
 	}
-
-	public OWLConceptClassMapper getConceptClassMapper ()
-	{
-		return conceptClassMapper;
-	}
-
-	/**
-	 * If this remains null, it's set by the component using it, e.g., @see the {@link OwlRecursiveRelMapper}.
-	 */	
-	public void setConceptClassMapper ( OWLConceptClassMapper conceptClassMapper )
-	{
-		this.conceptClassMapper = conceptClassMapper;
-	}
+	
+	
 
 	/**
 	 * The ID mapper that is used to create an {@link ConceptClass#getId() identifier for the mapped concept class}.
@@ -208,5 +198,5 @@ public class OWLConceptMapper implements ConceptMapper<OntClass>
 	{
 		this.dataSourcePrototype = dataSourcePrototype;
 	}
-	
+
 }

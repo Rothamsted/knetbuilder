@@ -1,12 +1,6 @@
 package net.sourceforge.ondex.parser2;
 
-import static org.apache.commons.lang3.StringUtils.trimToEmpty;
-
-import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -14,7 +8,6 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
  * The default concept mapper employs a set of mappers to the constituents of an {@link ONDEXConcept} and create a 

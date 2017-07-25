@@ -18,7 +18,6 @@ import net.sourceforge.ondex.parser.RelationsMapper;
  */
 public abstract class OWLRelMapper<S, OT> implements RelationsMapper<S, OT>
 {
-	private OWLConceptClassMapper conceptClassMapper;
 	private OWLConceptMapper conceptMapper;
 	private RelationTypePrototype relationTypePrototype;
 	private EvidenceTypePrototype evidenceTypePrototype;
@@ -49,25 +48,12 @@ public abstract class OWLRelMapper<S, OT> implements RelationsMapper<S, OT>
 	}
 
 	/**
-	 * Used to map the root class and know the top level in the source ontology to start from.
-	 */
-	public OWLConceptClassMapper getConceptClassMapper ()
-	{
-		return this.conceptClassMapper;
-	}
-
-	public void setConceptClassMapper ( OWLConceptClassMapper conceptClassMapper )
-	{
-		this.conceptClassMapper = conceptClassMapper;
-	}
-
-	/**
 	 * Every new owl:Class that is met by {@link #map(OntClass, ONDEXGraph)} is mapped to an {@link ONDEXConcept}
 	 * by means of this mapper.
+	 * 
 	 */
-	public OWLConceptMapper getConceptMapper ()
-	{
-		return conceptMapper;
+	public OWLConceptMapper getConceptMapper () {
+		return this.conceptMapper;
 	}
 
 	public void setConceptMapper ( OWLConceptMapper conceptMapper )

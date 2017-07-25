@@ -1,10 +1,8 @@
 package net.sourceforge.ondex.parser2;
 
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
 
 /**

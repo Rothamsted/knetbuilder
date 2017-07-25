@@ -24,6 +24,9 @@ import net.sourceforge.ondex.core.RelationType;
  * ONDEX entities. Methods are similar to createXXX methods in the {@link ONDEXGraph} interface, each method
  * calls the corresponding underlining creation method, but only if the required object hasn't been created yet.</p>
  * 
+ * <p>The version of getXXX() that receives only the type/key parameters simply return the corresponding object in the
+ * cache, if it is present, null otherwise</p>
+ * 
  * <p>Clearly, this is based on an internal static set of caches, that can be on a per-graph basis 
  * (see {@link #getInstance(ONDEXGraph)}).</p>
  * 
@@ -67,7 +70,34 @@ public class CachedGraphWrapper
 		);
 	}
 
-	
+	public ConceptClass getConceptClass ( ConceptClassPrototype proto )
+	{
+		try 
+		{
+			// Let's see if it has a parent
+			if ( proto.getParent () == null )
+			{
+				// Or a prototype to build it. In case of loops, this will lead to stack overflow
+				ConceptClassPrototype parentProto = proto.getParentPrototype ();
+				if ( parentProto != null )
+						proto.setParent ( this.getConceptClass ( parentProto ) );
+			}
+			
+			return this.cacheGet ( 
+				ConceptClass.class, proto.getId (), 
+					() -> this.graph.getMetaData ().getFactory ().createConceptClass ( 
+					proto.getId (), proto.getFullName (), proto.getDescription (), 
+					proto.getParent () 
+				)
+			);
+		}
+		catch ( StackOverflowError ex ) 
+		{
+			log.error ( "Stackoverflow error while creating the concept class '{}'. Do you have circular references?", proto.getId () );
+			throw ex;
+		}
+	}
+
 	public ONDEXConcept getConcept (
 		String id, String annotation, String description, DataSource ds, ConceptClass conceptClass, EvidenceType evidence
 	)
@@ -78,6 +108,9 @@ public class CachedGraphWrapper
 		);
 	}
 	
+	public ONDEXConcept getConcept ( String id ) {
+		return this.cacheGet ( ONDEXConcept.class, id );
+	}
 	
 	public RelationType getRelationType ( 
 		String id, boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitive 
@@ -114,7 +147,7 @@ public class CachedGraphWrapper
 		}
 		catch ( StackOverflowError ex ) 
 		{
-			log.error ( "Stackoverflow error while creating relation '{}'. Do you have circular references?", proto.getId () );
+			log.error ( "Stack Overflow error while creating relation '{}'. Do you have circular references?", proto.getId () );
 			throw ex;
 		}
 	}
@@ -174,7 +207,9 @@ public class CachedGraphWrapper
 		);
 	}	
 	
-	
+	/**
+	 * Facility to return cached objects, or, create and return them, if not already in the cache. 
+	 */	
 	@SuppressWarnings ( "unchecked" )
 	private <V> V cacheGet ( Class<? super V> type, String key, Supplier<V> newValueGenerator )
 	{
@@ -185,4 +220,12 @@ public class CachedGraphWrapper
 		return result;
 	}
 
+	/**
+	 * Like {@link #cacheGet(Class, String, Supplier)}, but just returns null if the type/key is not in the cache.  
+	 */
+	@SuppressWarnings ( "unchecked" )	
+	private <V> V cacheGet ( Class<? super V> type, String key )
+	{
+		return (V) this.cache.get ( type, key );
+	}
 }

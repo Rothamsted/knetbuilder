@@ -20,6 +20,9 @@
  * The components defined here are designed to allow for the configuration of a parser by means of a Spring Bean configuration
  * file. The OWL parser is a good starting point to see that in action. 
  *
+ * TODO: we still need to define the skeleton component to realise a parser that scans pair of concepts/relations, such 
+ * as a CSV parser.
+ *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *

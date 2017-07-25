@@ -37,25 +37,20 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 	{
 		private Scanner<SI, SI> scanner;
 		private RelationMapper<SI, SI> mapper;
-		private boolean excludeFirstLevel = false;
 		
+		public LinkerConfiguration () {
+			this ( null, null );
+		}
+
 		/**
 		 * This is used to represent the components and options needed to discover nodes linked to others. See the class's
 		 * method comments for details.
 		 */
-		public LinkerConfiguration ( Scanner<SI, SI> scanner, RelationMapper<SI, SI> mapper, boolean excludeFirstLevel )
-		{
-			super ();
-			this.scanner = scanner;
-			this.mapper = mapper;
-			this.excludeFirstLevel = excludeFirstLevel;
-		}
-
 		public LinkerConfiguration ( Scanner<SI, SI> scanner, RelationMapper<SI, SI> mapper )
 		{
 			super ();
-			this.scanner = scanner;
-			this.mapper = mapper;
+			this.setScanner ( scanner );
+			this.setMapper ( mapper );
 		}
 
 		/**
@@ -90,24 +85,6 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 		public void setMapper ( RelationMapper<SI, SI> mapper )
 		{
 			this.mapper = mapper;
-		}
-
-		/**
-		 * If this is true, the links between the nodes returned by the {@link ExploringMapper#getRootsScanner() roots scanner}
-		 * and the immediate related nodes found by this linker are not mapped to an {@link ONDEXRelation}. The root nodes 
-		 * are just used to create {@link ConceptClass}es to be used to map concepts. This is useful in tree-based mappers, 
-		 * where the root nodes are supposed to provide the category of concepts they contain in the sub-tree, for instance
-		 * you might decide that the root class 'Biological Process' in GeneOntology corresponds to a concept class, to which
-		 * all the biological processes are associated as concepts.
-		 */
-		public boolean isExcludeFirstLevel ()
-		{
-			return excludeFirstLevel;
-		}
-
-		public void setExcludeFirstLevel ( boolean excludeFirstLevel )
-		{
-			this.excludeFirstLevel = excludeFirstLevel;
 		}
 	}
 	
@@ -160,9 +137,11 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 				
 			RelationMapper<SI, SI> relmap = linker.getMapper ();
 			
+			// so...
 			targetsScanner
-			.scan ( rootItem )
-			.filter ( targetsScanner::isVisited )
+			.scan ( rootItem ) // get related nodes
+			.filter ( targetsScanner::isVisited ) // skip those already processed
+			// and process the remaining ones recursively
 			.forEach ( targetItem ->
 			{
 				ONDEXConcept targetConcept = conceptMapper.map ( targetItem, ccmapper, graph );
@@ -213,6 +192,15 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 		this.linkers = linkers;
 	}
 
+	/**
+	 * If this is true, the links between the nodes returned by the {@link ExploringMapper#getRootsScanner() roots scanner}
+	 * must not be mapped to {@link ONDEXConcept concepts } and the links from this to the immediate related nodes found by a 
+	 * {@link #getLinkers() linker} must not be mapped to an {@link ONDEXRelation}. If that is the case, the root nodes 
+	 * are just used to create {@link ConceptClass}es to be used to map concepts and to kick-start the exploration.
+	 * This is useful in tree-based mappers, where the root nodes are supposed to provide the category of concepts they 
+	 * contain in the sub-tree, for instance you might decide that the root class 'Biological Process' in GeneOntology 
+	 * corresponds to a concept class, to which all the biological processes are associated as concepts.
+	 */
 	public boolean isDoMapRootsToConcepts ()
 	{
 		return doMapRootsToConcepts;

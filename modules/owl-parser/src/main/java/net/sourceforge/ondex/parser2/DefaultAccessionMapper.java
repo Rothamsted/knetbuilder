@@ -17,14 +17,14 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  */
 public class DefaultAccessionMapper<S> implements AccessionMapper<S>
 {
-	TextMapper<S> accessionMapper;
+	TextMapper<S> accessionValueMapper;
 	DataSourceMapper<S> dataSourceMapper;
 	Mapper<S, Boolean> ambiguityMapper = new ConstMapper<S, Boolean, Boolean> ( true );
 	
 	@Override
 	public ConceptAccession map ( S src, ONDEXConcept concept, ONDEXGraph graph )
 	{
-		String accession = this.getAccessionMapper ().map ( src, graph );
+		String accession = this.getAccessionValueMapper ().map ( src, graph );
 		
 		DataSource dataSrc = 
 			Optional.ofNullable ( this.getDataSourceMapper () )
@@ -40,14 +40,14 @@ public class DefaultAccessionMapper<S> implements AccessionMapper<S>
 		return concept.createConceptAccession ( accession, dataSrc, isAmbiguous );
 	}
 
-	public TextMapper<S> getAccessionMapper ()
+	public TextMapper<S> getAccessionValueMapper ()
 	{
-		return accessionMapper;
+		return accessionValueMapper;
 	}
 	
-	public void setAccessionMapper ( TextMapper<S> accessionMapper )
+	public void setAccessionValueMapper ( TextMapper<S> accessionValueMapper )
 	{
-		this.accessionMapper = accessionMapper;
+		this.accessionValueMapper = accessionValueMapper;
 	}
 	
 	public DataSourceMapper<S> getDataSourceMapper ()

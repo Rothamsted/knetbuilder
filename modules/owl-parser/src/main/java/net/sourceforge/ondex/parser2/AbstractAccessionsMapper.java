@@ -12,39 +12,39 @@ import net.sourceforge.ondex.core.ONDEXConcept;
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>
  *
  */
-public class DefaultAccessionsMapper<S, SI> 
+public abstract class AbstractAccessionsMapper<S, SI> 
   extends ScannerPairMapper<S, SI, ONDEXConcept, ConceptAccession> 
   implements AccessionsMapper<S>
 {	
-	public DefaultAccessionsMapper () 
+	public AbstractAccessionsMapper () 
 	{
 		this ( null, null );
 	}
 	
 	
 	@SuppressWarnings ( "unchecked" )
-	public DefaultAccessionsMapper ( Scanner<S, SI> scanner, AccessionMapper<S> accessionMapper )
+	protected AbstractAccessionsMapper ( Scanner<S, SI> scanner, AccessionMapper<S> accessionMapper )
 	{
 		super ( scanner, (AccessionMapper<SI>) accessionMapper );
 	}
 
 	
-	public AccessionMapper<SI> getAccessionMapper ()
+	protected AccessionMapper<SI> getAccessionMapper ()
 	{
 		return (AccessionMapper<SI>) super.getMapper ();
 	}
 
-	public void setAccessionMapper ( AccessionMapper<SI> accessionMapper )
+	protected void setAccessionMapper ( AccessionMapper<SI> accessionMapper )
 	{
 		super.setMapper ( (AccessionMapper<SI>) accessionMapper );
 	}
 
-	public Scanner<S, SI> getScanner ()
+	protected Scanner<S, SI> getScanner ()
 	{
 		return scanner;
 	}
 
-	public void setScanner ( Scanner<S, SI> scanner )
+	protected void setScanner ( Scanner<S, SI> scanner )
 	{
 		this.scanner = scanner;
 	}

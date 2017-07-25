@@ -36,16 +36,20 @@ public abstract class OWLSimpleConceptRelMapper extends OWLRelMapper<OntClass, O
 		CachedGraphWrapper graphw = CachedGraphWrapper.getInstance ( graph );
 		
 		OWLConceptMapper conceptMapper = this.getConceptMapper ();
-		if ( conceptMapper.getConceptClassMapper () == null ) 
-			conceptMapper.setConceptClassMapper ( this.getConceptClassMapper () );		
 		
 		RelationType relType = graphw.getRelationType ( this.getRelationTypePrototype () );
 		EvidenceType evidence = graphw.getEvidenceType ( this.getEvidenceTypePrototype () );
-	
-		return this.getRelatedClasses ( fromOntCls )
-		.map ( targetOntCls -> CachedGraphWrapper.getInstance ( graph ).getRelation ( 
-			concept, conceptMapper.map ( targetOntCls, graph ), relType, evidence 
-		));
+		
+		return this
+		.getRelatedClasses ( fromOntCls )
+		.map ( targetOntCls -> 
+		{
+			synchronized ( this ) {
+				return CachedGraphWrapper.getInstance ( graph ).getRelation ( 
+					concept, conceptMapper.map ( targetOntCls, ONDEXElemWrapper.of ( concept.getOfType (), graph ) ), relType, evidence 
+				);
+			}
+		});
 	}	
 	
 	protected abstract Stream<OntClass> getRelatedClasses ( OntClass fromCls );
