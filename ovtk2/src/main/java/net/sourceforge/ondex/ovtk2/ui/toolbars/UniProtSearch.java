@@ -211,7 +211,7 @@ public class UniProtSearch implements Monitorable {
 		// setup UniProt parser arguments and transformer
 		ONDEXPluginArguments args = new ONDEXPluginArguments(new ArgumentDefinition<?>[] { new BooleanArgumentDefinition(ArgumentNames.HIDE_LARGE_SCALE_PUBLICATIONS_ARG, ArgumentNames.HIDE_LARGE_SCALE_PUBLICATIONS_ARG_DESC, false, true) });
 		args.addOption(ArgumentNames.HIDE_LARGE_SCALE_PUBLICATIONS_ARG, Boolean.TRUE);
-		Transformer transformer = new Transformer(graph, args, false, null);
+		Transformer transformer = new Transformer(graph, args, false);
 
 		// for xml parsing
 		WstxInputFactory factory = (WstxInputFactory) WstxInputFactory.newInstance();
