@@ -6,7 +6,7 @@
 
    <groupId>net.sourceforge.ondex</groupId>
    <artifactId>ondex-full</artifactId>
-   <version>1.1.1-SNAPSHOT</version>
+   <version>1.2-TEST</version>
    <packaging>pom</packaging>
 
    <name>ONDEX POM for Full Build</name>
@@ -299,6 +299,26 @@
             </plugins>
          </build>
       </profile>
+      
+			<profile>
+				<id>deploy-brandizi</id>
+				<activation><activeByDefault>false</activeByDefault></activation>
+				
+				<distributionManagement>
+			
+			    <snapshotRepository>
+			    	<id>marcobrandizi.info</id>
+						<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+			    </snapshotRepository>
+			
+			    <repository>
+			    	<id>marcobrandizi.info</id>
+						<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+			    </repository>
+					
+				</distributionManagement>	
+			
+			</profile>      
    </profiles>
 
 	 <repositories>
