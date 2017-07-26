@@ -6,7 +6,7 @@
    <parent>
       <artifactId>ondex-opt</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>1.2-RC</version>
+      <version>1.2.1-SNAPSHOT</version>
    </parent>
 
    <artifactId>modules-opt</artifactId>
