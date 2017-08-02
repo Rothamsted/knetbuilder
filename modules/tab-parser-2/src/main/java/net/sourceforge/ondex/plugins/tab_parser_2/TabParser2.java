@@ -7,10 +7,9 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
-import com.machinezoo.noexception.CheckedExceptionHandler;
-import com.machinezoo.noexception.Exceptions;
-
 import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
@@ -30,6 +29,7 @@ import net.sourceforge.ondex.tools.tab.importer.PathParser;
  * <dl><dt>Date:</dt><dd>30 Nov 2016</dd></dl>
  *
  */
+@Status( status = StatusType.STABLE )
 public class TabParser2 extends ONDEXParser
 {		
   private Logger log = Logger.getLogger ( this.getClass() );
