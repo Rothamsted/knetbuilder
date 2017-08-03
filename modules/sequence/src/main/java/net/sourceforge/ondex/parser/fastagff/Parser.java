@@ -242,7 +242,8 @@ public class Parser extends ONDEXParser {
 				* else add as location and set chromosome to "U"
 				* 
 				*/
-				if(taxid.equals("112509")||taxid.equals("3694")||taxid.equals("4577")){
+				if(taxid.equals("3694")||taxid.equals("4577")){
+				//if(taxid.equals("112509")||taxid.equals("3694")||taxid.equals("4577")){
 				    //if(chromosome.equals("1")||chromosome.equals("2")||chromosome.equals("3")||chromosome.equals("4")||chromosome.equals("5")||chromosome.equals("6")||chromosome.equals("7")||chromosome.equals("Pt")){
 				    if(chromosome.matches(regex)||chromosome.equals("Pt")||chromosome.contains("Chr")){
 					c1.createAttribute(anChromosome, chromosome, false);
