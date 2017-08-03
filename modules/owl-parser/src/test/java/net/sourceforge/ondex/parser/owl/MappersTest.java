@@ -32,6 +32,11 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
+import net.sourceforge.ondex.parser.ConceptMapper;
+import net.sourceforge.ondex.parser2.ConceptClassMapper;
+import net.sourceforge.ondex.parser2.DefaultConceptClassMapper;
+import net.sourceforge.ondex.parser2.DefaultConceptMapper;
+import net.sourceforge.ondex.parser2.TextMapper;
 
 /**
  * Tests {@link OWLMapper} and shows typical examples of how to use both the specific OWL mapping components and the 
@@ -51,8 +56,8 @@ public class MappersTest
 	private OntClass ontSubCls;
 	private String subClsId;
 	
-	private OWLConceptClassMapper ccmap;
-	private OWLConceptMapper conceptMap;
+	private DefaultConceptClassMapper<OntClass> ccmap;
+	private DefaultConceptMapper<OntClass> conceptMap;
 	
 	private ONDEXGraph graph;
 	
@@ -87,26 +92,24 @@ public class MappersTest
 		
 		// ---- Examples of mappers setup. You don't want to do this programmatically, Spring is much better
 		// 		
-		ccmap = new OWLConceptClassMapper ();
-		ccmap.setClassIri ( topCls.getURI () );
+		ccmap = new DefaultConceptClassMapper<> ();
 		ccmap.setIdMapper ( new IRIBasedIdMapper () );
 		
 		// You don't usually need this facility, Spring Beans is much better.
-		Function<String, TextPropertyMapper> txtMap = puri -> { 
-			TextPropertyMapper map = new TextPropertyMapper ();
+		Function<String, TextMapper<OntClass>> txtMap = puri -> { 
+			OWLTextMapper map = new OWLTextMapper ();
 			map.setPropertyIri ( puri );
 			return map;
 		};
 				
-		ccmap.setLabelMapper ( txtMap.apply ( RDFS.label.getURI () )  );
+		ccmap.setFullNameMapper ( txtMap.apply ( RDFS.label.getURI () )  );
 		ccmap.setDescriptionMapper ( txtMap.apply ( RDFS.comment.getURI () ) );
 
-		conceptMap = new OWLConceptMapper ();
-		conceptMap.setConceptClassMapper ( ccmap );
+		conceptMap = new DefaultConceptMapper<> ();
 		conceptMap.setIdMapper ( new IRIBasedIdMapper () );
 		conceptMap.setPreferredNameMapper ( txtMap.apply ( RDFS.label.getURI () )  );
 
-		OWLAccessionsMapper accMap = new OWLAccessionsMapper ();
+		OBOWLAccessionsMapper accMap = new OBOWLAccessionsMapper ();
 		accMap.setPropertyIri ( iri ( "dcterms:identifier" ) );
 		conceptMap.setAccessionsMappers ( new HashSet<> ( Arrays.asList ( accMap ) ) );
 		

@@ -43,7 +43,8 @@ public class OBOWLAccessionsMapper extends CompositeAccessionsMapper<OntClass>
 			String dsPrefix = this.getDataSourcePrefix ();
 			String addedPrefix = this.getAddedPrefix ();
 			
-			Stream<String> result = textsMapper.map ( ontCls, graph );
+			this.textsMapper.setPropertyIri ( propertyIri );
+			Stream<String> result = this.textsMapper.map ( ontCls, graph );
 			
 			if ( dsPrefix != null )
 			{
@@ -98,7 +99,7 @@ public class OBOWLAccessionsMapper extends CompositeAccessionsMapper<OntClass>
 	
 	@Override
 	public void setAccessionValuesMapper ( TextsMapper<OntClass> accessionValuesMapper ) {
-		throw new IllegalArgumentException ( this.getClass ().getName () + " requires a OBOWLAccStringsMapper as accessions mapper" );
+		throw new IllegalArgumentException ( this.getClass ().getName () + " requires a AccessionValuesMapper as accessions mapper" );
 	}
 
 	protected void setAccessionValuesMapper ( AccessionValuesMapper accessionValuesMapper )
