@@ -17,7 +17,7 @@ public class ConstPairMapper<S1, S2, C, O> implements PairMapper<S1, S2, O>
 	private C value;
 	
 	public ConstPairMapper ( C value ) {
-		this.setValue ( value );
+		this.value = value;
 	}
 
 	public ConstPairMapper () {

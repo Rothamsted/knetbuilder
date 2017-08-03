@@ -36,7 +36,7 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 	public static class LinkerConfiguration<SI>
 	{
 		private Scanner<SI, SI> scanner;
-		private RelationMapper<SI, SI> mapper;
+		private RelationMapper<?, ?> mapper;
 		
 		public LinkerConfiguration () {
 			this ( null, null );
@@ -46,11 +46,11 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 		 * This is used to represent the components and options needed to discover nodes linked to others. See the class's
 		 * method comments for details.
 		 */
-		public LinkerConfiguration ( Scanner<SI, SI> scanner, RelationMapper<SI, SI> mapper )
+		public <T> LinkerConfiguration ( Scanner<SI, SI> scanner, RelationMapper<T, T> mapper )
 		{
 			super ();
-			this.setScanner ( scanner );
-			this.setMapper ( mapper );
+			this.scanner = scanner;
+			this.mapper = mapper;
 		}
 
 		/**
@@ -77,12 +77,13 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 		 * {@link InvertingPairMapper} for such a case, since the explorer's works top-down).
 		 * 
 		 */
-		public RelationMapper<SI, SI> getMapper ()
+		@SuppressWarnings ( "unchecked" )
+		public <T> RelationMapper<T, T> getMapper ()
 		{
-			return mapper;
+			return (RelationMapper<T, T>) mapper;
 		}
 
-		public void setMapper ( RelationMapper<SI, SI> mapper )
+		public <T> void setMapper ( RelationMapper<T, T> mapper )
 		{
 			this.mapper = mapper;
 		}
@@ -120,14 +121,17 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 	 * {@link LinkerConfiguration#isExcludeFirstLevel()}.
 	 * 
 	 */
+	@SuppressWarnings ( "unchecked" )
 	protected ONDEXConcept scanTree ( SI rootItem, SI topItem, ONDEXGraph graph )
 	{			
 		ConceptClassMapper<SI> ccmapper = this.getConceptClassMapper ();
 		final ConceptMapper<SI> conceptMapper = this.getConceptMapper ();
 
+		ConceptClass rootCC = ccmapper.map ( rootItem, graph );
+		
 		// Map top items only if required by configuration. 
 		ONDEXConcept rootConcept = this.isDoMapRootsToConcepts () || !rootItem.equals ( topItem )
-			? conceptMapper.map ( rootItem, ccmapper, graph )
+			? conceptMapper.map ( rootItem, rootCC, graph )
 			: null;
 		
 		for ( LinkerConfiguration<SI> linker: this.getLinkers () )
@@ -135,24 +139,28 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 			Scanner<SI, SI> targetsScanner = linker.getScanner ();
 			if ( targetsScanner.isVisited ( rootItem ) ) continue;
 				
-			RelationMapper<SI, SI> relmap = linker.getMapper ();
+			RelationMapper<?, ?> relmap = linker.getMapper ();
 			
 			// so...
 			targetsScanner
 			.scan ( rootItem ) // get related nodes
-			.filter ( targetsScanner::isVisited ) // skip those already processed
+			.filter ( targetItem -> !targetsScanner.isVisited ( targetItem ) ) // skip those already processed
 			// and process the remaining ones recursively
 			.forEach ( targetItem ->
 			{
 				ONDEXConcept targetConcept = conceptMapper.map ( targetItem, ccmapper, graph );
 				
 				// Again, make a relation from the top items only if required by configuration
-				if ( !this.isDoMapRootsToConcepts () && rootItem.equals ( topItem ) ) return;
+				if ( this.isDoMapRootsToConcepts () || !rootItem.equals ( topItem ) )
+				{
+					if ( relmap instanceof ConceptBasedRelMapper )
+					 ( (ConceptBasedRelMapper) relmap).map ( rootConcept, targetConcept, graph );
+					else
+					 ( (RelationMapper<SI, SI>) relmap ).map ( rootItem, targetItem, graph );
+				}
 				
-				if ( relmap instanceof ConceptBasedRelMapper )
-				 ( (ConceptBasedRelMapper) relmap).map ( rootConcept, targetConcept, graph );
-				else
-				 relmap.map ( rootItem, targetItem );
+				// And then keep recursing
+				this.scanTree ( targetItem, topItem, graph );
 			});
 			
 			targetsScanner.setVisited ( rootItem );

@@ -21,7 +21,7 @@ public abstract class ScannerMapper<S, SI, OI> implements StreamMapper<S, OI>
 	protected ScannerMapper ( Scanner<S, SI> scanner, Mapper<SI, OI> sourceItemMapper )
 	{
 		super ();
-		this.setScanner ( scanner );;
+		this.scanner = scanner;
 		this.mapper = sourceItemMapper;
 	}
 

@@ -14,7 +14,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 public class ConstStreamMapper<S, C, OI> extends ConstMapper<S, C, Stream<OI>> implements StreamMapper<S, OI>
 {
 	public ConstStreamMapper () {
-		super ();
+		this ( null );
 	}
 
 	public ConstStreamMapper ( C value ) {

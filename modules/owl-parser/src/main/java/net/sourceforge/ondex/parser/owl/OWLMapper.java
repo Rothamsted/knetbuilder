@@ -28,6 +28,11 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
+	public ONDEXGraph map2Graph ( OntModel model )
+	{
+		return map2Graph ( model, null );
+	}
+
 	public ONDEXGraph map2Graph ( OntModel model, ONDEXGraph graph ) 
 	{
 		if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );

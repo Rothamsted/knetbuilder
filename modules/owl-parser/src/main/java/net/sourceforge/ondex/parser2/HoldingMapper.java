@@ -19,6 +19,17 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 public abstract class HoldingMapper<S, O> extends DecoratingMapper<S, O> implements Mapper<S, O>
 {
 	private O mappedValue = null;
+	
+	public HoldingMapper ()
+	{
+		this ( null );
+	}
+
+	public HoldingMapper ( Mapper<?, ?> baseMapper )
+	{
+		super ( baseMapper );
+	}
+
 
 	@Override
 	@SuppressWarnings ( "unchecked" )
@@ -26,5 +37,6 @@ public abstract class HoldingMapper<S, O> extends DecoratingMapper<S, O> impleme
 	{
 		if ( this.mappedValue != null ) return this.mappedValue; 
 		return this.mappedValue = (O) this.getBaseMapper ().map ( source, graph );
-	}	
+	}
+
 }

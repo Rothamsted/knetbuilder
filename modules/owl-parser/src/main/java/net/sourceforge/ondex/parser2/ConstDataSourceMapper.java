@@ -14,6 +14,7 @@ import net.sourceforge.ondex.core.utils.DataSourcePrototype;
  *
  */
 public class ConstDataSourceMapper<S> extends ConstMapper<S, DataSourcePrototype, DataSource>
+  implements DataSourceMapper<S>
 {
 	public ConstDataSourceMapper () {
 		this ( null );

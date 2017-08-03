@@ -8,6 +8,8 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
+import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
+import net.sourceforge.ondex.parser.owl.Utils;
 
 /**
  * The default concept mapper employs a set of mappers to the constituents of an {@link ONDEXConcept} and create a 
@@ -28,8 +30,8 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 	private TextMapper<S> preferredNameMapper;
 	private TextsMapper<S> altNamesMapper;
 	private AccessionsMapper<S> accessionsMapper;
-	private EvidenceTypeMapper<S> evidenceMapper;
-	private DataSourceMapper<S> dataSourceMapper;
+	private EvidenceTypeMapper<S> evidenceMapper = new ConstEvidenceTypeMapper<S> ( EvidenceTypePrototype.IMPD );
+	private DataSourceMapper<S> dataSourceMapper = new ConstDataSourceMapper<S> ( Utils.OWL_PARSER_DATA_SOURCE );
 	
 	@Override
 	public ONDEXConcept map ( S src, ConceptClass conceptClass, ONDEXGraph graph )
@@ -50,15 +52,15 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 		.map ( mapper -> this.getPreferredNameMapper ().map ( src, graph ) )
 		.ifPresent ( prefName -> result.createConceptName ( prefName, true ) );
 
-		Optional.of ( this.getAltNamesMapper () )
+		Optional.ofNullable ( this.getAltNamesMapper () )
 		.map ( mapper -> mapper.map ( src, graph ) )
 		.ifPresent ( names -> 
 		  names.filter ( name -> name == null )
 		  .forEach ( name -> result.createConceptName ( name, false ) )
 		);
 
-		Optional.of ( this.getAccessionsMapper () )
-		.ifPresent ( mapper -> mapper.map ( src, result, graph ) );
+		Optional.ofNullable ( this.getAccessionsMapper () )
+		.ifPresent ( mapper -> mapper.map ( src, result, graph ).count () );
 
 		return result;
 	}

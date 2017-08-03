@@ -14,7 +14,16 @@ import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
  *
  */
 public class ConstEvidenceTypeMapper<S> extends ConstMapper<S, EvidenceTypePrototype, EvidenceType>
+  implements EvidenceTypeMapper<S>
 {
+	public ConstEvidenceTypeMapper () {
+		this ( null );
+	}
+
+	public ConstEvidenceTypeMapper ( EvidenceTypePrototype value ) {
+		super ( value );
+	}
+
 	@Override
 	public EvidenceType map ( S source, ONDEXGraph graph )
 	{

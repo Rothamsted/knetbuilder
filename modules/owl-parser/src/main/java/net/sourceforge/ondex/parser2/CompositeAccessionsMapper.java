@@ -10,6 +10,7 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 
 /**
  * TODO: comment me!
@@ -21,8 +22,8 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 public class CompositeAccessionsMapper<S> implements AccessionsMapper<S> 
 {
 	private TextsMapper<S> accessionValuesMapper;
-	private StreamMapper<S, DataSource> dataSourcesMapper = new ConstDataSourcesMapper<> ();
-	private StreamMapper<S, Boolean> ambiguityMapper = new ConstStreamMapper<S, Boolean, Boolean> ();
+	private DataSourcesMapper<S> dataSourcesMapper;
+	private StreamMapper<S, Boolean> ambiguityMapper = new ConstStreamMapper<S, Boolean, Boolean> ( false );
 		
 	@Override
 	public Stream<ConceptAccession> map ( S src, ONDEXConcept concept, ONDEXGraph graph )
@@ -35,7 +36,7 @@ public class CompositeAccessionsMapper<S> implements AccessionsMapper<S>
 		
 		List<DataSource> dataSources = 
 			Optional.ofNullable ( this.getDataSourcesMapper () )
-			.orElseThrow ( () -> new NullPointerException ( this.getClass ().getName () + " needs a data source mapper" ) )
+			.orElseThrow ( () -> new NullPointerException ( this.getClass ().getName () + " needs a data sources mapper" ) )
 			.map ( src, graph )
 			.collect ( Collectors.toList () );
 			
@@ -45,7 +46,7 @@ public class CompositeAccessionsMapper<S> implements AccessionsMapper<S>
 			.map ( src, graph )
 			.map ( Boolean.TRUE::equals )
 			.collect ( Collectors.toList () );
-		
+				
 		return IntStream.range ( 0, accStrings.size () )
 		.mapToObj ( i ->  
 		  concept.createConceptAccession ( 
@@ -67,12 +68,12 @@ public class CompositeAccessionsMapper<S> implements AccessionsMapper<S>
 		this.accessionValuesMapper = accessionValuesMapper;
 	}
 
-	public StreamMapper<S, DataSource> getDataSourcesMapper ()
+	public DataSourcesMapper<S> getDataSourcesMapper ()
 	{
 		return dataSourcesMapper;
 	}
 
-	public void setDataSourcesMapper ( StreamMapper<S, DataSource> dataSourcesMapper )
+	public void setDataSourcesMapper ( DataSourcesMapper<S> dataSourcesMapper )
 	{
 		this.dataSourcesMapper = dataSourcesMapper;
 	}

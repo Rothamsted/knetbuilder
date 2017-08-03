@@ -13,10 +13,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  *
  */
 public class DataSourcePrototype extends DescribeablePrototype 
-{
-	// TODO: it should not be here, it's OWL-specific
-	public static final DataSourcePrototype OWL_PARSER = new DataSourcePrototype ( "owlParser", "The OWL Parser", "" );
-	
+{	
 	public DataSourcePrototype () {
 		this ( null, null, null );
 	}

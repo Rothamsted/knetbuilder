@@ -8,6 +8,7 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.RDFNode;
 
+import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -18,6 +19,7 @@ import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 import net.sourceforge.ondex.parser.AccessionsMapper;
 import net.sourceforge.ondex.parser2.AbstractAccessionsMapper;
 import net.sourceforge.ondex.parser2.CompositeAccessionsMapper;
+import net.sourceforge.ondex.parser2.ConstDataSourcesMapper;
 import net.sourceforge.ondex.parser2.TextsMapper;
 
 /**
@@ -28,9 +30,9 @@ import net.sourceforge.ondex.parser2.TextsMapper;
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>
  *
  */
-public class OBOWLAccessionsMapper extends CompositeAccessionsMapper<OntClass>
+public class OBOWLAccessionsMapper extends CompositeAccessionsMapper<OntClass> implements RdfPropertyConfigurator
 {
-	public static class AccessionValuesMapper extends DefaultRdfPropertyConfigurator implements TextsMapper<OntClass>
+	public static class AccessionValuesMapper implements RdfPropertyConfigurator, TextsMapper<OntClass>
 	{
 		private String dataSourcePrefix = null;
 		private String addedPrefix = null;
@@ -43,7 +45,6 @@ public class OBOWLAccessionsMapper extends CompositeAccessionsMapper<OntClass>
 			String dsPrefix = this.getDataSourcePrefix ();
 			String addedPrefix = this.getAddedPrefix ();
 			
-			this.textsMapper.setPropertyIri ( propertyIri );
 			Stream<String> result = this.textsMapper.map ( ontCls, graph );
 			
 			if ( dsPrefix != null )
@@ -88,12 +89,25 @@ public class OBOWLAccessionsMapper extends CompositeAccessionsMapper<OntClass>
 		public void setAddedPrefix ( String addedPrefix ) {
 			this.addedPrefix = addedPrefix;
 		}
+
+		public String getPropertyIri ()
+		{
+			return this.textsMapper.getPropertyIri ();
+		}
+
+		public void setPropertyIri ( String propertyIri )
+		{
+			textsMapper.setPropertyIri ( propertyIri );
+		}
+		
+		
 	}
 	
 	
 	public OBOWLAccessionsMapper ()
 	{
 		super ();
+		this.setDataSourcesMapper ( new ConstDataSourcesMapper<> ( Utils.OWL_PARSER_DATA_SOURCE ) );
 		this.setAccessionValuesMapper ( new AccessionValuesMapper () );
 	}
 	
@@ -132,5 +146,17 @@ public class OBOWLAccessionsMapper extends CompositeAccessionsMapper<OntClass>
 	public void setAddedPrefix ( String addedPrefix )
 	{
 		 ( (AccessionValuesMapper) this.getAccessionValuesMapper () ).setAddedPrefix ( addedPrefix );
+	}
+
+	@Override
+	public String getPropertyIri ()
+	{
+		return ( (AccessionValuesMapper) this.getAccessionValuesMapper () ).getPropertyIri ();
+	}
+
+	@Override
+	public void setPropertyIri ( String propertyIri )
+	{
+		( (AccessionValuesMapper) this.getAccessionValuesMapper () ).setPropertyIri ( propertyIri );		
 	}	
 }

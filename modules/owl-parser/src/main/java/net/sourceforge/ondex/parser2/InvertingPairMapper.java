@@ -17,26 +17,31 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  */
 public class InvertingPairMapper<S1, S2, O> extends DecoratingPairMapper<S1, S2, O>
 {
-	public InvertingPairMapper () {
-		super ();
-	}
-	
-	@Override
-	@SuppressWarnings ( "unchecked" )
-	public O map ( S1 src1, S2 src2, ONDEXGraph graph ) {
-		return (O) this.getBaseMapper ().map ( src2, src1 );
+	public InvertingPairMapper ()
+	{
+		this ( null );
 	}
 
+	public InvertingPairMapper ( PairMapper<S2, S1, O> baseMapper )
+	{
+		super ( baseMapper );
+	}
+
+	
 	@Override
-	public <BS1, BS2, BO> PairMapper<BS1, BS2, BO> getBaseMapper ()
+	public O map ( S1 src1, S2 src2, ONDEXGraph graph ) {
+		return (O) this.getBaseMapper ().map ( src2, src1, graph );
+	}
+
+	@SuppressWarnings ( "unchecked" )
+	@Override
+	public PairMapper<S2, S1, O> getBaseMapper ()
 	{
 		return super.getBaseMapper ();
 	}
 
-	@Override
 	public <BS1, BS2, BO> void setBaseMapper ( PairMapper<BS1, BS2, BO> baseMapper )
 	{
 		super.setBaseMapper ( baseMapper );
 	}
-	
 }

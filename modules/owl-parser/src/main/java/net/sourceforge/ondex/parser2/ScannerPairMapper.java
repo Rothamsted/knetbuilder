@@ -21,7 +21,7 @@ public abstract class ScannerPairMapper<S1, SI, SI2, OI> implements StreamPairMa
 
 	protected ScannerPairMapper ( Scanner<S1, SI> scanner, PairMapper<SI, SI2, OI> sourceItemMapper )
 	{
-		this.setScanner ( scanner );;
+		this.scanner = scanner;
 		this.mapper = sourceItemMapper;
 	}
 

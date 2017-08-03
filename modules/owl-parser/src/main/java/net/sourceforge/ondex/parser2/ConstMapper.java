@@ -15,7 +15,7 @@ public class ConstMapper<S,C,O> implements Mapper<S, O>
 	private C value;
 	
 	public ConstMapper ( C value ) {
-		this.setValue ( value );
+		this.value = value;
 	}
 
 	public ConstMapper () {

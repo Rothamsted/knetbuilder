@@ -11,6 +11,17 @@ package net.sourceforge.ondex.parser2;
 public abstract class DecoratingPairMapper<S1, S2, O> implements PairMapper<S1, S2, O>
 {
 	protected PairMapper<?, ?, ?> baseMapper;
+	
+	protected DecoratingPairMapper ()
+	{
+		this ( null );
+	}
+
+	protected DecoratingPairMapper ( PairMapper<?, ?, ?> baseMapper )
+	{
+		this.baseMapper = baseMapper;
+	}
+	
 
 	@SuppressWarnings ( "unchecked" )
 	protected <BS1, BS2, BO> PairMapper<BS1, BS2, BO> getBaseMapper ()
