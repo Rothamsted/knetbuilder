@@ -37,7 +37,7 @@ public class WholeGoLoadingTest
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );				
-		owlMap.map ( model, graph );		
+		owlMap.map2Graph ( model, graph );		
 		((Closeable) ctx ).close ();
 	}
 }

@@ -31,7 +31,7 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 	private TextsMapper<S> altNamesMapper;
 	private AccessionsMapper<S> accessionsMapper;
 	private EvidenceTypeMapper<S> evidenceMapper = new ConstEvidenceTypeMapper<S> ( EvidenceTypePrototype.IMPD );
-	private DataSourceMapper<S> dataSourceMapper = new ConstDataSourceMapper<S> ( Utils.OWL_PARSER_DATA_SOURCE );
+	private DataSourceMapper<S> dataSourceMapper;
 	
 	@Override
 	public ONDEXConcept map ( S src, ConceptClass conceptClass, ONDEXGraph graph )
@@ -55,7 +55,7 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 		Optional.ofNullable ( this.getAltNamesMapper () )
 		.map ( mapper -> mapper.map ( src, graph ) )
 		.ifPresent ( names -> 
-		  names.filter ( name -> name == null )
+		  names.filter ( name -> name != null )
 		  .forEach ( name -> result.createConceptName ( name, false ) )
 		);
 

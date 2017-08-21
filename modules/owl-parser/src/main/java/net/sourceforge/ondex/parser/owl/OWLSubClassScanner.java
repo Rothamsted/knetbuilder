@@ -18,7 +18,6 @@ import net.sourceforge.ondex.parser2.Scanner;
  */
 public class OWLSubClassScanner implements Scanner<OntClass, OntClass>
 {
-
 	@Override
 	public Stream<OntClass> scan ( OntClass parent )
 	{

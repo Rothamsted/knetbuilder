@@ -20,7 +20,7 @@ public class CompositeStreamMapper<S, OI> implements StreamMapper<S, OI>
 	@Override
 	public Stream<OI> map ( S source, ONDEXGraph graph )
 	{
-		return mappers
+		return this.getMappers ()
 		.stream ()
 		.flatMap ( mapper -> mapper.map ( source, graph ) );
 	}

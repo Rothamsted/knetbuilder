@@ -1,6 +1,8 @@
 package net.sourceforge.ondex.parser2;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import net.sourceforge.ondex.core.ConceptClass;
@@ -95,7 +97,7 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 	private boolean doMapRootsToConcepts = true;
 	
 	private Scanner<S, SI> rootsScanner;
-	private List<LinkerConfiguration<SI>> linkers;
+	private List<LinkerConfiguration<SI>> linkers = Collections.emptyList ();
 
 	/**
 	 * The mapper starts here, root nodes are extracted from the source, by means of the {@link #getRootsScanner() roots scanner},
@@ -112,7 +114,8 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 	{
 		return this.getRootsScanner ()
 		.scan ( source )
-		.map ( root -> this.scanTree ( root, root, graph ) );
+		.map ( root -> this.scanTree ( root, root, graph ) )
+		.filter ( Objects::nonNull ); // might return null nodes when it decides not to explore them (eg, because already visited)
 	}
 
 	/**

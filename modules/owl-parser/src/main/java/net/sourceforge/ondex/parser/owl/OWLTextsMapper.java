@@ -4,9 +4,6 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.rdf.model.RDFNode;
 
 import net.sourceforge.ondex.parser2.AbstractTextsMapper;
-import net.sourceforge.ondex.parser2.IdentityScanner;
-import net.sourceforge.ondex.parser2.Scanner;
-import net.sourceforge.ondex.parser2.TextMapper;
 
 /**
  * TODO: comment me!

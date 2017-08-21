@@ -9,6 +9,7 @@ import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser2.ExploringMapper;
@@ -28,6 +29,8 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
+	private OWLVisitable visitableHelper = new OWLVisitable ();  
+	
 	public ONDEXGraph map2Graph ( OntModel model )
 	{
 		return map2Graph ( model, null );
@@ -40,6 +43,8 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 		
 		try
 		{
+			log.info ( "Parsing OWL dataset with {} triple(s)", model.size () ); 
+			
 			final ONDEXGraph graph1 = graph; // just because the timer below needs a final
 
 			// Before delving into the mapping, let's setup a reporter, to give a sense that we're going ahead
@@ -57,4 +62,29 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 			timerService.shutdownNow ();			
 		}
 	}
+
+	@Override
+	protected ONDEXConcept scanTree ( OntClass rootItem, OntClass topItem, ONDEXGraph graph )
+	{
+		if ( this.isVisited ( rootItem ) ) return null;
+		this.setVisited ( rootItem );
+
+		return super.scanTree ( rootItem, topItem, graph );
+	}
+
+	public boolean isVisited ( OntClass ontCls )
+	{
+		return visitableHelper.isVisited ( ontCls );
+	}
+
+	public boolean setVisited ( OntClass ontCls, boolean isVisited )
+	{
+		return visitableHelper.setVisited ( ontCls, isVisited );
+	}
+
+	public boolean setVisited ( OntClass value )
+	{
+		return visitableHelper.setVisited ( value );
+	}
+	
 }

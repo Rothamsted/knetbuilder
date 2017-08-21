@@ -1,14 +1,11 @@
 package net.sourceforge.ondex.parser.owl;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.parser.ConceptClassMapper;
 import net.sourceforge.ondex.parser2.Scanner;
 
 /**

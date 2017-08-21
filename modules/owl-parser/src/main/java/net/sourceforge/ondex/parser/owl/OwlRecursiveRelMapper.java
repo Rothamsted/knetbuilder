@@ -30,7 +30,7 @@
 //{
 //	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 //
-//	private TopClassesProvider topClassesProvider = new OwlRootClassesProvider ();
+//	private TopClassesProvider topClassesProvider = new OwlRootClassesScanner ();
 //	private boolean doMapRootsToConcepts = true;
 //
 //	private OWLConceptClassMapper conceptClassMapper;

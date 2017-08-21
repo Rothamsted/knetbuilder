@@ -15,7 +15,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 public class DataSourcePrototype extends DescribeablePrototype 
 {	
 	public DataSourcePrototype () {
-		this ( null, null, null );
+		this ( null, "", "" );
 	}
 
 	public DataSourcePrototype ( String id, String fullName, String description ) 

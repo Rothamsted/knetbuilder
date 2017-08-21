@@ -18,7 +18,7 @@ import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 import net.sourceforge.ondex.parser.AccessionsMapper;
 import net.sourceforge.ondex.parser2.AbstractAccessionsMapper;
-import net.sourceforge.ondex.parser2.CompositeAccessionsMapper;
+import net.sourceforge.ondex.parser2.DefaultAccessionsMapper;
 import net.sourceforge.ondex.parser2.ConstDataSourcesMapper;
 import net.sourceforge.ondex.parser2.TextsMapper;
 
@@ -30,7 +30,7 @@ import net.sourceforge.ondex.parser2.TextsMapper;
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>
  *
  */
-public class OBOWLAccessionsMapper extends CompositeAccessionsMapper<OntClass> implements RdfPropertyConfigurator
+public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> implements RdfPropertyConfigurator
 {
 	public static class AccessionValuesMapper implements RdfPropertyConfigurator, TextsMapper<OntClass>
 	{

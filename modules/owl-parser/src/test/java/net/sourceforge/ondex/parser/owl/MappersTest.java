@@ -9,10 +9,6 @@ import static org.junit.Assert.assertNotNull;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -33,22 +29,13 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
 import net.sourceforge.ondex.core.utils.RelationTypePrototype;
-import net.sourceforge.ondex.parser.ConceptMapper;
 import net.sourceforge.ondex.parser2.ConceptBasedRelMapper;
-import net.sourceforge.ondex.parser2.ConceptClassMapper;
-import net.sourceforge.ondex.parser2.ConstDataSourcesMapper;
-import net.sourceforge.ondex.parser2.DefaultConceptClassMapper;
+import net.sourceforge.ondex.parser2.ConstDataSourceMapper;
 import net.sourceforge.ondex.parser2.DefaultConceptMapper;
-import net.sourceforge.ondex.parser2.ExploringMapper;
 import net.sourceforge.ondex.parser2.ExploringMapper.LinkerConfiguration;
 import net.sourceforge.ondex.parser2.InvertingConceptRelMapper;
-import net.sourceforge.ondex.parser2.InvertingPairMapper;
-import net.sourceforge.ondex.parser2.InvertingRelationMapper;
-import net.sourceforge.ondex.parser2.RelationMapper;
 import net.sourceforge.ondex.parser2.SimpleRelationMapper;
 import net.sourceforge.ondex.parser2.TextMapper;
 
@@ -98,7 +85,7 @@ public class MappersTest
 		topCls.addSubClass ( ontCls );		
 
 		subClsId = "ClassB";
-		ontSubCls = model.createClass ( NamespaceUtils.iri ( "foo", subClsId ) );
+		ontSubCls = model.createClass ( iri ( "foo", subClsId ) );
 		ontSubCls.setLabel ( "Class B Label", "en" );
 		ontSubCls.setComment ( "Class B Description", "en" );
 		JENAUTILS.assertLiteral ( model, ontSubCls.getURI (), iri ( "dcterms:identifier" ), subClsId );
@@ -129,7 +116,8 @@ public class MappersTest
 		accMap.setPropertyIri ( iri ( "dcterms:identifier" ) );
 		conceptMap.setAccessionsMapper ( accMap );
 		
-		conceptMap.setDescriptionMapper ( txtMap.apply ( RDFS.comment.getURI () ) );		
+		conceptMap.setDescriptionMapper ( txtMap.apply ( RDFS.comment.getURI () ) );
+		conceptMap.setDataSourceMapper ( new ConstDataSourceMapper<OntClass> ( Utils.OWL_PARSER_DATA_SOURCE ) );
 		
 		graph = new MemoryONDEXGraph ( "test" );
 	}
@@ -189,19 +177,18 @@ public class MappersTest
 		checkAllGrah ( graph );
 	}	
 	
-//	
-//	
-//	@Test
-//	public void testSpringBootstrap () throws IOException
-//	{
-//		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "mappings_ex.xml" );
-//		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-//
-//		ONDEXGraph graph = owlMap.map ( model );
-//		checkAllGrah ( graph );
-//		
-//		( (Closeable) ctx ).close ();
-//	}
+	
+	@Test
+	public void testSpringBootstrap () throws IOException
+	{
+		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "mappings_ex.xml" );
+		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
+
+		ONDEXGraph graph = owlMap.map2Graph ( model );
+		checkAllGrah ( graph );
+		
+		( (Closeable) ctx ).close ();
+	}
 	
 	private void checkAllGrah ( ONDEXGraph graph )
 	{
