@@ -3,7 +3,7 @@ package net.sourceforge.ondex.parser2;
 import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**
- * TODO: comment me!
+ * This is like {@link InvertingRelationMapper}, but it starts from ONDEX concepts as inputs, instead of data items.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>

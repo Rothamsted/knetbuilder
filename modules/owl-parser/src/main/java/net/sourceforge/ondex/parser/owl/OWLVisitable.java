@@ -12,7 +12,11 @@ import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.parser2.Visitable;
 
 /**
- * TODO: comment me!
+ * This implements the {@link Visitable} interface, by adding an RDF statement to the input passed to 
+ * {@link #setVisited(OntClass, boolean)} that is a boolean flag.
+ * 
+ * We mark OWL classes as visited in {@link OWLMapper#scanTree(OntClass, OntClass, net.sourceforge.ondex.core.ONDEXGraph)}, 
+ * in order to avoid loops when traversing a graph following some relation like rdfs:subClassOf. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>21 Aug 2017</dd></dl>

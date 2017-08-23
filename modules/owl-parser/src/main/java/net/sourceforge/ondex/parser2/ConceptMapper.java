@@ -14,7 +14,6 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>
  *
- * @param <S>
  */
 public interface ConceptMapper<S> extends PairMapper<S, ConceptClass, ONDEXConcept>, Visitable<S>
 {

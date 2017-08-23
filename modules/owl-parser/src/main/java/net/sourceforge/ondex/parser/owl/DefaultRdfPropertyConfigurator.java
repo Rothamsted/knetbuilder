@@ -1,7 +1,8 @@
 package net.sourceforge.ondex.parser.owl;
 
 /**
- * TODO: comment me!
+ * An obvious implementation of {@link RdfPropertyConfigurator} that keeps its {@link #getPropertyIri() managed property}
+ * as a class member.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

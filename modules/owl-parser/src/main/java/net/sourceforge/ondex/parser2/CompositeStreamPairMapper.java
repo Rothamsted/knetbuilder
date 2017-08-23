@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * 
  * A composite pair mapper joins the results of multiple {@link StreamPairMapper}s.
  *
  * @author brandizi

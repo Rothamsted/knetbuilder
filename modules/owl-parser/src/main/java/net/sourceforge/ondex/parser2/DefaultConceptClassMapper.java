@@ -11,13 +11,12 @@ import net.sourceforge.ondex.parser.SimpleIdMapper;
 import net.sourceforge.ondex.parser.SimpleLabelMapper;
 
 /**
- * 
- * TODO: comment me!
+ * The default class mapper invokes single-component mappers, such as {@link #getIdMapper()} or {@link #getFullNameMapper()}, 
+ * and use their result to build {@link ConceptClass}es.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>
  *
- * @param <S>
  */
 public class DefaultConceptClassMapper<S> implements ConceptClassMapper<S>
 {	

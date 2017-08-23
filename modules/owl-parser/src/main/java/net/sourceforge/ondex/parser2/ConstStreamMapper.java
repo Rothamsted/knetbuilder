@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * This is like {@link ConstMapper}, but adapts to a {@link StreamMapper}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

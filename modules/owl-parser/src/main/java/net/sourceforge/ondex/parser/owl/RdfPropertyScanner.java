@@ -9,13 +9,11 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 
-import net.sourceforge.ondex.parser.ONDEXMapper;
-import net.sourceforge.ondex.parser2.Mapper;
 import net.sourceforge.ondex.parser2.Scanner;
 
 /**
- * 
- * TODO: comment me!
+ * Fetches RDF literals, associated to OWL classes by means of a {@link #getPropertyIri() property}.
+ * This is used with {@link OWLTextsMapper}.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

@@ -23,8 +23,19 @@ import net.sourceforge.ondex.parser2.ConstDataSourcesMapper;
 import net.sourceforge.ondex.parser2.TextsMapper;
 
 /**
+ * <p>This implements a {@link DefaultAccessionsMapper} considering the way accessions are represented in OBO/OWL
+ * ontologies. For instances. GO accessions are represented through the property 'oboInOwl:id' associated to the 
+ * GO class and each value given for this property has the 'GO:' prefix (e.g., 'GO:00002835'). You can set 'oboInOwl:id' using 
+ * {@link #setPropertyIri(String) the property IRI setter} and tell about the 'GO:' prefix via 
+ * {@link #setDataSourcePrefix(String)}. The ONDEX data source is a different entity and you can set it 
+ * via {@link #setDataSourcesMapper(net.sourceforge.ondex.parser2.DataSourcesMapper)} (possibly using a 
+ * {@link ConstDataSourcesMapper}).</p>
  * 
- * TODO: comment me!
+ * <p>If the data source prefix is specified, this will be removed from the values associated to the ontology class
+ * via the property URI. If {@link #getAddedPrefix()} is specified, this will be added to the final accession 
+ * value. That means you can use the two to replace prefixes, or to keep the original prefix (by setting both
+ * {@link #getDataSourcePrefix()} and {@link #getAddedPrefix()} to the same prefix value).</p>
+ * 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>
@@ -32,6 +43,13 @@ import net.sourceforge.ondex.parser2.TextsMapper;
  */
 public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> implements RdfPropertyConfigurator
 {
+	/**
+	 * Implements the behaviour described above to extract accession values and consider value prefixes.
+	 *
+	 * @author brandizi
+	 * <dl><dt>Date:</dt><dd>23 Aug 2017</dd></dl>
+	 *
+	 */
 	public static class AccessionValuesMapper implements RdfPropertyConfigurator, TextsMapper<OntClass>
 	{
 		private String dataSourcePrefix = null;
@@ -67,9 +85,7 @@ public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> imp
 		}
 
 		/**
-		 * Accessions might be in forms like "EZ:12345". Set a prefix like "EZ:" here, to process only accessions of interest
-		 * and have their prefix removed from the final ID (the {@link OBOWLAccessionsMapper#getDataSourcesMapper() data source} 
-		 * still tracks the type). 
+		 * This is removed from the accession value (see above).
 		 */		
 		public String getDataSourcePrefix () {
 			return dataSourcePrefix;
@@ -99,8 +115,6 @@ public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> imp
 		{
 			textsMapper.setPropertyIri ( propertyIri );
 		}
-		
-		
 	}
 	
 	
@@ -136,7 +150,6 @@ public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> imp
 
 	/**
 	 * Wraps {@link AccessionValuesMapper#getAddedPrefix()}
-	 * @return
 	 */
 	public String getAddedPrefix ()
 	{
@@ -148,6 +161,9 @@ public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> imp
 		 ( (AccessionValuesMapper) this.getAccessionValuesMapper () ).setAddedPrefix ( addedPrefix );
 	}
 
+	/**
+	 * The property that associates accession strings to OWL classes.
+	 */
 	@Override
 	public String getPropertyIri ()
 	{

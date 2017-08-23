@@ -9,8 +9,7 @@ import org.apache.jena.ontology.OntModel;
 import net.sourceforge.ondex.parser2.Scanner;
 
 /**
- * 
- * TODO: comment me!
+ * An adapter to {@link Scanner} that returns an OWL class based on its {@link #getTopClassIri() IRI/URI}. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>

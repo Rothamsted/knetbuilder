@@ -6,7 +6,9 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser2.TextMapper;
 
 /**
- * TODO: comment me!
+ * a {@link TextMapper} that maps the lexical value of an {@link #getPropertyIri() RDF property} to a string.
+ * 
+ * This is based on {@link OWLTextsMapper}.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

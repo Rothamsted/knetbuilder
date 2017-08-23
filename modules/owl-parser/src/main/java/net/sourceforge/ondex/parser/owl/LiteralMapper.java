@@ -13,8 +13,9 @@ import net.sourceforge.ondex.parser.SimpleLabelMapper;
 import net.sourceforge.ondex.parser2.TextMapper;
 
 /**
+ * Maps an RDF literal to a string, using its lexical representation.
  * 
- * TODO: comment me!
+ * TODO: allow for the conversion from strings to other types.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

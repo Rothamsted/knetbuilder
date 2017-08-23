@@ -60,8 +60,8 @@ public class DefaultAccessionsMapper<S> implements AccessionsMapper<S>
 		.mapToObj ( i ->  
 		  concept.createConceptAccession ( 
 		  	accStrings.get ( i ), 
-		  	dataSources.get ( i % dataSources.size () ),
-		  	areAmbiguos.get ( i % areAmbiguos.size () ) 
+		  	dataSources.get ( i % dataSources.size () ), // Just reuse them if they're too few
+		  	areAmbiguos.get ( i % areAmbiguos.size () )  // same approach
 		  )
 		);
 	}

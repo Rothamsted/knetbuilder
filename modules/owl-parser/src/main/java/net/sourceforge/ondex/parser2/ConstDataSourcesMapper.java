@@ -9,7 +9,7 @@ import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
 
 /**
- * TODO: comment me!
+ * This works like {@link ConstDataSourceMapper}, but adapts to {@link DataSourcesMapper}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

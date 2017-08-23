@@ -10,7 +10,8 @@ import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
 import net.sourceforge.ondex.core.utils.RelationTypePrototype;
 
 /**
- * TODO: comment me!
+ * A simple {@link ConceptBasedRelMapper} uses a {@link RelationTypePrototype constant relation type} to 
+ * {@link #map(ONDEXConcept, ONDEXConcept, ONDEXGraph) build ONDEX relations between the inputs it receives}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>

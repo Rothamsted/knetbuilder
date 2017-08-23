@@ -1,8 +1,8 @@
 package net.sourceforge.ondex.parser2;
 
 /**
- * Implements a {@link TextsMapper} by means of a {@link ScannerMapper}, ie, by accepting a {@link Scanner}
- * plus a {@link TextsMapper} that maps each item retruned by the scanner to a string. 
+ * Implements a {@link TextsMapper} by means of a {@link ScannerMapper}, i.e., by accepting a {@link Scanner}
+ * plus a {@link TextsMapper} that maps each item returned by the scanner to a string. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>7 Jul 2017</dd></dl>

@@ -7,7 +7,7 @@ import net.sourceforge.ondex.core.utils.AccessionPrototype;
 import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 
 /**
- * Maps anything to constant {@link ConceptAccession}, which can be defined in a Spring configuration file, by means of
+ * Maps anything to a constant {@link ConceptAccession}, which can be defined in a Spring configuration file, by means of
  * {@link AccessionPrototype}.
  *
  * @author brandizi

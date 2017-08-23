@@ -48,10 +48,11 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 		if ( this.isVisited ( src ) ) return result;
 
 		Optional
-		.ofNullable ( this.getPreferredNameMapper () )
-		.map ( mapper -> this.getPreferredNameMapper ().map ( src, graph ) )
-		.ifPresent ( prefName -> result.createConceptName ( prefName, true ) );
+		.ofNullable ( this.getPreferredNameMapper () ) // if available,
+		.map ( mapper -> mapper.map ( src, graph ) ) // get a value from it
+		.ifPresent ( prefName -> result.createConceptName ( prefName, true ) ); // and use it to build a new name, if it's non-null
 
+		// Same approach for names mapper, but this has multiple results.
 		Optional.ofNullable ( this.getAltNamesMapper () )
 		.map ( mapper -> mapper.map ( src, graph ) )
 		.ifPresent ( names -> 

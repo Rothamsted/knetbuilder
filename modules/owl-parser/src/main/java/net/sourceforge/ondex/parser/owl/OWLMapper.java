@@ -18,6 +18,8 @@ import net.sourceforge.ondex.parser2.ExploringMapper;
  * <p>This is the top level mapper/parser. Usually a class of this type is configured via 
  * <a href = "https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html">Spring Beans</a>, 
  * equipping it with mappers that are specific to the ontology type that is being parsed and mapped to ONDEX.</p>
+ * 
+ * This maps a {@link OntModel Jena Ontology Model} into an ONDEXGraph containing the corresponding ontology.
  *
  * <p>See examples in tests and default configurations.</p>
  *
@@ -36,6 +38,12 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 		return map2Graph ( model, null );
 	}
 
+	/**
+	 * It is preferred that you use this on top-levl invocations, rather than {@link #map(OntModel, ONDEXGraph)}. This
+	 * does further operations (e.g., logging the mapping progress) and also returns the {@link ONDEXGraph} that is 
+	 * filled with mappings from the input model. 
+	 * 
+	 */
 	public ONDEXGraph map2Graph ( OntModel model, ONDEXGraph graph ) 
 	{
 		if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
@@ -63,6 +71,14 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 		}
 	}
 
+	/** 
+	 * Wraps the parent's corresponding method by checking if the input was {@link #isVisited(OntClass)} and 
+	 * by {@link #setVisited(OntClass, boolean) marking it as visited} before invoking
+	 * 
+	 * {@link ExploringMapper#scanTree(OntClass, OntClass, ONDEXGraph) the parent tree scanning}. 
+	 * This avoids to be trapped in loops produced by relations like rdfs:subClassOf.
+	 * 
+	 */
 	@Override
 	protected ONDEXConcept scanTree ( OntClass rootItem, OntClass topItem, ONDEXGraph graph )
 	{

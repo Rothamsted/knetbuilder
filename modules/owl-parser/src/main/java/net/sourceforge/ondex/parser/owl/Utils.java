@@ -3,7 +3,7 @@ package net.sourceforge.ondex.parser.owl;
 import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 
 /**
- * TODO: comment me!
+ * Utilities for the OWL parser.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>

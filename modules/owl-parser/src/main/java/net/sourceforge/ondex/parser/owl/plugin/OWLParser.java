@@ -91,7 +91,7 @@ public class OWLParser extends ONDEXParser
 		}
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-		owlMap.map ( model, this.graph );
+		owlMap.map2Graph ( model, this.graph );
 		
 		((Closeable) ctx ).close ();
 	}

@@ -2,8 +2,8 @@ package net.sourceforge.ondex.parser2;
 
 import net.sourceforge.ondex.core.ONDEXRelation;
 
-/**
- * TODO: comment me!
+/** 
+ * Inverts the inputs to build an ONDEX relation. @see {@link InvertingPairMapper}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>

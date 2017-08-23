@@ -10,7 +10,8 @@ import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
 import net.sourceforge.ondex.parser2.Scanner;
 
 /**
- * TODO: comment me!
+ * Looks for all the direct subclasses of a given OWL class. This is intended to be used with {@link OWLMapper}, 
+ * in one of its {@link OWLMapper#getLinkers() linkers}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>

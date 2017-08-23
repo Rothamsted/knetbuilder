@@ -10,7 +10,9 @@ import net.sourceforge.ondex.parser2.Mapper;
 import net.sourceforge.ondex.parser2.TextMapper;
 
 /**
- * TODO: comment me!
+ * Maps an OWL class that is on top of an ontology hierarchy. This is an {@link HoldingMapper}, since the initially
+ * mapped class (a top-one) is retained for subsequent usage (typically, to assign the same ONDEX concept class
+ * to all the concepts in the same root tree, as they are mapped from descendant classes).
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>

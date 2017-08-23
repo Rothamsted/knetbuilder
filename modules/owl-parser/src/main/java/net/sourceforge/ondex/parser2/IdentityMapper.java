@@ -3,7 +3,8 @@ package net.sourceforge.ondex.parser2;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * A facility that does nothing, its {@link #map(Object, ONDEXGraph)} method simply returns its input.
+ * This can be useful in Spring configurations, to return values like strings as-is.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

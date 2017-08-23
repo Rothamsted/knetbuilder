@@ -8,7 +8,8 @@ import net.sourceforge.ondex.core.utils.ConceptClassPrototype;
 import net.sourceforge.ondex.core.utils.DataSourcePrototype;
 
 /**
- * TODO: comment me!
+ * Maps anything to a constant class mapper, which can be configured in Spring via {@link ConceptClassPrototype} passed
+ * to {@link #setValue(Object)}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>

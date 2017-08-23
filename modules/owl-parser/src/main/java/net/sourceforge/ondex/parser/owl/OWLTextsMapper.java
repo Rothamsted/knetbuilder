@@ -4,9 +4,14 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.rdf.model.RDFNode;
 
 import net.sourceforge.ondex.parser2.AbstractTextsMapper;
+import net.sourceforge.ondex.parser2.Scanner;
+import net.sourceforge.ondex.parser2.TextMapper;
 
 /**
- * TODO: comment me!
+ * The OWL text mapper. This maps a literal property associated to a class to a string. 
+ * 
+ * This is done via {@link RdfPropertyScanner} and {@link LiteralMapper}. This mapper needs the 
+ * {@link #getPropertyIri() property URI} to be used to fetch literals.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>
@@ -14,9 +19,13 @@ import net.sourceforge.ondex.parser2.AbstractTextsMapper;
  */
 public class OWLTextsMapper extends AbstractTextsMapper<OntClass, RDFNode> implements RdfPropertyConfigurator
 {
-	public OWLTextsMapper ()
+	protected OWLTextsMapper ( Scanner<OntClass, RDFNode> scanner, TextMapper<RDFNode> sourceItemMapper )
 	{
-		super ( new RdfPropertyScanner (), new LiteralMapper () );
+		super ( scanner, sourceItemMapper );
+	}
+
+	public OWLTextsMapper () {
+		this ( new RdfPropertyScanner (), new LiteralMapper () );
 	}
 
 	@Override
