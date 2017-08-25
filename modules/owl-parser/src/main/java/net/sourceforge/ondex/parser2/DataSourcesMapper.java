@@ -11,5 +11,4 @@ import net.sourceforge.ondex.core.DataSource;
  */
 public interface DataSourcesMapper<S> extends StreamMapper<S, DataSource>
 {
-
 }

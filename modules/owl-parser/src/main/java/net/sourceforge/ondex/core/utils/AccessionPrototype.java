@@ -9,7 +9,7 @@ import net.sourceforge.ondex.core.DataSource;
  * <dl><dt>Date:</dt><dd>6 Jun 2017</dd></dl>
  *
  */
-public class AccessionPrototype extends DescribeablePrototype
+public class AccessionPrototype
 {
 	private String accession;
 	private boolean isAmbiguous;

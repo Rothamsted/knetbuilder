@@ -6,6 +6,7 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
 
 /**
  * The default accession mapper takes a couple of mappers to the constituents of an {@link ONDEXConcept} and uses them
@@ -37,7 +38,8 @@ public class DefaultAccessionMapper<S> implements AccessionMapper<S>
 			.map ( Boolean.TRUE::equals )
 			.orElseThrow ( () -> new NullPointerException ( this.getClass ().getName () + " needs an ambiguity mapper" ) );
 		
-		return concept.createConceptAccession ( accession, dataSrc, isAmbiguous );
+		
+		return CachedGraphWrapper.getInstance ( graph ).getAccession ( accession, dataSrc, isAmbiguous, concept );
 	}
 
 	public TextMapper<S> getAccessionValueMapper ()

@@ -27,7 +27,7 @@ public class DefaultConceptClassMapper<S> implements ConceptClassMapper<S>
 	
 	
 	@Override
-	public synchronized ConceptClass map ( S src, ONDEXGraph graph )
+	public ConceptClass map ( S src, ONDEXGraph graph )
 	{
 		String id = this.getIdMapper ().map ( src ); 
 		String fullName = Optional.ofNullable ( this.getFullNameMapper () ).map ( m -> m.map ( src, graph ) ).orElse ( "" );

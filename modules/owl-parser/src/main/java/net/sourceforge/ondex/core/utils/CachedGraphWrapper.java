@@ -56,13 +56,13 @@ public class CachedGraphWrapper
 	 *  
 	 * @param graph
 	 */
-	public static CachedGraphWrapper getInstance ( ONDEXGraph graph ) 
+	public static synchronized CachedGraphWrapper getInstance ( ONDEXGraph graph ) 
 	{
 		return instances.computeIfAbsent ( graph, g -> new CachedGraphWrapper ( g ) );
 	}
 	
 	
-	public ConceptClass getConceptClass ( String id, String fullName, String description, ConceptClass specialisationOf )
+	public synchronized ConceptClass getConceptClass ( String id, String fullName, String description, ConceptClass specialisationOf )
 	{
 		return this.cacheGet ( 
 			ConceptClass.class, id, 
@@ -70,7 +70,7 @@ public class CachedGraphWrapper
 		);
 	}
 
-	public ConceptClass getConceptClass ( ConceptClassPrototype proto )
+	public synchronized ConceptClass getConceptClass ( ConceptClassPrototype proto )
 	{
 		try 
 		{
@@ -98,7 +98,7 @@ public class CachedGraphWrapper
 		}
 	}
 
-	public ONDEXConcept getConcept (
+	public synchronized ONDEXConcept getConcept (
 		String id, String annotation, String description, DataSource ds, ConceptClass conceptClass, EvidenceType evidence
 	)
 	{
@@ -108,11 +108,11 @@ public class CachedGraphWrapper
 		);
 	}
 	
-	public ONDEXConcept getConcept ( String id ) {
+	public synchronized ONDEXConcept getConcept ( String id ) {
 		return this.cacheGet ( ONDEXConcept.class, id );
 	}
 	
-	public RelationType getRelationType ( 
+	public synchronized RelationType getRelationType ( 
 		String id, boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitive 
 	)
 	{
@@ -124,7 +124,7 @@ public class CachedGraphWrapper
 		);
 	}
 
-	public RelationType getRelationType ( RelationTypePrototype proto )
+	public synchronized RelationType getRelationType ( RelationTypePrototype proto )
 	{
 		try 
 		{
@@ -153,7 +153,7 @@ public class CachedGraphWrapper
 	}
 	
 	
-	public ONDEXRelation getRelation ( ONDEXConcept from, ONDEXConcept to, RelationType type, EvidenceType evidence )
+	public synchronized ONDEXRelation getRelation ( ONDEXConcept from, ONDEXConcept to, RelationType type, EvidenceType evidence )
 	{
 		String id = from.getPID () + to.getPID () + type.getId () + evidence.getId ();
 		return this.cacheGet ( 
@@ -162,7 +162,7 @@ public class CachedGraphWrapper
 		);
 	}
 	
-	public EvidenceType getEvidenceType ( String id, String fullName, String description )
+	public synchronized EvidenceType getEvidenceType ( String id, String fullName, String description )
 	{
 		return this.cacheGet ( 
 			EvidenceType.class, id, 
@@ -170,13 +170,13 @@ public class CachedGraphWrapper
 		);
 	}
 	
-	public EvidenceType getEvidenceType ( EvidenceTypePrototype proto )
+	public synchronized EvidenceType getEvidenceType ( EvidenceTypePrototype proto )
 	{
 		return this.getEvidenceType ( proto.getId (), proto.getFullName (), proto.getDescription () );
 	}
 	
 	
-	public DataSource getDataSource ( String id, String fullName, String description )
+	public synchronized DataSource getDataSource ( String id, String fullName, String description )
 	{
 		return this.cacheGet ( 
 			DataSource.class, id, 
@@ -184,12 +184,21 @@ public class CachedGraphWrapper
 		);
 	}
 
-	public DataSource getDataSource ( DataSourcePrototype proto )
+	public synchronized DataSource getDataSource ( DataSourcePrototype proto )
 	{
 		return this.getDataSource ( proto.getId (), proto.getFullName (), proto.getDescription () );
 	}
 	
-	public ConceptAccession getAccession ( AccessionPrototype proto, ONDEXConcept concept )
+	public synchronized ConceptAccession getAccession ( String accession, DataSource dataSrc, boolean isAmbiguous, ONDEXConcept concept )
+	{
+		// TODO: is the ID unique? Is it concept-unique? 
+		return this.cacheGet ( 
+			ConceptAccession.class, accession,
+			() -> concept.createConceptAccession ( accession, dataSrc, isAmbiguous )
+		);		
+	}
+	
+	public synchronized ConceptAccession getAccession ( AccessionPrototype proto, ONDEXConcept concept )
 	{
 		// Let's see if it has a parent
 		if ( proto.getDataSource () == null )
@@ -200,11 +209,7 @@ public class CachedGraphWrapper
 					proto.setDataSource ( this.getDataSource ( dsProto ) );
 		}
 		
-		// TODO: is the ID unique? Is it concept-unique? 
-		return this.cacheGet ( 
-			ConceptAccession.class, proto.getId (),
-			() -> concept.createConceptAccession ( proto.getAccession (), proto.getDataSource (), proto.isAmbiguous () )
-		);
+		return this.getAccession ( proto.getAccession (), proto.getDataSource (), proto.isAmbiguous (), concept );
 	}	
 	
 	/**

@@ -27,7 +27,7 @@ public class ConstantConceptClassMapper<S> extends ConstMapper<S, ConceptClassPr
 	}
 
 	@Override
-	public synchronized ConceptClass map ( S source, ONDEXGraph graph ) {
+	public ConceptClass map ( S source, ONDEXGraph graph ) {
 		return CachedGraphWrapper.getInstance ( graph ).getConceptClass ( this.getValue () );
 	}
 	
