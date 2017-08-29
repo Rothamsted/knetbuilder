@@ -7,9 +7,7 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Property;
 
-import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
-import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import net.sourceforge.ondex.parser2.Visitable;
+import net.sourceforge.ondex.parser.Visitable;
 
 /**
  * This implements the {@link Visitable} interface, by adding an RDF statement to the input passed to 

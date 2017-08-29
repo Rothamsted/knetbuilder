@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.parser2.ExploringMapper;
+import net.sourceforge.ondex.parser.ExploringMapper;
 
 /**
  * <p>This is the top level mapper/parser. Usually a class of this type is configured via 

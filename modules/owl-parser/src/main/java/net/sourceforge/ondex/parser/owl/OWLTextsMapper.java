@@ -3,9 +3,9 @@ package net.sourceforge.ondex.parser.owl;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.rdf.model.RDFNode;
 
-import net.sourceforge.ondex.parser2.AbstractTextsMapper;
-import net.sourceforge.ondex.parser2.Scanner;
-import net.sourceforge.ondex.parser2.TextMapper;
+import net.sourceforge.ondex.parser.AbstractTextsMapper;
+import net.sourceforge.ondex.parser.Scanner;
+import net.sourceforge.ondex.parser.TextMapper;
 
 /**
  * The OWL text mapper. This maps a literal property associated to a class to a string. 

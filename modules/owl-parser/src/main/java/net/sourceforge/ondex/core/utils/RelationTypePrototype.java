@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.core.utils;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;
 
 /**

@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.core.utils;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
-
 /**
  *
  * @author brandizi

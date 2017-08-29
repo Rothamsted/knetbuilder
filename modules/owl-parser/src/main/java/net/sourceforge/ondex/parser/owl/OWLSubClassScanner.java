@@ -6,8 +6,7 @@ import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 
-import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
-import net.sourceforge.ondex.parser2.Scanner;
+import net.sourceforge.ondex.parser.Scanner;
 
 /**
  * Looks for all the direct subclasses of a given OWL class. This is intended to be used with {@link OWLMapper}, 

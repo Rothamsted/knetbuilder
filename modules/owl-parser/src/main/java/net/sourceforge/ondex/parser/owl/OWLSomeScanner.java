@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 
-import net.sourceforge.ondex.parser2.Scanner;
+import net.sourceforge.ondex.parser.Scanner;
 
 /**
  * Scans OWL axioms like A subclassOf ( part-of ( some C ) ) or A equivalent ( B and (part-of ( some C ) )

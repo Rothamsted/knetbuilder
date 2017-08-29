@@ -24,7 +24,7 @@
 	</bean>
 	
 	
-	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser2.CompositeAccessionsMapper">
+	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.CompositeAccessionsMapper">
 		<property name = "mappers">
 			<set>
 				<bean class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
@@ -41,7 +41,7 @@
 					<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
 					<property name = "dataSourcePrefix" value="Wikipedia:" />
 					<property name = "dataSourcesMapper">
-						<bean class = "net.sourceforge.ondex.parser2.ConstDataSourcesMapper">
+						<bean class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 							<property name="value">
 								<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
 									<property name="id" value = "Wikipedia" />
@@ -63,7 +63,7 @@
 		</property>
 	</bean>
 
-	<bean id = "goDataSourcesMapper" class = "net.sourceforge.ondex.parser2.ConstDataSourcesMapper">
+	<bean id = "goDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name="value">
 			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
 				<property name="id" value = "GO" />

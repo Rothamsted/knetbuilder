@@ -1,14 +1,13 @@
 package net.sourceforge.ondex.parser.owl;
 
-import java.util.Iterator;
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
 import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
-import net.sourceforge.ondex.parser2.ExploringMapper;
-import net.sourceforge.ondex.parser2.Scanner;
+import net.sourceforge.ondex.parser.ExploringMapper;
+import net.sourceforge.ondex.parser.Scanner;
 
 /**
  * A {@link Scanner} that gets all the top classes in an OWL ontology (ie, all declared classes that haven't

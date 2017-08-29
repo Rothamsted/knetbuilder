@@ -3,11 +3,11 @@ package net.sourceforge.ondex.parser.owl;
 import org.apache.jena.ontology.OntClass;
 
 import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.parser2.ConceptClassMapper;
-import net.sourceforge.ondex.parser2.DefaultConceptClassMapper;
-import net.sourceforge.ondex.parser2.HoldingMapper;
-import net.sourceforge.ondex.parser2.Mapper;
-import net.sourceforge.ondex.parser2.TextMapper;
+import net.sourceforge.ondex.parser.ConceptClassMapper;
+import net.sourceforge.ondex.parser.DefaultConceptClassMapper;
+import net.sourceforge.ondex.parser.HoldingMapper;
+import net.sourceforge.ondex.parser.Mapper;
+import net.sourceforge.ondex.parser.TextMapper;
 
 /**
  * Maps an OWL class that is on top of an ontology hierarchy. This is an {@link HoldingMapper}, since the initially

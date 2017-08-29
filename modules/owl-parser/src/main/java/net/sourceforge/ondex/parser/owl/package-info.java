@@ -1,10 +1,10 @@
 /**
  * <p>Implementation of an OWL parser for ONDEX, focused on ontology files. This is based on the 
- * net.sourceforge.ondex.parser2 framework.</p>
+ * net.sourceforge.ondex.parser framework.</p>
  * 
  * <p>{@link net.sourceforge.ondex.parser.owl.OWLMapper} is the entry point to parse/map an 
  * {@link org.apache.jena.ontology.OntModel OWL ontology}, for instance one loaded from an .owl file. This is 
- * an {@link net.sourceforge.ondex.parser2.ExploringMapper}, which means it is able to follow relations like 
+ * an {@link net.sourceforge.ondex.parser.ExploringMapper}, which means it is able to follow relations like 
  * {@code owl:subClassOf}, as in {@link net.sourceforge.ondex.parser.owl.OWLSubClassScanner} and to build 
  * a corresponding ONDEX graph with the OWL classes that it meets. Other relations it is able to follow are 
  * {@link net.sourceforge.ondex.parser.owl.OWLSomeScanner} and {@link net.sourceforge.ondex.parser.owl.OWLEqIntersctScanner}, 

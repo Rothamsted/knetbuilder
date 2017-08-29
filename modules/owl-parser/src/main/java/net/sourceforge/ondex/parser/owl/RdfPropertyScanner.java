@@ -9,7 +9,7 @@ import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 
-import net.sourceforge.ondex.parser2.Scanner;
+import net.sourceforge.ondex.parser.Scanner;
 
 /**
  * Fetches RDF literals, associated to OWL classes by means of a {@link #getPropertyIri() property}.

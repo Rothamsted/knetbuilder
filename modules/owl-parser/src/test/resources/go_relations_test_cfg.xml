@@ -22,7 +22,7 @@
 			<list merge = "true">
 			  
 			  <!-- Follows intersections of classes of which the starting class is declared equivalent to  -->
-				<bean class = "net.sourceforge.ondex.parser2.ExploringMapper.LinkerConfiguration">
+				<bean class = "net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration">
 					<property name = "scanner">
 						<bean class = "net.sourceforge.ondex.parser.owl.OWLEqIntersctScanner" />
 					</property>
@@ -30,7 +30,7 @@
 				</bean>
 				
 				<!-- Follows owl:someValuesFrom relations -->
-				<bean class = "net.sourceforge.ondex.parser2.ExploringMapper.LinkerConfiguration">
+				<bean class = "net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration">
 					<property name = "scanner">
 						<bean class = "net.sourceforge.ondex.parser.owl.OWLSomeScanner">
 							<property name="propertyIri" value="#{ns.iri ( 'obo:BFO_0000050' )}" /><!-- part of -->
@@ -39,7 +39,7 @@
 					<property name = "mapper" ref = "partOfMapper" />
 				</bean>
 
-				<bean class = "net.sourceforge.ondex.parser2.ExploringMapper.LinkerConfiguration">
+				<bean class = "net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration">
 					<property name = "scanner">
 						<bean class = "net.sourceforge.ondex.parser.owl.OWLSomeScanner">
 							<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002211' )}" /><!-- regulates -->
@@ -48,7 +48,7 @@
 					<property name = "mapper" ref = "regulatesMapper" />
 				</bean>
 
-				<bean class = "net.sourceforge.ondex.parser2.ExploringMapper.LinkerConfiguration">
+				<bean class = "net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration">
 					<property name = "scanner">
 						<bean class = "net.sourceforge.ondex.parser.owl.OWLSomeScanner">
 							<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002213' )}" /><!-- pos regulates -->
@@ -57,7 +57,7 @@
 					<property name = "mapper" ref = "posRegMapper" />
 				</bean>
 
-				<bean class = "net.sourceforge.ondex.parser2.ExploringMapper.LinkerConfiguration">
+				<bean class = "net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration">
 					<property name = "scanner">
 						<bean class = "net.sourceforge.ondex.parser.owl.OWLSomeScanner">
 							<property name="propertyIri" value="#{ns.iri ( 'obo:RO_0002212' )}" /><!-- neg regulates -->
@@ -79,7 +79,7 @@
 
 	<!-- OBO/OWL class relations -->
 
-	<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser2.SimpleRelationMapper">
+	<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
 			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
 				<property name="id" value = "part_of" />
@@ -90,7 +90,7 @@
 		</property> 
 	</bean>
 
-	<bean id = "regulatesMapper" class = "net.sourceforge.ondex.parser2.SimpleRelationMapper">
+	<bean id = "regulatesMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
 			<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
 				<property name="id" value = "regulates" />
@@ -101,7 +101,7 @@
 		</property> 
 	</bean>
 
-	<bean id = "posRegMapper" class = "net.sourceforge.ondex.parser2.SimpleRelationMapper">
+	<bean id = "posRegMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
 			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
 				<property name="id" value = "pos_reg" />
@@ -113,7 +113,7 @@
 		</property> 
 	</bean>
 	
-	<bean id = "negRegMapper" class = "net.sourceforge.ondex.parser2.SimpleRelationMapper">
+	<bean id = "negRegMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
 			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
 				<property name="id" value = "neg_reg" />

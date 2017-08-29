@@ -1,26 +1,13 @@
 package net.sourceforge.ondex.parser.owl;
 
-import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
-
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
-import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.RDFNode;
 
-import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import net.sourceforge.ondex.core.ConceptAccession;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.DataSourcePrototype;
-import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
-import net.sourceforge.ondex.parser.AccessionsMapper;
-import net.sourceforge.ondex.parser2.AbstractAccessionsMapper;
-import net.sourceforge.ondex.parser2.DefaultAccessionsMapper;
-import net.sourceforge.ondex.parser2.ConstDataSourcesMapper;
-import net.sourceforge.ondex.parser2.TextsMapper;
+import net.sourceforge.ondex.parser.ConstDataSourcesMapper;
+import net.sourceforge.ondex.parser.DefaultAccessionsMapper;
+import net.sourceforge.ondex.parser.TextsMapper;
 
 /**
  * <p>This implements a {@link DefaultAccessionsMapper} considering the way accessions are represented in OBO/OWL
@@ -28,7 +15,7 @@ import net.sourceforge.ondex.parser2.TextsMapper;
  * GO class and each value given for this property has the 'GO:' prefix (e.g., 'GO:00002835'). You can set 'oboInOwl:id' using 
  * {@link #setPropertyIri(String) the property IRI setter} and tell about the 'GO:' prefix via 
  * {@link #setDataSourcePrefix(String)}. The ONDEX data source is a different entity and you can set it 
- * via {@link #setDataSourcesMapper(net.sourceforge.ondex.parser2.DataSourcesMapper)} (possibly using a 
+ * via {@link #setDataSourcesMapper(net.sourceforge.ondex.parser.DataSourcesMapper)} (possibly using a 
  * {@link ConstDataSourcesMapper}).</p>
  * 
  * <p>If the data source prefix is specified, this will be removed from the values associated to the ontology class

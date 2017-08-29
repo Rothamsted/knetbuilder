@@ -22,7 +22,7 @@
 		<property name="propertyIri" value = "#{ns.iri ( 'obo:IAO_0000115' )}" /><!-- definition -->
 	</bean>
 	
-	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser2.DefaultConceptMapper">
+	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.DefaultConceptMapper">
 	  <property name = "idMapper" ref = "idMapper" />
 	  <property name = "descriptionMapper" ref = "descriptionMapper" />	  
 	  <property name = "preferredNameMapper" ref = "nameMapper" />

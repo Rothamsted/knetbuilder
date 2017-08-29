@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 
-import net.sourceforge.ondex.parser2.Scanner;
+import net.sourceforge.ondex.parser.Scanner;
 
 /**
  * An adapter to {@link Scanner} that returns an OWL class based on its {@link #getTopClassIri() IRI/URI}. 

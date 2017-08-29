@@ -31,13 +31,13 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.utils.RelationTypePrototype;
-import net.sourceforge.ondex.parser2.ConceptBasedRelMapper;
-import net.sourceforge.ondex.parser2.ConstDataSourceMapper;
-import net.sourceforge.ondex.parser2.DefaultConceptMapper;
-import net.sourceforge.ondex.parser2.ExploringMapper.LinkerConfiguration;
-import net.sourceforge.ondex.parser2.InvertingConceptRelMapper;
-import net.sourceforge.ondex.parser2.SimpleRelationMapper;
-import net.sourceforge.ondex.parser2.TextMapper;
+import net.sourceforge.ondex.parser.ConceptBasedRelMapper;
+import net.sourceforge.ondex.parser.ConstDataSourceMapper;
+import net.sourceforge.ondex.parser.DefaultConceptMapper;
+import net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration;
+import net.sourceforge.ondex.parser.InvertingConceptRelMapper;
+import net.sourceforge.ondex.parser.SimpleRelationMapper;
+import net.sourceforge.ondex.parser.TextMapper;
 
 
 

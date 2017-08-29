@@ -34,7 +34,7 @@
 		     list tag, see eg, go_relations_test_cfg.xml -->
 		<property name = "linkers">
 			<list>
-				<bean class = "net.sourceforge.ondex.parser2.ExploringMapper.LinkerConfiguration">
+				<bean class = "net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration">
 					<property name="scanner">
 						<bean class = "net.sourceforge.ondex.parser.owl.OWLSubClassScanner" />
 					</property>
@@ -48,9 +48,9 @@
 
 	<!-- We use the inverting mapper, because the base mapper goes from parent to child, while is-a has the 
 	     opposite direction -->					
-	<bean id = "isaMapper" class = "net.sourceforge.ondex.parser2.InvertingConceptRelMapper">
+	<bean id = "isaMapper" class = "net.sourceforge.ondex.parser.InvertingConceptRelMapper">
 		<property name = "baseMapper">
-			<bean class = "net.sourceforge.ondex.parser2.SimpleRelationMapper">
+			<bean class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 				<!-- Every relation created from this mapper has this relation type (the prototype just contains
 				     constants to instantiate the relation type -->
 				<property 
@@ -73,7 +73,7 @@
 	  <property name = "descriptionMapper" ref = "descriptionMapper" />
 	</bean>
 
-	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser2.DefaultConceptMapper">
+	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.DefaultConceptMapper">
 	  <property name = "idMapper" ref = "idMapper" />
 	  <property name = "descriptionMapper" ref = "descriptionMapper" />	  
 	  <property name = "preferredNameMapper" ref = "nameMapper" />
@@ -100,7 +100,7 @@
 	  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:comment' )}" />
 	</bean>
 		
-	<bean id = "dataSourceMapper" class = "net.sourceforge.ondex.parser2.ConstDataSourceMapper">
+	<bean id = "dataSourceMapper" class = "net.sourceforge.ondex.parser.ConstDataSourceMapper">
 		<property name="value" value = "#{T( net.sourceforge.ondex.parser.owl.Utils ).OWL_PARSER_DATA_SOURCE }" />
 	</bean>	
 

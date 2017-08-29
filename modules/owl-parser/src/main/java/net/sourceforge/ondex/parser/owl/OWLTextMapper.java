@@ -3,7 +3,7 @@ package net.sourceforge.ondex.parser.owl;
 import org.apache.jena.ontology.OntClass;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.parser2.TextMapper;
+import net.sourceforge.ondex.parser.TextMapper;
 
 /**
  * a {@link TextMapper} that maps the lexical value of an {@link #getPropertyIri() RDF property} to a string.

@@ -2,7 +2,7 @@ package net.sourceforge.ondex.parser.owl;
 
 import org.apache.jena.ontology.OntClass;
 
-import net.sourceforge.ondex.parser2.TextsMapper;
+import net.sourceforge.ondex.parser.TextsMapper;
 
 /**
  * 

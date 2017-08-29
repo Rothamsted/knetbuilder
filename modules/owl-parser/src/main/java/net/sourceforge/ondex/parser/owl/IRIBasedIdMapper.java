@@ -6,8 +6,7 @@ import java.net.URLDecoder;
 import org.apache.jena.ontology.OntClass;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.parser.SimpleIdMapper;
-import net.sourceforge.ondex.parser2.TextMapper;
+import net.sourceforge.ondex.parser.TextMapper;
 
 /**
  * An identifier mapper that is based on the extraction of the last part of an IRI/URI. For instance, it gets 

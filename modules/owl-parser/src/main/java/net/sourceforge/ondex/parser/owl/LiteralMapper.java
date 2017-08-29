@@ -2,15 +2,10 @@ package net.sourceforge.ondex.parser.owl;
 
 import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 
-import org.apache.jena.ontology.OntClass;
-import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.parser.SimpleDescriptionMapper;
-import net.sourceforge.ondex.parser.SimpleLabelMapper;
-import net.sourceforge.ondex.parser2.TextMapper;
+import net.sourceforge.ondex.parser.TextMapper;
 
 /**
  * Maps an RDF literal to a string, using its lexical representation.
