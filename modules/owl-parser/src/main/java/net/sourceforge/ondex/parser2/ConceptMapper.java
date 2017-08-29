@@ -17,6 +17,10 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  */
 public interface ConceptMapper<S> extends PairMapper<S, ConceptClass, ONDEXConcept>, Visitable<S>
 {
+	/**
+	 * A helper wrapper, which gets the CC to be passed to {@link #map(Object, Object, ONDEXGraph)} from the 
+	 * {@link ConceptClassMapper#map(Object, ONDEXGraph) concept class mapper} passed as parameter here.
+	 */
 	public default ONDEXConcept map ( S source, ConceptClassMapper<S> ccmapper, ONDEXGraph graph ) 
 	{
 		return this.map ( source, ccmapper.map ( source, graph ), graph );
