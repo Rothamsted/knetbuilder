@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	>
 
 	<description><![CDATA[
 	The default mapping for net.sourceforge.ondex.parser.owl.OWLMapper. This uses mappings from common elements in OWL
@@ -46,6 +49,10 @@
 		
 	<bean id = "rootsScanner" class = "net.sourceforge.ondex.parser.owl.OwlRootClassesScanner" />
 
+
+
+	<!-- OBO/OWL class relations -->
+
 	<!-- We use the inverting mapper, because the base mapper goes from parent to child, while is-a has the 
 	     opposite direction -->					
 	<bean id = "isaMapper" class = "net.sourceforge.ondex.parser.InvertingConceptRelMapper">
@@ -58,6 +65,18 @@
 				  value = "#{T( net.sourceforge.ondex.core.utils.RelationTypePrototype ).IS_A_PROTOTYPE }"/>
 			</bean>
 		</property>
+	</bean>
+
+
+	<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
+		<property name ="relationTypePrototype">
+			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+				<property name="id" value = "part_of" />
+				<property name="fullName" value = "part of" />
+				<property name="antisymmetric" value = "true" />
+				<property name="transitive" value = "true" />
+			</bean>
+		</property> 
 	</bean>
 
 
@@ -79,6 +98,7 @@
 	  <property name = "preferredNameMapper" ref = "nameMapper" />
 	  <property name = "accessionsMapper" ref = "accessionsMapper" />
 	  <property name = "dataSourceMapper" ref = "dataSourceMapper" />
+	  <property name = "altNamesMapper" ref = "altNamesMapper" />
 	  <!-- 
 	    See the class DefaultConceptMapper for default properties (setXXX) you might want to change here 
 	    eg, annotationMapper, evidenceMapper, altNamesMapper
@@ -96,6 +116,10 @@
 	  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:label' )}" />
 	</bean>
 
+	<!-- This is null by default, defin your own net.sourceforge.ondex.parser.owl.OWLTextsMapper to map alt names (eg, see
+	     GO files)  -->
+	<bean id = "altNamesMapper" factory-bean = "nullBeanFactory" factory-method = "get" />
+	
 	<bean id = "descriptionMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
 	  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:comment' )}" />
 	</bean>
@@ -126,4 +150,11 @@
 		<constructor-arg value="#{T( org.apache.jena.ontology.OntModelSpec ).OWL_MEM }"></constructor-arg>
 	</bean>
 		
+	<!-- 
+	  Provides a factory bean that returns a null bean, via factory-method = 'get' (see above)
+	  Null beans are placeholder that can be overridden in descendant files with the real bean you need. 
+	-->
+	<bean id = "nullBeanFactory" class = "java.util.concurrent.atomic.AtomicReference" >
+		<constructor-arg><null/></constructor-arg>
+	</bean>
 </beans>

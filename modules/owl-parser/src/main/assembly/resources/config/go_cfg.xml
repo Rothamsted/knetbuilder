@@ -101,20 +101,6 @@
 	</bean>
 
 
-	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.DefaultConceptMapper">
-	  <property name = "idMapper" ref = "idMapper" />
-	  <property name = "descriptionMapper" ref = "descriptionMapper" />	  
-	  <property name = "preferredNameMapper" ref = "nameMapper" />
-	  <property name = "accessionsMapper" ref = "accessionsMapper" />
-	  <property name = "dataSourceMapper" ref = "dataSourceMapper" />
-	  <property name = "altNamesMapper">
-	  	<bean class = "net.sourceforge.ondex.parser.owl.OWLTextsMapper">
-				<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasExactSynonym' )}" />
-	  	</bean>
-	  </property>
-	</bean> <!-- /conceptMapper -->
-
-
 	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.CompositeAccessionsMapper">
 		<property name = "mappers">
 			<set>
@@ -162,19 +148,12 @@
 	</bean> <!-- /accessionsMapper -->
 
 
+	<bean id = "altNamesMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextsMapper">
+		<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasExactSynonym' )}" />
+	</bean>
+
 
 	<!-- OBO/OWL class relations -->
-
-	<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
-		<property name ="relationTypePrototype">
-			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
-				<property name="id" value = "part_of" />
-				<property name="fullName" value = "part of" />
-				<property name="antisymmetric" value = "true" />
-				<property name="transitive" value = "true" />
-			</bean>
-		</property> 
-	</bean>
 
 	<bean id = "regulatesMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
@@ -213,10 +192,10 @@
 
 
 	<bean id = "goDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-		<property name="value">
+		<property name = "value">
 			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
-				<property name="id" value = "GO" />
-				<property name="fullName" value = "Gene Ontology" />
+				<property name = "id" value = "GO" />
+				<property name = "fullName" value = "Gene Ontology" />
 			</bean>
 		</property>
 	</bean>	

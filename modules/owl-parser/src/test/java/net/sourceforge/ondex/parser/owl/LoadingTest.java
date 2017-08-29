@@ -27,10 +27,10 @@ public class LoadingTest
 	public void testLoad () throws Exception
 	{
 		String owlDir = "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/";
-		//load ( "go_cfg.xml", owlDir + "go.owl" );
+		load ( "go_cfg.xml", owlDir + "go.owl" );
 		//load ( "doid_cfg.xml", owlDir + "doid.owl" );
 		//load ( "to_cfg.xml", owlDir + "trait_ontology.owl" );
-		load ( "fypo_cfg.xml", owlDir + "fypo.owl" );
+		//load ( "fypo_cfg.xml", owlDir + "fypo.owl" );
 	}
 	
 	public static void load ( String cfgPath, String owlPath ) throws Exception
@@ -44,8 +44,7 @@ public class LoadingTest
 		);		
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );				
-		owlMap.map ( model, graph );		
+		owlMap.map2Graph ( model );		
 		((Closeable) ctx ).close ();
 	}
 }

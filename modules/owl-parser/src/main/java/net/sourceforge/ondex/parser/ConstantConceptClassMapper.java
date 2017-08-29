@@ -14,9 +14,10 @@ import net.sourceforge.ondex.core.utils.ConceptClassPrototype;
  *
  */
 public class ConstantConceptClassMapper<S> extends ConstMapper<S, ConceptClassPrototype, ConceptClass>
+  implements ConceptClassMapper<S>
 {
 
-	public ConstantConceptClassMapper () {
+	public ConstantConceptClassMapper () {		
 		this ( null );
 	}
 

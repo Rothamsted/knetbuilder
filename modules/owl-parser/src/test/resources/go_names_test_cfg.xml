@@ -22,17 +22,8 @@
 		<property name="propertyIri" value = "#{ns.iri ( 'obo:IAO_0000115' )}" /><!-- definition -->
 	</bean>
 	
-	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.DefaultConceptMapper">
-	  <property name = "idMapper" ref = "idMapper" />
-	  <property name = "descriptionMapper" ref = "descriptionMapper" />	  
-	  <property name = "preferredNameMapper" ref = "nameMapper" />
-	  <property name = "accessionsMapper" ref = "accessionsMapper" />
-	  <property name = "dataSourceMapper" ref = "dataSourceMapper" />
-	  <property name = "altNamesMapper">
-	  	<bean class = "net.sourceforge.ondex.parser.owl.OWLTextsMapper">
-				<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasExactSynonym' )}" />
-	  	</bean>
-	  </property>
+	<bean id ="altNamesMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextsMapper">
+		<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasExactSynonym' )}" />
 	</bean>
-				
+					
 </beans>

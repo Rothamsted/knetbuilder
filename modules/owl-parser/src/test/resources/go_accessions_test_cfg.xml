@@ -56,7 +56,14 @@
 				<bean class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
 					<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:id' )}" />
 					<property name = "dataSourcePrefix" value="GO:" />
-					<property name = "addedPrefix" value = "GenOnt:"
+					<property name = "addedPrefix" value = "GenOnt:" />
+					<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" />
+				</bean>
+				<!-- And this is the variant where you both match a prefix and retain it: matched/added prefixes are the same -->				
+				<bean class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
+					<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:id' )}" />
+					<property name = "dataSourcePrefix" value="GO:" />
+					<property name = "addedPrefix" value = "GO:" />
 					<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" />
 				</bean>				
 			</set>

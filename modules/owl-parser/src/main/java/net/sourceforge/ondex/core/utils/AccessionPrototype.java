@@ -1,9 +1,10 @@
 package net.sourceforge.ondex.core.utils;
 
+import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.DataSource;
 
 /**
- * TODO: comment me!
+ * Facility to be used to create a constant value {@link ConceptAccession}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>6 Jun 2017</dd></dl>

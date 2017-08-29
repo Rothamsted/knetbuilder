@@ -50,7 +50,7 @@ public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> imp
 			String dsPrefix = this.getDataSourcePrefix ();
 			String addedPrefix = this.getAddedPrefix ();
 			
-			Stream<String> result = this.textsMapper.map ( ontCls, graph );
+			Stream<String> result = this.getTextsMapper ().map ( ontCls, graph );
 			
 			if ( dsPrefix != null )
 			{
@@ -101,6 +101,16 @@ public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> imp
 		public void setPropertyIri ( String propertyIri )
 		{
 			textsMapper.setPropertyIri ( propertyIri );
+		}
+
+		public OWLTextsMapper getTextsMapper ()
+		{
+			return textsMapper;
+		}
+
+		public void setTextsMapper ( OWLTextsMapper textsMapper )
+		{
+			this.textsMapper = textsMapper;
 		}
 	}
 	
