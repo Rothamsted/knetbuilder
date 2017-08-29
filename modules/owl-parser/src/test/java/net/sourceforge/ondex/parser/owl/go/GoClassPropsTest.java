@@ -46,9 +46,9 @@ public class GoClassPropsTest
 		
 		ONDEXConcept c = graph.getConcepts ().iterator ().next ();
 
-		DataSource ds = graph.getMetaData ().createDataSource ( "GO", "Gene Ontology", "" );
+		DataSource goDs = graph.getMetaData ().createDataSource ( "GO", "Gene Ontology", "" );
 		
-		assertNotNull ( "Concept accession is wrong!", c.getConceptAccession ( "0000003", ds ) );
+		assertNotNull ( "Concept accession is wrong!", c.getConceptAccession ( "0000003", goDs ) );
 		assertNotNull ( "Concept label is wrong!", c.getConceptName ( "reproduction" ) );
 		Assert.assertTrue ( 
 			"Concept definition is wrong!", 
@@ -63,8 +63,12 @@ public class GoClassPropsTest
 			cc.getDescription ().startsWith ( "Any process specifically pertinent to" ) 
 		);
 		
-		ds = graph.getMetaData ().createDataSource ( "Wikipedia", "Wikipedia", "" );
-		assertNotNull ( "Additional x-ref to Wikipedia is wrong!", c.getConceptAccession ( "Reproduction", ds ) );
+		DataSource wpDs = graph.getMetaData ().createDataSource ( "Wikipedia", "Wikipedia", "" );
+		assertNotNull ( "Additional x-ref to Wikipedia is wrong!", c.getConceptAccession ( "Reproduction", wpDs ) );
+		
+		// Accessions with changed prefixes
+		assertNotNull ( "GO:0000003 accession not found!", c.getConceptAccession ( "GO:0000003", goDs ) );
+		assertNotNull ( "GenOnt:0000003 accession not found!", c.getConceptAccession ( "GenOnt:0000003", goDs ) );
 		
 		( (Closeable) ctx ).close ();
 	}

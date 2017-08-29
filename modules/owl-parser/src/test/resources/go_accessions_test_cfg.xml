@@ -51,6 +51,14 @@
 						</bean>	
 					</property>
 				</bean>
+				<!-- This is to test the prefix replacement mechanism: 
+				     'GO:' is first removed and then 'GenOnt:' is added to the ONDEX accession --> 
+				<bean class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
+					<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:id' )}" />
+					<property name = "dataSourcePrefix" value="GO:" />
+					<property name = "addedPrefix" value = "GenOnt:"
+					<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" />
+				</bean>				
 			</set>
 		</property>
 	</bean>
