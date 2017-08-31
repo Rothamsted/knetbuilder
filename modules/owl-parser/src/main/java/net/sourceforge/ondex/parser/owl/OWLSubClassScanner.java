@@ -22,6 +22,8 @@ public class OWLSubClassScanner implements Scanner<OntClass, OntClass>
 	public Stream<OntClass> scan ( OntClass parent )
 	{
 		return JENAUTILS.toStream ( parent.listSubClasses ( true ), true )
-		.filter ( cls -> !cls.isAnon () ); // These are usually other restrictions and we catch them elsewhere
+		// These are usually other restrictions and we catch them elsewhere
+		.filter ( cls -> !cls.isAnon () )
+		.filter ( cls -> cls.getURI () != null ); 
 	}
 }

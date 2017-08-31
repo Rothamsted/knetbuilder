@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.parser.owl;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
@@ -50,7 +51,9 @@ public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> imp
 			String dsPrefix = this.getDataSourcePrefix ();
 			String addedPrefix = this.getAddedPrefix ();
 			
-			Stream<String> result = this.getTextsMapper ().map ( ontCls, graph );
+			Stream<String> result = this.getTextsMapper ()
+				.map ( ontCls, graph )
+				.filter ( Objects::nonNull );
 			
 			if ( dsPrefix != null )
 			{

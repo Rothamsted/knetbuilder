@@ -21,7 +21,9 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  * However, the data source and/or the ambiguity mappers can
  * return fewer values than the accession returned by the accession values mapper. In that case, these values are reused in 
  * order. This accommodates the case where there is only one constant data source and a constant ambiguity flag for all
- * the accessions.</p> 
+ * the accessions.</p>
+ * 
+ * <p><b>WARNING</b>: All the mappers are supposed to return non-null values</p> 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

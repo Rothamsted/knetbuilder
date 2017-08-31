@@ -25,7 +25,7 @@
 							<property name="propertyIri" value="#{ns.iri ( 'obo:IDO_0000664' )}" /><!-- has material basis -->
 						</bean>
 					</property>
-					<property name = "mapper" ref = "materialBasisMapper">
+					<property name = "mapper">
 						<bean id = "materialBasisMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 							<property name ="relationTypePrototype">
 								<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">

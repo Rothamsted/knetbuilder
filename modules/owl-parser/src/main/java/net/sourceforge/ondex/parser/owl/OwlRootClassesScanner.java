@@ -1,9 +1,12 @@
 package net.sourceforge.ondex.parser.owl;
 
+import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
+
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
 import net.sourceforge.ondex.parser.ExploringMapper;
@@ -22,7 +25,8 @@ public class OwlRootClassesScanner implements Scanner<OntModel, OntClass>
 {
 	@Override
 	public Stream<OntClass> scan ( OntModel model )
-	{
-		return JenaGraphUtils.JENAUTILS.toStream ( model.listHierarchyRootClasses () );
+	{		
+		return JENAUTILS.toStream ( model.listHierarchyRootClasses () )
+			.filter ( cls -> !cls.isAnon () ); // These are usually other restrictions and we catch them elsewhere
 	}
 }

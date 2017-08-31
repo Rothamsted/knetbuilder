@@ -25,8 +25,8 @@ public class LoadingTest
 	{
 		String owlDir = "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/";
 		//load ( "go_cfg.xml", owlDir + "go.owl" );
-		//load ( "doid_cfg.xml", owlDir + "doid.owl" );
-		load ( "to_cfg.xml", owlDir + "trait_ontology.owl" );
+		load ( "doid_cfg.xml", owlDir + "doid.owl" );
+		//load ( "to_cfg.xml", owlDir + "trait_ontology.owl" );
 		//load ( "fypo_cfg.xml", owlDir + "fypo.owl" );
 	}
 	

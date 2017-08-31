@@ -54,7 +54,9 @@ public class OWLSomeScanner extends DefaultRdfPropertyConfigurator implements Sc
 		.filter ( restr -> restr.isSomeValuesFromRestriction () )
 		.map ( restr -> restr.asSomeValuesFromRestriction () )
 		.filter ( someRestr -> propIri.equals ( someRestr.getOnProperty ().getURI () ) )
-		.map ( someRestr -> someRestr.getSomeValuesFrom ().as ( OntClass.class ) );		
+		.map ( someRestr -> someRestr.getSomeValuesFrom ().as ( OntClass.class ) )
+		.filter ( cls -> !cls.isAnon () )
+		.filter ( cls -> cls.getURI () != null );
 	}
 		
 }
