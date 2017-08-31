@@ -3,6 +3,7 @@ package net.sourceforge.ondex.parser.owl;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -70,6 +71,7 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 			timerService.shutdownNow ();			
 		}
 	}
+	
 
 	/** 
 	 * Wraps the parent's corresponding method by checking if the input was {@link #isVisited(OntClass)} and 

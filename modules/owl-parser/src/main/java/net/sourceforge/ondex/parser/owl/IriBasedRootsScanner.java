@@ -5,6 +5,8 @@ import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.parser.Scanner;
 
@@ -18,6 +20,9 @@ import net.sourceforge.ondex.parser.Scanner;
 public class IriBasedRootsScanner implements Scanner<OntModel, OntClass>
 {
 	private String topClassIri;
+	
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+
 
 	public IriBasedRootsScanner ()
 	{
@@ -45,6 +50,8 @@ public class IriBasedRootsScanner implements Scanner<OntModel, OntClass>
 	public Stream<OntClass> scan ( OntModel model )
 	{
 		String topClsIri = this.getTopClassIri ();
-		return Collections.singleton ( model.getOntClass ( topClsIri ) ).stream ();
+		return Collections.singleton ( model.getOntClass ( topClsIri ) )
+			.stream ()
+			.peek ( cls -> log.info ( "Scanning from the class <{}>", cls.getURI () ) );
 	}
 }

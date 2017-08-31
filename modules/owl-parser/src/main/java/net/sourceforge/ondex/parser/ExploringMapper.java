@@ -11,23 +11,25 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**
- * The exploring mapper. This is based on the idea to start from a set of data items, which are provided by 
- * a {@link #getRootsScanner() roots scanner}. Those items are then explored by means of a set of 
- * {@link #getLinkers() linkers}. Each linker contains a {@link Scanner} and a {@link RelationMapper}, the former is
- * used to expand a root node into other nodes, the relation mapper is used to create links from the initial root to 
- * each of the related nodes. A relation mapper can be a {@link ConceptBasedRelMapper concept-based relation mapper}, 
- * in which case the root and the related nodes are first mapped to {@link ONDEXConcept} by means of the explorer's
- * {@link #getConceptMapper() explorer's concept mapper} and its {@link #getConceptClassMapper()} (both of which receives
- * the discovered nodes as data source items to map. The nodes found to be related to the roots are then further explored
- * by taking them as new roots and the process is recursively repeated in a top-down fashion, until the linkers return 
- * empty results. 
+ * <p>The exploring mapper. This is based on the idea to start from a set of data items, which are provided by 
+ * a {@link #getRootsScanner() roots scanner}.</p>
  * 
- * This kind of mapper is more generic of a mapper that explores a tree structure, such as an ontology, which is the 
- * typical case where this kind of mapper is expected to be used.
+ * <p>Those items are then explored by means of a set of {@link #getLinkers() linkers}. Each linker contains a 
+ * {@link Scanner} and a {@link RelationMapper}, the former is used to expand a root node into other nodes, the relation
+ * mapper is used to create links from the initial root to each of the related nodes. A relation mapper can be a 
+ * {@link ConceptBasedRelMapper concept-based relation mapper}, in which case the root and the related nodes are first 
+ * mapped to {@link ONDEXConcept} by means of the explorer's {@link #getConceptMapper() explorer's concept mapper} and 
+ * its {@link #getConceptClassMapper()} (both of which receives the discovered nodes as data source items to map. 
+ * The nodes found to be related to the roots are then further explored by taking them as new roots and the process is 
+ * recursively repeated in a top-down fashion, until the linkers return empty results.</p> 
+ * 
+ * <p>This kind of mapper is more generic of a mapper that explores a tree structure, such as an ontology, which is the 
+ * typical case where this kind of mapper is expected to be used.</p>
  *
- * Further options and details are available, see the method's comments below.
+ * <p>Further options and details are available, see the method's comments below.</p>
  * 
- * @see InvertingPairMapper.
+ * @see InvertingRelationMapper, which can be useful when you follow relations like subclassOf and you want to map
+ * them as is-a.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>

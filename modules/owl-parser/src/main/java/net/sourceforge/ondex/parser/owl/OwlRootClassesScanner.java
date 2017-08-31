@@ -7,8 +7,9 @@ import java.util.stream.Stream;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.util.iterator.ExtendedIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
 import net.sourceforge.ondex.parser.ExploringMapper;
 import net.sourceforge.ondex.parser.Scanner;
 
@@ -23,10 +24,15 @@ import net.sourceforge.ondex.parser.Scanner;
  */
 public class OwlRootClassesScanner implements Scanner<OntModel, OntClass>
 {
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
 	@Override
 	public Stream<OntClass> scan ( OntModel model )
 	{		
 		return JENAUTILS.toStream ( model.listHierarchyRootClasses () )
-			.filter ( cls -> !cls.isAnon () ); // These are usually other restrictions and we catch them elsewhere
+			// These are usually other restrictions and we catch them elsewhere				
+			.filter ( cls -> !cls.isAnon () ) 
+			.filter ( cls -> cls.getURI () != null )
+			.peek ( cls -> log.info ( "Scanning from the class <{}>", cls.getURI () ) );
 	}
 }
