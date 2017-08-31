@@ -10,11 +10,8 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-
 /**
- * A scrap test to ensure the whole GO can be loaded.
+ * A scrap test to ensure the whole ontology can be loaded.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>15 May 2017</dd></dl>
@@ -23,13 +20,13 @@ import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 public class LoadingTest
 {
 	@Test
-	@Ignore ( "Not a real test, very time consuming" )
+	//@Ignore ( "Not a real test, very time consuming" )
 	public void testLoad () throws Exception
 	{
 		String owlDir = "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/";
-		load ( "go_cfg.xml", owlDir + "go.owl" );
+		//load ( "go_cfg.xml", owlDir + "go.owl" );
 		//load ( "doid_cfg.xml", owlDir + "doid.owl" );
-		//load ( "to_cfg.xml", owlDir + "trait_ontology.owl" );
+		load ( "to_cfg.xml", owlDir + "trait_ontology.owl" );
 		//load ( "fypo_cfg.xml", owlDir + "fypo.owl" );
 	}
 	

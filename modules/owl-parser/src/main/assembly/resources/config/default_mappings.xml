@@ -30,7 +30,7 @@
 		<property name="conceptMapper" ref = "conceptMapper" />
 		<property name="rootsScanner" ref = "rootsScanner" />
 		
-		<!-- For instance, here you might want to override the default -->
+		<!-- For instance, here you might want to override the default (default is true) -->
 		<!--  property name="doMapRootsToConcepts" value ="false" / -->
 		
 		<!-- Or add other linkers. Typically you will want to add linkers here by means of the merge = 'true' flag in the
@@ -148,11 +148,13 @@
 		scope = "prototype"
 		factory-method="createOntologyModel">
 		<constructor-arg value="#{T( org.apache.jena.ontology.OntModelSpec ).OWL_MEM }"></constructor-arg>
+		<property name = "strictMode" value = "false" />
 	</bean>
 		
 	<!-- 
 	  Provides a factory bean that returns a null bean, via factory-method = 'get' (see above)
-	  Null beans are placeholder that can be overridden in descendant files with the real bean you need. 
+	  Null beans are used to create named placeholders, which can be overridden in descendant files with the real bean 
+	  you need. 
 	-->
 	<bean id = "nullBeanFactory" class = "java.util.concurrent.atomic.AtomicReference" >
 		<constructor-arg><null/></constructor-arg>

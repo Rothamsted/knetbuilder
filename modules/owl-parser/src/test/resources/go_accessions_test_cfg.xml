@@ -5,7 +5,11 @@
 
 	<description><![CDATA[Test configuration used to test accession mappings]]></description>
 
-	<import resource="default_mappings.xml" />
+	<import resource="obo_common_mappings.xml" />
+
+	<!-- Let's reset this again, we're not intereseted in names while doing these tests -->
+	<bean id = "altNamesMapper" factory-bean = "nullBeanFactory" factory-method = "get" />
+
 
 	<bean id = "owlMapper" parent = "defaultOwlMapper">
 		<!-- Let's scan from BioProcess only for these tests -->
@@ -19,38 +23,21 @@
 	</bean>
 		
 					
-	<bean id = "descriptionMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
-		<property name="propertyIri" value = "#{ns.iri ( 'obo:IAO_0000115' )}" /><!-- definition -->
-	</bean>
 	
 	
 	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.CompositeAccessionsMapper">
 		<property name = "mappers">
 			<set>
-				<bean class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
-					<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:id' )}" />
+				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="GO:" />
 					<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" />
 				</bean>
-				<bean class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
-					<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:hasAlternativeId' )}" />
+				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="GO:" />
 					<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" />
 				</bean>
-				<bean class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
-					<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
-					<property name = "dataSourcePrefix" value="Wikipedia:" />
-					<property name = "dataSourcesMapper">
-						<bean class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-							<property name="value">
-								<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
-									<property name="id" value = "Wikipedia" />
-									<property name="fullName" value = "Wikipedia" />
-								</bean>
-							</property>
-						</bean>	
-					</property>
-				</bean>
+				<ref bean = "wpXrefAccMapper" />
+
 				<!-- This is to test the prefix replacement mechanism: 
 				     'GO:' is first removed and then 'GenOnt:' is added to the ONDEX accession --> 
 				<bean class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">

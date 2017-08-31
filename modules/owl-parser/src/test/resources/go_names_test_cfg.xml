@@ -5,7 +5,7 @@
 
 	<description><![CDATA[Test configuration used to test name mappings]]></description>
 
-	<import resource="default_mappings.xml" />
+	<import resource="obo_common_mappings.xml" />
 
 	<bean id = "owlMapper" parent = "defaultOwlMapper">
 		<!-- Let's scan from BioProcess only for these tests -->
@@ -17,13 +17,5 @@
 		<!-- The top OWL class maps to an ONDEX concept class and not to a concpet -->
 		<property name = "doMapRootsToConcepts" value = "false" />
 	</bean>
-		
-	<bean id = "descriptionMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
-		<property name="propertyIri" value = "#{ns.iri ( 'obo:IAO_0000115' )}" /><!-- definition -->
-	</bean>
-	
-	<bean id ="altNamesMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextsMapper">
-		<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasExactSynonym' )}" />
-	</bean>
-					
+								
 </beans>
