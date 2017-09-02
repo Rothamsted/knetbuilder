@@ -76,16 +76,6 @@
 			</set>
 		</property>
 	</bean> <!-- /accessionsMapper -->
-
-
-	<bean id = "goDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
-				<property name = "id" value = "GO" />
-				<property name = "fullName" value = "Gene Ontology" />
-			</bean>
-		</property>
-	</bean>	
 	
 </beans>
 	

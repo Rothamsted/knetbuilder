@@ -40,6 +40,7 @@
 		<property name = "dataSourcePrefix" value="Wikipedia:" />
 		<property name = "dataSourcesMapper" ref = "wpDataSourcesMapper" />
 	</bean>
+	
 	<bean id = "wpDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name="value">
 			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
@@ -164,6 +165,17 @@
 			</bean>			
 		</property> 
 	</bean>
+	
+	
+	<!-- This is used by both GO and other ontologies that refer to GO terms. -->
+	<bean id = "goDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
+		<property name = "value">
+			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+				<property name = "id" value = "GO" />
+				<property name = "fullName" value = "Gene Ontology" />
+			</bean>
+		</property>
+	</bean>		
 	
 </beans>
 	
