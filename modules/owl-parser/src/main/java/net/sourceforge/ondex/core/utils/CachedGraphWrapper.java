@@ -69,34 +69,6 @@ public class CachedGraphWrapper
 			() -> this.graph.getMetaData ().createConceptClass ( id, fullName, description, specialisationOf )
 		);
 	}
-	
-	public ConceptClass getConceptClass ( ConceptClassPrototype proto )
-	{
-		try 
-		{
-			// Let's see if it has a parent
-			if ( proto.getParent () == null )
-			{
-				// Or a prototype to build it. In case of loops, this will lead to stack overflow
-				ConceptClassPrototype parentProto = proto.getParentPrototype ();
-				if ( parentProto != null )
-						proto.setParent ( this.getConceptClass ( parentProto ) );
-			}
-			
-			return this.cacheGet ( 
-				ConceptClass.class, proto.getId (), 
-					() -> this.graph.getMetaData ().getFactory ().createConceptClass ( 
-					proto.getId (), proto.getFullName (), proto.getDescription (), 
-					proto.getParent () 
-				)
-			);
-		}
-		catch ( StackOverflowError ex ) 
-		{
-			log.error ( "Stackoverflow error while creating the concept class '{}'. Do you have circular references?", proto.getId () );
-			throw ex;
-		}
-	}
 
 	public synchronized ConceptClass getConceptClass ( ConceptClassPrototype proto )
 	{
@@ -134,10 +106,6 @@ public class CachedGraphWrapper
 			ONDEXConcept.class, id, 
 			() -> this.graph.getFactory ().createConcept ( id, annotation, description, ds, conceptClass, evidence )
 		);
-	}
-
-	public ONDEXConcept getConcept ( String id ) {
-		return this.cacheGet ( ONDEXConcept.class, id );
 	}
 	
 	public synchronized ONDEXConcept getConcept ( String id ) {

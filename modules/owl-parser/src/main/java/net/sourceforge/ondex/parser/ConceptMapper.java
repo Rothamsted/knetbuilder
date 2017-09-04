@@ -2,7 +2,7 @@ package net.sourceforge.ondex.parser;
 
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
+import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
  * The wrapper to mark a mapper to a {@link ONDEXConcept}. This is a {@link PairMapper} since ONDEX requires a 
