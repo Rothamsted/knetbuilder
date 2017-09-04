@@ -6,11 +6,4 @@ cd "$(dirname $0)/.."
 echo -e "\n\n\tSetting up submodules\n"
 git submodule update --init --recursive
 
-printf "\n\n\tSwitching to master branch in each module\n"
-for repo in ondex-base ondex-desktop ondex-integration-tests ondex-opt ondex-base	ondex-doc	ondex-knet-builder ondex-old-components
-do
-  echo -e "\n\n$repo"
-  cd "$repo"
-  git checkout master
-  cd ..
-done
+./git-cmds/checkout_all.sh master
