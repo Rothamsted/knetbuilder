@@ -37,7 +37,8 @@
 
 
 
-      <!-- ONDEX deps -->      <dependency>
+      <!-- ONDEX deps -->      
+      <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>lucene</artifactId>
          <version>${project.version}</version>
