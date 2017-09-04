@@ -20,7 +20,6 @@
       <dependency>
          <groupId>org.apache.lucene</groupId>
          <artifactId>lucene-core</artifactId>
-         <version>3.6.1</version>
       </dependency>
 
       <!-- ONDEX deps -->      <dependency>

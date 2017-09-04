@@ -6,12 +6,15 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -30,6 +33,7 @@ import net.sourceforge.ondex.exception.type.AccessDeniedException;
 
 import org.apache.log4j.Level;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
@@ -37,15 +41,18 @@ import org.apache.lucene.document.FieldSelector;
 import org.apache.lucene.document.FieldSelectorResult;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Collector;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Scorer;
+import org.apache.lucene.search.SimpleCollector;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
@@ -67,113 +74,71 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * Collects Bits from a given LUCENE field and adds them to a BitSet.
 	 * 
+	 * Marco Brandizi: these collectors were adapted from Lucene 3.6 to 6, maybe we don't need collectors and
+	 * simply search/check is enough.
+	 * 
+	 * See Lucene docs for details.
+	 * 
 	 * @author hindlem, taubertj
 	 */
-	private class DocIdCollector extends Collector {
+	private class DocIdCollector extends SimpleCollector 
+	{
+		protected final BitSet bits;
+		protected int docBase;
 
-		/**
-		 * Collects results
-		 */
-		private final BitSet bits;
-
-		/**
-		 * In case of Multiple-Reader use
-		 */
-		private int docBase;
-
-		/**
-		 * Set IndexReader used to determine size of BitSet.
-		 * 
-		 * @param indexReader
-		 */
-		public DocIdCollector(IndexReader indexReader) {
-			bits = new BitSet(indexReader.maxDoc());
+		public DocIdCollector ( IndexReader indexReader ) {
+			bits = new BitSet ( indexReader.maxDoc() );
 		}
 
-		/**
-		 * accept docs out of order (for a BitSet it doesn't matter)
-		 */
-		@Override
-		public boolean acceptsDocsOutOfOrder() {
-			return true;
-		}
 
 		@Override
-		public void collect(int doc) {
-			bits.set(doc + docBase);
+		public void collect ( int doc ) {
+			bits.set ( doc + docBase );
 		}
 
-		/**
-		 * @return the bits returned
-		 */
 		public BitSet getBits() {
 			return bits;
 		}
-
+		
 		@Override
-		public void setNextReader(IndexReader reader, int docBase) {
-			this.docBase = docBase;
+		protected void doSetNextReader ( LeafReaderContext context ) throws IOException
+		{
+			this.docBase = context.docBase;
 		}
 
-		/**
-		 * ignore scorer
-		 */
 		@Override
-		public void setScorer(Scorer scorer) {
-
+		public boolean needsScores () {
+			return false;
 		}
 	}
 
 	/**
-	 * Collects Bits from a given LUCENE field and adds them to a
-	 * Int2FloatOpenHashMap
+	 * Collects documents and their scores from a search.
 	 * 
-	 * @author hindlem
+	 * @see DocIdCollector
+	 * 
+	 * @author hindlem, brandizi
 	 */
-	private class ScoreCollector extends Collector {
+	private class ScoreCollector extends DocIdCollector 
+	{
+		protected Scorer scorer;
 
 		/**
-		 * In case of Multiple-Reader use
+		 * Collects scores for each doc.
 		 */
-		private int docBase;
+		protected final Map<Integer, Float> docScores;
 
-		/**
-		 * Returns associated scores
-		 */
-		private Scorer scorer;
-
-		/**
-		 * Collection score per document
-		 */
-		private final Map<Integer, Float> docScores;
-
-		/**
-		 * Collects results
-		 */
-		private final BitSet bits;
-
-		/**
-		 * Set IndexReader used to determine size of BitSet.
-		 * 
-		 * @param indexReader
-		 */
-		public ScoreCollector(IndexReader indexReader) {
-			bits = new BitSet(indexReader.maxDoc());
-			docScores = new HashMap<Integer, Float>(indexReader.maxDoc());
-		}
-
-		/**
-		 * accept docs out of order (for a Map it doesn't matter)
-		 */
-		@Override
-		public boolean acceptsDocsOutOfOrder() {
-			return true;
+		public ScoreCollector ( IndexReader indexReader ) 
+		{
+			super ( indexReader );
+			docScores = new HashMap<Integer, Float> ( indexReader.maxDoc() );
 		}
 
 		@Override
-		public void collect(int doc) throws IOException {
-			bits.set(doc + docBase);
-			docScores.put(doc + docBase, scorer.score());
+		public void collect ( int doc )
+		{
+			super.collect ( doc );
+			docScores.put ( doc + docBase, scorer.score() );
 		}
 
 		/**
@@ -184,19 +149,15 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		}
 
 		/**
-		 * @return doc id to scores
+		 * @return a map going from do IDs to scores.
 		 */
 		public Map<Integer, Float> getScores() {
 			return docScores;
 		}
 
-		@Override
-		public void setNextReader(IndexReader indexReader, int docBase) {
-			this.docBase = docBase;
-		}
 
 		@Override
-		public void setScorer(Scorer scorer) {
+		public void setScorer ( Scorer scorer ) {
 			this.scorer = scorer;
 		}
 	}
@@ -204,7 +165,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * global analyser used for the index
 	 */
-	public final static Analyzer DEFAULTANALYZER = new DefaultONDEXLuceneAnalyser();
+	public final static Analyzer DEFAULTANALYZER = new StandardAnalyzer();
 
 	/**
 	 * remove double spaces
@@ -227,19 +188,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * Allows only the id of a document to be loaded
 	 */
-	private static FieldSelector idSelector = new FieldSelector() {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public FieldSelectorResult accept(String arg0) {
-			if (arg0.equals(CONID_FIELD) || arg0.equals(RELID_FIELD)) {
-				return FieldSelectorResult.LOAD_AND_BREAK;
-			} else {
-				return FieldSelectorResult.NO_LOAD;
-			}
-		}
-	};
+	private static Set<String> idSelector = Stream.of ( CONID_FIELD, RELID_FIELD )
+		.collect ( Collectors.toSet () );
 
 	// pre-compiled patterns for text stripping
 	private final static Pattern patternNonWordChars = Pattern.compile("\\W");
@@ -352,7 +302,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 		try {
 			// open a Directory for the index
-			directory = FSDirectory.open(new File(indexdir));
+			directory = FSDirectory.open ( new File ( indexdir ).toPath () );
 		} catch (IOException ioe) {
 			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
 					"[LuceneEnv - constructor]"));
@@ -376,8 +326,6 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		try {
 			if (im != null)
 				im.close();
-			if (is != null)
-				is.close();
 			if (ir != null)
 				ir.close();
 			if (directory != null)
@@ -670,7 +618,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		} finally {
 			closeIndex();
 			try {
-				ir = IndexReader.open(directory);
+				ir = DirectoryReader.open( directory );
 				is = new IndexSearcher(ir);
 			} catch (CorruptIndexException e) {
 				e.printStackTrace();
@@ -731,9 +679,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		} finally {
 			closeIndex();
 			try {
-				is.close();
 				ir.close();
-				ir = IndexReader.open(directory);
+				ir = DirectoryReader.open( directory );
 				is = new IndexSearcher(ir);
 			} catch (CorruptIndexException e) {
 				e.printStackTrace();
@@ -764,10 +711,16 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				BitSet set = new BitSet(bs.length());
 				// iterator of document indices
 				for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i + 1)) {
-					Document document = is.doc(i, idSelector);
+					Document document = is.doc ( i, idSelector );
 					float score = doc2Scores.get(i);
-					Fieldable cid = document.getFieldable(CONID_FIELD);
-					int conceptId = Integer.valueOf(cid.stringValue());
+// TODO: remove
+//					Fieldable cid = document.getFieldable(CONID_FIELD);
+//					int conceptId = Integer.valueOf(cid.stringValue());
+					int conceptId = Optional.ofNullable ( document.get ( CONID_FIELD ) )
+					.map ( Integer::valueOf )
+					.orElseThrow ( () -> new NullPointerException ( 
+						"Internal error: for some reason I have a null concept ID for: " + q.toString () 
+					));
 					cid2scores.put(conceptId, score);
 					set.set(conceptId);
 				}
