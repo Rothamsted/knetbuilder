@@ -1,50 +1,56 @@
 package net.sourceforge.ondex.parser.owl;
 
-import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
-
-import java.util.stream.Stream;
-
-import org.apache.jena.ontology.OntClass;
+import net.sourceforge.ondex.parser.TextsMapper;
 
 /**
- * A wrapper of {@link OWLAxiomMapper} to map accessions in owl:Axiom.
+ * <p>Extracts accessions from {@code owl:Axiom} annotations, leveraging {@link OWLAxiomMapper}.</p>
+ * 
+ * <p>This uses {@link OBOWLAccessionsMapper} and its {@link AccessionValuesMapper}, to which a {@link TextsMapper}
+ * of type {@link OWLAxiomMapper} is passed. In practice, this means the same logics of mapping 
+ * accessions, prefixes, added prefixes, data sources and evidence is applied to the string values that are extracted
+ * by an {@link OWLAxiomMapper}. In even more practical terms, this maps the targets of {@code owl:Axiom} to 
+ * ONDEX accessions.</p>
+ * 
+ * <p>See the Trait Ontology config file for details.</p>
+ * 
  *
  * @author brandizi
- * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
+ * <dl><dt>Date:</dt><dd>23 Aug 2017</dd></dl>
  *
  */
-public class OWLAccsMapperFromAxiom extends OWLAccessionsMapper
+public class OWLAccsMapperFromAxiom extends OBOWLAccessionsMapper
 {
-	private String mappedPropertyIri = null;
-
-	public static class HelperMapper extends OWLAxiomMapper<Stream<String>, Void>
+	public OWLAccsMapperFromAxiom ()
 	{
-		@Override
-		public Stream<String> map ( OntClass ontCls, Void ondexTarget )
-		{
-			return this.getMappedNodes ( ontCls )
-			.map ( accNode -> JENAUTILS.literal2Value ( accNode ).get () );
-		}
+		super ();
+		( (AccessionValuesMapper) this.getAccessionValuesMapper () ).setTextsMapper ( new OWLAxiomMapper () ); 
 	}
-	
-	private HelperMapper helperMapper = new HelperMapper ();
-
-	@Override
-	protected Stream<String> getAccessionStrings ( OntClass ontCls )
-	{
-		this.helperMapper.setPropertyIri ( this.getPropertyIri () );
-		this.helperMapper.setMappedPropertyIri ( this.getMappedPropertyIri () );
-		return this.helperMapper.map ( ontCls, null );
-	}
-	
+		
 	public String getMappedPropertyIri ()
 	{
-		return mappedPropertyIri;
+		return getOWLAxiomMapper ().getMappedPropertyIri ();
 	}
 
 	public void setMappedPropertyIri ( String mappedPropertyIri )
 	{
-		this.mappedPropertyIri = mappedPropertyIri;
+		getOWLAxiomMapper ().setMappedPropertyIri ( mappedPropertyIri );
 	}
-
+	
+	/**
+	 * Do some checks+typecasting to return the {@link OWLAxiomMapper} that is assigned to {@link #getAccessionValuesMapper()}
+	 * as {@link AccessionValuesMapper#getTextsMapper() texts mapper}. 
+	 */
+	private OWLAxiomMapper getOWLAxiomMapper () 
+	{
+		AccessionValuesMapper valMap = (AccessionValuesMapper) this.getAccessionValuesMapper ();
+		OWLTextsMapper txtMapper = valMap.getTextsMapper ();
+		if ( ! ( txtMapper instanceof OWLAxiomMapper ) ) throw new IllegalStateException (
+			String.format ( 
+				"Internal error: the %s.accessionValuesMapper must be of type %s", 
+				this.getClass ().getSimpleName (),
+				OWLAxiomMapper.class.getSimpleName ()
+			)
+		);
+		return (OWLAxiomMapper) txtMapper;		
+	}
 }

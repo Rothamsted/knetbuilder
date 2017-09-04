@@ -9,43 +9,19 @@
 
 	<import resource="default_mappings.xml" />
 
-	<bean id = "owlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
+	<bean id = "owlMapper" parent = "defaultOwlMapper">
 		<!-- 
-			The root component. Subcomponents are added here and their parameters are set to customise the parser.
-			
-			The typical pattern is to pass relation mappers, which traverses the ontology following relations like
-			owl:subClassOf or part-of and map the subclasses it meets along the way to ONDEX concepts, which in turn 
-			enables the mapping of root classes to ONDEX concept classes. 
-		 -->
-	  <property name = "relationsMappers">
-	  	<set>
-				<bean id = "subClassesMapperEx" parent = "subClassMapper">
-					<property name="topClassesProvider">
-						<bean class = "net.sourceforge.ondex.parser.owl.IriBasedTopClassesProvider">
-							<property name="topClassIri" value = "#{ns.iri ( 'foo:TopClass' )}" />
-						</bean>
-					</property>
-					<property name="doMapRootsToConcepts" value = "false" />
-				</bean> 		
-	  	</set>
-	  </property>
-	</bean>
-		
-	<!--
-		This replaces the default, you might prefer to use 'parent' (see default_mappings.xml) 
-	 -->
-	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper">
-		<!-- This way it's initialised by its container, dynamically -->
-		<property name = "idMapper" ref = "idMapper" />
-		<property name = "preferredNameMapper" ref = "labelMapper" />
-		<property name = "descriptionMapper" ref = "descriptionMapper" />
-		<property name="accessionsMappers">
-			<set>
-				<bean id = "dcAccMapper" class = "net.sourceforge.ondex.parser.owl.OWLAccessionsMapper">
-					<property name = "propertyIri" value = "#{ns.iri ( 'dcterms:identifier' )}" />
-				</bean>
-			</set>
+		  Let's change the root scanner, we want to map from this specific class, 
+		  See other Spring files in main/assembly/resources/config to see how to use a composite scanner to map multiple top
+		  classes. 
+		-->
+		<property name = "rootsScanner">
+			<bean class = "net.sourceforge.ondex.parser.owl.IriBasedRootsScanner">
+				<property name = "topClassIri" value = "#{ns.iri ( 'foo:TopClass' )}" />
+			</bean>
 		</property>
+		<!-- The top OWL class maps to an ONDEX concept class and not to a concpet -->
+		<property name = "doMapRootsToConcepts" value = "false" />
 	</bean>
 		
 </beans>

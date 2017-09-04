@@ -34,7 +34,7 @@ public class GoRelationsTest
 		model.read ( Resources.getResource ( "go_relations_test.owl" ).toString (), "", "RDF/XML" );
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-		ONDEXGraph graph = owlMap.map ( model );
+		ONDEXGraph graph = owlMap.map2Graph ( model );
 		
 		for ( final String target: new String [] { "GO_0000070", "GO_0007052", "GO_0000278" } )
 		{
@@ -64,7 +64,7 @@ public class GoRelationsTest
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 
-		ONDEXGraph graph = owlMap.map ( model );
+		ONDEXGraph graph = owlMap.map2Graph ( model );
 		
 		for ( final String target: new String [] { "GO_0000070", "GO_0007052", "GO_0000278" } )
 		{

@@ -1,15 +1,14 @@
 package net.sourceforge.ondex.parser;
 
 import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * A marker interface to declare a mapper that returns a {@link ConceptClass} from a source of type S.
+ * Wrapper interfaces that maps a {@link ConceptClass} mapper.
  *
  * @author brandizi
- * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
+ * <dl><dt>Date:</dt><dd>8 Jul 2017</dd></dl>
  *
  */
-public interface ConceptClassMapper<S> extends ONDEXMapper<ConceptClass, S, ONDEXGraph>
+public interface ConceptClassMapper<S> extends Mapper<S, ConceptClass>
 {
 }

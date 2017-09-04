@@ -2,14 +2,13 @@ package net.sourceforge.ondex.parser.owl;
 
 import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
+import static net.sourceforge.ondex.parser.owl.Utils.OWL_PARSER_DATA_SOURCE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -31,8 +30,16 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
-import net.sourceforge.ondex.core.utils.ONDEXElemWrapper;
+import net.sourceforge.ondex.core.utils.RelationTypePrototype;
+import net.sourceforge.ondex.parser.ConceptBasedRelMapper;
+import net.sourceforge.ondex.parser.ConstDataSourceMapper;
+import net.sourceforge.ondex.parser.DefaultConceptMapper;
+import net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration;
+import net.sourceforge.ondex.parser.InvertingConceptRelMapper;
+import net.sourceforge.ondex.parser.SimpleRelationMapper;
+import net.sourceforge.ondex.parser.TextMapper;
+
+
 
 /**
  * Tests {@link OWLMapper} and shows typical examples of how to use both the specific OWL mapping components and the 
@@ -52,8 +59,8 @@ public class MappersTest
 	private OntClass ontSubCls;
 	private String subClsId;
 	
-	private OWLClassCCMapper ccmap;
-	private OWLConceptMapper conceptMap;
+	private OWLTopConceptClassMapper ccmap;
+	private DefaultConceptMapper<OntClass> conceptMap;
 	
 	private ONDEXGraph graph;
 	
@@ -78,7 +85,7 @@ public class MappersTest
 		topCls.addSubClass ( ontCls );		
 
 		subClsId = "ClassB";
-		ontSubCls = model.createClass ( NamespaceUtils.iri ( "foo", subClsId ) );
+		ontSubCls = model.createClass ( iri ( "foo", subClsId ) );
 		ontSubCls.setLabel ( "Class B Label", "en" );
 		ontSubCls.setComment ( "Class B Description", "en" );
 		JENAUTILS.assertLiteral ( model, ontSubCls.getURI (), iri ( "dcterms:identifier" ), subClsId );
@@ -88,28 +95,29 @@ public class MappersTest
 		
 		// ---- Examples of mappers setup. You don't want to do this programmatically, Spring is much better
 		// 		
-		ccmap = new OWLClassCCMapper ();
+		ccmap = new OWLTopConceptClassMapper ();
 		ccmap.setIdMapper ( new IRIBasedIdMapper () );
 		
 		// You don't usually need this facility, Spring Beans is much better.
-		Function<String, TextPropertyMapper> txtMap = puri -> { 
-			TextPropertyMapper map = new TextPropertyMapper ();
+		Function<String, TextMapper<OntClass>> txtMap = puri -> { 
+			OWLTextMapper map = new OWLTextMapper ();
 			map.setPropertyIri ( puri );
 			return map;
 		};
 				
-		ccmap.setLabelMapper ( txtMap.apply ( RDFS.label.getURI () )  );
+		ccmap.setFullNameMapper ( txtMap.apply ( RDFS.label.getURI () )  );
 		ccmap.setDescriptionMapper ( txtMap.apply ( RDFS.comment.getURI () ) );
-
-		conceptMap = new OWLConceptMapper ();
+		
+		conceptMap = new DefaultConceptMapper<> ();
 		conceptMap.setIdMapper ( new IRIBasedIdMapper () );
 		conceptMap.setPreferredNameMapper ( txtMap.apply ( RDFS.label.getURI () )  );
 
-		OWLAccessionsMapper accMap = new OWLAccessionsMapper ();
+		OBOWLAccessionsMapper accMap = new OBOWLAccessionsMapper ();
 		accMap.setPropertyIri ( iri ( "dcterms:identifier" ) );
-		conceptMap.setAccessionsMappers ( new HashSet<> ( Arrays.asList ( accMap ) ) );
+		conceptMap.setAccessionsMapper ( accMap );
 		
-		conceptMap.setDescriptionMapper ( txtMap.apply ( RDFS.comment.getURI () ) );		
+		conceptMap.setDescriptionMapper ( txtMap.apply ( RDFS.comment.getURI () ) );
+		conceptMap.setDataSourceMapper ( new ConstDataSourceMapper<OntClass> ( Utils.OWL_PARSER_DATA_SOURCE ) );
 		
 		graph = new MemoryONDEXGraph ( "test" );
 	}
@@ -117,8 +125,8 @@ public class MappersTest
 	@Test
 	public void testConceptMapper ()
 	{
-		ConceptClass cc = ccmap.map ( topCls, graph );
-		conceptMap.map ( this.ontCls, ONDEXElemWrapper.of ( cc, graph ) );
+		ConceptClass cc = this.ccmap.map ( this.topCls, graph );
+		this.conceptMap.map ( this.ontCls, cc, graph );
 		
 		final ONDEXConcept[] ct = new ONDEXConcept [ 1 ];
 		
@@ -130,7 +138,9 @@ public class MappersTest
 			.anyMatch ( c -> "ClassA".equals ( c.getPID () ) && ( ct [ 0 ] = c ) != null )
 		);
 		
-		DataSource ds = graph.getMetaData ().createDataSource ( "owlParser", "The OWL Parser", "" );
+		DataSource ds = graph.getMetaData ().createDataSource ( 
+			OWL_PARSER_DATA_SOURCE.getId (), OWL_PARSER_DATA_SOURCE.getFullName (), OWL_PARSER_DATA_SOURCE.getDescription () 
+		);
 
 		assertNotNull ( "Concept accession is wrong!", ct[ 0 ].getConceptAccession ( clsId, ds ) );
 		assertNotNull ( "Concept label is wrong!", ct[ 0 ].getConceptName ( ontCls.getLabel ( "en" ) ) );
@@ -146,19 +156,23 @@ public class MappersTest
 	@Test
 	public void testMapper ()
 	{
-		OwlSubClassRelMapper subClsMap = new OwlSubClassRelMapper ();
-		subClsMap.setTopClassesProvider ( 
-			new IriBasedTopClassesProvider ( this.topCls.getURI () )
-		);
-		subClsMap.setDoMapRootsToConcepts ( false );
-		subClsMap.setConceptClassMapper ( this.ccmap );
-		subClsMap.setConceptMapper ( this.conceptMap );
-		subClsMap.setEvidenceTypePrototype ( new EvidenceTypePrototype ( "IMDP", "IMDP", "" ) );
+		OWLMapper mapper = new OWLMapper ();
 		
-		OWLMapper map = new OWLMapper ();
-		map.setRelationsMappers ( Collections.singleton ( subClsMap ) );
+		mapper.setConceptClassMapper ( ccmap );
+		mapper.setConceptMapper ( conceptMap );
+		mapper.setRootsScanner ( new IriBasedRootsScanner ( this.topCls.getURI () ) );
+		mapper.setDoMapRootsToConcepts ( false );
+				
+		SimpleRelationMapper relMap = new SimpleRelationMapper ();
+		relMap.setRelationTypePrototype ( RelationTypePrototype.IS_A_PROTOTYPE );
 		
-		ONDEXGraph graph = map.map ( this.model );
+		ConceptBasedRelMapper relMapInv = new InvertingConceptRelMapper ( relMap );
+		
+		mapper.setLinkers ( Arrays.asList ( 
+			new LinkerConfiguration<OntClass> ( new OWLSubClassScanner (), relMapInv ) 
+		));
+						
+		ONDEXGraph graph = mapper.map2Graph ( this.model );
 
 		checkAllGrah ( graph );
 	}	
@@ -170,7 +184,7 @@ public class MappersTest
 		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "mappings_ex.xml" );
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 
-		ONDEXGraph graph = owlMap.map ( model );
+		ONDEXGraph graph = owlMap.map2Graph ( model );
 		checkAllGrah ( graph );
 		
 		( (Closeable) ctx ).close ();

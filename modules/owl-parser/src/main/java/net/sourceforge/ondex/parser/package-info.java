@@ -1,24 +1,32 @@
 /**
- * <h1>The ONDEX Mapping Framework</h1>
- * 
- * <p>This package defines a generic framework to map external structures (e.g., a data format) to ONDEX structures like
- * concepts and concept classes.</p>
+ * <p>Generic parser components. This package attempts to define a general architecture that most of the ONDEX parsers 
+ * might based on. The idea is that a parser starts by decomposing a data document into smaller data items, by means of
+ * a {@link net.sourceforge.ondex.parser.Scanner}, then each item is mapped onto ONDEX elements, such as concepts, 
+ * accessions or relations, by means of {@link net.sourceforge.ondex.parser.Mapper mappers}. This mechanism can be
+ * further decomposed, so that, for instance, a data source item used to spawn an 
+ * {@link net.sourceforge.ondex.core.ONDEXConcept} might be passed to other scanners and mappers, to produce 
+ * components like the concept's {@link net.sourceforge.ondex.core.ConceptAccession}s and names (see 
+ * {@link net.sourceforge.ondex.parser.DefaultConceptMapper}, where this approach is actually implemented).</p>
  *
- * <p>The idea is that, when you define a new mapper or parser, let's say to import a data format, you start from an 
- * implementation of {@link net.sourceforge.ondex.parser.GraphMapper}, which typically would produce a graph from an 
- * input source by composing other {@link net.sourceforge.ondex.parser.ONDEXMapper mappers}, such as 
- * {@link net.sourceforge.ondex.parser.ConceptMapper} or {@link net.sourceforge.ondex.parser.RelationMapper} (or 
- * helper components like {@link net.sourceforge.ondex.parser.RelationBuilder}.</p> 
+ * <p>An example of parser might be a parser to convert some XML data into ONDEX elements. In such a case, there will likely
+ * be a scanner that would get top-level XML elements such as Protein or Gene and would pass them to concept mappers.</p>
  * 
- * <p>Components are designed to be used with a <a href = "http://harrewijnen.net/how-to-anxiety/">IoC</a> framework 
- * such as <a href = "https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html">Spring Beans</a>,
- * which is the one we use.</p>
+ * <p>Another example would be a CSV parser, where a scanner would go through the rows of the file and would map each row
+ * to a {@link net.sourceforge.ondex.parser.ConceptBasedRelMapper}, which, in turn, would be equipped with 
+ * {@link net.sourceforge.ondex.parser.ConceptMapper}s.</p>
  * 
- * <p>You can see an example of how this can be used in the implementation of the OWL Parser.</p>
+ * <p>Another example is the OWL parser.</p>
+ * 
+ * <p>The components defined here are designed to allow for the configuration of a parser by means of a Spring Bean configuration
+ * file. The OWL parser is a good starting point to see that in action.</p> 
+ *
+ * <p>TODO: we still need to define the skeleton component to realise a parser that scans pair of concepts/relations, such 
+ * as a CSV parser.</p>
+ * 
+ * <p>TODO: This package and the utils package should be moved in more proper locations</p>
  *
  * @author brandizi
- * 
- * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
+ * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
 package net.sourceforge.ondex.parser;

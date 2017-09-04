@@ -1,8 +1,6 @@
 package net.sourceforge.ondex.core.utils;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.base.DataSourceImpl;
-import net.sourceforge.ondex.exception.type.NullValueException;
 
 /**
  * These prototypes are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 
@@ -14,44 +12,14 @@ import net.sourceforge.ondex.exception.type.NullValueException;
  * <dl><dt>Date:</dt><dd>8 May 2017</dd></dl>
  *
  */
-@SuppressWarnings ( "serial" )
-public class DataSourcePrototype extends DataSourceImpl 
-{
-	public static final DataSourcePrototype OWL_PARSER = new DataSourcePrototype ( "owlParser", "The OWL Parser", "" );
-	
-	private String id; 
-
-	public DataSourcePrototype ( String id, String fullname, String description ) 
-	{
-		super ( -1, id, fullname, description );
-		this.setId ( id );
-	}
-
-	
+public class DataSourcePrototype extends DescribeablePrototype 
+{	
 	public DataSourcePrototype () {
-		this ( "", "", "" );
+		this ( null, "", "" );
 	}
 
-	public String getId () {
-		return this.id;
-	}
-	
-	public void setId ( String id ) {
-		this.id = id;
-	}
-
-
-	@Override
-	public void setFullname ( String fullname ) throws NullValueException, UnsupportedOperationException
+	public DataSourcePrototype ( String id, String fullName, String description ) 
 	{
-		this.fullname = fullname;
+		super ( id, fullName, description );
 	}
-
-
-	@Override
-	public void setDescription ( String description ) throws NullValueException, UnsupportedOperationException
-	{
-		this.description = description;
-	}	
-
 }

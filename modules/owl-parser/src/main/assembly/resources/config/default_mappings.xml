@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	>
 
 	<description><![CDATA[
 	The default mapping for net.sourceforge.ondex.parser.owl.OWLMapper. This uses mappings from common elements in OWL
@@ -9,98 +12,151 @@
 	
 	This file is usually imported by a configuration that is specific to a particular ontology file.
 	
-	Hae a look at the Spring documentation, eg, https://www.tutorialspoint.com/spring/spring_bean_definition.htm
+	Have a look at TODO and the Spring documentation, eg, https://www.tutorialspoint.com/spring/spring_bean_definition.htm
 	to know how this file works. Also, see the OWL parser code to figure out which Java components are available for 
 	mapping your ontology to ONDEX.
 	]]></description>
-
-
-	<!--
-		Defaults that are referred by other components. 
-	 -->
-	 
-	<bean id = "evidenceTypePrototype" class = "net.sourceforge.ondex.core.utils.EvidenceTypePrototype">
-		<property name="id" value = "IMPD" />
-		<property name="fullname" value = "IMPD" />
-	</bean>	 
-	 
-	<bean id = "idMapper" class = "net.sourceforge.ondex.parser.owl.IRIBasedIdMapper" /> 
-
-	<!-- Default label based on rdfs:label -->
-	<bean id = "labelMapper" class = "net.sourceforge.ondex.parser.owl.TextPropertyMapper">
-		<property name="propertyIri" value="#{ns.iri ( 'rdfs:label' )}"></property>
-	</bean>		
-
-	<!-- Default description/definition based on rdfs:comment -->
-	<bean id = "descriptionMapper" class = "net.sourceforge.ondex.parser.owl.TextPropertyMapper">
-		<property name="propertyIri" value="#{ns.iri ( 'rdfs:comment' )}"></property>
-	</bean>		
-
-	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.owl.OWLConceptMapper">
-		<property name = "idMapper" ref = "idMapper" />
-		<property name = "preferredNameMapper" ref = "labelMapper" />
-		<property name = "descriptionMapper" ref = "descriptionMapper" />
-	</bean>
 	
-	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLClassCCMapper">
-		<property name = "idMapper" ref = "idMapper" />
-		<property name = "labelMapper" ref = "labelMapper" />
-		<property name = "descriptionMapper" ref = "descriptionMapper" />
-	</bean>
+	<!-- 
+	  These are minimal defaults, you can override them by using a different proper JavaBean class for the 'class' attributes 
+	  and by using the 'property' element for setting properties with what corresponds to the methods setXXX defined for
+	  the JavaBean class chosen at the top of the bean definition (or for super-classes).
+	-->
 	
-	<!-- This is an example of alternative to conceptClassMapper -->
-	<bean id = "constCCMapper" class = "net.sourceforge.ondex.parser.owl.OWLConstCCMapper">
-		<property name="value">
-			<bean class = "net.sourceforge.ondex.core.utils.ConceptClassPrototype">
-				<property name = "id" value="EXID" />
-				<property name = "fullName" value="Example Concept Class" />
-				<property name= "description" value="This is just an example." />
-			</bean>
-		</property>
-	</bean>
 	
-	<!-- This is based on the root classes in the OWL structure -->
-	<bean id = "subClassMapper" class = "net.sourceforge.ondex.parser.owl.OwlSubClassRelMapper">
+	<!-- The base mapper parses an ontology top-down, starting from the ontology root classes -->
+	<bean id = "defaultOwlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
 		<property name="conceptClassMapper" ref = "conceptClassMapper" />
 		<property name="conceptMapper" ref = "conceptMapper" />
-		<property name="evidenceTypePrototype" ref = "evidenceTypePrototype" />
-		<!-- 
-			This means the root OWL classes, whatever the way they're picked by topClassesProvider, are mapped to 
-			ONDEX concepts. You might not want this, for example when you consider "Biological Concept" in GO a concept
-			class only.
-		-->
-		<property name="doMapRootsToConcepts" value = "true" />
-		<property name="topClassesProvider">
-			<bean class = "net.sourceforge.ondex.parser.owl.OwlRootClassesProvider" />
+		<property name="rootsScanner" ref = "rootsScanner" />
+		
+		<!-- For instance, here you might want to override the default (default is true) -->
+		<!--  property name="doMapRootsToConcepts" value ="false" / -->
+		
+		<!-- Or add other linkers. Typically you will want to add linkers here by means of the merge = 'true' flag in the
+		     list tag, see eg, go_relations_test_cfg.xml -->
+		<property name = "linkers">
+			<list>
+				<bean class = "net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration">
+					<property name="scanner">
+						<bean class = "net.sourceforge.ondex.parser.owl.OWLSubClassScanner" />
+					</property>
+					<property name = "mapper" ref = "isaMapper" />
+				</bean>
+			</list>
 		</property>
 	</bean>
 		
-	<!-- 
-	  And this is for the case where you have IRIs about the top classes. 
-		You need one per IRI and you too can use the parent 
-	-->
-	<bean id = "subClassesMapperEx" parent = "subClassMapper">
-		<property name="topClassesProvider">
-			<bean class = "net.sourceforge.ondex.parser.owl.IriBasedTopClassesProvider">
-				<property name="topClassIri" value = "#{ns.iri ( 'obo:GO_0008150' )}" /> <!-- BioProcess -->
+	<bean id = "rootsScanner" class = "net.sourceforge.ondex.parser.owl.OwlRootClassesScanner" />
+
+
+
+	<!-- OBO/OWL class relations -->
+
+	<!-- We use the inverting mapper, because the base mapper goes from parent to child, while is-a has the 
+	     opposite direction -->					
+	<bean id = "isaMapper" class = "net.sourceforge.ondex.parser.InvertingConceptRelMapper">
+		<property name = "baseMapper">
+			<bean class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
+				<!-- Every relation created from this mapper has this relation type (the prototype just contains
+				     constants to instantiate the relation type -->
+				<property 
+					name ="relationTypePrototype" 
+				  value = "#{T( net.sourceforge.ondex.core.utils.RelationTypePrototype ).IS_A_PROTOTYPE }"/>
 			</bean>
 		</property>
-		<!-- See above, in a case like this you might want this to be false. -->
-  	<property name="doMapRootsToConcepts" value = "false" />
-	</bean> 		
+	</bean>
+
+
+	<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
+		<property name ="relationTypePrototype">
+			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+				<property name="id" value = "part_of" />
+				<property name="fullName" value = "part of" />
+				<property name="antisymmetric" value = "true" />
+				<property name="transitive" value = "true" />
+			</bean>
+		</property> 
+	</bean>
+
+
+
+
+	<!-- 
+	  This is the only bean so far that requires a prototype scope (ie, a new instance for every new reference), since
+	  it is an holding mapper, which retains the first OWL class it maps to an ONDEX concept class. 
+	-->
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLTopConceptClassMapper" scope="prototype">
+	  <property name = "idMapper" ref = "idMapper" />
+	  <property name = "fullNameMapper" ref = "nameMapper" />
+	  <property name = "descriptionMapper" ref = "descriptionMapper" />
+	</bean>
+
+	<bean id = "conceptMapper" class = "net.sourceforge.ondex.parser.DefaultConceptMapper">
+	  <property name = "idMapper" ref = "idMapper" />
+	  <property name = "descriptionMapper" ref = "descriptionMapper" />	  
+	  <property name = "preferredNameMapper" ref = "nameMapper" />
+	  <property name = "accessionsMapper" ref = "accessionsMapper" />
+	  <property name = "dataSourceMapper" ref = "dataSourceMapper" />
+	  <property name = "altNamesMapper" ref = "altNamesMapper" />
+	  <!-- 
+	    See the class DefaultConceptMapper for default properties (setXXX) you might want to change here 
+	    eg, annotationMapper, evidenceMapper, altNamesMapper
+	  -->	
+	</bean>
+
+	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
+		<property name="propertyIri" value = "#{ns.iri ( 'dcterms:identifier' )}" />
+	</bean>
+
+
+	<bean id = "idMapper" class = "net.sourceforge.ondex.parser.owl.IRIBasedIdMapper" />
+	
+	<bean id = "nameMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
+	  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:label' )}" />
+	</bean>
+
+	<!-- This is null by default, defin your own net.sourceforge.ondex.parser.owl.OWLTextsMapper to map alt names (eg, see
+	     GO files)  -->
+	<bean id = "altNamesMapper" factory-bean = "nullBeanFactory" factory-method = "get" />
+	
+	<bean id = "descriptionMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
+	  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:comment' )}" />
+	</bean>
 		
-	<!-- This is called via SpEl -->
+	<bean id = "dataSourceMapper" class = "net.sourceforge.ondex.parser.ConstDataSourceMapper">
+		<property name="value" value = "#{T( net.sourceforge.ondex.parser.owl.Utils ).OWL_PARSER_DATA_SOURCE }" />
+	</bean>	
+
+		
+		
+		
+	<!-- ____________________________ Misc Utilities ____________________________ -->
+		
+		
+	<!-- This is called via SpEl, see above -->
 	<bean id = "ns" class = "info.marcobrandizi.rdfutils.namespaces.NamespaceUtils" />
 	
 	<!-- 
 		This is the default OntModel that we use to load the input OWL. As you can see, we disable any type of 
-	  inference, the default model, which as some basic entailments enabled, causes endless waitings and eventual
-	  crashes 
+	  inference. The default model, which has some basic entailments enabled, but this causes endless loops and eventual
+	  crashes.
+	  
+	  TODO: see if it's still true with the new parser.
 	-->
 	<bean id = "jenaOntModel" class = "org.apache.jena.rdf.model.ModelFactory" 
 		scope = "prototype"
 		factory-method="createOntologyModel">
 		<constructor-arg value="#{T( org.apache.jena.ontology.OntModelSpec ).OWL_MEM }"></constructor-arg>
+		<property name = "strictMode" value = "false" />
 	</bean>
 		
+	<!-- 
+	  Provides a factory bean that returns a null bean, via factory-method = 'get' (see above)
+	  Null beans are used to create named placeholders, which can be overridden in descendant files with the real bean 
+	  you need. 
+	-->
+	<bean id = "nullBeanFactory" class = "java.util.concurrent.atomic.AtomicReference" >
+		<constructor-arg><null/></constructor-arg>
+	</bean>
 </beans>

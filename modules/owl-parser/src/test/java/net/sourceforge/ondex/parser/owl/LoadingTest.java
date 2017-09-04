@@ -10,11 +10,8 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-
 /**
- * A scrap test to ensure the whole GO can be loaded.
+ * A scrap test to ensure the whole ontology can be loaded.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>15 May 2017</dd></dl>
@@ -44,8 +41,7 @@ public class LoadingTest
 		);		
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );				
-		owlMap.map ( model, graph );		
+		owlMap.map2Graph ( model );		
 		((Closeable) ctx ).close ();
 	}
 }

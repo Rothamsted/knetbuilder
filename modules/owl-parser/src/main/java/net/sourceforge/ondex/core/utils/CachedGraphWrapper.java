@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
@@ -23,7 +24,7 @@ import net.sourceforge.ondex.core.RelationType;
  * ONDEX entities. Methods are similar to createXXX methods in the {@link ONDEXGraph} interface, each method
  * calls the corresponding underlining creation method, but only if the required object hasn't been created yet.</p>
  * 
- * <p>The version of cacheXXX that receives only the type/key parameters simply return the corresponding object in the
+ * <p>The version of getXXX() that receives only the type/key parameters simply return the corresponding object in the
  * cache, if it is present, null otherwise</p>
  * 
  * <p>Clearly, this is based on an internal static set of caches, that can be on a per-graph basis 
@@ -55,13 +56,13 @@ public class CachedGraphWrapper
 	 *  
 	 * @param graph
 	 */
-	public static CachedGraphWrapper getInstance ( ONDEXGraph graph ) 
+	public static synchronized CachedGraphWrapper getInstance ( ONDEXGraph graph ) 
 	{
 		return instances.computeIfAbsent ( graph, g -> new CachedGraphWrapper ( g ) );
 	}
 	
 	
-	public ConceptClass getConceptClass ( String id, String fullName, String description, ConceptClass specialisationOf )
+	public synchronized ConceptClass getConceptClass ( String id, String fullName, String description, ConceptClass specialisationOf )
 	{
 		return this.cacheGet ( 
 			ConceptClass.class, id, 
@@ -97,8 +98,35 @@ public class CachedGraphWrapper
 		}
 	}
 
-	
-	public ONDEXConcept getConcept (
+	public synchronized ConceptClass getConceptClass ( ConceptClassPrototype proto )
+	{
+		try 
+		{
+			// Let's see if it has a parent
+			if ( proto.getParent () == null )
+			{
+				// Or a prototype to build it. In case of loops, this will lead to stack overflow
+				ConceptClassPrototype parentProto = proto.getParentPrototype ();
+				if ( parentProto != null )
+						proto.setParent ( this.getConceptClass ( parentProto ) );
+			}
+			
+			return this.cacheGet ( 
+				ConceptClass.class, proto.getId (), 
+					() -> this.graph.getMetaData ().getFactory ().createConceptClass ( 
+					proto.getId (), proto.getFullName (), proto.getDescription (), 
+					proto.getParent () 
+				)
+			);
+		}
+		catch ( StackOverflowError ex ) 
+		{
+			log.error ( "Stackoverflow error while creating the concept class '{}'. Do you have circular references?", proto.getId () );
+			throw ex;
+		}
+	}
+
+	public synchronized ONDEXConcept getConcept (
 		String id, String annotation, String description, DataSource ds, ConceptClass conceptClass, EvidenceType evidence
 	)
 	{
@@ -112,8 +140,11 @@ public class CachedGraphWrapper
 		return this.cacheGet ( ONDEXConcept.class, id );
 	}
 	
+	public synchronized ONDEXConcept getConcept ( String id ) {
+		return this.cacheGet ( ONDEXConcept.class, id );
+	}
 	
-	public RelationType getRelationType ( 
+	public synchronized RelationType getRelationType ( 
 		String id, boolean isAntisymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitive 
 	)
 	{
@@ -125,36 +156,36 @@ public class CachedGraphWrapper
 		);
 	}
 
-	public RelationType getRelationType ( RelationTypePrototype proto )
+	public synchronized RelationType getRelationType ( RelationTypePrototype proto )
 	{
 		try 
 		{
 			// Let's see if it has a parent
-			if ( proto.getSpecialisationOf () == null )
+			if ( proto.getParent () == null )
 			{
 				// Or a prototype to build it. In case of loops, this will lead to stack overflow
 				RelationTypePrototype parentProto = proto.getParentPrototype ();
 				if ( parentProto != null )
-						proto.setSpecialisationOf ( this.getRelationType ( parentProto ) );
+						proto.setParent ( this.getRelationType ( parentProto ) );
 			}
 			
 			return this.cacheGet ( 
 				RelationType.class, proto.getId (), 
 				() -> this.graph.getMetaData ().getFactory ().createRelationType ( 
-					proto.getId (), proto.getFullname (), proto.getDescription (), 
-					proto.isAntisymmetric (), proto.isReflexive (), proto.isSymmetric (), proto.isTransitiv (), 
-					proto.getSpecialisationOf () )
+					proto.getId (), proto.getFullName (), proto.getDescription (), 
+					proto.isAntisymmetric (), proto.isReflexive (), proto.isSymmetric (), proto.isTransitive (), 
+					proto.getParent () )
 			);
 		}
 		catch ( StackOverflowError ex ) 
 		{
-			log.error ( "Stackoverflow error while creating the relation '{}'. Do you have circular references?", proto.getId () );
+			log.error ( "Stack Overflow error while creating relation '{}'. Do you have circular references?", proto.getId () );
 			throw ex;
 		}
 	}
 	
 	
-	public ONDEXRelation getRelation ( ONDEXConcept from, ONDEXConcept to, RelationType type, EvidenceType evidence )
+	public synchronized ONDEXRelation getRelation ( ONDEXConcept from, ONDEXConcept to, RelationType type, EvidenceType evidence )
 	{
 		String id = from.getPID () + to.getPID () + type.getId () + evidence.getId ();
 		return this.cacheGet ( 
@@ -163,7 +194,7 @@ public class CachedGraphWrapper
 		);
 	}
 	
-	public EvidenceType getEvidenceType ( String id, String fullName, String description )
+	public synchronized EvidenceType getEvidenceType ( String id, String fullName, String description )
 	{
 		return this.cacheGet ( 
 			EvidenceType.class, id, 
@@ -171,13 +202,13 @@ public class CachedGraphWrapper
 		);
 	}
 	
-	public EvidenceType getEvidenceType ( EvidenceTypePrototype proto )
+	public synchronized EvidenceType getEvidenceType ( EvidenceTypePrototype proto )
 	{
-		return this.getEvidenceType ( proto.getId (), proto.getFullname (), proto.getDescription () );
+		return this.getEvidenceType ( proto.getId (), proto.getFullName (), proto.getDescription () );
 	}
 	
 	
-	public DataSource getDataSource ( String id, String fullName, String description )
+	public synchronized DataSource getDataSource ( String id, String fullName, String description )
 	{
 		return this.cacheGet ( 
 			DataSource.class, id, 
@@ -185,14 +216,37 @@ public class CachedGraphWrapper
 		);
 	}
 
-	public DataSource getDataSource ( DataSourcePrototype proto )
+	public synchronized DataSource getDataSource ( DataSourcePrototype proto )
 	{
-		return this.getDataSource ( proto.getId (), proto.getFullname (), proto.getDescription () );
+		return this.getDataSource ( proto.getId (), proto.getFullName (), proto.getDescription () );
 	}
+	
+	public synchronized ConceptAccession getAccession ( String accession, DataSource dataSrc, boolean isAmbiguous, ONDEXConcept concept )
+	{
+		// TODO: is the ID unique? Is it concept-unique? 
+		return this.cacheGet ( 
+			ConceptAccession.class, accession,
+			() -> concept.createConceptAccession ( accession, dataSrc, isAmbiguous )
+		);		
+	}
+	
+	public synchronized ConceptAccession getAccession ( AccessionPrototype proto, ONDEXConcept concept )
+	{
+		// Let's see if it has a parent
+		if ( proto.getDataSource () == null )
+		{
+			// Or a prototype to build it. In case of loops, this will lead to stack overflow
+			DataSourcePrototype dsProto = proto.getDataSourcePrototype ();
+			if ( dsProto != null )
+					proto.setDataSource ( this.getDataSource ( dsProto ) );
+		}
+		
+		return this.getAccession ( proto.getAccession (), proto.getDataSource (), proto.isAmbiguous (), concept );
+	}	
 	
 	/**
 	 * Facility to return cached objects, or, create and return them, if not already in the cache. 
-	 */
+	 */	
 	@SuppressWarnings ( "unchecked" )
 	private <V> V cacheGet ( Class<? super V> type, String key, Supplier<V> newValueGenerator )
 	{
@@ -211,5 +265,4 @@ public class CachedGraphWrapper
 	{
 		return (V) this.cache.get ( type, key );
 	}
-
 }
