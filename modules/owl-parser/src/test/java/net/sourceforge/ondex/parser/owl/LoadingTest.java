@@ -20,7 +20,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class LoadingTest
 {
 	@Test
-	//@Ignore ( "Not a real test, very time consuming" )
+	@Ignore ( "Not a real test, very time consuming" )
 	public void testLoad () throws Exception
 	{
 		String owlDir = "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/";
