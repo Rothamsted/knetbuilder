@@ -16,12 +16,6 @@
    <name>ONDEX OVTK2</name>
    <description>ONDEX OVTK2</description>
 
-
-
-
-
-
-
    <build>
       <plugins>
          <plugin>
@@ -47,6 +41,7 @@
          <plugin>
             <groupId>com.akathist.maven.plugins.launch4j</groupId>
             <artifactId>launch4j-maven-plugin</artifactId>
+            <version>1.7.16</version>
             <executions>
                <execution>
                   <id>l4j-gui</id>
