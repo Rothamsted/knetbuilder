@@ -2,12 +2,12 @@ package net.sourceforge.ondex.plugins.tab_parser_2;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
