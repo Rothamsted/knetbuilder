@@ -281,30 +281,31 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue(lenv.conceptExistsInIndex(concept3.getId()));
 	}
 	
-	public void test_updateConceptToIndex() {
-		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
-		concept1.createConceptAccession("ABC", dataSource, true);
-		ONDEXConcept concept2 = og.getFactory().createConcept("B", dataSource, cc1, et);
-		concept2.createConceptAccession("ABC", dataSource, true);
-		ONDEXConcept concept3 = og.getFactory().createConcept("C", dataSource, cc1, et);
-		concept3.createConceptAccession("ABC", dataSource, true);
-		
-		System.out.println("index!!");
-		lenv.setONDEXGraph(og);
-		
-		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept1.getId()));
-		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept2.getId()));
-		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept3.getId()));
-		
-		ONDEXConcept concept4 = og.getFactory().createConcept("D", dataSource, cc1, et);
-		concept4.createConceptAccession("ABC", dataSource, true);
-		
-		lenv.updateConceptToIndex(concept4);
-		
-		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept1.getId()));
-		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept2.getId()));
-		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept3.getId()));
-		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept4.getId()));
+	public void test_updateConceptToIndex ()
+	{
+		ONDEXConcept concept1 = og.getFactory ().createConcept ( "A", dataSource, cc, et );
+		concept1.createConceptAccession ( "ABC", dataSource, true );
+		ONDEXConcept concept2 = og.getFactory ().createConcept ( "B", dataSource, cc1, et );
+		concept2.createConceptAccession ( "ABC", dataSource, true );
+		ONDEXConcept concept3 = og.getFactory ().createConcept ( "C", dataSource, cc1, et );
+		concept3.createConceptAccession ( "ABC", dataSource, true );
+
+		System.out.println ( "index!!" );
+		lenv.setONDEXGraph ( og );
+
+		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept1.getId () ) );
+		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept2.getId () ) );
+		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept3.getId () ) );
+
+		ONDEXConcept concept4 = og.getFactory ().createConcept ( "D", dataSource, cc1, et );
+		concept4.createConceptAccession ( "ABC", dataSource, true );
+
+		lenv.updateConceptToIndex ( concept4 );
+
+		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept1.getId () ) );
+		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept2.getId () ) );
+		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept3.getId () ) );
+		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept4.getId () ) );
 	}
 	
 	public void test_updateConceptsToIndex() {

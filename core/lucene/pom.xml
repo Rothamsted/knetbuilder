@@ -21,6 +21,17 @@
          <groupId>org.apache.lucene</groupId>
          <artifactId>lucene-core</artifactId>
       </dependency>
+      
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-queryparser</artifactId>
+			</dependency>
+
+      <dependency>
+         <groupId>org.apache.commons</groupId>
+         <artifactId>commons-lang3</artifactId>
+      </dependency>
+      
 
       <!-- ONDEX deps -->      <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
@@ -28,6 +39,13 @@
          <version>${project.version}</version>
          <scope>provided</scope>
       </dependency>
+
+			<dependency>
+				<!-- Cute utility that allows for quick handling of exceptions (eg, checked/unchecked wrapping) -->
+				<groupId>com.machinezoo.noexception</groupId>
+				<artifactId>noexception</artifactId>
+			</dependency>      
+      
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>memory</artifactId>

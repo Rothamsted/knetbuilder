@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,6 +22,7 @@ import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
@@ -36,10 +38,10 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.FieldSelector;
-import org.apache.lucene.document.FieldSelectorResult;
-import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StoredField;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -48,24 +50,23 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Collector;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.SimpleCollector;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.LockObtainFailedException;
-import org.apache.lucene.util.Version;
+
+import com.machinezoo.noexception.Exceptions;
 
 /**
  * This class is the entry point for the indexed ONDEX graph representation. It
  * initialises the LUCENE Index system.
  * 
- * @author taubertj
- * @version 18.07.2011
+ * @author taubertj, reviewed in 2017 by brandizi (mainly to migrate to Lucene 6.x)
  */
 public class LuceneEnv implements ONDEXLuceneFields {
 
@@ -137,8 +138,13 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		@Override
 		public void collect ( int doc )
 		{
-			super.collect ( doc );
-			docScores.put ( doc + docBase, scorer.score() );
+			try {
+				super.collect ( doc );
+				docScores.put ( doc + docBase, scorer.score() );
+			}
+			catch ( IOException ex ) {
+				throw new RuntimeException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
+			}
 		}
 
 		/**
@@ -177,8 +183,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	private final static BitSet EMPTYBITSET = new BitSet(0);
 
-	private final static Map<Integer, Float> EMPTYSCOREMAP = new HashMap<Integer, Float>(
-			0);
+	private final static Map<Integer, Float> EMPTYSCOREMAP = new HashMap<Integer, Float>( 0 );
+	
+	private final static FieldType FIELD_TYPE_STORED_INDEXED_NO_NORMS = new FieldType ( TextField.TYPE_STORED );
+	private final static FieldType FIELD_TYPE_STORED_INDEXED_VECT_STORE = new FieldType ( TextField.TYPE_STORED );
+
 
 	/**
 	 * threaded indexing of graph
@@ -195,9 +204,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	private final static Pattern patternNonWordChars = Pattern.compile("\\W");
 
 	/**
-	 * LUCENE RAM buffer size in MB
+	 * This is the RAM allocated for Lucene buffering, during indexing operation. It is expressed as a fraction of
+	 * Runtime.getRuntime ().maxMemory (). 
+	 * 
 	 */
-	private final static double RAMBufferSizeMB = 128;
+	private final static double RAM_BUFFER_QUOTA = 0.1;
 
 	/**
 	 * Strips text to be inserted into the index.
@@ -233,7 +244,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * LUCENE index writer
 	 */
-	private IndexWriter im;
+	private IndexWriter iw;
 
 	/**
 	 * directory for index
@@ -274,6 +285,12 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	// contains all used attribute names for relations
 	protected Set<String> listOfRelationAttrNames = new HashSet<String>();
 
+	static {
+		LuceneEnv.FIELD_TYPE_STORED_INDEXED_NO_NORMS.setOmitNorms ( true );
+		LuceneEnv.FIELD_TYPE_STORED_INDEXED_VECT_STORE.setStoreTermVectors ( true );
+	}
+	
+	
 	/**
 	 * Constructor which initialises an empty LuceneEnv.
 	 * 
@@ -324,12 +341,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	public void cleanup() {
 		try {
-			if (im != null)
-				im.close();
-			if (ir != null)
-				ir.close();
-			if (directory != null)
-				directory.close();
+			if (iw != null) iw.close();
+			if (ir != null) ir.close();
+			if (directory != null) directory.close();
 		} catch (IOException ioe) {
 			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
 					"[LuceneEnv - cleanup]"));
@@ -339,27 +353,27 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * Close a potentially open index.
 	 */
-	public void closeIndex() {
-		try {
+	public void closeIndex() 
+	{
+		try 
+		{
 			// check if index open for writing
-			if (!indexWriterIsOpen)
-				return;
+			if ( !indexWriterIsOpen ) return;
 
 			// add last document to index
-			addMetadataToIndex();
+			addMetadataToIndex ();
 
-			im.prepareCommit();
-			im.commit();
-			im.close();
+			iw.prepareCommit ();
+			iw.commit ();
+			iw.close ();
 			indexWriterIsOpen = false;
-		} catch (CorruptIndexException cie) {
-			fireEventOccurred(new DataFileErrorEvent(cie.getMessage(),
-					"[LucenceEnv - closeIndex]"));
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LucenceEnv - closeIndex]"));
+		} 
+		catch (CorruptIndexException cie) {
+			fireEventOccurred ( new DataFileErrorEvent ( cie.getMessage(), "[LucenceEnv - closeIndex]" ) );
+		} 
+		catch (IOException ioe) {
+			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage(), "[LucenceEnv - closeIndex]" ) );
 		}
-
 	}
 
 	/**
@@ -367,12 +381,13 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the concept id to check for
 	 * @return if one or more indexes of this concept exist in the index
 	 */
-	public boolean conceptExistsInIndex(int cid) {
-		DocIdCollector collector = new DocIdCollector(is.getIndexReader());
+	public boolean conceptExistsInIndex(int cid) 
+	{
+		DocIdCollector collector = null;
 		try {
-			is.search(
-					new TermQuery(new Term(CONID_FIELD, String.valueOf(cid))),
-					collector);
+			ensureReaderAndSearcherOpen ();
+			collector = new DocIdCollector(is.getIndexReader());
+			is.search( new TermQuery(new Term(CONID_FIELD, String.valueOf(cid))), collector);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -390,13 +405,13 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the word/term to search for
 	 * @return int
 	 */
-	public int getFrequenceyOfWordInConceptAttribute(AttributeName an,
-			String word) {
-
+	public int getFrequenceyOfWordInConceptAttribute(AttributeName an, String word) 
+	{
 		String fieldname = CONATTRIBUTE_FIELD + DELIM + an.getId();
 		Term term = new Term(fieldname, word);
 		try {
-			return is.docFreq(term);
+			this.ensureReaderAndSearcherOpen ();
+			return ir.docFreq( term );
 		} catch (IOException e) {
 			fireEventOccurred(new DataFileErrorEvent(e.getMessage(),
 					"[LuceneEnv - getFrequenceyOfWordInConceptAttribute]"));
@@ -417,15 +432,15 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the word/term to search for
 	 * @return int[]
 	 */
-	public int[] getFrequenceyOfWordInConceptAttribute(AttributeName an,
-			String[] word) {
-
+	public int[] getFrequenceyOfWordInConceptAttribute(AttributeName an, String[] word) 
+	{
 		String fieldname = CONATTRIBUTE_FIELD + DELIM + an.getId();
 
 		try {
+			this.ensureReaderAndSearcherOpen ();			
 			int[] freqs = new int[word.length];
 			for (int i = 0; i < word.length; i++) {
-				freqs[i] = is.docFreq(new Term(fieldname, word[i]));
+				freqs[i] = ir.docFreq ( new Term ( fieldname, word[i] ) );
 			}
 
 			// Returns the number of documents containing the terms.
@@ -446,14 +461,14 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the word/term to search for
 	 * @return int
 	 */
-	public int getFrequenceyOfWordInRelationAttribute(AttributeName an,
-			String word) {
-
+	public int getFrequenceyOfWordInRelationAttribute(AttributeName an, String word)
+	{
 		String fieldname = RELATTRIBUTE_FIELD + DELIM + an.getId();
 		Term term = new Term(fieldname, word);
 		try {
 			// Returns the number of documents containing the term.
-			return is.docFreq(term);
+			this.ensureReaderAndSearcherOpen ();						
+			return ir.docFreq ( term );
 		} catch (IOException e) {
 			fireEventOccurred(new DataFileErrorEvent(e.getMessage(),
 					"[LuceneEnv - getFrequenceyOfWordInRelationAttribute]"));
@@ -471,15 +486,15 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the word/term to search for
 	 * @return int[]
 	 */
-	public int[] getFrequenceyOfWordInRelationAttribute(AttributeName an,
-			String[] word) {
-
+	public int[] getFrequenceyOfWordInRelationAttribute(AttributeName an, String[] word) 
+	{
 		String fieldname = RELATTRIBUTE_FIELD + DELIM + an.getId();
 
 		try {
+			this.ensureReaderAndSearcherOpen ();
 			int[] freqs = new int[word.length];
 			for (int i = 0; i < word.length; i++) {
-				freqs[i] = is.docFreq(new Term(fieldname, word[i]));
+				freqs[i] = ir.docFreq ( new Term(fieldname, word[i]) );
 			}
 
 			// Returns the number of documents containing the terms.
@@ -524,38 +539,31 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * Open index for writing.
 	 */
-	public void openIndex() {
+	public void openIndex ()
+	{
 		// open index modifier to write to index
-		try {
+		try
+		{
+			if ( indexWriterIsOpen ) closeIndex ();
+			ir.close ();
 
-			if (indexWriterIsOpen)
-				closeIndex();
-			is.close();
-			ir.close();
-
-			IndexWriterConfig writerConfig = new IndexWriterConfig(
-					Version.LUCENE_36, DEFAULTANALYZER);
-			writerConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
+			IndexWriterConfig writerConfig = new IndexWriterConfig ( DEFAULTANALYZER );
+			writerConfig.setOpenMode ( OpenMode.CREATE_OR_APPEND );
 			// set RAM buffer, hopefully speeds up things
-			writerConfig.setRAMBufferSizeMB(RAMBufferSizeMB);
+			writerConfig.setRAMBufferSizeMB ( RAM_BUFFER_QUOTA * Runtime.getRuntime ().maxMemory () / ( 1 << 20 ) );
 
-			im = new IndexWriter(directory, writerConfig);
+			iw = new IndexWriter ( directory, writerConfig );
 			indexWriterIsOpen = true;
 
 			// deletes the last record that has attribute names,
 			// that will have to be rebuilt
-			im.deleteDocuments(new Term(LASTDOCUMENT, "true"));
-			System.out.println("Lucene Metadata delete: " + im.hasDeletions());
-			im.commit();
-		} catch (CorruptIndexException cie) {
-			fireEventOccurred(new DataFileErrorEvent(cie.getMessage(),
-					"[LucenceEnv - openIndex]"));
-		} catch (LockObtainFailedException lofe) {
-			fireEventOccurred(new DataFileErrorEvent(lofe.getMessage(),
-					"[LucenceEnv - openIndex]"));
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LucenceEnv - openIndex]"));
+			iw.deleteDocuments ( new Term ( LASTDOCUMENT, "true" ) );
+			System.out.println ( "Lucene Metadata delete: " + iw.hasDeletions () );
+			iw.commit ();
+		}
+		catch ( IOException ioe )
+		{
+			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LucenceEnv - openIndex]" ) );
 		}
 	}
 
@@ -564,16 +572,19 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the relation id to check for
 	 * @return if one or more indexes of this concept exist in the index
 	 */
-	public boolean relationExistsInIndex(int rid) {
-		DocIdCollector collector = new DocIdCollector(is.getIndexReader());
-		try {
-			is.search(
-					new TermQuery(new Term(RELID_FIELD, String.valueOf(rid))),
-					collector);
-		} catch (IOException e) {
-			e.printStackTrace();
+	public boolean relationExistsInIndex ( int rid )
+	{
+		DocIdCollector collector = null;
+		try 
+		{
+			this.ensureReaderAndSearcherOpen ();
+			collector = new DocIdCollector ( is.getIndexReader () );
+			is.search ( new TermQuery ( new Term ( RELID_FIELD, String.valueOf ( rid ) ) ), collector );
 		}
-		return (collector.getBits().length() > 0);
+		catch ( IOException e ) {
+			e.printStackTrace ();
+		}
+		return ( collector == null ? false : collector.getBits ().length () > 0 );
 	}
 
 	/**
@@ -588,7 +599,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	public boolean removeConceptFromIndex(int cid) {
 		return removeConceptsFromIndex(new int[] { cid });
 	}
-
+	
 	/**
 	 * Removes the selected concepts from the index
 	 * 
@@ -596,37 +607,19 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the conceptIds to remove from the index
 	 * @return the number of concepts removed
 	 */
-	public boolean removeConceptsFromIndex(int[] cids) {
-		boolean success = false;
-		openIndex();
-		try {
+	public boolean removeConceptsFromIndex(int[] cids) 
+	{
+		return updadeIndex ( () -> 
+		{
 			Query[] terms = new Query[cids.length];
 			for (int i = 0; i < terms.length; i++) {
 				terms[i] = new TermQuery(new Term(CONID_FIELD,
 						String.valueOf(cids[i])));
 				System.out.println(terms[i].toString());
 			}
-
-			try {
-				im.deleteDocuments(terms);
-				success = im.hasDeletions();
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} finally {
-			closeIndex();
-			try {
-				ir = DirectoryReader.open( directory );
-				is = new IndexSearcher(ir);
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return success;
+			Exceptions.sneak ().get (	() -> iw.deleteDocuments ( terms ) );
+			return iw.hasDeletions();			
+		});
 	}
 
 	/**
@@ -659,38 +652,73 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the relationIds to remove from the index
 	 * @return the number of relations removed
 	 */
-	public boolean removeRelationsFromIndex(int[] rids) {
-		boolean success = false;
-		openIndex();
-		try {
+	public boolean removeRelationsFromIndex(int[] rids) 
+	{
+		return updadeIndex ( () -> 
+		{
 			Term[] terms = new Term[rids.length];
 			for (int i = 0; i < terms.length; i++) {
 				terms[i] = new Term(RELID_FIELD, String.valueOf(rids[i]));
 			}
-
-			try {
-				im.deleteDocuments(terms);
-				success = im.hasDeletions();
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} finally {
-			closeIndex();
-			try {
-				ir.close();
-				ir = DirectoryReader.open( directory );
-				is = new IndexSearcher(ir);
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return success;
+			Exceptions.sneak ().get ( () -> iw.deleteDocuments(terms) );
+			return iw.hasDeletions();
+		});		
 	}
 
+	/**
+	 * TODO: comment me!
+	 */
+	private <E extends ONDEXEntity> ScoredHits<E> searchScoredEntity ( 
+		Query q, String field, Class<E> returnValueClass 
+	)
+	{
+		try
+		{
+			ensureReaderAndSearcherOpen ();
+			ScoreCollector collector = new ScoreCollector ( is.getIndexReader () );
+			is.search ( q, collector );
+			Set<E> view;
+			Map<Integer, Float> doc2Scores = collector.getScores ();
+			Map<Integer, Float> id2scores = new HashMap<Integer, Float> ();
+			BitSet bs = collector.getBits ();
+			if ( bs.length () > 0 )
+			{
+				BitSet set = new BitSet ( bs.length () );
+				// iterator of document indices
+				for ( int i = bs.nextSetBit ( 0 ); i >= 0; i = bs.nextSetBit ( i + 1 ) )
+				{
+					Document document = is.doc ( i, idSelector );
+					float score = doc2Scores.get ( i );
+					// TODO: remove
+					// Fieldable cid = document.getFieldable(CONID_FIELD);
+					// int conceptId = Integer.valueOf(cid.stringValue());
+					int entityId = Optional.ofNullable ( document.get ( field ) )
+						.map ( Integer::valueOf )
+						.orElseThrow ( () -> new NullPointerException ( String.format ( 
+							"Internal error: for some reason I have a null ID for the Lucene query: \"%s\" and the field \"%s\"", 
+							field, 
+							q.toString () 
+						)));
+					id2scores.put ( entityId, score );
+					set.set ( entityId );
+				}
+				view = BitSetFunctions.create ( og, returnValueClass, set );
+				return new ScoredHits<E> ( view, id2scores );
+			} 
+			else
+			{
+				view = BitSetFunctions.create ( og, returnValueClass, EMPTYBITSET );
+				return new ScoredHits<E> ( view, EMPTYSCOREMAP );
+			}
+		}
+		catch ( IOException ioe )
+		{
+			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LuceneEnv - searchInConcepts]" ) );
+		}
+		return null;
+	}
+	
+	
 	/**
 	 * Searches in Concepts and returns found Concepts.
 	 * 
@@ -698,44 +726,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            Query
 	 * @return ScoredHits<ONDEXConcept>
 	 */
-	public ScoredHits<ONDEXConcept> scoredSearchInConcepts(Query q) {
-		try {
-			ScoreCollector collector = new ScoreCollector(is.getIndexReader());
-			is.search(q, collector);
-
-			Set<ONDEXConcept> view;
-			Map<Integer, Float> doc2Scores = collector.getScores();
-			Map<Integer, Float> cid2scores = new HashMap<Integer, Float>();
-			BitSet bs = collector.getBits();
-			if (bs.length() > 0) {
-				BitSet set = new BitSet(bs.length());
-				// iterator of document indices
-				for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i + 1)) {
-					Document document = is.doc ( i, idSelector );
-					float score = doc2Scores.get(i);
-// TODO: remove
-//					Fieldable cid = document.getFieldable(CONID_FIELD);
-//					int conceptId = Integer.valueOf(cid.stringValue());
-					int conceptId = Optional.ofNullable ( document.get ( CONID_FIELD ) )
-					.map ( Integer::valueOf )
-					.orElseThrow ( () -> new NullPointerException ( 
-						"Internal error: for some reason I have a null concept ID for: " + q.toString () 
-					));
-					cid2scores.put(conceptId, score);
-					set.set(conceptId);
-				}
-				view = BitSetFunctions.create(og, ONDEXConcept.class, set);
-				return new ScoredHits<ONDEXConcept>(view, cid2scores);
-			} else {
-				view = BitSetFunctions.create(og, ONDEXConcept.class,
-						EMPTYBITSET);
-				return new ScoredHits<ONDEXConcept>(view, EMPTYSCOREMAP);
-			}
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - searchInConcepts]"));
-		}
-		return null;
+	public ScoredHits<ONDEXConcept> scoredSearchInConcepts(Query q)  {
+		return searchScoredEntity ( q, CONID_FIELD, ONDEXConcept.class );
 	}
 
 	/**
@@ -746,39 +738,56 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 * @return ScoredHits<ONDEXRelation>
 	 */
 	public ScoredHits<ONDEXRelation> scoredSearchInRelations(Query q) {
-		try {
-			ScoreCollector collector = new ScoreCollector(is.getIndexReader());
-			is.search(q, collector);
-
-			Set<ONDEXRelation> view;
-			Map<Integer, Float> doc2Scores = collector.getScores();
-			Map<Integer, Float> rid2scores = new HashMap<Integer, Float>();
-			BitSet bs = collector.getBits();
-			if (bs.length() > 0) {
-				BitSet set = new BitSet(bs.length());
-				// iterator of document indices
-				for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i + 1)) {
-					Document document = is.doc(i, idSelector);
-					float score = doc2Scores.get(i);
-					Fieldable rid = document.getFieldable(RELID_FIELD);
-					int relationId = Integer.valueOf(rid.stringValue());
-					rid2scores.put(relationId, score);
-					set.set(relationId);
-				}
-				view = BitSetFunctions.create(og, ONDEXRelation.class, set);
-				return new ScoredHits<ONDEXRelation>(view, rid2scores);
-			} else {
-				view = BitSetFunctions.create(og, ONDEXRelation.class,
-						EMPTYBITSET);
-				return new ScoredHits<ONDEXRelation>(view, EMPTYSCOREMAP);
-			}
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - searchInConcepts]"));
-		}
-		return null;
+		return searchScoredEntity ( q, RELID_FIELD, ONDEXRelation.class );
 	}
 
+	
+	
+	private <E extends ONDEXEntity> Set<E> searchEntity ( Query q, String field, Class<E> returnValueClass )
+	{
+		try
+		{
+			this.ensureReaderAndSearcherOpen ();
+			DocIdCollector collector = new DocIdCollector ( is.getIndexReader () );
+			is.search ( q, collector );
+
+			BitSet bs = collector.getBits ();
+			if ( bs.length () == 0 ) return BitSetFunctions.create ( og, returnValueClass, EMPTYBITSET );
+
+			BitSet set = new BitSet ( bs.length () );
+			// iterator of document indices
+			for ( int i = bs.nextSetBit ( 0 ); i >= 0; i = bs.nextSetBit ( i + 1 ) )
+			{
+				// retrieve associated document
+				Document document = is.doc ( i, idSelector );
+				// get concept ID from document
+				
+				// TODO: remove
+				// Fieldable cid = document.getFieldable ( CONID_FIELD );
+				// set.set ( Integer.valueOf ( cid.stringValue () ) );
+				
+				int entityId = Optional.ofNullable ( document.get ( field ) )
+					.map ( Integer::valueOf )
+					.orElseThrow ( () -> new NullPointerException ( String.format ( 
+						"Internal error: for some reason I have a null ID for the Lucene query: \"%s\" and the field \"%s\"", 
+						field, 
+						q.toString () 
+					)));
+				
+				set.set ( entityId );
+			}
+			return BitSetFunctions.create ( og, returnValueClass, set );
+		}
+		catch ( IOException ioe )
+		{
+			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LuceneEnv - searchInConcepts]" ) );
+		}
+		return null;
+		
+	}
+	
+	
+	
 	/**
 	 * Searches in Concepts and returns found Concepts.
 	 * 
@@ -787,31 +796,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 * @return Set<ONDEXConcept>
 	 */
 	public Set<ONDEXConcept> searchInConcepts(Query q) {
-		try {
-			DocIdCollector collector = new DocIdCollector(is.getIndexReader());
-			is.search(q, collector);
-
-			BitSet bs = collector.getBits();
-			if (bs.length() > 0) {
-				BitSet set = new BitSet(bs.length());
-				// iterator of document indices
-				for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i + 1)) {
-					// retrieve associated document
-					Document document = is.doc(i, idSelector);
-					// get concept ID from document
-					Fieldable cid = document.getFieldable(CONID_FIELD);
-					set.set(Integer.valueOf(cid.stringValue()));
-				}
-				return BitSetFunctions.create(og, ONDEXConcept.class, set);
-			} else {
-				return BitSetFunctions.create(og, ONDEXConcept.class,
-						EMPTYBITSET);
-			}
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - searchInConcepts]"));
-		}
-		return null;
+		return searchEntity ( q, CONID_FIELD, ONDEXConcept.class );
 	}
 
 	/**
@@ -822,33 +807,56 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 * @return Set<ONDEXRelation>
 	 */
 	public Set<ONDEXRelation> searchInRelations(Query q) {
-		try {
-			DocIdCollector collector = new DocIdCollector(is.getIndexReader());
-			is.search(q, collector);
+		return searchEntity ( q, RELID_FIELD, ONDEXRelation.class );
+	}
 
-			BitSet bs = collector.getBits();
-			if (bs.length() > 0) {
-				BitSet set = new BitSet(bs.length());
-				// iterator of document indices
-				for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i + 1)) {
-					// retrieve associated document
-					Document document = is.doc(i, idSelector);
-					// get relation ID from document
-					Fieldable rid = document.getFieldable(RELID_FIELD);
-					set.set(Integer.valueOf(rid.stringValue()));
+	
+	private <E extends ONDEXEntity> ScoredHits<E> searchScoredEntity ( 
+		Query q, String field, Class<E> returnedValueClass, int limit 
+	)
+	{
+		try
+		{
+			this.ensureReaderAndSearcherOpen ();
+			final BitSet bits = new BitSet ();
+			TopDocs hits = is.search ( q, limit );
+			Map<Integer, Float> scores = new HashMap<Integer, Float> ();
+			for ( int i = 0; i < hits.scoreDocs.length; i++ )
+			{
+				int docId = hits.scoreDocs[ i ].doc;
+				float score = hits.scoreDocs[ i ].score;
+				Document document = is.doc ( docId, idSelector );
+				
+//				Fieldable cid = document.getFieldable ( CONID_FIELD );
+//				if ( cid != null )
+//				{
+//					int id = Integer.parseInt ( cid.stringValue () );
+//					bits.set ( id );
+//					scores.put ( id, score );
+//				}
+				
+				Integer entityId = Optional.ofNullable ( document.get ( field ) )
+					.map ( Integer::valueOf )
+					.orElse ( null );
+				
+				if ( entityId != null ) {
+					bits.set ( entityId );
+					scores.put ( entityId, score );
 				}
-				return BitSetFunctions.create(og, ONDEXRelation.class, set);
-			} else {
-				return BitSetFunctions.create(og, ONDEXRelation.class,
-						EMPTYBITSET);
 			}
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - searchInRelations]"));
+
+			Set<E> view = BitSetFunctions.create ( og, returnedValueClass, bits );
+			return new ScoredHits<E> ( view, scores );
+		}
+		catch ( IOException ioe )
+		{
+			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LuceneEnv - searchTopConcepts]" ) );
 		}
 		return null;
 	}
-
+	
+	
+	
 	/**
 	 * Searches the top n hits for query in Concepts.
 	 * 
@@ -859,31 +867,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 * @return ScoredHits<ONDEXConcept>
 	 */
 	public ScoredHits<ONDEXConcept> searchTopConcepts(Query q, int n) {
-
-		try {
-			final BitSet bits = new BitSet();
-			TopDocs hits = is.search(q, null, n);
-			Map<Integer, Float> scores = new HashMap<Integer, Float>();
-			for (int i = 0; i < hits.scoreDocs.length; i++) {
-				int docId = hits.scoreDocs[i].doc;
-				float score = hits.scoreDocs[i].score;
-				Document document = is.doc(docId, idSelector);
-				Fieldable cid = document.getFieldable(CONID_FIELD);
-				if (cid != null) {
-					int id = Integer.parseInt(cid.stringValue());
-					bits.set(id);
-					scores.put(id, score);
-				}
-			}
-
-			Set<ONDEXConcept> view = BitSetFunctions.create(og,
-					ONDEXConcept.class, bits);
-			return new ScoredHits<ONDEXConcept>(view, scores);
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - searchTopConcepts]"));
-		}
-		return null;
+		return searchScoredEntity ( q, CONID_FIELD, ONDEXConcept.class, n );
 	}
 
 	/**
@@ -896,32 +880,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 * @return ScoredHits<ONDEXRelation>
 	 */
 	public ScoredHits<ONDEXRelation> searchTopRelations(Query q, int n) {
-
-		try {
-			BitSet bits = new BitSet();
-			TopDocs hits = is.search(q, null, n);
-			Map<Integer, Float> scores = new HashMap<Integer, Float>();
-			for (int i = 0; i < hits.scoreDocs.length; i++) {
-				int docId = hits.scoreDocs[i].doc;
-				float score = hits.scoreDocs[i].score;
-				Document document = is.doc(docId, idSelector);
-				Fieldable rid = document.getFieldable(RELID_FIELD);
-				if (rid != null) {
-					int id = Integer.parseInt(rid.stringValue());
-					bits.set(id);
-					scores.put(id, score);
-				}
-			}
-
-			Set<ONDEXRelation> view = BitSetFunctions.create(og,
-					ONDEXRelation.class, bits);
-			return new ScoredHits<ONDEXRelation>(view, scores);
-
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - searchTopRelations]"));
-		}
-		return null;
+		return searchScoredEntity ( q, RELID_FIELD, ONDEXRelation.class, n );
 	}
 
 	/**
@@ -955,32 +914,18 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 * @throws AccessDeniedException
 	 */
 	public void updateConceptsToIndex(Set<ONDEXConcept> concepts)
-			throws AccessDeniedException {
-		openIndex();
-		try {
+			throws AccessDeniedException 
+	{
+		updateIndexVoid ( () -> 
+		{
 			for (ONDEXConcept concept : concepts) {
 				// try a delete this is quicker than reopening the "is"
-				try {
-					im.deleteDocuments(new Term(CONID_FIELD, String
-							.valueOf(concept.getId())));
-				} catch (CorruptIndexException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				Exceptions.sneak ().run ( () -> 
+					iw.deleteDocuments( new Term ( CONID_FIELD, String.valueOf(concept.getId() ) ) )
+				);
 				addConceptToIndex(concept);
 			}
-		} finally {
-			closeIndex();
-			try {
-				ir = IndexReader.open(directory);
-				is = new IndexSearcher(ir);
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		});		
 	}
 
 	/**
@@ -992,33 +937,16 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the concept to add to the index
 	 * @throws AccessDeniedException
 	 */
-	public void updateConceptToIndex(ONDEXConcept concept)
-			throws AccessDeniedException {
-		boolean exists = conceptExistsInIndex(concept.getId());
-		openIndex();
-		try {
-			if (exists) {
-				try {
-					im.deleteDocuments(new Term(CONID_FIELD, String
-							.valueOf(concept.getId())));
-				} catch (CorruptIndexException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			addConceptToIndex(concept);
-		} finally {
-			closeIndex();
-			try {
-				ir = IndexReader.open(directory);
-				is = new IndexSearcher(ir);
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public void updateConceptToIndex ( ONDEXConcept concept ) throws AccessDeniedException
+	{
+		updateIndexVoid ( () -> 
+		{
+			boolean exists = conceptExistsInIndex ( concept.getId () );
+			if ( exists ) Exceptions.sneak ().run ( 
+				() -> iw.deleteDocuments ( new Term ( CONID_FIELD, String.valueOf ( concept.getId () ) ) ) 
+			);
+			addConceptToIndex ( concept );
+		});
 	}
 
 	/**
@@ -1028,32 +956,18 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the relations to add to the index
 	 * @throws AccessDeniedException
 	 */
-	public void updateRelationsToIndex(Set<ONDEXRelation> relations)
-			throws AccessDeniedException {
-		openIndex();
-		try {
-			for (ONDEXRelation relation : relations) {
-				try {
-					im.deleteDocuments(new Term(RELID_FIELD, String
-							.valueOf(relation.getId())));
-				} catch (CorruptIndexException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				addRelationToIndex(relation);
+	public void updateRelationsToIndex ( Set<ONDEXRelation> relations ) throws AccessDeniedException
+	{
+		updateIndexVoid ( () ->
+		{
+			for ( ONDEXRelation relation : relations )
+			{
+				Exceptions.sneak ().run ( () -> 
+					iw.deleteDocuments ( new Term ( RELID_FIELD, String.valueOf ( relation.getId () ) ) )
+				);
+				addRelationToIndex ( relation );
 			}
-		} finally {
-			closeIndex();
-			try {
-				ir = IndexReader.open(directory);
-				is = new IndexSearcher(ir);
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		});
 	}
 
 	/**
@@ -1065,33 +979,17 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            ondex relation to add to the index
 	 * @throws AccessDeniedException
 	 */
-	public void updateRelationToIndex(ONDEXRelation relation)
-			throws AccessDeniedException {
-		boolean exists = relationExistsInIndex(relation.getId());
-		openIndex();
-		try {
-			if (exists) {
-				try {
-					im.deleteDocuments(new Term(RELID_FIELD, String
-							.valueOf(relation.getId())));
-				} catch (CorruptIndexException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			addRelationToIndex(relation);
-		} finally {
-			closeIndex();
-			try {
-				ir = IndexReader.open(directory);
-				is = new IndexSearcher(ir);
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public void updateRelationToIndex ( ONDEXRelation relation ) throws AccessDeniedException
+	{
+		updateIndexVoid ( () -> 
+		{
+			boolean exists = relationExistsInIndex ( relation.getId() );
+			if ( exists )
+				Exceptions.sneak ().run ( () ->
+					iw.deleteDocuments ( new Term ( RELID_FIELD, String.valueOf ( relation.getId () ) ) )				
+				);
+			addRelationToIndex ( relation );
+		});
 	}
 
 	/**
@@ -1101,129 +999,140 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            ONDEXConcept to add to index
 	 * @throws AccessDeniedException
 	 */
-	private void addConceptToIndex(ONDEXConcept c) throws AccessDeniedException {
+	private void addConceptToIndex(ONDEXConcept c) throws AccessDeniedException 
+	{
 		// ensures duplicates are not written to the Index
-		Set<String> cacheSet = new HashSet<String>(100);
+		Set<String> cacheSet = new HashSet<String> ( 100 );
 
 		// get textual properties
-		String conceptID = String.valueOf(c.getId());
-		String parserID = c.getPID();
-		String annotation = c.getAnnotation();
-		String description = c.getDescription();
+		String conceptID = String.valueOf ( c.getId () );
+		String parserID = c.getPID ();
+		String annotation = c.getAnnotation ();
+		String description = c.getDescription ();
 
 		// get all properties iterators
-		Set<ConceptAccession> it_ca = c.getConceptAccessions();
-		if (it_ca.size() == 0) {
+		Set<ConceptAccession> it_ca = c.getConceptAccessions ();
+		if ( it_ca.size () == 0 )
+		{
 			it_ca = null;
 		}
-		Set<ConceptName> it_cn = c.getConceptNames();
-		if (it_cn.size() == 0) {
+		Set<ConceptName> it_cn = c.getConceptNames ();
+		if ( it_cn.size () == 0 )
+		{
 			it_cn = null;
 		}
-		Set<Attribute> it_attribute = c.getAttributes();
-		if (it_attribute.size() == 0) {
+		Set<Attribute> it_attribute = c.getAttributes ();
+		if ( it_attribute.size () == 0 )
+		{
 			it_attribute = null;
 		}
 
 		// leave if there are no properties
-		if (it_ca == null && it_cn == null && it_attribute == null
-				&& annotation.length() == 0 && description.length() == 0) {
+		if ( it_ca == null && it_cn == null && it_attribute == null && annotation.length () == 0
+				&& description.length () == 0 )
+		{
 			return; // there is nothing to index, no document should be created!
 		}
 
 		// create a new document for each concept and sets fields
-		Document doc = new Document();
+		Document doc = new Document ();
+		
+		doc.add ( new Field ( CONID_FIELD, conceptID, FIELD_TYPE_STORED_INDEXED_NO_NORMS ) );
+		doc.add ( new Field ( PID_FIELD, parserID, StoredField.TYPE ) );
+		
+		doc.add ( new Field ( CC_FIELD, c.getOfType ().getId (), StringField.TYPE_STORED ) );
+		doc.add ( new Field ( DataSource_FIELD, c.getElementOf ().getId (), StringField.TYPE_STORED ) );
 
-		doc.add(new Field(CONID_FIELD, conceptID, Field.Store.YES,
-				Field.Index.NOT_ANALYZED_NO_NORMS));
-		doc.add(new Field(PID_FIELD, parserID, Field.Store.YES, Field.Index.NO));
-		doc.add(new Field(CC_FIELD, c.getOfType().getId(), Field.Store.YES,
-				Field.Index.NOT_ANALYZED_NO_NORMS));
-		doc.add(new Field(DataSource_FIELD, c.getElementOf().getId(),
-				Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+		if ( annotation.length () > 0 )
+			doc.add ( new Field ( ANNO_FIELD, LuceneEnv.stripText ( annotation ), TextField.TYPE_STORED ) );
 
-		if (annotation.length() > 0)
-			doc.add(new Field(ANNO_FIELD, LuceneEnv.stripText(annotation),
-					Store.YES, Field.Index.ANALYZED));
-
-		if (description.length() > 0)
-			doc.add(new Field(DESC_FIELD, LuceneEnv.stripText(description),
-					Store.YES, Field.Index.ANALYZED));
+		if ( description.length () > 0 )
+			doc.add ( new Field ( DESC_FIELD, LuceneEnv.stripText ( description ), TextField.TYPE_STORED ) );
 
 		// start concept accession handling
-		if (it_ca != null) {
+		if ( it_ca != null )
+		{
 
 			// add all concept accessions for this concept
-			for (ConceptAccession ca : it_ca) {
-				String accession = ca.getAccession();
-				String elementOf = ca.getElementOf().getId();
-				Boolean isAmbiguous = ca.isAmbiguous();
-				listOfConceptAccDataSources.add(elementOf);
+			for ( ConceptAccession ca : it_ca )
+			{
+				String accession = ca.getAccession ();
+				String elementOf = ca.getElementOf ().getId ();
+				Boolean isAmbiguous = ca.isAmbiguous ();
+				listOfConceptAccDataSources.add ( elementOf );
 
 				String id = CONACC_FIELD + DELIM + elementOf;
 
-				if (isAmbiguous) {
+				if ( isAmbiguous )
+				{
 					id = id + DELIM + AMBIGUOUS;
 				}
 				// concept accessions should not be ANALYZED?
-				doc.add(new Field(id, LuceneEnv.stripText(accession),
-						Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+				doc.add (
+						new Field ( id, LuceneEnv.stripText ( accession ), StringField.TYPE_STORED ) );
 			}
 		}
 
 		// start concept name handling
-		if (it_cn != null) {
+		if ( it_cn != null )
+		{
 
 			// add all concept names for this concept
-			for (ConceptName cn : it_cn) {
-				String name = cn.getName();
-				cacheSet.add(LuceneEnv.stripText(name));
+			for ( ConceptName cn : it_cn )
+			{
+				String name = cn.getName ();
+				cacheSet.add ( LuceneEnv.stripText ( name ) );
 			}
 
 			// exclude completely equal concept names from being
 			// represented twice
-			for (String aCacheSet : cacheSet) {
-				doc.add(new Field(CONNAME_FIELD, aCacheSet, Store.YES,
-						Field.Index.ANALYZED));
+			for ( String aCacheSet : cacheSet )
+			{
+				doc.add ( new Field ( CONNAME_FIELD, aCacheSet, TextField.TYPE_STORED ) );
 			}
-			cacheSet.clear();
+			cacheSet.clear ();
 		}
 
 		// start concept gds processing
-		if (it_attribute != null) {
+		if ( it_attribute != null )
+		{
 
 			// mapping attribute name to gds value
-			Map<String, String> attrNames = new HashMap<String, String>();
+			Map<String, String> attrNames = new HashMap<String, String> ();
 
 			// add all concept gds for this concept
-			for (Attribute attribute : it_attribute) {
-				if (attribute.isDoIndex()) {
-					String name = attribute.getOfType().getId();
-					listOfConceptAttrNames.add(name);
-					String value = attribute.getValue().toString();
-					attrNames.put(name, LuceneEnv.stripText(value));
+			for ( Attribute attribute : it_attribute )
+			{
+				if ( attribute.isDoIndex () )
+				{
+					String name = attribute.getOfType ().getId ();
+					listOfConceptAttrNames.add ( name );
+					String value = attribute.getValue ().toString ();
+					attrNames.put ( name, LuceneEnv.stripText ( value ) );
 				}
 			}
 
 			// write attribute name specific Attribute fields
-			for (String name : attrNames.keySet()) {
-				String value = attrNames.get(name);
-
-				doc.add(new Field(CONATTRIBUTE_FIELD + DELIM + name, value,
-						Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+			for ( String name : attrNames.keySet () )
+			{
+				String value = attrNames.get ( name );				
+				doc.add ( new Field ( CONATTRIBUTE_FIELD + DELIM + name, value, FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 			}
-			attrNames.clear();
+			attrNames.clear ();
 		}
 
 		// store document to index
-		try {
-			im.addDocument(doc);
-		} catch (CorruptIndexException cie) {
-			fireEventOccurred(new DataFileErrorEvent(cie.getMessage(),
-					"[LuceneEnv - addConceptToIndex]"));
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - addConceptToIndex]"));
+		try
+		{
+			iw.addDocument ( doc );
+		}
+		catch ( CorruptIndexException cie )
+		{
+			fireEventOccurred ( new DataFileErrorEvent ( cie.getMessage (), "[LuceneEnv - addConceptToIndex]" ) );
+		}
+		catch ( IOException ioe )
+		{
+			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LuceneEnv - addConceptToIndex]" ) );
 		}
 	}
 
@@ -1234,20 +1143,17 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 		// new document for fields
 		Document doc = new Document();
-		doc.add(new Field(LASTDOCUMENT, "true", Field.Store.YES, Field.Index.NO));
+		doc.add(new Field(LASTDOCUMENT, "true", StringField.TYPE_NOT_STORED ));
 		for (String name : listOfConceptAttrNames)
-			doc.add(new Field(CONATTRIBUTE_FIELD + DELIM + name, name,
-					Field.Store.YES, Field.Index.NO));
+			doc.add(new Field(CONATTRIBUTE_FIELD + DELIM + name, name,	StringField.TYPE_NOT_STORED ));
 		for (String name : listOfRelationAttrNames)
-			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, name,
-					Field.Store.YES, Field.Index.NO));
+			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, name,	StringField.TYPE_NOT_STORED ));
 		for (String elementOf : listOfConceptAccDataSources)
-			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf,
-					Field.Store.YES, Field.Index.NO));
+			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf, StoredField.TYPE ));
 
 		// add last document
 		try {
-			im.addDocument(doc);
+			iw.addDocument(doc);
 		} catch (CorruptIndexException cie) {
 			fireEventOccurred(new DataFileErrorEvent(cie.getMessage(),
 					"[LuceneEnv - addMetadataToIndex]"));
@@ -1278,16 +1184,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		// create a Document for each relation and store ids
 		Document doc = new Document();
 
-		doc.add(new Field(RELID_FIELD, String.valueOf(r.getId()),
-				Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-		doc.add(new Field(FROM_FIELD, String
-				.valueOf(r.getFromConcept().getId()), Field.Store.YES,
-				Field.Index.NO));
-		doc.add(new Field(TO_FIELD, String.valueOf(r.getToConcept().getId()),
-				Field.Store.YES, Field.Index.NO));
+		doc.add(new Field(RELID_FIELD, String.valueOf(r.getId()), StringField.TYPE_NOT_STORED ) );
+		doc.add(new Field(FROM_FIELD, String.valueOf(r.getFromConcept().getId()), StringField.TYPE_NOT_STORED ));
+		doc.add(new Field(TO_FIELD, String.valueOf(r.getToConcept().getId()),	StoredField.TYPE ));
 
-		doc.add(new Field(OFTYPE_FIELD, r.getOfType().getId(), Field.Store.YES,
-				Field.Index.NOT_ANALYZED_NO_NORMS));
+		doc.add(new Field(OFTYPE_FIELD, r.getOfType().getId(), StringField.TYPE_STORED ));
 
 		// mapping attribute name to gds value
 		Map<String, String> attrNames = new HashMap<String, String>();
@@ -1306,14 +1207,13 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		for (String name : attrNames.keySet()) {
 			String value = attrNames.get(name);
 
-			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, value,
-					Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, value, FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
 		}
 		attrNames.clear();
 
 		// store document to index
 		try {
-			im.addDocument(doc);
+			iw.addDocument(doc);
 		} catch (CorruptIndexException cie) {
 			fireEventOccurred(new DataFileErrorEvent(cie.getMessage(),
 					"[LuceneEnv - addRelationToIndex]"));
@@ -1345,16 +1245,14 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			if (create) {
 
 				// open index modifier to write to index
-				if (indexWriterIsOpen)
-					closeIndex();
+				if (indexWriterIsOpen) closeIndex();
 
-				IndexWriterConfig writerConfig = new IndexWriterConfig(
-						Version.LUCENE_36, DEFAULTANALYZER);
+				IndexWriterConfig writerConfig = new IndexWriterConfig( DEFAULTANALYZER );
 				writerConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
 				// set RAM buffer, hopefully speeds up things
-				writerConfig.setRAMBufferSizeMB(RAMBufferSizeMB);
+				writerConfig.setRAMBufferSizeMB( Runtime.getRuntime ().maxMemory () / 10 );
 
-				im = new IndexWriter(directory, writerConfig);
+				iw = new IndexWriter(directory, writerConfig);
 				indexWriterIsOpen = true;
 
 				// INDEX CONCEPTS
@@ -1390,19 +1288,17 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				// last Document contains meta data lists
 				addMetadataToIndex();
 
-				im.prepareCommit();
-				im.commit();
-				im.close();
+				iw.prepareCommit();
+				iw.commit();
+				iw.close();
 				indexWriterIsOpen = false;
 			}
 
-			// open index read-only for searching
-			ir = IndexReader.open(directory);
-			is = new IndexSearcher(ir);
-
+			this.ensureReaderAndSearcherOpen ();
+			
 			if (!create) {
 				// read in attribute names and accession DataSources
-				Document doc = is.doc(is.maxDoc() - 1);
+				Document doc = ir.document ( ir.maxDoc() - 1 );
 				for (Object o : doc.getFields()) {
 					Field field = (Field) o;
 					String name = field.name();
@@ -1427,8 +1323,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 * @param e
 	 *            type of event
 	 */
-	protected void fireEventOccurred(EventType e) {
-
+	protected void fireEventOccurred(EventType e) 
+	{
 		if (listeners.size() > 0) {
 			// new ondex event
 			ONDEXEvent oe = new ONDEXEvent(this, e);
@@ -1438,5 +1334,68 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				listener.eventOccurred(oe);
 			}
 		}
+	}
+
+	/**
+	 * Utility that factorises an index updating operation, wrapping it into common pre/post processing, like opening the
+	 * index, reopening it at the end.
+	 *  
+	 * @param action what to do, assuming it will return a result.
+	 */
+	private <R> R updadeIndex ( Supplier<R> action )
+	{
+		openIndex ();
+		
+		try {
+			return action.get ();
+		}	
+		finally 
+		{
+			closeIndex ();
+			try {
+				this.ensureReaderAndSearcherOpen ();
+			} 
+			catch ( IOException ex ) {
+				throw new RuntimeException ( "Internal Error while updating Lucene data index: ", ex );
+			}
+		}		
+	}
+	
+	/**
+	 * Like {@link #updadeIndex(Supplier)}, but doesn't return anything, so it's easier to use this in those lambdas that
+	 * don't have anything to return.
+	 */
+	private void updateIndexVoid ( Runnable action ) {
+		this.updadeIndex ( () -> { action.run (); return null; } );
+	}
+
+	/**
+	 * This was added by brandizi in 2017, to ensure {@link #ir} and {@link #is} are open, before starting using them
+	 * in an operation. TODO: this is a patch: we should actually review all the logic that this class uses, ensuring a 
+	 * clear and common flow of open/do/close, exception handling and alike.
+	 *   
+	 */
+	private void ensureReaderAndSearcherOpen () throws IOException
+	{
+		boolean irChanged = false;
+		if ( irChanged = ( ir == null ) ) 
+			ir = DirectoryReader.open ( directory ); 
+		else 
+		{
+			DirectoryReader newReader = null;
+			try {
+				newReader = DirectoryReader.openIfChanged ( (DirectoryReader) ir );
+			}
+			catch ( AlreadyClosedException ex ) {
+				// It seems there isn't a method to know if the reader was already closed, apart from a listener, which
+				// would be a bit more cumbersome here and not so useful
+				newReader = DirectoryReader.open ( directory );
+			}
+			if ( irChanged = ( newReader != null ) ) {
+				ir = newReader; 
+			}
+		}
+
+		if ( irChanged ) is = new IndexSearcher ( ir );
 	}
 }
