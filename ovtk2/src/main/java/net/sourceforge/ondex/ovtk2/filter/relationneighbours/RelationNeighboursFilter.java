@@ -41,7 +41,6 @@ import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.listmodel.ConceptListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
 
-import org.apache.lucene.queryParser.ParseException;
 
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
