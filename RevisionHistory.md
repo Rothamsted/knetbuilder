@@ -4,10 +4,11 @@
   * OWL Parser
     * Internals: complete review of the generic parser architecture (TODO: link), which now has clear separation between 
       data source decomposition (TODO: Scanner) and mapping (TODO: Mapper, PairMapper). 
-      The OWL Parser (TODO:link) was changed accordingly. Generic packages (ie, the generic parser library and a few utilities
+      The [OWL Parser](https://github.com/Rothamsted/ondex-knet-builder/tree/master/modules/owl-parser/src/main/java/net/sourceforge/ondex/parser/owl) 
+      was changed accordingly. Generic packages (ie, the generic parser library and a few utilities
       TODO: link) were migrated from the owl parser module to proper places.
   * Internal components to index data based on Lucene
-  	* Alle ONDEX code reviewed and migrated to Lucene 6.0.0.
+  	* All ONDEX code reviewed and migrated to Lucene 6.0.0.
 
 ## v1.2
   * OWL parser
