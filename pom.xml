@@ -255,7 +255,8 @@
       <jexcelapi.jxl.version>2.6.10</jexcelapi.jxl.version>
       <junit.version>4.7</junit.version>
       <mysql.connector.java.version>5.1.6</mysql.connector.java.version>
-      <org.apache.lucene.core.version>3.6.1</org.apache.lucene.core.version>
+      <!-- TODO: remove org.apache.lucene.core.version>3.6.1</org.apache.lucene.core.version -->
+      <lucene.version>6.6.0</lucene.version>
    </properties>
 
    <profiles>
@@ -350,7 +351,7 @@
          <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
          <releases><enabled>false</enabled></releases>
          <snapshots><enabled>true</enabled></snapshots>
-      </repository>      
+      </repository>            
 	 </repositories>
 
    <pluginRepositories>
@@ -362,7 +363,7 @@
       <pluginRepository>
       	<id>sonatype-releases</id>
       	<url>https://oss.sonatype.org/content/repositories/releases</url>
-      </pluginRepository>
+      </pluginRepository>      
    </pluginRepositories>
 
    <dependencies>
@@ -413,6 +414,38 @@
             <artifactId>jxl</artifactId>
             <version>2.6.10</version>
          </dependency>
+         
+				 <dependency>
+				   <groupId>org.apache.lucene</groupId>
+					 <artifactId>lucene-core</artifactId>
+					 <version>${lucene.version}</version>
+				 </dependency>
+				 
+				 <dependency>
+				   <groupId>org.apache.lucene</groupId>
+					 <artifactId>lucene-queryparser</artifactId>
+					 <version>${lucene.version}</version>
+				 </dependency>
+				 
+				<dependency>
+					<!-- Cute utility that allows for quick handling of exceptions (eg, checked/unchecked wrapping) -->
+					<groupId>com.machinezoo.noexception</groupId>
+					<artifactId>noexception</artifactId>
+					<version>1.1.0</version>
+				</dependency>      
+				
+				<dependency>
+				  <groupId>org.apache.commons</groupId>
+				  <artifactId>commons-lang3</artifactId>
+				  <version>3.5</version>
+				</dependency>
+				
+				<dependency>
+				  <groupId>commons-io</groupId>
+				  <artifactId>commons-io</artifactId>
+				  <version>2.5</version>
+				</dependency>				
+         
       </dependencies>
    </dependencyManagement>
 </project>
