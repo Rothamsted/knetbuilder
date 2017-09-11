@@ -47,7 +47,8 @@
          </exclusions>
       </dependency>
 
-      <!-- ONDEX deps -->      <dependency>
+      <!-- ONDEX deps -->
+      <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>tools</artifactId>
          <version>${project.version}</version>

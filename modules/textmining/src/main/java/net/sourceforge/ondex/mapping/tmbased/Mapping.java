@@ -30,6 +30,7 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.mapping.tmbased.args.ArgumentNames;
 
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
 
 
@@ -87,7 +88,7 @@ public class Mapping extends ONDEXMapping
 
 
     @Override
-    public void start() throws InvalidPluginArgumentException {
+    public void start() throws InvalidPluginArgumentException, ParseException {
         AttributeName abstractAN = graph.getMetaData().getAttributeName(MetaData.ATT_NAME_ABSTRACT);
         if (abstractAN == null) {
             AttributeNameMissingEvent so = new AttributeNameMissingEvent(MetaData.ATT_NAME_ABSTRACT + " missing.", Mapping.getCurrentMethodName());
@@ -164,7 +165,7 @@ public class Mapping extends ONDEXMapping
                     LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
                     if (searchStrategy.toLowerCase().equals(EXACT_SEARCH.toLowerCase())) {
                         query = "\"" + query + "\"";
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttribute(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
+                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
                         abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
                     } else if (searchStrategy.toLowerCase().equals(FUZZY_SEARCH.toLowerCase())) {
                         //TODO: check NormValue
@@ -174,15 +175,15 @@ public class Mapping extends ONDEXMapping
                     } else if (searchStrategy.toLowerCase().equals(AND_SEARCH.toLowerCase())) {
                         query = query.replaceAll(" ", " AND ");
                         if (query.equals("")) continue;
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttribute(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
+                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
                         abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
                     } else if (searchStrategy.toLowerCase().equals(PROXIMITY_SEARCH.toLowerCase())) {
                         query = "\"" + query + "\"~10";
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttribute(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
+                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
                         abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
                     } else {
                         // search exact if search method is unknown
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttribute(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
+                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
                         abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
                     }
 

@@ -2,7 +2,7 @@ package net.sourceforge.ondex.mapping.tmbased;
 
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 
-import org.apache.lucene.analysis.StopAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import java.util.HashSet;
 import java.util.regex.Pattern;
@@ -53,7 +53,7 @@ public class TextProcessing {
      * @return string without any stopwords
      */
     public static String removeStopWords(String text) {
-        for (Object stopWord : StopAnalyzer.ENGLISH_STOP_WORDS_SET) {
+        for (Object stopWord : StandardAnalyzer.ENGLISH_STOP_WORDS_SET) {
             if (text.contains(stopWord.toString())) {
                 text = text.replaceAll("\\b" + stopWord + "\\b", "");
 
