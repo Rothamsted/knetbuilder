@@ -1,3 +1,4 @@
+// TODO: comes from the old Lucene, remove
 //package net.sourceforge.ondex.core.searchable;
 //
 //import java.io.IOException;
