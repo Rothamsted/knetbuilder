@@ -3,7 +3,7 @@ package net.sourceforge.ondex.core.utils;
 import net.sourceforge.ondex.core.ConceptClass;
 
 /**
- * TODO: comment me!
+ * Facility to create a constant {@link ConceptClass}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>22 Jun 2017</dd></dl>

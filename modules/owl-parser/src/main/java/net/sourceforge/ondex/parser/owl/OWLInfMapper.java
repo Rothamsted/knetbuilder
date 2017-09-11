@@ -1,11 +1,14 @@
 package net.sourceforge.ondex.parser.owl;
 
+import java.util.stream.Stream;
+
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.update.UpdateAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
+import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
@@ -21,7 +24,7 @@ public class OWLInfMapper extends OWLMapper
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 
 	@Override
-	public ONDEXGraph map ( OntModel model, ONDEXGraph graph )
+	public Stream<ONDEXConcept> map ( OntModel model, ONDEXGraph graph )
 	{
 		log.info ( "Preprocessing inference annotations, please wait..." );
 		String sparul =

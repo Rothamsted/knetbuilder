@@ -3,6 +3,7 @@ package net.sourceforge.ondex.parser.owl;
 import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
@@ -29,46 +30,67 @@ import org.apache.jena.vocabulary.RDF;
  *  defaults to owl:annotatedTarget).
  *
  * @author brandizi
- * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
+ * <dl><dt>Date:</dt><dd>23 Aug 2017</dd></dl>
  *
  */
-public abstract class OWLAxiomMapper<O, OT> extends RdfPropertyMapper<O, OT>
+public class OWLAxiomMapper extends OWLTextsMapper
 {
-	private String mappedPropertyIri = iri ( "owl:annotatedTarget" );
-	
-	protected Stream<RDFNode> getMappedNodes ( OntClass fromCls )
+	public static class TargetScanner extends RdfPropertyScanner
 	{
-		OntModel model = fromCls.getOntModel ();
-		// any ? annSource fromCls
-		ResIterator axiomsItr = model.listSubjectsWithProperty ( 
-			model.getProperty ( iri ( "owl:annotatedSource" ) ), fromCls 
-		);
-				
-		Stream<Resource> axioms = JENAUTILS.toStream ( axiomsItr )
-		// annProperty must match
-		.filter ( ax -> model.listStatements ( 
-				ax, 
-				model.getProperty ( iri ( "owl:annotatedProperty" ) ), 
-				model.getProperty ( this.getPropertyIri () ) 
-				).hasNext ()  
-		)
-		// and, just in case, let's check it's an axiom
-		.filter ( ax -> model.listStatements ( ax, RDF.type, model.getProperty ( iri ( "owl:Axiom" ) ) ).hasNext () );
+		private String mappedPropertyIri;
 		
-		// good, now take the mapped property value and we're done
-		return axioms
-		.flatMap ( ax -> JENAUTILS.toStream ( ax.listProperties ( model.getProperty ( getMappedPropertyIri() ) ) ) )
-		.map ( stmt -> stmt.getObject () );
+		@Override
+		public Stream<RDFNode> scan ( OntClass ontCls )
+		{
+			OntModel model = ontCls.getOntModel ();
+			// any ? annSource fromCls
+			ResIterator axiomsItr = model.listSubjectsWithProperty ( 
+				model.getProperty ( iri ( "owl:annotatedSource" ) ), ontCls 
+			);
+			
+			Stream<Resource> axioms = JENAUTILS.toStream ( axiomsItr )
+			// annProperty must match
+			.filter ( ax -> model.listStatements ( 
+					ax, 
+					model.getProperty ( iri ( "owl:annotatedProperty" ) ), 
+					model.getProperty ( this.getPropertyIri () ) 
+					).hasNext ()  
+			)
+			// and, just in case, let's check it's an axiom
+			.filter ( ax -> model.listStatements ( ax, RDF.type, model.getProperty ( iri ( "owl:Axiom" ) ) ).hasNext () );
+			
+			// good, now take the mapped property value and we're done
+			String mappedPropIri = Optional.ofNullable ( this.getMappedPropertyIri () ).orElse ( iri ( "owl:annotatedTarget" ) );
+			
+			return axioms
+			.flatMap ( ax -> JENAUTILS.toStream ( ax.listProperties ( model.getProperty ( mappedPropIri ) ) ) )
+			.map ( stmt -> stmt.getObject () );			
+		}
+
+		public String getMappedPropertyIri ()
+		{
+			return mappedPropertyIri;
+		}
+
+		public void setMappedPropertyIri ( String mappedPropertyIri )
+		{
+			this.mappedPropertyIri = mappedPropertyIri;
+		}
 	}
 
+	public OWLAxiomMapper ()
+	{
+		super ( new TargetScanner (), new LiteralMapper () );
+	}
+	
 	public String getMappedPropertyIri ()
 	{
-		return mappedPropertyIri;
+		return ( (TargetScanner) this.getScanner () ).getMappedPropertyIri ();
 	}
 
 	public void setMappedPropertyIri ( String mappedPropertyIri )
 	{
-		this.mappedPropertyIri = mappedPropertyIri;
+		( (TargetScanner) this.getScanner () ).setMappedPropertyIri ( mappedPropertyIri );
 	}
 	
 }

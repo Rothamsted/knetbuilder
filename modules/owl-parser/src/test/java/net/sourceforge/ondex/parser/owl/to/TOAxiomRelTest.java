@@ -39,7 +39,7 @@ public class TOAxiomRelTest
 		model.read ( Resources.getResource ( "to_owl_axiom.owl" ).toString (), "", "RDF/XML" );
 		
 		OWLMapper mapper = (OWLMapper) ctx.getBean ( "owlMapper" );
-		ONDEXGraph graph = mapper.map ( model );
+		ONDEXGraph graph = mapper.map2Graph ( model );
 				
 		ONDEXConcept c = graph.getConcepts ()
 		.stream ()

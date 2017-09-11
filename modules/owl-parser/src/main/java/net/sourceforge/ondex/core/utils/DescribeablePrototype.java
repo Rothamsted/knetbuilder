@@ -1,7 +1,10 @@
 package net.sourceforge.ondex.core.utils;
 
+import net.sourceforge.ondex.core.ONDEXGraph;
+
 /**
- * TODO: comment me!
+ * These prototypes are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 
+ * with the necessary parameters. They're also designed to be used with IoC frameworks like Spring.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>6 Jun 2017</dd></dl>

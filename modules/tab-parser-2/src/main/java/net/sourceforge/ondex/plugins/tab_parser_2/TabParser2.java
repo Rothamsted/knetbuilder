@@ -2,8 +2,8 @@ package net.sourceforge.ondex.plugins.tab_parser_2;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -90,8 +90,8 @@ public class TabParser2 extends ONDEXParser
     	tabParser.setProcessingOptions ( mergeFlags );
     
     Subgraph newGraph = tabParser.parse ();
-    int nconcepts = Optional.ofNullable ( newGraph.getConcepts () ).orElse ( Collections.emptySet () ).size ();
-    int nrelations = Optional.ofNullable ( newGraph.getRelations () ).orElse ( Collections.emptySet () ).size ();
+    int nconcepts = Optional.ofNullable ( newGraph.getConcepts () ).map ( Set::size ).orElse ( 0 );
+    int nrelations = Optional.ofNullable ( newGraph.getRelations () ).map ( Set::size ).orElse ( 0 );
 	
     log.info ( String.format ( 
     	"Got %d concepts and %d relations from '%s'", 

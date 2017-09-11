@@ -1,14 +1,19 @@
 /**
- * Implementation of an OWL parser for ONDEX, focused on ontology files. This is based on the 
- * net.sourceforge.ondex.parser framework.
+ * <p>Implementation of an OWL parser for ONDEX, focused on ontology files. This is based on the 
+ * net.sourceforge.ondex.parser framework.</p>
  * 
- * {@link net.sourceforge.ondex.parser.owl.OWLMapper} is the entry point to to parse/map an OWL file. It typically 
- * bootstraps the file parsing by invoking a set of {@link net.sourceforge.ondex.parser.owl.OwlSubClassRelMapper}, one
- * per top OWL class, and then these mappers visit the ontology tree and invoking {@link net.sourceforge.ondex.parser.owl.OWLConceptMapper}
- * for each met OWL subclass. The latter maps an OWL class to and ONDEX concept (and uses {@link net.sourceforge.ondex.parser.owl.OWLConceptClassMapper}
- * to map the ancestor OWL top class to a concept class), as well as various other OWL elements to ONDEX concept attributes
- * (eg, {@link net.sourceforge.ondex.parser.owl.OWLAccessionsMapper}, {@link net.sourceforge.ondex.parser.owl.OWLNamesMapper})
- * further direct relations, such as 'part-of' or 'regulates' (using {@link net.sourceforge.ondex.parser.owl.OWLSimpleConceptRelMapper}.
+ * <p>{@link net.sourceforge.ondex.parser.owl.OWLMapper} is the entry point to parse/map an 
+ * {@link org.apache.jena.ontology.OntModel OWL ontology}, for instance one loaded from an .owl file. This is 
+ * an {@link net.sourceforge.ondex.parser.ExploringMapper}, which means it is able to follow relations like 
+ * {@code owl:subClassOf}, as in {@link net.sourceforge.ondex.parser.owl.OWLSubClassScanner} and to build 
+ * a corresponding ONDEX graph with the OWL classes that it meets. Other relations it is able to follow are 
+ * {@link net.sourceforge.ondex.parser.owl.OWLSomeScanner} and {@link net.sourceforge.ondex.parser.owl.OWLEqIntersctScanner}, 
+ * which are mappers useful for relations like part-of or participates-in, which usually are represented by means
+ * of OWL axioms that cobine owl:someValuesFrom and owl:equivalentClass.</p>
+ * 
+ * <p>OWL parsers are configured by means of Spring Beans XML files. This allows for defining details about the particular
+ * ontology that is being imported in ONDEX. See examples (in the parser's unit tests and distribution) 
+ * and documentation (TODO).</p> 
  * 
  *
  * @author brandizi

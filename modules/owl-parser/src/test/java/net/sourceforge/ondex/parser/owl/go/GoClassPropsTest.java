@@ -40,7 +40,7 @@ public class GoClassPropsTest
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 
-		ONDEXGraph graph = owlMap.map ( model );
+		ONDEXGraph graph = owlMap.map2Graph ( model );
 		
 		assertEquals ( "Wrong no of concepts!", 1, graph.getConcepts ().size () );
 		
@@ -84,7 +84,7 @@ public class GoClassPropsTest
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 
-		ONDEXGraph graph = owlMap.map ( model );
+		ONDEXGraph graph = owlMap.map2Graph ( model );
 		
 		assertEquals ( "Wrong no of concepts!", 1, graph.getConcepts ().size () );
 		
