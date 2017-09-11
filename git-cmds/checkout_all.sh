@@ -13,3 +13,5 @@ do
   git checkout "$branch"
   cd ..
 done
+
+git checkout "$branch"
