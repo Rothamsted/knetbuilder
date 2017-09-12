@@ -55,6 +55,13 @@
          <artifactId>guava</artifactId>
          <version>12.0</version>
       </dependency>
+
+			<!-- Routes SLF4J to LOG4j, which is the ONDEX logger (here we use both LOG4j and SLF4J -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+			</dependency>
+      
       <!-- ONDEX deps -->
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
