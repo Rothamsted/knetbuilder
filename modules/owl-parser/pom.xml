@@ -12,27 +12,35 @@
    <artifactId>owl-parser</artifactId>
 
    <name>OWL Parser</name>
-   <description>TODO</description>
-   <developers>
-      <developer>
-         <name>Marco Brandizi</name>
-      </developer>
-   </developers>
+   <description>A parser for OWL ontologies</description>
+   
+ 	 <developers>
+	   <developer>
+		   <name>Marco Brandizi</name>
+			 <url>https://github.com/marco-brandizi</url>
+		 </developer>
+	 </developers>
    
    <dependencies>
    
-   		<dependency>
-   			<artifactId>api</artifactId>
-  		  <groupId>net.sourceforge.ondex.core</groupId>
-   		  <version>${project.version}</version>
-        <scope>provided</scope>   		  
-   		</dependency>
-   		
+      <dependency>    
+      	<groupId>net.sourceforge.ondex</groupId>
+ 			  <artifactId>parser-api</artifactId>
+        <version>${project.version}</version>      
+      </dependency>
+      
+			<dependency>
+				<artifactId>api</artifactId>
+			  <groupId>net.sourceforge.ondex.core</groupId>
+			  <version>${project.version}</version>
+		    <scope>provided</scope>   		  
+			</dependency>
+      
       <dependency>
-         <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>workflow-api</artifactId>
-         <version>${project.version}</version>
-         <scope>provided</scope>
+        <groupId>net.sourceforge.ondex.core</groupId>
+        <artifactId>workflow-api</artifactId>
+        <version>${project.version}</version>
+        <scope>provided</scope>
       </dependency>
 
       <dependency>
@@ -125,28 +133,5 @@
       </plugins>
 
    </build>
-
-   <repositories>
-      <repository>
-         <id>ondex-releases-all</id>
-         <name>ONDEX Releases</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
-         <releases><enabled>true</enabled></releases>
-         <snapshots><enabled>false</enabled></snapshots>
-      </repository>
-      <repository>
-         <id>ondex-snapshots-all</id>
-         <name>ONDEX Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
-         <releases><enabled>false</enabled></releases>
-         <snapshots><enabled>true</enabled></snapshots>
-      </repository>
-			<repository>
-				<id>marcobrandizi.info</id>
-				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
-				<releases><enabled>true</enabled></releases>
-				<snapshots><enabled>true</enabled></snapshots>
-			</repository>
-   </repositories>
 
 </project>
