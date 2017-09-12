@@ -30,7 +30,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.utils.RelationTypePrototype;
+import net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype;
 import net.sourceforge.ondex.parser.ConceptBasedRelMapper;
 import net.sourceforge.ondex.parser.ConstDataSourceMapper;
 import net.sourceforge.ondex.parser.DefaultConceptMapper;

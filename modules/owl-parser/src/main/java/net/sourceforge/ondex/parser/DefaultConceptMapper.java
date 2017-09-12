@@ -7,8 +7,8 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.prototypes.EvidenceTypePrototype;
 
 /**
  * The default concept mapper employs a set of mappers to the constituents of an {@link ONDEXConcept} and create a 

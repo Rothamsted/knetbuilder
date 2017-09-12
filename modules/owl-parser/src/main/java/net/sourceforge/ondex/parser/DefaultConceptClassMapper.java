@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
 
 /**
  * The default class mapper invokes single-component mappers, such as {@link #getIdMapper()} or {@link #getFullNameMapper()}, 

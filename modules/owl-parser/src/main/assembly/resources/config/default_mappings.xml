@@ -62,7 +62,7 @@
 				     constants to instantiate the relation type -->
 				<property 
 					name ="relationTypePrototype" 
-				  value = "#{T( net.sourceforge.ondex.core.utils.RelationTypePrototype ).IS_A_PROTOTYPE }"/>
+				  value = "#{T( net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype ).IS_A_PROTOTYPE }"/>
 			</bean>
 		</property>
 	</bean>
@@ -70,7 +70,7 @@
 
 	<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
-			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 				<property name="id" value = "part_of" />
 				<property name="fullName" value = "part of" />
 				<property name="antisymmetric" value = "true" />

@@ -46,15 +46,6 @@
          <artifactId>log4j</artifactId>
          <scope>provided</scope>
       </dependency>
-
-			<!-- Routes SLF4J to LOG4j, which is the ONDEX logger -->
-			<!-- TODO: move to top pom -->      
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.7.25</version>
-			</dependency>
-      
       
 			<dependency>
 			  <groupId>info.marcobrandizi</groupId>

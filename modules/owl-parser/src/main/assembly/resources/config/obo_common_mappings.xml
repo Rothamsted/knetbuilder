@@ -43,7 +43,7 @@
 	
 	<bean id = "wpDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name="value">
-			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
 				<property name="id" value = "Wikipedia" />
 				<property name="fullName" value = "Wikipedia" />
 			</bean>
@@ -58,7 +58,7 @@
 	</bean>
 	<bean id = "pmedDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name="value">
-			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
 				<property name="id" value = "PUBMED" />
 				<property name="fullName" value = "PUBMED Medical Literature Index" />
 			</bean>
@@ -74,7 +74,7 @@
 	</bean>				
 	<bean id = "enzymeDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name="value">
-			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
 				<property name="id" value = "EC" />
 				<property name="fullName" value = "Enzyme Nomenclature Database" />
 				<property name="description" value = "ENZYME is a repository of information relative to the nomenclature of enzymes (http://enzyme.expasy.org)." />
@@ -115,7 +115,7 @@
 	</bean>
 	<bean id = "regulatesMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
-			<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+			<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 				<property name="id" value = "regulates" />
 				<property name="fullName" value = "regulates" />
 				<property name="antisymmetric" value = "true" />
@@ -135,7 +135,7 @@
 	</bean>
 	<bean id = "posRegMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
-			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 				<property name="id" value = "pos_reg" />
 				<property name="fullName" value = "positively regulates" />
 				<property name="antisymmetric" value = "true" />
@@ -156,7 +156,7 @@
 	</bean>	
 	<bean id = "negRegMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
-			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 				<property name="id" value = "neg_reg" />
 				<property name="fullName" value = "negatively regulates" />
 				<property name="antisymmetric" value = "true" />
@@ -170,7 +170,7 @@
 	<!-- This is used by both GO and other ontologies that refer to GO terms. -->
 	<bean id = "goDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
 				<property name = "id" value = "GO" />
 				<property name = "fullName" value = "Gene Ontology" />
 			</bean>

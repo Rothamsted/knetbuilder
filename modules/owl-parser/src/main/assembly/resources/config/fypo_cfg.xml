@@ -80,7 +80,7 @@
 					<property name="dataSourcesMapper">
 						<bean id = "patoDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 							<property name = "value">
-								<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+								<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
 									<property name = "id" value = "PATO" />
 									<property name = "fullName" value = "Phenotypic Quality Ontology" />
 								</bean>
@@ -96,7 +96,7 @@
 	<!-- Data source that represents Ascomycete Phenotype Ontology itself and used on several components -->
 	<bean id = "fypoDataSource" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
 				<property name = "id" value = "FYPO" />
 				<property name = "fullName" value = "Fission Yeast Phenotype Ontology" />
 			</bean>

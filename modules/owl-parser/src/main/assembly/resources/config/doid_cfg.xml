@@ -28,7 +28,7 @@
 					<property name = "mapper">
 						<bean id = "materialBasisMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 							<property name ="relationTypePrototype">
-								<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+								<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 									<property name="id" value = "material_basis_in" />
 									<property name="fullName" value = "has material basis in" />
 									<property name="antisymmetric" value = "true" />
@@ -63,7 +63,7 @@
 
 	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.ConstantConceptClassMapper">
 		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.utils.ConceptClassPrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype">
 				<property name = "id" value = "DOID_TERM" />
 				<property name = "fullName" value = "DOID Term" />
 				<property name = "description" value = "Term from the Disease Ontology (http://disease-ontology.org)" />
@@ -74,7 +74,7 @@
 
 	<bean id = "doidDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.utils.DataSourcePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
 				<property name = "id" value = "DOID" />
 				<property name = "fullName" value = "Disease Ontology (http://disease-ontology.org)" />
 			</bean>

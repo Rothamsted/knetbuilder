@@ -5,9 +5,9 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
-import net.sourceforge.ondex.core.utils.RelationTypePrototype;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.prototypes.EvidenceTypePrototype;
+import net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype;
 
 /**
  * A simple {@link ConceptBasedRelMapper} uses a {@link RelationTypePrototype constant relation type} to 

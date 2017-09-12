@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.parser.owl;
 
-import net.sourceforge.ondex.core.utils.DataSourcePrototype;
+import net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype;
 
 /**
  * Utilities for the OWL parser.

@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.DataSourcePrototype;
+import net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype;
 
 /**
  * This works like {@link ConstDataSourceMapper}, but adapts to {@link DataSourcesMapper}.

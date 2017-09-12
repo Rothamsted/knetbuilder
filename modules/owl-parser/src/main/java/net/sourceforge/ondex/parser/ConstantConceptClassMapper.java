@@ -2,8 +2,8 @@ package net.sourceforge.ondex.parser;
 
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.ConceptClassPrototype;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype;
 
 /**
  * Maps anything to a constant class mapper, which can be configured in Spring via {@link ConceptClassPrototype} passed

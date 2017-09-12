@@ -2,8 +2,8 @@ package net.sourceforge.ondex.parser;
 
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.EvidenceTypePrototype;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.prototypes.EvidenceTypePrototype;
 
 /**
  * Maps anything to constant {@link EvidenceType}, which can be defined in a Spring configuration file, by means of

@@ -81,7 +81,7 @@
 
 	<bean id = "partOfMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
-			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 				<property name="id" value = "part_of" />
 				<property name="fullName" value = "part of" />
 				<property name="antisymmetric" value = "true" />
@@ -92,7 +92,7 @@
 
 	<bean id = "regulatesMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
-			<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+			<bean id = "regulatesRelPrototype" class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 				<property name="id" value = "regulates" />
 				<property name="fullName" value = "regulates" />
 				<property name="antisymmetric" value = "true" />
@@ -103,7 +103,7 @@
 
 	<bean id = "posRegMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
-			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 				<property name="id" value = "pos_reg" />
 				<property name="fullName" value = "positively regulates" />
 				<property name="antisymmetric" value = "true" />
@@ -115,7 +115,7 @@
 	
 	<bean id = "negRegMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
 		<property name ="relationTypePrototype">
-			<bean class = "net.sourceforge.ondex.core.utils.RelationTypePrototype">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype">
 				<property name="id" value = "neg_reg" />
 				<property name="fullName" value = "negatively regulates" />
 				<property name="antisymmetric" value = "true" />

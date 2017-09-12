@@ -3,8 +3,8 @@ package net.sourceforge.ondex.parser;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.AccessionPrototype;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.prototypes.AccessionPrototype;
 
 /**
  * Maps anything to a constant {@link ConceptAccession}, which can be defined in a Spring configuration file, by means of

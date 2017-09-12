@@ -2,8 +2,8 @@ package net.sourceforge.ondex.parser;
 
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.utils.CachedGraphWrapper;
-import net.sourceforge.ondex.core.utils.DataSourcePrototype;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype;
 
 /**
  * Maps anything to constant {@link DataSource}, which can be defined in a Spring configuration file, by means of
