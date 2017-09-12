@@ -2,8 +2,9 @@
 
 ## v1.2.1-SNAPSHOT
   * OWL Parser
-    * Internals: complete review of the generic parser architecture (TODO: link), which now has clear separation between 
-      data source decomposition (TODO: Scanner) and mapping (TODO: Mapper, PairMapper). 
+    * Internals: complete review of the [generic parser](https://github.com/Rothamsted/ondex-base/tree/master/core/parser-api) architecture, 
+      which now has clear separation between [data source decomposition](https://github.com/Rothamsted/ondex-base/blob/master/core/parser-api/src/main/java/net/sourceforge/ondex/parser/Scanner.java) 
+      and [mapping](https://github.com/Rothamsted/ondex-base/blob/master/core/parser-api/src/main/java/net/sourceforge/ondex/parser/Mapper.java). 
       The [OWL Parser](https://github.com/Rothamsted/ondex-knet-builder/tree/master/modules/owl-parser/src/main/java/net/sourceforge/ondex/parser/owl) 
       was changed accordingly. Generic packages (ie, the generic parser library and a few utilities
       TODO: link) were migrated from the owl parser module to proper places.
