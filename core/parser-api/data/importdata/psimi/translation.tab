@@ -1,0 +1,113 @@
+#cc
+peptide	Protein
+protein	Protein
+ribonucleic acid	RNA
+messenger rna	MRNA
+small interfering rna	SIRNA
+deoxyribonucleic acid	DNA
+double stranded deoxyribonucleic acid	dDNA
+single stranded deoxyribonucleic acid	sDNA
+nucleic acid	DNA
+small molecule	SMOL
+#db
+afcs	AFCS
+genbank_protein_gi	GENB
+genbank_nucleotide_g	GENB
+newt	NEWT
+ipi	IPI
+rgd	RGD
+camjedb	CAMJE
+encode	ENCODE
+ipi	IPI
+rdg RDG
+encode	ENCODE
+psi-mi	PSI-MIO
+MI	PSI-MIO
+pubmed	NLM
+interpro	IPRO
+reactome protein	REAC
+gene ontology	GO
+go	GO
+sgd	SGD
+uniprot	UNIPROTKB
+uniprot knowledge base	UNIPROTKB
+SWISSPROT	UNIPROTKB
+uniprotkb	UNIPROTKB
+scop superfamily	IPRO
+smart	IPRO
+tigrfams	IPRO
+reactome	REAC
+reactome protein	REAC
+intact	INTACT
+kegg	KEGG
+mint	MINT
+MINT	MINT
+ddbj/embl/genbank	PROID
+ensembl	EMBL
+flybase	FLYBASE
+omim	OMIM
+refseq	GENB
+uniparc	UNIPARC
+wormbase	WB
+ENCODE	ENCODE
+UNIPROTKB	UNIPROTKB
+chebi	CHEBI
+huge	HUGE
+pdb	PDB
+rcsb pdb	PDB
+#rt
+cofactor	co_by
+dna strand elongation	elongates
+direct interaction	it_wi
+non covalent interaction	it_wi
+genetic interaction	it_wi
+covalent interaction	it_wi		
+enzymatic reaction	is_p
+physical interaction	phys_int
+aggregation	phys_int
+methylation reaction	is_p
+colocalization	clc
+colocalisation	clc
+acetylation reaction	is_p
+phosphorylation reaction	is_p
+deubiquitination reaction	is_p
+hydroxylation reaction	is_p
+glycosylation reaction	is_p
+deacetylation reaction	is_p
+sumoylation reaction	is_p
+covalent binding	is_p	
+adp ribosylation reaction	is_p
+neddylation reaction	is_p
+disulfide bond	is_p
+cleavage reaction	is_p
+demethylation reaction	is_p
+phosphotransfer reaction	is_p
+protein cleavage	is_p
+dephosphorylation reaction	is_p
+ubiquitination reaction	is_p
+palmitoylation reaction	is_p
+catalysed by	ca_by
+#direction
+enzyme target	TARGET
+electron acceptor	TARGET
+electron donor	SOURCE
+enzyme	SOURCE
+unspecified role	BOTH
+neutral component	BOTH
+unspecified	BOTH
+self	BOTH
+ancillary	BOTH
+inhibitor	SOURCE
+cofactor	SOURCE
+bait	SOURCE
+prey	TARGET
+#confidences
+significant but weak signal	0.4
+strong signal	0.6
+very strong signal	0.8
+A	0.95
+B	0.85
+C	0.75
+D	0.65
+E	0.55
+F	0.45

@@ -28,6 +28,7 @@
       <module>workflow-api</module>
       <module>workflow-base</module>
       <module>workflow-component-descriptor</module>
+      <module>parser-api</module>
    </modules>
 
    <dependencies>

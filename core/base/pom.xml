@@ -47,7 +47,6 @@
       <dependency>
          <groupId>net.sourceforge.collections</groupId>
          <artifactId>collections-generic</artifactId>
-         <version>4.01</version>
          <scope>compile</scope>
       </dependency>
       <dependency>

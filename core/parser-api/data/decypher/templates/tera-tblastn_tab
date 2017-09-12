@@ -1,0 +1,30 @@
+[comment] This template name is tera-tblastn
+[comment] Tera-TBLASTN search amino vs translated nucleic
+
+[comment] The following block should not be changed by the user
+[algorithm] tera-blastp
+[target path] %TARGETPATH%
+[result path] %RESULTPATH%
+[query type] aa
+[query search] 1
+[target type] nt
+[target frames] 1 2 3 -1 -2 -3
+
+[comment] The following block will rarely be changed by the user
+[neighborhood threshold] off
+[word size] 4
+[query increment] 1
+[extension threshold] 20
+[gapped alignment] banded
+[matrix] %MATRIXPATH%/blosum62.maa
+[open penalty] -11
+[extend penalty] -1
+
+[comment] The following block will often be changed by the user
+[query filter] t
+[max scores] 100
+[max alignments] 50
+[significance] evalue
+[threshold] significance=10
+[output format] tab percentage fieldrecord
+[field] querynumber targetlocus targetdescription targetaccession targetlength score significance querystart queryend targetstart targetend queryframe targetframe percentalignment simpercentalignment gaps alignmentlength querynt targetnt   

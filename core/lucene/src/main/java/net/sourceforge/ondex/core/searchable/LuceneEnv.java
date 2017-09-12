@@ -192,7 +192,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * threaded indexing of graph
 	 */
-	public static ExecutorService EXECUTOR;
+	private static final ExecutorService EXECUTOR;
 
 	/**
 	 * Allows only the id of a document to be loaded
@@ -210,6 +210,15 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	private final static double RAM_BUFFER_QUOTA = 0.1;
 
+	/**
+	 * Optimises the RAM to be used for Lucene indexes, based on {@link #RAM_BUFFER_QUOTA} and
+	 * max memory available.
+	 */
+	private static long getOptimalRamBufferSize ()
+	{
+		return Math.round ( RAM_BUFFER_QUOTA * Runtime.getRuntime ().maxMemory () / ( 1 << 20 ) );		
+	}
+	
 	/**
 	 * Strips text to be inserted into the index.
 	 * 
@@ -288,6 +297,14 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	static {
 		LuceneEnv.FIELD_TYPE_STORED_INDEXED_NO_NORMS.setOmitNorms ( true );
 		LuceneEnv.FIELD_TYPE_STORED_INDEXED_VECT_STORE.setStoreTermVectors ( true );
+		
+		EXECUTOR = Executors.newCachedThreadPool();
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				if (EXECUTOR != null)
+					EXECUTOR.shutdownNow();
+			}
+		});
 	}
 	
 	
@@ -303,19 +320,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		this.indexdir = indexdir;
 		this.create = create;
 
-		// make sure only one EXECUTOR is started
-		if (EXECUTOR == null) {
-			EXECUTOR = Executors.newCachedThreadPool();
-			Runtime.getRuntime().addShutdownHook(new Thread() {
-				public void run() {
-					if (EXECUTOR != null)
-						EXECUTOR.shutdownNow();
-				}
-			});
-		}
-
-		if (create)
-			new File(indexdir).mkdirs();
+		if (create) new File(indexdir).mkdirs();
 
 		try {
 			// open a Directory for the index
@@ -550,7 +555,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			IndexWriterConfig writerConfig = new IndexWriterConfig ( DEFAULTANALYZER );
 			writerConfig.setOpenMode ( OpenMode.CREATE_OR_APPEND );
 			// set RAM buffer, hopefully speeds up things
-			writerConfig.setRAMBufferSizeMB ( RAM_BUFFER_QUOTA * Runtime.getRuntime ().maxMemory () / ( 1 << 20 ) );
+			writerConfig.setRAMBufferSizeMB ( getOptimalRamBufferSize () );
 
 			iw = new IndexWriter ( directory, writerConfig );
 			indexWriterIsOpen = true;
@@ -1113,11 +1118,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			}
 
 			// write attribute name specific Attribute fields
-			for ( String name : attrNames.keySet () )
-			{
-				String value = attrNames.get ( name );				
-				doc.add ( new Field ( CONATTRIBUTE_FIELD + DELIM + name, value, FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
-			}
+			attrNames.forEach ( ( name, value ) -> 
+				doc.add ( new Field ( CONATTRIBUTE_FIELD + DELIM + name, value, FIELD_TYPE_STORED_INDEXED_VECT_STORE ) )
+			);
+			
 			attrNames.clear ();
 		}
 
@@ -1250,7 +1254,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				IndexWriterConfig writerConfig = new IndexWriterConfig( DEFAULTANALYZER );
 				writerConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
 				// set RAM buffer, hopefully speeds up things
-				writerConfig.setRAMBufferSizeMB( Runtime.getRuntime ().maxMemory () / 10 );
+				writerConfig.setRAMBufferSizeMB( getOptimalRamBufferSize () );
 
 				iw = new IndexWriter(directory, writerConfig);
 				indexWriterIsOpen = true;
