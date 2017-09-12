@@ -15,6 +15,7 @@ import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.PhraseQuery;
@@ -44,12 +45,18 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		DEFAULT_ATTR_BOOSTS.put("ConceptAttribute_FullText", 1f);
 	}
 
+	/**
+	 * Generic field-based seach using a particular analyzer.
+	 */
 	private static Query search ( String field, String value, Analyzer analyzer ) throws ParseException
 	{
 		QueryParser qp = new QueryParser( field, analyzer );
 		return qp.parse ( value );
 	}
 	
+	/**
+	 * singleTermTrim = false.
+	 */
 	private static PhraseQuery searchByWords ( String field, String words )
 	{
 		return searchByWords ( field, words, false );
@@ -69,13 +76,17 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return qb.build ();
 	}
 	
+	/** 
+	 * Generic field-based {@link FuzzyQuery}.
+	 *  
+	 */
 	private static FuzzyQuery searchFuzzy ( String field, String term, int editDistance )
 	{
 		return new FuzzyQuery ( new Term ( field, term ), editDistance );
 	}
 
 	/**
-	 * Lucene doesn't have similarity anymore, so we make a reasonable convertion to edit distance, consisting in
+	 * Lucene doesn't have similarity anymore, so we make a reasonable conversion to edit distance, consisting in
 	 * distance = 2 if similarity < 0.667, 1 if higher. 
 	 */
 	private static FuzzyQuery searchFuzzy ( String field, String term, float similarity )
@@ -607,10 +618,15 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return boolQb.build ();
 	}
 
-
-	private static Query searchByAttributes ( 
-		String attrFieldPrefix, Set<String> attrNames, Function<String, Query> singleAttributeSearcher
-	) 
+	/**
+	 * Builds a {@link BooleanQuery} (with {@link BooleanClause.Occur#SHOULD}) where each clause
+	 * is based on the {@link Query} returned by the singleAttributeSearcher function from each attribute name.
+	 * 
+	 * Possible additional parameters needed by the singleAttributeSearcher are to be set from the invoker of this
+	 * generic method (see below).
+	 * 
+	 */
+	private static Query searchByAttributes ( Set<String> attrNames, Function<String, Query> singleAttributeSearcher ) 
 	{
 		BooleanQuery.Builder boolQb = new BooleanQuery.Builder ();
 		for ( String attrname: attrNames )
@@ -621,32 +637,40 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return boolQb.build ();
 	}
 	
-	private static Query searchByAttributes ( 
-		String attrFieldPrefix, AttributeName[] attrNames, Function<String, Query> singleAttributeSearcher
-	) 
+	/**
+	 * Like {@link #searchByAttributes(String, Set, Function)} but with an array of attribute names as parameter.
+	 */
+	private static Query searchByAttributes ( AttributeName[] attrNames, Function<String, Query> singleAttributeSearcher ) 
 	{
 		Set<String> nameStr = Stream.of ( attrNames )
 		.map ( AttributeName::getId )
 		.collect ( Collectors.toSet () );
 		
-		return searchByAttributes ( attrFieldPrefix, nameStr, singleAttributeSearcher ); 
+		return searchByAttributes ( nameStr, singleAttributeSearcher ); 
 	}
 	
 	
-	
+	/**
+	 *  Boolean query over all attributes (@see {@link #searchByAttributes(String, String, Set, Analyzer)}, where each
+	 *  attribute triggers a {@link #searchByAttribute(String, String, String, Analyzer) simple name/value query}. 
+	 */
 	private static Query searchByAttributes (
 		String attrFieldPrefix, String value, Set<String> attrNames, Analyzer analyzer 
 	) throws ParseException
 	{
 		return searchByAttributes ( 
-		  attrFieldPrefix,
 		  attrNames,
 		  n -> Exceptions.sneak ().get ( () -> searchByAttribute ( attrFieldPrefix, n, value, analyzer ) ) 
 		);
 	}
 
 	
-	
+	/**
+	 * @return a {@link MultiFieldQueryParser}-based query, where attribute names (prefixed by attrFieldPrefix) 
+	 * are the fields used for the query. The multi-fields query parser also receives boost factors and
+	 * a specific analyzer. 
+	 *  
+	 */
 	private static Query searchByAttributesMulti (
 		String attrFieldPrefix, String term, String[] attrNames, Map<String, Float> boosts, Analyzer analyzer 
 	) throws ParseException
@@ -656,6 +680,9 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return new MultiFieldQueryParser ( attrNames, analyzer, boosts ).parse ( term );
 	}
 	
+	/**
+	 * Wrapper of {@link #searchByAttributesMulti(String, String, String[], Map, Analyzer)}
+	 */
 	private static Query searchByAttributesMulti (
 		String attrFieldPrefix, String term, AttributeName[] attrNames, Map<String, Float> boosts, Analyzer analyzer 
 	) throws ParseException
@@ -666,26 +693,32 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return searchByAttributesMulti ( attrFieldPrefix, term, attrStr, boosts, analyzer );
 	}
 	
-	private static Query searchByAttributeWords ( String attrFieldPrefix, String value, Set<String> attrNames )
+	/**
+	 * Defaults to singleWordTrim = false.
+	 */
+	private static Query searchByAttributeWords ( String attrFieldPrefix, Set<String> attrNames, String value )
 		throws ParseException
 	{
-		return searchByAttributeWords ( attrFieldPrefix, value, attrNames, false );
+		return searchByAttributeWords ( attrFieldPrefix, attrNames, value, false );
 	}
-	
-	private static Query searchByAttributeWords ( String attrFieldPrefix, String value, Set<String> attrNames, boolean singleTermTrim ) 
+
+	/**
+	 * Searches over the attributes by building a 
+	 * {@link #searchByAttributeWords(String, String, String, boolean) words-based query} for each attribute. Joins the 
+	 * single-attribute query by means of {@link Occur#SHOULD}.
+	 */
+	private static Query searchByAttributeWords ( String attrFieldPrefix, Set<String> attrNames, String value, boolean singleWordTrim ) 
 		throws ParseException
 	{
 		return searchByAttributes ( 
-		  attrFieldPrefix,
 		  attrNames,
-		  n -> Exceptions.sneak ().get ( () -> searchByAttributeWords ( attrFieldPrefix, n, value, singleTermTrim ) ) 
+		  n -> Exceptions.sneak ().get ( () -> searchByAttributeWords ( attrFieldPrefix, n, value, singleWordTrim ) ) 
 		);
 	}
-
 	
-	
-	
-	
+	/**
+	 * Wrapper of {@link #searchByAttribute(String, String, String, Analyzer)}. 
+	 */
 	private static Query searchByAttribute ( 
 		String attrFieldPrefix, AttributeName an, String term, Analyzer analyzer
 	) throws ParseException 
@@ -693,6 +726,10 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return searchByAttribute ( attrFieldPrefix, an.getId(), term, analyzer );
 	}
 	
+	/**
+	 * Essentially a wrapper of {@link #search(String, String, Analyzer)}, which builds the field to be searched by 
+	 * using the prefix and attrName parameters. 
+	 */
 	private static Query searchByAttribute ( 
 		String attrFieldPrefix, String attrName, String term, Analyzer analyzer
 	) throws ParseException 
@@ -700,35 +737,50 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return search ( attrFieldPrefix + DELIM + attrName, term, analyzer );
 	}
 
-	
+	/**
+	 * Defaults to singleWordTrim = false. 
+	 */
 	private static Query searchByAttributeWords ( String attrFieldPrefix, String attrName, String term )
 		throws ParseException 	
 	{
 		return searchByAttributeWords ( attrFieldPrefix, attrName, term, false );
 	}
 	
-	private static Query searchByAttributeWords ( String attrFieldPrefix, String attrName, String term, boolean singleTermTrim ) 
+	/**
+	 * Attribute search that uses attrFieldPrefix and attrName as field for {@link #searchByWords(String, String, boolean)},
+	 * so the attribute is searched by a boolean query that concatenates query clauses about each term words. 
+	 */
+	private static Query searchByAttributeWords ( String attrFieldPrefix, String attrName, String term, boolean singleWordTrim ) 
 		throws ParseException 
 	{
-		return searchByWords ( attrFieldPrefix + DELIM + attrName, term, singleTermTrim );
+		return searchByWords ( attrFieldPrefix + DELIM + attrName, term, singleWordTrim );
 	}
 
-
+	/**
+	 * Defaults to singleWordTrim = false.
+	 */
 	private static Query searchByAttributeWords ( String attrFieldPrefix, AttributeName attrName, String term )
 		throws ParseException 	
 	{
-		return searchByAttributeWords ( attrFieldPrefix, attrName, term, false );
+		return searchByAttributeWords ( attrFieldPrefix, attrName.getId (), term, false );
 	}
 	
-	private static Query searchByAttributeWords ( String attrFieldPrefix, AttributeName attrName, String term, boolean singleTermTrim ) 
+	/**
+	 * A wrapper of {@link #searchByAttributeWords(String, String, String, boolean)}.
+	 */
+	private static Query searchByAttributeWords ( String attrFieldPrefix, AttributeName attrName, String term, boolean singleWordTrim ) 
 		throws ParseException 
 	{
-		return searchByAttributeWords ( attrFieldPrefix, attrName.getId (), term, singleTermTrim );
+		return searchByAttributeWords ( attrFieldPrefix, attrName.getId (), term, singleWordTrim );
 	}
 	
 	
 	
-	
+	/**
+	 * Attribute tokens search based on fuzzy queries. It clean the term text using 
+	 * {@link LuceneEnv#stripText(String)} and then setup a {@link #searchFuzzy(String, String, float) fuzzy search}
+	 * for each of the tokens and uses this to build a boolean query with the {@link BooleanClause.Occur#MUST} operator. 
+	 */
 	private static Query searchByAttributeFuzzy ( String attrFieldPrefix, String attrName, String term, float similarity ) 
 		throws ParseException 
 	{
@@ -744,6 +796,9 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return boolQb.build ();
 	}
 
+	/**
+	 * Wrapper of {@link #searchByAttributeFuzzy(String, String, String, float)}
+	 */
 	private static Query searchByAttributeFuzzy ( String attrFieldPrefix, AttributeName attrName, String term, float similarity ) 
 		throws ParseException 
 	{
@@ -751,12 +806,16 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	}
 	
 	
-	
+	/**
+	 * Build a boolean fuzzy query by joining single term-clauses, each obtained from 
+	 * {@link #searchByAttributeFuzzy(String, String, String, float)}, i.e., does a fuzzy search for the term'tokens and 
+	 * for each attribute. For each term, tokens queries are joined via the {@link Occur#MUST} operator, while each
+	 * term's query is joined to the outer boolean query by means of {@link Occur#SHOULD}.    
+	 */
 	private static Query searchByAttributesFuzzy ( String attrFieldPrefix, AttributeName[] attrNames, String term, float similarity ) 
 		throws ParseException 
 	{
-		return searchByAttributes (
-			attrFieldPrefix, 
+		return searchByAttributes ( 
 			attrNames, 
 			n -> Exceptions.sneak ().get ( () -> searchByAttributeFuzzy ( attrFieldPrefix, n, term, similarity ) )
 		);
@@ -765,18 +824,18 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	
 	/**
 	 * Searches a concept by all of its Attribute.
-	 * 
+	 * @param listOfConceptAttrNames
 	 * @param query
 	 *            Query for concept Attribute
-	 * @param listOfConceptAttrNames
 	 * @param analyzer
 	 *            used to find terms in the query text
+	 * 
 	 * @return Query a query object to be submitted to the LuceneEnv
 	 * @throws ParseException
 	 *             on an error in your query construction
 	 */
 	public static Query searchConceptByConceptAttribute ( 
-		String query, Set<String> listOfConceptAttrNames, Analyzer analyzer 
+		Set<String> listOfConceptAttrNames, String query, Analyzer analyzer 
 	) throws ParseException
 	{
 		return searchByAttributes ( CONATTRIBUTE_FIELD, query, listOfConceptAttrNames, analyzer );
@@ -826,17 +885,17 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 
 	/**
 	 * Searches a concept by concept Attribute.
-	 * 
+	 * @param listOfConceptAttrNames
 	 * @param term
 	 *            Term to search in concept Attribute
-	 * @param listOfConceptAttrNames
+	 * 
 	 * @return Query a query object to be submitted to the LuceneEnv
 	 * @throws ParseException 
 	 */
-	public static Query searchConceptByConceptAttributeExact(String term, Set<String> listOfConceptAttrNames ) 
+	public static Query searchConceptByConceptAttributeExact(Set<String> listOfConceptAttrNames, String term ) 
 		throws ParseException 
 	{
-		return searchByAttributeWords ( CONATTRIBUTE_FIELD, term, listOfConceptAttrNames );
+		return searchByAttributeWords ( CONATTRIBUTE_FIELD, listOfConceptAttrNames, term );
 	}
 
 	/**
@@ -922,16 +981,16 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 
 	/**
 	 * Searches a relation by relation Attribute.
-	 * 
 	 * @param term
 	 *            Term to search in Relation Attribute
+	 * 
 	 * @return Query a query object to be submitted to the LuceneEnv
 	 * @throws ParseException 
 	 */
-	public static Query searchRelationByRelationAttributeExact ( String term, Set<String> listOfRelationAttrNames ) 
+	public static Query searchRelationByRelationAttributeExact ( Set<String> listOfRelationAttrNames, String term ) 
 		throws ParseException
 	{
-		return searchByAttributeWords ( RELATTRIBUTE_FIELD, term, listOfRelationAttrNames );
+		return searchByAttributeWords ( RELATTRIBUTE_FIELD, listOfRelationAttrNames, term );
 	}
 
 	/**
