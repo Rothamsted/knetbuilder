@@ -294,17 +294,17 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	// contains all used attribute names for relations
 	protected Set<String> listOfRelationAttrNames = new HashSet<String>();
 
-	static {
+	static
+	{
 		LuceneEnv.FIELD_TYPE_STORED_INDEXED_NO_NORMS.setOmitNorms ( true );
 		LuceneEnv.FIELD_TYPE_STORED_INDEXED_VECT_STORE.setStoreTermVectors ( true );
 		
-		EXECUTOR = Executors.newCachedThreadPool();
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				if (EXECUTOR != null)
-					EXECUTOR.shutdownNow();
-			}
-		});
+		EXECUTOR = Executors.newCachedThreadPool ();
+		Runtime.getRuntime ().addShutdownHook ( 
+			new Thread ( 
+				() -> { if ( EXECUTOR != null ) EXECUTOR.shutdownNow (); } 
+			) 
+		); 
 	}
 	
 	
@@ -918,17 +918,17 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            the relations to add to the index
 	 * @throws AccessDeniedException
 	 */
-	public void updateConceptsToIndex(Set<ONDEXConcept> concepts)
-			throws AccessDeniedException 
+	public void updateConceptsToIndex(Set<ONDEXConcept> concepts) throws AccessDeniedException 
 	{
 		updateIndexVoid ( () -> 
 		{
-			for (ONDEXConcept concept : concepts) {
+			for ( ONDEXConcept concept : concepts )
+			{
 				// try a delete this is quicker than reopening the "is"
-				Exceptions.sneak ().run ( () -> 
-					iw.deleteDocuments( new Term ( CONID_FIELD, String.valueOf(concept.getId() ) ) )
+				Exceptions.sneak ().run ( 
+					() -> iw.deleteDocuments ( new Term ( CONID_FIELD, String.valueOf ( concept.getId () ) ) ) 
 				);
-				addConceptToIndex(concept);
+				addConceptToIndex ( concept );
 			}
 		});		
 	}
@@ -1074,7 +1074,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				}
 				// concept accessions should not be ANALYZED?
 				doc.add (
-						new Field ( id, LuceneEnv.stripText ( accession ), StringField.TYPE_STORED ) );
+					new Field ( id, LuceneEnv.stripText ( accession ), StringField.TYPE_STORED ) 
+				);
 			}
 		}
 
@@ -1101,7 +1102,6 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		// start concept gds processing
 		if ( it_attribute != null )
 		{
-
 			// mapping attribute name to gds value
 			Map<String, String> attrNames = new HashMap<String, String> ();
 
@@ -1148,10 +1148,14 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		// new document for fields
 		Document doc = new Document();
 		doc.add(new Field(LASTDOCUMENT, "true", StringField.TYPE_NOT_STORED ));
+		// Attribute fields about the last document were initially not stored. However, this is not good for Lucene 6,
+		// because it complaints that a field name having both docs where it is stored and not stored cannot be used to 
+		// build certain searches (https://goo.gl/Ee1sfm)
+		//
 		for (String name : listOfConceptAttrNames)
-			doc.add(new Field(CONATTRIBUTE_FIELD + DELIM + name, name,	StringField.TYPE_NOT_STORED ));
+			doc.add(new Field(CONATTRIBUTE_FIELD + DELIM + name, name,	FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
 		for (String name : listOfRelationAttrNames)
-			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, name,	StringField.TYPE_NOT_STORED ));
+			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, name,	FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
 		for (String elementOf : listOfConceptAccDataSources)
 			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf, StoredField.TYPE ));
 
@@ -1174,56 +1178,52 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            ONDEXRelation to add to index
 	 * @throws AccessDeniedException
 	 */
-	private void addRelationToIndex(ONDEXRelation r)
-			throws AccessDeniedException {
-
+	private void addRelationToIndex ( ONDEXRelation r ) throws AccessDeniedException
+	{
 		// get Relation and RelationAttributes
-		Set<Attribute> it_attribute = r.getAttributes();
+		Set<Attribute> it_attribute = r.getAttributes ();
 
 		// leave if there is nothing to index
-		if (it_attribute.size() == 0) {
-			return;
-		}
+		if ( it_attribute.size () == 0 ) return;
 
 		// create a Document for each relation and store ids
-		Document doc = new Document();
+		Document doc = new Document ();
 
-		doc.add(new Field(RELID_FIELD, String.valueOf(r.getId()), StringField.TYPE_NOT_STORED ) );
-		doc.add(new Field(FROM_FIELD, String.valueOf(r.getFromConcept().getId()), StringField.TYPE_NOT_STORED ));
-		doc.add(new Field(TO_FIELD, String.valueOf(r.getToConcept().getId()),	StoredField.TYPE ));
-
-		doc.add(new Field(OFTYPE_FIELD, r.getOfType().getId(), StringField.TYPE_STORED ));
+		doc.add ( new Field ( RELID_FIELD, String.valueOf ( r.getId () ), StringField.TYPE_NOT_STORED ) );
+		doc.add ( new Field ( FROM_FIELD, String.valueOf ( r.getFromConcept ().getId () ), StringField.TYPE_NOT_STORED ) );
+		doc.add ( new Field ( TO_FIELD, String.valueOf ( r.getToConcept ().getId () ), StoredField.TYPE ) );
+		doc.add ( new Field ( OFTYPE_FIELD, r.getOfType ().getId (), StringField.TYPE_STORED ) );
 
 		// mapping attribute name to gds value
-		Map<String, String> attrNames = new HashMap<String, String>();
+		Map<String, String> attrNames = new HashMap<String, String> ();
 
 		// add all relation gds for this relation
-		for (Attribute attribute : it_attribute) {
-			if (attribute.isDoIndex()) {
-				String name = attribute.getOfType().getId();
-				listOfRelationAttrNames.add(name);
-				String value = attribute.getValue().toString();
-				attrNames.put(name, LuceneEnv.stripText(value));
+		for ( Attribute attribute : it_attribute )
+		{
+			if ( attribute.isDoIndex () )
+			{
+				String name = attribute.getOfType ().getId ();
+				listOfRelationAttrNames.add ( name );
+				String value = attribute.getValue ().toString ();
+				attrNames.put ( name, LuceneEnv.stripText ( value ) );
 			}
 		}
 
 		// write attribute name specific Attribute fields
-		for (String name : attrNames.keySet()) {
-			String value = attrNames.get(name);
-
-			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, value, FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
+		for ( String name : attrNames.keySet () )
+		{
+			String value = attrNames.get ( name );
+			doc.add ( new Field ( RELATTRIBUTE_FIELD + DELIM + name, value, FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 		}
-		attrNames.clear();
+		
+		attrNames.clear ();
 
 		// store document to index
 		try {
-			iw.addDocument(doc);
-		} catch (CorruptIndexException cie) {
-			fireEventOccurred(new DataFileErrorEvent(cie.getMessage(),
-					"[LuceneEnv - addRelationToIndex]"));
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - addRelationToIndex]"));
+			iw.addDocument ( doc );
+		}
+		catch ( IOException ex ) {
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - addRelationToIndex]" ) );
 		}
 	}
 
@@ -1246,7 +1246,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		try {
 
 			// if index is new created, fill index
-			if (create) {
+			if (create) 
+			{
 
 				// open index modifier to write to index
 				if (indexWriterIsOpen) closeIndex();
@@ -1297,6 +1298,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				iw.close();
 				indexWriterIsOpen = false;
 			}
+			// if ( create )
 
 			this.ensureReaderAndSearcherOpen ();
 			
