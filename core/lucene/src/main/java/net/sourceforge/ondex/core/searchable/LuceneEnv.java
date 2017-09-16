@@ -166,6 +166,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		public void setScorer ( Scorer scorer ) {
 			this.scorer = scorer;
 		}
+		
+		@Override
+		public boolean needsScores () {
+			return true;
+		}		
 	}
 
 	/**
