@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
@@ -15,6 +16,7 @@ import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -161,16 +163,16 @@ public class Transformer extends ONDEXTransformer implements
         System.out.println("Relations for co-occurrence before filtering: " + relations.size());
         
         // only consider publications with less than N pub_in or occ_in relations
-        for(ONDEXConcept c : graph.getConceptsOfConceptClass(ccPublication)){
-        	Set<ONDEXRelation> rels = graph.getRelationsOfConcept(c);
+        for(ONDEXConcept cPub : graph.getConceptsOfConceptClass(ccPublication)){
+        	Set<ONDEXRelation> pubLinks = graph.getRelationsOfConcept(cPub);
         	int countPubIn = 0;
-        	for(ONDEXRelation r : rels){
-        		if(r.getOfType().getId().equals("pub_in")){
+        	for(ONDEXRelation pubLink : pubLinks){
+        		if(pubLink.getOfType().getId().equals("pub_in")){
         			countPubIn++;
         		}
         	}
         	if(countPubIn >= 10){
-        		relations.removeAll(rels);
+        		relations.removeAll(pubLinks);
         	}
         }
         
@@ -344,21 +346,29 @@ public class Transformer extends ONDEXTransformer implements
                     	to.addTag(qual);
                     	existRel.addTag(qual);
                         
-                        // concatenate PMIDs
-                        if (valuePMID != null) {
-                            if(existRel.getAttribute(attPMID) != null){
-                            	String b = existRel.getAttribute(attPMID).getValue().toString();
-        	                    String concat = valuePMID + ", " + b;
-        	                    existRel.getAttribute(attPMID).setValue(concat);
-                            }else{
-                            	existRel.createAttribute(attPMID, valuePMID, false);
-                            }
-                        }
-                        
-                        // count number of co-citation
-                        Integer num = (Integer) existRel.getAttribute(attNumPubl).getValue();
-                        num++;
-                        existRel.getAttribute(attNumPubl).setValue(num);
+                      if (valuePMID != null) 
+                      {
+                        // concatenate a new PMID, if it's available on the existing relation
+                      	//
+                      	Attribute bPMIDAttr = existRel.getAttribute ( attPMID );
+												String bPMID = bPMIDAttr == null ? null : bPMIDAttr.getValue ().toString ();
+
+												if ( bPMID != null )
+												{
+													// Sometimes it happens the PMID is already there, for reasons to be investigated
+													if ( !valuePMID.contains ( bPMID ) && !bPMID.contains ( valuePMID ) )
+														// if not, eventually join them
+														bPMIDAttr.setValue ( valuePMID + ", " + bPMID );
+												} 
+												else
+													// else, this is the first PMID you see, so just add it
+													existRel.createAttribute ( attPMID, valuePMID, false );
+                      }
+                      
+                      // count number of co-citation
+                      Integer num = (Integer) existRel.getAttribute(attNumPubl).getValue();
+                      num++;
+                      existRel.getAttribute(attNumPubl).setValue(num);
                         
                         
                         // evidence sentences
