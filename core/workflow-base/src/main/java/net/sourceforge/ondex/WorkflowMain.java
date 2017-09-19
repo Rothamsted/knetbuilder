@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 import net.sourceforge.ondex.config.Config;
@@ -25,6 +28,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -81,7 +85,6 @@ public class WorkflowMain {
         if (cmd.hasOption("h")) {
             printHelp(options);
             System.exit(0);
-            return; // hack: java doesn't know about System.exit
         }
 
         String ondexDir = null; //ondex data directory
@@ -243,7 +246,12 @@ public class WorkflowMain {
 
     private static WorkflowAndPath workflowAndPath(String wf)
     {
-        return wfap(wf, "./");
+    	// MB: fixed with commons-io and less custom guessing
+    	String wfBase = FilenameUtils.getBaseName ( wf );
+    	String wfParent = FilenameUtils.getFullPath ( wf );
+    	if ( wfParent.length () == 0 ) wfParent = "./";
+    	    	
+    	return wfap ( wfBase, wfParent );
     }
 
     private static WorkflowAndPath wfap(String wf, String p)
