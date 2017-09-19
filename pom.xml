@@ -209,6 +209,21 @@
                   </lifecycleMappingMetadata>
                </configuration>
             </plugin>
+            <!-- Cleans up things that are usualy left around on the main module folder, not in target/ -->
+		        <plugin>
+		          <artifactId>maven-clean-plugin</artifactId>
+		          <configuration>
+		            <filesets>
+		              <fileset>
+		                <directory>${basedir}</directory>
+		                <includes>
+		                  <include>ondex.log</include>
+		                  <include>velocity.log</include>
+		                </includes>
+		              </fileset>
+		            </filesets>
+		          </configuration>
+		        </plugin>
          </plugins>
       </pluginManagement>
 
