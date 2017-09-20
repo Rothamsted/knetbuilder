@@ -247,7 +247,7 @@ public class WorkflowMain {
     private static WorkflowAndPath workflowAndPath(String wf)
     {
     	// MB: fixed with commons-io and less custom guessing
-    	String wfBase = FilenameUtils.getBaseName ( wf );
+    	String wfBase = FilenameUtils.getName ( wf );
     	String wfParent = FilenameUtils.getFullPath ( wf );
     	if ( wfParent.length () == 0 ) wfParent = "./";
     	    	

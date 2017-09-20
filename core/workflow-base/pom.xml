@@ -58,7 +58,8 @@
          <version>1.6.2</version>
       </dependency>
 
-      <!-- ONDEX deps -->      <dependency>
+      <!-- ONDEX deps -->      
+      <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>tools</artifactId>
          <version>${project.version}</version>
