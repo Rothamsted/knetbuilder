@@ -68,7 +68,6 @@ import net.sourceforge.ondex.ovtk2.ui.mouse.OVTK2PickingMousePlugin;
 import net.sourceforge.ondex.ovtk2.ui.toolbars.OVTK2ToolBar;
 import net.sourceforge.ondex.ovtk2.util.DesktopUtils;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
-import net.sourceforge.ondex.taverna.TavernaApi;
 
 /**
  * Class creates main OVTK2 menu bar.
@@ -192,9 +191,6 @@ public class OVTK2Menu extends JMenuBar implements IFileHistory, OVTK2MenuBar {
 		JMenu tools = makeMenu("Menu.Tools");
 		this.add(tools);
 		populateToolsMenu(tools);
-
-		// taverna menu
-		addTavernaMenu();
 
 		// help menu
 		JMenu help = makeMenu("Menu.Help");
@@ -1075,70 +1071,7 @@ public class OVTK2Menu extends JMenuBar implements IFileHistory, OVTK2MenuBar {
 
 	}
 
-	/**
-	 * Populates the taverna menu.
-	 * 
-	 * @param taverna
-	 *            JMenu "Tools"
-	 */
-	private void addTavernaMenu() {
 
-		if (!Boolean.parseBoolean(Config.config.getProperty("Taverna.Enable"))) {
-			return;
-		}
-		String value = Config.language.getProperty("Menu.Taverna");
-		if (value == null) {
-			throw new RuntimeException("Key \"Menu.Taverna\" is missing from the language file");
-		}
-		JMenu tavernaMenu = new JMenu(value);
-		this.add(tavernaMenu);
-		// Use 'v' as 't; is in English for Tool
-		tavernaMenu.setMnemonic('v');
-
-		// TavernaMenuAction listener;
-
-		Frame parentFrame = this.getParentFrame();
-
-		Class<TavernaApi> clazz;
-		try {
-			URLClassLoader ucl = OVTK2PluginLoader.getInstance().ucl;
-			Thread.currentThread().setContextClassLoader(ucl);
-			String classname = "net.sourceforge.ondex.taverna.TavernaWrapper";
-			clazz = (Class<TavernaApi>) ucl.loadClass(classname);
-			// System.out.println(clazz);
-			// Constructor[] constructors = clazz.getConstructors();
-			// for (Constructor c: constructors){
-			// System.out.println(c);
-			// }
-		} catch (Exception e) {
-			// Ok no Taverna
-			e.printStackTrace();
-			System.err.println("No TavernaWrapper found. ");
-			System.err.println(e.getMessage());
-			JMenuItem missing = makeMenuItem("Menu.Taverna.Missing", "TavernaMissing");
-			NoTavernaMenuAction helpListener = new NoTavernaMenuAction();
-			desktop.addActionListener(helpListener);
-			tavernaMenu.add(missing);
-			return;
-		}
-		try {
-			Constructor<TavernaApi> constructor = clazz.getConstructor(parentFrame.getClass());
-			TavernaApi travernaApi = constructor.newInstance(parentFrame);
-			// TavernaApi handles the loading of menu bar and the actions.
-			travernaApi.attachMenu(tavernaMenu);
-			// The Home files can be set from the config file.
-			// tavernaApi ignore nulls and emptys
-			// An Exception is throw is a non emplty string is incorrect.
-			travernaApi.setTavernaHome(Config.config.getProperty("Taverna.TravenaHome"));
-			travernaApi.setDataViewerHome(Config.config.getProperty("Taverna.DataViewerHomer"));
-			File dataDir = new File(net.sourceforge.ondex.config.Config.ondexDir);
-			travernaApi.setRootDirectory(dataDir);
-			Icon icon = new ImageIcon("config/toolbarButtonGraphics/taverna/taverna.jpeg");
-		} catch (Exception e) {
-			ErrorDialog.show(e);
-		}
-
-	}
 
 	/**
 	 * Populates the view menu.

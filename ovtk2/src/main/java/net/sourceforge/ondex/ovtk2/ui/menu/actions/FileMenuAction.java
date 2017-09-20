@@ -1,40 +1,26 @@
 package net.sourceforge.ondex.ovtk2.ui.menu.actions;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.soapgraph.SOAPONDEXGraph;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.config.OVTK2PluginLoader;
 import net.sourceforge.ondex.ovtk2.io.OVTK2IO;
 import net.sourceforge.ondex.ovtk2.io.OXLImport;
-import net.sourceforge.ondex.ovtk2.io.WebserviceExport;
-import net.sourceforge.ondex.ovtk2.io.WebserviceImport;
 import net.sourceforge.ondex.ovtk2.io.WizardImport;
 import net.sourceforge.ondex.ovtk2.io.importwizard.ConfigTool;
 import net.sourceforge.ondex.ovtk2.io.importwizard.ImportWizard;
@@ -50,7 +36,6 @@ import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.OVTKProgressMonitor;
 import net.sourceforge.ondex.ovtk2.util.SVGExport;
 import net.sourceforge.ondex.tools.threading.monitoring.IndeterminateProcessAdapter;
-import net.sourceforge.ondex.webservice.client.WSGraph;
 
 /**
  * Listens to action events specific to the file menu.
@@ -58,9 +43,6 @@ import net.sourceforge.ondex.webservice.client.WSGraph;
  * @author taubertj
  */
 public class FileMenuAction implements ActionListener {
-
-	// for loading a graph from the webservice
-	private WSGraphWrapper wrapper;
 
 	private static FileMenuAction instance = null;
 
@@ -74,27 +56,6 @@ public class FileMenuAction implements ActionListener {
 		return instance;
 	}
 
-	/**
-	 * Convenience wrapper for a graph returned by webservice
-	 * 
-	 * @author taubertj
-	 */
-	private class WSGraphWrapper {
-
-		private WSGraph wsgraph;
-
-		public WSGraphWrapper(WSGraph wsgraph) {
-			this.wsgraph = wsgraph;
-		}
-
-		public WSGraph getWSGraph() {
-			return wsgraph;
-		}
-
-		public String toString() {
-			return wsgraph.getName().getValue();
-		}
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
@@ -152,228 +113,6 @@ public class FileMenuAction implements ActionListener {
 				WelcomeDialog.getInstance(desktop).setVisible(false);
 			}
 		}
-
-		// load data from webservice
-		else if (cmd.equals("load")) {
-			try {
-				// get webservice URL and lists graphs
-				List<WSGraphWrapper> graphs = null;
-				final URL url = new URL(Config.config.getProperty("Program.URL"));
-				graphs = new ArrayList<WSGraphWrapper>();
-				for (WSGraph ws : WebserviceImport.getGraphs(url)) {
-					graphs.add(new WSGraphWrapper(ws));
-				}
-
-				if (graphs.size() > 0) {
-					final JDialog dialog = new JDialog(desktop.getMainFrame(), "Graph Name", true);
-					dialog.setLayout(new BorderLayout());
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-					JPanel selection = new JPanel(new GridLayout(3, 1));
-					selection.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-					dialog.add(selection, BorderLayout.CENTER);
-
-					JLabel label = new JLabel("Please select name of graph to load:");
-					selection.add(label);
-
-					final JComboBox box = new JComboBox(graphs.toArray());
-					box.setSelectedItem(graphs.get(0));
-					selection.add(box);
-
-					JCheckBox check = new JCheckBox("Work on web-server directly");
-					selection.add(check);
-
-					JButton load = new JButton("Load");
-					load.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							dialog.setVisible(false);
-							wrapper = (WSGraphWrapper) box.getSelectedItem();
-						}
-					});
-					dialog.add(load, BorderLayout.SOUTH);
-
-					dialog.pack();
-					dialog.setLocationRelativeTo(desktop.getMainFrame());
-					dialog.setVisible(true);
-
-					// got a graph to load
-					if (wrapper != null) {
-						final WSGraph graph = wrapper.getWSGraph();
-						System.out.println("Loading graph " + graph.getName() + " " + graph.getId());
-
-						// load a copy of graph
-						if (!check.isSelected()) {
-
-							// wrap into a process
-							IndeterminateProcessAdapter p = new IndeterminateProcessAdapter() {
-								public void task() {
-
-									// for coping with plug-in Attribute data
-									// types
-									try {
-										Thread.currentThread().setContextClassLoader(OVTK2PluginLoader.getInstance().ucl);
-									} catch (FileNotFoundException e) {
-										ErrorDialog.show(e);
-									} catch (MalformedURLException e) {
-										ErrorDialog.show(e);
-									}
-
-									// name of new graph
-									String name = graph.getName().getValue();
-
-									// get a new empty graph
-									ONDEXGraph aog = DesktopUtils.initGraph(name);
-
-									try {
-										// start webservice import
-										new WebserviceImport(aog, url, graph);
-									} catch (Exception e) {
-										ErrorDialog.show(e);
-									}
-
-									// display the graph
-									DesktopUtils.displayGraphOnDesktop(aog);
-								}
-							};
-							// start processing and monitoring
-							p.start();
-							OVTKProgressMonitor.start(OVTK2Desktop.getInstance().getMainFrame(), "Loading graph", p);
-
-							// close possible welcome dialog
-							WelcomeDialog.getInstance(desktop).setVisible(false);
-						} else {
-							// wrap into a process
-							IndeterminateProcessAdapter p = new IndeterminateProcessAdapter() {
-								public void task() {
-
-									// for coping with plug-in Attribute data
-									// types
-									try {
-										Thread.currentThread().setContextClassLoader(OVTK2PluginLoader.getInstance().ucl);
-									} catch (FileNotFoundException e) {
-										ErrorDialog.show(e);
-									} catch (MalformedURLException e) {
-										ErrorDialog.show(e);
-									}
-
-									// new SOAPGraph
-									SOAPONDEXGraph og = new SOAPONDEXGraph(url, graph);
-									og.addActionListener(new ActionListener() {
-
-										@Override
-										public void actionPerformed(ActionEvent e) {
-											ErrorDialog.show((Exception) e.getSource());
-										}
-									});
-
-									// display the graph
-									DesktopUtils.displayGraphOnDesktop(og);
-								}
-							};
-							// start processing and monitoring
-							p.start();
-							OVTKProgressMonitor.start(OVTK2Desktop.getInstance().getMainFrame(), "Connecting to graph", p);
-
-							// close possible welcome dialog
-							WelcomeDialog.getInstance(desktop).setVisible(false);
-						}
-					}
-				} else {
-					JOptionPane.showInternalMessageDialog(desktop.getDesktopPane(), "No graphs found on server.", "No graphs", JOptionPane.INFORMATION_MESSAGE);
-				}
-			} catch (Exception e) {
-				ErrorDialog.show(e);
-			}
-		}
-
-		// upload current graph to webservice
-		else if (cmd.equals("upload")) {
-			if (resources.getSelectedViewer() != null) {
-				try {
-					// get webservice URL
-					final URL url = new URL(Config.config.getProperty("Program.URL"));
-					final String name = JOptionPane.showInternalInputDialog(desktop.getDesktopPane(), "Please give name of graph:\n", "Graph Name", JOptionPane.PLAIN_MESSAGE);
-					if (name != null && name.length() > 0) {
-
-						// wrap into a process
-						IndeterminateProcessAdapter p = new IndeterminateProcessAdapter() {
-							public void task() {
-
-								// for coping with plug-in Attribute data types
-								try {
-									Thread.currentThread().setContextClassLoader(OVTK2PluginLoader.getInstance().ucl);
-								} catch (FileNotFoundException e) {
-									ErrorDialog.show(e);
-								} catch (MalformedURLException e) {
-									ErrorDialog.show(e);
-								}
-
-								// get current viewer
-								OVTK2Viewer viewer = (OVTK2Viewer) resources.getSelectedViewer();
-
-								// graph to export
-								ONDEXGraph aog = viewer.getONDEXJUNGGraph();
-								try {
-									// start webservice export
-									new WebserviceExport(aog, url, name);
-								} catch (Exception e) {
-									ErrorDialog.show(e);
-								}
-							}
-						};
-						// start processing and monitoring
-						p.start();
-						OVTKProgressMonitor.start(OVTK2Desktop.getInstance().getMainFrame(), "Uploading graph", p);
-					}
-				} catch (Exception e) {
-					ErrorDialog.show(e);
-				}
-			} else {
-				JOptionPane.showInternalMessageDialog(OVTK2Desktop.getInstance().getDesktopPane(), "No graph loaded or available. Cannot continue with operation.", "Graph not found", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-
-		// load a graph from SQL backend
-		// else if (cmd.equals("importSQL2")) {
-		// // TODO: needs error catching
-		// String sqlAddress = JOptionPane.showInputDialog(null,
-		// "What is your host:port?", "Enter address",
-		// JOptionPane.QUESTION_MESSAGE);
-		// String sqlGraphNo = JOptionPane.showInputDialog(null,
-		// "Which graph would you like to open?", "Enter graph id",
-		// JOptionPane.QUESTION_MESSAGE);
-		//
-		// final String sqlA = "jdbc:mysql://" + sqlAddress
-		// + "/OndexDB2?cachePrepStmts=true&prepStmtCacheSize=4096";
-		// final Integer sGraph = Integer.parseInt(sqlGraphNo);
-		// final String sqlUser = JOptionPane.showInputDialog(null,
-		// "What is your username?", "Enter username",
-		// JOptionPane.QUESTION_MESSAGE);
-		// final String sqlPass = JOptionPane.showInputDialog(null,
-		// "What is your password?", "Enter password",
-		// JOptionPane.QUESTION_MESSAGE);
-		//
-		// // public SQL2Graph(int id, String connectionString, String
-		// // user, String pass) {
-		// IndeterminateProcessAdapter p = new IndeterminateProcessAdapter() {
-		// public void task() {
-		// // database wrapper graph
-		// SQL2Graph g = new SQL2Graph(sGraph, sqlA, sqlUser, sqlPass);
-		//
-		// // wrapper for SQL graph
-		// ActionWrappedONDEXGraph aog = new ActionWrappedONDEXGraph(
-		// g, new ActionListenerComparator());
-		//
-		// // display the graph
-		// DesktopUtils.displayGraphOnDesktop(aog);
-		// }
-		// };
-		// // start processing and monitoring
-		// p.start();
-		// OVTKProgressMonitor.start(OVTK2Desktop.getInstance().getMainFrame(),"Generating graph...",
-		// p);
-		// }
 
 		// uses import wizard to parse delimited files
 		else if (cmd.equals("importwizard")) {

@@ -336,24 +336,6 @@
       </dependency>
 
       <dependency>
-         <groupId>net.sourceforge.ondex.webservices</groupId>
-         <artifactId>soapgraph</artifactId>
-         <version>0.5.0</version>
-      </dependency>
-
-      <dependency>
-         <groupId>net.sourceforge.ondex.webservices</groupId>
-         <artifactId>webservice-client</artifactId>
-         <version>0.5.0</version>
-      </dependency>
-
-      <dependency>
-         <groupId>net.sourceforge.ondex.taverna</groupId>
-         <artifactId>taverna-api</artifactId>
-         <version>0.5.0</version>
-      </dependency>
-
-      <dependency>
          <groupId>org.codehaus.swizzle</groupId>
          <artifactId>swizzle-jira</artifactId>
          <version>1.6.1</version>
