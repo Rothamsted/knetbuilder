@@ -1,16 +1,8 @@
 package net.sourceforge.ondex.mini.test;
 
-import java.text.MessageFormat;
-
 import com.google.common.collect.ObjectArrays;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.OndexMiniMain;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
  * Invokes ONDEX-Mini to run a workflow file.
@@ -96,33 +88,6 @@ public class MiniInvoker
 	public void setLibDirPath ( String libDirPath )
 	{
 		this.libDirPath = libDirPath;
-	}
-	
-	public ONDEXGraph loadOXL ( String filePath, ONDEXGraph graph )
-	{
-		try
-		{
-			if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
-			
-			Parser parser = new Parser ();
-			parser.setONDEXGraph ( graph );
-			ONDEXPluginArguments args = new ONDEXPluginArguments ( parser.getArgumentDefinitions () );
-			args.setOption ( FileArgumentDefinition.INPUT_FILE, filePath );
-			parser.setArguments ( args );
-			parser.start ();
-			return graph;
-		}
-		catch ( PluginConfigurationException ex )
-		{
-			throw new RuntimeException ( MessageFormat.format ( 
-				"Internal error while loading '{}': {}", filePath, ex.getMessage () 
-			), ex);
-		}
-	}
-	
-	public ONDEXGraph loadOXL ( String filePath )
-	{
-		return loadOXL ( filePath, null );
 	}
 
 }

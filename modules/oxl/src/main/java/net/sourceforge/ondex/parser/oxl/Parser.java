@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -28,6 +30,8 @@ import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
@@ -385,4 +389,41 @@ public class Parser extends ONDEXParser {
 			throw new ParsingFailedException(e);
 		}
 	}
+	
+	/**
+	 * Utility to use this plug-in to load a graph outside of ONDEX, ONDEX Mini or alike. This is mainly useful for 
+	 * testing.
+	 * 
+	 * It populates the graph parameter and returns it. When the graph is null, creates a {@link MemoryONDEXGraph}.
+	 * 
+	 */
+	public static ONDEXGraph loadOXL ( String filePath, ONDEXGraph graph )
+	{
+		try
+		{
+			if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
+			
+			Parser parser = new Parser ();
+			parser.setONDEXGraph ( graph );
+			ONDEXPluginArguments args = new ONDEXPluginArguments ( parser.getArgumentDefinitions () );
+			args.setOption ( FileArgumentDefinition.INPUT_FILE, filePath );
+			parser.setArguments ( args );
+			parser.start ();
+			return graph;
+		}
+		catch ( PluginConfigurationException ex )
+		{
+			throw new RuntimeException ( MessageFormat.format ( 
+				"Internal error while loading '{}': {}", filePath, ex.getMessage () 
+			), ex);
+		}
+	}
+	
+	/**
+	 * Default to null.
+	 */
+	public static ONDEXGraph loadOXL ( String filePath )
+	{
+		return loadOXL ( filePath, null );
+	}	
 }

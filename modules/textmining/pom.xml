@@ -1,156 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <artifactId>modules</artifactId>
-      <groupId>net.sourceforge.ondex</groupId>
-      <version>1.2.1-SNAPSHOT</version>
-   </parent>
+	<parent>
+		<artifactId>modules</artifactId>
+		<groupId>net.sourceforge.ondex</groupId>
+		<version>1.2.1-SNAPSHOT</version>
+	</parent>
 
-   <groupId>net.sourceforge.ondex.modules</groupId>
-   <artifactId>textmining</artifactId>
+	<groupId>net.sourceforge.ondex.modules</groupId>
+	<artifactId>textmining</artifactId>
 
-   <name>textmining</name>
+	<name>textmining</name>
 
-   <description>A collection of parsers, mapping and transformers to do textmining</description>
+	<description>A collection of parsers, mapping and transformers to do textmining</description>
 
-   <dependencies>
-      <dependency>
-         <groupId>org.codehaus.woodstox</groupId>
-         <artifactId>stax2-api</artifactId>
-         <version>3.0.1</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.codehaus.woodstox</groupId>
-         <artifactId>woodstox-core-lgpl</artifactId>
-         <version>4.0.6</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.apache.cxf</groupId>
-         <artifactId>cxf-wstx-msv-validation</artifactId>
-         <version>2.2</version>
-         <scope>compile</scope>
-         <exclusions>
-            <exclusion>
-               <groupId>org.codehaus.woodstox</groupId>
-               <artifactId>woodstox-core-asl</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.codehaus.woodstox</groupId>
-               <artifactId>wstx-asl</artifactId>
-            </exclusion>
-         </exclusions>
-      </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>stax2-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>woodstox-core-lgpl</artifactId>
+			<version>4.0.6</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-wstx-msv-validation</artifactId>
+			<version>2.2</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.codehaus.woodstox</groupId>
+					<artifactId>woodstox-core-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.woodstox</groupId>
+					<artifactId>wstx-asl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-      <!-- ONDEX deps -->
-      <dependency>
-         <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>tools</artifactId>
-         <version>${project.version}</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>lucene</artifactId>
-         <version>${project.version}</version>
-         <scope>provided</scope>
-      </dependency>
-      <!-- Used for integration tests. -->
-      <dependency>
-				<groupId>net.sourceforge.ondex.apps</groupId>
-				<artifactId>ondex-mini</artifactId>
-				<version>${project.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <!-- Same -->
-      <dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>oxl</artifactId>
-         <version>${project.version}</version>
-         <!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
-         <scope>test</scope>         
-      </dependency>      
-   </dependencies>
-   
-   
-   <build>
-   		
-   		<!-- 
-   			Cranes test workflows, used for integration tests.
-   		-->
-		<testResources>
-			<testResource>
-			  <directory>src/test/resources</directory>
-			  <filtering>true</filtering>
-			  <includes>
-			  	<include>**/tm-workflow.xml</include>
-			  </includes>
-			</testResource>
-			<testResource>
-			  <directory>src/test/resources</directory>
-			  <filtering>false</filtering>
-			  <excludes>
-			  	<exclude>**/tm-workflow.xml</exclude>
-			  </excludes>
-			</testResource>
-		</testResources>
-           
-   	<plugins>
-   		<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<!-- Pull out ONDEX-mini, used for integration tests -->
-					<execution>
-					 <id>unpack-mini</id>
-					 <phase>pre-integration-test</phase>
-					 <goals>
-					   <goal>unpack</goal>
-					 </goals>
-					 <configuration>
-					   <artifactItems>
-					     <artifactItem>
-							   <groupId>net.sourceforge.ondex.apps</groupId>
-								 <artifactId>ondex-mini</artifactId>
-					       <version>${project.version}</version>
-					       <classifier>packaged-distro</classifier>
-					       <type>zip</type>
-								 <outputDirectory>${project.build.directory}</outputDirectory>				         
-					     </artifactItem>
-					   </artifactItems>
-					 </configuration>
-					</execution>
-				</executions>				   		
-   		</plugin>
-   		
-   		<!-- Tests TM workflows, using the whole ONDEX-mini -->
-	    <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-failsafe-plugin</artifactId>
-	      <version>2.20.1</version>
-				<executions>
-          <execution>
-          	<id>i-test</id>
-          	<phase>integration-test</phase>
-            <goals>
-            	<goal>integration-test</goal>
-            </goals>
-          </execution>
-          <execution>
-       			<id>verify</id>
-          	<phase>verify</phase>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>	      
-	    </plugin>
-   		
-   	</plugins>
-   </build>
+		<!-- ONDEX deps -->
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>tools</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>lucene</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
 </project>

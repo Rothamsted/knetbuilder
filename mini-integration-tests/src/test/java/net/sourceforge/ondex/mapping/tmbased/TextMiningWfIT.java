@@ -10,11 +10,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.mini.test.MiniInvoker;
+import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
  * Some integration tests based on test text mining workflows.
@@ -27,15 +30,20 @@ import net.sourceforge.ondex.mini.test.MiniInvoker;
  */
 public class TextMiningWfIT
 {
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
 	@Test
 	public void testTextMiningWf ()
 	{
-		String wfPath = "target/test-classes/textmining_wf/";
+		System.out.format ( "\n\n------- PROP ----- %s\n\n\n",  System.getProperty ( "maven.buildDirectory", "FUCK" ) );
+		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
+		String wfPath = mavenBuildPath + "test-classes/textmining_wf/";
 		MiniInvoker invoker = new MiniInvoker ();
 		invoker.invoke ( wfPath + "tm-workflow.xml" );
-		ONDEXGraph graph = invoker.loadOXL ( wfPath + "out.oxl" );
+		ONDEXGraph graph = Parser.loadOXL ( wfPath + "out.oxl" );
 				
-		// Do we have the 
+		// Do we have this concept?
+		//
 		ONDEXConcept testConcept = 
 			graph.getConcepts ()
 			.stream ()
@@ -49,6 +57,9 @@ public class TextMiningWfIT
 		
 		assertNotNull ( "Test concept not found!", testConcept );
 		
+		
+		// And does it have a relation having this other concept at the other end?
+		//
 		ONDEXRelation testRel = graph
 		.getRelationsOfConcept ( testConcept )
 		.stream ()
@@ -62,6 +73,9 @@ public class TextMiningWfIT
 		
 		assertNotNull ( "Test relation not found!", testRel );
 
+		
+		// And how does the relation look like?
+		//
 		Set<String> pmids = testRel
 		.getAttributes ()
 		.stream ()

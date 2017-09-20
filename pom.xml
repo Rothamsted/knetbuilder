@@ -20,6 +20,7 @@
     <module>ondex-mini</module>
     <module>launcher</module>
     <module>installer</module>
+    <module>mini-integration-tests</module>
    </modules>
    
 	 <repositories>

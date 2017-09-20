@@ -34,19 +34,6 @@
                   <configuration>
                      <artifactItems>
 
-												<!-- 
-													This is needed here, since we need it both as a compile dependency and in the plugins
-													directory.
-												 -->
-												<artifactItem>
-													<groupId>net.sourceforge.ondex.modules</groupId>
-													<artifactId>oxl</artifactId>
-													<version>${project.version}</version>
-													<type>jar</type>
-													<outputDirectory>${project.build.directory}/plugins</outputDirectory>
-													<overWrite>true</overWrite>
-												</artifactItem>
-
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>tab-parser-2</artifactId>
@@ -220,8 +207,7 @@
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>oxl</artifactId>
          <version>${project.version}</version>
-         <!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
-         <scope>provided</scope>         
+         <scope>test</scope>         
       </dependency>
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
