@@ -15,6 +15,8 @@ import net.sourceforge.ondex.core.util.prototypes.EvidenceTypePrototype;
  * new concept using the results from these mappers. 
  * 
  * This should be enough in the most common cases.
+ * 
+ * TODO: add attributes mapper.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
