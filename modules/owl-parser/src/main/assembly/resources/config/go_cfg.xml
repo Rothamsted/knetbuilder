@@ -34,7 +34,7 @@
 			</bean>
 		</property>
 		
-		<!-- The top OWL class maps to an ONDEX concept class and not to a concpet -->
+		<!-- The top OWL class maps to an ONDEX concept class and not to a concept -->
 		<property name = "doMapRootsToConcepts" value = "false" />
 		
 		<!-- The OWL class relations to follow -->
