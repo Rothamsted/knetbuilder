@@ -207,13 +207,16 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 
 	/**
 	 * <p>If this is true, the links between the nodes returned by the {@link ExploringMapper#getRootsScanner() roots scanner}
-	 * must not be mapped to {@link ONDEXConcept concepts } and the links from this to the immediate related nodes found by a 
+	 * must not be mapped to {@link ONDEXConcept concepts} and the links from this to the immediate related nodes found by a 
 	 * {@link #getLinkers() linker} must not be mapped to an {@link ONDEXRelation}. If that is the case, the root nodes 
 	 * are just used to create {@link ConceptClass}es to be used to map concepts and to kick-start the exploration.</p>
 	 * 
 	 * <p>This is useful in tree-based mappers, where the root nodes are supposed to provide the category of concepts they 
 	 * contain in the sub-tree, for instance you might decide that the root class 'Biological Process' in GeneOntology 
 	 * corresponds to a concept class, to which all the biological processes are associated as concepts.</p>
+	 * 
+	 * <p><b>WARNING</b>: in real cases this might be very challenging to implement, for several reasons: hierarchies
+	 * might not be well-separated and ONDEX doesn't support multiple inheritance. 
 	 * 
 	 * <p>This defaults to true</p>
 	 */
