@@ -7,7 +7,7 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<dependencySets>
 		<dependencySet>
-			<outputDirectory>${artifactId}-${project.version}/lib
+			<outputDirectory>${project.artifactId}-${project.version}/lib
 			</outputDirectory>
 			<outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
@@ -18,7 +18,7 @@
 			</excludes>
 		</dependencySet>
 		<dependencySet>
-			<outputDirectory>${artifactId}-${project.version}/plugins
+			<outputDirectory>${project.artifactId}-${project.version}/plugins
 			</outputDirectory>
 			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}
 			</outputFileNameMapping>
@@ -30,7 +30,7 @@
 			</includes>
 		</dependencySet>
 		<dependencySet>
-			<outputDirectory>${artifactId}-${project.version}</outputDirectory>
+			<outputDirectory>${project.artifactId}-${project.version}</outputDirectory>
 			<scope>runtime</scope>
 			<includes>
 				<include>*:zip</include>
@@ -42,14 +42,14 @@
 		<file>
 			<source>${basedir}/runme.sh</source>
 			<outputDirectory></outputDirectory>
-			<destName>${artifactId}-${project.version}/runme.sh</destName>
+			<destName>${project.artifactId}-${project.version}/runme.sh</destName>
       <fileMode>0755</fileMode>
 			<lineEnding>unix</lineEnding>
 		</file>
 		<file>
 			<source>${basedir}/runme.bat</source>
 			<outputDirectory></outputDirectory>
-			<destName>${artifactId}-${project.version}/runme.bat</destName>
+			<destName>${project.artifactId}-${project.version}/runme.bat</destName>
       <fileMode>0755</fileMode>
 			<lineEnding>dos</lineEnding>
 		</file>
@@ -57,7 +57,7 @@
 	<fileSets>
 		<fileSet>
 			<directory>${basedir}/data</directory>
-			<outputDirectory>${artifactId}-${project.version}/data
+			<outputDirectory>${project.artifactId}-${project.version}/data
 			</outputDirectory>
 			<includes>
 				<include>**/*.*</include>
