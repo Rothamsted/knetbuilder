@@ -2,11 +2,11 @@ package net.sourceforge.ondex.parser.owl;
 
 import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -17,6 +17,7 @@ import org.apache.jena.vocabulary.OWL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.util.CachedGraphWrapper;
@@ -71,9 +72,17 @@ public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, Concept
 		if ( this.getTopClasses ().contains ( cls ) ) return cls;
 		if ( OWL.Thing.equals ( cls ) ) return null;
 		
-		for ( ExtendedIterator<OntClass> itr = cls.listSuperClasses ( true ); itr.hasNext (); )
+		Set<OntClass> parents = JENAUTILS.toStream ( cls.listSuperClasses ( true ) )
+		.collect ( Collectors.toSet () );
+		
+		if ( parents.size () > 1 )
+			log.warn ( 
+				  "The class {} has multiple parents, you might get unexpected concept class mappings, consider using a single "
+				+ "constant concept class to represent all the terms of this ontology (using ConstantConceptClassMapper)" );
+
+		for ( OntClass parent: parents )
 		{
-			OntClass result = this.getTopClass ( itr.next () );
+			OntClass result = this.getTopClass ( parent );
 			if ( result != null ) return result;
 		}
 		return null;
