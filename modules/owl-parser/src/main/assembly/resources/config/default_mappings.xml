@@ -80,13 +80,13 @@
 	</bean>
 
 
-
-
-	<!-- 
-	  This is the only bean so far that requires a prototype scope (ie, a new instance for every new reference), since
-	  it is an holding mapper, which retains the first OWL class it maps to an ONDEX concept class. 
+	<!--
+		By default, the OWLMapper uses its 'rootsScanner' property to get the roots of an ontology and pass them to this
+		mapper, which it uses to create corresponding concept classes. 'doMapRootsToConcepts' determines if these 
+		classes will become concepts too. Usually, if you use this mapper, you will want this flag to be false, while
+		you want it to be true in combination with a constant class mapper (eg, see the to_cfg.xml file).
 	-->
-	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLTopConceptClassMapper" scope="prototype">
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.owl.OWLTopConceptClassMapper">
 	  <property name = "idMapper" ref = "idMapper" />
 	  <property name = "fullNameMapper" ref = "nameMapper" />
 	  <property name = "descriptionMapper" ref = "descriptionMapper" />
@@ -139,17 +139,35 @@
 	
 	<!-- 
 		This is the default OntModel that we use to load the input OWL. As you can see, we disable any type of 
-	  inference. The default model, which has some basic entailments enabled, but this causes endless loops and eventual
-	  crashes.
-	  
-	  TODO: see if it's still true with the new parser.
+	  inference and other features we don't need. You might define your own model by overriding this bean. Beware
+	  that inference might be slow. 
 	-->
 	<bean id = "jenaOntModel" class = "org.apache.jena.rdf.model.ModelFactory" 
 		scope = "prototype"
 		factory-method="createOntologyModel">
-		<constructor-arg value="#{T( org.apache.jena.ontology.OntModelSpec ).OWL_MEM }"></constructor-arg>
+		<constructor-arg>
+			<!-- 
+				Some tricky composition to disable the processing of owl:imports
+			-->
+			<bean class = "org.apache.jena.ontology.OntModelSpec">
+				<!-- As said above, OWL_MEM means no inference -->
+				<constructor-arg value = "#{T( org.apache.jena.ontology.OntModelSpec ).OWL_MEM }" />
+				<property name = "documentManager">
+					<bean class = "org.apache.jena.ontology.OntDocumentManager">
+						<!--
+						  We're usually just fine with the plug-in input file imports can be possibly loaded by separated
+							plug-in instances (and config files)
+						-->
+						<property name = "processImports" value = "false" />
+					</bean>
+				</property>
+			</bean>
+		</constructor-arg>
+		<!-- Avoids complaints like referred OWL classes that are not defined explicitly (happens in tests) -->
 		<property name = "strictMode" value = "false" />
 	</bean>
+	
+	
 		
 	<!-- 
 	  Provides a factory bean that returns a null bean, via factory-method = 'get' (see above)

@@ -722,9 +722,7 @@ public class WorkflowTool extends javax.swing.JFrame {
 				JOptionPane.showMessageDialog(null,
 						"Malformed XML found in file!");
 			} catch (UnknownPluginTypeException e4) {
-				JOptionPane
-						.showMessageDialog(null,
-								"Unknown plugin type found in the input file, workflow was not loaded.");
+				JOptionPane.showMessageDialog(null, "Error: " + e4.getMessage () + ". Workflow was not loaded." );
 			} finally {
 
 				selected.getListPanel().validate();

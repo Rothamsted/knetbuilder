@@ -3,15 +3,19 @@ package net.sourceforge.ondex.parser.owl;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.parser.ConceptClassMapper;
 import net.sourceforge.ondex.parser.ExploringMapper;
 
 /**
@@ -71,7 +75,27 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 		}
 	}
 	
+	
 
+	@Override
+	public Stream<ONDEXConcept> map ( OntModel source, ONDEXGraph graph )
+	{
+		ConceptClassMapper<OntClass> ccmap = this.getConceptClassMapper ();
+		if ( ccmap instanceof OWLTopConceptClassMapper )
+		{
+			// If you have this mapper, you might need to populate it with the root OWL classes.
+			//
+			OWLTopConceptClassMapper owlTopMapper = (OWLTopConceptClassMapper) ccmap;
+			if ( owlTopMapper.getTopClasses () == null )
+				owlTopMapper.setTopClasses (
+					this.getRootsScanner ().scan ( source )
+					.collect ( Collectors.toSet () )
+			);
+		}
+		return super.map ( source, graph );
+	}
+
+	
 	/** 
 	 * Wraps the parent's corresponding method by checking if the input was {@link #isVisited(OntClass)} and 
 	 * by {@link #setVisited(OntClass, boolean) marking it as visited} before invoking

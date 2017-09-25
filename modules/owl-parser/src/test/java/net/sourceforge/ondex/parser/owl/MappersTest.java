@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -125,6 +126,8 @@ public class MappersTest
 	@Test
 	public void testConceptMapper ()
 	{
+		// This kind of initialisation is usually done by the OWLMapper automatically
+		this.ccmap.setTopClassIris ( this.topCls.getURI () );
 		ConceptClass cc = this.ccmap.map ( this.topCls, graph );
 		this.conceptMap.map ( this.ontCls, cc, graph );
 		

@@ -64,7 +64,7 @@ public class TOAxiomRelTest
 //			"Concept Class definition is wrong!", 
 //			cc.getDescription ().startsWith ( "A measurable or observable" ) 
 //		);
-		assertEquals ( "Concept Class ID is wrong!", "TO", cc.getId () );
+		assertEquals ( "Concept Class ID is wrong!", "TO_TERM", cc.getId () );
 		assertEquals ( "Concept Class label is wrong!",  "Trait Ontology Term", cc.getFullname () );
 		Assert.assertTrue ( 
 			"Concept Class definition is wrong!", 

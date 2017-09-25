@@ -1,9 +1,28 @@
 package net.sourceforge.ondex.parser.owl;
 
+import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
+
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.OWL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype;
 import net.sourceforge.ondex.parser.ConceptClassMapper;
+import net.sourceforge.ondex.parser.DecoratingMapper;
 import net.sourceforge.ondex.parser.DefaultConceptClassMapper;
 import net.sourceforge.ondex.parser.HoldingMapper;
 import net.sourceforge.ondex.parser.Mapper;
@@ -18,12 +37,83 @@ import net.sourceforge.ondex.parser.TextMapper;
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>
  *
  */
-public class OWLTopConceptClassMapper extends HoldingMapper<OntClass, ConceptClass>
+public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, ConceptClass>
   implements ConceptClassMapper<OntClass>
 {	
+	private Set<OntClass> topClasses = null;
+	private Map<OntClass, ConceptClass> cache = new HashMap<> ();
+	
+	private ConceptClassPrototype genericConceptClass = Utils.GENERIC_ONTOLOGY_CONCEPT_CLASS;
+	
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
+	
+	@Override
+	public ConceptClass map ( OntClass cls, ONDEXGraph graph )
+	{
+		OntClass topCls = this.getTopClass ( cls );
+		
+		if ( topCls == null ) 
+		{
+			log.debug ( "Assigning the generic concept class to {}", cls.getURI () );
+			return this.cache.computeIfAbsent ( 
+				cls.getOntModel ().getOntClass ( OWL.Thing.getURI () ), 
+				k -> CachedGraphWrapper.getInstance ( graph ).getConceptClass ( this.getGenericConceptClass () )
+			);
+		}
+		
+		return this.cache.computeIfAbsent ( topCls, c -> this.getMyBaseMapper ().map ( c, graph ) );
+	}
+
+	
+	private OntClass getTopClass ( OntClass cls )
+	{
+		if ( this.getTopClasses ().contains ( cls ) ) return cls;
+		if ( OWL.Thing.equals ( cls ) ) return null;
+		
+		for ( ExtendedIterator<OntClass> itr = cls.listSuperClasses ( true ); itr.hasNext (); )
+		{
+			OntClass result = this.getTopClass ( itr.next () );
+			if ( result != null ) return result;
+		}
+		return null;
+	}
+	
+	public Set<OntClass> getTopClasses ()
+	{
+		return topClasses;
+	}
+
+	public void setTopClasses ( Set<OntClass> topClasses )
+	{
+		this.topClasses = topClasses;
+	}
+	
+	public void setTopClassIris ( String... iris )
+	{
+		Set<OntClass> clss = new HashSet<> ();
+		OntModel model = ModelFactory.createOntologyModel ( OntModelSpec.OWL_MEM );
+		
+		if ( iris != null ) for ( String iri: iris)
+			clss.add ( model.createClass ( iri ) );
+		
+		this.setTopClasses ( clss );
+	}
+	
+		
 	public OWLTopConceptClassMapper ()
 	{
 		super ( new DefaultConceptClassMapper<> () );
+	}
+
+	public ConceptClassPrototype getGenericConceptClass ()
+	{
+		return genericConceptClass;
+	}
+
+	public void setGenericConceptClass ( ConceptClassPrototype genericConceptClass )
+	{
+		this.genericConceptClass = genericConceptClass;
 	}
 
 	@SuppressWarnings ( { "unchecked", "rawtypes" } )
