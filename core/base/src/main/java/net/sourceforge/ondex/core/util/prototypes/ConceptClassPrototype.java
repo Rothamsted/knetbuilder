@@ -21,16 +21,20 @@ public class ConceptClassPrototype extends DescribeablePrototype
 	
 	public ConceptClassPrototype ( String id, String fullName, String description, ConceptClassPrototype parentProto )
 	{
-		super ( id, fullName, description );
+		this ( id, fullName, description );
 		this.setParentPrototype ( parentProto );
 	}
 
 	public ConceptClassPrototype ( String id, String fullName, String description, ConceptClass parent )
 	{
-		super ( id, fullName, description );
+		this ( id, fullName, description );
 		this.setParent ( parent );
 	}
 
+	public ConceptClassPrototype ( String id, String fullName, String description )
+	{
+		super ( id, fullName, description );
+	}
 	
 	public ConceptClass getParent ()
 	{
