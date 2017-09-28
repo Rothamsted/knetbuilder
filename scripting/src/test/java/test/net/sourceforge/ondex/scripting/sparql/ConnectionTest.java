@@ -5,6 +5,7 @@ import java.net.URL;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -16,6 +17,7 @@ public class ConnectionTest {
     private Logger log = Logger.getLogger(ConnectionTest.class);
 
     @Test
+    @Ignore ( "The URL has gone and we're not using SPARQL at the moment." )
     public void test() throws Exception {
         log.info("connection test");
 
