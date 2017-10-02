@@ -41,7 +41,7 @@
 					<property name="scanner">
 						<bean class = "net.sourceforge.ondex.parser.owl.OWLSubClassScanner" />
 					</property>
-					<property name = "mapper" ref = "isaMapper" />
+					<property name = "mapper" ref = "isaInvertedMapper" />
 				</bean>
 			</list>
 		</property>
@@ -53,18 +53,18 @@
 
 	<!-- OBO/OWL class relations -->
 
-	<!-- We use the inverting mapper, because the base mapper goes from parent to child, while is-a has the 
-	     opposite direction -->					
-	<bean id = "isaMapper" class = "net.sourceforge.ondex.parser.InvertingConceptRelMapper">
-		<property name = "baseMapper">
-			<bean class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
-				<!-- Every relation created from this mapper has this relation type (the prototype just contains
-				     constants to instantiate the relation type -->
-				<property 
-					name ="relationTypePrototype" 
-				  value = "#{T( net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype ).IS_A_PROTOTYPE }"/>
-			</bean>
-		</property>
+	<!-- We use the inverting mapper, for those scanned/mapped/computed relations going from parent to child, 
+			 which obviously need that is-a is instantiated in the opposite direction. --> 
+	<bean id = "isaInvertedMapper" class = "net.sourceforge.ondex.parser.InvertingConceptRelMapper">
+		<property name = "baseMapper" ref = "isaMapper" />
+	</bean>
+
+	<bean id = "isaMapper" class = "net.sourceforge.ondex.parser.SimpleRelationMapper">
+		<!-- Every relation created from this mapper has this relation type (the prototype just contains
+		     constants to instantiate the relation type -->
+		<property 
+			name ="relationTypePrototype" 
+		  value = "#{T( net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype ).IS_A_PROTOTYPE }"/>
 	</bean>
 
 

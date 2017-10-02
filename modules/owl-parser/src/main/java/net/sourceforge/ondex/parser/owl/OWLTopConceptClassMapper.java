@@ -76,9 +76,11 @@ public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, Concept
 		.collect ( Collectors.toSet () );
 		
 		if ( parents.size () > 1 )
-			log.warn ( 
+			log.debug ( 
 				  "The class {} has multiple parents, you might get unexpected concept class mappings, consider using a single "
-				+ "constant concept class to represent all the terms of this ontology (using ConstantConceptClassMapper)" );
+				+ "constant concept class to represent all the terms of this ontology (using ConstantConceptClassMapper)",
+				cls.getURI ()
+		);
 
 		for ( OntClass parent: parents )
 		{
