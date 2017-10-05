@@ -35,7 +35,6 @@ public class TextMiningWfIT
 	@Test
 	public void testTextMiningWf ()
 	{
-		System.out.format ( "\n\n------- PROP ----- %s\n\n\n",  System.getProperty ( "maven.buildDirectory", "FUCK" ) );
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
 		String wfPath = mavenBuildPath + "test-classes/textmining_wf/";
 		MiniInvoker invoker = new MiniInvoker ();
