@@ -18,6 +18,7 @@ fi
 export TRNSF='/bin/cp --recursive --no-dereference --preserve --verbose'
 export TRNSF='/bin/cp -R -P -p -v'
 
+
 cd "$(dirname $0)" 
 cd target
 unzip owl-parser-*-bundle.zip

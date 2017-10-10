@@ -79,8 +79,7 @@ public class OWLParser extends ONDEXParser
 
 		ApplicationContext ctx = new FileSystemXmlApplicationContext ( springXmlPath );
 
-		// OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
-		OntModel model = ModelFactory.createOntologyModel ( OntModelSpec.OWL_MEM );
+		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
 		for ( String owlPath: owlInputPaths )
 		{
 			log.info ( "Loading file '{}'", owlPath );

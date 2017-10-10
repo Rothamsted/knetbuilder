@@ -12,7 +12,7 @@
     Various integration tests of ONDEX Mini workflows.
     TODO: maybe it will requires splitting into submodules in future. Keeping it simple for the moment.
   </description>
-  
+ 
   
   <dependencies>
 

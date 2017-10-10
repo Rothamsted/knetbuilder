@@ -30,9 +30,7 @@ import net.sourceforge.ondex.parser.Mapper;
 import net.sourceforge.ondex.parser.TextMapper;
 
 /**
- * Maps an OWL class that is on top of an ontology hierarchy. This is an {@link HoldingMapper}, since the initially
- * mapped class (a top-one) is retained for subsequent usage (typically, to assign the same ONDEX concept class
- * to all the concepts in the same root tree, as they are mapped from descendant classes).
+ * Maps an OWL class that is on top of an ontology hierarchy.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>3 Aug 2017</dd></dl>
@@ -42,7 +40,19 @@ public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, Concept
   implements ConceptClassMapper<OntClass>
 {	
 	private Set<OntClass> topClasses = null;
+	
+	/** 
+	 * Maps each class to its top concept class. This is cached to make the mapper performant. 
+	 * This also makes the mapper stateful, but usually a new instance is created for each new OWL file mapped.
+	 * 
+	 */ 
 	private Map<OntClass, ConceptClass> cache = new HashMap<> ();
+	
+	/**
+	 * Quick hack to report a messages once only. This is also stateful information, but see
+	 * above.
+	 */
+	private boolean singleInheritanceReported = false;
 	
 	private ConceptClassPrototype genericConceptClass = Utils.GENERIC_ONTOLOGY_CONCEPT_CLASS;
 	
@@ -76,11 +86,22 @@ public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, Concept
 		.collect ( Collectors.toSet () );
 		
 		if ( parents.size () > 1 )
-			log.debug ( 
-				  "The class {} has multiple parents, you might get unexpected concept class mappings, consider using a single "
+		{
+			String clsUri = cls.getURI ();
+			log.trace ( 
+				  "The class <{}> has multiple parents, you might get unexpected concept class mappings, consider using a single "
 				+ "constant concept class to represent all the terms of this ontology (using ConstantConceptClassMapper)",
-				cls.getURI ()
-		);
+				clsUri
+			);
+			if ( !this.singleInheritanceReported )
+				log.warn (
+					"The ontology has classes with multiple parents, (e.g., <{}>). you might get unexpected concept class "
+				+ "mappings, consider using a single constant concept class to represent all the terms of this ontology "
+				+ "(using ConstantConceptClassMapper)",
+				clsUri
+			);
+			this.singleInheritanceReported = true;
+		}
 
 		for ( OntClass parent: parents )
 		{
