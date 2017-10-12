@@ -21,15 +21,13 @@
  3. Check the folder structure looks like this
  ```
  -bash-4.1$ ls knetbuilder-folder/
-knetbuilder_tutorial_files.zip
-ondex-mini-1.0-20170228.230404-8-packaged-distro.zip
-ondex-mini-1.0-SNAPSHOT
+ondex-mini-1.2
 tutorial_files
 ```
 
- 4. Go to ondex-mini-1.0-SNAPSHOT and run a workflow:
+ 4. Go to the downloaded ondex-mini folder and run a workflow:
   ```
- cd ondex-mini-1.0-SNAPSHOT
+ cd ondex-mini-1.2
  ./runme.sh ../tutorial_files/Workflow/HumanDiseaseKNET.xml
  ```
 
