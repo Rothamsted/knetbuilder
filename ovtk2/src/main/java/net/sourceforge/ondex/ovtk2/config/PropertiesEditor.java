@@ -27,12 +27,12 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.ovtk2.util.CustomFileFilter;
-
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.codehaus.stax2.XMLStreamWriter2;
 
 import com.ctc.wstx.io.CharsetNames;
+
+import net.sourceforge.ondex.ovtk2.util.CustomFileFilter;
 
 /**
  * Simple GUI for editing JAVA Properties files.

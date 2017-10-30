@@ -17,10 +17,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
-import edu.uci.ics.jung.algorithms.layout.Layout;
 
 public class ConnectivityLayout extends OVTK2Layouter {
 	// #####FIELDS####

@@ -6,8 +6,6 @@ import java.net.URISyntaxException;
 
 import javax.swing.JOptionPane;
 
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.init.PluginRegistry;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.util.DesktopUtils;
 

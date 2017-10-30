@@ -5,16 +5,15 @@ import java.awt.Paint;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.ovtk2.config.Config;
-import net.sourceforge.ondex.ovtk2.graph.custom.MultiColorNodePaint;
-
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.ovtk2.graph.custom.MultiColorNodePaint;
 
 /**
  * Provides a transformation from a given ONDEXConcept to a Color.

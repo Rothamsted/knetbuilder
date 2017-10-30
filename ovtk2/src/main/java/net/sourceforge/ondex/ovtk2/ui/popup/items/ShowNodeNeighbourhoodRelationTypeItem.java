@@ -7,6 +7,9 @@ import java.util.Set;
 
 import javax.swing.JMenu;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
@@ -14,9 +17,6 @@ import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
 import net.sourceforge.ondex.ovtk2.ui.popup.EntityMenuItem;
 import net.sourceforge.ondex.ovtk2.util.LayoutNeighbours;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
 
 /**
  * Shows everything in the neighbourhood of this node for a certain concept

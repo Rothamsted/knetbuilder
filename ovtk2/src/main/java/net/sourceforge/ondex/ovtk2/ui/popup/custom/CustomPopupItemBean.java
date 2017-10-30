@@ -12,10 +12,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 
-import net.sourceforge.ondex.ovtk2.config.Config;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.clapper.util.io.DirectoryFilter;
+
+import net.sourceforge.ondex.ovtk2.config.Config;
 
 /**
  * This is a JavaBean representing a single custom popup item.

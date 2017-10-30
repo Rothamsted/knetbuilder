@@ -11,6 +11,9 @@ import java.util.Set;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -26,9 +29,6 @@ import net.sourceforge.ondex.ovtk2.ui.dialog.DialogSearchResult;
 import net.sourceforge.ondex.ovtk2.ui.toolbars.MenuGraphSearchBox.MetaDataWrapper;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.IntegerStringWrapper;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
 
 /**
  * Handles search box related action events.

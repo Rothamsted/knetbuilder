@@ -12,6 +12,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import edu.uci.ics.jung.algorithms.scoring.BetweennessCentrality;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
@@ -23,7 +24,6 @@ import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.ovtk2.util.OVTKProgressMonitor;
 import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.tools.threading.monitoring.IndeterminateProcessAdapter;
-import edu.uci.ics.jung.algorithms.scoring.BetweennessCentrality;
 
 public class EdgeBetweennessClusterAnnotator extends OVTK2Annotator implements
 		ActionListener {

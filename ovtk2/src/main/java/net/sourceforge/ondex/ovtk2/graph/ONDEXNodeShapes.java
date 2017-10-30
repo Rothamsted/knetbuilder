@@ -4,13 +4,13 @@ import java.awt.Shape;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.ovtk2.config.Config;
-import net.sourceforge.ondex.ovtk2.util.VertexShapeFactory;
-
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.ovtk2.util.VertexShapeFactory;
 
 /**
  * Provides a transformation from a given ONDEXConcept to a Shape.

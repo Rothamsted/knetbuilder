@@ -26,9 +26,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.xml.transform.TransformerException;
 
-import net.sourceforge.ondex.config.Config;
-
 import org.jdom.JDOMException;
+
+import net.sourceforge.ondex.config.Config;
 
 /**
  * @author lysenkoa

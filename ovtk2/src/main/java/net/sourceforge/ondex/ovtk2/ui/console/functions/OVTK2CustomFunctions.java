@@ -1,14 +1,11 @@
 package net.sourceforge.ondex.ovtk2.ui.console.functions;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Set;
 
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.RequiresGraph;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -23,7 +20,6 @@ import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.OVTKProgressMonitor;
 import net.sourceforge.ondex.ovtk2.util.PluginUtils;
 import net.sourceforge.ondex.scripting.FunctionException;
-import net.sourceforge.ondex.tools.DirUtils;
 import net.sourceforge.ondex.tools.threading.monitoring.SimpleMonitor;
 import net.sourceforge.ondex.workflow.engine.Engine;
 

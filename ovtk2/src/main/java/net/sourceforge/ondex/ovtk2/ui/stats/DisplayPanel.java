@@ -15,9 +15,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.sourceforge.ondex.ovtk2.config.Config;
-import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -26,6 +23,9 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.statistics.SimpleHistogramBin;
 import org.jfree.data.statistics.SimpleHistogramDataset;
 import org.jfree.ui.RectangleInsets;
+
+import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
 
 /**
  * this is the panel of the statistics module that displays the results of the

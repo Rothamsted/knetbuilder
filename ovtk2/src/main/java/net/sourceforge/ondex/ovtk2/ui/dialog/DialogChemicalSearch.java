@@ -33,6 +33,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.undo.StateEdit;
 
+import org.apache.log4j.Logger;
+
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -52,10 +55,6 @@ import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.IdLabel;
 import net.sourceforge.ondex.ovtk2.util.OVTKProgressMonitor;
 import net.sourceforge.ondex.tools.threading.monitoring.IndeterminateProcessAdapter;
-
-import org.apache.log4j.Logger;
-
-import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
  * Showing table for showing search results.

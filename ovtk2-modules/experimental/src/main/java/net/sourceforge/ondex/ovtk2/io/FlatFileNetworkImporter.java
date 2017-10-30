@@ -17,6 +17,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.SetMultimap;
+
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -36,10 +40,6 @@ import net.sourceforge.ondex.ovtk2.ui.console.VisualizationHandler;
 import net.sourceforge.ondex.ovtk2.ui.dialog.WelcomeDialog;
 import net.sourceforge.ondex.ovtk2.util.DesktopUtils;
 import net.sourceforge.ondex.tools.ondex.MdHelper;
-
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.SetMultimap;
 
 /**
  *

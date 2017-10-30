@@ -27,6 +27,7 @@ import javax.swing.event.InternalFrameListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import net.sourceforge.ondex.algorithm.entropy.ShannonEntropy;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -46,7 +47,6 @@ import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.VisualisationUtils;
 import net.sourceforge.ondex.ovtk2.util.listmodel.AttributeNameListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
-import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
  * Identifies all maximal cliques in a graph and ranks them according to their

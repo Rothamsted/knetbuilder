@@ -6,12 +6,12 @@ import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.cr
 
 import java.util.Set;
 
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.tools.subgraph.Subgraph;
-import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
  * Collection of functions to do with user interaction with the graph.

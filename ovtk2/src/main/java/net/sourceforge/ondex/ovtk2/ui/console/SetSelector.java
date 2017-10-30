@@ -37,7 +37,6 @@ import net.sourceforge.ondex.tools.functions.StandardFunctions;
 import net.sourceforge.ondex.tools.ondex.MdHelper;
 import net.sourceforge.ondex.tools.threading.monitoring.IndeterminateProcessAdapter;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
-import edu.uci.ics.jung.graph.Graph;
 
 /**
  * 

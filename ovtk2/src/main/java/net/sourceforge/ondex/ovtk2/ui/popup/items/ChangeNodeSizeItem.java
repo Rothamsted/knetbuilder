@@ -10,14 +10,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.commons.collections15.Transformer;
+
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXNodeShapes;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXNodeShapes.NodeShapeSelection;
 import net.sourceforge.ondex.ovtk2.ui.popup.EntityMenuItem;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
-
-import org.apache.commons.collections15.Transformer;
 
 /**
  * Changes the size of selected node(s)

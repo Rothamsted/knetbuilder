@@ -18,6 +18,11 @@ import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.XMLStreamReader2;
+
+import com.ctc.wstx.io.CharsetNames;
+
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.export.oxl.Export;
@@ -32,11 +37,6 @@ import net.sourceforge.ondex.parser.oxl.RelationParser;
 import net.sourceforge.ondex.parser.oxl.XmlParser;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
-
-import org.codehaus.stax2.XMLInputFactory2;
-import org.codehaus.stax2.XMLStreamReader2;
-
-import com.ctc.wstx.io.CharsetNames;
 
 /**
  * Importer for the OXL format.

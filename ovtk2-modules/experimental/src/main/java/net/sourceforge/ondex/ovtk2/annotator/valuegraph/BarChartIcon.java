@@ -9,8 +9,6 @@ import java.util.Map;
 
 import javax.swing.Icon;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
@@ -21,6 +19,8 @@ import org.jfree.chart.renderer.category.BarRenderer3D;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**
  * Draws the actual bar chart on an icon. Positive values are in red, negative

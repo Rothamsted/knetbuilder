@@ -3,11 +3,10 @@ package net.sourceforge.ondex.ovtk2.filter.subgraph;
 import java.awt.Color;
 import java.awt.Paint;
 
-import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaRelation;
-
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
+import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaRelation;
 
 /**
  * Provides a transformation from a given ONDEXMetaRelation to a Colour.

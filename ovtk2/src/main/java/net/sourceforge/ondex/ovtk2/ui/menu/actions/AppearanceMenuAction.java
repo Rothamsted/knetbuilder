@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import org.apache.commons.collections15.Transformer;
+
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXEdgeColors;
@@ -21,8 +23,6 @@ import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 import net.sourceforge.ondex.ovtk2.ui.mouse.OVTK2GraphMouse;
 import net.sourceforge.ondex.ovtk2.ui.mouse.OVTK2PickingMousePlugin;
 import net.sourceforge.ondex.ovtk2.util.AppearanceSynchronizer;
-
-import org.apache.commons.collections15.Transformer;
 
 /**
  * Listens to action events specific to the appearance menu.

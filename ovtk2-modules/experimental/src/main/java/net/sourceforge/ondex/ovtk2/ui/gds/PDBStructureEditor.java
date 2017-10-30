@@ -11,14 +11,14 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 
+import org.jmol.adapter.smarter.SmarterJmolAdapter;
+import org.jmol.api.JmolViewer;
+
 import net.sourceforge.ondex.config.OndexJAXBContextRegistry;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.tools.data.Protein3dStructure;
 import net.sourceforge.ondex.tools.data.Protein3dStructureHolder;
-
-import org.jmol.adapter.smarter.SmarterJmolAdapter;
-import org.jmol.api.JmolViewer;
 
 /**
  * GDSEditor for PDBStructure information. Displays the PDB structure in a JMOL.

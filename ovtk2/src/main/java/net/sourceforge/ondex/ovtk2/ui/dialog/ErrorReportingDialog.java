@@ -20,14 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
-import net.sourceforge.ondex.ovtk2.config.Config;
-import net.sourceforge.ondex.ovtk2.util.DesktopUtils;
-import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
-
 import org.codehaus.swizzle.jira.Issue;
 import org.codehaus.swizzle.jira.IssueType;
 import org.codehaus.swizzle.jira.Jira;
 import org.codehaus.swizzle.jira.Priority;
+
+import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.ovtk2.util.DesktopUtils;
+import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 
 /**
  * Send error reports to JIRA

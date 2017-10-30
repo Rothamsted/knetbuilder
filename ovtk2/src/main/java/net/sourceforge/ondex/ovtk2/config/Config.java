@@ -16,7 +16,6 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 
 /**
  * Class provides methods to access the program configuration.

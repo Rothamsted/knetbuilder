@@ -38,6 +38,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
+import org.apache.commons.collections15.Transformer;
+
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.ovtk2.annotator.OVTK2Annotator;
@@ -50,8 +52,6 @@ import net.sourceforge.ondex.ovtk2.util.AppearanceSynchronizer;
 import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.listmodel.AttributeNameListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
-
-import org.apache.commons.collections15.Transformer;
 
 /**
  * Renders time series or other values as little graphs on nodes.

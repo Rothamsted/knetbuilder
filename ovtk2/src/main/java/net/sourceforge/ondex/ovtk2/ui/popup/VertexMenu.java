@@ -30,6 +30,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -47,7 +48,6 @@ import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.LayoutNeighbours;
 import net.sourceforge.ondex.transformer.relationcollapser.ClusterCollapser;
 import net.sourceforge.ondex.validator.htmlaccessionlink.Condition;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 /**
  * Menu shown on right click on nodes.

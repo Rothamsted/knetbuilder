@@ -5,11 +5,11 @@ import java.awt.Paint;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**
  * Provides a transformation from a given ONDEXConcept to a Color.

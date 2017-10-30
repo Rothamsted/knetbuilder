@@ -23,13 +23,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.sourceforge.ondex.ovtk2.config.Config;
-import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
-import net.sourceforge.ondex.ovtk2.ui.popup.MetaConceptMenu;
-import net.sourceforge.ondex.ovtk2.ui.popup.MetaRelationMenu;
-import net.sourceforge.ondex.ovtk2.ui.popup.PopupVertexEdgeMenuMousePlugin;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
@@ -40,6 +33,13 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
+import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
+import net.sourceforge.ondex.ovtk2.ui.popup.MetaConceptMenu;
+import net.sourceforge.ondex.ovtk2.ui.popup.MetaRelationMenu;
+import net.sourceforge.ondex.ovtk2.ui.popup.PopupVertexEdgeMenuMousePlugin;
 
 public class ONDEXMetaGraphPanel extends JPanel implements ActionListener, ChangeListener, ComponentListener {
 

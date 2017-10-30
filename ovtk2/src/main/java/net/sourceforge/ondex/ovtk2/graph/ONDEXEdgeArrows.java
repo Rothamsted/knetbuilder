@@ -1,12 +1,11 @@
 package net.sourceforge.ondex.ovtk2.graph;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-
 import org.apache.commons.collections15.Predicate;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**
  * Provides a predicate whether or not to draw arrows at edges.

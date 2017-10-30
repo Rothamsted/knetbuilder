@@ -15,14 +15,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.ovtk2.config.Config;
-import net.sourceforge.ondex.ovtk2.filter.OVTK2Filter;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
-import net.sourceforge.ondex.ovtk2.util.AppearanceSynchronizer;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -34,6 +26,14 @@ import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.ovtk2.filter.OVTK2Filter;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
+import net.sourceforge.ondex.ovtk2.util.AppearanceSynchronizer;
 
 /**
  * Filter to select a region in a scatter plot of two attribute values against

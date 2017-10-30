@@ -3,10 +3,10 @@ package net.sourceforge.ondex.ovtk2.metagraph;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.apache.commons.collections15.Transformer;
+
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
-
-import org.apache.commons.collections15.Transformer;
 
 /**
  * Provides a transformation from a given ONDEXMetaRelation to a String as

@@ -32,6 +32,8 @@ import javax.swing.SpringLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.collections15.Transformer;
+
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -47,8 +49,6 @@ import net.sourceforge.ondex.ovtk2.util.AppearanceSynchronizer;
 import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.listmodel.AttributeNameListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
-
-import org.apache.commons.collections15.Transformer;
 
 /**
  * Annotator to define node size based on quantitative Attribute value

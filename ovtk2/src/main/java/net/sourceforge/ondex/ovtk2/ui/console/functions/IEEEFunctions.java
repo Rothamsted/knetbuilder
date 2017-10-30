@@ -24,6 +24,8 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.collections15.Transformer;
+
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.Number;
@@ -46,8 +48,6 @@ import net.sourceforge.ondex.ovtk2.graph.ONDEXNodeShapes;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.ovtk2.ui.console.OverviewWindow;
 import net.sourceforge.ondex.ovtk2.ui.console.SetSelector;
-
-import org.apache.commons.collections15.Transformer;
 
 /**
  * 

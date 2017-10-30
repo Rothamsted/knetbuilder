@@ -11,14 +11,14 @@ import java.util.zip.GZIPOutputStream;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.export.oxl.Export;
-import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
-import net.sourceforge.ondex.tools.ziptools.ZipEndings;
-
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.codehaus.stax2.XMLStreamWriter2;
 
 import com.ctc.wstx.io.CharsetNames;
+
+import net.sourceforge.ondex.export.oxl.Export;
+import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
+import net.sourceforge.ondex.tools.ziptools.ZipEndings;
 
 /**
  * Exporter for the OXL format.

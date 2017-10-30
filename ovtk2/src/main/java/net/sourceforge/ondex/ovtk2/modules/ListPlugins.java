@@ -8,10 +8,6 @@ import java.util.Set;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import net.sourceforge.ondex.event.ONDEXEvent;
-import net.sourceforge.ondex.event.type.UnspecifiedErrorEvent;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -21,6 +17,10 @@ import org.jdom.input.SAXBuilder;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+
+import net.sourceforge.ondex.event.ONDEXEvent;
+import net.sourceforge.ondex.event.type.UnspecifiedErrorEvent;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 
 /**
  * @author hindlem

@@ -3,12 +3,12 @@ package net.sourceforge.ondex.ovtk2.graph;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.RelationType;
-
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
+
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 
 /**
  * Provides a transformation from a given ONDEXRelation to a String as label.

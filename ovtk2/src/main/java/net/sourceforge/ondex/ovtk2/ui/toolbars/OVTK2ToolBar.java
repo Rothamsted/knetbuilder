@@ -23,11 +23,11 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.border.Border;
 
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.ui.menu.actions.ViewMenuAction;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 
 /**
  * Implements toolbar functionality of OVTK2.

@@ -5,6 +5,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -13,7 +14,6 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
-import edu.uci.ics.jung.algorithms.layout.Layout;
 
 /**
  * Layouter which places the nodes according to their Attribute graphicalX/Y.

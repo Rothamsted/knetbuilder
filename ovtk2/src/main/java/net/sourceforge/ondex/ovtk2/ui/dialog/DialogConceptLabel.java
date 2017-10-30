@@ -28,6 +28,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.xml.stream.XMLStreamException;
 
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.XMLOutputFactory2;
+import org.codehaus.stax2.XMLStreamReader2;
+import org.codehaus.stax2.XMLStreamWriter2;
+
+import com.ctc.wstx.io.CharsetNames;
+
+import edu.uci.ics.jung.visualization.renderers.Renderer;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.ovtk2.config.Config;
@@ -38,15 +46,6 @@ import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.xml.ConceptLabelXMLReader;
 import net.sourceforge.ondex.ovtk2.util.xml.ConceptLabelXMLWriter;
-
-import org.codehaus.stax2.XMLInputFactory2;
-import org.codehaus.stax2.XMLOutputFactory2;
-import org.codehaus.stax2.XMLStreamReader2;
-import org.codehaus.stax2.XMLStreamWriter2;
-
-import com.ctc.wstx.io.CharsetNames;
-
-import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /**
  * Dialog to configure combinations for concept labels.

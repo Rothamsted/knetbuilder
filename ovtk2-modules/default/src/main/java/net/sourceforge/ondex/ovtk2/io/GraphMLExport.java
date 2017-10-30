@@ -21,12 +21,6 @@ import java.util.Iterator;
 
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
-import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
-
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.codehaus.stax2.XMLStreamWriter2;
 
@@ -36,6 +30,11 @@ import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
+import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 
 /**
  * This class represents a GraphML export using Stax2 XML writer.

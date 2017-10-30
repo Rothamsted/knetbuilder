@@ -6,9 +6,9 @@ import java.util.Map;
 
 import javax.swing.Icon;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-
 import org.apache.commons.collections15.Transformer;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**
  * A node shape which displays data as a bar chart. This is the 2D data

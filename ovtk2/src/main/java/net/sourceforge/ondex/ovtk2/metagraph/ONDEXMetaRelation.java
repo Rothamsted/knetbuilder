@@ -3,12 +3,12 @@ package net.sourceforge.ondex.ovtk2.metagraph;
 import java.util.Iterator;
 import java.util.Set;
 
+import edu.uci.ics.jung.graph.util.Pair;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
-import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * Represents relations of a RelationType in the AbstractONDEXGraph.

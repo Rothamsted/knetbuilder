@@ -16,18 +16,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPopupMenu;
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.ovtk2.config.Config;
-import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
-import net.sourceforge.ondex.ovtk2.ui.popup.EdgeMenu;
-import net.sourceforge.ondex.ovtk2.ui.popup.PopupVertexEdgeMenuMousePlugin;
-import net.sourceforge.ondex.ovtk2.ui.popup.VertexMenu;
-import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
-import net.sourceforge.ondex.ovtk2.util.xml.AnnotationXMLReader;
-import net.sourceforge.ondex.ovtk2.util.xml.AnnotationXMLWriter;
-
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
@@ -49,6 +37,17 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ViewScalingControl;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
+import net.sourceforge.ondex.ovtk2.ui.popup.EdgeMenu;
+import net.sourceforge.ondex.ovtk2.ui.popup.PopupVertexEdgeMenuMousePlugin;
+import net.sourceforge.ondex.ovtk2.ui.popup.VertexMenu;
+import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
+import net.sourceforge.ondex.ovtk2.util.xml.AnnotationXMLReader;
+import net.sourceforge.ondex.ovtk2.util.xml.AnnotationXMLWriter;
 
 /**
  * Class extends JUNGs DefaultModalGraphMouse to be able to override the picking

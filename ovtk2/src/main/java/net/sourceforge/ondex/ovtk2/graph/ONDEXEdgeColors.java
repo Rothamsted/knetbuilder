@@ -5,16 +5,15 @@ import java.awt.Paint;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.ovtk2.config.Config;
-import net.sourceforge.ondex.ovtk2.graph.custom.MultiColorEdgePaint;
-
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.ovtk2.graph.custom.MultiColorEdgePaint;
 
 /**
  * Provides a transformation from a given ONDEXRelation to a Colour.

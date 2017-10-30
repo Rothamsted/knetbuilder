@@ -9,8 +9,6 @@ import java.util.Map;
 
 import javax.swing.Icon;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
@@ -20,6 +18,8 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.category.LineRenderer3D;
 import org.jfree.data.category.DefaultCategoryDataset;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**
  * Draws the actual line chart on an icon. Different colours used for different

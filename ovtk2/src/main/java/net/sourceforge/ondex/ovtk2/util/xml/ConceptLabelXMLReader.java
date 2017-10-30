@@ -6,11 +6,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.ovtk2.ui.dialog.DialogConceptLabel;
-
 import org.codehaus.stax2.XMLStreamReader2;
 
 import edu.uci.ics.jung.visualization.renderers.Renderer;
+import net.sourceforge.ondex.ovtk2.ui.dialog.DialogConceptLabel;
 
 /**
  * Translates XML settings for DialogConceptLabel.

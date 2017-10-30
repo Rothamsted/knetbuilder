@@ -44,6 +44,11 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.undo.StateEdit;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.map.LazyMap;
+
+import edu.uci.ics.jung.visualization.VisualizationModel;
 import net.sourceforge.ondex.algorithm.graphquery.GraphTraverser;
 import net.sourceforge.ondex.algorithm.graphquery.StateMachine;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.InvalidFileException;
@@ -64,15 +69,9 @@ import net.sourceforge.ondex.ovtk2.graph.ONDEXEdgeStrokes;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXNodeShapes;
 import net.sourceforge.ondex.ovtk2.graph.VisibilityUndo;
 import net.sourceforge.ondex.ovtk2.layout.GDSPositionLayout;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 import net.sourceforge.ondex.ovtk2.util.IntegerStringWrapper;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.map.LazyMap;
-
-import edu.uci.ics.jung.visualization.VisualizationModel;
 
 /**
  * Filter for the Poplar data.

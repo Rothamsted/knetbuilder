@@ -27,6 +27,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.collections15.Transformer;
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.XMLOutputFactory2;
+import org.codehaus.stax2.XMLStreamReader2;
+import org.codehaus.stax2.XMLStreamWriter2;
+
+import com.ctc.wstx.io.CharsetNames;
+
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaConcept;
 import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaConceptLabels;
@@ -41,14 +49,6 @@ import net.sourceforge.ondex.ovtk2.util.ImageWriterUtil;
 import net.sourceforge.ondex.ovtk2.util.RegisteredFrame;
 import net.sourceforge.ondex.ovtk2.util.xml.MetaGraphXMLReader;
 import net.sourceforge.ondex.ovtk2.util.xml.MetaGraphXMLWriter;
-
-import org.apache.commons.collections15.Transformer;
-import org.codehaus.stax2.XMLInputFactory2;
-import org.codehaus.stax2.XMLOutputFactory2;
-import org.codehaus.stax2.XMLStreamReader2;
-import org.codehaus.stax2.XMLStreamWriter2;
-
-import com.ctc.wstx.io.CharsetNames;
 
 /**
  * Represents a dynamic metagraph view on the graph of a OVTK2Viewer.

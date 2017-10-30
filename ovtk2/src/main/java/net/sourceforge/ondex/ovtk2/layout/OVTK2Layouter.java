@@ -2,12 +2,12 @@ package net.sourceforge.ondex.ovtk2.layout;
 
 import javax.swing.JPanel;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 
 /**
  * Abstract class for all OVTK2 Layouter.

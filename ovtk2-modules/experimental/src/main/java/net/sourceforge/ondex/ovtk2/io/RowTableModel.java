@@ -1,8 +1,10 @@
 package net.sourceforge.ondex.ovtk2.io;
 
-import java.lang.reflect.*;
-import java.util.*;
-import javax.swing.table.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.table.AbstractTableModel;
 
 /**
 Source: http://tips4java.wordpress.com

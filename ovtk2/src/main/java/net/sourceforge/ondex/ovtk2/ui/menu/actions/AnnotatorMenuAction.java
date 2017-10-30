@@ -21,10 +21,10 @@ import net.sourceforge.ondex.ovtk2.annotator.OVTK2AnnotatorInternalFrameListener
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.config.OVTK2PluginLoader;
 import net.sourceforge.ondex.ovtk2.config.PluginID;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop.Position;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2ResourceAssesor;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 import net.sourceforge.ondex.ovtk2.ui.RegisteredJInternalFrame;
 import net.sourceforge.ondex.ovtk2.ui.menu.CustomMouseListener;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;

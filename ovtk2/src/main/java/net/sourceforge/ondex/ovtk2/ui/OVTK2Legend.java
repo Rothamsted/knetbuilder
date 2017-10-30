@@ -41,6 +41,9 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
@@ -64,9 +67,6 @@ import net.sourceforge.ondex.ovtk2.ui.dialog.tablemodel.ColorTableEditor;
 import net.sourceforge.ondex.ovtk2.ui.dialog.tablemodel.MetaDataTableCellRenderer;
 import net.sourceforge.ondex.ovtk2.ui.dialog.tablemodel.ShapeComboBoxRenderer;
 import net.sourceforge.ondex.ovtk2.ui.dialog.tablemodel.ShapeTableCellRenderer;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
 
 /**
  * JInternalFrame, which provides an overview of the MetaData currently

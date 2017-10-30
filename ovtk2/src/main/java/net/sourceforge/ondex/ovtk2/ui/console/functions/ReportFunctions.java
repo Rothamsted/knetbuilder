@@ -41,6 +41,12 @@ import java.util.regex.Pattern;
 
 import javax.swing.JColorChooser;
 
+import org.apache.commons.collections15.Transformer;
+
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
+import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -60,13 +66,6 @@ import net.sourceforge.ondex.ovtk2.reusable_functions.DistinctColourMaker;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.tools.ondex.MdHelper;
-
-import org.apache.commons.collections15.Transformer;
-
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.picking.PickedState;
-import edu.uci.ics.jung.visualization.renderers.Renderer;
-import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
 
 /**
  * To be sorted, do not use.

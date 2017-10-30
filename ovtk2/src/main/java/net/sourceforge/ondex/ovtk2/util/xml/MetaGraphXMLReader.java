@@ -5,13 +5,12 @@ import java.awt.geom.Point2D;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaConcept;
-import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaRelation;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2MetaGraph;
-
 import org.codehaus.stax2.XMLStreamReader2;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaConcept;
+import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaRelation;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2MetaGraph;
 
 /**
  * Translates XML settings for MetaGraph appearance.

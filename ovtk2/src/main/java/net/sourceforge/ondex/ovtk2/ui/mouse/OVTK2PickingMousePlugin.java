@@ -26,14 +26,6 @@ import javax.swing.JComponent;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.ovtk2.ui.gds.AttributePanel;
-import net.sourceforge.ondex.ovtk2.ui.popup.VertexMenu;
-import net.sourceforge.ondex.tools.data.ChemicalStructure;
-
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
@@ -41,6 +33,13 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.ovtk2.ui.gds.AttributePanel;
+import net.sourceforge.ondex.ovtk2.ui.popup.VertexMenu;
+import net.sourceforge.ondex.tools.data.ChemicalStructure;
 
 /**
  * Realises the change in cursor while in picking mode.

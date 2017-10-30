@@ -14,13 +14,13 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.TitledBorder;
 
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaConcept;
 import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaGraph;
 import net.sourceforge.ondex.ovtk2.metagraph.ONDEXMetaRelation;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 public class MetaRelationMenu extends JPopupMenu {
 

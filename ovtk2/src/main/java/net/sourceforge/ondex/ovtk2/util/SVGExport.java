@@ -18,11 +18,6 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
-
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.batik.svggen.SVGGraphics2DIOException;
@@ -42,6 +37,10 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 
 /**
  * Exports images in the following formats (via the SVG):svg, jpg, png, pdf, ps,

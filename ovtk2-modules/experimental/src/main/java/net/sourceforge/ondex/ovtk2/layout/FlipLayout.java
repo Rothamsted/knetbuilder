@@ -7,10 +7,10 @@ import java.util.HashSet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
-import edu.uci.ics.jung.algorithms.layout.Layout;
 
 /**
  * Vertically flips the selected nodes.

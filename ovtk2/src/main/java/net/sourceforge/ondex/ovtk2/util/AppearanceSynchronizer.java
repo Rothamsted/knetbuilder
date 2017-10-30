@@ -15,6 +15,11 @@ import java.util.Set;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.map.LazyMap;
+
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -36,12 +41,6 @@ import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.ovtk2.ui.dialog.DialogConceptLabel;
 import net.sourceforge.ondex.ovtk2.ui.menu.actions.AppearanceMenuAction;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.map.LazyMap;
-
-import edu.uci.ics.jung.algorithms.layout.Layout;
 
 /**
  * Provides methods for storing and retrieving graphical attributes of the graph

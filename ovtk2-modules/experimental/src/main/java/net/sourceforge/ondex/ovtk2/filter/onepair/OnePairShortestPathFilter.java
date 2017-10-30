@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.undo.StateEdit;
 
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -40,7 +41,6 @@ import net.sourceforge.ondex.ovtk2.util.listmodel.ConceptListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
 import net.sourceforge.ondex.tools.threading.monitoring.MonitoringToolKit;
 import net.sourceforge.ondex.tools.threading.monitoring.SimpleMonitor;
-import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
  * Filter to change the visibility according to shortest paths present in graph.

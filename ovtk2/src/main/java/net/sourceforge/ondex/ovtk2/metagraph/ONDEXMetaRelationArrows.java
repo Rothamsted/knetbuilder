@@ -1,11 +1,10 @@
 package net.sourceforge.ondex.ovtk2.metagraph;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
-
 import org.apache.commons.collections15.Predicate;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;
+import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
  * Provides a prediate whether or not to draw arrows at edges.

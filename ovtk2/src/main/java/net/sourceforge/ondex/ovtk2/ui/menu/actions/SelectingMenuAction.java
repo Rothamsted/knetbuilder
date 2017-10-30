@@ -3,14 +3,14 @@ package net.sourceforge.ondex.ovtk2.ui.menu.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.ovtk2.graph.ONDEXJUNGGraph;
-import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2ResourceAssesor;
+import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 import net.sourceforge.ondex.ovtk2.ui.toolbars.OVTK2ToolBar;
-import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
  * Listens to action events specific to the selecting menu.

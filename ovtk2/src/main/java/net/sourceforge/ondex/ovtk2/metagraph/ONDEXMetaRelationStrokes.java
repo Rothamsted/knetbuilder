@@ -3,9 +3,9 @@ package net.sourceforge.ondex.ovtk2.metagraph;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
-
 import org.apache.commons.collections15.Transformer;
+
+import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
  * Provides a transformation from a given ONDEXMetaRelation to a edge stroke.

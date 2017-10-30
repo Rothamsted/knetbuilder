@@ -1,17 +1,5 @@
 package net.sourceforge.ondex.ovtk2.ui.popup.items;
 
-import jalview.bin.Cache;
-import jalview.datamodel.Alignment;
-import jalview.gui.AlignFrame;
-import jalview.gui.Desktop;
-import jalview.io.AppletFormatAdapter;
-import jalview.io.FastaFile;
-import jalview.jbgui.GCutAndPasteTransfer;
-import jalview.jbgui.GPCAPanel;
-import jalview.jbgui.GStructureViewer;
-import jalview.jbgui.GTreePanel;
-import jalview.ws.jws1.Discoverer;
-
 import java.awt.Component;
 import java.awt.event.ComponentListener;
 import java.awt.event.ContainerEvent;
@@ -23,6 +11,17 @@ import java.io.IOException;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
+import jalview.bin.Cache;
+import jalview.datamodel.Alignment;
+import jalview.gui.AlignFrame;
+import jalview.gui.Desktop;
+import jalview.io.AppletFormatAdapter;
+import jalview.io.FastaFile;
+import jalview.jbgui.GCutAndPasteTransfer;
+import jalview.jbgui.GPCAPanel;
+import jalview.jbgui.GStructureViewer;
+import jalview.jbgui.GTreePanel;
+import jalview.ws.jws1.Discoverer;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptName;

@@ -5,11 +5,11 @@ import java.awt.Stroke;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections15.Transformer;
+
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.ovtk2.config.Config;
-
-import org.apache.commons.collections15.Transformer;
 
 /**
  * Provides a transformation from a given ONDEXRelation to a edge stroke.

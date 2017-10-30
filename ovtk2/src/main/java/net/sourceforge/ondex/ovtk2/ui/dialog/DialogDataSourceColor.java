@@ -18,8 +18,8 @@ import javax.swing.table.TableColumn;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Dialog;
 import net.sourceforge.ondex.ovtk2.ui.dialog.tablemodel.ColorTableCellRenderer;
-import net.sourceforge.ondex.ovtk2.ui.dialog.tablemodel.ColorTableModel;
 import net.sourceforge.ondex.ovtk2.ui.dialog.tablemodel.ColorTableEditor;
+import net.sourceforge.ondex.ovtk2.ui.dialog.tablemodel.ColorTableModel;
 import net.sourceforge.ondex.ovtk2.util.DeleteCellEditor;
 
 /**
