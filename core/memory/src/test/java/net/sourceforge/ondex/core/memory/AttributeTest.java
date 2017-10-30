@@ -1,15 +1,15 @@
 package net.sourceforge.ondex.core.memory;
 
+import org.junit.Test;
+
 import junit.framework.TestCase;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-
-import org.junit.Test;
 
 /**
  * @author hindlem

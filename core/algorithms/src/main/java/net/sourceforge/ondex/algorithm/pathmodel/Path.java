@@ -1,11 +1,11 @@
 package net.sourceforge.ondex.algorithm.pathmodel;
 
+import java.util.List;
+import java.util.Set;
+
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * An interface for defining routes through a graph, useful for many algorithms

@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.algorithm.graphquery.pathrank;
 
+import java.util.Set;
+
 import net.sourceforge.ondex.algorithm.graphquery.AttributeFunctions;
 import net.sourceforge.ondex.algorithm.graphquery.State;
 import net.sourceforge.ondex.algorithm.graphquery.StateMachine;
@@ -8,8 +10,6 @@ import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
-
-import java.util.Set;
 
 /**
  * Ranking on numerical attributes of concepts derived from state

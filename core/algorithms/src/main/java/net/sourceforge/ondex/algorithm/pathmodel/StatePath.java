@@ -1,11 +1,11 @@
 package net.sourceforge.ondex.algorithm.pathmodel;
 
+import java.util.Set;
+
 import net.sourceforge.ondex.algorithm.graphquery.State;
 import net.sourceforge.ondex.algorithm.graphquery.StateMachineComponent;
 import net.sourceforge.ondex.algorithm.graphquery.Transition;
 import net.sourceforge.ondex.core.ONDEXEntity;
-
-import java.util.Set;
 
 /**
  * Defines a methods for accessing a State Path.

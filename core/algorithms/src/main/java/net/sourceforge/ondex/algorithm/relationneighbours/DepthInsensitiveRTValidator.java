@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 
 /**
  * A validator for registering valid relation types/ or type sets that will be

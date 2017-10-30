@@ -1,5 +1,8 @@
 package net.sourceforge.ondex.workflow.engine;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.UUID;
+
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -10,9 +13,6 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
 import net.sourceforge.ondex.workflow.model.PluginAndArgs;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.UUID;
 /**
  * @author lysenkoa
  * 

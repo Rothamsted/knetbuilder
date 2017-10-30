@@ -1,9 +1,13 @@
 package net.sourceforge.ondex.algorithm.relationneighbours;
 
-import net.sourceforge.ondex.core.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 
 /**
  * A validator for registering valid relation types that will be

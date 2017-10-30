@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.algorithm.graphquery.pathrank;
 
+import java.util.Comparator;
+
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.IncorrectAttributeValueType;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.UnrankableRouteException;
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXGraph;
-
-import java.util.Comparator;
 
 /**
  * @author hindlem

@@ -1,11 +1,10 @@
 package net.sourceforge.ondex.init;
 
-import net.sourceforge.ondex.*;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.workflow.engine.PluginProcessor;
-import net.sourceforge.ondex.workflow.engine.Processor;
-import net.sourceforge.ondex.workflow.engine.ResourcePool;
-import net.sourceforge.ondex.workflow.model.PluginAndArgs;
+import static junit.framework.Assert.assertEquals;
+
+import java.util.Collections;
+import java.util.UUID;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -13,10 +12,19 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Collections;
-import java.util.UUID;
-
-import static junit.framework.Assert.assertEquals;
+import net.sourceforge.ondex.DummyExport;
+import net.sourceforge.ondex.DummyFilter;
+import net.sourceforge.ondex.DummyMapping;
+import net.sourceforge.ondex.DummyParser;
+import net.sourceforge.ondex.DummyProducer;
+import net.sourceforge.ondex.DummyTransformer;
+import net.sourceforge.ondex.ONDEXPlugin;
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.workflow.engine.PluginProcessor;
+import net.sourceforge.ondex.workflow.engine.Processor;
+import net.sourceforge.ondex.workflow.engine.ResourcePool;
+import net.sourceforge.ondex.workflow.model.PluginAndArgs;
 
 /**
  * Test the functionality of PluginProcessor.

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.BitSet;
 import java.util.Set;
 
+import org.apache.lucene.search.Query;
+
 import junit.framework.TestCase;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -16,8 +18,6 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.tools.DirUtils;
-
-import org.apache.lucene.search.Query;
 
 public class TestLuceneEnv extends TestCase {
 

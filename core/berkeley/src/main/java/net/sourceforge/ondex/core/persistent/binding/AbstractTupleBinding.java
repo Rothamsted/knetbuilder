@@ -1,13 +1,14 @@
 package net.sourceforge.ondex.core.persistent.binding;
 
+import java.io.IOException;
+
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
+
 import net.sourceforge.ondex.core.persistent.BerkeleyEnv;
 import net.sourceforge.ondex.core.persistent.BerkeleySerializable;
 import net.sourceforge.ondex.core.persistent.Persistence;
-
-import java.io.IOException;
 
 public class AbstractTupleBinding<T extends BerkeleySerializable> extends
         TupleBinding<T>

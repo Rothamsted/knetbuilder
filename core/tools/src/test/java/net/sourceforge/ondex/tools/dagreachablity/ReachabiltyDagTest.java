@@ -4,6 +4,9 @@
 package net.sourceforge.ondex.tools.dagreachablity;
 
 
+import org.junit.After;
+import org.junit.Before;
+
 import junit.framework.TestCase;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -11,9 +14,6 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-
-import org.junit.After;
-import org.junit.Before;
 
 /**
  * @author hindlem

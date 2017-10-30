@@ -4,22 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
-
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.init.PluginRegistry;
-import net.sourceforge.ondex.workflow.engine.BasicJobImpl;
-import net.sourceforge.ondex.workflow.engine.ResourcePool;
-import net.sourceforge.ondex.workflow.model.WorkflowDescription;
-import net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO;
-import net.sourceforge.ondex.workflow.model.WorkflowTask;
-import net.sourceforge.ondex.workflow.validation.ErrorReport;
-import net.sourceforge.ondex.workflow.validation.PluginValidator;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -33,6 +20,16 @@ import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+
+import net.sourceforge.ondex.config.Config;
+import net.sourceforge.ondex.init.PluginRegistry;
+import net.sourceforge.ondex.workflow.engine.BasicJobImpl;
+import net.sourceforge.ondex.workflow.engine.ResourcePool;
+import net.sourceforge.ondex.workflow.model.WorkflowDescription;
+import net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO;
+import net.sourceforge.ondex.workflow.model.WorkflowTask;
+import net.sourceforge.ondex.workflow.validation.ErrorReport;
+import net.sourceforge.ondex.workflow.validation.PluginValidator;
 
 /**
  * The main entry point for running workflows

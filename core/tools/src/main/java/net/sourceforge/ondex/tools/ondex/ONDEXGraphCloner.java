@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;

@@ -3,7 +3,11 @@ package net.sourceforge.ondex.algorithm.graphquery;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.InvalidNumericalComparisonException;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.InvalidParamiterException;
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 
 /**
  * This is an example class to show how you can extend Transition objects in the state machine

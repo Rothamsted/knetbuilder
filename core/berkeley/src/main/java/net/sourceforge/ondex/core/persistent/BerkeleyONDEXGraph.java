@@ -11,6 +11,14 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Set;
 
+import com.sleepycat.je.Cursor;
+import com.sleepycat.je.CursorConfig;
+import com.sleepycat.je.Database;
+import com.sleepycat.je.DatabaseEntry;
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
+
 import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -34,14 +42,6 @@ import net.sourceforge.ondex.exception.type.DataLossException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.exception.type.RetrievalException;
 import net.sourceforge.ondex.exception.type.StorageException;
-
-import com.sleepycat.je.Cursor;
-import com.sleepycat.je.CursorConfig;
-import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseEntry;
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.je.LockMode;
-import com.sleepycat.je.OperationStatus;
 
 /**
  * This class represents a persistent implementation of the AbstractONDEXGraph.

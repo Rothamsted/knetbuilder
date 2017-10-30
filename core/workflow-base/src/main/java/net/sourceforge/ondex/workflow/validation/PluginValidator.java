@@ -1,19 +1,28 @@
 package net.sourceforge.ondex.workflow.validation;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.config.ValidatorRegistry;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.workflow.model.*;
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
+import net.sourceforge.ondex.workflow.model.PluginAndArgs;
+import net.sourceforge.ondex.workflow.model.WorkflowDescriptionConf;
+import net.sourceforge.ondex.workflow.model.WorkflowTask;
 
 /**
  * Validates all input arguments for workflow

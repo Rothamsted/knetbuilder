@@ -1,12 +1,12 @@
 package net.sourceforge.ondex;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.init.ArgumentDescription;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
-
-import java.util.Collection;
-import java.util.Collections;
 
 /**
 * Created by IntelliJ IDEA.

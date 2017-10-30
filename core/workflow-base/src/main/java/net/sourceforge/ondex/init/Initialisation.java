@@ -12,6 +12,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.codehaus.stax2.XMLInputFactory2;
+import org.xml.sax.SAXException;
+
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.event.ONDEXListener;
 import net.sourceforge.ondex.exception.type.PluginException;
@@ -20,9 +23,6 @@ import net.sourceforge.ondex.workflow.engine.ResourcePool;
 import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
 import net.sourceforge.ondex.workflow.model.WorkflowDescription;
 import net.sourceforge.ondex.workflow.model.WorkflowTask;
-
-import org.codehaus.stax2.XMLInputFactory2;
-import org.xml.sax.SAXException;
 
 /**
  * This class parses initial meta data from the ondexmetadata.xml.

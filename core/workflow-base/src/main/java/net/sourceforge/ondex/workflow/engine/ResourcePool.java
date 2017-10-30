@@ -1,6 +1,10 @@
 package net.sourceforge.ondex.workflow.engine;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Implements a store for the shared Objects that can be passed between

@@ -1,14 +1,15 @@
 package net.sourceforge.ondex.core.persistent.binding;
 
-import com.sleepycat.je.Cursor;
-import org.apache.log4j.Logger;
-
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import org.apache.log4j.Logger;
+
+import com.sleepycat.je.Cursor;
 
 /**
  * Management of berkeley cursors.

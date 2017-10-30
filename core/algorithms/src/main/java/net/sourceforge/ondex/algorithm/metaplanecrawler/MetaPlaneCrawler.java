@@ -1,8 +1,15 @@
 package net.sourceforge.ondex.algorithm.metaplanecrawler;
 
-import net.sourceforge.ondex.core.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Vector;
 
-import java.util.*;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**
  * @author jweile

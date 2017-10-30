@@ -1,5 +1,13 @@
 package net.sourceforge.ondex.core.persistent;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.base.AbstractONDEXGraph;
 import net.sourceforge.ondex.core.base.ConceptNameImpl;
@@ -9,8 +17,6 @@ import net.sourceforge.ondex.event.type.DeserialisationFailedEvent;
 import net.sourceforge.ondex.event.type.SerialisationFailedEvent;
 import net.sourceforge.ondex.exception.type.RetrievalException;
 import net.sourceforge.ondex.exception.type.StorageException;
-
-import java.io.*;
 
 public class BerkeleyConceptName extends ConceptNameImpl implements Updatable, BerkeleySerializable {
 

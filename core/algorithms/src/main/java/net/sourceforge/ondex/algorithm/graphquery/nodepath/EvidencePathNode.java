@@ -1,13 +1,17 @@
 package net.sourceforge.ondex.algorithm.graphquery.nodepath;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import net.sourceforge.ondex.algorithm.graphquery.State;
 import net.sourceforge.ondex.algorithm.graphquery.StateMachineComponent;
 import net.sourceforge.ondex.algorithm.graphquery.Transition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
-
-import java.util.*;
 
 /**
  * @author hindlem

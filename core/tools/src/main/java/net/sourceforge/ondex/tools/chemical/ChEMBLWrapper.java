@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.tools.chemical;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -8,10 +12,6 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.tools.MetaDataUtil;
 import net.sourceforge.ondex.tools.data.ChemicalStructure;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Provides XML parsing functions to extract Ondex concepts from ChEMBL web

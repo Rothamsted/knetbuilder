@@ -1,9 +1,13 @@
 package net.sourceforge.ondex.algorithm.graphquery;
 
-import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
-import net.sourceforge.ondex.core.*;
-
 import java.util.Arrays;
+
+import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**
  * Allows only certain values for Attribute to be allowed

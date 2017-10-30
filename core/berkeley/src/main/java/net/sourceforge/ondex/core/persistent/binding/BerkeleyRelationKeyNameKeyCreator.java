@@ -4,6 +4,7 @@ import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.SecondaryDatabase;
 import com.sleepycat.je.SecondaryKeyCreator;
+
 import net.sourceforge.ondex.core.persistent.BerkeleyEnv;
 import net.sourceforge.ondex.core.persistent.BerkeleyRelationKey;
 import net.sourceforge.ondex.core.persistent.BerkeleyRelationKeyName;

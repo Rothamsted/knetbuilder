@@ -14,6 +14,11 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.DocErrorReporter;
+import com.sun.javadoc.RootDoc;
+import com.sun.javadoc.Tag;
+
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
@@ -26,11 +31,6 @@ import net.sourceforge.ondex.annotations.metadata.RelationTypeRequired;
 import net.sourceforge.ondex.init.PluginType;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.DocErrorReporter;
-import com.sun.javadoc.RootDoc;
-import com.sun.javadoc.Tag;
 
 /**
  * @author hindlem

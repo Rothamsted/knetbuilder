@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.BidiMap;
+import org.apache.commons.collections15.bidimap.DualHashBidiMap;
+
 import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -22,9 +25,6 @@ import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.ONDEXListener;
 import net.sourceforge.ondex.event.type.DuplicatedEntryEvent;
 import net.sourceforge.ondex.event.type.EventType;
-
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.bidimap.DualHashBidiMap;
 
 /**
  * This class represents a pure memory based implementation of the abstract

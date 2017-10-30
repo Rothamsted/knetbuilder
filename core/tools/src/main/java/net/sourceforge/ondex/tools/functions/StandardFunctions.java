@@ -24,6 +24,9 @@ import java.util.TreeMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -39,9 +42,6 @@ import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.tools.subgraph.Subgraph;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
 
 /**
  * Useful reusable functions

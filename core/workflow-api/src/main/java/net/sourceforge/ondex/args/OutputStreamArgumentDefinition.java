@@ -1,14 +1,14 @@
 package net.sourceforge.ondex.args;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipOutputStream;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
 
 /**
  * ArgumentDefinition for an output stream.

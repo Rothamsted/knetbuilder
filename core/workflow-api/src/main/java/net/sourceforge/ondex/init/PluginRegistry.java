@@ -3,12 +3,10 @@ package net.sourceforge.ondex.init;
 import java.beans.XMLEncoder;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,11 +31,6 @@ import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.annotations.Status;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 import org.clapper.util.classutil.AbstractClassFilter;
@@ -53,6 +46,11 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.SAXBuilder;
+
+import net.sourceforge.ondex.ONDEXPlugin;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.validator.AbstractONDEXValidator;
 
 /**
  * @author lysenkoa

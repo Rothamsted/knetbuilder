@@ -2,10 +2,10 @@ package net.sourceforge.ondex.logging;
 
 import javax.swing.event.EventListenerList;
 
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.event.ONDEXEvent;
 import net.sourceforge.ondex.event.ONDEXListener;
-
-import org.apache.log4j.Logger;
 
 /**
  * 

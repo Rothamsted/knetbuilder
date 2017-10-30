@@ -1,16 +1,22 @@
 package net.sourceforge.ondex.core.persistent;
 
-import com.sleepycat.je.*;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import com.sleepycat.je.Cursor;
+import com.sleepycat.je.CursorConfig;
+import com.sleepycat.je.DatabaseEntry;
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
+
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.base.AbstractMetaData;
 import net.sourceforge.ondex.core.base.AbstractONDEXEntity;
 import net.sourceforge.ondex.core.util.UpdateListener;
 import net.sourceforge.ondex.event.type.DatabaseErrorEvent;
-
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * Berkeley implementation of the Set.

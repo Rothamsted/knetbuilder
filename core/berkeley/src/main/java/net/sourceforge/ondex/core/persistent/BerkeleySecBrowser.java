@@ -4,6 +4,14 @@ import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import com.sleepycat.je.Cursor;
+import com.sleepycat.je.CursorConfig;
+import com.sleepycat.je.Database;
+import com.sleepycat.je.DatabaseEntry;
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
+
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptName;
@@ -12,14 +20,6 @@ import net.sourceforge.ondex.core.base.RelationAttribute;
 import net.sourceforge.ondex.core.util.UpdateListener;
 import net.sourceforge.ondex.event.type.DatabaseErrorEvent;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
-
-import com.sleepycat.je.Cursor;
-import com.sleepycat.je.CursorConfig;
-import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseEntry;
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.je.LockMode;
-import com.sleepycat.je.OperationStatus;
 
 /**
  * Berkeley implementation of the Set.

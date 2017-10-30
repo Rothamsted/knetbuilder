@@ -1,21 +1,22 @@
 package net.sourceforge.ondex.workflow.validation;
 
-import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginType;
-import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
-import net.sourceforge.ondex.workflow.model.WorkflowTask;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Before;
+import org.junit.Test;
+
+import net.sourceforge.ondex.exception.type.PluginConfigurationException;
+import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.init.PluginDescription;
+import net.sourceforge.ondex.init.PluginType;
+import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
+import net.sourceforge.ondex.workflow.model.WorkflowTask;
 
 /**
  * Check that PluginValidator is working as expected.

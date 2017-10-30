@@ -1,17 +1,18 @@
 package net.sourceforge.ondex.algorithm.pathmodel;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import net.sourceforge.ondex.algorithm.graphquery.State;
 import net.sourceforge.ondex.algorithm.graphquery.StateMachineComponent;
 import net.sourceforge.ondex.algorithm.graphquery.Transition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A more defined and enriched Route model than SimpleRoute

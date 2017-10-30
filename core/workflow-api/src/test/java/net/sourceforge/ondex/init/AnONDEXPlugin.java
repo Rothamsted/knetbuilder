@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.init;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-
-import java.util.Collection;
-import java.util.Collections;
 import net.sourceforge.ondex.event.ONDEXListener;
 
 public class AnONDEXPlugin implements ONDEXPlugin

@@ -1,11 +1,11 @@
 package net.sourceforge.ondex.args;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
 
 /**
  * ArgumentDefinition for a Number within a range. Works with AtomicInteger, AtomicLong, BigDecimal, BigInteger, Byte, Double, Float, Integer, Long, and Short.

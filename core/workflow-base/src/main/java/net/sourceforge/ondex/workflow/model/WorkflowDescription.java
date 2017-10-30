@@ -1,16 +1,20 @@
 package net.sourceforge.ondex.workflow.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
+
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.init.ArgumentDescription;
 import net.sourceforge.ondex.workflow.engine.OndexJob;
 import net.sourceforge.ondex.workflow.engine.Processor;
 import net.sourceforge.ondex.workflow.engine.Processor.Argument;
 import net.sourceforge.ondex.workflow.model.WorkflowDescriptionConf.PluginArgMaker;
-
-import org.apache.log4j.Logger;
-
-import java.util.*;
-import java.util.Map.Entry;
 
 public class WorkflowDescription {
     private static final Logger LOG = Logger.getLogger(WorkflowDescription.class);

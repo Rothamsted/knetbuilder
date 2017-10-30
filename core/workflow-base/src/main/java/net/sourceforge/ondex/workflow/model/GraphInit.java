@@ -1,9 +1,9 @@
 package net.sourceforge.ondex.workflow.model;
 
-import net.sourceforge.ondex.workflow.exceptions.ReplicatedValueException;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import net.sourceforge.ondex.workflow.exceptions.ReplicatedValueException;
 
 /**
  * @author hindlem

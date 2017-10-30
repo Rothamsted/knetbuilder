@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.algorithm.relationneighbours;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**
  * Allows the creation of a tree structure by adding child validators which are treated with the and boolean operation

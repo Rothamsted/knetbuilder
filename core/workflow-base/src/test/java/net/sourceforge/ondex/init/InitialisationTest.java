@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.init;
 
-import org.junit.Test;
-import org.xml.sax.SAXException;
+import static junit.framework.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
-import static junit.framework.Assert.assertTrue;
+import org.junit.Test;
+import org.xml.sax.SAXException;
 
 /**
  * Test key aspects of the Initialisation class.

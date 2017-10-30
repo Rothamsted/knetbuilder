@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.workflow.model;
 
-import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.init.PluginDescription;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import net.sourceforge.ondex.exception.type.PluginConfigurationException;
+import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.init.PluginDescription;
 
 /**
  * This class stores information about the plug-in to be executed as part of the

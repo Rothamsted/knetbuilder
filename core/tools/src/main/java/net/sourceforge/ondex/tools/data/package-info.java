@@ -4,7 +4,8 @@
 @AnnotationForRuntime
 package net.sourceforge.ondex.tools.data;
 
-import java.lang.annotation.*; 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy; 
 
 @Retention(RetentionPolicy.RUNTIME)
 @interface AnnotationForRuntime {

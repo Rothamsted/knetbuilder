@@ -1,13 +1,28 @@
 package net.sourceforge.ondex.tools.dagreachablity;
 
-import net.sourceforge.ondex.algorithm.graphquery.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.sourceforge.ondex.algorithm.graphquery.ConceptLinkedState;
+import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition;
 import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition.EdgeTreatment;
+import net.sourceforge.ondex.algorithm.graphquery.GraphTraverser;
+import net.sourceforge.ondex.algorithm.graphquery.State;
+import net.sourceforge.ondex.algorithm.graphquery.StateMachine;
+import net.sourceforge.ondex.algorithm.graphquery.Transition;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.StateMachineInvalidException;
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
-
-import java.util.*;
 
 /**
  * An analysis class for extracting properties of node pairs in a directed acyclic graph (e.g. GO)

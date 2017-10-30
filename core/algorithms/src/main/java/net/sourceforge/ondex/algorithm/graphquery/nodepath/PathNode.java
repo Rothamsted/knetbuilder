@@ -1,11 +1,15 @@
 package net.sourceforge.ondex.algorithm.graphquery.nodepath;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import net.sourceforge.ondex.algorithm.pathmodel.Path;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
-
-import java.util.*;
 
 /**
  * A two-color singly linked list.

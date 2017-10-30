@@ -1,8 +1,8 @@
 package net.sourceforge.ondex.args;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-
 import java.io.File;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
 
 /**
  * ArgumentDefinition for a file/directory name.

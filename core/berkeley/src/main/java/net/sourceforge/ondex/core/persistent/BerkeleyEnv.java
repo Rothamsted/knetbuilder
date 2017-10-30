@@ -10,6 +10,28 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.sleepycat.bind.EntryBinding;
+import com.sleepycat.je.CheckpointConfig;
+import com.sleepycat.je.Cursor;
+import com.sleepycat.je.CursorConfig;
+import com.sleepycat.je.Database;
+import com.sleepycat.je.DatabaseConfig;
+import com.sleepycat.je.DatabaseEntry;
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.Durability;
+import com.sleepycat.je.Environment;
+import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.je.EnvironmentMutableConfig;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
+import com.sleepycat.je.SecondaryConfig;
+import com.sleepycat.je.SecondaryCursor;
+import com.sleepycat.je.SecondaryDatabase;
+import com.sleepycat.je.Transaction;
+
 import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -41,28 +63,6 @@ import net.sourceforge.ondex.event.type.DatabaseErrorEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.RetrievalException;
 import net.sourceforge.ondex.exception.type.StorageException;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
-import com.sleepycat.bind.EntryBinding;
-import com.sleepycat.je.CheckpointConfig;
-import com.sleepycat.je.Cursor;
-import com.sleepycat.je.CursorConfig;
-import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseConfig;
-import com.sleepycat.je.DatabaseEntry;
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.je.Durability;
-import com.sleepycat.je.Environment;
-import com.sleepycat.je.EnvironmentConfig;
-import com.sleepycat.je.EnvironmentMutableConfig;
-import com.sleepycat.je.LockMode;
-import com.sleepycat.je.OperationStatus;
-import com.sleepycat.je.SecondaryConfig;
-import com.sleepycat.je.SecondaryCursor;
-import com.sleepycat.je.SecondaryDatabase;
-import com.sleepycat.je.Transaction;
 
 /**
  * BerkeleyEnv wraps the Berkeley DB Java Edition and provides methods for

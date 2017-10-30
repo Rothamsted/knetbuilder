@@ -1,13 +1,13 @@
 package net.sourceforge.ondex.core.persistent;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.event.ONDEXEvent;
 import net.sourceforge.ondex.event.ONDEXListener;
 import net.sourceforge.ondex.event.type.EventType;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Parent class for all persistent environments.

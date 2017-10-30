@@ -1,12 +1,17 @@
 package net.sourceforge.ondex.algorithm.pathmodel;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXEntity;
-import net.sourceforge.ondex.core.ONDEXRelation;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.*;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**
  * @author hindlem

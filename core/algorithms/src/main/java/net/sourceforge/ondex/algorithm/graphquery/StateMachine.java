@@ -1,11 +1,11 @@
 package net.sourceforge.ondex.algorithm.graphquery;
 
-import net.sourceforge.ondex.algorithm.graphquery.exceptions.StateMachineInvalidException;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import net.sourceforge.ondex.algorithm.graphquery.exceptions.StateMachineInvalidException;
 
 /**
  * A object that defines a finite state machine with a start and multiple possible ends

@@ -17,22 +17,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.ConceptAccession;
-import net.sourceforge.ondex.core.ConceptName;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXEntity;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
-import net.sourceforge.ondex.event.ONDEXEvent;
-import net.sourceforge.ondex.event.ONDEXListener;
-import net.sourceforge.ondex.event.type.DataFileErrorEvent;
-import net.sourceforge.ondex.event.type.EventType;
-import net.sourceforge.ondex.event.type.GeneralOutputEvent;
-import net.sourceforge.ondex.exception.type.AccessDeniedException;
-
 import org.apache.log4j.Level;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -61,6 +45,22 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import com.machinezoo.noexception.Exceptions;
+
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.event.ONDEXEvent;
+import net.sourceforge.ondex.event.ONDEXListener;
+import net.sourceforge.ondex.event.type.DataFileErrorEvent;
+import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.exception.type.AccessDeniedException;
 
 /**
  * This class is the entry point for the indexed ONDEX graph representation. It

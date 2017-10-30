@@ -4,17 +4,18 @@
 package net.sourceforge.ondex;
 
 
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginRegistry;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.List;
+import net.sourceforge.ondex.init.PluginDescription;
+import net.sourceforge.ondex.init.PluginRegistry;
 
 /**
  * @author lysenkoa

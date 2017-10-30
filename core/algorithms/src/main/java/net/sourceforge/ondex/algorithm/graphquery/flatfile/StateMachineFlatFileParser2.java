@@ -1,5 +1,18 @@
 package net.sourceforge.ondex.algorithm.graphquery.flatfile;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition;
 import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition.EdgeTreatment;
 import net.sourceforge.ondex.algorithm.graphquery.State;
@@ -15,9 +28,6 @@ import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;
-
-import java.io.*;
-import java.util.*;
 
 /**
  * @author hindlem

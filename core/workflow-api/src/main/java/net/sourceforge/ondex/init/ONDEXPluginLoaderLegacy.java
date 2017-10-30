@@ -1,15 +1,5 @@
 package net.sourceforge.ondex.init;
 
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
-import net.sourceforge.ondex.exception.type.ONDEXConfigurationException;
-import net.sourceforge.ondex.export.ONDEXExport;
-import net.sourceforge.ondex.filter.ONDEXFilter;
-import net.sourceforge.ondex.mapping.ONDEXMapping;
-import net.sourceforge.ondex.parser.ONDEXParser;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
-import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -23,6 +13,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import net.sourceforge.ondex.ONDEXPlugin;
+import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.exception.type.ONDEXConfigurationException;
+import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.filter.ONDEXFilter;
+import net.sourceforge.ondex.mapping.ONDEXMapping;
+import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.validator.AbstractONDEXValidator;
 
 /**
  * The Ondex producer loader provides methods to access all currently available

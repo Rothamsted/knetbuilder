@@ -1,17 +1,22 @@
 package net.sourceforge.ondex.workflow.model;
 
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.workflow.engine.*;
-import org.apache.log4j.Logger;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import net.sourceforge.ondex.ONDEXPlugin;
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.exception.type.PluginConfigurationException;
+import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.engine.Engine;
+import net.sourceforge.ondex.workflow.engine.PluginProcessor;
+import net.sourceforge.ondex.workflow.engine.Processor;
+import net.sourceforge.ondex.workflow.engine.StandardProcessor;
+import net.sourceforge.ondex.workflow.engine.ValuePair;
 
 /**
  * Configuration for TaskDescription.

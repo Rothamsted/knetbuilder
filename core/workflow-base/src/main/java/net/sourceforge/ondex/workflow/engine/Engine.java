@@ -24,6 +24,10 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.log4j.Level;
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.XMLStreamReader2;
+
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -62,10 +66,6 @@ import net.sourceforge.ondex.validator.AbstractONDEXValidator;
 import net.sourceforge.ondex.workflow.events.InvalidArgumentEvent;
 import net.sourceforge.ondex.workflow.model.GraphInit;
 import net.sourceforge.ondex.workflow.model.PluginAndArgs;
-
-import org.apache.log4j.Level;
-import org.codehaus.stax2.XMLInputFactory2;
-import org.codehaus.stax2.XMLStreamReader2;
 
 /**
  * ONDEX Work flow is the main entry point for running ONDEX work flows specified

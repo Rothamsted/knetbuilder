@@ -1,8 +1,12 @@
 package net.sourceforge.ondex.init;
 
-import net.sourceforge.ondex.annotations.*;
-
 import java.util.regex.Pattern;
+
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.annotations.DataURL;
+import net.sourceforge.ondex.annotations.DatabaseTarget;
+import net.sourceforge.ondex.annotations.Status;
 
 /**
  * @author hindlem, lysenko

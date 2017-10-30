@@ -1,10 +1,10 @@
 package net.sourceforge.ondex;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.event.ONDEXListener;
-
 import java.util.Collection;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.event.ONDEXListener;
+import net.sourceforge.ondex.init.ArgumentDescription;
 
 /**
  * Parent class for all ONDEX plugins, e.g. mappings, parser, transformer.

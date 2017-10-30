@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import junit.framework.TestCase;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.StateMachineInvalidException;
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
@@ -17,10 +21,6 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * Tests the Traversal of Graph using a state machine

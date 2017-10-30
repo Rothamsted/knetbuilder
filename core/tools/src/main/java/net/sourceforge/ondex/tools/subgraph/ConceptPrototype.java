@@ -1,13 +1,23 @@
 package net.sourceforge.ondex.tools.subgraph;
 
-import net.sourceforge.ondex.core.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.EmptyStringException;
 import net.sourceforge.ondex.exception.type.NullValueException;
-
-import java.util.*;
-
-import static net.sourceforge.ondex.tools.subgraph.DefConst.PositionProcessor;
+import net.sourceforge.ondex.tools.subgraph.DefConst.PositionProcessor;
 
 /**
  * @author lysenkoa

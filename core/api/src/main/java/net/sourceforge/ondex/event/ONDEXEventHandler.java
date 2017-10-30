@@ -1,9 +1,10 @@
 package net.sourceforge.ondex.event;
 
-import net.sourceforge.ondex.event.type.EventType;
+import java.util.HashMap;
 
 import javax.swing.event.EventListenerList;
-import java.util.HashMap;
+
+import net.sourceforge.ondex.event.type.EventType;
 
 /**
  * Stores the EventHandler instances for each graph, accessible through

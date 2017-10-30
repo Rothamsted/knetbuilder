@@ -3,6 +3,9 @@ package net.sourceforge.ondex.core.memory;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.collections15.BidiMap;
+import org.apache.commons.collections15.bidimap.DualHashBidiMap;
+
 import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -12,9 +15,6 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.base.AbstractRelation;
 import net.sourceforge.ondex.event.type.DuplicatedEntryEvent;
-
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.bidimap.DualHashBidiMap;
 
 /**
  * This class represents a pure memory based implementation of AbstractRelation.

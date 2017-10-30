@@ -1,12 +1,22 @@
 package net.sourceforge.ondex.algorithm.annotationquality;
 
-import net.sourceforge.ondex.core.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
 
 /**
  * This class builds a complete go annotation index for a given mapping file

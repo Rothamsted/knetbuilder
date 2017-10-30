@@ -214,7 +214,7 @@ public abstract class ConceptAttributeProcessor {
                         Set result = new HashSet();
                         String[] def = ap.getDef();
                         if (def[1] != null) {
-                            if (dataSource.equals(c.getOfType()))
+                            if (dataSource.equals(c.getElementOf ()))
                                 result.add(dataSource);
                         } else {
                             result.add(dataSource);

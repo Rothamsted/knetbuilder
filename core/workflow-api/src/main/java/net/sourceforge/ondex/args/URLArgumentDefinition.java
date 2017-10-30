@@ -1,9 +1,9 @@
 package net.sourceforge.ondex.args;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
 
 /**
  * ArgumentDefinition for a string value representing a URL.

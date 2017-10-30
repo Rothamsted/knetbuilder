@@ -1,8 +1,8 @@
 package net.sourceforge.ondex.tools.subgraph;
 
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.RelationType;

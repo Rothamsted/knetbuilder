@@ -1,10 +1,15 @@
 package net.sourceforge.ondex.workflow.model;
 
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginRegistry;
-import net.sourceforge.ondex.init.PluginType;
-import net.sourceforge.ondex.workflow.engine.Engine;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.stream.XMLStreamException;
+
 import org.apache.log4j.Logger;
 import org.jdom.CDATA;
 import org.jdom.Document;
@@ -15,14 +20,11 @@ import org.jdom.output.Format;
 import org.jdom.output.Format.TextMode;
 import org.jdom.output.XMLOutputter;
 
-import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.init.PluginDescription;
+import net.sourceforge.ondex.init.PluginRegistry;
+import net.sourceforge.ondex.init.PluginType;
+import net.sourceforge.ondex.workflow.engine.Engine;
 
 /**
  * Utility class for saving and reading Ondex workflow files in a variety of formats

@@ -1,13 +1,14 @@
 package net.sourceforge.ondex.core.persistent.binding;
 
+import java.io.IOException;
+
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
+
 import net.sourceforge.ondex.core.persistent.BerkeleyEnv;
 import net.sourceforge.ondex.core.persistent.BerkeleyRelationKey;
 import net.sourceforge.ondex.core.persistent.BerkeleyRelationKeyName;
-
-import java.io.IOException;
 
 /**
  * Serialises and deserialises a BerkeleyRelationKeyName.

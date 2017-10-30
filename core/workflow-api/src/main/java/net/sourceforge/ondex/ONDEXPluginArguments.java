@@ -1,9 +1,13 @@
 package net.sourceforge.ondex;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
 
 /**
  * Arguments bundle for plugins.
