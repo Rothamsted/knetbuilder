@@ -1,5 +1,33 @@
 package net.sourceforge.ondex.export.specificity;
 
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.ADD_2_CONCEPT_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.ADD_2_CONCEPT_ARG_DESC;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.ADD_2_RELATION_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.ADD_2_RELATION_ARG_DESC;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.DEGREE_ATT_TYPE_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.DEGREE_ATT_TYPE_ARG_DESC;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.RELATION_TYPE_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.RELATION_TYPE_ARG_DESC;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.SOURCE_CC_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.SOURCE_CC_ARG_DESC;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.SPEC_ATT_TYPE_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.SPEC_ATT_TYPE_ARG_DESC;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.TARGET_CC_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.TARGET_CC_ARG_DESC;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.THRESHOLD_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.THRESHOLD_ARG_DESC;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.THRESHOLD_TYPE_ARG;
+import static net.sourceforge.ondex.export.specificity.ArgumentNames.THRESHOLD_TYPE_ARG_DESC;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -8,13 +36,14 @@ import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.RangeArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.export.ONDEXExport;
 import net.sourceforge.ondex.export.specificity.ThresholdArgumentDefinition.ThresholdType;
-
-import java.util.*;
-
-import static net.sourceforge.ondex.export.specificity.ArgumentNames.*;
 
 /**
  * Attaches a numerical specificity measure on a set of relation for the

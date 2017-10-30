@@ -1,10 +1,13 @@
 package net.sourceforge.ondex.tools.tab.exporter.extractors;
 
-import net.sourceforge.ondex.core.*;
+import java.util.Set;
+
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.tools.tab.exporter.InvalidOndexEntityException;
 import net.sourceforge.ondex.tools.tab.exporter.Label;
-
-import java.util.Set;
 
 public class ContextExtractor implements AttributeExtractor {
 

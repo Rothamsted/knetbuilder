@@ -1,10 +1,10 @@
 package net.sourceforge.ondex.scripting;
 
+import java.util.Set;
+
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-
-import java.util.Set;
 
 public interface ProcessingCheckpoint {
 

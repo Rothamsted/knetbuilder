@@ -1,14 +1,5 @@
 package net.sourceforge.ondex.transformer.evidenceweightings;
 
-import net.sourceforge.ondex.annotations.Authors;
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.BooleanArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,6 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.BooleanArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.transformer.ONDEXTransformer;
 
 /**
  * Implements the annotation of concepts in a graph with evidence code

@@ -2,12 +2,6 @@ package net.sourceforge.ondex.parser.biocyc.handler;
 
 import java.util.Set;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
-
 import org.biopax.paxtools.model.level2.ControlType;
 import org.biopax.paxtools.model.level2.biochemicalReaction;
 import org.biopax.paxtools.model.level2.catalysis;
@@ -20,6 +14,12 @@ import org.biopax.paxtools.model.level2.physicalEntity;
 import org.biopax.paxtools.model.level2.physicalEntityParticipant;
 import org.biopax.paxtools.model.level2.process;
 import org.biopax.paxtools.model.level2.transport;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 
 /**
  * Uses pathways to added context accordingly.

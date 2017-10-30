@@ -3,12 +3,12 @@ package net.sourceforge.ondex.parser.ecocyc.parse;
 import java.util.Iterator;
 
 import net.sourceforge.ondex.parser.ecocyc.objects.AbstractNode;
-import net.sourceforge.ondex.parser.ecocyc.objects.SinkFactory;
 import net.sourceforge.ondex.parser.ecocyc.objects.Compound;
 import net.sourceforge.ondex.parser.ecocyc.objects.ECNumber;
 import net.sourceforge.ondex.parser.ecocyc.objects.Enzyme;
 import net.sourceforge.ondex.parser.ecocyc.objects.Pathway;
 import net.sourceforge.ondex.parser.ecocyc.objects.Reaction;
+import net.sourceforge.ondex.parser.ecocyc.objects.SinkFactory;
 
 /**
  * Parser for the reaction.* files(s)

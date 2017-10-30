@@ -7,6 +7,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+import org.apache.lucene.search.Query;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -33,10 +37,6 @@ import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.core.searchable.LuceneQueryBuilder;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
-import org.apache.lucene.search.Query;
 
 /**
  * Implements a ConceptName based mapping.

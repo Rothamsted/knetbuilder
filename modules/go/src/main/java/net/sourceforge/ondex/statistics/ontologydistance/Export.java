@@ -1,26 +1,30 @@
 package net.sourceforge.ondex.statistics.ontologydistance;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.algorithm.hierarchicalsimilarity.Evaluation;
-import net.sourceforge.ondex.algorithm.hierarchicalsimilarity.HierarchicalSimilarity;
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.ONDEXEventHandler;
-import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
-import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
-import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
-import net.sourceforge.ondex.export.ONDEXExport;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.algorithm.hierarchicalsimilarity.Evaluation;
+import net.sourceforge.ondex.algorithm.hierarchicalsimilarity.HierarchicalSimilarity;
+import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.ONDEXEventHandler;
+import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
+import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
+import net.sourceforge.ondex.export.ONDEXExport;
 
 /**
  * Statistics class to evaluate a set of GO annotations to a "Gold Standard".

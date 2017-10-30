@@ -1,21 +1,36 @@
 package net.sourceforge.ondex.workflow2.gui.components;
 
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginDocumentationFactory;
-import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
-import net.sourceforge.ondex.workflow.model.WorkflowTask;
-import net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO;
-import net.sourceforge.ondex.workflow2.gui.arg.ArgumentHolder;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.init.PluginDescription;
+import net.sourceforge.ondex.init.PluginDocumentationFactory;
+import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
+import net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO;
+import net.sourceforge.ondex.workflow.model.WorkflowTask;
+import net.sourceforge.ondex.workflow2.gui.arg.ArgumentHolder;
 
 
 /**

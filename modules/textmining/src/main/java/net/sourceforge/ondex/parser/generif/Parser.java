@@ -11,29 +11,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
-import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
-
-import org.apache.log4j.Level;
 
 /**
  * Parser for the GeneRIF file.

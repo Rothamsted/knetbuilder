@@ -1,14 +1,15 @@
 package net.sourceforge.ondex.parser.wordnet;
 
+import java.io.File;
+import java.util.ArrayList;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
-import org.apache.log4j.Level;
-
-import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Parser for WORDNET.

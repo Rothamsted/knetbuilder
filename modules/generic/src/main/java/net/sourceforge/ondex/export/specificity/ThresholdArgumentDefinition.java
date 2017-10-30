@@ -1,10 +1,10 @@
 package net.sourceforge.ondex.export.specificity;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
 
 /**
  * @author hindlem

@@ -1,20 +1,26 @@
 package net.sourceforge.ondex.export.dot;
 
+import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.RangeArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.export.ONDEXExport;
-
-import java.awt.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Exports a whole ONDEX graph into the DOT language according to

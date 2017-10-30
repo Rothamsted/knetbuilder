@@ -20,21 +20,9 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXEntity;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.ArrayKey;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
-import net.sourceforge.ondex.core.util.QuerySetParser;
-import net.sourceforge.ondex.scripting.CommandInterpreter;
-import net.sourceforge.ondex.scripting.OutputPrinter;
-import net.sourceforge.ondex.scripting.ProcessingCheckpoint;
-import net.sourceforge.ondex.scripting.ProxyTemplate;
-import net.sourceforge.ondex.scripting.wrappers.OndexScriptingInitialiser;
-
 import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.multimap.MultiHashMap;
+import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -50,7 +38,19 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
-import org.apache.log4j.Logger;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.util.ArrayKey;
+import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.util.QuerySetParser;
+import net.sourceforge.ondex.scripting.CommandInterpreter;
+import net.sourceforge.ondex.scripting.OutputPrinter;
+import net.sourceforge.ondex.scripting.ProcessingCheckpoint;
+import net.sourceforge.ondex.scripting.ProxyTemplate;
+import net.sourceforge.ondex.scripting.wrappers.OndexScriptingInitialiser;
 
 /**
  * @author lysenkoa SPARQL parser. Maps the SPARQL commands to appropriate java

@@ -5,15 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import net.sourceforge.ondex.scripting.CommandInterpreter;
-import net.sourceforge.ondex.scripting.FunctionException;
-import net.sourceforge.ondex.scripting.OutputPrinter;
-import net.sourceforge.ondex.scripting.ProcessingCheckpoint;
-import net.sourceforge.ondex.scripting.ProxyTemplate;
-import net.sourceforge.ondex.scripting.base.BasicProxyTemplate;
-import net.sourceforge.ondex.scripting.base.ScriptingWrapper;
-import net.sourceforge.ondex.scripting.base.UniversalConstants;
-
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.EcmaError;
@@ -24,6 +15,15 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrapFactory;
 import org.mozilla.javascript.WrappedException;
+
+import net.sourceforge.ondex.scripting.CommandInterpreter;
+import net.sourceforge.ondex.scripting.FunctionException;
+import net.sourceforge.ondex.scripting.OutputPrinter;
+import net.sourceforge.ondex.scripting.ProcessingCheckpoint;
+import net.sourceforge.ondex.scripting.ProxyTemplate;
+import net.sourceforge.ondex.scripting.base.BasicProxyTemplate;
+import net.sourceforge.ondex.scripting.base.ScriptingWrapper;
+import net.sourceforge.ondex.scripting.base.UniversalConstants;
 
 /**
  * 

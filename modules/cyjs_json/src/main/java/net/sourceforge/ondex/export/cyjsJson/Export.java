@@ -4,6 +4,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.xml.stream.XMLStreamException;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -24,8 +30,6 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.Unit;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
 
 /**
  * Builds JSON files to be used with CytoscapeJS using data from ONDEX concepts, relations and other 

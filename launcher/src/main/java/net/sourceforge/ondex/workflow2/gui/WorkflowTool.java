@@ -48,6 +48,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.xml.stream.XMLStreamException;
 
+import org.jdom.JDOMException;
+
 import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.util.GraphAdaptor;
 import net.sourceforge.ondex.init.ArgumentDescription;
@@ -68,8 +70,6 @@ import net.sourceforge.ondex.workflow2.gui.tree.DocumentedTreeNode;
 import net.sourceforge.ondex.workflow2.gui.tree.PluginTreeModelBuilder;
 import net.sourceforge.ondex.workflow2.gui.tree.PluginTreeNode;
 import net.sourceforge.ondex.workflow2.gui.tree.PluginTreeRenderer;
-
-import org.jdom.JDOMException;
 
 /**
  * @author lysenkoa

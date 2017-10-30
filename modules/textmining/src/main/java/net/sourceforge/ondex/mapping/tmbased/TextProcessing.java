@@ -1,11 +1,11 @@
 package net.sourceforge.ondex.mapping.tmbased;
 
-import net.sourceforge.ondex.core.searchable.LuceneEnv;
+import java.util.HashSet;
+import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
-import java.util.HashSet;
-import java.util.regex.Pattern;
+import net.sourceforge.ondex.core.searchable.LuceneEnv;
 
 /**
  * This Class provides various utilities to process text

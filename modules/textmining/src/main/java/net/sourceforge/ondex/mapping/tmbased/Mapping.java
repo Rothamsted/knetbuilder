@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.search.Query;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -29,9 +32,6 @@ import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.mapping.tmbased.args.ArgumentNames;
-
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.Query;
 
 
 /**

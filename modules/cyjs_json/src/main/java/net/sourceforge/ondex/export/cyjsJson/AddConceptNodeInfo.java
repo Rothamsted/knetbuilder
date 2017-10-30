@@ -1,14 +1,15 @@
 package net.sourceforge.ondex.export.cyjsJson;
 
 import java.util.Set;
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.ConceptAccession;
-import net.sourceforge.ondex.core.ConceptName;
-import net.sourceforge.ondex.core.ONDEXConcept;
+
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**
  * Build node json objects using their various attributes.

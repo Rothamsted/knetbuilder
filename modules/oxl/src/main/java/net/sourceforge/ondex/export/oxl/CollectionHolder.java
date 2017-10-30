@@ -1,13 +1,14 @@
 package net.sourceforge.ondex.export.oxl;
 
-import net.sourceforge.ondex.core.util.Holder;
+import java.util.Collection;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementWrapper;
-import java.util.Collection;
+
+import net.sourceforge.ondex.core.util.Holder;
 
 /**
  * A collection holder for any collection with an empty constructor

@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.parser.ecocyc.parse.transformers;
 
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.parser.ecocyc.MetaData;

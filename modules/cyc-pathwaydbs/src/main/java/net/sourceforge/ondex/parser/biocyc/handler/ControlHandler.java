@@ -2,6 +2,12 @@ package net.sourceforge.ondex.parser.biocyc.handler;
 
 import java.util.Set;
 
+import org.biopax.paxtools.model.level2.ControlType;
+import org.biopax.paxtools.model.level2.control;
+import org.biopax.paxtools.model.level2.physicalEntity;
+import org.biopax.paxtools.model.level2.physicalEntityParticipant;
+import org.biopax.paxtools.model.level2.process;
+
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -11,12 +17,6 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
 import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
 import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
-
-import org.biopax.paxtools.model.level2.ControlType;
-import org.biopax.paxtools.model.level2.control;
-import org.biopax.paxtools.model.level2.physicalEntity;
-import org.biopax.paxtools.model.level2.physicalEntityParticipant;
-import org.biopax.paxtools.model.level2.process;
 
 /**
  * Translates control entities into relationships.

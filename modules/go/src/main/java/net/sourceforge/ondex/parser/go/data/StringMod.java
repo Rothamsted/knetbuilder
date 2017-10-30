@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.parser.go.data;
 
-import java.util.StringTokenizer;
-
 /**
  * Class contains static methods for String modifications.
  * 

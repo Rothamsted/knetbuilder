@@ -1,18 +1,18 @@
 package net.sourceforge.ondex.tools.tab.exporter.extractors;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import net.sourceforge.ondex.config.ValidatorRegistry;
-import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.EmptyStringException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.tools.tab.exporter.InvalidOndexEntityException;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author lysenkoa

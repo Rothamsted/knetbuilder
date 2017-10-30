@@ -12,12 +12,10 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.OWL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import info.marcobrandizi.rdfutils.jena.JenaGraphUtils;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.util.CachedGraphWrapper;
@@ -25,7 +23,6 @@ import net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype;
 import net.sourceforge.ondex.parser.ConceptClassMapper;
 import net.sourceforge.ondex.parser.DecoratingMapper;
 import net.sourceforge.ondex.parser.DefaultConceptClassMapper;
-import net.sourceforge.ondex.parser.HoldingMapper;
 import net.sourceforge.ondex.parser.Mapper;
 import net.sourceforge.ondex.parser.TextMapper;
 

@@ -1,16 +1,20 @@
 package net.sourceforge.ondex.export.json;
 
-import net.sourceforge.ondex.export.json.Export;
+import static junit.framework.Assert.assertTrue;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import static junit.framework.Assert.assertTrue;
+
+import org.junit.Test;
+
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
-import org.junit.Test;
 
 /**
  * To test the JSON Export code.

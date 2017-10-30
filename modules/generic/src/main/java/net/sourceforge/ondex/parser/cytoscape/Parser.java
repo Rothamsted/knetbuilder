@@ -16,6 +16,8 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.codehaus.stax2.XMLInputFactory2;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -33,8 +35,6 @@ import net.sourceforge.ondex.exception.type.ParsingFailedException;
 import net.sourceforge.ondex.exception.type.WrongArgumentException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
-
-import org.codehaus.stax2.XMLInputFactory2;
 
 @Custodians(custodians = { "Jochen Weile" }, emails = { "jweile at users.sourceforge.net" })
 public class Parser extends ONDEXParser {

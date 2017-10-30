@@ -1,5 +1,12 @@
 package net.sourceforge.ondex.parser.ecocyc;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -8,14 +15,28 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.ecocyc.objects.AbstractNode;
 import net.sourceforge.ondex.parser.ecocyc.objects.SinkFactory;
-import net.sourceforge.ondex.parser.ecocyc.parse.*;
+import net.sourceforge.ondex.parser.ecocyc.parse.AbstractParser;
+import net.sourceforge.ondex.parser.ecocyc.parse.CompoundParser;
+import net.sourceforge.ondex.parser.ecocyc.parse.EnzymeParser;
+import net.sourceforge.ondex.parser.ecocyc.parse.GeneParser;
+import net.sourceforge.ondex.parser.ecocyc.parse.IParser;
+import net.sourceforge.ondex.parser.ecocyc.parse.PathwayParser;
+import net.sourceforge.ondex.parser.ecocyc.parse.ProteinParser;
+import net.sourceforge.ondex.parser.ecocyc.parse.PublicationParser;
+import net.sourceforge.ondex.parser.ecocyc.parse.ReactionParser;
 import net.sourceforge.ondex.parser.ecocyc.parse.readers.AbstractReader;
 import net.sourceforge.ondex.parser.ecocyc.parse.readers.ColFileReader;
 import net.sourceforge.ondex.parser.ecocyc.parse.readers.DatFileReader;
-import net.sourceforge.ondex.parser.ecocyc.parse.transformers.*;
-
-import java.io.File;
-import java.util.*;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.AbstractTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.CompoundTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.ECNumberTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.EnzymeTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.GeneTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.PathwayTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.ProteinTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.PublicationTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.ReactionTransformer;
+import net.sourceforge.ondex.parser.ecocyc.parse.transformers.TransformerFactory;
 
 /**
  * Parser for the ecocyc flatfile database. The data flow is Parser ->

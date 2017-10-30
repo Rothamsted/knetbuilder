@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.parser.genericobo.chebi;
 
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 //import java.io.BufferedReader;
 //import java.io.FileReader;
 //import java.io.File;
@@ -7,10 +11,6 @@ package net.sourceforge.ondex.parser.genericobo.chebi;
 //java.util.StringTokenizer;
 
 import net.sourceforge.ondex.parser.genericobo.OboConcept;
-
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 //just used to determine if a concept is a compound.
 

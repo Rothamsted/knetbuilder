@@ -1,21 +1,25 @@
 package net.sourceforge.ondex.mapping.transitive;
 
+import static net.sourceforge.ondex.mapping.ArgumentNames.CONCEPTCLASS_RESTRICTION_ARG;
+import static net.sourceforge.ondex.mapping.ArgumentNames.CONCEPTCLASS_RESTRICTION_ARG_DESC;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.args.StringMappingPairArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
-
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-
-import static net.sourceforge.ondex.mapping.ArgumentNames.CONCEPTCLASS_RESTRICTION_ARG;
-import static net.sourceforge.ondex.mapping.ArgumentNames.CONCEPTCLASS_RESTRICTION_ARG_DESC;
 
 /**
  * Implements a transitive mapping for equ relationtypes.

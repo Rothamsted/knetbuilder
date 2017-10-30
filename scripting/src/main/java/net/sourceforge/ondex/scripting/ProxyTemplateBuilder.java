@@ -1,10 +1,17 @@
 package net.sourceforge.ondex.scripting;
 
-import net.sourceforge.ondex.core.util.BitSetFunctions;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.sourceforge.ondex.core.util.BitSetFunctions;
 
 /**
  * Template of rules for building wrappers

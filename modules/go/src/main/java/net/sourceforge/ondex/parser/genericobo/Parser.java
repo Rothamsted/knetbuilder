@@ -8,9 +8,10 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
-import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
@@ -20,16 +21,16 @@ import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.config.ValidatorRegistry;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
-import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
@@ -41,8 +42,6 @@ import net.sourceforge.ondex.parser.genericobo.go.Organism;
 import net.sourceforge.ondex.parser.genericobo.go.StringMod;
 import net.sourceforge.ondex.parser.genericobo.po.POReferenceContainer;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
-import org.apache.log4j.Level;
 
 /**
  * OBO Ontology Parser

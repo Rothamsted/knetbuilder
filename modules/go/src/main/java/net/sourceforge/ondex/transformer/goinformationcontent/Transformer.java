@@ -1,20 +1,23 @@
 package net.sourceforge.ondex.transformer.goinformationcontent;
 
+import java.io.File;
+import java.io.IOException;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.algorithm.annotationquality.GoaIndexer;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
-import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Iterates over the GO concepts of an Ondex graph, calculates its

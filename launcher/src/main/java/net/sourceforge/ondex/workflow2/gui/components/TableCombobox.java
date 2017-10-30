@@ -1,18 +1,16 @@
 package net.sourceforge.ondex.workflow2.gui.components;
 
+import java.awt.Color;
+import java.awt.event.FocusEvent;
+
+import javax.swing.JComboBox;
+
 import net.sourceforge.ondex.init.ArgumentDescription;
 import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
 import net.sourceforge.ondex.workflow2.gui.arg.ArgumentContainer;
 import net.sourceforge.ondex.workflow2.gui.components.highlighting.HighlightHandler;
 import net.sourceforge.ondex.workflow2.gui.components.highlighting.HighlightManager;
 import net.sourceforge.ondex.workflow2.gui.components.highlighting.HighlightableComponent;
-
-import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-
-import java.awt.*;
-import java.awt.event.FocusEvent;
 
 /**
  * @author lysenkoa

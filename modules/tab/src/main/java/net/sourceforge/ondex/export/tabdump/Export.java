@@ -1,16 +1,16 @@
 package net.sourceforge.ondex.export.tabdump;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.export.ONDEXExport;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.export.ONDEXExport;
 
 public class Export extends ONDEXExport
 {

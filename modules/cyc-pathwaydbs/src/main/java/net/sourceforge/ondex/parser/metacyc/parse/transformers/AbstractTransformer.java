@@ -1,8 +1,20 @@
 package net.sourceforge.ondex.parser.metacyc.parse.transformers;
 
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.parser.metacyc.MetaData;
@@ -11,12 +23,6 @@ import net.sourceforge.ondex.parser.metacyc.objects.AbstractNode;
 import net.sourceforge.ondex.parser.metacyc.objects.DBName;
 import net.sourceforge.ondex.parser.metacyc.objects.Publication;
 import net.sourceforge.ondex.tools.functions.StandardFunctions;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Similar to the ConceptWriter in the other packages. Provides a basic

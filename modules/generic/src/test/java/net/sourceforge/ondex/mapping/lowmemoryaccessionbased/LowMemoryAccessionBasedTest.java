@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.ONDEXRelation;
@@ -18,11 +23,6 @@ import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.tools.DirUtils;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * A applied test case designed by catherine.c, implemented by matt.h

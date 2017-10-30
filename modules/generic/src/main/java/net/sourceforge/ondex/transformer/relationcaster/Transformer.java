@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.transformer.relationcaster;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -13,10 +17,6 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.tools.functions.GraphElementManipulation;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author lysenkoa

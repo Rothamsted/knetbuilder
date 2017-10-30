@@ -12,15 +12,19 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import junit.framework.TestCase;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
@@ -31,10 +35,6 @@ import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.export.oxl.Export;
 import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.tools.DirUtils;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author hindlem, taubertj

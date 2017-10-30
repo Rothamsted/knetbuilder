@@ -1,21 +1,27 @@
 package net.sourceforge.ondex.mapping.lowmemoryaccessionbased;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.config.LuceneRegistry;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.searchable.LuceneEnv;
-import net.sourceforge.ondex.event.ONDEXEventHandler;
-import net.sourceforge.ondex.logging.ONDEXLogger;
-import net.sourceforge.ondex.tools.DirUtils;
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.config.LuceneRegistry;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.RelationKey;
+import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.core.searchable.LuceneEnv;
+import net.sourceforge.ondex.event.ONDEXEventHandler;
+import net.sourceforge.ondex.logging.ONDEXLogger;
+import net.sourceforge.ondex.tools.DirUtils;
 
 /**
  * Unit test for accession based mapping.

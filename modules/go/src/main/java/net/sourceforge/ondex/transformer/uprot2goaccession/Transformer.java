@@ -1,5 +1,13 @@
 package net.sourceforge.ondex.transformer.uprot2goaccession;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.algorithm.annotationquality.GoaIndexer;
@@ -8,19 +16,16 @@ import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.event.type.*;
+import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
+import net.sourceforge.ondex.event.type.DataFileErrorEvent;
+import net.sourceforge.ondex.event.type.DataFileMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Reads the uniprot accessions from the concept, looks up their associated

@@ -2,17 +2,17 @@ package net.sourceforge.ondex.parser.biocyc.handler;
 
 import java.util.Set;
 
-import net.sourceforge.ondex.core.DataSource;
+import org.biopax.paxtools.model.level2.physicalEntity;
+import org.biopax.paxtools.model.level2.protein;
+import org.biopax.paxtools.model.level2.smallMolecule;
+
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
 import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
-
-import org.biopax.paxtools.model.level2.physicalEntity;
-import org.biopax.paxtools.model.level2.protein;
-import org.biopax.paxtools.model.level2.smallMolecule;
 
 /**
  * Translates physicalEntitys entities into concepts.

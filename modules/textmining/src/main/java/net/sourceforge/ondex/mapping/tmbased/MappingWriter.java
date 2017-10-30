@@ -1,14 +1,20 @@
 package net.sourceforge.ondex.mapping.tmbased;
 
-import net.sourceforge.ondex.core.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 /**
  * Writes for one publication its text mining mapping results

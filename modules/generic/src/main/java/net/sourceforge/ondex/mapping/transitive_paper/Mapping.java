@@ -1,11 +1,15 @@
 package net.sourceforge.ondex.mapping.transitive_paper;
 
+import java.util.HashSet;
+
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
-
-import java.util.HashSet;
 
 @Custodians(custodians = {"Jochen Weile"}, emails = {"jweile at users.sourceforge.net"})
 public class Mapping extends ONDEXMapping

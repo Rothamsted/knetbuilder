@@ -1,10 +1,15 @@
 package net.sourceforge.ondex.workflow2.gui.tree;
 
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
-import java.util.*;
-import java.util.Map.Entry;
 
 /**
  * Implements a tree that supports hiding and showing of branches given a path. Only works with DocumentedTreeNode

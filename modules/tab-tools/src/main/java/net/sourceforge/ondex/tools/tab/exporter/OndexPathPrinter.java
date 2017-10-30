@@ -1,15 +1,20 @@
 package net.sourceforge.ondex.tools.tab.exporter;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.List;
+import java.util.zip.GZIPOutputStream;
+
 import net.sourceforge.ondex.algorithm.pathmodel.Path;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.tools.tab.exporter.extractors.AttributeExtractor;
-
-import java.io.*;
-import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * A class for printing Ondex Routes to a file in tab deliminated form

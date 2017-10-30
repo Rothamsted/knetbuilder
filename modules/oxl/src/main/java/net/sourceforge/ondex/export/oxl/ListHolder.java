@@ -1,12 +1,13 @@
 package net.sourceforge.ondex.export.oxl;
 
-import net.sourceforge.ondex.core.util.Holder;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+
+import net.sourceforge.ondex.core.util.Holder;
 
 /**
  * Utility bean to wrap up list values.

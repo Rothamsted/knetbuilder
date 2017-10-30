@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.producer.memory;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
+
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -13,10 +17,6 @@ import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.init.ArgumentDescription;
 import net.sourceforge.ondex.init.Initialisation;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Created by IntelliJ IDEA.

@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.parser.uniprot;
 
-import com.ctc.wstx.stax.WstxInputFactory;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,8 +12,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
+
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
+
+import com.ctc.wstx.stax.WstxInputFactory;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 //import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.annotations.Authors;

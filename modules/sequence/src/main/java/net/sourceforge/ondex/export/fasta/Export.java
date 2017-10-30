@@ -1,21 +1,40 @@
 package net.sourceforge.ondex.export.fasta;
 
-import net.sourceforge.ondex.annotations.Authors;
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.*;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.export.ONDEXExport;
-import net.sourceforge.ondex.tools.tab.exporter.Label;
-import net.sourceforge.ondex.tools.tab.exporter.extractors.*;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
+
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.BooleanArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.RangeArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.tools.tab.exporter.Label;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.AccessionAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.AnnotationAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.AttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.CVAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.ContextExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.DefinedEvidenceAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.DescriptionAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.EvidenceAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.GDSAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.NameAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.PidAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.TypeAttributeExtractor;
 
 /**
  * A rough and ready fasta exporter....under development

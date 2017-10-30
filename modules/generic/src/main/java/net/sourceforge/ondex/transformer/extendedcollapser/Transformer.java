@@ -1,5 +1,17 @@
 package net.sourceforge.ondex.transformer.extendedcollapser;
 
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.convertConceptClasses;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.convertRelationTypes;
+import static net.sourceforge.ondex.tools.functions.GraphElementManipulation.oneToManyCollapse;
+import static net.sourceforge.ondex.tools.functions.GraphElementManipulation.oneToOneCollapse;
+import static net.sourceforge.ondex.tools.functions.StandardFunctions.getOtherNode;
+import static net.sourceforge.ondex.tools.functions.ViewConstruction.getConceptsOfTypes;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -7,20 +19,11 @@ import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.convertConceptClasses;
-import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.convertRelationTypes;
-import static net.sourceforge.ondex.tools.functions.GraphElementManipulation.oneToManyCollapse;
-import static net.sourceforge.ondex.tools.functions.GraphElementManipulation.oneToOneCollapse;
-import static net.sourceforge.ondex.tools.functions.StandardFunctions.getOtherNode;
-import static net.sourceforge.ondex.tools.functions.ViewConstruction.getConceptsOfTypes;
 
 /**
  * This transformer implements one-to-many and one-to-one relation collapse, as opposed to

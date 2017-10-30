@@ -2,8 +2,13 @@ package net.sourceforge.ondex.parser.biocyc.handler;
 
 import java.util.Set;
 
-import net.sourceforge.ondex.core.DataSource;
+import org.biopax.paxtools.model.level2.catalysis;
+import org.biopax.paxtools.model.level2.physicalEntity;
+import org.biopax.paxtools.model.level2.physicalEntityParticipant;
+import org.biopax.paxtools.model.level2.process;
+
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -11,11 +16,6 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
 import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
 import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
-
-import org.biopax.paxtools.model.level2.catalysis;
-import org.biopax.paxtools.model.level2.physicalEntity;
-import org.biopax.paxtools.model.level2.physicalEntityParticipant;
-import org.biopax.paxtools.model.level2.process;
 
 /**
  * Translates catalysis entities into concepts.

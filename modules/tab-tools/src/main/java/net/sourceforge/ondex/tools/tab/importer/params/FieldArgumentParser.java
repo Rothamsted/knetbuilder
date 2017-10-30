@@ -1,19 +1,33 @@
 package net.sourceforge.ondex.tools.tab.importer.params;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ConstantTransformer;
+import org.apache.commons.collections15.functors.MapTransformer;
+
 import net.sourceforge.ondex.algorithm.pathmodel.Path;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.tools.tab.exporter.AttributeExtractorModel;
 import net.sourceforge.ondex.tools.tab.exporter.Label;
-import net.sourceforge.ondex.tools.tab.exporter.extractors.*;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.functors.MapTransformer;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.AccessionAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.AnnotationAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.AttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.CVAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.ContextExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.DefinedEvidenceAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.DescriptionAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.EvidenceAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.GDSAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.IdExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.NameAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.PidAttributeExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.SynonymsExtractor;
+import net.sourceforge.ondex.tools.tab.exporter.extractors.TypeAttributeExtractor;
 
 /**
  * Parses user arguments and builds the relevent transformer to translate between depth and the user defined AttributeExtractor definitions

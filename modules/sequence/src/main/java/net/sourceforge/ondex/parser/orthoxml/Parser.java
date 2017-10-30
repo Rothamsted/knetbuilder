@@ -8,6 +8,10 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.codehaus.stax2.XMLInputFactory2;
+
+import com.ctc.wstx.io.CharsetNames;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DataURL;
@@ -15,25 +19,21 @@ import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.annotations.metadata.AttributeNameRequired;
-import net.sourceforge.ondex.annotations.metadata.DataSourceRequired;
 import net.sourceforge.ondex.annotations.metadata.ConceptClassRequired;
+import net.sourceforge.ondex.annotations.metadata.DataSourceRequired;
 import net.sourceforge.ondex.annotations.metadata.EvidenceTypeRequired;
 import net.sourceforge.ondex.annotations.metadata.RelationTypeRequired;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.parser.ONDEXParser;
-
-import org.codehaus.stax2.XMLInputFactory2;
-
-import com.ctc.wstx.io.CharsetNames;
 
 /**
  * Parser for the OrthoXML format

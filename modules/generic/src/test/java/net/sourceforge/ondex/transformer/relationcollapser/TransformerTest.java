@@ -1,18 +1,27 @@
 package net.sourceforge.ondex.transformer.relationcollapser;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.junit.Test;
+
 import junit.framework.TestCase;
 import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.filter.conceptclass.Filter;
 import net.sourceforge.ondex.logging.ONDEXLogger;
-import org.junit.Test;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class TransformerTest extends TestCase {
 

@@ -20,6 +20,11 @@ import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.log4j.Level;
+import org.codehaus.stax2.XMLInputFactory2;
+
+import com.ctc.wstx.io.CharsetNames;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Authors;
@@ -43,11 +48,6 @@ import net.sourceforge.ondex.exception.type.ParsingFailedException;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
-
-import org.apache.log4j.Level;
-import org.codehaus.stax2.XMLInputFactory2;
-
-import com.ctc.wstx.io.CharsetNames;
 
 /**
  * Parser for OXL files.

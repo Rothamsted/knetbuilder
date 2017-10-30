@@ -5,7 +5,11 @@ import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.export.ONDEXExport;
 
 /**

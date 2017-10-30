@@ -1,16 +1,28 @@
 package net.sourceforge.ondex.mapping.go2goslim;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.lucene.search.Query;
+
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.config.LuceneRegistry;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.searchable.LuceneConcept;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.core.searchable.LuceneQueryBuilder;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
-import org.apache.lucene.search.Query;
-
-import java.util.*;
 
 /**
  * An equivilent of the map2slim algorithm for Ondex

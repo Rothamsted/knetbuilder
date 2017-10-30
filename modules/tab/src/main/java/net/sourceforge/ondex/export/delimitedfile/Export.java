@@ -1,5 +1,12 @@
 package net.sourceforge.ondex.export.delimitedfile;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.InvalidRouteException;
 import net.sourceforge.ondex.algorithm.pathmodel.ONDEXEntityPath;
@@ -7,19 +14,21 @@ import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
+import net.sourceforge.ondex.args.CompressResultsArguementDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.MetaData;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.export.ONDEXExport;
 import net.sourceforge.ondex.tools.tab.exporter.OndexPathPrinter;
 import net.sourceforge.ondex.tools.tab.importer.params.FieldArgumentParser;
-
-import java.io.File;
-import java.util.*;
-import net.sourceforge.ondex.args.CompressResultsArguementDefinition;
 
 /**
  * @author lysenkoa, hindlem

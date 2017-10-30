@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.parser.uniprot.xml.component;
 
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 

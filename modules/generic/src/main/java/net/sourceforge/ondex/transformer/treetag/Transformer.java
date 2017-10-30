@@ -1,18 +1,21 @@
 package net.sourceforge.ondex.transformer.treetag;
 
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
-import net.sourceforge.ondex.exception.type.DataSourceMissingException;
-import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
+
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
+import net.sourceforge.ondex.transformer.ONDEXTransformer;
 
 @Custodians(custodians = { "Jochen Weile" }, emails = { " \tjweile at users.sourceforge.net" })
 public class Transformer extends ONDEXTransformer implements ArgumentNames {

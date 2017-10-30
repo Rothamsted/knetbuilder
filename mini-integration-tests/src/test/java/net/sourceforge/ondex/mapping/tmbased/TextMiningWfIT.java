@@ -3,7 +3,6 @@ package net.sourceforge.ondex.mapping.tmbased;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Optional;
 import java.util.Set;

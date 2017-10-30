@@ -1,17 +1,22 @@
 package net.sourceforge.ondex.parser.aracyc.parse.transformers;
 
-import net.sourceforge.ondex.core.*;
+import java.util.HashSet;
+import java.util.regex.Pattern;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
-import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.parser.aracyc.MetaData;
 import net.sourceforge.ondex.parser.aracyc.Parser;
 import net.sourceforge.ondex.parser.aracyc.objects.AbstractNode;
 import net.sourceforge.ondex.parser.aracyc.objects.Compound;
-
-import java.util.HashSet;
-import java.util.regex.Pattern;
 /**
  * Transforms a net.sourceforge.ondex.parser.aracyc2.sink.Compound to a ONDEXConcept.
  * @author peschr

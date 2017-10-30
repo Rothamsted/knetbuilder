@@ -1,18 +1,24 @@
 package net.sourceforge.ondex.export.tab;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
-import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
-import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
-import net.sourceforge.ondex.export.ONDEXExport;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
+import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
+import net.sourceforge.ondex.export.ONDEXExport;
 
 public class Export extends ONDEXExport
 {

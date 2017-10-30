@@ -18,14 +18,14 @@ import java.util.zip.ZipFile;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.parser.medline2.Parser;
-import net.sourceforge.ondex.parser.medline2.sink.Abstract;
-import net.sourceforge.ondex.tools.ziptools.ZipEndings;
-
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 
 import com.ctc.wstx.stax.WstxInputFactory;
+
+import net.sourceforge.ondex.parser.medline2.Parser;
+import net.sourceforge.ondex.parser.medline2.sink.Abstract;
+import net.sourceforge.ondex.tools.ziptools.ZipEndings;
 
 /**
  * MEDLINE XML parser

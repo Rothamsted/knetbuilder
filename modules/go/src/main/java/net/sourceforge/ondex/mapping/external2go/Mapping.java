@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.lucene.search.Query;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -36,8 +38,6 @@ import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
-
-import org.apache.lucene.search.Query;
 
 /**
  * Parses any *2go mapping from a given file.

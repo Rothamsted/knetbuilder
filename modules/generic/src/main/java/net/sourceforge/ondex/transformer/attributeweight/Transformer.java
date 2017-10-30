@@ -1,17 +1,20 @@
 package net.sourceforge.ondex.transformer.attributeweight;
 
+import java.util.Set;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.exception.type.WrongParameterException;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.util.Set;
 
 /**
  * This transformer calculates a weighted average over the specified Attribute after

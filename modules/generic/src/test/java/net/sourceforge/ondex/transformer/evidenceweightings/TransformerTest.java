@@ -3,19 +3,28 @@
  */
 package net.sourceforge.ondex.transformer.evidenceweightings;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.Properties;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 
 /**
  * @author hindlem

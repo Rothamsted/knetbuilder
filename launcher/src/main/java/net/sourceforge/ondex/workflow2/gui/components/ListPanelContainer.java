@@ -33,6 +33,8 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.workflow.engine.BasicJobImpl;
 import net.sourceforge.ondex.workflow.engine.JobExecutor;
 import net.sourceforge.ondex.workflow.engine.JobProgressObserver;
@@ -42,8 +44,6 @@ import net.sourceforge.ondex.workflow.model.WorkflowTask;
 import net.sourceforge.ondex.workflow.validation.ErrorReport;
 import net.sourceforge.ondex.workflow.validation.PluginValidator;
 import net.sourceforge.ondex.workflow2.gui.components.highlighting.HighlightManager;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author lysenkoa

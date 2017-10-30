@@ -1,17 +1,5 @@
 package net.sourceforge.ondex.export.xhtml;
 
-import com.ctc.wstx.io.CharsetNames;
-import com.ctc.wstx.stax.WstxOutputFactory;
-import net.sourceforge.ondex.annotations.Authors;
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.export.ONDEXExport;
-import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
-import org.codehaus.stax2.XMLStreamWriter2;
-
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,6 +10,34 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.stream.XMLStreamException;
+
+import org.codehaus.stax2.XMLStreamWriter2;
+
+import com.ctc.wstx.io.CharsetNames;
+import com.ctc.wstx.stax.WstxOutputFactory;
+
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.MetaData;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
 
 /**
  * Exports an ONDEX to a xhtml website made up of linked tables with various

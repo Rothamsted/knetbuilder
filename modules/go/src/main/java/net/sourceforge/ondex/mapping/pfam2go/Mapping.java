@@ -1,15 +1,5 @@
 package net.sourceforge.ondex.mapping.pfam2go;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.annotations.Status;
-import net.sourceforge.ondex.annotations.StatusType;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.*;
-import net.sourceforge.ondex.mapping.ONDEXMapping;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,6 +8,24 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.DataFileErrorEvent;
+import net.sourceforge.ondex.event.type.DataFileMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
+import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.event.type.InconsistencyEvent;
+import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
+import net.sourceforge.ondex.mapping.ONDEXMapping;
 
 /**
  * Parses the pfam2go mapping from a given file.

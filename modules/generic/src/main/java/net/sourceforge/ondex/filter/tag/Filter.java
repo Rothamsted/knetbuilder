@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.filter.tag;
 
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -12,10 +16,6 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
-
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Filter on context

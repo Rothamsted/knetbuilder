@@ -2,6 +2,7 @@ package test.net.sourceforge.ondex.scripting.sparql;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.junit.Assert;

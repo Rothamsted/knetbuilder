@@ -1,11 +1,11 @@
 package net.sourceforge.ondex.scripting;
 
-import net.sourceforge.ondex.scripting.ui.CommandEvent;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import net.sourceforge.ondex.scripting.ui.CommandEvent;
 
 /**
  * Trivial implementation of an InterpretationController

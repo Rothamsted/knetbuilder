@@ -7,23 +7,23 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.config.ValidatorRegistry;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
-import org.apache.log4j.Level;
 
 public class Writer {
 

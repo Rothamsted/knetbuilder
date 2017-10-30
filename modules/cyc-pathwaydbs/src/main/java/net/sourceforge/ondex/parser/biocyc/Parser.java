@@ -1,5 +1,25 @@
 package net.sourceforge.ondex.parser.biocyc;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+import org.biopax.paxtools.io.BioPAXIOHandler;
+import org.biopax.paxtools.io.jena.JenaIOHandler;
+import org.biopax.paxtools.model.Model;
+import org.biopax.paxtools.model.level2.biochemicalReaction;
+import org.biopax.paxtools.model.level2.catalysis;
+import org.biopax.paxtools.model.level2.complex;
+import org.biopax.paxtools.model.level2.control;
+import org.biopax.paxtools.model.level2.modulation;
+import org.biopax.paxtools.model.level2.pathway;
+import org.biopax.paxtools.model.level2.physicalEntity;
+import org.biopax.paxtools.model.level2.protein;
+import org.biopax.paxtools.model.level2.smallMolecule;
+import org.biopax.paxtools.model.level2.transport;
+
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
@@ -10,13 +30,18 @@ import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
-import net.sourceforge.ondex.parser.biocyc.handler.*;
-import org.biopax.paxtools.io.BioPAXIOHandler;
-import org.biopax.paxtools.io.jena.JenaIOHandler;
-import org.biopax.paxtools.model.Model;
-import org.biopax.paxtools.model.level2.*;
-
-import java.io.*;
+import net.sourceforge.ondex.parser.biocyc.handler.ComplexHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.CompoundHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.ContextHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.ControlHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.DefaultHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.EnzymeHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.ModulationHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.PathwayHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.PhysicalEntityHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.ProteinHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.ReactionHandler;
+import net.sourceforge.ondex.parser.biocyc.handler.TransportHandler;
 
 /**
  * PlantCyc parser based on BioPax representation parsed using paxtools.

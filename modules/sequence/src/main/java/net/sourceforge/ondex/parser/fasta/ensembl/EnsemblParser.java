@@ -3,12 +3,14 @@ package net.sourceforge.ondex.parser.fasta.ensembl;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -20,8 +22,6 @@ import net.sourceforge.ondex.parser.fasta.FastaBlock;
 import net.sourceforge.ondex.parser.fasta.ReadFastaFiles;
 import net.sourceforge.ondex.parser.fasta.WriteFastaFile;
 import net.sourceforge.ondex.parser.fasta.args.ArgumentNames;
-
-import org.apache.log4j.Level;
 
 /**
  * Ensembl FASTA FILE parser, input a peptide file

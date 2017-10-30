@@ -1,11 +1,19 @@
 package net.sourceforge.ondex.workflow2.gui;
 
+import java.io.File;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.init.PluginRegistry;
-import org.apache.commons.cli.*;
-
-import javax.swing.*;
-import java.io.File;
 
 public class Main {
 

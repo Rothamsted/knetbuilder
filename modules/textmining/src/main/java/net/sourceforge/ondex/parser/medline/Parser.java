@@ -1,19 +1,24 @@
 package net.sourceforge.ondex.parser.medline;
 
+import java.util.Hashtable;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
-import net.sourceforge.ondex.args.*;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.BooleanArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.RangeArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.medline.args.ArgumentNames;
-import org.apache.log4j.Level;
-
-import java.util.Hashtable;
 
 /**
  * @author rwinnenb

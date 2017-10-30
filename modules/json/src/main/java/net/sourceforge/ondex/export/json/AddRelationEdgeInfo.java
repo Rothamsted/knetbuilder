@@ -1,9 +1,11 @@
 package net.sourceforge.ondex.export.json;
 
 import java.util.Set;
+
+import org.json.simple.JSONObject;
+
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import org.json.simple.JSONObject;
 
 /**
  * Build edge json objects using their various attributes.

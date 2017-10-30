@@ -1,9 +1,19 @@
 package net.sourceforge.ondex.parser.fasta.gramene;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
@@ -11,10 +21,6 @@ import net.sourceforge.ondex.parser.fasta.FastaBlock;
 import net.sourceforge.ondex.parser.fasta.ReadFastaFiles;
 import net.sourceforge.ondex.parser.fasta.WriteFastaFile;
 import net.sourceforge.ondex.parser.fasta.args.ArgumentNames;
-import org.apache.log4j.Level;
-
-import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * NCBI FASTA FILE parser

@@ -22,6 +22,15 @@ import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+import org.codehaus.stax2.XMLOutputFactory2;
+import org.codehaus.stax2.XMLStreamWriter2;
+
+import com.ctc.wstx.api.WstxOutputProperties;
+import com.ctc.wstx.io.CharsetNames;
+import com.ctc.wstx.stax.WstxOutputFactory;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -51,15 +60,6 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
-import org.codehaus.stax2.XMLOutputFactory2;
-import org.codehaus.stax2.XMLStreamWriter2;
-
-import com.ctc.wstx.api.WstxOutputProperties;
-import com.ctc.wstx.io.CharsetNames;
-import com.ctc.wstx.stax.WstxOutputFactory;
 
 /**
  * Builds complete XML exchange format documents and/or ONDEX relations and

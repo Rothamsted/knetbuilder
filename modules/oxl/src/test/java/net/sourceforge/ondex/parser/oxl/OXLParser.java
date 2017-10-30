@@ -3,26 +3,36 @@
  */
 package net.sourceforge.ondex.parser.oxl;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.export.oxl.Export;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
-import java.awt.*;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.exception.type.PluginConfigurationException;
+import net.sourceforge.ondex.export.oxl.Export;
 
 /**
  * @author hindlem

@@ -1,8 +1,18 @@
 package net.sourceforge.ondex.parser.medline;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -12,14 +22,6 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.medline.args.ArgumentNames;
-import org.apache.log4j.Level;
-
-import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.FileFilter;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 
 class MyFilter implements FileFilter {
 

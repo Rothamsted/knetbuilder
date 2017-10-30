@@ -1,14 +1,10 @@
 package net.sourceforge.ondex.parser.correlationtab;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.annotations.Authors;
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.*;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.*;
-import net.sourceforge.ondex.parser.ONDEXParser;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -16,6 +12,29 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.RangeArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.args.StringMappingPairArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
+import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
+import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
+import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
+import net.sourceforge.ondex.event.type.WrongParameterEvent;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 /**
  * A relation centric aproach to importing concepts and relations Concepts are

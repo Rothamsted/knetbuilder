@@ -4,20 +4,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
-import net.sourceforge.ondex.exception.type.DataSourceMissingException;
-import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
-import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
-import net.sourceforge.ondex.parser.biocyc.MetaData;
-import net.sourceforge.ondex.parser.biocyc.Parser;
-
 import org.biopax.paxtools.model.level2.Level2Element;
 import org.biopax.paxtools.model.level2.XReferrable;
 import org.biopax.paxtools.model.level2.complex;
@@ -27,6 +13,20 @@ import org.biopax.paxtools.model.level2.relationshipXref;
 import org.biopax.paxtools.model.level2.sequenceEntity;
 import org.biopax.paxtools.model.level2.unificationXref;
 import org.biopax.paxtools.model.level2.xref;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
+import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
+import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
+import net.sourceforge.ondex.parser.biocyc.MetaData;
+import net.sourceforge.ondex.parser.biocyc.Parser;
 
 /**
  * Implements shared methods for manipulation of concepts and relations.

@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.DataSource;

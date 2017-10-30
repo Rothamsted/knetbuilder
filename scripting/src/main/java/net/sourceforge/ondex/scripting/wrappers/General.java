@@ -1,18 +1,37 @@
 package net.sourceforge.ondex.scripting.wrappers;
 
-import net.sourceforge.ondex.core.*;
+import static net.sourceforge.ondex.tools.functions.StandardFunctions.getAccessionsOfType;
+import static net.sourceforge.ondex.tools.functions.StandardFunctions.getOtherNode;
+import static net.sourceforge.ondex.tools.functions.StandardFunctions.getOutgoingRelationsToConceptClass;
+import static net.sourceforge.ondex.tools.functions.StandardFunctions.relationsToTargets;
+
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.swing.JOptionPane;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXConcept;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXRelation;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
-
-import java.io.*;
-import java.util.*;
-import java.util.Map.Entry;
-
-import javax.swing.JOptionPane;
-
-import static net.sourceforge.ondex.tools.functions.StandardFunctions.*;
 
 /**
  * General-purpose functions used in scripting

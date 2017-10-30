@@ -1,6 +1,23 @@
 package net.sourceforge.ondex.scripting.wrappers;
 
-import net.sourceforge.ondex.core.*;
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationKey;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.Unit;
 import net.sourceforge.ondex.core.base.AbstractConcept;
 import net.sourceforge.ondex.core.base.AbstractONDEXGraphMetaData;
 import net.sourceforge.ondex.core.base.AbstractRelation;
@@ -9,19 +26,26 @@ import net.sourceforge.ondex.core.memory.MemoryONDEXRelation;
 import net.sourceforge.ondex.core.persistent.BerkeleyConcept;
 import net.sourceforge.ondex.core.persistent.BerkeleyONDEXGraph;
 import net.sourceforge.ondex.core.persistent.BerkeleyRelation;
-import net.sourceforge.ondex.scripting.*;
+import net.sourceforge.ondex.scripting.AbstractScriptingInitialiser;
+import net.sourceforge.ondex.scripting.BasicInterpretationController;
+import net.sourceforge.ondex.scripting.CommandInterpreter;
+import net.sourceforge.ondex.scripting.FunctionException;
+import net.sourceforge.ondex.scripting.InterpretationController;
+import net.sourceforge.ondex.scripting.ProxyTemplate;
+import net.sourceforge.ondex.scripting.ProxyTemplateBuilder;
+import net.sourceforge.ondex.scripting.TemplateBuilder;
 import net.sourceforge.ondex.scripting.base.JavaProxyTemplate;
 import net.sourceforge.ondex.scripting.base.UniversalProxyTemplateBuilder;
 import net.sourceforge.ondex.scripting.javascript.JSInterpreter;
 import net.sourceforge.ondex.scripting.ui.ScriptingShell;
-import net.sourceforge.ondex.tools.subgraph.*;
+import net.sourceforge.ondex.tools.subgraph.AttributePrototype;
+import net.sourceforge.ondex.tools.subgraph.ConceptPrototype;
+import net.sourceforge.ondex.tools.subgraph.DefConst;
+import net.sourceforge.ondex.tools.subgraph.RelationPrototype;
+import net.sourceforge.ondex.tools.subgraph.Subgraph;
 import net.sourceforge.ondex.tools.tab.importer.DataReader;
 import net.sourceforge.ondex.tools.tab.importer.DelimitedReader;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
-
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
 public class OndexScriptingInitialiser extends AbstractScriptingInitialiser {
 

@@ -1,15 +1,17 @@
 package net.sourceforge.ondex.transformer.createtag;
 
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createCC;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createDataSource;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createEvidence;
+
+import java.util.Set;
+
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.util.Set;
-
-import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.*;
 
 @Custodians(custodians = {"Jochen Weile"}, emails = {"jweile at users.sourceforge.net"})
 public class Transformer extends ONDEXTransformer implements

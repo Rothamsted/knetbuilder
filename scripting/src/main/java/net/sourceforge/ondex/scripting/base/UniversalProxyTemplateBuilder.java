@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javassist.CannotCompileException;
 import javassist.ClassClassPath;
@@ -23,9 +23,7 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewConstructor;
 import javassist.LoaderClassPath;
-
 import net.sourceforge.ondex.scripting.ApplicationTreeBuilder;
-
 import net.sourceforge.ondex.scripting.ProxyTemplate;
 import net.sourceforge.ondex.scripting.ProxyTemplateBuilder;
 import net.sourceforge.ondex.scripting.ProxyTemplateBuilderInteraface;

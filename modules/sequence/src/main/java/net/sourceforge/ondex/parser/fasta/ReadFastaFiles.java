@@ -1,11 +1,15 @@
 package net.sourceforge.ondex.parser.fasta;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.util.zip.GZIPInputStream;
+
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
-
-import java.io.*;
-import java.util.zip.GZIPInputStream;
 
 /**
  * FASTA FILE parser

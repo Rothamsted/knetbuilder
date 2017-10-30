@@ -1,22 +1,35 @@
 package net.sourceforge.ondex.mapping.basicaccessionbased;
 
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.mapping.accessionbased.MetaData;
-import org.apache.log4j.Logger;
-
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.*;
-import java.util.Map.Entry;
 
 
 /**

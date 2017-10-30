@@ -2,11 +2,10 @@ package net.sourceforge.ondex.parser.tableparser.tableEmulators;
 
 import java.io.File;
 
-import net.sourceforge.ondex.tools.tab.importer.DataReader;
-
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
+import net.sourceforge.ondex.tools.tab.importer.DataReader;
 
 public class MSExcelEmulator extends DataReader{
 	private Sheet sheet;

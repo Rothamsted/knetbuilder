@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.search.Query;
+
 import net.sourceforge.ondex.algorithm.relationneighbours.DepthSensitiveRTValidator;
 import net.sourceforge.ondex.algorithm.relationneighbours.LogicalRelationValidator;
 import net.sourceforge.ondex.algorithm.relationneighbours.RelationNeighboursSearch;
@@ -34,8 +36,6 @@ import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.exception.type.WrongParameterException;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
-
-import org.apache.lucene.search.Query;
 
 /**
  * Locates relation neighbours on seed/s defined by ondex id or list of names

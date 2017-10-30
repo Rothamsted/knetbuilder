@@ -1,13 +1,15 @@
 package net.sourceforge.ondex.filter.cloner;
 
+import java.util.Set;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
-
-import java.util.Set;
 
 /**
  * Returns the graph exactly

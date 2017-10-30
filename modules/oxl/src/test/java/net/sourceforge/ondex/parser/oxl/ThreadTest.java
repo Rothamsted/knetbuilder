@@ -4,7 +4,8 @@ import static junit.framework.Assert.assertEquals;
 
 import java.net.URL;
 import java.util.Arrays;
-import java.util.List;
+
+import org.junit.Test;
 
 import junit.framework.AssertionFailedError;
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -13,8 +14,6 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.base.AbstractAttribute;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-
-import org.junit.Test;
 
 public class ThreadTest {
 

@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.parser.uniprot.xml.component;
 
-import net.sourceforge.ondex.parser.uniprot.sink.DbLink;
-import net.sourceforge.ondex.parser.uniprot.sink.Protein;
-import net.sourceforge.ondex.parser.uniprot.xml.filter.ValueFilter;
-
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
+import net.sourceforge.ondex.parser.uniprot.sink.DbLink;
+import net.sourceforge.ondex.parser.uniprot.sink.Protein;
+import net.sourceforge.ondex.parser.uniprot.xml.filter.ValueFilter;
 
 /**
  * @author peschr

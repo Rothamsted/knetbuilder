@@ -14,6 +14,13 @@ import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.codehaus.stax2.XMLOutputFactory2;
+import org.codehaus.stax2.XMLStreamWriter2;
+
+import com.ctc.wstx.api.WstxOutputProperties;
+import com.ctc.wstx.io.CharsetNames;
+import com.ctc.wstx.stax.WstxOutputFactory;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
@@ -28,13 +35,6 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
-
-import org.codehaus.stax2.XMLOutputFactory2;
-import org.codehaus.stax2.XMLStreamWriter2;
-
-import com.ctc.wstx.api.WstxOutputProperties;
-import com.ctc.wstx.io.CharsetNames;
-import com.ctc.wstx.stax.WstxOutputFactory;
 
 /**
  * Exports information about meta data and other properties assigned to concepts

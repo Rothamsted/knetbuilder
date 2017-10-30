@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.export.datasource;
 
+import java.util.Set;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -8,8 +10,6 @@ import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.export.ONDEXExport;
-
-import java.util.Set;
 
 /**
  * Prints very simple statistics on the abundance of data source C.V.

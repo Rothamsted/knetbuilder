@@ -1,5 +1,12 @@
 package net.sourceforge.ondex.parser.metacyc;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -8,14 +15,28 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.metacyc.objects.AbstractNode;
 import net.sourceforge.ondex.parser.metacyc.objects.SinkFactory;
-import net.sourceforge.ondex.parser.metacyc.parse.*;
+import net.sourceforge.ondex.parser.metacyc.parse.AbstractParser;
+import net.sourceforge.ondex.parser.metacyc.parse.CompoundParser;
+import net.sourceforge.ondex.parser.metacyc.parse.EnzymeParser;
+import net.sourceforge.ondex.parser.metacyc.parse.GeneParser;
+import net.sourceforge.ondex.parser.metacyc.parse.IParser;
+import net.sourceforge.ondex.parser.metacyc.parse.PathwayParser;
+import net.sourceforge.ondex.parser.metacyc.parse.ProteinParser;
+import net.sourceforge.ondex.parser.metacyc.parse.PublicationParser;
+import net.sourceforge.ondex.parser.metacyc.parse.ReactionParser;
 import net.sourceforge.ondex.parser.metacyc.parse.readers.AbstractReader;
 import net.sourceforge.ondex.parser.metacyc.parse.readers.ColFileReader;
 import net.sourceforge.ondex.parser.metacyc.parse.readers.DatFileReader;
-import net.sourceforge.ondex.parser.metacyc.parse.transformers.*;
-
-import java.io.File;
-import java.util.*;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.AbstractTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.CompoundTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.ECNumberTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.EnzymeTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.GeneTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.PathwayTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.ProteinTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.PublicationTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.ReactionTransformer;
+import net.sourceforge.ondex.parser.metacyc.parse.transformers.TransformerFactory;
 
 /**
  * Parser for the aracyc flatfile database. The data flow is Parser ->
