@@ -1,8 +1,9 @@
 package net.sourceforge.ondex.core.memorydist;
 
-import com.hazelcast.core.HazelcastInstance;
 import java.io.File;
 import java.io.FileNotFoundException;
+
+import com.hazelcast.core.HazelcastInstance;
 
 /**
  * A simple commandline Hazelcast node. You can use this program to donate

@@ -2,6 +2,8 @@ package net.sourceforge.ondex.parser.kegg.kgml;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.codehaus.stax2.XMLStreamReader2;
+
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -14,8 +16,6 @@ import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
 import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.parser.kegg.Parser;
-
-import org.codehaus.stax2.XMLStreamReader2;
 
 /**
  * For parsing the name of the current pathway map

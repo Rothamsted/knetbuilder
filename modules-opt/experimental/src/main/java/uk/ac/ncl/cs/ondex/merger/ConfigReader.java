@@ -9,12 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.sourceforge.ondex.core.DataSource;
+
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import org.apache.log4j.Logger;
 
 /**
  *

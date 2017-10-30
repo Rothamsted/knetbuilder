@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.IntegerRangeArgumentDefinition;
@@ -30,10 +34,6 @@ import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.tools.ConsoleProgressBar;
 import net.sourceforge.ondex.tools.MetaDataLookup;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
-import org.apache.log4j.Level;
 
 /**
  * Shared GI transformer

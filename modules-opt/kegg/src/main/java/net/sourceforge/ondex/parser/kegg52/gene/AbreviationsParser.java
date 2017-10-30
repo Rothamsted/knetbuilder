@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
-import net.sourceforge.ondex.parser.kegg52.Parser;
-
 import com.ice.tar.TarEntry;
 import com.ice.tar.TarInputStream;
+
+import net.sourceforge.ondex.parser.kegg52.Parser;
 
 /**
  * @author Jan

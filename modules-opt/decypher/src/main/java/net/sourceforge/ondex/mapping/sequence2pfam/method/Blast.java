@@ -5,9 +5,11 @@ import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.lucene.search.Query;
+
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -16,8 +18,6 @@ import net.sourceforge.ondex.core.searchable.LuceneQueryBuilder;
 import net.sourceforge.ondex.mapping.sequence2pfam.MetaData;
 import net.sourceforge.ondex.programcalls.HMMMatch;
 import net.sourceforge.ondex.programcalls.SequenceType;
-
-import org.apache.lucene.search.Query;
 
 /**
  * BLAST based pfam mapping method

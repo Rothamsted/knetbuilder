@@ -10,11 +10,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import uk.ac.ncl.cs.ondex.stats.datastructures.ConceptClassTree;
-import uk.ac.ncl.cs.ondex.stats.datastructures.PropertyMaps;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.Attribute;
@@ -23,6 +22,8 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.export.ONDEXExport;
+import uk.ac.ncl.cs.ondex.stats.datastructures.ConceptClassTree;
+import uk.ac.ncl.cs.ondex.stats.datastructures.PropertyMaps;
 import uk.ac.ncl.cs.ondex.stats.datastructures.RelationTypeTree;
 import uk.ac.ncl.cs.ondex.stats.datastructures.Tree;
 

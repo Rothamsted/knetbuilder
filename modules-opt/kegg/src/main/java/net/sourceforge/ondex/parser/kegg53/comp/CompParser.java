@@ -4,11 +4,6 @@
  */
 package net.sourceforge.ondex.parser.kegg53.comp;
 
-import net.sourceforge.ondex.parser.kegg53.MetaData;
-import net.sourceforge.ondex.parser.kegg53.sink.Concept;
-import net.sourceforge.ondex.parser.kegg53.sink.ConceptAcc;
-import net.sourceforge.ondex.parser.kegg53.sink.ConceptName;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +11,11 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import net.sourceforge.ondex.parser.kegg53.MetaData;
+import net.sourceforge.ondex.parser.kegg53.sink.Concept;
+import net.sourceforge.ondex.parser.kegg53.sink.ConceptAcc;
+import net.sourceforge.ondex.parser.kegg53.sink.ConceptName;
 
 
 /**

@@ -4,6 +4,18 @@
  */
 package net.sourceforge.ondex.parser.kegg56.path;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import com.sleepycat.persist.EntityCursor;
 
 import net.sourceforge.ondex.exception.type.InconsistencyException;
@@ -19,13 +31,6 @@ import net.sourceforge.ondex.parser.kegg56.sink.ConceptName;
 import net.sourceforge.ondex.parser.kegg56.sink.Relation;
 import net.sourceforge.ondex.parser.kegg56.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg56.util.Util;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * @author taubertj

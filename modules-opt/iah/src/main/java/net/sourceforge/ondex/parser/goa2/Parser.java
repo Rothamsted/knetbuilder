@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
@@ -29,10 +33,6 @@ import net.sourceforge.ondex.exception.type.PluginException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.MetaDataLookup;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
-import org.apache.log4j.Level;
 
 public class Parser extends ONDEXParser {
 

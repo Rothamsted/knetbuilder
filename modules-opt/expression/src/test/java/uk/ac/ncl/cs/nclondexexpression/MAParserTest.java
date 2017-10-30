@@ -7,21 +7,23 @@ package uk.ac.ncl.cs.nclondexexpression;
 
 import java.util.Map;
 import java.util.Set;
-import junit.framework.Assert;
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.parser.ONDEXParser;
-import net.sourceforge.ondex.parser.oxl.Parser;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import junit.framework.Assert;
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
  *

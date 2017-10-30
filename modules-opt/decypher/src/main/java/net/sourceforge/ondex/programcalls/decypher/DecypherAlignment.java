@@ -1,20 +1,43 @@
 package net.sourceforge.ondex.programcalls.decypher;
 
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.programcalls.*;
-import net.sourceforge.ondex.programcalls.MetaData;
-import net.sourceforge.ondex.programcalls.exceptions.AlgorithmNotSupportedException;
-import net.sourceforge.ondex.programcalls.exceptions.MissingFileException;
+import static net.sourceforge.ondex.programcalls.SequenceType.AA;
+import static net.sourceforge.ondex.programcalls.SequenceType.NA;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import static net.sourceforge.ondex.programcalls.SequenceType.AA;
-import static net.sourceforge.ondex.programcalls.SequenceType.NA;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.programcalls.BLASTAlignmentProgram;
+import net.sourceforge.ondex.programcalls.HMMAlignmentProgram;
+import net.sourceforge.ondex.programcalls.HMMMatch;
+import net.sourceforge.ondex.programcalls.Match;
+import net.sourceforge.ondex.programcalls.MetaData;
+import net.sourceforge.ondex.programcalls.SequenceType;
+import net.sourceforge.ondex.programcalls.StreamGobbler;
+import net.sourceforge.ondex.programcalls.exceptions.AlgorithmNotSupportedException;
+import net.sourceforge.ondex.programcalls.exceptions.MissingFileException;
 
 /**
  * An implementation of Decypher for allignments

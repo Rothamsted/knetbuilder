@@ -1,15 +1,24 @@
 package net.sourceforge.ondex.parser.kegg53;
 
-import com.ice.tar.TarEntry;
-import com.ice.tar.TarEntryEnumerator;
-import com.ice.tar.TarInputStream;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.zip.*;
+import java.util.zip.Deflater;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
+
+import com.ice.tar.TarEntry;
+import com.ice.tar.TarEntryEnumerator;
+import com.ice.tar.TarInputStream;
 
 /**
  * @author hindlem

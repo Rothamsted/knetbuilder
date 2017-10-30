@@ -1,7 +1,13 @@
 package net.sourceforge.ondex.parser.transfac.factor.gene;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Iterator;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
@@ -10,12 +16,6 @@ import net.sourceforge.ondex.parser.transfac.ConceptWriter;
 import net.sourceforge.ondex.parser.transfac.DBlink;
 import net.sourceforge.ondex.parser.transfac.Parser;
 import net.sourceforge.ondex.parser.transfac.sink.Publication;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Iterator;
 
 
 /**

@@ -1,23 +1,29 @@
 package net.sourceforge.ondex.parser.iah;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.EventType;
-import net.sourceforge.ondex.event.type.GeneralOutputEvent;
-import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.parser.ONDEXParser;
-import net.sourceforge.ondex.tools.MetaDataLookup;
-import net.sourceforge.ondex.tools.MetaDataUtil;
-import org.apache.log4j.Level;
-
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.log4j.Level;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.exception.type.PluginConfigurationException;
+import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.tools.MetaDataLookup;
+import net.sourceforge.ondex.tools.MetaDataUtil;
 
 public class Parser extends ONDEXParser
 {

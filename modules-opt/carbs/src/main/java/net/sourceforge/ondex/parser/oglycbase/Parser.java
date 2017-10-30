@@ -1,11 +1,5 @@
 package net.sourceforge.ondex.parser.oglycbase;
 
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.parser.ONDEXParser;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +8,17 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
+
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 /**
  *

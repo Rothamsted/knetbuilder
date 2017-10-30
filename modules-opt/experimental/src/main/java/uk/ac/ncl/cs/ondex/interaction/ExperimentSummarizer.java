@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.IntegerRangeArgumentDefinition;
 import net.sourceforge.ondex.core.Attribute;
@@ -29,7 +32,6 @@ import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-import org.apache.log4j.Level;
 import uk.ac.ncl.cs.ondex.tools.Neighbour;
 
 /**

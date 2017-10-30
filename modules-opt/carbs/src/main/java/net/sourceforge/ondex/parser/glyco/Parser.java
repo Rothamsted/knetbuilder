@@ -1,5 +1,12 @@
 package net.sourceforge.ondex.parser.glyco;
 
+import java.io.File;
+import java.io.FileFilter;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
@@ -8,12 +15,6 @@ import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
-
-import java.io.File;
-import java.io.FileFilter;
 
 /**
  * A parser for GlycomeDB.

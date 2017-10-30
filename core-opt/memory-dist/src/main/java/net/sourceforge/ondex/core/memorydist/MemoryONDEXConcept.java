@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.collections15.BidiMap;
+import org.apache.commons.collections15.bidimap.DualHashBidiMap;
+
 import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -16,9 +19,6 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.base.AbstractConcept;
 import net.sourceforge.ondex.event.type.DuplicatedEntryEvent;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
-
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.bidimap.DualHashBidiMap;
 
 /**
  * This class represents a pure memory based implementation of the ONDEXConcept.

@@ -1,14 +1,15 @@
 package net.sourceforge.ondex.parser.kegg53.xml;
 
-import net.sourceforge.ondex.parser.kegg53.data.Pathway;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import net.sourceforge.ondex.parser.kegg53.data.Pathway;
 
 
 /**

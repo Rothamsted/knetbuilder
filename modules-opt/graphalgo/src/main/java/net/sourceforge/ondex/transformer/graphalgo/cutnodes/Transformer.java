@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.transformer.graphalgo.cutnodes;
 
-import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.transformer.graphalgo.GraphAlgoTransformer;
 

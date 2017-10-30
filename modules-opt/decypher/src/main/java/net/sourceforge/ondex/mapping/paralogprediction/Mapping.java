@@ -1,21 +1,40 @@
 package net.sourceforge.ondex.mapping.paralogprediction;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.*;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.RangeArgumentDefinition;
+import net.sourceforge.ondex.args.SequenceTypeArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
-import net.sourceforge.ondex.event.type.*;
+import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
+import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
+import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.programcalls.Match;
 import net.sourceforge.ondex.programcalls.decypher.DecypherAlignment;
 import net.sourceforge.ondex.programcalls.exceptions.AlgorithmNotSupportedException;
 import net.sourceforge.ondex.programcalls.exceptions.MissingFileException;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * Predicts paralogs within species based on a bitscore cutoff of similar proteins (bitscores, unlike evalues do not vary with the size of the database), matches based on reciprocal blast.

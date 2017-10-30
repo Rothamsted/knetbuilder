@@ -1,11 +1,11 @@
 package net.sourceforge.ondex.parser.transfac.tfclass;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
+import java.io.IOException;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.parser.transfac.AbstractTFParser;
 import net.sourceforge.ondex.parser.transfac.ConceptWriter;
-
-import java.io.IOException;
 
 public class ClassParser extends AbstractTFParser {
 

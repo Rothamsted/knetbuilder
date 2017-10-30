@@ -7,11 +7,11 @@ import java.util.Map;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.event.type.ParsingErrorEvent;
-import net.sourceforge.ondex.parser.kegg.Parser;
-
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
+
+import net.sourceforge.ondex.event.type.ParsingErrorEvent;
+import net.sourceforge.ondex.parser.kegg.Parser;
 
 /**
  * This parser parses KGML files according to http://www.genome.jp/kegg/xml/

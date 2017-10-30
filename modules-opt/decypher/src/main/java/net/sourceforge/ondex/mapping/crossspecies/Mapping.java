@@ -1,11 +1,32 @@
 package net.sourceforge.ondex.mapping.crossspecies;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
-import net.sourceforge.ondex.args.*;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.BooleanArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.RangeArgumentDefinition;
+import net.sourceforge.ondex.args.SequenceTypeArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
@@ -14,8 +35,6 @@ import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.programcalls.Match;
 import net.sourceforge.ondex.programcalls.decypher.DecypherAlignment;
-
-import java.util.*;
 
 /**
  * This plugin is not intended for generic usage!

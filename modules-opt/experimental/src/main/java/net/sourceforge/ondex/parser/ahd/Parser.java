@@ -1,19 +1,31 @@
 package net.sourceforge.ondex.parser.ahd;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.exception.type.*;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EntityFactory;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
+import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
+import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
+import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.auxfunctions.TabArrayObject;
 import net.sourceforge.ondex.tools.auxfunctions.TabDelimited;
 import net.sourceforge.ondex.tools.auxfunctions.tuples.Pair;
 import net.sourceforge.ondex.tools.auxfunctions.tuples.Triple;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**

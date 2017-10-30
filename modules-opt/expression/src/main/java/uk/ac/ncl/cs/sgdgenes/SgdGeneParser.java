@@ -5,22 +5,29 @@
 
 package uk.ac.ncl.cs.sgdgenes;
 
+import static uk.ac.ncl.cs.sgdgenes.Column.ALIASES;
+import static uk.ac.ncl.cs.sgdgenes.Column.DESCRIPTION;
+import static uk.ac.ncl.cs.sgdgenes.Column.GENE_NAME;
+import static uk.ac.ncl.cs.sgdgenes.Column.ORF_NAME;
+import static uk.ac.ncl.cs.sgdgenes.Column.SGD_ID;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.event.type.ParsingErrorEvent;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.exception.type.ParsingFailedException;
 import net.sourceforge.ondex.parser.ONDEXParser;
-import org.apache.log4j.Level;
-import static uk.ac.ncl.cs.sgdgenes.Column.*;
 
 /**
  *

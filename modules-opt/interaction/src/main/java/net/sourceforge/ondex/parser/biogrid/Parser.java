@@ -1,17 +1,5 @@
 package net.sourceforge.ondex.parser.biogrid;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.InconsistencyEvent;
-import net.sourceforge.ondex.exception.type.MetaDataMissingException;
-import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.exception.type.PluginException;
-import net.sourceforge.ondex.parser.ONDEXParser;
-import net.sourceforge.ondex.tools.MetaDataLookup;
-import org.apache.log4j.Level;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,6 +7,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Level;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.InconsistencyEvent;
+import net.sourceforge.ondex.exception.type.MetaDataMissingException;
+import net.sourceforge.ondex.exception.type.PluginConfigurationException;
+import net.sourceforge.ondex.exception.type.PluginException;
+import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.tools.MetaDataLookup;
 
 /**
  * Parses BioGRID database flatfiles.

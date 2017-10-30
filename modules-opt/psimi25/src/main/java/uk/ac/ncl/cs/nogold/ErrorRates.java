@@ -17,9 +17,6 @@
 
 package uk.ac.ncl.cs.nogold;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  *
  * @author Jochen Weile, M.Sc. <j.weile@ncl.ac.uk>

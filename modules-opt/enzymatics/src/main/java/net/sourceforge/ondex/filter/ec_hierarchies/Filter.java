@@ -1,24 +1,29 @@
 package net.sourceforge.ondex.filter.ec_hierarchies;
 
-import net.sourceforge.ondex.annotations.Status;
-import net.sourceforge.ondex.annotations.StatusType;
-import net.sourceforge.ondex.annotations.metadata.DataSourceRequired;
-import net.sourceforge.ondex.annotations.metadata.ConceptClassRequired;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.RangeArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.filter.ONDEXFilter;
-import net.sourceforge.ondex.parser.ec.MetaData;
-import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
+import static net.sourceforge.ondex.filter.ec_hierarchies.ArgumentNames.EC_LEVEL_ARG;
+import static net.sourceforge.ondex.filter.ec_hierarchies.ArgumentNames.EC_LEVEL_DESC;
+import static net.sourceforge.ondex.filter.ec_hierarchies.MetaData.CC_EC;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static net.sourceforge.ondex.filter.ec_hierarchies.ArgumentNames.EC_LEVEL_ARG;
-import static net.sourceforge.ondex.filter.ec_hierarchies.ArgumentNames.EC_LEVEL_DESC;
-import static net.sourceforge.ondex.filter.ec_hierarchies.MetaData.CC_EC;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
+import net.sourceforge.ondex.annotations.metadata.ConceptClassRequired;
+import net.sourceforge.ondex.annotations.metadata.DataSourceRequired;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.RangeArgumentDefinition;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.filter.ONDEXFilter;
+import net.sourceforge.ondex.parser.ec.MetaData;
+import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
 
 /**
  * A simple filter that allows a user to filter EC concepts based on there EC level in the hierarchy

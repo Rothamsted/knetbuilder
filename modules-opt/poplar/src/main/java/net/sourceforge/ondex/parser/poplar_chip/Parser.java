@@ -1,23 +1,30 @@
 package net.sourceforge.ondex.parser.poplar_chip;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.BooleanArgumentDefinition;
-import net.sourceforge.ondex.args.RangeArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
-import net.sourceforge.ondex.exception.type.DataSourceMissingException;
-import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
-import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
-import net.sourceforge.ondex.parser.ONDEXParser;
-import net.sourceforge.ondex.tools.auxfunctions.SQLTableReader;
-import net.sourceforge.ondex.tools.auxfunctions.TabArrayObject;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.BooleanArgumentDefinition;
+import net.sourceforge.ondex.args.RangeArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EntityFactory;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
+import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
+import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
+import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.tools.auxfunctions.SQLTableReader;
+import net.sourceforge.ondex.tools.auxfunctions.TabArrayObject;
 
 /**
  * Parser for Poplar blast hits

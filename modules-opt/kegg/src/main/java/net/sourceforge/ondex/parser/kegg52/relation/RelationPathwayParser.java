@@ -4,8 +4,14 @@
  */
 package net.sourceforge.ondex.parser.kegg52.relation;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.parser.kegg52.MetaData;
 import net.sourceforge.ondex.parser.kegg52.Parser;
 import net.sourceforge.ondex.parser.kegg52.data.Entry;
@@ -15,11 +21,6 @@ import net.sourceforge.ondex.parser.kegg52.sink.ConceptWriter;
 import net.sourceforge.ondex.parser.kegg52.sink.Relation;
 import net.sourceforge.ondex.parser.kegg52.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg52.util.Util;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * @author taubertj

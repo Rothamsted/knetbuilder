@@ -19,10 +19,9 @@
  */
 package uk.ac.ncl.cs.nclondexexpression.tools;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-
 import java.util.Vector;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;

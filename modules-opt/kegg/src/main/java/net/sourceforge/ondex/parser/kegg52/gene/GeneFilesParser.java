@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.parser.kegg52.MetaData;
 import net.sourceforge.ondex.parser.kegg52.Parser;
 import net.sourceforge.ondex.parser.kegg52.data.Entry;
@@ -22,9 +25,6 @@ import net.sourceforge.ondex.parser.kegg52.sink.Concept;
 import net.sourceforge.ondex.parser.kegg52.sink.Relation;
 import net.sourceforge.ondex.parser.kegg52.sink.Sequence;
 import net.sourceforge.ondex.parser.kegg52.util.DPLPersistantSet;
-
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
 
 
 /**

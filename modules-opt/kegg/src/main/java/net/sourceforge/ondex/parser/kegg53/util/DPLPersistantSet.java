@@ -1,13 +1,13 @@
 package net.sourceforge.ondex.parser.kegg53.util;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+
 import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.PrimaryIndex;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 
 public class DPLPersistantSet<T> {
 

@@ -1,15 +1,19 @@
 package net.sourceforge.ondex.transformer.graphpath;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class Transformer extends ONDEXTransformer {
 

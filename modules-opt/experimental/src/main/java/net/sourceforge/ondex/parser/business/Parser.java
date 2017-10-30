@@ -1,16 +1,21 @@
 package net.sourceforge.ondex.parser.business;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.parser.ONDEXParser;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Parser for parsing business relation spreadsheets from IC.

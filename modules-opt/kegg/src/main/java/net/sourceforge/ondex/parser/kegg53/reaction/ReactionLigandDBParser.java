@@ -1,11 +1,5 @@
 package net.sourceforge.ondex.parser.kegg53.reaction;
 
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
-import net.sourceforge.ondex.parser.kegg53.data.Pathway;
-import net.sourceforge.ondex.parser.kegg53.data.Reaction;
-import net.sourceforge.ondex.parser.kegg53.util.DPLPersistantSet;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +10,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
+
+import net.sourceforge.ondex.parser.kegg53.data.Pathway;
+import net.sourceforge.ondex.parser.kegg53.data.Reaction;
+import net.sourceforge.ondex.parser.kegg53.util.DPLPersistantSet;
 
 /**
  * Parses the reaction componant of the ligand database

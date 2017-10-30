@@ -4,6 +4,14 @@
  */
 package net.sourceforge.ondex.parser.kegg52.ko;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 
@@ -17,9 +25,6 @@ import net.sourceforge.ondex.parser.kegg52.sink.ConceptName;
 import net.sourceforge.ondex.parser.kegg52.sink.Relation;
 import net.sourceforge.ondex.parser.kegg52.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg52.util.TaxidMapping;
-
-import java.util.*;
-import java.util.regex.Pattern;
 
 
 /**

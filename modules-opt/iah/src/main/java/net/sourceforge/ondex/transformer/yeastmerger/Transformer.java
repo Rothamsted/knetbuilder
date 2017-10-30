@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -25,8 +27,6 @@ import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.tools.ConsoleProgressBar;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import org.apache.log4j.Level;
 
 /**
  * Yeast merger

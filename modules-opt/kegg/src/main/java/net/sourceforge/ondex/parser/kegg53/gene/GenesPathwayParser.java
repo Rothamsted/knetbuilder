@@ -6,6 +6,7 @@ package net.sourceforge.ondex.parser.kegg53.gene;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.kegg53.MetaData;
 import net.sourceforge.ondex.parser.kegg53.Parser;

@@ -1,10 +1,40 @@
 package net.sourceforge.ondex.parser.kegg53;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.regex.Pattern;
+
+import org.xml.sax.SAXException;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
-import net.sourceforge.ondex.ONDEXPluginArguments;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.annotations.*;
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.annotations.DataURL;
+import net.sourceforge.ondex.annotations.DatabaseTarget;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
@@ -13,7 +43,11 @@ import net.sourceforge.ondex.parser.kegg53.args.ArgumentNames;
 import net.sourceforge.ondex.parser.kegg53.args.SpeciesArgumentDefinition;
 import net.sourceforge.ondex.parser.kegg53.comp.CompParser;
 import net.sourceforge.ondex.parser.kegg53.comp.CompPathwayMerger;
-import net.sourceforge.ondex.parser.kegg53.data.*;
+import net.sourceforge.ondex.parser.kegg53.data.Entry;
+import net.sourceforge.ondex.parser.kegg53.data.Pathway;
+import net.sourceforge.ondex.parser.kegg53.data.Reaction;
+import net.sourceforge.ondex.parser.kegg53.data.Relation;
+import net.sourceforge.ondex.parser.kegg53.data.Subtype;
 import net.sourceforge.ondex.parser.kegg53.enzyme.EnzymePathwayParser;
 import net.sourceforge.ondex.parser.kegg53.gene.GeneFilesParser;
 import net.sourceforge.ondex.parser.kegg53.gene.GenePathwayParser;
@@ -32,14 +66,6 @@ import net.sourceforge.ondex.parser.kegg53.util.BerkleyLocalEnvironment;
 import net.sourceforge.ondex.parser.kegg53.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg53.util.Util;
 import net.sourceforge.ondex.parser.kegg53.xml.XMLParser;
-import org.xml.sax.SAXException;
-
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.regex.Pattern;
 
 /**
  * @author taubertj, hindlem

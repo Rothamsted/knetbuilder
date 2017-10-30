@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.transformer.graphalgo.allcliques;
 
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.transformer.graphalgo.GraphAlgoTransformer;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.transformer.graphalgo.GraphAlgoTransformer;
 
 /**
  * Finds all maximal independent sets by an enumerative tree search.

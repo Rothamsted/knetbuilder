@@ -1,12 +1,18 @@
 package net.sourceforge.ondex.filter.nohits;
 
+import java.util.Set;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
-
-import java.util.Set;
 
 /**
  * A Filter to remove all UniProt proteins that do not have any

@@ -1,10 +1,19 @@
 package net.sourceforge.ondex.parser.kegg53;
 
-import net.sourceforge.ondex.parser.kegg53.args.SpeciesArgumentDefinition;
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
+
+import net.sourceforge.ondex.parser.kegg53.args.SpeciesArgumentDefinition;
 
 /**
  * Parses out the genome information from the genome file (found in the genes directory)

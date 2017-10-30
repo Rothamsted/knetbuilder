@@ -1,13 +1,12 @@
 package net.sourceforge.ondex.parser.poplar;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.poplar.genomic.GenomicPoplarParserV2;
-import net.sourceforge.ondex.parser.poplar.qtl.QTLPoplarParser;
-
-import org.apache.log4j.Level;
 
 /**
  * Parser for Poplar sequences and functional annotations.

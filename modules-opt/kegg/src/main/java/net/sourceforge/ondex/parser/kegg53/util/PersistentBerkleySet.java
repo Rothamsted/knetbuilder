@@ -1,6 +1,10 @@
 package net.sourceforge.ondex.parser.kegg53.util;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class PersistentBerkleySet<V> implements Set<V> {
 

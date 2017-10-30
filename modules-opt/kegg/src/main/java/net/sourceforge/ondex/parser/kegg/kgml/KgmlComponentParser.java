@@ -2,9 +2,9 @@ package net.sourceforge.ondex.parser.kegg.kgml;
 
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.parser.kegg.Parser;
-
 import org.codehaus.stax2.XMLStreamReader2;
+
+import net.sourceforge.ondex.parser.kegg.Parser;
 
 /**
  * Abstract parent class for component parser for KGML.

@@ -17,11 +17,12 @@
 
 package uk.ac.ncl.cs.nogold;
 
-import cern.colt.list.DoubleArrayList;
-import cern.jet.stat.Descriptive;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import cern.colt.list.DoubleArrayList;
+import cern.jet.stat.Descriptive;
 
 /**
  * Records the burn-in phase of the MCMC method and

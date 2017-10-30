@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipInputStream;
 
+import com.ice.tar.TarEntry;
+import com.ice.tar.TarInputStream;
+
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.parser.kegg52.MetaData;
 import net.sourceforge.ondex.parser.kegg52.Parser;
@@ -29,9 +32,6 @@ import net.sourceforge.ondex.parser.kegg52.sink.Relation;
 import net.sourceforge.ondex.parser.kegg52.sink.Sequence;
 import net.sourceforge.ondex.parser.kegg52.util.DPLPersistantSet;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
-
-import com.ice.tar.TarEntry;
-import com.ice.tar.TarInputStream;
 
 public class ParseGeneFile implements Runnable {
 

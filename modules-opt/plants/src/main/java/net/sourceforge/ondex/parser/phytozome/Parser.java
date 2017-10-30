@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.parser.phytozome;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DataURL;
@@ -18,9 +20,6 @@ import net.sourceforge.ondex.args.IntegerRangeArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
-
-
-import org.apache.log4j.Level;
 
 /**
  * Parser for any PHYTOZOME species.

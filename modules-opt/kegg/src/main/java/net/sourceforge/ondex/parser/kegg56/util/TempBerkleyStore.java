@@ -1,20 +1,31 @@
 package net.sourceforge.ondex.parser.kegg56.util;
 
-import com.sleepycat.bind.EntryBinding;
-import com.sleepycat.bind.tuple.TupleBinding;
-import com.sleepycat.je.*;
-import net.sourceforge.ondex.event.type.DatabaseErrorEvent;
-import net.sourceforge.ondex.event.type.EventType;
-import net.sourceforge.ondex.event.type.GeneralOutputEvent;
-import net.sourceforge.ondex.parser.ONDEXParser;
-import net.sourceforge.ondex.tools.DirUtils;
-import org.apache.log4j.Level;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.apache.log4j.Level;
+
+import com.sleepycat.bind.EntryBinding;
+import com.sleepycat.bind.tuple.TupleBinding;
+import com.sleepycat.je.Database;
+import com.sleepycat.je.DatabaseConfig;
+import com.sleepycat.je.DatabaseEntry;
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.Durability;
+import com.sleepycat.je.Environment;
+import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.je.EnvironmentMutableConfig;
+import com.sleepycat.je.LockMode;
+import com.sleepycat.je.OperationStatus;
+
+import net.sourceforge.ondex.event.type.DatabaseErrorEvent;
+import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.tools.DirUtils;
 
 /**
  * Temp berkley store for storage of large object arrays in kegg

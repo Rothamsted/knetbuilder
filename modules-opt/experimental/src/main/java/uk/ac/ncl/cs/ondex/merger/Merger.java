@@ -5,6 +5,11 @@
 
 package uk.ac.ncl.cs.ondex.merger;
 
+import static uk.ac.ncl.cs.ondex.merger.MergerTools.check;
+import static uk.ac.ncl.cs.ondex.merger.MergerTools.complain;
+import static uk.ac.ncl.cs.ondex.merger.MergerTools.determineCC;
+import static uk.ac.ncl.cs.ondex.merger.MergerTools.log;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,16 +17,26 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
-import net.sourceforge.ondex.core.*;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
-import org.apache.log4j.Logger;
+import net.sourceforge.ondex.transformer.ONDEXTransformer;
 import uk.ac.ncl.cs.ondex.merger.ConfigReader.Configuration;
 import uk.ac.ncl.cs.ondex.tools.ConsoleProgressBar;
-import static uk.ac.ncl.cs.ondex.merger.MergerTools.*;
 
 /**
  * 

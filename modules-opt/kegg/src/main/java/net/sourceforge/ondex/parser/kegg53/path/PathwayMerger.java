@@ -6,7 +6,20 @@
  */
 package net.sourceforge.ondex.parser.kegg53.path;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.kegg53.GenomeParser;
 import net.sourceforge.ondex.parser.kegg53.MetaData;
@@ -19,13 +32,6 @@ import net.sourceforge.ondex.parser.kegg53.sink.ConceptName;
 import net.sourceforge.ondex.parser.kegg53.sink.Relation;
 import net.sourceforge.ondex.parser.kegg53.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg53.util.Util;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.Pattern;
 
 
 /**

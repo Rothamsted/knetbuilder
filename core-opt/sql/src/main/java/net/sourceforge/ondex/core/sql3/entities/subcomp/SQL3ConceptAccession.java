@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.core.sql3.entities.subcomp;
 
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.sql3.SQL3Graph;
 import net.sourceforge.ondex.core.sql3.helper.SubCompHelper;
 import net.sourceforge.ondex.core.sql3.metadata.SQL3DataSource;

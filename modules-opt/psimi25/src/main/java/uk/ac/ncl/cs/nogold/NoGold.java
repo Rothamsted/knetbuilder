@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FloatRangeArgumentDefinition;
 import net.sourceforge.ondex.args.IntegerRangeArgumentDefinition;
@@ -29,7 +32,6 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.exception.type.PluginException;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-import org.apache.log4j.Level;
 
 /**
  * An Ondex transformer that runs the NoGold fully bayesian integration method.

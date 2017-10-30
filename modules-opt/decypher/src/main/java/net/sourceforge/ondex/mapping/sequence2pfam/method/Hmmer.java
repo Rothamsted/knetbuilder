@@ -1,19 +1,30 @@
 package net.sourceforge.ondex.mapping.sequence2pfam.method;
 
-import net.sourceforge.ondex.core.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import org.apache.lucene.search.Query;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.core.searchable.LuceneQueryBuilder;
 import net.sourceforge.ondex.mapping.sequence2pfam.MetaData;
 import net.sourceforge.ondex.programcalls.HMMMatch;
 import net.sourceforge.ondex.programcalls.SequenceType;
 import net.sourceforge.ondex.programcalls.StreamGobbler;
-import org.apache.lucene.search.Query;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * HMMER based pfam mapping method

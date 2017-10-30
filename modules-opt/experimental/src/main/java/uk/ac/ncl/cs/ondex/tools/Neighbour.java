@@ -2,6 +2,7 @@ package uk.ac.ncl.cs.ondex.tools;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;

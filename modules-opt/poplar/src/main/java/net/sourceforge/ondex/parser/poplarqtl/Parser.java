@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
@@ -32,8 +34,6 @@ import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.poplar.MetaData;
 import net.sourceforge.ondex.parser.poplar.genomic.GenomicPoplarParserV2;
-
-import org.apache.log4j.Level;
 
 /**
  * Parser for Poplar QTL tab delimitted file

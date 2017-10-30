@@ -4,17 +4,17 @@
  */
 package net.sourceforge.ondex.parser.kegg52.ko;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.kegg52.MetaData;
 import net.sourceforge.ondex.parser.kegg52.Parser;
 import net.sourceforge.ondex.parser.kegg52.sink.ConceptWriter;
 import net.sourceforge.ondex.parser.kegg52.sink.Relation;
 import net.sourceforge.ondex.parser.kegg52.util.Util;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 
 /**

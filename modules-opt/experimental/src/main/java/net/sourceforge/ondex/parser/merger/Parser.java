@@ -13,6 +13,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.codehaus.stax2.XMLInputFactory2;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.Attribute;
@@ -32,8 +34,6 @@ import net.sourceforge.ondex.parser.oxl.GeneralMetaDataParser;
 import net.sourceforge.ondex.parser.oxl.RelationMetaDataParser;
 import net.sourceforge.ondex.parser.oxl.RelationParser;
 import net.sourceforge.ondex.parser.oxl.XmlParser;
-
-import org.codehaus.stax2.XMLInputFactory2;
 
 /**
  * Merges two OXL files together based solely on their concept IDs, use only for

@@ -4,6 +4,9 @@
  */
 package net.sourceforge.ondex.parser.kegg56.relation;
 
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.kegg56.MetaData;
@@ -15,9 +18,6 @@ import net.sourceforge.ondex.parser.kegg56.sink.ConceptWriter;
 import net.sourceforge.ondex.parser.kegg56.sink.Relation;
 import net.sourceforge.ondex.parser.kegg56.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg56.util.Util;
-
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
 
 /**
  * @author taubertj

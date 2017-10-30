@@ -11,6 +11,15 @@ import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.log4j.Logger;
+
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.Environment;
+import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.persist.EntityStore;
+import com.sleepycat.persist.PrimaryIndex;
+import com.sleepycat.persist.StoreConfig;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -20,15 +29,6 @@ import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
 import net.sourceforge.ondex.event.type.DatabaseErrorEvent;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
-
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.je.Environment;
-import com.sleepycat.je.EnvironmentConfig;
-import com.sleepycat.persist.EntityStore;
-import com.sleepycat.persist.PrimaryIndex;
-import com.sleepycat.persist.StoreConfig;
-import org.apache.log4j.Logger;
 
 /**
  * Implements a species formal scientific name lookup for the NCBI taxonomy.

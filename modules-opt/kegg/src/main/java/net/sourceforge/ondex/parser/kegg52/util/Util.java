@@ -4,13 +4,24 @@
  */
 package net.sourceforge.ondex.parser.kegg52.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.kegg52.Parser;
-import net.sourceforge.ondex.parser.kegg52.sink.*;
-
-import java.util.*;
-import java.util.regex.Pattern;
+import net.sourceforge.ondex.parser.kegg52.sink.Concept;
+import net.sourceforge.ondex.parser.kegg52.sink.ConceptWriter;
+import net.sourceforge.ondex.parser.kegg52.sink.Relation;
+import net.sourceforge.ondex.parser.kegg52.sink.RelationWriter;
+import net.sourceforge.ondex.parser.kegg52.sink.Sequence;
+import net.sourceforge.ondex.parser.kegg52.sink.SequenceWriter;
 
 /**
  * @author taubertj

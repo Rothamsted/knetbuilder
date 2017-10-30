@@ -6,12 +6,14 @@
 package uk.ac.ncl.cs.nclondexexpression.tools;
 
 import java.util.Map;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.exception.type.ParsingFailedException;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 /**
  *

@@ -4,7 +4,13 @@
  */
 package net.sourceforge.ondex.parser.kegg52.reaction;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.parser.kegg52.MetaData;
@@ -12,14 +18,13 @@ import net.sourceforge.ondex.parser.kegg52.Parser;
 import net.sourceforge.ondex.parser.kegg52.data.Entry;
 import net.sourceforge.ondex.parser.kegg52.data.Pathway;
 import net.sourceforge.ondex.parser.kegg52.data.Reaction;
-import net.sourceforge.ondex.parser.kegg52.sink.*;
+import net.sourceforge.ondex.parser.kegg52.sink.Concept;
+import net.sourceforge.ondex.parser.kegg52.sink.ConceptAcc;
+import net.sourceforge.ondex.parser.kegg52.sink.ConceptName;
+import net.sourceforge.ondex.parser.kegg52.sink.ConceptWriter;
+import net.sourceforge.ondex.parser.kegg52.sink.Relation;
 import net.sourceforge.ondex.parser.kegg52.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg52.util.Util;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 
 /**

@@ -1,20 +1,20 @@
 package net.sourceforge.ondex.transformer.attributeregex;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.args.StringMappingPairArgumentDefinition;
-import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This transformer applies a given regular expression to a String value of a

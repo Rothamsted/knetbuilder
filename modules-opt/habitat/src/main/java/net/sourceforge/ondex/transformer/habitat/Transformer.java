@@ -1,19 +1,25 @@
 package net.sourceforge.ondex.transformer.habitat;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Vector;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
 import net.sourceforge.ondex.tools.MetaDataUtil;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-import org.apache.log4j.Level;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Vector;
 
 /**
  * Transforms the NCL habitat database: Creates relations

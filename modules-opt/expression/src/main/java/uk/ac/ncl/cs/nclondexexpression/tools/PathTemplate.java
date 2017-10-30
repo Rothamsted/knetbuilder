@@ -7,6 +7,7 @@ package uk.ac.ncl.cs.nclondexexpression.tools;
 
 
 import java.util.ArrayList;
+
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.RelationType;

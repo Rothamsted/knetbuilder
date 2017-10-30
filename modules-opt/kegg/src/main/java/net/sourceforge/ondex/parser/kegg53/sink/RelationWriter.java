@@ -4,12 +4,17 @@
  */
 package net.sourceforge.ondex.parser.kegg53.sink;
 
-import net.sourceforge.ondex.core.*;
+import java.util.HashMap;
+
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 import net.sourceforge.ondex.parser.kegg53.MetaData;
-
-import java.util.HashMap;
 
 /**
  * Turns a KEGG Relation into a binary or ternary ONDEXRelation.

@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.programcalls;
 
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.programcalls.exceptions.AlgorithmNotSupportedException;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.Set;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.programcalls.exceptions.AlgorithmNotSupportedException;
 
 public interface HMMAlignmentProgram {
 

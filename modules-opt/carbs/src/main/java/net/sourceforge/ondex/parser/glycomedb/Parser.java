@@ -1,19 +1,24 @@
 package net.sourceforge.ondex.parser.glycomedb;
 
-import net.sourceforge.ondex.annotations.Authors;
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.annotations.DatabaseTarget;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.parser.ONDEXParser;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.zip.GZIPInputStream;
+
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.annotations.DatabaseTarget;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 @DatabaseTarget(name = "GlycomeDB", description = "A carbohydrate structure metadatabase", version = "", url = "http://www.glycome-db.org")
 @Authors(authors = {"Jan Taubert", "Victor Lesk"}, emails = {"jantaubert at users.sourceforge.net", "v.lesk at imperial.ac.uk"})

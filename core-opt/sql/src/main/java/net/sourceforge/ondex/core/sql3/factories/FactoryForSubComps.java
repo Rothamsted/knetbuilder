@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.DataSource;
-
 import net.sourceforge.ondex.core.sql3.SQL3Graph;
 import net.sourceforge.ondex.core.sql3.entities.SQL3Concept;
 import net.sourceforge.ondex.core.sql3.entities.SQL3Entity;

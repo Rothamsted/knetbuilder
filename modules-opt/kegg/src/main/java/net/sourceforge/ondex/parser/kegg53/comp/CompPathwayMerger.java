@@ -4,8 +4,12 @@
  */
 package net.sourceforge.ondex.parser.kegg53.comp;
 
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.kegg53.MetaData;
 import net.sourceforge.ondex.parser.kegg53.Parser;
@@ -13,9 +17,6 @@ import net.sourceforge.ondex.parser.kegg53.data.Entry;
 import net.sourceforge.ondex.parser.kegg53.data.Pathway;
 import net.sourceforge.ondex.parser.kegg53.sink.Concept;
 import net.sourceforge.ondex.parser.kegg53.util.DPLPersistantSet;
-
-import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * Merges pathway maps information with parsing results from compound and glycan

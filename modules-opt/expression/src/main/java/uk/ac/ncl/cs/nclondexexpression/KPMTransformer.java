@@ -5,14 +5,6 @@
 
 package uk.ac.ncl.cs.nclondexexpression;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.IntegerRangeArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.args.FloatRangeArgumentDefinition;
-import net.sourceforge.ondex.args.BooleanArgumentDefinition;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import de.mpg.mpiinf.csb.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,14 +12,26 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+
+import de.mpg.mpiinf.csb.Ant;
+import de.mpg.mpiinf.csb.GeneEdge;
+import de.mpg.mpiinf.csb.KPMNetwork;
+import de.mpg.mpiinf.csb.KeyPathwayMiner;
+import de.mpg.mpiinf.csb.SortAntsBy;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.BooleanArgumentDefinition;
+import net.sourceforge.ondex.args.FloatRangeArgumentDefinition;
+import net.sourceforge.ondex.args.IntegerRangeArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.transformer.ONDEXTransformer;
 import uk.ac.ncl.cs.nclondexexpression.tools.DataSourceArgumentDefinition;
 import uk.ac.ncl.cs.nclondexexpression.tools.DefaultPathTemplates;
 import uk.ac.ncl.cs.nclondexexpression.tools.Path;

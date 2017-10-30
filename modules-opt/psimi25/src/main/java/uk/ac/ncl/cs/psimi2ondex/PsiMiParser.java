@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.zip.ZipFile;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
@@ -14,9 +18,6 @@ import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.exception.type.PluginException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.MetaDataTopup;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import uk.ac.ncl.cs.intbio.psimi.PSIMIEngine;
 import uk.ac.ncl.cs.intbio.psimi.PSIMIProcessor;
 

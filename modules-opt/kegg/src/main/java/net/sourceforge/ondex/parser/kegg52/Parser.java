@@ -1,10 +1,25 @@
 package net.sourceforge.ondex.parser.kegg52;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
-import net.sourceforge.ondex.ONDEXPluginArguments;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.annotations.*;
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.annotations.DataURL;
+import net.sourceforge.ondex.annotations.DatabaseTarget;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
@@ -14,7 +29,11 @@ import net.sourceforge.ondex.parser.kegg52.args.ArgumentNames;
 import net.sourceforge.ondex.parser.kegg52.args.SpeciesArgumentDefinition;
 import net.sourceforge.ondex.parser.kegg52.comp.CompParser;
 import net.sourceforge.ondex.parser.kegg52.comp.CompPathwayMerger;
-import net.sourceforge.ondex.parser.kegg52.data.*;
+import net.sourceforge.ondex.parser.kegg52.data.Entry;
+import net.sourceforge.ondex.parser.kegg52.data.Pathway;
+import net.sourceforge.ondex.parser.kegg52.data.Reaction;
+import net.sourceforge.ondex.parser.kegg52.data.Relation;
+import net.sourceforge.ondex.parser.kegg52.data.Subtype;
 import net.sourceforge.ondex.parser.kegg52.enzyme.EnzymePathwayParser;
 import net.sourceforge.ondex.parser.kegg52.gene.AbreviationsParser;
 import net.sourceforge.ondex.parser.kegg52.gene.GeneFilesParser;
@@ -29,11 +48,13 @@ import net.sourceforge.ondex.parser.kegg52.relation.RelationPathwayParser;
 import net.sourceforge.ondex.parser.kegg52.sink.ConceptWriter;
 import net.sourceforge.ondex.parser.kegg52.sink.RelationWriter;
 import net.sourceforge.ondex.parser.kegg52.sink.SequenceWriter;
-import net.sourceforge.ondex.parser.kegg52.util.*;
+import net.sourceforge.ondex.parser.kegg52.util.BerkleyLocalEnvironment;
+import net.sourceforge.ondex.parser.kegg52.util.DPLPersistantSet;
+import net.sourceforge.ondex.parser.kegg52.util.MultiThreadQueue;
+import net.sourceforge.ondex.parser.kegg52.util.MyFileFilter;
+import net.sourceforge.ondex.parser.kegg52.util.TaxidMapping;
+import net.sourceforge.ondex.parser.kegg52.util.Util;
 import net.sourceforge.ondex.parser.kegg52.xml.XMLParser;
-
-import java.io.File;
-import java.util.*;
 
 /*
  * Created on 25-Apr-2005

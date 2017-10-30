@@ -8,15 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
 import net.sourceforge.ondex.parser.kegg56.data.Entry;
 import net.sourceforge.ondex.parser.kegg56.data.Graphics;
 import net.sourceforge.ondex.parser.kegg56.data.Pathway;
 import net.sourceforge.ondex.parser.kegg56.data.Reaction;
 import net.sourceforge.ondex.parser.kegg56.data.Relation;
 import net.sourceforge.ondex.parser.kegg56.data.Subtype;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author Jan

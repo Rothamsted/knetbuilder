@@ -2,9 +2,9 @@ package net.sourceforge.ondex.filter.genomic;
 
 import java.util.regex.Pattern;
 
+import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptName;
-import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**

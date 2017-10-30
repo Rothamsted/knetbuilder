@@ -1,12 +1,16 @@
 package net.sourceforge.ondex.parser.pfam.transformer;
 
-import net.sourceforge.ondex.core.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.pfam.MetaData;
 import net.sourceforge.ondex.parser.pfam.sink.DbLink;
 import net.sourceforge.ondex.parser.pfam.sink.Family;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * transforms a Family object to a concept with all related information attached

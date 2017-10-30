@@ -4,21 +4,26 @@
  */
 package net.sourceforge.ondex.parser.kegg53.reaction;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.kegg53.MetaData;
 import net.sourceforge.ondex.parser.kegg53.Parser;
 import net.sourceforge.ondex.parser.kegg53.data.Entry;
 import net.sourceforge.ondex.parser.kegg53.data.Pathway;
 import net.sourceforge.ondex.parser.kegg53.data.Reaction;
-import net.sourceforge.ondex.parser.kegg53.sink.*;
+import net.sourceforge.ondex.parser.kegg53.sink.Concept;
+import net.sourceforge.ondex.parser.kegg53.sink.ConceptAcc;
+import net.sourceforge.ondex.parser.kegg53.sink.ConceptName;
+import net.sourceforge.ondex.parser.kegg53.sink.ConceptWriter;
+import net.sourceforge.ondex.parser.kegg53.sink.Relation;
 import net.sourceforge.ondex.parser.kegg53.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg53.util.Util;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 
 /**

@@ -1,5 +1,11 @@
 package net.sourceforge.ondex.parser.transfac;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
@@ -15,11 +21,6 @@ import net.sourceforge.ondex.parser.transfac.factor.FactorParser;
 import net.sourceforge.ondex.parser.transfac.factor.gene.GeneParser;
 import net.sourceforge.ondex.parser.transfac.matrix.MatrixParser;
 import net.sourceforge.ondex.parser.transfac.site.SiteParser;
-import org.apache.log4j.Level;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * Parses the Transfac database from BioBase.

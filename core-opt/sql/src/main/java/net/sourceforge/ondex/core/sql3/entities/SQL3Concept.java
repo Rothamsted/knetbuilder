@@ -1,21 +1,27 @@
 package net.sourceforge.ondex.core.sql3.entities;
 
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.sql3.SQL3Graph;
-import net.sourceforge.ondex.core.sql3.entities.subcomp.SQL3ConceptAccession;
-import net.sourceforge.ondex.core.sql3.entities.subcomp.SQL3ConceptName;
-import net.sourceforge.ondex.core.sql3.entities.subcomp.SQL3ConceptAttribute;
-import net.sourceforge.ondex.core.sql3.factories.FactoryForSubComps;
-import net.sourceforge.ondex.core.sql3.helper.EntityHelper;
-import net.sourceforge.ondex.exception.type.AccessDeniedException;
-import net.sourceforge.ondex.exception.type.NullValueException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
+
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.sql3.SQL3Graph;
+import net.sourceforge.ondex.core.sql3.entities.subcomp.SQL3ConceptAccession;
+import net.sourceforge.ondex.core.sql3.entities.subcomp.SQL3ConceptAttribute;
+import net.sourceforge.ondex.core.sql3.entities.subcomp.SQL3ConceptName;
+import net.sourceforge.ondex.core.sql3.factories.FactoryForSubComps;
+import net.sourceforge.ondex.core.sql3.helper.EntityHelper;
+import net.sourceforge.ondex.exception.type.AccessDeniedException;
+import net.sourceforge.ondex.exception.type.NullValueException;
 
 public class SQL3Concept extends SQL3Entity implements ONDEXConcept {
 	

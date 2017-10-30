@@ -1,26 +1,43 @@
 package net.sourceforge.ondex.parser.ec;
 
+import java.io.File;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
-import net.sourceforge.ondex.annotations.metadata.*;
+import net.sourceforge.ondex.annotations.metadata.AttributeNameRequired;
+import net.sourceforge.ondex.annotations.metadata.ConceptClassRequired;
+import net.sourceforge.ondex.annotations.metadata.DataSourceRequired;
+import net.sourceforge.ondex.annotations.metadata.EvidenceTypeRequired;
+import net.sourceforge.ondex.annotations.metadata.RelationTypeRequired;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.*;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
+import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
+import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.ec.data.Entry;
 import net.sourceforge.ondex.parser.ec.data.Extractor;
 import net.sourceforge.ondex.parser.ec.data.Relation;
-import org.apache.log4j.Level;
-
-import java.io.File;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * EC Nomenclature Parser for the files: "enzclass.txt" "enzyme.dat" from

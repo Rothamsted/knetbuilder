@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.parser.kegg56;
 
-import net.sourceforge.ondex.data.DataRetrieval;
-
 import java.io.File;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -13,6 +11,8 @@ import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.zip.GZIPInputStream;
+
+import net.sourceforge.ondex.data.DataRetrieval;
 
 /**
  * Under development!!! No where near finished

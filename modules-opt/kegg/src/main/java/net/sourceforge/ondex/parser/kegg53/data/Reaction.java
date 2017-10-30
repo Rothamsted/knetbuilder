@@ -4,11 +4,11 @@
  */
 package net.sourceforge.ondex.parser.kegg53.data;
 
-import com.sleepycat.persist.model.Persistent;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.sleepycat.persist.model.Persistent;
 
 /**
  * @author taubertj

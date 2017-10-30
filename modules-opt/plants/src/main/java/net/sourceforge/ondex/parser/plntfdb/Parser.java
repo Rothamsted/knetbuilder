@@ -1,23 +1,36 @@
 package net.sourceforge.ondex.parser.plntfdb;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.config.ValidatorRegistry;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.DataFileMissingEvent;
-import net.sourceforge.ondex.exception.type.*;
-import net.sourceforge.ondex.parser.ONDEXParser;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createAttName;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createAttName;
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.config.ValidatorRegistry;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.DataFileMissingEvent;
+import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
+import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
+import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
+import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 
 /**

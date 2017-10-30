@@ -1,19 +1,32 @@
 package net.sourceforge.ondex.parser.gramene;
 
+import static net.sourceforge.ondex.parser.gramene.ArgumentNames.PARSE_LITERATURE_ARG;
+import static net.sourceforge.ondex.parser.gramene.ArgumentNames.PARSE_LITERATURE_ARG_DESC;
+
+import java.io.File;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.*;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
+import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.DataFileMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
+import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
-import org.apache.log4j.Level;
-
-import java.io.File;
-
-import static net.sourceforge.ondex.parser.gramene.ArgumentNames.PARSE_LITERATURE_ARG;
-import static net.sourceforge.ondex.parser.gramene.ArgumentNames.PARSE_LITERATURE_ARG_DESC;
 
 /**
  * Gramene Parser

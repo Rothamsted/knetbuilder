@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.kegg56.MetaData;
@@ -21,9 +24,6 @@ import net.sourceforge.ondex.parser.kegg56.sink.Concept;
 import net.sourceforge.ondex.parser.kegg56.sink.ConceptName;
 import net.sourceforge.ondex.parser.kegg56.sink.Relation;
 import net.sourceforge.ondex.parser.kegg56.util.DPLPersistantSet;
-
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
 
 /**
  * @author taubertj

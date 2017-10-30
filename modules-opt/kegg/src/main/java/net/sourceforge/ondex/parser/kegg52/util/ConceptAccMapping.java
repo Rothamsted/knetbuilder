@@ -6,9 +6,9 @@
  */
 package net.sourceforge.ondex.parser.kegg52.util;
 
-import net.sourceforge.ondex.parser.kegg52.MetaData;
-
 import java.util.concurrent.ConcurrentHashMap;
+
+import net.sourceforge.ondex.parser.kegg52.MetaData;
 
 
 /**

@@ -1,15 +1,16 @@
 package net.sourceforge.ondex.parser.kegg53.util;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.StoreConfig;
+
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.tools.DirUtils;
-
-import java.io.File;
-import java.io.IOException;
 
 public class BerkleyLocalEnvironment {
 

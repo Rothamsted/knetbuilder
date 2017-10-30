@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Level;
+
 import net.sf.psidev.mi.Attribute;
 import net.sf.psidev.mi.AttributeList;
 import net.sf.psidev.mi.Availability;
@@ -46,9 +48,6 @@ import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.tools.MetaDataLookup2;
 import net.sourceforge.ondex.tools.MetaDataMatcher;
-
-import org.apache.log4j.Level;
-
 import uk.ac.ncl.cs.intbio.psimi.PSIMIProcessor;
 
 /**

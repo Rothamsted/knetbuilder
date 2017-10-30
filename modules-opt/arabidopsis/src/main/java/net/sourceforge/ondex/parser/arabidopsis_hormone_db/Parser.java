@@ -1,21 +1,38 @@
 package net.sourceforge.ondex.parser.arabidopsis_hormone_db;
 
-import net.sourceforge.ondex.annotations.DatabaseTarget;
-import net.sourceforge.ondex.annotations.Status;
-import net.sourceforge.ondex.annotations.StatusType;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.util.ArrayKey;
-import net.sourceforge.ondex.parser.ONDEXParser;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createAttName;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createCC;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createDataSource;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createEvidence;
+import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.createRT;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.*;
+import net.sourceforge.ondex.annotations.DatabaseTarget;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.util.ArrayKey;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 /**
  * @author lysenkoa

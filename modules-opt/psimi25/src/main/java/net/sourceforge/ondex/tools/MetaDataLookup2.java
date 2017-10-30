@@ -1,17 +1,27 @@
 package net.sourceforge.ondex.tools;
 
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
-import net.sourceforge.ondex.exception.type.MetaDataMissingException;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.HashMap;
-import net.sourceforge.ondex.exception.type.DataSourceMissingException;
+
+import org.apache.log4j.Logger;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.MetaData;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
 import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
 import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
+import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 import net.sourceforge.ondex.exception.type.UnitMissingException;
-import org.apache.log4j.Logger;
 
 /**
  * @author Jochen Weile

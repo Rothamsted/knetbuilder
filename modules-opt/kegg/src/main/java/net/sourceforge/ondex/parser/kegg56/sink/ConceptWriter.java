@@ -12,14 +12,14 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
-import net.sourceforge.ondex.exception.type.DataSourceMissingException;
 import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
 import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;

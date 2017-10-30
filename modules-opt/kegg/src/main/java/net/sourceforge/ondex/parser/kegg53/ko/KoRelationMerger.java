@@ -4,16 +4,16 @@
  */
 package net.sourceforge.ondex.parser.kegg53.ko;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.kegg53.MetaData;
 import net.sourceforge.ondex.parser.kegg53.Parser;
 import net.sourceforge.ondex.parser.kegg53.sink.ConceptWriter;
 import net.sourceforge.ondex.parser.kegg53.sink.Relation;
 import net.sourceforge.ondex.parser.kegg53.util.Util;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 
 /**

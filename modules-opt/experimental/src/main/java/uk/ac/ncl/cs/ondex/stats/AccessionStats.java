@@ -10,16 +10,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import uk.ac.ncl.cs.ondex.stats.datastructures.ConceptClassTree;
-import uk.ac.ncl.cs.ondex.stats.datastructures.PropertyMaps;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.export.ONDEXExport;
+import uk.ac.ncl.cs.ondex.stats.datastructures.ConceptClassTree;
+import uk.ac.ncl.cs.ondex.stats.datastructures.PropertyMaps;
 
 /**
  * This statistic analyzes the accession coverage for all concept classes.

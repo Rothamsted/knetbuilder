@@ -1,16 +1,29 @@
 package net.sourceforge.ondex.core.sql3;
 
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.sql3.factories.FactoryForMetaData;
-import net.sourceforge.ondex.core.sql3.metadata.*;
-import net.sourceforge.ondex.exception.type.AccessDeniedException;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.MetaDataFactory;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.core.sql3.factories.FactoryForMetaData;
+import net.sourceforge.ondex.core.sql3.metadata.SQL3AttrName;
+import net.sourceforge.ondex.core.sql3.metadata.SQL3ConceptClass;
+import net.sourceforge.ondex.core.sql3.metadata.SQL3DataSource;
+import net.sourceforge.ondex.core.sql3.metadata.SQL3EvidenceType;
+import net.sourceforge.ondex.core.sql3.metadata.SQL3RelationType;
+import net.sourceforge.ondex.core.sql3.metadata.SQL3Unit;
+import net.sourceforge.ondex.exception.type.AccessDeniedException;
 
 public class SQL3GraphMetaData implements ONDEXGraphMetaData {
 

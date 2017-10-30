@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.mapping.nt2proteinAlignment;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -14,10 +18,6 @@ import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.programcalls.BLASTAlignmentProgram;
 import net.sourceforge.ondex.programcalls.Match;
 import net.sourceforge.ondex.programcalls.decypher.DecypherAlignment;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A example plugin to demonstrate the DeCypher API

@@ -1,16 +1,20 @@
 package net.sourceforge.ondex.parser.transpath;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.StringTokenizer;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.config.ValidatorRegistry;
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
-
-import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.StringTokenizer;
 
 /**
  * Superclass for GeneParser, MoleculeParser and ReactionParser.

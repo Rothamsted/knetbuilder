@@ -1,8 +1,20 @@
 package net.sourceforge.ondex.parser.habitat;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.HashMap;
+import java.util.Set;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
@@ -12,12 +24,6 @@ import net.sourceforge.ondex.exception.type.PluginException;
 import net.sourceforge.ondex.exception.type.WrongArgumentException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.MetaDataUtil;
-import org.apache.log4j.Level;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Parser for the NCL Habitat DB project.

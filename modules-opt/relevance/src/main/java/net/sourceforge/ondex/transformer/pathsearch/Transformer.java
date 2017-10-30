@@ -1,5 +1,10 @@
 package net.sourceforge.ondex.transformer.pathsearch;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -7,11 +12,6 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.cytoscape.mapping.PathSearcher;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 /**
  * A transformer that wraps Jochen's PathSearch algorithm.

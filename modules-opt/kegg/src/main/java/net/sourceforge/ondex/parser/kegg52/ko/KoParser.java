@@ -19,15 +19,15 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
+import com.ice.tar.TarEntry;
+import com.ice.tar.TarInputStream;
+
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.parser.kegg52.MetaData;
 import net.sourceforge.ondex.parser.kegg52.Parser;
 import net.sourceforge.ondex.parser.kegg52.sink.Concept;
 import net.sourceforge.ondex.parser.kegg52.sink.ConceptAcc;
 import net.sourceforge.ondex.parser.kegg52.sink.ConceptName;
-
-import com.ice.tar.TarEntry;
-import com.ice.tar.TarInputStream;
 
 
 /**

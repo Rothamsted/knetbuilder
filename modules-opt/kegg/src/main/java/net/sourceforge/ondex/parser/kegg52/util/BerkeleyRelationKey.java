@@ -1,12 +1,18 @@
 package net.sourceforge.ondex.parser.kegg52.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.sourceforge.ondex.core.base.AbstractONDEXGraph;
 import net.sourceforge.ondex.core.base.RelationKeyImpl;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.DeserialisationFailedEvent;
 import net.sourceforge.ondex.event.type.SerialisationFailedEvent;
-
-import java.io.*;
 
 public class BerkeleyRelationKey extends RelationKeyImpl {
 

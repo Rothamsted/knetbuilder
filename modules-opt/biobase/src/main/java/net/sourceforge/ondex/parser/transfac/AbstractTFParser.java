@@ -1,18 +1,22 @@
 package net.sourceforge.ondex.parser.transfac;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.config.ValidatorRegistry;
-import net.sourceforge.ondex.event.type.DataFileErrorEvent;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.config.ValidatorRegistry;
+import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 
 /**
  * Superclass for GeneParser, FactorParser and MatrixParser.

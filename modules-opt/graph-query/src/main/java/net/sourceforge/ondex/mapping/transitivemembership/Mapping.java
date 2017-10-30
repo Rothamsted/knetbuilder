@@ -1,17 +1,36 @@
 package net.sourceforge.ondex.mapping.transitivemembership;
 
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.mapping.ONDEXMapping;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.EXPORT_DIR_ARG;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.EXPORT_DIR_ARG_DESC;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.INFERENCE_CONCEPT_CLASS_ARG;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.INFERENCE_CONCEPT_CLASS_ARG_DESC;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.NEW_RELATION_TYPE_ARG;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.NEW_RELATION_TYPE_ARG_DESC;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.RELATION_TYPE_ARG;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.RELATION_TYPE_ARG_DESC;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.SUBJECT_CONCEPT_CLASS_ARG;
+import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.SUBJECT_CONCEPT_CLASS_ARG_DESC;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static net.sourceforge.ondex.mapping.transitivemembership.ArgumentNames.*;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.mapping.ONDEXMapping;
 
 /**
  * if A-(r)->B-(r)->C where A and C are the same CC but different CVs

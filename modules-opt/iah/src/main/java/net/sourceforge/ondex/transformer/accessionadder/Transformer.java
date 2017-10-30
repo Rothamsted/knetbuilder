@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
@@ -22,8 +24,6 @@ import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
-import org.apache.log4j.Level;
 
 /**
  * Created by IntelliJ IDEA.

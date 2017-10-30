@@ -4,8 +4,11 @@
  */
 package net.sourceforge.ondex.parser.kegg52.genes;
 
+import java.util.Iterator;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.kegg52.MetaData;
 import net.sourceforge.ondex.parser.kegg52.Parser;
@@ -14,8 +17,6 @@ import net.sourceforge.ondex.parser.kegg52.data.Pathway;
 import net.sourceforge.ondex.parser.kegg52.sink.Concept;
 import net.sourceforge.ondex.parser.kegg52.sink.Relation;
 import net.sourceforge.ondex.parser.kegg52.util.DPLPersistantSet;
-
-import java.util.Iterator;
 
 /**
  * @author taubertj

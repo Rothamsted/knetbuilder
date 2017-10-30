@@ -4,10 +4,10 @@
  */
 package net.sourceforge.ondex.parser.kegg52.data;
 
-import com.sleepycat.persist.model.Persistent;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import com.sleepycat.persist.model.Persistent;
 
 /**
  * @author taubertj

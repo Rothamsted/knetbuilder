@@ -4,6 +4,9 @@
  */
 package net.sourceforge.ondex.parser.kegg56.enzyme;
 
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 
@@ -18,9 +21,6 @@ import net.sourceforge.ondex.parser.kegg56.sink.ConceptAcc;
 import net.sourceforge.ondex.parser.kegg56.sink.ConceptName;
 import net.sourceforge.ondex.parser.kegg56.sink.Relation;
 import net.sourceforge.ondex.parser.kegg56.util.DPLPersistantSet;
-
-import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 /**
  * @author taubertj

@@ -1,16 +1,21 @@
 package net.sourceforge.ondex.parser.homology;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.event.type.InconsistencyEvent;
-import net.sourceforge.ondex.exception.type.ParsingFailedException;
-import net.sourceforge.ondex.parser.ONDEXParser;
-import org.apache.log4j.Level;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+
+import org.apache.log4j.Level;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.InconsistencyEvent;
+import net.sourceforge.ondex.exception.type.ParsingFailedException;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 public class Parser extends ONDEXParser
 {

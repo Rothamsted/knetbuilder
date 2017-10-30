@@ -4,12 +4,12 @@
  */
 package net.sourceforge.ondex.parser.kegg52.data;
 
-import com.sleepycat.persist.model.Entity;
-import com.sleepycat.persist.model.PrimaryKey;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.sleepycat.persist.model.Entity;
+import com.sleepycat.persist.model.PrimaryKey;
 
 /**
  * @author taubertj

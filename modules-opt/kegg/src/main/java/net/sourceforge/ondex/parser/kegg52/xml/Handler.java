@@ -7,6 +7,9 @@ package net.sourceforge.ondex.parser.kegg52.xml;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.parser.kegg52.Parser;
 import net.sourceforge.ondex.parser.kegg52.data.Entry;
@@ -15,9 +18,6 @@ import net.sourceforge.ondex.parser.kegg52.data.Pathway;
 import net.sourceforge.ondex.parser.kegg52.data.Reaction;
 import net.sourceforge.ondex.parser.kegg52.data.Relation;
 import net.sourceforge.ondex.parser.kegg52.data.Subtype;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author Jan

@@ -4,11 +4,11 @@
  */
 package net.sourceforge.ondex.parser.kegg53.sink;
 
-import com.sleepycat.persist.model.Entity;
-import com.sleepycat.persist.model.PrimaryKey;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import com.sleepycat.persist.model.Entity;
+import com.sleepycat.persist.model.PrimaryKey;
 
 /**
  * @author taubertj

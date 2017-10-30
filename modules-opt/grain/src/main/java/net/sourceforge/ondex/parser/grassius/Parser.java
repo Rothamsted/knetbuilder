@@ -1,20 +1,49 @@
 package net.sourceforge.ondex.parser.grassius;
 
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.args.RangeArgumentDefinition;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.exception.type.*;
-import net.sourceforge.ondex.parser.ONDEXParser;
+import static net.sourceforge.ondex.parser.grassius.ArgumentNames.AA_FILE_ARG;
+import static net.sourceforge.ondex.parser.grassius.ArgumentNames.AA_FILE_ARG_DESC;
+import static net.sourceforge.ondex.parser.grassius.ArgumentNames.NA_FILE_ARG;
+import static net.sourceforge.ondex.parser.grassius.ArgumentNames.NA_FILE_ARG_DESC;
+import static net.sourceforge.ondex.parser.grassius.ArgumentNames.SPECIES_ARG;
+import static net.sourceforge.ondex.parser.grassius.ArgumentNames.SPECIES_ARG_DESC;
+import static net.sourceforge.ondex.parser.grassius.MetaData.ATT_AA;
+import static net.sourceforge.ondex.parser.grassius.MetaData.ATT_NA;
+import static net.sourceforge.ondex.parser.grassius.MetaData.ATT_TAXID;
+import static net.sourceforge.ondex.parser.grassius.MetaData.CC_TRANS_FACTOR;
+import static net.sourceforge.ondex.parser.grassius.MetaData.CV_TIGR;
+import static net.sourceforge.ondex.parser.grassius.MetaData.EN_BY_RT;
+import static net.sourceforge.ondex.parser.grassius.MetaData.ET_IMPD;
+import static net.sourceforge.ondex.parser.grassius.MetaData.GENE;
+import static net.sourceforge.ondex.parser.grassius.MetaData.GRASSIUS_CV;
+import static net.sourceforge.ondex.parser.grassius.MetaData.IS_A_RT;
+import static net.sourceforge.ondex.parser.grassius.MetaData.MAIZE_CV;
+import static net.sourceforge.ondex.parser.grassius.MetaData.M_ISP_RT;
+import static net.sourceforge.ondex.parser.grassius.MetaData.PROTEIN;
+import static net.sourceforge.ondex.parser.grassius.MetaData.SORGUM_CV;
+import static net.sourceforge.ondex.parser.grassius.MetaData.SUGERCANE_CV;
+import static net.sourceforge.ondex.parser.grassius.MetaData.TF_FAMILY;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.sourceforge.ondex.parser.grassius.ArgumentNames.*;
-import static net.sourceforge.ondex.parser.grassius.MetaData.*;
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.RangeArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
+import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
+import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
+import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 /**
  * GRASSIUS: a platform for comparative regulatory genomics across the grasses.

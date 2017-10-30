@@ -1,21 +1,36 @@
 package net.sourceforge.ondex.export.owl2;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.exception.type.ONDEXConfigurationException;
-import net.sourceforge.ondex.export.ONDEXExport;
-import org.semanticweb.owl.apibinding.OWLManager;
-import org.semanticweb.owl.io.OWLXMLOntologyFormat;
-import org.semanticweb.owl.model.*;
-import org.semanticweb.owl.util.SimpleURIMapper;
-
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Set;
+
+import org.semanticweb.owl.apibinding.OWLManager;
+import org.semanticweb.owl.io.OWLXMLOntologyFormat;
+import org.semanticweb.owl.model.AddAxiom;
+import org.semanticweb.owl.model.OWLAxiom;
+import org.semanticweb.owl.model.OWLClass;
+import org.semanticweb.owl.model.OWLDataFactory;
+import org.semanticweb.owl.model.OWLIndividual;
+import org.semanticweb.owl.model.OWLObjectProperty;
+import org.semanticweb.owl.model.OWLObjectPropertyAssertionAxiom;
+import org.semanticweb.owl.model.OWLOntology;
+import org.semanticweb.owl.model.OWLOntologyChangeException;
+import org.semanticweb.owl.model.OWLOntologyManager;
+import org.semanticweb.owl.util.SimpleURIMapper;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.config.Config;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.exception.type.ONDEXConfigurationException;
+import net.sourceforge.ondex.export.ONDEXExport;
 
 /**
  * Export as OWL2.

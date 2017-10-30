@@ -1,20 +1,33 @@
 package net.sourceforge.ondex.transformer.rankedpathways;
 
-import junit.framework.TestCase;
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.core.*;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.event.ONDEXEventHandler;
-import net.sourceforge.ondex.logging.ONDEXLogger;
-import org.junit.Test;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
+
+import org.junit.Test;
+
+import junit.framework.TestCase;
+import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.event.ONDEXEventHandler;
+import net.sourceforge.ondex.logging.ONDEXLogger;
 
 public class AppliedRankedPathwayTest extends TestCase {
 

@@ -5,16 +5,17 @@
 
 package uk.ac.ncl.cs.nogold;
 
-import cern.jet.random.Beta;
-import cern.jet.random.Uniform;
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.RandomEngine;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import cern.jet.random.Beta;
+import cern.jet.random.Uniform;
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * Implementation of the fully Bayesian MCMC-based probabilistic integration method.

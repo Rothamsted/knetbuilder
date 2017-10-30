@@ -5,11 +5,15 @@
 
 package uk.ac.ncl.cs.ondex.merger;
 
-import static uk.ac.ncl.cs.ondex.merger.MergerTools.*;
+import static uk.ac.ncl.cs.ondex.merger.MergerTools.cat;
+import static uk.ac.ncl.cs.ondex.merger.MergerTools.log;
+import static uk.ac.ncl.cs.ondex.merger.MergerTools.moreSpecific;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;

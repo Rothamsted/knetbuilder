@@ -4,29 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.annotations.Custodians;
-import net.sourceforge.ondex.annotations.DatabaseTarget;
-import net.sourceforge.ondex.annotations.Status;
-import net.sourceforge.ondex.annotations.StatusType;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
-import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
-import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
-import net.sourceforge.ondex.event.type.DataFileMissingEvent;
-import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
-import net.sourceforge.ondex.event.type.GeneralOutputEvent;
-import net.sourceforge.ondex.event.type.InconsistencyEvent;
-import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
-import net.sourceforge.ondex.parser.ONDEXParser;
-
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ModifierSpeciesReference;
@@ -36,6 +13,29 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.xml.stax.SBMLReader;
+
+import net.sourceforge.ondex.annotations.Custodians;
+import net.sourceforge.ondex.annotations.DatabaseTarget;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
+import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
+import net.sourceforge.ondex.event.type.DataFileMissingEvent;
+import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
+import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
+import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.event.type.InconsistencyEvent;
+import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 @DatabaseTarget(name = "BRENDA", description = "Brenda enzymatics database", version = "BRENDA release online since 2nd July 2010", url = "http://www.brenda-enzymes.info/")
 @Custodians(custodians = {"Jan Taubert"}, emails = {"jan.taubert at rothamsted.ac.uk"})

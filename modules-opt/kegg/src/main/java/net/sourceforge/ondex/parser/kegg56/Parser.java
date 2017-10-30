@@ -22,6 +22,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
+import org.xml.sax.SAXException;
+
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Authors;
@@ -62,11 +67,6 @@ import net.sourceforge.ondex.parser.kegg56.util.BerkleyLocalEnvironment;
 import net.sourceforge.ondex.parser.kegg56.util.DPLPersistantSet;
 import net.sourceforge.ondex.parser.kegg56.util.Util;
 import net.sourceforge.ondex.parser.kegg56.xml.XMLParser;
-
-import org.xml.sax.SAXException;
-
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
 
 /**
  * @author taubertj, hindlem

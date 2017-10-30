@@ -10,12 +10,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.parser.kegg53.data.Entry;
 import net.sourceforge.ondex.parser.kegg53.data.Pathway;
 import net.sourceforge.ondex.parser.kegg53.util.DPLPersistantSet;
-
-import com.sleepycat.je.DatabaseException;
-import com.sleepycat.persist.EntityCursor;
 
 
 /**

@@ -7,6 +7,7 @@ package uk.ac.ncl.cs.ondex.stats.datastructures;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.sourceforge.ondex.core.MetaData;
 
 /**

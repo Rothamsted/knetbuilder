@@ -8,12 +8,28 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Level;
+import org.sbml.jsbml.AbstractNamedSBase;
+import org.sbml.jsbml.Annotation;
+import org.sbml.jsbml.CVTerm;
+import org.sbml.jsbml.CVTerm.Qualifier;
+import org.sbml.jsbml.Compartment;
+import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.Reaction;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBase;
+import org.sbml.jsbml.SimpleSpeciesReference;
+import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.xml.stax.SBMLReader;
+
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
@@ -27,22 +43,6 @@ import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.MetaDataLookup;
 import net.sourceforge.ondex.tools.MetaDataUtil;
-
-import org.apache.log4j.Level;
-import org.sbml.jsbml.AbstractNamedSBase;
-import org.sbml.jsbml.Annotation;
-import org.sbml.jsbml.CVTerm;
-import org.sbml.jsbml.Compartment;
-import org.sbml.jsbml.ListOf;
-import org.sbml.jsbml.Model;
-import org.sbml.jsbml.Reaction;
-import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBase;
-import org.sbml.jsbml.SimpleSpeciesReference;
-import org.sbml.jsbml.Species;
-import org.sbml.jsbml.SpeciesReference;
-import org.sbml.jsbml.CVTerm.Qualifier;
-import org.sbml.jsbml.xml.stax.SBMLReader;
 
 /**
  * Parser for SBML, using libSBML, targeting SBML level 2.

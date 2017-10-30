@@ -1,15 +1,20 @@
 package net.sourceforge.ondex.core.sql3.entities.subcomp;
 
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.sql3.SQL3Graph;
-import net.sourceforge.ondex.core.sql3.helper.SubCompHelper;
-import net.sourceforge.ondex.exception.type.AccessDeniedException;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.sql3.SQL3Graph;
+import net.sourceforge.ondex.core.sql3.helper.SubCompHelper;
+import net.sourceforge.ondex.exception.type.AccessDeniedException;
 
 public abstract class SQL3Attribute implements Attribute {
 

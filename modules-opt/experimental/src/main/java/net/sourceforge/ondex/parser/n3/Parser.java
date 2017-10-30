@@ -9,24 +9,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.args.StringMappingPairArgumentDefinition;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
-import net.sourceforge.ondex.exception.type.DataSourceMissingException;
-import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
-import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
-import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
-import net.sourceforge.ondex.parser.ONDEXParser;
-
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -42,6 +24,24 @@ import com.hp.hpl.jena.rdf.model.RDFReader;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.args.StringMappingPairArgumentDefinition;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
+import net.sourceforge.ondex.exception.type.ConceptClassMissingException;
+import net.sourceforge.ondex.exception.type.DataSourceMissingException;
+import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
+import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
+import net.sourceforge.ondex.parser.ONDEXParser;
 
 public class Parser extends ONDEXParser
 {

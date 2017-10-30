@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.transformer.graphalgo.minimalequivalent;
 
-import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.transformer.graphalgo.GraphAlgoTransformer;
 

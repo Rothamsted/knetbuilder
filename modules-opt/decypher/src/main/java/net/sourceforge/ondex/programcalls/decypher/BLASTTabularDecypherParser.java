@@ -1,13 +1,25 @@
 package net.sourceforge.ondex.programcalls.decypher;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+
 import net.sourceforge.ondex.programcalls.Match;
 import net.sourceforge.ondex.programcalls.SequenceType;
 import net.sourceforge.ondex.programcalls.exceptions.AlgorithmNotSupportedException;
-
-import java.io.*;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 /**
  * Parsers a Decypher tab delim file

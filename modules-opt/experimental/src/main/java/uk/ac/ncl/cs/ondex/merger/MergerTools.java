@@ -7,13 +7,14 @@ package uk.ac.ncl.cs.ondex.merger;
 
 import java.util.Collection;
 import java.util.HashSet;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import uk.ac.ncl.cs.ondex.merger.Merger;
 
 /**
  *

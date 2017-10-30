@@ -14,6 +14,8 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.config.ValidatorRegistry;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
@@ -23,8 +25,6 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.ec.MetaData;
 import net.sourceforge.ondex.parser.ec.Parser;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
-
-import org.apache.log4j.Level;
 
 /**
  * Class extracts content from EC database.

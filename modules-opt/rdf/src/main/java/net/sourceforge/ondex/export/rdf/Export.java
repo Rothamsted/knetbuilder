@@ -1,28 +1,9 @@
 package net.sourceforge.ondex.export.rdf;
 
-import java.io.FileWriter;
+import static java.net.URLEncoder.encode;
 
-import net.sourceforge.ondex.annotations.Authors;
-import net.sourceforge.ondex.annotations.Status;
-import net.sourceforge.ondex.annotations.StatusType;
-import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.config.Constants;
-import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.ConceptAccession;
-import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.ConceptName;
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.MetaData;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXEntity;
-import net.sourceforge.ondex.core.ONDEXGraphMetaData;
-import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.export.ONDEXExport;
+import java.io.FileWriter;
+import java.io.UnsupportedEncodingException;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -33,6 +14,28 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.DC_11;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
+
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
+import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FileArgumentDefinition;
+import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.config.Constants;
+import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.MetaData;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.export.ONDEXExport;
 /**
  * RDF export.
  *
@@ -60,14 +63,24 @@ public class Export extends ONDEXExport {
 		public static String ofTypeUri = createONDEXCoreURI("ofType");
 		public static String pidUri = createONDEXCoreURI("pid");
 
-		public static String toUri(String graphUri, String typeName, String id) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(graphUri);
-			sb.append("/");
-			sb.append(typeName);
-			sb.append("/");
-			sb.append(id);
-			return sb.toString();
+		public static String toUri(String graphUri, String typeName, String id) 
+		{
+			try
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.append(graphUri);
+				sb.append("/");
+				sb.append( encode ( typeName, "UTF-8" ) );
+				sb.append("/");
+				sb.append( encode ( id, "UTF-8" ) );
+				return sb.toString();
+			}
+			catch ( UnsupportedEncodingException ex )
+			{
+				throw new RuntimeException ( 
+					String.format ( "Internal error while URIfying %s/%s: %s", typeName, id, ex.getMessage () ), 
+					ex );
+			}
 		}
 
 		public static String conceptToUri(String graphUri, ONDEXConcept c) {

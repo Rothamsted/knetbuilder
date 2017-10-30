@@ -1,17 +1,26 @@
 package net.sourceforge.ondex.parser.kegg52.xml;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipInputStream;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.kegg52.Parser;
 import net.sourceforge.ondex.parser.kegg52.data.Pathway;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
-import org.xml.sax.*;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import java.io.*;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.ZipInputStream;
 
 
 /**

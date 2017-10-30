@@ -11,6 +11,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
+import org.biojava3.core.sequence.DNASequence;
+import org.biojava3.core.sequence.ProteinSequence;
+import org.biojava3.core.sequence.RNASequence;
+import org.biojava3.core.sequence.transcription.Frame;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -37,11 +42,6 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.mapping.sequence2pfam.method.IMethod;
 import net.sourceforge.ondex.programcalls.HMMMatch;
-
-import org.biojava3.core.sequence.DNASequence;
-import org.biojava3.core.sequence.ProteinSequence;
-import org.biojava3.core.sequence.RNASequence;
-import org.biojava3.core.sequence.transcription.Frame;
 
 /**
  * Sequence to Pfam mapping method. Maps a protein whith an attached amino acid

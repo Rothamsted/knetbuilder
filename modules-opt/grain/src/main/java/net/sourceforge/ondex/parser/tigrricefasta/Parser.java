@@ -1,14 +1,15 @@
 package net.sourceforge.ondex.parser.tigrricefasta;
 
+import java.util.List;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
-import org.apache.log4j.Level;
-
-import java.util.List;
 
 
 /**

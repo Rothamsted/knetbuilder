@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
-
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
+
+import net.sourceforge.ondex.core.ONDEXGraph;
 
 /*
  * Created on 29.05.2005

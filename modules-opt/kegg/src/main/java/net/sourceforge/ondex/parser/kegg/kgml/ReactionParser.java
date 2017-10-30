@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
+import org.codehaus.stax2.XMLStreamReader2;
+
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -19,8 +21,6 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.parser.kegg.Parser;
-
-import org.codehaus.stax2.XMLStreamReader2;
 
 public class ReactionParser extends KgmlComponentParser {
 

@@ -4,14 +4,24 @@
  */
 package net.sourceforge.ondex.parser.kegg56.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.kegg56.GenomeParser;
-import net.sourceforge.ondex.parser.kegg56.sink.*;
-
-import java.util.*;
+import net.sourceforge.ondex.parser.kegg56.sink.Concept;
+import net.sourceforge.ondex.parser.kegg56.sink.ConceptWriter;
+import net.sourceforge.ondex.parser.kegg56.sink.Relation;
+import net.sourceforge.ondex.parser.kegg56.sink.RelationWriter;
+import net.sourceforge.ondex.parser.kegg56.sink.Sequence;
+import net.sourceforge.ondex.parser.kegg56.sink.SequenceWriter;
 
 /**
  * @author taubertj

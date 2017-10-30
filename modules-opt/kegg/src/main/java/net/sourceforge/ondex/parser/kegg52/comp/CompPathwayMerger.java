@@ -4,18 +4,19 @@
  */
 package net.sourceforge.ondex.parser.kegg52.comp;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
+
 import net.sourceforge.ondex.parser.kegg52.MetaData;
 import net.sourceforge.ondex.parser.kegg52.Parser;
 import net.sourceforge.ondex.parser.kegg52.data.Entry;
 import net.sourceforge.ondex.parser.kegg52.data.Pathway;
 import net.sourceforge.ondex.parser.kegg52.sink.Concept;
 import net.sourceforge.ondex.parser.kegg52.util.DPLPersistantSet;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * Merges pathway maps information with parsing results from compound and glycan

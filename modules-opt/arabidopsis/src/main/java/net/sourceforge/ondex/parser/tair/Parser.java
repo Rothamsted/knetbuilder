@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.parser.tair;
 
+import java.io.File;
+
+import org.apache.log4j.Level;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
@@ -13,9 +17,6 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.tair.genome.ParseGenome;
 import net.sourceforge.ondex.parser.tair.protein.ParseProtein;
 import net.sourceforge.ondex.parser.tair.publication.ParseAnnotation;
-import org.apache.log4j.Level;
-
-import java.io.File;
 
 
 /**

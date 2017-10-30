@@ -1,6 +1,17 @@
 package net.sourceforge.ondex.mapping.sequence2pfam.method;
 
-import net.sourceforge.ondex.core.*;
+import java.io.File;
+import java.util.Collection;
+import java.util.Set;
+
+import org.apache.lucene.search.Query;
+
+import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.core.searchable.LuceneQueryBuilder;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
@@ -9,11 +20,6 @@ import net.sourceforge.ondex.programcalls.HMMMatch;
 import net.sourceforge.ondex.programcalls.decypher.DecypherAlignment;
 import net.sourceforge.ondex.programcalls.exceptions.AlgorithmNotSupportedException;
 import net.sourceforge.ondex.programcalls.exceptions.MissingFileException;
-import org.apache.lucene.search.Query;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.Set;
 
 /**
  * Decypher based mapping method

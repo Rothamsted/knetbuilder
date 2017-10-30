@@ -1,10 +1,22 @@
 package net.sourceforge.ondex.parser.pfam;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.core.*;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
@@ -12,12 +24,6 @@ import net.sourceforge.ondex.parser.pfam.sink.DbLink;
 import net.sourceforge.ondex.parser.pfam.sink.Family;
 import net.sourceforge.ondex.parser.pfam.sink.Publication;
 import net.sourceforge.ondex.parser.pfam.transformer.FamilyTransformer;
-
-import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 /**
  * Parser for the http://pfam.sanger.ac.uk/ pfam database
