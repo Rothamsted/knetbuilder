@@ -1,6 +1,6 @@
 # Revision History
 
-## v1.2.1-SNAPSHOT
+## v1.2.1-SNAPSHOT
   * OWL Parser and base components for developers
     * Complete review of the [generic parser](https://github.com/Rothamsted/ondex-base/tree/master/core/parser-api) architecture, 
       which now has clear separation between [data source decomposition](https://github.com/Rothamsted/ondex-base/blob/master/core/parser-api/src/main/java/net/sourceforge/ondex/parser/Scanner.java) 
