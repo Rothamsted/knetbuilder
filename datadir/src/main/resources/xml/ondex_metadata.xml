@@ -5294,6 +5294,7 @@
 				<id>equ</id>
 				<fullname>is_equivalent_to</fullname>
 				<description></description>
+				<inverseName>none</inverseName>
 				<isAntisymmetric>false</isAntisymmetric>
 				<isReflexive>true</isReflexive>
 				<isSymmetric>true</isSymmetric>
@@ -5374,6 +5375,7 @@
 				<id>is_part_of</id>
 				<fullname>is_part_of</fullname>
 				<description>Molecule->MoleculeCmplx</description>
+				<inverseName>none</inverseName>
 				<isAntisymmetric>false</isAntisymmetric>
 				<isReflexive>false</isReflexive>
 				<isSymmetric>false</isSymmetric>
@@ -7153,8 +7155,8 @@
 			<relation_type>
 				<id>ortho</id>
 				<fullname>orthologue</fullname>
-				<description>blastbased ortholog proteins of different species
-				</description>
+				<description>blastbased ortholog proteins of different species</description>
+				<inverseName>none</inverseName>
 				<isAntisymmetric>false</isAntisymmetric>
 				<isReflexive>false</isReflexive>
 				<isSymmetric>true</isSymmetric>
@@ -7162,8 +7164,7 @@
 				<specialisationOf>
 					<id>homologue</id>
 					<fullname>homologue</fullname>
-					<description>gene is homologue to other gene
-					</description>
+					<description>gene is homologue to other gene</description>
 					<inverseName>none</inverseName>
 					<isAntisymmetric>false</isAntisymmetric>
 					<isReflexive>false</isReflexive>
@@ -7391,6 +7392,13 @@
 				<isTransitive>true</isTransitive>
 				<specialisationOf>
 					<id>physical</id>
+					<fullname>physical</fullname>
+					<description></description>
+					<inverseName>none</inverseName>
+					<isAntisymmetric>false</isAntisymmetric>
+					<isReflexive>false</isReflexive>
+					<isSymmetric>false</isSymmetric>
+					<isTransitive>false</isTransitive>
 				</specialisationOf>
 			</relation_type>
 		</relationtypes>
