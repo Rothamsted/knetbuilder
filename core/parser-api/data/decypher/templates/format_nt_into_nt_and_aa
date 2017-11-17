@@ -1,6 +1,0 @@
-[COMMENT] Format nucleic soruce into nucleic target and amino translations
-[ALGORITHM] TB
-[QUERY TYPE] NT
-[OPTIONS] -O4DC123N1N2N3
-[TARGET PATH] %TARGETPATH%
-[TARGET SET] NEW_DB
