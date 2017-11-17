@@ -1,6 +1,0 @@
-[COMMENT] Format hmm source into hmm target
-[ALGORITHM] TB
-[QUERY TYPE] AA
-[OPTIONS] -O1
-[TARGET PATH] %TARGETPATH%
-[TARGET SET] PFAM_FS

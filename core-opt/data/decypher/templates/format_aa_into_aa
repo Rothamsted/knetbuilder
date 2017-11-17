@@ -1,6 +1,0 @@
-[COMMENT] Format amino source into amino target
-[ALGORITHM] TB
-[QUERY TYPE] AA
-[OPTIONS] -O1
-[TARGET PATH] %TARGETPATH%
-[TARGET SET] NEW_DB
