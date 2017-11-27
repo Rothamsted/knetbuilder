@@ -15,16 +15,14 @@
  * to a {@link net.sourceforge.ondex.parser.ConceptBasedRelMapper}, which, in turn, would be equipped with 
  * {@link net.sourceforge.ondex.parser.ConceptMapper}s.</p>
  * 
- * <p>Another example is the OWL parser.</p>
+ * <p>Another example is the <a href = "https://github.com/Rothamsted/ondex-knet-builder/tree/master/modules/owl-parser">OWL parser</a>.</p>
  * 
  * <p>The components defined here are designed to allow for the configuration of a parser by means of a Spring Bean configuration
  * file. The OWL parser is a good starting point to see that in action.</p> 
  *
- * <p>TODO: we still need to define the skeleton component to realise a parser that scans pair of concepts/relations, such 
+ * <p>TODO: we still need to define the skeleton component to realise a parser that scans pairs of concepts/relations, such 
  * as a CSV parser.</p>
- * 
- * <p>TODO: This package and the utils package should be moved in more proper locations</p>
- *
+ *  
  * @author brandizi
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *

@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.parser;
 
 /**
- * A utility scaffolder, which allows you to implement a {@link Mapper} by leveraging the functionality available from a 
+ * A scaffolding utility, which allows you to implement a {@link Mapper} by leveraging the functionality available from a 
  * base mapper. This is obviously based on the <a href = 'https://en.wikipedia.org/wiki/Decorator_pattern>decorator pattern</a>.
  *
  * @author brandizi

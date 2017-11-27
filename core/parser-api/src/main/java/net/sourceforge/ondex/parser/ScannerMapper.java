@@ -5,9 +5,9 @@ import java.util.stream.Stream;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * A facility that combines a {@link Scanner} and passes the source items SI that this returns to an 
- * {@link Mapper item mapper}. Hence, each source item resulting from the scan is mapped to an ONDEX element and 
- * all the mapped elements are returned by the resulting Stream.
+ * A facility that combines a {@link Scanner} and an {@link Mapper item mapper} by passing the source items 
+ * SI that this returns to the mapper. Each source item resulting from the scan is typically mapped 
+ * to an ONDEX element and all the mapped elements are returned by the resulting Stream.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>7 Jul 2017</dd></dl>
@@ -27,6 +27,7 @@ public abstract class ScannerMapper<S, SI, OI> implements StreamMapper<S, OI>
 
 	@Override
 	public Stream<OI> map ( S source, ONDEXGraph graph ) {
+		//                             This is Stream.map(), not our map(), which is the next one.
 		return scanner.scan ( source ).map ( si -> mapper.map ( si, graph ) );
 	}
 	

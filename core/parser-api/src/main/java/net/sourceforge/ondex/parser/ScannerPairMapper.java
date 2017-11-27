@@ -29,6 +29,7 @@ public abstract class ScannerPairMapper<S1, SI, SI2, OI> implements StreamPairMa
 	@Override
 	public Stream<OI> map ( S1 src1, SI2 src2, ONDEXGraph graph )
 	{
+		//                          // This is Stream.map(), not our map(), which is the next one
 		return scanner.scan ( src1 ).map ( si -> mapper.map ( si, src2, graph ) );
 	}
 
