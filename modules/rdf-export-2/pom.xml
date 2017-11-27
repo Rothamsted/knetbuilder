@@ -9,10 +9,10 @@
       <version>1.2.1-SNAPSHOT</version>
    </parent>
    <groupId>net.sourceforge.ondex.modules</groupId>
-   <artifactId>owl-parser</artifactId>
+   <artifactId>rdf-export-2</artifactId>
 
-   <name>ONDEX OWL Parser</name>
-   <description>A parser for OWL ontologies</description>
+   <name>ONDEX RDF Exporter</name>
+   <description>A library to manage RDF export from ONDEX graphs</description>
    
  	 <developers>
 	   <developer>
@@ -23,12 +23,6 @@
    
    <dependencies>
    
-      <dependency>    
-      	<groupId>net.sourceforge.ondex</groupId>
- 			  <artifactId>parser-api</artifactId>
-        <version>${project.version}</version>      
-      </dependency>
-      
 			<dependency>
 				<artifactId>api</artifactId>
 			  <groupId>net.sourceforge.ondex.core</groupId>
@@ -54,7 +48,18 @@
          <artifactId>log4j</artifactId>
          <scope>provided</scope>
       </dependency>
-      
+      <dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<scope>test</scope>
+			</dependency>
+            
 			<dependency>
 			  <groupId>info.marcobrandizi</groupId>
 			  <artifactId>rdfutils-jena</artifactId>
@@ -62,25 +67,42 @@
 			</dependency>
       
 			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>4.3.6.RELEASE</version>
+			  <groupId>uk.ac.ebi.fg</groupId>
+			  <artifactId>java2rdf</artifactId>
+			  <version>2.0-SNAPSHOT</version>
+			</dependency>      
+
+			<dependency>
+			  <groupId>org.apache.commons</groupId>
+			  <artifactId>commons-rdf-jena</artifactId>
+			  <version>0.3.0-incubating</version>
+			  <exclusions>
+					<exclusion>
+						<groupId>org.apache.jena</groupId>
+						<artifactId>jena-osgi</artifactId>
+					</exclusion>		  
+			  </exclusions>
 			</dependency>
-			      
+
+	    <dependency>
+				<groupId>net.sourceforge.ondex.apps</groupId>
+				<artifactId>ondex-mini</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+	    </dependency>
+
+			<!-- Used for integration tests. -->
+			<dependency>
+				<groupId>net.sourceforge.ondex.modules</groupId>
+				<artifactId>oxl</artifactId>
+				<version>${project.version}</version>
+				<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
+				<scope>test</scope>
+			</dependency>
+
    </dependencies>
    
    <build>
-   
-			<testResources>
-			  <!--  This is stuff used both in the binary distribution and in tests -->
-			  <testResource>
-			    <directory>src/main/assembly/resources/config</directory>
-			  </testResource>
-			  <!-- This is the usual Maven conventions -->
-			  <testResource>
-			    <directory>src/test/resources</directory>
-			  </testResource>
-		  </testResources>   
    
       <plugins>
       
@@ -135,12 +157,24 @@
    </build>
    
    <repositories>
+			
+			<!-- rdfutils -->
 			<repository>
 				<id>marcobrandizi.info</id>
 				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
 				<releases><enabled>true</enabled></releases>
 				<snapshots><enabled>true</enabled></snapshots>
 			</repository>
+
+			<!-- jutils, java2rdf -->
+			<repository>
+		    <id>EBIBioSamples-GH-repo</id>
+		    <url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
+		    <snapshots>
+	        <enabled>true</enabled>
+		    </snapshots>
+	    </repository>			
+
    </repositories>   
 
 </project>

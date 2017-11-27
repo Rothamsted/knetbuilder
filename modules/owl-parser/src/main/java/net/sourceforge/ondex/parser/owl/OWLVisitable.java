@@ -48,9 +48,9 @@ public class OWLVisitable implements Visitable<OntClass>
 		if ( oldValue == isVisited ) return oldValue;
 		
 		OntModel m = ontCls.getOntModel ();
-		Property pIsProc = m.getProperty ( visitedProp );
-		ontCls.removeAll ( pIsProc );
-		ontCls.addLiteral ( pIsProc, isVisited );
+		Property pisVisited = m.getProperty ( visitedProp );
+		ontCls.removeAll ( pisVisited );
+		ontCls.addLiteral ( pisVisited, isVisited );
 		return oldValue;
 	}
 }

@@ -116,7 +116,7 @@
 	  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:label' )}" />
 	</bean>
 
-	<!-- This is null by default, defin your own net.sourceforge.ondex.parser.owl.OWLTextsMapper to map alt names (eg, see
+	<!-- This is null by default, define your own net.sourceforge.ondex.parser.owl.OWLTextsMapper to map alt names (eg, see
 	     GO files)  -->
 	<bean id = "altNamesMapper" factory-bean = "nullBeanFactory" factory-method = "get" />
 	

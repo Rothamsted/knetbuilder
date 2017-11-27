@@ -12,10 +12,12 @@ import net.sourceforge.ondex.parser.TextsMapper;
 
 /**
  * <p>This implements a {@link DefaultAccessionsMapper} considering the way accessions are represented in OBO/OWL
- * ontologies. For instances. GO accessions are represented through the property 'oboInOwl:id' associated to the 
- * GO class and each value given for this property has the 'GO:' prefix (e.g., 'GO:00002835'). You can set 'oboInOwl:id' using 
- * {@link #setPropertyIri(String) the property IRI setter} and tell about the 'GO:' prefix via 
- * {@link #setDataSourcePrefix(String)}. The ONDEX data source is a different entity and you can set it 
+ * ontologies. For instance, GO accessions are represented through the property 'oboInOwl:id' associated to the 
+ * GO class and each value given for this property has the 'GO:' prefix (e.g., 'GO:00002835'). You can map 
+ * 'oboInOwl:id' through this mapper, using {@link #setPropertyIri(String) the property IRI setter} and telling 
+ * about the 'GO:' prefix via {@link #setDataSourcePrefix(String)}. 
+ * 
+ * The ONDEX data source is a different entity and you can set it 
  * via {@link #setDataSourcesMapper(net.sourceforge.ondex.parser.DataSourcesMapper)} (possibly using a 
  * {@link ConstDataSourcesMapper}).</p>
  * 
@@ -117,7 +119,9 @@ public class OBOWLAccessionsMapper extends DefaultAccessionsMapper<OntClass> imp
 		}
 	}
 	
-	
+	/**
+	 * This sets up {@link Utils#OWL_PARSER_DATA_SOURCE} as default data source (using {@link ConstDataSourcesMapper}).
+	 */
 	public OBOWLAccessionsMapper ()
 	{
 		super ();

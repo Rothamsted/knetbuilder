@@ -7,8 +7,9 @@ if [ "$target" == "" ]; then
 	
 	$(basename $0) <ONDEX binary path>
 	
-	Updated an ONDEX installation with the last build of the OWL parser plug-in. The parameter is the directory where
-	the installer was exploded. 
+	Updates an ONDEX installation with the last build of the OWL parser plug-in. The parameter is the directory where
+	the installer was exploded. The ONDEX and ONDEX mini applications are auto-updated during build, this script might
+	be useful during debugging and alike.
 
 EOT
 
@@ -16,8 +17,6 @@ EOT
 fi
 
 export TRNSF='/bin/cp --recursive --no-dereference --preserve --verbose'
-export TRNSF='/bin/cp -R -P -p -v'
-
 
 cd "$(dirname $0)" 
 cd target
