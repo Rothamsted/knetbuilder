@@ -21,7 +21,7 @@ public class FileExporterTest
 		String testResPath = mavenBuildPath + "test-classes/";
 		
 		ONDEXGraph g = Parser.loadOXL ( testResPath + "text_mining.oxl" );
-
+		
 		RDFFileExporter fx = new RDFFileExporter ();
 		fx.export ( g, mavenBuildPath + "test.ttl", "TURTLE_BLOCKS" );
 		//fx.export ( g, System.out, "TURTLE_BLOCKS" );

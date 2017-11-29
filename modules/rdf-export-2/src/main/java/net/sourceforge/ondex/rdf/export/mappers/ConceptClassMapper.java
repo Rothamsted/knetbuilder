@@ -6,17 +6,9 @@ import static org.apache.commons.lang3.ArrayUtils.contains;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils;
-import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ConceptClass;
-import uk.ac.ebi.fg.java2rdf.mapping.BeanRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
-import uk.ac.ebi.fg.java2rdf.mapping.properties.LiteralPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
-import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
-import uk.ac.ebi.utils.ids.IdUtils;
 
 /**
  * TODO: comment me!

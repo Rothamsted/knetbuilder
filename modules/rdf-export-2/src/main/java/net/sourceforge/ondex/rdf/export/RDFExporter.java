@@ -1,25 +1,28 @@
 package net.sourceforge.ondex.rdf.export;
 
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import org.apache.commons.rdf.api.Graph;
 import org.apache.commons.rdf.jena.JenaGraph;
-import org.apache.commons.rdf.jena.JenaRDF;
+import org.apache.jena.ext.com.google.common.collect.Streams;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
+import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
@@ -64,13 +67,18 @@ public class RDFExporter
 		RDFXFactory xfact = new RDFXFactory ( jenaModelSupplier.get () );
 		
 		// TODO: Graph
-		
-		for ( ConceptClass cc: graph.getMetaData ().getConceptClasses () )
-			xfact.map ( cc );
-
-		for ( RelationType rt: graph.getMetaData ().getRelationTypes () )
-			xfact.map ( rt );
-		
+		final RDFXFactory xfactf = xfact; 
+		ONDEXGraphMetaData metaData = graph.getMetaData ();
+		Stream.of ( 
+			metaData.getConceptClasses (), 
+			metaData.getRelationTypes (), 
+			metaData.getAttributeNames (), 
+			metaData.getEvidenceTypes (),
+			metaData.getUnits ()
+		)
+		.flatMap ( Collection::stream )
+		.forEach ( meta -> xfactf.map ( meta ) );
+								
 		// We export all metadata in one chunk. This is typically small at this point and flushing it out 
 		// allows a client to handle the whole T-Box first.
 		xfact = this.handleChunkSwitching ( xfact, true );
@@ -78,14 +86,12 @@ public class RDFExporter
 		for ( ONDEXConcept concept: graph.getConcepts () )
 		{
 			xfact.map ( concept );
-			
 			xfact = this.handleChunkSwitching ( xfact );
 		}
 
 		for ( ONDEXRelation relation: graph.getRelations () )
 		{
-			// do the export
-			
+			xfact.map ( relation );
 			xfact = this.handleChunkSwitching ( xfact );
 		}
 		

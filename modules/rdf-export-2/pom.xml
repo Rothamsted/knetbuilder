@@ -84,6 +84,11 @@
 			  </exclusions>
 			</dependency>
 
+			<dependency>
+			  <groupId>org.apache.commons</groupId>
+			  <artifactId>commons-collections4</artifactId>
+			</dependency>
+
 	    <dependency>
 				<groupId>net.sourceforge.ondex.apps</groupId>
 				<artifactId>ondex-mini</artifactId>
@@ -91,7 +96,6 @@
 				<scope>test</scope>
 	    </dependency>
 
-			<!-- Used for integration tests. -->
 			<dependency>
 				<groupId>net.sourceforge.ondex.modules</groupId>
 				<artifactId>oxl</artifactId>

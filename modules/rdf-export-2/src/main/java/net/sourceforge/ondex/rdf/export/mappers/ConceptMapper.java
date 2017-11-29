@@ -6,16 +6,21 @@ import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.rdf.api.Graph;
 
-import info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
+import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.rdf.OndexRDFUtils;
-import uk.ac.ebi.fg.java2rdf.mapping.BeanRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
+import uk.ac.ebi.fg.java2rdf.mapping.properties.CollectionPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.LiteralPropRdfMapper;
+import uk.ac.ebi.fg.java2rdf.mapping.properties.ResourcePropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
 
@@ -33,39 +38,27 @@ public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 		@Override
 		public String getUri ( ONDEXConcept c, Map<String, Object> params )
 		{
-			
 			String ns = Java2RdfUtils.getParam ( params, "instanceNamespace", NamespaceUtils.ns ( "bkr" ) );
 			
 			String ccPart = Optional
 				.ofNullable ( c.getOfType () )
 				.flatMap ( cc -> Optional.ofNullable ( cc.getId () ) )
 				.orElse ( null );
-
-// TODO: remove
-//			String idPart = c.getConceptAccessions ()
-//			.stream ()
-//			.filter ( acc -> acc != null && !acc.isAmbiguous () )
-//			.map ( ConceptAccession::getAccession )
-//			.sorted ()
-//			.findFirst ()
-//			.orElse ( String.valueOf ( c.getId () ) );
-
+			
 			return OndexRDFUtils.iri ( ns, ccPart, c.getPID (), c.getId () );
 		}				
 	}
 	
 	{
-/*
-* 		
-		c.getAttributes ();
-		c.getConceptAccessions ();
-		c.getConceptName ();
-		c.getElementOf ();
-		c.getEvidence ();
-		c.getTags ();
-
-*/
 		this.setRdfUriGenerator ( new UriGenerator () );
+
+		this.addPropertyMapper ( "PID", new LiteralPropRdfMapper<> ( iri ( "dcterms:identifier" ) ) );
+		this.addPropertyMapper ( "description", new LiteralPropRdfMapper<> ( iri ( "dcterms:description" ) ) );
+		this.addPropertyMapper ( "annotation", new LiteralPropRdfMapper<> ( iri ( "rdfs:comment" ) ) );
+		this.addPropertyMapper ( "elementOf", new ResourcePropRdfMapper<ONDEXConcept, DataSource> ( iri ( "bk:dataSource" ) ) );
+		this.addPropertyMapper ( "conceptAccessions", new CollectionPropRdfMapper<ONDEXConcept, ConceptAccession, String> ( 
+			new ResourcePropRdfMapper<> ( iri ( "dc:identifier" ) )
+		));
 	}
 
 	@Override
@@ -74,13 +67,26 @@ public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 		if ( !super.map ( concept, params ) ) return false;
 
 		RdfMapperFactory xfact = this.getMapperFactory ();
+		Graph graphModel = xfact.getGraphModel ();
 
 		String myiri = this.getRdfUriGenerator ().getUri ( concept, params );
 		
 		ConceptClass cc = concept.getOfType ();
 		String cciri = cc == null ? iri ( "bk:Concept" ) : xfact.getUri ( cc, params );
-		COMMUTILS.assertResource ( xfact.getGraphModel (), myiri, iri ( "rdf:type" ), cciri );
+		COMMUTILS.assertResource ( graphModel, myiri, iri ( "rdf:type" ), cciri );
 		
+		// Names
+		for ( ConceptName cname: concept.getConceptNames () )
+		{
+			String nameStr = cname.getName ();
+			if ( StringUtils.isEmpty ( nameStr ) ) continue;
+
+			// This is bk:prefName or bk:altName
+			String nameProp = iri ( "bk", ( cname.isPreferred () ? "pref" : "alt" ) + "Name" );
+			
+			COMMUTILS.assertLiteral ( graphModel, myiri, nameProp, nameStr );
+		}
+				
 		return true;
 	}
 
