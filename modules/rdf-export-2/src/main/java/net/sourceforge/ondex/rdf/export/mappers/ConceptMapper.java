@@ -14,7 +14,6 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.rdf.OndexRDFUtils;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
@@ -25,11 +24,9 @@ import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
 
 /**
- * TODO: comment me!
- *
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Nov 2017</dd></dl>
- *
  */
 public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 {

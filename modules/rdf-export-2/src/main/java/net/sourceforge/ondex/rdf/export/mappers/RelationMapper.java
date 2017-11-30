@@ -18,7 +18,8 @@ import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
 
 /**
- * TODO: comment me!
+ * Maps {@link ONDEXRelation}. These are translated into straight RDF triples and, if further elements
+ * are to be associated to a relation, a bk:Relation instance is created too and these elements linked to it.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Nov 2017</dd></dl>
@@ -78,8 +79,9 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 
 		COMMUTILS.assertResource ( graph, fromIri, relTypeIri, toIri );
 
-		// And the corresponding reified relation
 		
+		// And the corresponding reified relation
+		//
 		
 		if ( sizeIsEmpty ( rel.getAttributes () ) && sizeIsEmpty ( rel.getEvidence () ) && sizeIsEmpty ( rel.getTags () ) )
 			// If we have nothing to add to the triple, let's just skip it.

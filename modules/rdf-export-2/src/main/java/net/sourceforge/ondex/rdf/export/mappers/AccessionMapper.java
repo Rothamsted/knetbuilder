@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.rdf.export.mappers;
 
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
-import static net.sourceforge.ondex.rdf.OndexRDFUtils.idEncode;
 
 import java.util.Map;
 import java.util.Optional;
@@ -9,10 +8,7 @@ import java.util.Optional;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.MetaData;
-import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.rdf.OndexRDFUtils;
-import net.sourceforge.ondex.rdf.export.mappers.ConceptMapper.UriGenerator;
 import uk.ac.ebi.fg.java2rdf.mapping.BeanRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.LiteralPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.ResourcePropRdfMapper;
@@ -21,7 +17,6 @@ import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
 
 /**
- * TODO: comment me!
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>29 Nov 2017</dd></dl>

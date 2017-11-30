@@ -21,8 +21,7 @@ import uk.ac.ebi.fg.java2rdf.mapping.properties.ResourcePropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfLiteralGenerator;
 
 /**
- * TODO: comment me!
- *
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Nov 2017</dd></dl>
  *

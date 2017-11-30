@@ -11,10 +11,9 @@ import uk.ac.ebi.fg.java2rdf.mapping.BeanRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.LiteralPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
-import uk.ac.ebi.utils.ids.IdUtils;
 
 /**
- * TODO: comment me!
+ * Maps common aspects of {@link MetaData}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>27 Nov 2017</dd></dl>

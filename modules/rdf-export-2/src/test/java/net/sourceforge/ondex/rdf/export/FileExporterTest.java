@@ -6,8 +6,6 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
- * TODO: comment me!
- *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Nov 2017</dd></dl>
  *

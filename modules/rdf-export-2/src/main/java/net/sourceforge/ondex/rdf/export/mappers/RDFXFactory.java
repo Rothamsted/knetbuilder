@@ -13,10 +13,21 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.rdf.export.RDFExporter;
+import uk.ac.ebi.fg.java2rdf.mapping.BeanRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
 
 /**
- * TODO: comment me!
+ * The {@link RdfMapperFactory} for ONDEX/RDF exporting.
+ * 
+ * Here we define all the {@link BeanRdfMapper} needed for the job. and then {@link RDFExporter} uses 
+ * instance of this factory. 
+ * 
+ * Note that every new chunks generated in 
+ * {@link RDFExporter#export(net.sourceforge.ondex.core.ONDEXGraph)} uses a new {@link RDFXFactory}, 
+ * so possible state information stored here doesn't last for the whole lifetime of the exporter (the 
+ * {@link RdfMapperFactory} tracking of already-visited objects isn't very relevan here, since ONDEX 
+ * objects are visited once only).
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Nov 2017</dd></dl>

@@ -11,8 +11,7 @@ import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 
 /**
- * TODO: comment me!
- *
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>27 Nov 2017</dd></dl>
  *

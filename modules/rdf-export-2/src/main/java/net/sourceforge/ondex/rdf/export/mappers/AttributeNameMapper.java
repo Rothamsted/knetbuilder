@@ -11,8 +11,6 @@ import org.apache.commons.rdf.api.Graph;
 import info.marcobrandizi.rdfutils.XsdMapper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.AttributeName;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.Unit;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.ResourcePropRdfMapper;
@@ -21,8 +19,8 @@ import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
 import uk.ac.ebi.utils.ids.IdUtils;
 
 /**
- * TODO: comment me!
- *
+ * Maps an attribute type as a subproperty of bk:attribute, as expected by the bioknet ontology.
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>28 Nov 2017</dd></dl>
  *
@@ -47,6 +45,11 @@ public class AttributeNameMapper extends MetadataMapper<AttributeName>
 	}
 	
 	
+	/**
+	 * Note that the range is mapped using {@link XsdMapper}. You need a custom implementation for more complicated
+	 * cases.
+	 * 
+	 */
 	@Override
 	public boolean map ( AttributeName aname, Map<String, Object> params )
 	{
@@ -58,7 +61,10 @@ public class AttributeNameMapper extends MetadataMapper<AttributeName>
 
 		String myiri = uriGen.getUri ( aname, params );
 
+		// The parent attribute type
+		//
 		AttributeName parent = aname.getSpecialisationOf ();
+		
 		String parentIri = parent == null
 			? iri ( "bk:attribute" ) 
 			: uriGen.getUri ( parent );
@@ -68,6 +74,7 @@ public class AttributeNameMapper extends MetadataMapper<AttributeName>
 			.map ( clazz -> XsdMapper.dataTypeIri ( clazz ) )
 			.orElse ( null );
 		
+		// The range, if a proper mapping exists.
 		if ( dataTypeIri != null ) 
 			COMMUTILS.assertResource ( graphModel, myiri, iri ( "rdfs:range" ), dataTypeIri );
 		
