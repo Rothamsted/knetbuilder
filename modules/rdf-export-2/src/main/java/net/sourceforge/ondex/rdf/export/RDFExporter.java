@@ -38,7 +38,8 @@ import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
  */
 public class RDFExporter extends RDFProcessor<ONDEXGraph>
 {
-	public final void process ( ONDEXGraph graph ) {
+	@Override
+	public final void process ( ONDEXGraph graph, Object...opts ) {
 		this.export ( graph );
 	}
 	
