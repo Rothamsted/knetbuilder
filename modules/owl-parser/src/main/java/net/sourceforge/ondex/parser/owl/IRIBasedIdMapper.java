@@ -7,6 +7,7 @@ import org.apache.jena.ontology.OntClass;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.TextMapper;
+import uk.ac.ebi.utils.ids.IdUtils;
 
 /**
  * An identifier mapper that is based on the extraction of the last part of an IRI/URI. For instance, it gets 
@@ -24,20 +25,7 @@ public class IRIBasedIdMapper implements TextMapper<OntClass>
 	public String map ( OntClass ontCls, ONDEXGraph graph )
 	{
 		// TODO: null
-		String iri= ontCls.getURI (); 
-		try
-		{
-			String[] frags = iri.split ( splitRegEx );
-			String lastFrag = frags [ frags.length - 1 ];
-			lastFrag = URLDecoder.decode ( lastFrag, "UTF-8" );
-			lastFrag = lastFrag.replaceAll ( "[\\s\\+\\-\\:\\.\\?]", "_" );
-			return lastFrag;
-		}
-		catch ( UnsupportedEncodingException ex ) {
-			throw new RuntimeException ( String.format ( 
-				"Internal error while extracting an ID from the uri <%s>: %s", iri, ex.getMessage ()
-			), ex );
-		}
+		return IdUtils.iri2id ( ontCls.getURI (), splitRegEx );
 	}
 
 	/**
