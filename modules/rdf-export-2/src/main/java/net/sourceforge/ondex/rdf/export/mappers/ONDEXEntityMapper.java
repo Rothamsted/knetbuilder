@@ -72,7 +72,7 @@ public abstract class ONDEXEntityMapper<OE extends ONDEXEntity> extends BeanRdfM
 				COMMUTILS.assertLiteral ( graphModel, myiri, attrProp, vl );
 				
 				if ( !attr.isDoIndex () ) continue;
-					// This goes at the level of the attribute type, as explained in bioknet ontology file.
+					// This goes at the level of the attribute type, as explained in the bioknet ontology file.
 				COMMUTILS.assertLiteral ( 
 					graphModel, attrProp, iri ( "bk:isIndexed" ), COMMUTILS.value2TypedLiteral ( graphModel, true ).get () 
 				);

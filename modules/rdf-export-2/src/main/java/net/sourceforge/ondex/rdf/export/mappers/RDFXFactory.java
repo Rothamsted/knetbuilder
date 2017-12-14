@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.rdf.export.mappers;
 
+import org.apache.commons.rdf.jena.JenaGraph;
 import org.apache.commons.rdf.jena.JenaRDF;
 import org.apache.jena.rdf.model.Model;
 
@@ -53,4 +54,8 @@ public class RDFXFactory extends RdfMapperFactory
 		this.setMapper ( ConceptAccession.class, new AccessionMapper () );
 	}
 
+	public Model getJenaModel ()
+	{
+		return ( (JenaGraph) this.getGraphModel () ).asJenaModel ();
+	}
 }

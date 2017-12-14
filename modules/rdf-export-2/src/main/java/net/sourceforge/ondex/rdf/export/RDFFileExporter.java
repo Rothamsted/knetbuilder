@@ -11,12 +11,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFFormat;
 import org.apache.jena.riot.system.StreamRDFWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import info.marcobrandizi.rdfutils.jena.elt.JenaIoUtils;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
@@ -30,21 +32,11 @@ public class RDFFileExporter
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
-	public void export ( ONDEXGraph g, final OutputStream out, final String lang )
+	public void export ( ONDEXGraph g, final OutputStream out, final String langOrFormat )
 	{
 		try
 		{
-			Lang jlang = null;
-			RDFFormat jfmt = null;
-			try {
-				jlang = (Lang) Lang.class.getField ( lang ).get ( null );
-			}
-			catch ( NoSuchFieldException ex ) {
-				jfmt = (RDFFormat) RDFFormat.class.getField ( lang ).get ( null );
-			}
-			final Lang jlangf = jlang; 
-			final RDFFormat jfmtf = jfmt;
-			
+			final Pair<RDFFormat, Lang> jlang = JenaIoUtils.getLangOrFormat ( langOrFormat );
 			
 			RDFExporter xport = new RDFExporter ();
 			
@@ -59,23 +51,23 @@ public class RDFFileExporter
 				new LinkedBlockingQueue<> ( 100 ) 
 			));
 			
-			xport.setExportHandler ( m -> 
+			xport.setConsumer ( m -> 
 			{ 
 				log.trace ( "BEGIN RDF writing thread {}", Thread.currentThread ().getName () );
-				if ( jlangf != null )
-					StreamRDFWriter.write ( out, m.getGraph (), jlangf );
+				if ( jlang.getLeft () != null )
+					StreamRDFWriter.write ( out, m.getGraph (), jlang.getLeft () );
 				else
-					StreamRDFWriter.write ( out, m.getGraph (), jfmtf );
+					StreamRDFWriter.write ( out, m.getGraph (), jlang.getRight () );
 				log.trace ( "END RDF writing thread {}", Thread.currentThread ().getName () );
 			});
 			
 			xport.export ( g ); 
 			out.close ();
 		}
-		catch ( NoSuchFieldException | IllegalArgumentException | IllegalAccessException | SecurityException ex )
+		catch ( IllegalArgumentException ex )
 		{
 			throw new IllegalArgumentException ( String.format (  
-				"Got error: %s. Probably RDF language '%s' is invalid/unsupported", ex.getMessage (), lang ), 
+				"Got error: %s. Probably RDF language '%s' is invalid/unsupported", ex.getMessage (), langOrFormat ), 
 			ex );
 		}
 		catch ( IOException ex ) {
