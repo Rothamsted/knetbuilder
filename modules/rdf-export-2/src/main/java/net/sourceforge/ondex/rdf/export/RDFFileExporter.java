@@ -62,7 +62,6 @@ public class RDFFileExporter
 			});
 			
 			xport.export ( g ); 
-			out.close ();
 		}
 		catch ( IllegalArgumentException ex )
 		{
@@ -70,19 +69,21 @@ public class RDFFileExporter
 				"Got error: %s. Probably RDF language '%s' is invalid/unsupported", ex.getMessage (), langOrFormat ), 
 			ex );
 		}
-		catch ( IOException ex ) {
-			throw new UncheckedIOException ( "I/O Error while exporting RDF: " + ex.getMessage (), ex );
-		}
 	}
 	
 	public void export ( ONDEXGraph g, File file, String lang )
 	{
-		try
+		try ( OutputStream out = new BufferedOutputStream ( new FileOutputStream ( file ) ) )
 		{
-			export ( g, new BufferedOutputStream ( new FileOutputStream ( file ) ), lang );
+			export ( g, out, lang );
 		}
 		catch ( FileNotFoundException ex ) {
 			throw new UncheckedIOException ( "RDF export file '" + file.getAbsolutePath () + "' not found" , ex );
+		}
+		catch ( IOException ex ) {
+			throw new UncheckedIOException ( 
+				"Error while RDF-exporting to '" + file.getAbsolutePath () + "': " + ex.getMessage () , ex 
+			);
 		}
 	}
 	

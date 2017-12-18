@@ -23,5 +23,7 @@ public class FileExporterTest
 		RDFFileExporter fx = new RDFFileExporter ();
 		fx.export ( g, mavenBuildPath + "test.ttl", "TURTLE_BLOCKS" );
 		//fx.export ( g, System.out, "TURTLE_BLOCKS" );
+		
+		// TODO: tests!
 	}
 }

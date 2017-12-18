@@ -35,7 +35,7 @@ public class ConceptClassMapper extends MetadataMapper<ConceptClass>
 
 		ConceptClass parent = cc.getSpecialisationOf ();
 		String parentIri = parent == null || contains ( IGNORED_IDS, parent.getId () ) 
-			? iri ( "bk:ConceptClass" ) 
+			? iri ( "bk:Concept" ) 
 			: uriGen.getUri ( parent );
 		COMMUTILS.assertResource ( xfact.getGraphModel (), myiri, iri ( "rdfs:subClassOf" ), parentIri );
 

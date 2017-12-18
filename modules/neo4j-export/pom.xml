@@ -10,10 +10,10 @@
    </parent>
    
    <groupId>net.sourceforge.ondex.modules</groupId>
-   <artifactId>rdf-export-2</artifactId>
+   <artifactId>neo4j-export</artifactId>
 
-   <name>ONDEX RDF Exporter</name>
-   <description>Tools to manage RDF export from ONDEX graphs</description>
+   <name>ONDEX Neo4J Exporter</name>
+   <description></description>
    
  	 <developers>
 	   <developer>
@@ -21,7 +21,12 @@
 			 <url>https://github.com/marco-brandizi</url>
 		 </developer>
 	 </developers>
-   
+      
+      
+   <properties>
+		<neo4j.server.version>3.3.1</neo4j.server.version>
+   </properties>
+      
    <dependencies>
    
 			<dependency>
@@ -62,34 +67,17 @@
 			</dependency>
             
 			<dependency>
-			  <groupId>info.marcobrandizi</groupId>
-			  <artifactId>rdfutils-jena</artifactId>
-			  <version>2.0-SNAPSHOT</version>
-			</dependency>
-      
+				<groupId>uk.ac.rothamsted</groupId>
+				<version>0.0.1-SNAPSHOT</version>
+  				<artifactId>rdf2neo</artifactId>
+			</dependency>            
+            
 			<dependency>
-			  <groupId>uk.ac.ebi.fg</groupId>
-			  <artifactId>java2rdf</artifactId>
-			  <version>2.0-SNAPSHOT</version>
-			</dependency>      
-
-			<dependency>
-			  <groupId>org.apache.commons</groupId>
-			  <artifactId>commons-rdf-jena</artifactId>
-			  <version>0.3.0-incubating</version>
-			  <exclusions>
-					<exclusion>
-						<groupId>org.apache.jena</groupId>
-						<artifactId>jena-osgi</artifactId>
-					</exclusion>		  
-			  </exclusions>
-			</dependency>
-
-			<dependency>
-			  <groupId>org.apache.commons</groupId>
-			  <artifactId>commons-collections4</artifactId>
-			</dependency>
-
+      		<groupId>${project.groupId}</groupId>
+				<artifactId>rdf-export-2</artifactId>
+				<version>${project.version}</version>
+			</dependency>            
+	    
 	    <dependency>
 				<groupId>net.sourceforge.ondex.apps</groupId>
 				<artifactId>ondex-mini</artifactId>
@@ -110,6 +98,57 @@
    <build>
    
       <plugins>
+      
+				<!-- 
+					A small plug-in that starts Neo4j, we maintain our own version of this at 
+					https://github.com/Rothamsted/neo4j-server-maven-plugin
+				 -->
+				<plugin>
+					<groupId>com.github.harti2006</groupId>
+					<artifactId>neo4j-server-maven-plugin</artifactId>
+					<version>0.2-SNAPSHOT</version>
+					<configuration>
+						<!-- port>7474</port --> 
+						<version>${neo4j.server.version}</version>
+						<deleteDb>true</deleteDb>
+					</configuration>
+					<executions>
+						<execution>
+							<id>start-neo4j-server</id>
+							<goals>
+								<goal>start</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>stop-neo4j-server</id>
+							<goals>
+								<goal>stop</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+					
+		    <plugin>
+		      <artifactId>maven-failsafe-plugin</artifactId>
+		      <version>2.20.1</version>
+		      <configuration>
+		      		<trimStackTrace>false</trimStackTrace>
+		      </configuration>
+					<executions>
+	          <execution>
+	          		<id>failsafe-test</id>
+	            <goals>
+		            	<goal>integration-test</goal>
+	            </goals>
+	          </execution>
+	          <execution>
+	          		<id>failsafe-verify</id>
+	          		<goals>
+	          			<goal>verify</goal>
+	          		</goals>
+	          </execution>
+	        </executions>	      
+		    </plugin>      
       
 			  <plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
@@ -162,6 +201,8 @@
    </build>
    
    <repositories>
+
+			<!-- TODO: Move upstream? -->
 			
 			<!-- rdfutils -->
 			<repository>

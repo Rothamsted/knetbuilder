@@ -48,6 +48,7 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		RDFXFactory xfact = new RDFXFactory ( this.getDestinationSupplier ().get () );
 		
 		// TODO: Graph
+		this.setDuplicateTBox ( true );
 		final RDFXFactory xfactf = xfact; 
 		ONDEXGraphMetaData metaData = graph.getMetaData ();
 		Stream.of ( 
@@ -63,6 +64,7 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		// We export all metadata in one chunk. This is typically small at this point and flushing it out 
 		// allows a client to handle the whole T-Box first.
 		xfact = this.handleNewXTask ( xfact, true );
+		this.setDuplicateTBox ( false );
 		
 		for ( ONDEXConcept concept: graph.getConcepts () )
 		{
@@ -101,6 +103,6 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		Model newModel = super.handleNewTask ( currentModel , forceFlush );
 
 		if ( currentModel == newModel ) return xfact;
-		return new RDFXFactory ( this.getDestinationSupplier ().get () );
+		return new RDFXFactory ( newModel );
 	}
 }

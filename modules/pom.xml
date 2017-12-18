@@ -57,6 +57,7 @@
       <module>textmining</module>
       <module>validator</module>
       <module>rdf-export-2</module>
+      <module>neo4j-export</module>
    </modules>
 
    <reporting>
