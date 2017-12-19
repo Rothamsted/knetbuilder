@@ -29,8 +29,8 @@ public class Neo4JExporterIT
 			ONDEXGraph g = Parser.loadOXL ( testResPath + "text_mining.oxl" );
 			
 			Neo4jExporter neox = new Neo4jExporter ();
-			neox.setLabelSparqlQuery ( IOUtils.readResource ( "node_labels.sparql" ) );
-			neox.setNodePropSparqlQuery ( IOUtils.readResource ( "node_props.sparql" ) );
+			neox.setLabelSparqlQueries ( IOUtils.readResource ( "node_labels.sparql" ) );
+			neox.setNodePropSparqlQueries ( IOUtils.readResource ( "node_props.sparql" ) );
 			neox.setNeo4jDriver ( neoDriver );
 
 			neox.export ( g );

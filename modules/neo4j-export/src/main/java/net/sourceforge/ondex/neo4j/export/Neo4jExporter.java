@@ -19,7 +19,7 @@ public class Neo4jExporter extends CypherLoader<ONDEXGraph>
 		this.setRdfProcessor ( new RDFExporter () );
 	}
 
-	public void export ( ONDEXGraph rdfSource ) {
-		super.process ( rdfSource );
+	public void export ( ONDEXGraph graph ) {
+		super.process ( graph );
 	}	
 }
