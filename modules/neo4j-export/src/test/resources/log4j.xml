@@ -7,7 +7,7 @@
         <param name="Target" value="System.err"/>
 	      <param name="threshold" value="debug" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%-4r [%t] %-5p %c %x - %m%n"/>
+           <param name = "ConversionPattern" value = "%d{HH:mm:ss.SSS} %25.25C [%t] [%-5p] - %m%n" />
         </layout>
     </appender>
 
@@ -16,18 +16,17 @@
       <param name="append" value="false" />
       <param name="threshold" value="trace" />
       <layout class="org.apache.log4j.PatternLayout">
-      		<param name="ConversionPattern" value="%-4r [%t] %-5p %c %x - %m%n"/>
+         <param name = "ConversionPattern" value = "%d{yyyy-MM-dd HH:mm:ss.SSS} %C [%t] [%-5p] - %m%n" />
       </layout>
     </appender>
     	        
-    <logger name="net.sourceforge.ondex.rdf" additivity="true">
-      <level value="trace" />
-    </logger>
-
-    <logger name="net.sourceforge.ondex.neo4j" additivity="true">
-      <level value="trace" />
-    </logger>
-
+    <logger name="net.sourceforge.ondex.rdf" additivity="true"><level value="debug" /></logger>
+    <logger name="net.sourceforge.ondex.neo4j" additivity="true"><level value="debug" /></logger>
+    <logger name="uk.ac.rothamsted.rdf.neo4j" additivity="true"><level value="debug" /></logger>
+    <logger name="uk.ac.rothamsted.rdf.neo4j.load.support" additivity="true"><level value="trace" /></logger>
+    
+		<logger name = "org.apache.jena" additivity = "true"><level value = "info" /></logger>
+		<logger name = "TDB" additivity = "true"><level value = "info" /></logger>
 
     <root>
       <priority value="debug"/>

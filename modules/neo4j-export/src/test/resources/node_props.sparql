@@ -5,22 +5,22 @@ PREFIX bkr: <http://www.ondex.org/bioknet/resources/>
 PREFIX bka: <http://www.ondex.org/bioknet/attributes/>
 PREFIX dcterms: <http://purl.org/dc/terms/>
 
-SELECT DISTINCT ?iri ?name ?value
+SELECT ?iri ?name ?value
 {
-  ?iri a ?label.
-  ?label rdfs:subClassOf* bk:Concept.
-
 	{ 
 	  ?iri ?name ?value.
 	  VALUES ( ?name ) {
+	    (rdfs:label)
+	    (rdfs:comment)
 	    (dcterms:identifier)
 	    (bk:altName)
 	    (bk:prefName)
+	    (dcterms:description)
+	    (bk:isAmbiguousAccession)
 	  }
 	}
 	UNION {
 	  ?iri ?name ?value.
 	  ?name rdfs:subPropertyOf* bk:attribute.
 	}
-	# TODO: name, else?
 }

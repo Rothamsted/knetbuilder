@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.rdf.export;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -26,4 +27,21 @@ public class FileExporterTest
 		
 		// TODO: tests!
 	}
+
+	
+	@Test 	@Ignore ( "Large file loading, not a real unit test" )
+	public void testkNetMinerAra ()
+	{
+		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
+		
+		ONDEXGraph g = Parser.loadOXL ( "/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/ArabidopsisKNET_201708.oxl" );
+		
+		RDFFileExporter fx = new RDFFileExporter ();
+		fx.export ( g, mavenBuildPath + "test.ttl", "TURTLE_BLOCKS" );
+		//fx.export ( g, System.out, "TURTLE_BLOCKS" );
+		
+		// TODO: tests!
+	}
+
+	
 }

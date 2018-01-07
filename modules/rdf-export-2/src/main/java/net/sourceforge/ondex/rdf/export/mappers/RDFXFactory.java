@@ -36,9 +36,18 @@ import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
  */
 public class RDFXFactory extends RdfMapperFactory
 {
+	private long triplesCount = 0;
+	
 	public RDFXFactory ( Model model )
 	{
+		this ( model, 0 );
+	}
+
+	public RDFXFactory ( Model model, long triplesCount )
+	{
 		super ( null );
+		
+		this.triplesCount = 0;
 
 		JenaRDF rdf = (JenaRDF) CommonsRDFUtils.COMMUTILS.getRDF ();
 		this.setGraphModel ( rdf.asGraph ( model ) );
@@ -58,4 +67,10 @@ public class RDFXFactory extends RdfMapperFactory
 	{
 		return ( (JenaGraph) this.getGraphModel () ).asJenaModel ();
 	}
+
+	public long getTriplesCount ()
+	{
+		return triplesCount;
+	}
+	
 }

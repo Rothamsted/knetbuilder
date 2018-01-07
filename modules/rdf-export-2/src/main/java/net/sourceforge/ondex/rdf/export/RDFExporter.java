@@ -2,21 +2,11 @@ package net.sourceforge.ondex.rdf.export;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.commons.rdf.jena.JenaGraph;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import info.marcobrandizi.rdfutils.jena.elt.RDFProcessor;
-import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
@@ -48,7 +38,6 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		RDFXFactory xfact = new RDFXFactory ( this.getDestinationSupplier ().get () );
 		
 		// TODO: Graph
-		this.setDuplicateTBox ( true );
 		final RDFXFactory xfactf = xfact; 
 		ONDEXGraphMetaData metaData = graph.getMetaData ();
 		Stream.of ( 
@@ -64,7 +53,6 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		// We export all metadata in one chunk. This is typically small at this point and flushing it out 
 		// allows a client to handle the whole T-Box first.
 		xfact = this.handleNewXTask ( xfact, true );
-		this.setDuplicateTBox ( false );
 		
 		for ( ONDEXConcept concept: graph.getConcepts () )
 		{
@@ -103,6 +91,9 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		Model newModel = super.handleNewTask ( currentModel , forceFlush );
 
 		if ( currentModel == newModel ) return xfact;
-		return new RDFXFactory ( newModel );
+		
+		long newCount = currentModel.size () + xfact.getTriplesCount ();
+		log.info ( "{} RDF triples submitted for export", newCount );
+		return new RDFXFactory ( newModel, newCount );
 	}
 }

@@ -1,0 +1,54 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bk: <http://www.ondex.org/bioknet/terms/>
+PREFIX bkr: <http://www.ondex.org/bioknet/resources/>
+PREFIX bka: <http://www.ondex.org/bioknet/attributes/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?iri ?type ?fromIri ?toIri
+{
+  # Straight RDF statements
+	{ 
+		{
+		  # Triples between concepts 
+		  ?type rdfs:subPropertyOf* bk:relatedConcept.
+		  ?fromIri ?type ?toIri.
+		  
+		  # This is taken care of by the pattern below (reified relations always have a direct statement too)
+		  FILTER NOT EXISTS {
+	  			?reifiedIri bk:relFrom ?fromIri; bk:relTo ?toIri.
+		  } 
+		}
+		
+		UNION 
+		{
+		  # And Other bk-related triples
+		  ?fromIri ?type ?toIri.
+		  
+		  VALUES ( ?type ) {
+		  		( bk:evidence )
+		  		( dc:identifier )
+		  		( bk:dataSource )
+		  }
+		}
+
+    # IRI is used in Cypher to assign an ID to each relation		
+		BIND ( 
+			IRI ( 
+		  		CONCAT ( 
+		  		  STR ( bkr: ),
+		  		  MD5 ( CONCAT ( STR ( ?type ), STR ( ?fromIri ), STR ( ?toIri ) ) )
+		  		) 
+		  	)
+		  AS ?iri
+		)
+	}
+	
+	# Reified relations
+	UNION {
+	  ?iri a bk:Relation;
+	   	bk:relTypeRef ?type;
+	    bk:relFrom ?fromIri;
+	    bk:relTo ?toIri.
+	}
+}

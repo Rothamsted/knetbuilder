@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import info.marcobrandizi.rdfutils.jena.elt.JenaIoUtils;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import uk.ac.ebi.utils.threading.HackedBlockingQueue;
 
 /**
  * TODO: comment me!
@@ -44,12 +45,9 @@ public class RDFFileExporter
 			// in a thread-safe way, so it would need synchronization at model level (going more fine-grained
 			// is too complicated) making the true processing single-thread anyway
 			//
-			xport.setExecutor ( new ThreadPoolExecutor (
-				1, 
-				Integer.MAX_VALUE, 
-				0L, TimeUnit.MILLISECONDS, 
-				new LinkedBlockingQueue<> ( 100 ) 
-			));
+			ThreadPoolExecutor executor = (ThreadPoolExecutor) xport.getExecutor ();
+			executor.setCorePoolSize ( 1 );
+			executor.setMaximumPoolSize ( 1 );
 			
 			xport.setConsumer ( m -> 
 			{ 

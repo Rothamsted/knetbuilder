@@ -103,12 +103,11 @@
 					A small plug-in that starts Neo4j, we maintain our own version of this at 
 					https://github.com/Rothamsted/neo4j-server-maven-plugin
 				 -->
-				<plugin>
+				<!--  plugin>
 					<groupId>com.github.harti2006</groupId>
 					<artifactId>neo4j-server-maven-plugin</artifactId>
 					<version>0.2-SNAPSHOT</version>
 					<configuration>
-						<!-- port>7474</port --> 
 						<version>${neo4j.server.version}</version>
 						<deleteDb>true</deleteDb>
 					</configuration>
@@ -126,7 +125,7 @@
 							</goals>
 						</execution>
 					</executions>
-				</plugin>
+				</plugin -->
 					
 		    <plugin>
 		      <artifactId>maven-failsafe-plugin</artifactId>

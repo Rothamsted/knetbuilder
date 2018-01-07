@@ -4,13 +4,13 @@ PREFIX bk: <http://www.ondex.org/bioknet/terms/>
 PREFIX bkr: <http://www.ondex.org/bioknet/resources/>
 PREFIX bka: <http://www.ondex.org/bioknet/attributes/>
 
-SELECT ?iri ?label
+SELECT ?iri
 {
   {
-  		?iri a ?label.
   		?label rdfs:subClassOf* bk:Concept.
-  }
-  
+  		?iri a ?label.
+  	}
+  	
   UNION {
     ?iri a ?label.
     VALUES ( ?label ) {
