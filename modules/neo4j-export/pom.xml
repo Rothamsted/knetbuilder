@@ -1,225 +1,246 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <parent>
-      <artifactId>modules</artifactId>
-      <groupId>net.sourceforge.ondex</groupId>
-      <version>1.2.1-SNAPSHOT</version>
-   </parent>
-   
-   <groupId>net.sourceforge.ondex.modules</groupId>
-   <artifactId>neo4j-export</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>modules</artifactId>
+		<groupId>net.sourceforge.ondex</groupId>
+		<version>1.2.1-SNAPSHOT</version>
+	</parent>
 
-   <name>ONDEX Neo4J Exporter</name>
-   <description></description>
-   
- 	 <developers>
-	   <developer>
-		   <name>Marco Brandizi</name>
-			 <url>https://github.com/marco-brandizi</url>
-		 </developer>
-	 </developers>
-      
-      
-   <properties>
+	<groupId>net.sourceforge.ondex.modules</groupId>
+	<artifactId>neo4j-export</artifactId>
+
+	<name>ONDEX Neo4J Exporter</name>
+	<description></description>
+
+	<developers>
+		<developer>
+			<name>Marco Brandizi</name>
+			<url>https://github.com/marco-brandizi</url>
+		</developer>
+	</developers>
+
+
+	<properties>
 		<neo4j.server.version>3.3.1</neo4j.server.version>
-   </properties>
-      
-   <dependencies>
-   
-			<dependency>
-				<artifactId>api</artifactId>
-			  <groupId>net.sourceforge.ondex.core</groupId>
-			  <version>${project.version}</version>
-		    <scope>provided</scope>   		  
-			</dependency>
-      
-      <dependency>
-        <groupId>net.sourceforge.ondex.core</groupId>
-        <artifactId>workflow-api</artifactId>
-        <version>${project.version}</version>
-        <scope>provided</scope>
-      </dependency>
+	</properties>
 
-      <dependency>
-         <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>memory</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-            
-      <dependency>
-         <groupId>log4j</groupId>
-         <artifactId>log4j</artifactId>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>log4j</groupId>
-         <artifactId>log4j</artifactId>
-         <scope>test</scope>
-      </dependency>
+	<dependencies>
 
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<scope>test</scope>
-			</dependency>
-            
-			<dependency>
-				<groupId>uk.ac.rothamsted</groupId>
-				<version>0.0.1-SNAPSHOT</version>
-  				<artifactId>rdf2neo</artifactId>
-			</dependency>            
-            
-			<dependency>
-      		<groupId>${project.groupId}</groupId>
-				<artifactId>rdf-export-2</artifactId>
-				<version>${project.version}</version>
-			</dependency>            
-	    
-	    <dependency>
-				<groupId>net.sourceforge.ondex.apps</groupId>
-				<artifactId>ondex-mini</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-	    </dependency>
+		<dependency>
+			<artifactId>api</artifactId>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-			<dependency>
-				<groupId>net.sourceforge.ondex.modules</groupId>
-				<artifactId>oxl</artifactId>
-				<version>${project.version}</version>
-				<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
-				<scope>test</scope>
-			</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>workflow-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-   </dependencies>
-   
-   <build>
-   
-      <plugins>
-      
-				<!-- 
-					A small plug-in that starts Neo4j, we maintain our own version of this at 
-					https://github.com/Rothamsted/neo4j-server-maven-plugin
-				 -->
-				<!-- plugin>
-					<groupId>com.github.harti2006</groupId>
-					<artifactId>neo4j-server-maven-plugin</artifactId>
-					<version>0.2-SNAPSHOT</version>
-					<configuration>
-						<version>${neo4j.server.version}</version>
-						<deleteDb>true</deleteDb>
-					</configuration>
-					<executions>
-						<execution>
-							<id>start-neo4j-server</id>
-							<goals>
-								<goal>start</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>stop-neo4j-server</id>
-							<goals>
-								<goal>stop</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin -->
-					
-		    <plugin>
-		      <artifactId>maven-failsafe-plugin</artifactId>
-		      <version>2.20.1</version>
-		      <configuration>
-		      		<trimStackTrace>false</trimStackTrace>
-		      </configuration>
-					<executions>
-	          <execution>
-	          		<id>failsafe-test</id>
-	            <goals>
-		            	<goal>integration-test</goal>
-	            </goals>
-	          </execution>
-	          <execution>
-	          		<id>failsafe-verify</id>
-	          		<goals>
-	          			<goal>verify</goal>
-	          		</goals>
-	          </execution>
-	        </executions>	      
-		    </plugin>      
-      
-			  <plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-surefire-plugin</artifactId>
-			    <version>2.20</version>			    
-			    <configuration>
-			      <properties>
-			        <property>
-			        	<!-- Prints out spaces and test name before/after every test method and automatically -->
-			          <name>listener</name>
-			          <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>			          
-			        </property>
-			       </properties>
-             <forkMode>always</forkMode>
-             <forkCount>1</forkCount>
-             <!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
-             <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
-             <argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>             
-			    </configuration>
-			  </plugin>
-      
-      
-        <plugin>
-	        <artifactId>maven-assembly-plugin</artifactId>
-	        <version>${maven.assembly.plugin.version}</version>
-	        <executions>
-	        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
-						<execution>
-							<id>make-assembly-packaged_with_jars</id>
-							<phase />
-						</execution>    
-	             
-						<execution>
-						  <id>assembly-bundle</id>
-						  <phase>package</phase>
-						  <goals>
-						     <goal>attached</goal>
-						  </goals>
-						  <configuration>
-						     <descriptors>
-						     	<descriptor>src/main/assembly/bundle.xml</descriptor>
-						     </descriptors>
-						  </configuration>
-						</execution>
-	        </executions>
-        </plugin>
-				         
-      </plugins>
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>memory</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-   </build>
-   
-   <repositories>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-			<!-- TODO: Move upstream? -->
-			
-			<!-- rdfutils -->
-			<repository>
-				<id>marcobrandizi.info</id>
-				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
-				<releases><enabled>true</enabled></releases>
-				<snapshots><enabled>true</enabled></snapshots>
-			</repository>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-			<!-- jutils, java2rdf -->
-			<repository>
-		    <id>EBIBioSamples-GH-repo</id>
-		    <url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
-		    <snapshots>
-	        <enabled>true</enabled>
-		    </snapshots>
-	    </repository>			
+		<dependency>
+			<groupId>uk.ac.rothamsted</groupId>
+			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>rdf2neo</artifactId>
+		</dependency>
 
-   </repositories>   
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>rdf-export-2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.apps</groupId>
+			<artifactId>ondex-mini</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.modules</groupId>
+			<artifactId>oxl</artifactId>
+			<version>${project.version}</version>
+			<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<plugins>
+
+			<!-- A small plug-in that starts Neo4j, we maintain our own version of this at https://github.com/Rothamsted/neo4j-server-maven-plugin -->
+			<plugin>
+				<groupId>com.github.harti2006</groupId>
+				<artifactId>neo4j-server-maven-plugin</artifactId>
+				<version>0.2-SNAPSHOT</version>
+				<configuration>
+					<version>${neo4j.server.version}</version>
+					<deleteDb>true</deleteDb>
+					<port>7490</port>
+					<boltPort>7690</boltPort>
+				</configuration>
+				<executions>
+					<execution>
+						<id>start-neo4j-server</id>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>stop-neo4j-server</id>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.20.1</version>
+				<configuration>
+					<trimStackTrace>false</trimStackTrace>
+				</configuration>
+				<executions>
+					<execution>
+						<id>failsafe-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>failsafe-verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.20</version>
+				<configuration>
+					<properties>
+						<property>
+							<!-- Prints out spaces and test name before/after every test method and automatically -->
+							<name>listener</name>
+							<value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
+						</property>
+					</properties>
+					<forkMode>always</forkMode>
+					<forkCount>1</forkCount>
+					<!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
+					<forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
+					<argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven.assembly.plugin.version}</version>
+				<executions>
+					<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+					<execution>
+						<id>make-assembly-packaged_with_jars</id>
+						<phase />
+					</execution>
+
+					<execution>
+						<id>assembly-bundle</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/bundle.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+	<repositories>
+
+		<!-- TODO: Move upstream? -->
+
+		<!-- rdfutils -->
+		<repository>
+			<id>marcobrandizi.info</id>
+			<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+		<!-- jutils, java2rdf -->
+		<repository>
+			<id>EBIBioSamples-GH-repo</id>
+			<url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+	</repositories>
+
+	<pluginRepositories>
+
+		<pluginRepository>
+			<id>ondex-releases</id>
+			<name>Internal Releases</name>
+			<url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
+		</pluginRepository>
+
+		<pluginRepository>
+			<id>ondex-snapshots</id>
+			<name>Internal Snapshots</name>
+			<url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+
+	</pluginRepositories>
 
 </project>

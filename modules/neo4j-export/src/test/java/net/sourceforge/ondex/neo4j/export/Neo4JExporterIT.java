@@ -25,7 +25,7 @@ public class Neo4JExporterIT
 		NeoDataManager.setConfigTdbPath ( "target/test_tdb" );
 		
 		try (
-			Driver neoDriver = GraphDatabase.driver( "bolt://127.0.0.1:7687", AuthTokens.basic ( "neo4j", "test" ) );
+			Driver neoDriver = GraphDatabase.driver( "bolt://127.0.0.1:7690", AuthTokens.basic ( "neo4j", "test" ) );
 		) 
 		{ 
 			ONDEXGraph g = Parser.loadOXL ( oxlPath );
@@ -48,7 +48,8 @@ public class Neo4JExporterIT
 			cyRelhandler.setRelationPropsSparql ( IOUtils.readResource ( "rel_props.sparql" ) );
 			cyRelhandler.setNeo4jDriver ( neoDriver );
 			
-			neox.setRDFChunkSize ( 500000 );
+			//neox.setRDFChunkSize ( 500000 );
+			neox.setRDFChunkSize ( 250000 );
 			neox.setCypherChunkSize ( 25000 );
 			
 			neox.export ( g );
@@ -89,7 +90,7 @@ public class Neo4JExporterIT
 	/**
 	 * 279Mb OXL 
 	 */
-	@Test @Ignore ( "Not a real unit test, time consuming" )
+	@Test //@Ignore ( "Not a real unit test, time consuming" )
 	public void testWheatKnetMiner () throws Exception
 	{
 		this.exportOxl (
