@@ -22,7 +22,7 @@ SELECT ?iri ?type ?fromIri ?toIri
 		
 		UNION 
 		{
-		  # And Other bk-related triples
+		  # And other bk-related triples
 		  ?fromIri ?type ?toIri.
 		  
 		  VALUES ( ?type ) {

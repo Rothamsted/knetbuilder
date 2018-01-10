@@ -11,6 +11,7 @@ import net.sourceforge.ondex.parser.oxl.Parser;
 import uk.ac.ebi.utils.io.IOUtils;
 import uk.ac.rothamsted.rdf.neo4j.load.support.CyNodeLoadingHandler;
 import uk.ac.rothamsted.rdf.neo4j.load.support.CyRelationLoadingHandler;
+import uk.ac.rothamsted.rdf.neo4j.load.support.NeoDataManager;
 
 /**
  * @author brandizi
@@ -21,6 +22,8 @@ public class Neo4JExporterIT
 {
 	private void exportOxl ( String oxlPath ) throws Exception
 	{
+		NeoDataManager.setConfigTdbPath ( "target/test_tdb" );
+		
 		try (
 			Driver neoDriver = GraphDatabase.driver( "bolt://127.0.0.1:7687", AuthTokens.basic ( "neo4j", "test" ) );
 		) 
@@ -32,7 +35,7 @@ public class Neo4JExporterIT
 			CyNodeLoadingHandler cyNodehandler = neox.getCyNodeLoadingHandler ();
 			CyRelationLoadingHandler cyRelhandler = neox.getCyRelationLoadingHandler ();
 
-			String defaultLabel = "Concept";
+			String defaultLabel = "Node";
 			cyNodehandler.setDefaultLabel ( defaultLabel );
 			cyRelhandler.setDefaultLabel ( defaultLabel );
 			
@@ -46,13 +49,13 @@ public class Neo4JExporterIT
 			cyRelhandler.setNeo4jDriver ( neoDriver );
 			
 			neox.setRDFChunkSize ( 500000 );
-			neox.setCypherChunkSize ( 10000 );
+			neox.setCypherChunkSize ( 25000 );
 			
 			neox.export ( g );
 		}		
 	}
 	
-	@Test
+	@Test @Ignore ( "TODO: re-enable later" )
 	public void testBasics () throws Exception
 	{
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
@@ -64,7 +67,7 @@ public class Neo4JExporterIT
 	/**
 	 * 4Mb OXL 
 	 */
-	@Test //@Ignore ( "Not a real unit test, time consuming" )
+	@Test @Ignore ( "Not a real unit test, time consuming" )
 	public void testAraCycBioPax () throws Exception
 	{
 		this.exportOxl (
@@ -75,11 +78,22 @@ public class Neo4JExporterIT
 	/**
 	 * 127Mb OXL 
 	 */
-	@Test //@Ignore ( "Not a real unit test, time consuming" )
+	@Test @Ignore ( "Not a real unit test, time consuming" )
 	public void testAraKnetMiner () throws Exception
 	{
 		this.exportOxl (
 			"/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/ArabidopsisKNET_201708.oxl"
+		);
+	}
+
+	/**
+	 * 279Mb OXL 
+	 */
+	@Test @Ignore ( "Not a real unit test, time consuming" )
+	public void testWheatKnetMiner () throws Exception
+	{
+		this.exportOxl (
+			"/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/WheatKNET.oxl"
 		);
 	}
 }
