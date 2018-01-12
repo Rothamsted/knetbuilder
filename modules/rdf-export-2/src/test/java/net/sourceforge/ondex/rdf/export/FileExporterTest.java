@@ -2,6 +2,8 @@ package net.sourceforge.ondex.rdf.export;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
@@ -13,6 +15,8 @@ import net.sourceforge.ondex.parser.oxl.Parser;
  */
 public class FileExporterTest
 {
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
 	@Test
 	public void testBasics ()
 	{
@@ -27,7 +31,6 @@ public class FileExporterTest
 		
 		// TODO: tests!
 	}
-
 	
 	@Test 	@Ignore ( "Large file loading, not a real unit test" )
 	public void testkNetMinerAra ()
@@ -38,10 +41,18 @@ public class FileExporterTest
 		
 		RDFFileExporter fx = new RDFFileExporter ();
 		fx.export ( g, mavenBuildPath + "test.ttl", "TURTLE_BLOCKS" );
-		//fx.export ( g, System.out, "TURTLE_BLOCKS" );
-		
-		// TODO: tests!
 	}
 
+	@Test 	@Ignore ( "Large file loading, not a real unit test" )
+	public void testkNetMinerWheat ()
+	{
+		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
+		
+		ONDEXGraph g = Parser.loadOXL ( "/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/WheatKNET.oxl" );
+		
+		RDFFileExporter fx = new RDFFileExporter ();
+		fx.export ( g, mavenBuildPath + "wheat.ttl", "TURTLE_BLOCKS" );
+		log.info ( "DONE" );
+	}	
 	
 }

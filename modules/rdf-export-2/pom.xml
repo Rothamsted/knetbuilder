@@ -127,7 +127,7 @@
              <forkCount>1</forkCount>
              <!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
              <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
-             <argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>             
+             <argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>                          
 			    </configuration>
 			  </plugin>
       

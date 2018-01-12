@@ -42,12 +42,12 @@ public class RDFFileExporter
 			RDFExporter xport = new RDFExporter ();
 			
 			// There's no point in true parallelism here, because the output stream below is not written
-			// in a thread-safe way, so it would need synchronization at model level (going more fine-grained
+			// in a thread-safe way, so it would need synchronisation at model level (going more fine-grained
 			// is too complicated) making the true processing single-thread anyway
 			//
-			ThreadPoolExecutor executor = (ThreadPoolExecutor) xport.getExecutor ();
-			executor.setCorePoolSize ( 1 );
-			executor.setMaximumPoolSize ( 1 );
+			ThreadPoolExecutor executor = HackedBlockingQueue.createExecutor ( 1, 1 ); 
+			xport.setExecutor ( executor );
+			xport.setDestinationMaxSize ( 50000 );
 			
 			xport.setConsumer ( m -> 
 			{ 

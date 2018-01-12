@@ -7,6 +7,7 @@ import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import uk.ac.ebi.utils.io.IOUtils;
 import uk.ac.rothamsted.rdf.neo4j.load.support.CyNodeLoadingHandler;
@@ -20,15 +21,22 @@ import uk.ac.rothamsted.rdf.neo4j.load.support.NeoDataManager;
  */
 public class Neo4JExporterIT
 {
-	private void exportOxl ( String oxlPath ) throws Exception
+	private void exportOxl ( String oxlPath, String tdbPath ) throws Exception
 	{
-		NeoDataManager.setConfigTdbPath ( "target/test_tdb" );
+		if ( tdbPath == null )
+			// Non-null when you're loading from an existing one (and you don't need to populate it)
+			NeoDataManager.setConfigTdbPath ( "target/test_tdb" );
+		else {
+			NeoDataManager.setConfigTdbPath ( tdbPath );
+			NeoDataManager.setDoCleanTdbDirectory ( false );
+		}
 		
 		try (
+			// null when you're getting data from the existing TDB and not the graph
 			Driver neoDriver = GraphDatabase.driver( "bolt://127.0.0.1:7690", AuthTokens.basic ( "neo4j", "test" ) );
 		) 
 		{ 
-			ONDEXGraph g = Parser.loadOXL ( oxlPath );
+			ONDEXGraph g = oxlPath == null ? new MemoryONDEXGraph ( "default" ) : Parser.loadOXL ( oxlPath );
 			
 			Neo4jExporter neox = new Neo4jExporter ();
 
@@ -39,7 +47,7 @@ public class Neo4JExporterIT
 			cyNodehandler.setDefaultLabel ( defaultLabel );
 			cyRelhandler.setDefaultLabel ( defaultLabel );
 			
-			cyNodehandler.setNodeIrisSparql ( IOUtils.readResource ( "node_iris.sparql" ) );
+			neox.setNodeIrisSparql ( IOUtils.readResource ( "node_iris.sparql" ) );
 			cyNodehandler.setLabelsSparql ( IOUtils.readResource ( "node_labels.sparql" ) );
 			cyNodehandler.setNodePropsSparql ( IOUtils.readResource ( "node_props.sparql" ) );
 			cyNodehandler.setNeo4jDriver ( neoDriver );
@@ -48,42 +56,44 @@ public class Neo4JExporterIT
 			cyRelhandler.setRelationPropsSparql ( IOUtils.readResource ( "rel_props.sparql" ) );
 			cyRelhandler.setNeo4jDriver ( neoDriver );
 			
-			//neox.setRDFChunkSize ( 500000 );
-			neox.setRDFChunkSize ( 250000 );
+			neox.setRDFChunkSize ( 500000 );
+			//neox.setRDFChunkSize ( 250000 );
 			neox.setCypherChunkSize ( 25000 );
 			
 			neox.export ( g );
 		}		
 	}
 	
-	@Test @Ignore ( "TODO: re-enable later" )
+	@Test // @Ignore ( "TODO: re-enable later" )
 	public void testBasics () throws Exception
 	{
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
 		String testResPath = mavenBuildPath + "test-classes/";
 		
-		this.exportOxl ( testResPath + "text_mining.oxl" );
+		this.exportOxl ( testResPath + "text_mining.oxl", null );
 	}
 
 	/**
 	 * 4Mb OXL 
 	 */
-	@Test @Ignore ( "Not a real unit test, time consuming" )
+	@Test // @Ignore ( "Not a real unit test, time consuming" )
 	public void testAraCycBioPax () throws Exception
 	{
 		this.exportOxl (
-			"/Users/brandizi/Documents/Work/RRes/ondex_data/fungi_net_miner/examples_20170314/aracyc/Protein-Pathway.oxl"
+			"/Users/brandizi/Documents/Work/RRes/ondex_data/fungi_net_miner/examples_20170314/aracyc/Protein-Pathway.oxl",
+			null
 		);
 	}
 	
 	/**
 	 * 127Mb OXL 
 	 */
-	@Test @Ignore ( "Not a real unit test, time consuming" )
+	@Test // @Ignore ( "Not a real unit test, time consuming" )
 	public void testAraKnetMiner () throws Exception
 	{
 		this.exportOxl (
-			"/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/ArabidopsisKNET_201708.oxl"
+			"/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/ArabidopsisKNET_201708.oxl",
+			null	
 		);
 	}
 
@@ -94,7 +104,8 @@ public class Neo4JExporterIT
 	public void testWheatKnetMiner () throws Exception
 	{
 		this.exportOxl (
-			"/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/WheatKNET.oxl"
+			null,
+			"/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/wheat_tdb"
 		);
 	}
 }

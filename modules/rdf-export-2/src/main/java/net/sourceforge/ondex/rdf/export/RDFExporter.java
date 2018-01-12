@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.rdf.export;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
@@ -50,20 +51,31 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		.flatMap ( Collection::stream )
 		.forEach ( meta -> xfactf.map ( meta ) );
 								
+		
 		// We export all metadata in one chunk. This is typically small at this point and flushing it out 
 		// allows a client to handle the whole T-Box first.
 		xfact = this.handleNewXTask ( xfact, true );
-		
-		for ( ONDEXConcept concept: graph.getConcepts () )
+
+		Set<ONDEXConcept> concepts = graph.getConcepts ();
+		int ntotal = concepts.size ();
+		int ctr = 0;
+
+		for ( ONDEXConcept concept: concepts )
 		{
 			xfact.map ( concept );
 			xfact = this.handleNewXTask ( xfact );
+			if ( ++ctr % 100000 == 0 ) log.info ( "{}/{} concepts submitted for export", ctr, ntotal );
 		}
 
-		for ( ONDEXRelation relation: graph.getRelations () )
+		Set<ONDEXRelation> relations = graph.getRelations ();
+		ntotal = relations.size ();
+		ctr = 0;
+				
+		for ( ONDEXRelation relation: relations )
 		{
 			xfact.map ( relation );
 			xfact = this.handleNewXTask ( xfact );
+			if ( ++ctr % 100000 == 0 ) log.info ( "{}/{} relations submitted for export", ctr, ntotal );
 		}
 		
 		this.handleNewXTask ( xfact, true );
@@ -72,8 +84,8 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		
 		executor.shutdown ();
 
-		this.waitExecutor ( "Waiting for RDF export completion, please wait..." );
-		log.info ( "...RDF export finished" );
+		this.waitExecutor ( "Waiting for RDF export completion, please wait" );
+		log.info ( "RDF export finished, a total of {} concepts+relations exported", concepts.size () + relations.size () );
 	}
 	
 	private RDFXFactory handleNewXTask ( RDFXFactory xfact ) {
@@ -92,8 +104,8 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 
 		if ( currentModel == newModel ) return xfact;
 		
-		long newCount = currentModel.size () + xfact.getTriplesCount ();
-		log.info ( "{} RDF triples submitted for export", newCount );
+		long newCount = currentModel.size () + xfact.getTriplesCountTracker ();
+		log.debug ( "{} RDF triples submitted for export", newCount );
 		return new RDFXFactory ( newModel, newCount );
 	}
 }
