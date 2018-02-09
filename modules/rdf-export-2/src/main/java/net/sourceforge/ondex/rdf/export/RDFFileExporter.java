@@ -69,11 +69,11 @@ public class RDFFileExporter
 		}
 	}
 	
-	public void export ( ONDEXGraph g, File file, String lang )
+	public void export ( ONDEXGraph g, File file, String langOrFormat )
 	{
 		try ( OutputStream out = new BufferedOutputStream ( new FileOutputStream ( file ) ) )
 		{
-			export ( g, out, lang );
+			export ( g, out, langOrFormat );
 		}
 		catch ( FileNotFoundException ex ) {
 			throw new UncheckedIOException ( "RDF export file '" + file.getAbsolutePath () + "' not found" , ex );

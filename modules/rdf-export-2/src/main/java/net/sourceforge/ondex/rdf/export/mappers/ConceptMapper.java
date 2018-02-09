@@ -70,6 +70,7 @@ public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 		
 		ConceptClass cc = concept.getOfType ();
 		String cciri = cc == null ? iri ( "bk:Concept" ) : xfact.getUri ( cc, params );
+		
 		COMMUTILS.assertResource ( graphModel, myiri, iri ( "rdf:type" ), cciri );
 		
 		// Names

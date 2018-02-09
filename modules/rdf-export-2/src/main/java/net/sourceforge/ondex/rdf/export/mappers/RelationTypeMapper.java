@@ -38,7 +38,8 @@ public class RelationTypeMapper extends MetadataMapper<RelationType>
 		String parentIri = parent == null || contains ( IGNORED_IDS, parent.getId () ) 
 			? iri ( "bk:conceptsRelation" ) 
 			: uriGen.getUri ( parent );
-		COMMUTILS.assertResource ( xfact.getGraphModel (), myiri, iri ( "rdfs:subPropertyOf" ), parentIri );
+		
+			COMMUTILS.assertResource ( xfact.getGraphModel (), myiri, iri ( "rdfs:subPropertyOf" ), parentIri );
 
 		return true;
 	}

@@ -43,7 +43,7 @@ public class FileExporterTest
 		fx.export ( g, mavenBuildPath + "test.ttl", "TURTLE_BLOCKS" );
 	}
 
-	@Test 	@Ignore ( "Large file loading, not a real unit test" )
+	@Test @Ignore ( "Large file loading, not a real unit test" )
 	public void testkNetMinerWheat ()
 	{
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
