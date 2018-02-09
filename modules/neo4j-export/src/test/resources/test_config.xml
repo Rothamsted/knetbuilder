@@ -138,7 +138,7 @@
 				  scope = "loadingSession"
 		>
 			
-			<constructor-arg value = "bolt://127.0.0.1:7690" />
+			<constructor-arg value = "bolt://127.0.0.1:${neo4j.server.boltPort}" />
 					
 			<constructor-arg>
 				<bean class = "org.neo4j.driver.v1.AuthTokens" factory-method = "basic">

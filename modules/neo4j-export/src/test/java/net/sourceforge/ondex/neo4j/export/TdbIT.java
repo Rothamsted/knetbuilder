@@ -34,8 +34,10 @@ public class TdbIT
 	@Test @Ignore ( "Not a real Unit test" )
 	public void testRelationMismatches () throws IOException
 	{
+		// This comes from Maven/failsafe configuration
+		String boltPort = System.getProperty ( "neo4j.server.boltPort", "7687" );
 		try (
-			Driver neoDriver = GraphDatabase.driver( "bolt://127.0.0.1:7687", AuthTokens.basic ( "neo4j", "test" ) );
+			Driver neoDriver = GraphDatabase.driver( "bolt://127.0.0.1:" + boltPort, AuthTokens.basic ( "neo4j", "test" ) );
 		) 
 		{
 			Set<String> types = new HashSet<> ();

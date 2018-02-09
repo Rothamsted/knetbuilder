@@ -24,6 +24,7 @@
 
 	<properties>
 		<neo4j.server.version>3.3.1</neo4j.server.version>
+		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
 	</properties>
 
 	<dependencies>
@@ -106,8 +107,8 @@
 				<configuration>
 					<version>${neo4j.server.version}</version>
 					<deleteDb>true</deleteDb>
-					<port>7490</port>
-					<boltPort>7690</boltPort>
+					<port>17490</port>
+					<boltPort>${neo4j.server.boltPort}</boltPort>
 				</configuration>
 				<executions>
 					<execution>
@@ -130,6 +131,9 @@
 				<version>2.20.1</version>
 				<configuration>
 					<trimStackTrace>false</trimStackTrace>
+					<systemPropertyVariables>
+						<neo4j.server.boltPort>${neo4j.server.boltPort}</neo4j.server.boltPort>
+					</systemPropertyVariables>
 				</configuration>
 				<executions>
 					<execution>
@@ -195,6 +199,19 @@
 
 		</plugins>
 
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<excludes><exclude>test_config.xml</exclude></excludes>
+				<includes><include>**/*</include></includes>
+				<filtering>false</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<includes><include>test_config.xml</include></includes>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
 	</build>
 
 	<repositories>
