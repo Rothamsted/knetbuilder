@@ -1,0 +1,28 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bk: <http://www.ondex.org/bioknet/terms/>
+PREFIX bkr: <http://www.ondex.org/bioknet/resources/>
+PREFIX bka: <http://www.ondex.org/bioknet/attributes/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+SELECT ?iri ?name ?value
+{
+  {
+		?iri ?name ?value.
+		?name rdfs:subPropertyOf* bk:attribute.
+	}
+	UNION 
+	{
+	  # reified relations can point to a few other resources, we choose to represent this as
+	  # string properties having the target IRI as value. 
+	
+		?iri ?name ?toIri.
+	
+		BIND ( STR ( ?toIri ) AS ?value )
+	
+		VALUES ( ?name ) {
+		  (bk:evidence)
+		  (bk:relatedConcept)
+		}	
+	}
+}

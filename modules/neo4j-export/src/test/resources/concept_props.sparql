@@ -9,14 +9,13 @@ SELECT ?iri ?name ?value
 {
 	{ 
 	  ?iri ?name ?value.
+
 	  VALUES ( ?name ) {
-	    (rdfs:label)
-	    (rdfs:comment)
 	    (dcterms:identifier)
-	    (bk:altName)
-	    (bk:prefName)
 	    (dcterms:description)
-	    (bk:isAmbiguousAccession)
+	    (rdfs:comment)
+	    (bk:prefName)
+	    (bk:altName)
 	  }
 	}
 	UNION {

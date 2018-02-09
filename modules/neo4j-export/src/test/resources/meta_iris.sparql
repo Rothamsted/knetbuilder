@@ -6,17 +6,10 @@ PREFIX bka: <http://www.ondex.org/bioknet/attributes/>
 
 SELECT ?iri
 {
-  {
-  		?label rdfs:subClassOf* bk:Concept.
-  		?iri a ?label.
-  	}
-  	
-  UNION {
-    ?iri a ?label.
-    VALUES ( ?label ) {
-			( bk:EvidenceType )
-			( bk:Accession )
-			( bk:DataSource )
-    }
+  ?iri a ?label.
+  
+  VALUES ( ?label ) {
+		( bk:EvidenceType )
+		( bk:DataSource )
   }
 }

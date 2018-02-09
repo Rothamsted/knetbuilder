@@ -3,7 +3,6 @@ package net.sourceforge.ondex.neo4j.export;
 import static java.lang.System.out;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,11 +17,9 @@ import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.Values;
 
 import info.marcobrandizi.rdfutils.jena.SparqlUtils;
-import uk.ac.ebi.utils.ids.IdUtils;
 import uk.ac.ebi.utils.io.IOUtils;
 
 /**
