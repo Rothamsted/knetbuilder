@@ -67,7 +67,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>uk.ac.rothamsted</groupId>
+			<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
 			<version>0.0.1-SNAPSHOT</version>
 			<artifactId>rdf2neo</artifactId>
 		</dependency>
