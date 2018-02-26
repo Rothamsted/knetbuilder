@@ -17,7 +17,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.rdf.export.RDFFileExporter;
 import uk.ac.rothamsted.rdf.neo4j.load.MultiConfigCyLoader;
-import uk.ac.rothamsted.rdf.neo4j.load.support.NeoDataManager;
+import uk.ac.rothamsted.rdf.neo4j.load.support.RdfDataManager;
 
 /**
  * @author brandizi
@@ -47,7 +47,7 @@ public class Neo4JExporterIT
 
 			log.info ( "Loading the RDF into {}", tdbPath );
 			Reader rdfReader = new BufferedReader ( new FileReader ( rdfPath ), (int) 1E6 );
-			try ( NeoDataManager dataMgr = new NeoDataManager ( tdbPath ); )
+			try ( RdfDataManager dataMgr = new RdfDataManager ( tdbPath ); )
 			{
 				Dataset dataSet = dataMgr.getDataSet ();
 				Txn.executeWrite ( 
