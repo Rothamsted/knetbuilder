@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
@@ -62,7 +63,12 @@ public class Neo4JExporterIT
 		}
 		
 		log.info ( "Exporting to Neo4j from the TDB" );			
-		
+				
+//		try ( 
+//			ConfigurableApplicationContext beanCtx = new FileSystemXmlApplicationContext ( 
+//				"src/main/assembly/resources/ondex_config/config.xml" 
+//			); 
+//		)
 		try ( ConfigurableApplicationContext beanCtx = new ClassPathXmlApplicationContext ( "test_config.xml" ); )
 		{			
 			MultiConfigCyLoader mloader = beanCtx.getBean ( MultiConfigCyLoader.class );
@@ -71,7 +77,7 @@ public class Neo4JExporterIT
 		}
 	}
 	
-	@Test // @Ignore ( "TODO: re-enable later" )
+	@Test //@Ignore ( "TODO: re-enable later" )
 	public void testBasics () throws Exception
 	{
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
@@ -114,14 +120,9 @@ public class Neo4JExporterIT
 	@Test @Ignore ( "Not a real unit test, time consuming" )
 	public void testWheatKnetMiner () throws Exception
 	{
-		this.exportOxl (
-			null,
-			"/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/wheat_tdb_20180118"
-		);
-		/*
-		this.exportOxl (
-			"/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/WheatKNET.oxl",
-			null
-		); */
+		String src = "/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/wheat_tdb_20180118";
+		src = "/tmp/wheat_tdb_20180118";
+		
+		this.exportOxl ( null, src );
 	}
 }

@@ -108,4 +108,5 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		log.debug ( "{} RDF triples submitted for export", newCount );
 		return new RDFXFactory ( newModel, newCount );
 	}
+		
 }

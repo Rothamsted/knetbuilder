@@ -35,12 +35,10 @@ public class RDFFileExporter
 	
 	public void export ( ONDEXGraph g, final OutputStream out, final String langOrFormat )
 	{
-		try
+		try ( RDFExporter xport = new RDFExporter (); )
 		{
 			final Pair<RDFFormat, Lang> jlang = JenaIoUtils.getLangOrFormat ( langOrFormat );
-			
-			RDFExporter xport = new RDFExporter ();
-			
+						
 			// There's no point in true parallelism here, because the output stream below is not written
 			// in a thread-safe way, so it would need synchronisation at model level (going more fine-grained
 			// is too complicated) making the true processing single-thread anyway
@@ -66,6 +64,9 @@ public class RDFFileExporter
 			throw new IllegalArgumentException ( String.format (  
 				"Got error: %s. Probably RDF language '%s' is invalid/unsupported", ex.getMessage (), langOrFormat ), 
 			ex );
+		}
+		catch ( Exception ex ) {
+			throw new RuntimeException ( "Internal error while closing the RDFExporter: " + ex.getMessage (), ex );
 		}
 	}
 	

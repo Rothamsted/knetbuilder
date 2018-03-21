@@ -9,7 +9,7 @@
 
 
 	<!-- 
-	  This is the entry point, it starts from top OWL classes and recurse on rdfs:subClasOf and other OWL relations like
+	  This is the entry point, it starts from top OWL classes and recurse on rdfs:subClassOf and other OWL relations like
 	  someValuesFrom 
 	-->		
 	<bean id = "owlMapper" parent = "defaultOwlMapper">

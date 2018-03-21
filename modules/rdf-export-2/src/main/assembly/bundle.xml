@@ -15,7 +15,7 @@
   </formats>
 
   <includeBaseDirectory>true</includeBaseDirectory>
-  <baseDirectory>owl-parser-plugin</baseDirectory>
+  <baseDirectory>rdf-export-2-plugin</baseDirectory>
 
 	<dependencySets>
 		<dependencySet>
@@ -33,7 +33,7 @@
 		  <fileMode>0644</fileMode>
 			<directoryMode>0755</directoryMode>      
 			<outputDirectory></outputDirectory>
-			<filtered>true</filtered>
+			<filtered>false</filtered>
 		</fileSet>	
 	</fileSets>
 

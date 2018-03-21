@@ -72,6 +72,32 @@
                            <outputDirectory>${project.build.directory}</outputDirectory>
                         </artifactItem>
                         
+                        <!-- As above -->
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>rdf-export-2</artifactId>
+                           <version>${project.version}</version>
+                           <classifier>bundle</classifier>
+                           <type>zip</type>
+                           <overWrite>true</overWrite>
+                           <includes>**/*</includes>
+                           <outputDirectory>${project.build.directory}</outputDirectory>
+                        </artifactItem>
+                        
+                        
+                        <!-- As above, except this is not a real ONDEX plugin, but a command line tool that we want to
+                        be part of the final ONDEX binary -->
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>neo4j-export</artifactId>
+                           <version>${project.version}</version>
+                           <classifier>bundle</classifier>
+                           <type>zip</type>
+                           <overWrite>true</overWrite>
+                           <includes>**/*</includes>
+                           <outputDirectory>${project.build.directory}</outputDirectory>
+                        </artifactItem>
+                        
                         
                         <!-- TODO: outdated and not building 
                         <artifactItem>
@@ -480,7 +506,7 @@
                            <destFileName>protein-structure-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
                         
-                        <artifactItem>
+                        <!-- artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>rdf</artifactId>
                            <version>${project.version}</version>
@@ -490,7 +516,7 @@
                            <outputDirectory>${project.build.directory}/plugins</outputDirectory>
                            <includes>**/*</includes>
                            <destFileName>rdf-jar-with-dependencies.jar</destFileName>
-                        </artifactItem>
+                        </artifactItem -->
                         
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>

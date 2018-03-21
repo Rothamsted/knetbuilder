@@ -76,7 +76,7 @@
 			  <testResource>
 			    <directory>src/main/assembly/resources/config</directory>
 			  </testResource>
-			  <!-- This is the usual Maven conventions -->
+			  <!-- This is as per usual Maven conventions -->
 			  <testResource>
 			    <directory>src/test/resources</directory>
 			  </testResource>

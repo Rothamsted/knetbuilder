@@ -20,10 +20,12 @@ public class FileExporterTest
 	@Test
 	public void testBasics ()
 	{
+		String mavenPomPath = System.getProperty ( "maven.basedir", "." ) + "/";
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
-		String testResPath = mavenBuildPath + "test-classes/";
+		// String testResPath = mavenBuildPath + "test-classes/";
 		
-		ONDEXGraph g = Parser.loadOXL ( testResPath + "text_mining.oxl" );
+		// ONDEXGraph g = Parser.loadOXL ( testResPath + "text_mining.oxl" );
+		ONDEXGraph g = Parser.loadOXL ( mavenPomPath + "src/main/assembly/resources/examples/text_mining.oxl" );
 		
 		RDFFileExporter fx = new RDFFileExporter ();
 		fx.export ( g, mavenBuildPath + "test.ttl", "TURTLE_BLOCKS" );

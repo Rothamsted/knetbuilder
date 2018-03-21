@@ -1,12 +1,9 @@
 <!-- 
   File for the Maven Assembly plug-in.
-  
-	This version creates a zip that contains the plug-in jar, plus all the jars it depends on, in addition to some other
-	files, such as configuration files and examples. 
-	
-	This is different from the usual approach to pack everything in a single jar, and we need a different way due to 
-	files with the same name that clash.  
- -->
+
+	This version bundles a copy of the rdf2neo-cli command line tool together with an ONDEX-specific configuration.
+	The tool is supposed to be invoked from a shell script, not from Java, in particular not as an ONDEX plug-in.
+-->
 <assembly>
   <id>bundle</id>
   
@@ -15,17 +12,19 @@
   </formats>
 
   <includeBaseDirectory>true</includeBaseDirectory>
-  <baseDirectory>owl-parser-plugin</baseDirectory>
+  <baseDirectory>neo4j-exporter</baseDirectory>
 
+	<!-- 
 	<dependencySets>
 		<dependencySet>
-		  <!-- Enable only if non-empty <outputFileNameMapping></outputFileNameMapping> -->
+		  <! - - Enable only if non-empty <outputFileNameMapping></outputFileNameMapping> - - >
 		  <outputDirectory>/lib</outputDirectory>
 		  <unpack>false</unpack>
 		  <scope>runtime</scope>
 		</dependencySet>
 	</dependencySets> 
-	
+	-->
+	 
 	<fileSets>
 		<fileSet>
 			<directory>src/main/assembly/resources</directory>
@@ -34,7 +33,28 @@
 			<directoryMode>0755</directoryMode>      
 			<outputDirectory></outputDirectory>
 			<filtered>true</filtered>
-		</fileSet>	
+		</fileSet>
+
+		<!-- the rdf2neo command line tool, which is poured under /target/dependency by the dependency plug-in -->
+		<fileSet>
+			<directory>target/dependency/rdf2neo-cli_${rdf2neo.version}</directory>
+			<outputDirectory></outputDirectory>
+      <excludes>
+        <!-- Defined below, with x permissions, non-executables only here -->
+        <exclude>**/*.sh</exclude>
+      </excludes>  
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>      
+		</fileSet>
+		<fileSet>
+			<directory>target/dependency/rdf2neo-cli_${rdf2neo.version}</directory>
+			<outputDirectory></outputDirectory>
+      <includes>
+        <include>**/*.sh</include>
+      </includes>  
+      <fileMode>0755</fileMode>
+			<directoryMode>0755</directoryMode>      
+		</fileSet>
 	</fileSets>
 
 </assembly>

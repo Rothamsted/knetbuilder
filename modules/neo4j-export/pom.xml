@@ -25,6 +25,7 @@
 	<properties>
 		<neo4j.server.version>3.3.1</neo4j.server.version>
 		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
+		<rdf2neo.version>0.0.1-SNAPSHOT</rdf2neo.version>
 	</properties>
 
 	<dependencies>
@@ -98,6 +99,34 @@
 	<build>
 
 		<plugins>
+		
+			<!-- 
+				We include an installation of the rdf2neo-cli command line tool in the final ONDEX. 
+				The dependency plug-in pours this into target/dependency/rdf2neo-cli-VERSION, then the 
+				Assembly plugin repackage this in the final distro structure, removing the version bit.
+			-->
+	  		<plugin>
+	  			<artifactId>maven-dependency-plugin</artifactId>	  			
+	  			<executions>
+	  				<execution>
+	  					<phase>prepare-package</phase>
+	  					<goals>
+	  						<goal>unpack</goal>
+	  					</goals>
+	  					<configuration>
+		          	<artifactItems>
+		            	<artifactItem>
+								    <groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+										<artifactId>rdf2neo-cli</artifactId>
+								    <version>0.0.1-SNAPSHOT</version>
+		               	<type>zip</type>
+		               	<excludes>**/examples/</excludes>
+		             	</artifactItem>
+		          	</artifactItems>  						
+	  					</configuration>
+	  				</execution>
+	  			</executions>
+	  		</plugin>		
 
 			<!-- A small plug-in that starts Neo4j, we maintain our own version of this at https://github.com/Rothamsted/neo4j-server-maven-plugin -->
 			<plugin>
@@ -132,8 +161,12 @@
 				<configuration>
 					<trimStackTrace>false</trimStackTrace>
 					<systemPropertyVariables>
-						<neo4j.server.boltPort>${neo4j.server.boltPort}</neo4j.server.boltPort>
+						<neo4j.server.boltPort>${neo4j.server.boltPort}</neo4j.server.boltPort>						
 					</systemPropertyVariables>
+	      		<environmentVariables>
+	      			<!-- this is to re-use the config shipped to the final binary with integration tests. -->
+	      			<RDF2NEO_HOME>${project.basedir}/src/main/assembly/resources</RDF2NEO_HOME>
+	      		</environmentVariables>					
 				</configuration>
 				<executions>
 					<execution>

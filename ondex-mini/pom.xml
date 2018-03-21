@@ -85,11 +85,31 @@
                   <configuration>
 										<artifactItems>
 											<!-- 
-											  See the installer for an explanation of how we unpack this.  
+											  See the installer for an explanation of how we unpack these.  
 											-->                        
 	                    <artifactItem>
 	                       <groupId>net.sourceforge.ondex.modules</groupId>
 	                       <artifactId>owl-parser</artifactId>
+	                       <version>${project.version}</version>
+	                       <classifier>bundle</classifier>
+	                       <type>zip</type>
+	                       <overWrite>true</overWrite>
+	                       <outputDirectory>${project.build.directory}</outputDirectory>
+	                       <includes>**/*</includes>
+	                    </artifactItem>
+                      <artifactItem>
+                         <groupId>net.sourceforge.ondex.modules</groupId>
+                         <artifactId>rdf-export-2</artifactId>
+                         <version>${project.version}</version>
+                         <classifier>bundle</classifier>
+                         <type>zip</type>
+                         <overWrite>true</overWrite>
+                         <includes>**/*</includes>
+                         <outputDirectory>${project.build.directory}</outputDirectory>                        
+                      </artifactItem>
+	                    <artifactItem>
+	                       <groupId>net.sourceforge.ondex.modules</groupId>
+	                       <artifactId>neo4j-export</artifactId>
 	                       <version>${project.version}</version>
 	                       <classifier>bundle</classifier>
 	                       <type>zip</type>

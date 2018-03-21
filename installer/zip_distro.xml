@@ -58,6 +58,35 @@
 			<outputDirectory>ondex/data/examples/owl-parser</outputDirectory>
 		</fileSet>		
 		
-				
+		<!-- RDF exporter -->
+		<fileSet>
+			<directory>target/rdf-export-2-plugin/lib</directory>
+			<outputDirectory>ondex/plugins</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/rdf-export-2-plugin/examples</directory>
+			<outputDirectory>ondex/data/examples/rdf-export-2</outputDirectory>
+		</fileSet>
+		
+		<!-- Neo4J Export plug-in -->
+		<fileSet>
+			<directory>target/neo4j-exporter</directory>
+			<outputDirectory>ondex/tools/neo4j-exporter</outputDirectory>
+      <excludes>
+        <!-- Defined below, with x permissions, non-executables only here -->
+        <exclude>**/*.sh</exclude>
+      </excludes>  
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>
+		</fileSet>
+		<fileSet>
+			<directory>target/neo4j-exporter</directory>
+			<outputDirectory>ondex/tools/neo4j-exporter</outputDirectory>
+      <includes>
+        <include>**/*.sh</include>
+      </includes>  
+      <fileMode>0755</fileMode>
+			<directoryMode>0755</directoryMode>      
+		</fileSet>						
 	</fileSets>
 </assembly>

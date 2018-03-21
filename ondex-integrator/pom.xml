@@ -190,11 +190,11 @@
          <artifactId>prolog</artifactId>
          <version>${project.version}</version>
       </dependency>
-      <dependency>
+      <!-- dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>rdf</artifactId>
          <version>${project.version}</version>
-      </dependency>
+      </dependency -->
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>interaction</artifactId>

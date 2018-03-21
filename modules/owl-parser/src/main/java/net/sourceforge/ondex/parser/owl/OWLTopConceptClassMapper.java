@@ -46,7 +46,7 @@ public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, Concept
 	private Map<OntClass, ConceptClass> cache = new HashMap<> ();
 	
 	/**
-	 * Quick hack to report a messages once only. This is also stateful information, but see
+	 * Quick hack to report a message once only. This is also stateful information, but see
 	 * above.
 	 */
 	private boolean singleInheritanceReported = false;
