@@ -28,12 +28,24 @@
 	<fileSets>
 		<fileSet>
 			<directory>src/main/assembly/resources</directory>
-			<!-- Beware of .sh, in case you add them, you'll need different permissions -->
+			<outputDirectory></outputDirectory>
 		  <fileMode>0644</fileMode>
 			<directoryMode>0755</directoryMode>      
-			<outputDirectory></outputDirectory>
-			<filtered>true</filtered>
+      <excludes>
+        <!-- Defined below, with x permissions, non-executables only here -->
+        <exclude>**/*.sh</exclude>
+      </excludes>			
 		</fileSet>
+		<fileSet>
+			<directory>src/main/assembly/resources</directory>
+			<outputDirectory></outputDirectory>
+      <fileMode>0755</fileMode>
+			<directoryMode>0755</directoryMode>            
+      <includes>
+        <include>**/*.sh</include>
+      </includes>  
+		</fileSet>
+		
 
 		<!-- the rdf2neo command line tool, which is poured under /target/dependency by the dependency plug-in -->
 		<fileSet>
