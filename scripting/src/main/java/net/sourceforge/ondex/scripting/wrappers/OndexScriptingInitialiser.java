@@ -23,9 +23,6 @@ import net.sourceforge.ondex.core.base.AbstractONDEXGraphMetaData;
 import net.sourceforge.ondex.core.base.AbstractRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXConcept;
 import net.sourceforge.ondex.core.memory.MemoryONDEXRelation;
-import net.sourceforge.ondex.core.persistent.BerkeleyConcept;
-import net.sourceforge.ondex.core.persistent.BerkeleyONDEXGraph;
-import net.sourceforge.ondex.core.persistent.BerkeleyRelation;
 import net.sourceforge.ondex.scripting.AbstractScriptingInitialiser;
 import net.sourceforge.ondex.scripting.BasicInterpretationController;
 import net.sourceforge.ondex.scripting.CommandInterpreter;
@@ -181,7 +178,6 @@ public class OndexScriptingInitialiser extends AbstractScriptingInitialiser {
         ProxyTemplateBuilder tGraph = proxyTemplateBuilder.spawnTemplate("Graph", ONDEXGraph.class, false);
 
         tGraph.autoAddExclusive(toExclude);
-        tGraph.addSource(BerkeleyONDEXGraph.class);
         tGraph.addSource(ONDEXGraph.class);
 
         ProxyTemplateBuilder tView = proxyTemplateBuilder.spawnTemplate("View", Set.class, true);
@@ -239,14 +235,12 @@ public class OndexScriptingInitialiser extends AbstractScriptingInitialiser {
         tConcept.addEmbeddedClass(AbstractONDEXGraphMetaData.class);
         tConcept.addFunction("acc", "createConceptAccession");
         tConcept.autoAddExclusive(toExclude);
-        tConcept.addSource(BerkeleyConcept.class);
         tConcept.addSource(ONDEXConcept.class);
         tConcept.addSource(MemoryONDEXConcept.class);
 
         ProxyTemplateBuilder tRelation = proxyTemplateBuilder.spawnTemplate("Relation", AbstractRelation.class, false);
         tRelation.addEmbeddedClass(AbstractONDEXGraphMetaData.class);
         tRelation.autoAddExclusive(toExclude);
-        tRelation.addSource(BerkeleyRelation.class);
         tRelation.addSource(MemoryONDEXRelation.class);
         tRelation.addSource(ONDEXRelation.class);
         //proxyTemplateBuilder.spawnTemplate("Instances", Instances.class, true);

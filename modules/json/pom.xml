@@ -39,12 +39,12 @@
          <version>${project.version}</version>
          <scope>test</scope>
       </dependency>
-      <dependency>
+      <!--  TODO remove dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>berkeley</artifactId>
          <version>${project.version}</version>
          <scope>test</scope>
-      </dependency>
+      </dependency -->
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>api</artifactId>

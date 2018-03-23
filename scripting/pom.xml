@@ -67,12 +67,12 @@
          <version>${project.version}</version>
          <scope>compile</scope>
       </dependency>
-      <dependency>
+      <!-- TODO: remove dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>berkeley</artifactId>
          <version>${project.version}</version>
          <scope>compile</scope>
-      </dependency>
+      </dependency -->
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>memory</artifactId>
