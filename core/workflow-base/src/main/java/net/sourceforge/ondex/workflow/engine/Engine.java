@@ -32,7 +32,6 @@ import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.config.BerkeleyRegistry;
 import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.config.ValidatorRegistry;
@@ -43,8 +42,6 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.persistent.AbstractONDEXPersistent;
-import net.sourceforge.ondex.core.persistent.BerkeleyEnv;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.event.ONDEXEvent;
@@ -64,7 +61,6 @@ import net.sourceforge.ondex.tools.DirUtils;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
 import net.sourceforge.ondex.workflow.events.InvalidArgumentEvent;
-import net.sourceforge.ondex.workflow.model.GraphInit;
 import net.sourceforge.ondex.workflow.model.PluginAndArgs;
 
 /**
@@ -83,7 +79,6 @@ public class Engine {
     private final List<ONDEXListener> listeners = new ArrayList<ONDEXListener>();
     private ONDEXLogger logger;
     private static Engine engine;
-    private AbstractONDEXPersistent penv;
     private ONDEXLogger pluginLogger;
     private Map<ONDEXGraph, String> indexedGraphs = new HashMap<ONDEXGraph, String>();
     private Set<String> indeciesToRetain = new HashSet<String>();
@@ -155,6 +150,11 @@ public class Engine {
         } catch (IOException e) {
         }
         ONDEXGraph result = null;
+
+        result = new MemoryONDEXGraph(name);
+        ONDEXEventHandler.getEventHandlerForSID(result.getSID()).addONDEXONDEXListener(logger);
+        
+        /* TODO remove
         if (type.equalsIgnoreCase(GraphInit.BERKELEY)) {
             penv = new BerkeleyEnv(storageDir, name, logger);
             result = penv.getAbstractONDEXGraph();
@@ -164,7 +164,7 @@ public class Engine {
             penv = null;
             result = new MemoryONDEXGraph(name);
             ONDEXEventHandler.getEventHandlerForSID(result.getSID()).addONDEXONDEXListener(logger);
-       }
+       	} */
         try {
             if (!no_metadata) {
                 File metadata = new File(Config.ondexDir + File.separator + "xml" + File.separator + "ondex_metadata.xml");
@@ -211,7 +211,6 @@ public class Engine {
         exporter.start();
 
         fireEventOccurred(new GeneralOutputEvent("Exporting with " + name + " took " + ((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
-        if (penv != null) penv.commit();
     }
 
     /**
@@ -314,8 +313,6 @@ public class Engine {
                 getCurrentMethodName()));
 
         removeIndex(graphInput, lenv);
-        if (penv != null)
-            penv.commit();
         return graphOutput;
     }
 
@@ -334,10 +331,8 @@ public class Engine {
         LuceneEnv lenv = null;
         if (transformer.requiresIndexedGraph()) {
             lenv = getIndex(graphInput, transformer.getName());
-//			interA.setIndexedEnv(lenv);
         }
 
-//		interA.setPersistentEnv(penv);
 
         String name = transformer.getName();
 
@@ -350,8 +345,6 @@ public class Engine {
 
         fireEventOccurred(new GeneralOutputEvent(name + " took " + ((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
         removeIndex(graphInput, lenv);
-        if (penv != null)
-            penv.commit();
         return graphInput;
     }
 
@@ -396,9 +389,7 @@ public class Engine {
         fireEventOccurred(new GeneralOutputEvent("New Relations: " + relationsPost, getCurrentMethodName()));
         rit = null;
         removeIndex(graphInput, lenv);
-        if (penv != null)
-            penv.commit();
-
+        
         return graphInput;
     }
 
@@ -418,9 +409,7 @@ public class Engine {
         LuceneEnv lenv = null;
         if (parser.requiresIndexedGraph()) {
             lenv = getIndex(graphInput, parser.getName());
-//			pargs.setIndexedEnv(lenv);
         }
-//		pargs.setPersistentEnv(penv);
         parser.addONDEXListener(pluginLogger);
         parser.setArguments(args);
 
@@ -434,15 +423,11 @@ public class Engine {
 
         fireEventOccurred(new GeneralOutputEvent(parser.getName() + " took " + +((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
         removeIndex(graphInput, lenv);
-        if (penv != null) {
-            penv.commit();
-        }
         return graphInput;
     }
 
 
     public LuceneEnv getIndex(ONDEXGraph graph, String name) {//pluginInit.makeSimplePlugin().getName()
-        if (penv != null) penv.commit();
         long start = System.currentTimeMillis();
         fireEventOccurred(new GeneralOutputEvent("Index required by " + name + " starting index", getCurrentMethodName()));
         String dir = indexedGraphs.get(graph);
@@ -471,7 +456,6 @@ public class Engine {
         LuceneRegistry.sid2luceneEnv.put(graph.getSID(), lenv);
         indexedGraphs.put(graph, dir);
         fireEventOccurred(new GeneralOutputEvent("Lucene took " + (System.currentTimeMillis() - start) + " msec.", getCurrentMethodName()));
-        if (penv != null) penv.commit();
         return lenv;
     }
 
@@ -528,9 +512,6 @@ public class Engine {
      * Cleanup default graph if persistant and closes all existing graphs
      */
     public void cleanUp() {
-        if (penv != null) {
-            penv.cleanup();
-        }
         List<ONDEXGraph> indexed = new LinkedList<ONDEXGraph>();
         Set<String> graphFolders = new HashSet<String>();
         for (Entry<ONDEXGraph, String> ent : indexedGraphs.entrySet()) {
