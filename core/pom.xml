@@ -18,7 +18,7 @@
       <module>algorithms</module>
       <module>api</module>
       <module>base</module>
-      <module>berkeley</module>
+      <!-- module>berkeley</module -->
       <module>lucene</module>
       <module>marshal</module>
       <module>memory</module>
