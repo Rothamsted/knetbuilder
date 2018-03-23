@@ -25,6 +25,10 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import net.sourceforge.ondex.parser.medline.data.Abstract;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
 
+/**
+ * TODO: is it still used? If yes, we probably need CDATA wrapping (see V2).
+ *
+ */
 public class XMLParser {
 
 	private WstxInputFactory factory;

@@ -46,6 +46,29 @@
 			</exclusions>
 		</dependency>
 
+    <dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+    </dependency>
+
+
+		<!-- Utilities to pre-process the PubMed XML -->
+		<dependency>
+	  		<groupId>uk.ac.ebi</groupId>
+	  		<artifactId>jutils-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.unix4j</groupId>
+			<artifactId>unix4j-command</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jsignature.io-tools</groupId>
+			<artifactId>easystream</artifactId>
+			<version>1.2.15</version>
+		</dependency>
+
 		<!-- ONDEX deps -->
 		<dependency>
 			<groupId>net.sourceforge.ondex.core</groupId>
@@ -59,6 +82,7 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		
 	</dependencies>
 
 </project>

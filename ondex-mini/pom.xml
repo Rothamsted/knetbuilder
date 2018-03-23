@@ -70,6 +70,16 @@
                            <includes>**/*</includes>
 									      </artifactItem>
                         
+												<artifactItem>
+													<groupId>net.sourceforge.ondex.modules</groupId>
+													<artifactId>textmining</artifactId>
+													<version>${project.version}</version>
+													<classifier>jar-with-dependencies</classifier>
+													<type>jar</type>									         
+													<overWrite>true</overWrite>
+													<outputDirectory>${project.build.directory}/plugins</outputDirectory>
+													<includes>**/*</includes>
+												</artifactItem>
                         
                      </artifactItems>
                      <overWriteReleases>false</overWriteReleases>
@@ -258,12 +268,6 @@
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>sequence</artifactId>
-         <version>${project.version}</version>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>textmining</artifactId>
          <version>${project.version}</version>
          <scope>test</scope>
       </dependency>

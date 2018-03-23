@@ -4,6 +4,7 @@ package net.sourceforge.ondex.parser.medline2.xml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,6 +27,7 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import net.sourceforge.ondex.parser.medline2.Parser;
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
+import uk.ac.ebi.utils.xml.XmlFilterUtils;
 
 /**
  * MEDLINE XML parser
@@ -89,7 +91,9 @@ public class XMLParser {
 	private final static String MESHDESCR = "DescriptorName";
 
 //	private final static String ARTICLEID = "ArticleId";
-	
+
+	/** The XML content of these elements is wrapped with CDATA blocks, to avoid XML parser problems */
+	private final static String [] CDATA_ELEMENTS = new String[] { "ArticleTitle", "AbstractText" };
 
 
 	/**
@@ -104,7 +108,7 @@ public class XMLParser {
 		//		System.out.println("Parsing file: " + file);
 		Set<Abstract> abstracts = new HashSet<Abstract>();
 
-		XMLStreamReader2 staxXmlReader;
+		InputStream xmlin = null;
 
 		// detecting whether input file is zipped or not
 		int detectedEnding = ZipEndings.getPostfix(file);
@@ -112,25 +116,25 @@ public class XMLParser {
 		switch (detectedEnding) {
 
 		case ZipEndings.GZ:
-			GZIPInputStream gzis = new GZIPInputStream(new FileInputStream(file));
-			staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader(gzis);
+			xmlin = new GZIPInputStream ( new FileInputStream( file ) );
 			break;
 		case ZipEndings.ZIP:
 			ZipFile zipFile = new ZipFile(file);
 			if (zipFile.size() > 1) {
 				System.err.println("There are multiple files in this zip file: can not parse");
 			}
-			staxXmlReader = (XMLStreamReader2) factory
-			.createXMLStreamReader(zipFile.getInputStream(zipFile
-					.entries().nextElement()));
+			xmlin = zipFile.getInputStream ( zipFile.entries().nextElement() );
 			break;
 		default:
-			staxXmlReader = factory.createXMLStreamReader(file);
+			xmlin = new FileInputStream ( file );
 		}
 
-		abstracts = this.parse(staxXmlReader);
-		return abstracts;
+		// Wrap these elements with CDATA
+		xmlin = XmlFilterUtils.cdataWrapper ( xmlin, CDATA_ELEMENTS );
+		XMLStreamReader2 staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( xmlin );
 
+		abstracts = this.parse ( staxXmlReader );
+		return abstracts;
 	}
 
 	/**
@@ -201,8 +205,9 @@ public class XMLParser {
 			HttpURLConnection httpConn = (HttpURLConnection) efetch.openConnection();
 			httpConn.setConnectTimeout(0);
 
-			staxXmlReader = (XMLStreamReader2) factory
-								.createXMLStreamReader(httpConn.getInputStream());
+			// Wrap certain elements with CDATA			
+			InputStream xmlin = XmlFilterUtils.cdataWrapper ( httpConn.getInputStream(), CDATA_ELEMENTS );
+			staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( xmlin );
 			abstracts = this.parse(staxXmlReader);
 			allabstracts.addAll(abstracts);
 

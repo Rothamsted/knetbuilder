@@ -58,7 +58,6 @@
 			<dependency>
 			  <groupId>info.marcobrandizi</groupId>
 			  <artifactId>rdfutils-jena</artifactId>
-			  <version>2.0-SNAPSHOT</version>
 			</dependency>
       
 			<dependency>
