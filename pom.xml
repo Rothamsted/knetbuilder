@@ -265,7 +265,6 @@
       <org.biopax.paxtools.version>20101113</org.biopax.paxtools.version>
       <org.biojava.version>1.7.1</org.biojava.version>
       <com.hp.hpl.jena.version>2.5.7</com.hp.hpl.jena.version>
-      <com.sleepycat.je.version>4.0.71</com.sleepycat.je.version>
       <com.thoughtworks.xstream.version>1.3.1</com.thoughtworks.xstream.version>
       <javax.management.jmxri>1.2.1</javax.management.jmxri>
       <jexcelapi.jxl.version>2.6.10</jexcelapi.jxl.version>
@@ -273,6 +272,7 @@
       <mysql.connector.java.version>5.1.6</mysql.connector.java.version>
       <!-- TODO: remove org.apache.lucene.core.version>3.6.1</org.apache.lucene.core.version -->
       <lucene.version>6.6.0</lucene.version>
+      <spring.version>4.3.6.RELEASE</spring.version>
    </properties>
 
    <profiles>
@@ -481,6 +481,23 @@
 				  <version>2.5</version>
 				</dependency>				
          
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+					<version>${spring.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+					<version>${spring.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+					<version>${spring.version}</version>
+				</dependency>
+         
+         
 				<!-- Marco Brandizi: my personal toolset -->
 				<dependency>
 			  		<groupId>uk.ac.ebi</groupId>
@@ -500,6 +517,11 @@
 				  <version>2.0.1-SNAPSHOT</version>
 				</dependency>
 
+	      <dependency>
+	         <groupId>com.sleepycat</groupId>
+	         <artifactId>je</artifactId>
+	         <version>4.0.71</version>
+	      </dependency>
          
       </dependencies>
    </dependencyManagement>
