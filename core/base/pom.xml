@@ -54,6 +54,13 @@
          <artifactId>guava</artifactId>
          <version>12.0</version>
       </dependency>
+			
+			<!-- Used in a couple of plug-ins, we cannot make it working as their local dependency only -->
+      <dependency>
+         <groupId>com.sleepycat</groupId>
+         <artifactId>je</artifactId>
+         <scope>compile</scope>
+      </dependency>
 
 			<!-- Routes SLF4J to LOG4j, which is the ONDEX logger (here we use both LOG4j and SLF4J -->
 			<dependency>
