@@ -37,11 +37,5 @@
          <version>${project.version}</version>
          <scope>provided</scope>
       </dependency>
-      <!-- TODO: remove dependency>
-         <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>berkeley</artifactId>
-         <version>${project.version}</version>
-         <scope>test</scope>
-      </dependency -->
    </dependencies>
 </project>

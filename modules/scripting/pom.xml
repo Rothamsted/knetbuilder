@@ -71,12 +71,6 @@
       </dependency>
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>berkeley</artifactId>
-         <version>${project.version}</version>
-         <scope>compile</scope>
-      </dependency>
-      <dependency>
-         <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>memory</artifactId>
          <version>${project.version}</version>
          <scope>compile</scope>
