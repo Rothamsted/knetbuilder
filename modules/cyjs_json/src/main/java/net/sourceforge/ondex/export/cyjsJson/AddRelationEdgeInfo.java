@@ -125,7 +125,7 @@ public class AddRelationEdgeInfo {
   else if(edgeLbl.equals(EdgeLabel.is_p.toString())) {
      colour= EdgeColour.darkGrey.toString();
     }
-  else if(edgeLbl.equals(EdgeLabel.has_observed_phenotype.toString())) {
+  else if(edgeLbl.equals(EdgeLabel.has_observed_phenotype.toString()) || edgeLbl.equals(EdgeLabel.has_observ_pheno.toString())) {
      colour= EdgeColour.greenYellow.toString();
     }
   else if(edgeLbl.equals(EdgeLabel.control.toString())) {
