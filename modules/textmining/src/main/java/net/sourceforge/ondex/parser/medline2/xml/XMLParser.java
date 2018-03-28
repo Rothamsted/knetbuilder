@@ -80,7 +80,7 @@ public class XMLParser {
 
 	private final static String CHEM = "Chemical";
 
-	private final static String DATE = "DateCreated";
+	private final static String DATE = "ArticleDate";
 
 //	private final static String REG_NUM = "RegistryNumber";
 
@@ -298,11 +298,22 @@ public class XMLParser {
 					medlineCitation.setBody(text);
 				}
 
-				//<!ELEMENT	DateCreated (Year,Month,Day)>
-				if (element.equals(DATE)){
-					staxXmlReader.nextTag();
-					int pubYear = Integer.parseInt(staxXmlReader.getElementText());
-					medlineCitation.setYear(pubYear);
+				//<!ELEMENT	ArticleDate (Year,Month,Day)>
+				if (element.equals(DATE))
+				{
+					// I'm not sure of the date components order, so let's make it more robust.
+					int pubYear = -1;
+					for ( int elCt = 1; elCt <= 3; )
+					{
+						int myev = staxXmlReader.nextTag();
+						if ( myev != XMLStreamConstants.START_ELEMENT ) continue;
+						if ( "Year".equals ( staxXmlReader.getLocalName () ) ) {
+							pubYear = Integer.parseInt ( staxXmlReader.getElementText() );
+							medlineCitation.setYear ( pubYear );
+							break;
+						}
+						elCt++;
+					}
 				}
 
 //				<!ELEMENT	Author (((LastName, ForeName?, Initials?, Suffix?) | 

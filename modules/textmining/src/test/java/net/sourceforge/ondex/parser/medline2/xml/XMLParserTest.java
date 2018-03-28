@@ -51,5 +51,6 @@ public class XMLParserTest
 			"Wrong title for test article!", 
 			testAbs.getBody ().contains ( "but not in wild-type (WT) and<i>aterg2-1</i>+<i>/</i>- developed seeds." )
 		);
+		assertEquals ( "Wrong year for test article!", 2018, testAbs.getYear () );
 	}
 }
