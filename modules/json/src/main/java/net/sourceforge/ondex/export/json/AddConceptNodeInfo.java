@@ -14,7 +14,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 /**
  * Build node json objects using their various attributes.
  * @author Ajit Singh
- * @version 07/03/17
+ * @version 28/03/18
  */
 public class AddConceptNodeInfo {
 
@@ -296,13 +296,29 @@ public class AddConceptNodeInfo {
      shape= ConceptShape.hexagon.toString();
      colour= ConceptColour.teal.toString();
     }
-  else if((conType.equals(ConceptType.Protein_Complex.toString())) || (conType.equals("Protein Complex"))) {
+  else if((conType.equals(ConceptType.Protein_Complex.toString())) || (conType.equals("Protein Complex")) || (conType.equals(ConceptType.Protcmplx.toString()))) {
      shape= ConceptShape.roundrectangle.toString();
      colour= ConceptColour.red.toString();
     }
   else if(conType.equals(ConceptType.Transport.toString())) {
      shape= ConceptShape.diamond.toString();
      colour= ConceptColour.lightBlue.toString();
+    }
+  else if(conType.equals(ConceptType.CoExpStudy.toString())) {
+     shape= ConceptShape.rhomboid.toString();
+     colour= ConceptColour.tan.toString();
+    }
+  else if(conType.equals(ConceptType.CoExpCluster.toString())) {
+     shape= ConceptShape.vee.toString();
+     colour= ConceptColour.tan.toString();
+    }
+  else if(conType.equals(ConceptType.PlantOntologyTerm.toString())) {
+     shape= ConceptShape.pentagon.toString();
+     colour= ConceptColour.lightGreen.toString();
+    }
+  else if(conType.equals(ConceptType.SnpEffect.toString())) {
+     shape= ConceptShape.diamond.toString();
+     colour= ConceptColour.slateBlue.toString();
     }
   
   // Set the determined attribute values;

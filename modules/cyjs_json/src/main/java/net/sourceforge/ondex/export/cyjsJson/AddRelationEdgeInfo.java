@@ -10,7 +10,7 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 /**
  * Build edge json objects using their various attributes.
  * @author Ajit Singh
- * @version 07/03/17
+ * @version 28/03/18
  */
 public class AddRelationEdgeInfo {
     
@@ -92,13 +92,15 @@ public class AddRelationEdgeInfo {
   else if(edgeLbl.equals(EdgeLabel.encodes.toString())) {
      colour= EdgeColour.grey.toString();
     }
-  else if(edgeLbl.equals(EdgeLabel.participates_in.toString())) {
+  else if((edgeLbl.equals(EdgeLabel.participates_in.toString())) ||
+          (edgeLbl.equals(EdgeLabel.has_mutant.toString()))) {
      colour= EdgeColour.teal.toString();
     }
   else if(edgeLbl.equals(EdgeLabel.has_similar_sequence.toString())) {
      colour= EdgeColour.fireBrick.toString();
     }
-  else if((edgeLbl.equals(EdgeLabel.cooccurs_with.toString()))) {
+  else if((edgeLbl.equals(EdgeLabel.cooccurs_with.toString())) ||
+          (edgeLbl.equals(EdgeLabel.regulates.toString()))) {
      colour= EdgeColour.blue.toString();
     }
   else if(edgeLbl.equals(EdgeLabel.has_protein_domain.toString())) {
@@ -110,7 +112,8 @@ public class AddRelationEdgeInfo {
   else if(edgeLbl.equals(EdgeLabel.associated_with.toString())) { // For Trait/ GWAS
      colour= EdgeColour.black.toString();
     }
-  else if(edgeLbl.equals(EdgeLabel.differentially_expressed.toString())) {  // For DGES
+  else if((edgeLbl.equals(EdgeLabel.differentially_expressed.toString())) ||
+          (edgeLbl.equals(EdgeLabel.enriched_for.toString()))) {  // For DGES & CoExpCluster
      colour= EdgeColour.tan.toString();
     }
   else if(edgeLbl.equals(EdgeLabel.located_in.toString())) {
@@ -159,6 +162,12 @@ public class AddRelationEdgeInfo {
     }
   else if(edgeLbl.equals(EdgeLabel.is_equivalent_to.toString())) {
      colour= EdgeColour.lightBlue.toString();
+    }
+  else if(edgeLbl.equals(EdgeLabel.homeolog.toString())) {
+     colour= EdgeColour.navy.toString();
+    }
+  else if(edgeLbl.equals(EdgeLabel.leads_to.toString())) {
+     colour= EdgeColour.slateBlue.toString();
     }
 
   return colour;

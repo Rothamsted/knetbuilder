@@ -2,8 +2,9 @@ package net.sourceforge.ondex.export.json;
 
 /**
  * @author Ajit Singh
- * @version 13/10/15
+ * @version 28/03/18
  */
 public enum ConceptShape {
- ellipse, rectangle, triangle, pentagon, star, octagon, hexagon, roundrectangle, diamond
+ triangle, ellipse, rectangle, pentagon, star, 
+ octagon, hexagon, roundrectangle, diamond, heptagon, vee, rhomboid
 }

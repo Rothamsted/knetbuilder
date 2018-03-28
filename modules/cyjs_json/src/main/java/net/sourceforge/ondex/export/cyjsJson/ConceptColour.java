@@ -2,8 +2,10 @@ package net.sourceforge.ondex.export.cyjsJson;
 
 /**
  * @author Ajit Singh
- * @version 07/03/17
+ * @version 28/03/18
  */
 public enum ConceptColour {
- red, greenYellow, orange, lightBlue, teal, lightGrey, springGreen, salmon, blue, purple, pink, slateBlue, lightGreen, tan, crimson
+ red, greenYellow, orange, lightBlue, teal, lightGrey, springGreen, purple, pink, 
+ salmon, blue, slateBlue, lightGreen, tan, 
+ black, crimson, fireBrick, grey, darkGrey, limeGreen, steelBlue, navy, magenta, brown
 }
