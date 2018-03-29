@@ -29,8 +29,6 @@ public class XMLParserTest
 	/**
 	 * Tests that the CDATA wrapper works (fixes 
 	 * <a href = 'https://github.com/Rothamsted/ondex-knet-builder/issues/12'>#12</a>).
-	 * @throws XMLStreamException 
-	 * @throws IOException 
 	 */
 	@Test
 	public void testCDATA () throws IOException, XMLStreamException
@@ -51,6 +49,25 @@ public class XMLParserTest
 			"Wrong title for test article!", 
 			testAbs.getBody ().contains ( "but not in wild-type (WT) and<i>aterg2-1</i>+<i>/</i>- developed seeds." )
 		);
-		assertEquals ( "Wrong year for test article!", 2018, testAbs.getYear () );
+	}
+	
+	/**
+	 * Tests that the Year in the new PM XML (fixes 
+	 * <a href = 'https://github.com/Rothamsted/ondex-knet-builder/issues/13'>#13</a>).
+	 */
+	@Test
+	public void testYear () throws IOException, XMLStreamException
+	{
+		XMLParser pmParser = new XMLParser ();
+		Set<Abstract> abstracts = pmParser.parseMedlineXML ( new File ( "target/test-classes/test_pmed_new_date.xml" ) );
+
+		Abstract testAbs = abstracts.stream ().filter ( abs -> abs.getId () == 24882934 ).findAny ().orElse ( null );
+		assertNotNull ( "Test Article not found!", testAbs );
+		assertEquals ( "Wrong year for test article!", 2014, testAbs.getYear () );
+
+		// the <MedlineDate> tag
+		testAbs = abstracts.stream ().filter ( abs -> abs.getId () == 11706173 ).findAny ().orElse ( null );
+		assertNotNull ( "Test Article not found (MedlineDate case)!", testAbs );		
+		assertEquals ( "Wrong year for MedlineDate case!", 2000, testAbs.getYear () );
 	}
 }

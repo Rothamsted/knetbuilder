@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipFile;
@@ -19,6 +20,8 @@ import java.util.zip.ZipFile;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang3.StringUtils;
+import org.clapper.util.regex.RegexUtil;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 
@@ -27,6 +30,7 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import net.sourceforge.ondex.parser.medline2.Parser;
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
+import uk.ac.ebi.utils.regex.RegEx;
 import uk.ac.ebi.utils.xml.XmlFilterUtils;
 
 /**
@@ -95,6 +99,9 @@ public class XMLParser {
 	/** The XML content of these elements is wrapped with CDATA blocks, to avoid XML parser problems */
 	private final static String [] CDATA_ELEMENTS = new String[] { "ArticleTitle", "AbstractText" };
 
+	/** Matches stuff like {@code <MedlineDate>2000 Spring</MedlineDate>} in the hope to extrat the year */
+	private final static RegEx MEDLINE_YEAR_RE = new RegEx ( "^([0-9]{4}).*$" );
+	
 
 	/**
 	 * Reads one single PubMed/MEDLINE XML file.
@@ -298,23 +305,58 @@ public class XMLParser {
 					medlineCitation.setBody(text);
 				}
 
-				//<!ELEMENT	ArticleDate (Year,Month,Day)>
-				if (element.equals(DATE))
+				// Journal/JournalIssue/PubDate 
+				if (element.equals ( "Journal" ) )
 				{
-					// I'm not sure of the date components order, so let's make it more robust.
-					int pubYear = -1;
-					for ( int elCt = 1; elCt <= 3; )
+					String trackedElem = "Journal";
+					
+					while ( staxXmlReader.hasNext() )
 					{
-						int myev = staxXmlReader.nextTag();
-						if ( myev != XMLStreamConstants.START_ELEMENT ) continue;
-						if ( "Year".equals ( staxXmlReader.getLocalName () ) ) {
-							pubYear = Integer.parseInt ( staxXmlReader.getElementText() );
-							medlineCitation.setYear ( pubYear );
-							break;
-						}
-						elCt++;
-					}
-				}
+						event = staxXmlReader.next ();
+						if ( event == XMLStreamConstants.END_ELEMENT && "Journal".equals ( element ) ) break;
+						if ( event != XMLStreamConstants.START_ELEMENT ) continue;
+
+						element = staxXmlReader.getLocalName ();						
+												
+						if ( "Journal".equals ( trackedElem ) && "JournalIssue".equals ( element ) )
+							trackedElem = element;
+						
+						if ( "JournalIssue".equals ( trackedElem ) && "PubDate".equals ( element ) )
+							trackedElem = element;
+						
+						if ( "PubDate".equals ( trackedElem ) )
+						{
+							Integer pubYear = null;
+
+							// We can have either a Y/M/D date or a string element
+							if ( "Year".equals ( element ) )
+								pubYear = Integer.parseInt ( staxXmlReader.getElementText() );
+							else if ( "MedlineDate".equals ( element ) ) 
+							{
+								pubYear = -1;
+								
+								// In case of string, we still hope to get the year from the string begin
+								String dateStr = StringUtils.trimToNull ( staxXmlReader.getElementText () );
+								if ( dateStr != null ) 
+								{
+									Matcher rem = MEDLINE_YEAR_RE.matcher ( dateStr );
+									if ( rem.matches () )
+										pubYear = Integer.parseInt ( rem.group ( 1 ) );
+								}
+							}
+							if ( pubYear != null )
+							{								
+								// TODO: check for a sensible range, like >=1800 ?
+								if ( pubYear >= 0 )	medlineCitation.setYear ( pubYear );
+
+								// If non-null, we have met the relevant Year/Medline tags, so we can stop
+								break;
+							}
+						} // if PubDate
+					} // while on Journal
+				
+				} // if Journal
+				
 
 //				<!ELEMENT	Author (((LastName, ForeName?, Initials?, Suffix?) | 
 //                        CollectiveName),NameID*)>
