@@ -316,7 +316,7 @@ public class AddConceptNodeInfo {
      shape= ConceptShape.pentagon.toString();
      colour= ConceptColour.lightGreen.toString();
     }
-  else if(conType.equals(ConceptType.SnpEffect.toString())) {
+  else if(conType.equals(ConceptType.SNPEffect.toString())) {
      shape= ConceptShape.diamond.toString();
      colour= ConceptColour.slateBlue.toString();
     }
