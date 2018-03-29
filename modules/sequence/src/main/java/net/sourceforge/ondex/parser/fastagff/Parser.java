@@ -164,7 +164,7 @@ public class Parser extends ONDEXParser {
 					}
 					// geneId = col[0].split("=")[1].toUpperCase();
 					// geneDescription = col[1].split("=")[1].toUpperCase();
-					geneId = geneProps.get("ID");
+					geneId = geneProps.get("ID").toUpperCase();
 					if(geneProps.containsKey("DESCRIPTION"))
 					    geneDescription = geneProps.get("DESCRIPTION");
 					geneCName = geneProps.get("NAME");
@@ -361,7 +361,7 @@ public class Parser extends ONDEXParser {
 				while ((Mappingrow = Mappingbr.readLine()) != null) {
 					String[] splited = Mappingrow.split("\t");
 
-					String geneId = splited[geneColumn];
+					String geneId = splited[geneColumn].toUpperCase();
 					String proteinId = splited[proteinColumn];
 
 					if (ondex2protein.get(proteinId) == null) {
