@@ -35,6 +35,20 @@
 		<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" /> -->
 	</bean>
 	
+	<bean id = "goXrefAccMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
+		<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
+		<property name = "dataSourcePrefix" value="GO:" />
+		<property name="addedPrefix" value = "GO:" />
+		<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" />
+	</bean>
+		
+	<bean id = "patoXrefAccMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
+		<property name="propertyIri" value="#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
+		<property name="dataSourcePrefix" value="PATO:" />
+		<property name="addedPrefix" value = "PATO_" />
+		<property name="dataSourcesMapper" ref="patoDataSourcesMapper" />
+	</bean>
+	
 	<bean id = "wpXrefAccMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
 		<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:hasDbXref' )}" />
 		<property name = "dataSourcePrefix" value="Wikipedia:" />
@@ -173,6 +187,16 @@
 			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
 				<property name = "id" value = "GO" />
 				<property name = "fullName" value = "Gene Ontology" />
+			</bean>
+		</property>
+	</bean>		
+	
+	<!-- This too is used in a couple of ontologies -->
+	<bean id = "patoDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
+		<property name = "value">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+				<property name = "id" value = "PATO" />
+				<property name = "fullName" value = "Phenotypic Quality Ontology" />
 			</bean>
 		</property>
 	</bean>		

@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<description><![CDATA[ONDEX OWL Parser configuration for importing Fission Yeast Phenotype Ontology]]></description>
+	<description><![CDATA[ONDEX OWL Parser configuration for importing Ascomycete Phenotype Ontology]]></description>
 
 
 	<import resource="obo_common_mappings.xml" />
@@ -21,7 +21,7 @@
 				<property name = "scanners">
 					<set>
 						<bean class = "net.sourceforge.ondex.parser.owl.IriBasedRootsScanner">
-							<property name = "topClassIri" value = "#{ns.iri ( 'obo:FYPO_0000001' )}" /><!-- Phenotype -->
+							<property name = "topClassIri" value = "#{ns.iri ( 'obo:APO_0000017' )}" /><!-- Observable -->
 						</bean>
 					</set>					
 				</property>
@@ -57,28 +57,28 @@
 	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.CompositeAccessionsMapper">
 		<property name = "mappers">
 			<set>
-							
+			
 				<bean parent = "idAccMapper">
-					<property name = "dataSourcePrefix" value="FYPO:" />
-					<property name = "dataSourcesMapper" ref = "fypoDataSource" />
-					<property name="addedPrefix" value = "FYPO_" />
+					<property name = "dataSourcePrefix" value="APO:" />
+					<property name = "dataSourcesMapper" ref = "apoDataSource" />
+					<property name="addedPrefix" value = "APO_" />
 				</bean>
 				
 				<bean parent = "altIdAccMapper">
-					<property name = "dataSourcePrefix" value="FYPO:" />
-					<property name = "dataSourcesMapper" ref = "fypoDataSource" />
-					<property name="addedPrefix" value = "FYPO_" />
+					<property name = "dataSourcePrefix" value="APO:" />
+					<property name = "dataSourcesMapper" ref = "apoDataSource" />
+					<property name="addedPrefix" value = "APO_" />
 				</bean>
+				
+				<ref bean = "goXrefAccMapper" />
 
-				<ref bean = "goRefAccMapper" />
-
-				<ref bean = "patoRefAccMapper" />
+				<ref bean = "patoXrefAccMapper" />
 
 			</set>
 		</property>
 	</bean> <!-- /accessionsMapper -->
 	
-<!-- The concept class under which all FYPO term concepts will be -->
+	<!-- The concept class under which all FYPO term concepts will be -->
   <bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.ConstantConceptClassMapper">
 		<property name = "value">
 			<bean class = "net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype">
@@ -87,14 +87,14 @@
 				<property name= "description" value = "phenotype of mutant" />
 			</bean>
 		</property>
-	</bean>
-
-	<!-- Data source that represents Fission Yeast Phenotype Ontology itself and used on several components -->
-	<bean id = "fypoDataSource" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
+	</bean>	
+	
+	<!-- Data source that represents Ascomycete Phenotype Ontology itself and used on several components -->
+	<bean id = "apoDataSource" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
 		<property name = "value">
 			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
-				<property name = "id" value = "FYPO" />
-				<property name = "fullName" value = "Fission Yeast Phenotype Ontology" />
+				<property name = "id" value = "APO" />
+				<property name = "fullName" value = "Ascomycete Phenotype Ontology" />
 			</bean>
 		</property>
 	</bean>		
