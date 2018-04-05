@@ -14,10 +14,10 @@
   <includeBaseDirectory>true</includeBaseDirectory>
   <baseDirectory>neo4j-exporter</baseDirectory>
 
+	<!-- Enable only if non-empty  -->
 	<!-- 
 	<dependencySets>
 		<dependencySet>
-		  <! - - Enable only if non-empty <outputFileNameMapping></outputFileNameMapping> - - >
 		  <outputDirectory>/lib</outputDirectory>
 		  <unpack>false</unpack>
 		  <scope>runtime</scope>
@@ -54,6 +54,8 @@
       <excludes>
         <!-- Defined below, with x permissions, non-executables only here -->
         <exclude>**/*.sh</exclude>
+        <!-- We need to ship it with another name, see below -->
+        <exclude>README.md</exclude>
       </excludes>  
       <fileMode>0644</fileMode>
 			<directoryMode>0755</directoryMode>      
@@ -68,5 +70,19 @@
 			<directoryMode>0755</directoryMode>      
 		</fileSet>
 	</fileSets>
+	
+	<files>
+		<!-- From the Maven project structure -->
+		<file>
+			<source>README.md</source>
+		</file>
+	  
+	  <!-- We can't have two READMEs, so... -->
+		<file>
+			<source>target/dependency/rdf2neo-cli_${rdf2neo.version}/README.md</source>
+			<destName>README_rdf2neo.md</destName>
+		</file>
+
+	</files>
 
 </assembly>

@@ -77,7 +77,7 @@ public class Neo4JExporterIT
 		}
 	}
 	
-	@Test //@Ignore ( "TODO: re-enable later" )
+	@Test // @Ignore ( "TODO: re-enable later" )
 	public void testBasics () throws Exception
 	{
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";

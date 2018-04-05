@@ -13,7 +13,10 @@
    <artifactId>rdf-export-2</artifactId>
 
    <name>ONDEX RDF Exporter</name>
-   <description>Tools to manage RDF export from ONDEX graphs</description>
+   <description>
+   	Tools to manage RDF export from ONDEX graphs.
+   	See src/main/java/net/sourceforge/ondex/rdf/export/package-info.java for details.
+   </description>
    
  	 <developers>
 	   <developer>
