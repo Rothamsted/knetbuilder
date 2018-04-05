@@ -1,7 +1,10 @@
 # Revision History
 
 ## v1.2.1-SNAPSHOT
-  * OWL Parser and base components for developers
+  * Graph Databases and Linked Data support:
+    * [New RDF Exporter](modules/rdf-export-2) plug-in.
+    * [Tool to export ONDEX RDF to Neo4j](modules/neo4j-export).
+  * OWL Parser and base components for developers:
     * Complete review of the [generic parser](https://github.com/Rothamsted/ondex-base/tree/master/core/parser-api) architecture, 
       which now has clear separation between [data source decomposition](https://github.com/Rothamsted/ondex-base/blob/master/core/parser-api/src/main/java/net/sourceforge/ondex/parser/Scanner.java) 
       and [mapping](https://github.com/Rothamsted/ondex-base/blob/master/core/parser-api/src/main/java/net/sourceforge/ondex/parser/Mapper.java). 
