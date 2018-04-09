@@ -1,10 +1,26 @@
 package net.sourceforge.ondex.rdf.export;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import info.marcobrandizi.rdfutils.jena.SparqlBasedTester;
+import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
 
@@ -18,20 +34,25 @@ public class FileExporterTest
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	@Test
-	public void testBasics ()
+	public void testBasics () throws IOException
 	{
 		String mavenPomPath = System.getProperty ( "maven.basedir", "." ) + "/";
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
-		// String testResPath = mavenBuildPath + "test-classes/";
 		
-		// ONDEXGraph g = Parser.loadOXL ( testResPath + "text_mining.oxl" );
 		ONDEXGraph g = Parser.loadOXL ( mavenPomPath + "src/main/assembly/resources/examples/text_mining.oxl" );
 		
-		RDFFileExporter fx = new RDFFileExporter ();
-		fx.export ( g, mavenBuildPath + "test.ttl", "TURTLE_BLOCKS" );
-		//fx.export ( g, System.out, "TURTLE_BLOCKS" );
+		String outPath = mavenBuildPath + "test.ttl";
+		RDFFileExporter fx = new RDFFileExporter ();		
+		fx.export ( g, outPath, "TURTLE_BLOCKS" );
 		
-		// TODO: tests!
+		// Verify the resulting RDF		
+		SparqlBasedTester tester = new SparqlBasedTester ( outPath, NamespaceUtils.asSPARQLProlog () );
+		String sparqlTestsPath = mavenBuildPath + "test-classes/text_mining_tests";
+		
+		Assert.assertTrue ( 
+			"No SPARQL tests found at '" + sparqlTestsPath + "'!", 
+			tester.askFromDirectory ( sparqlTestsPath ) > 0 
+		);
 	}
 	
 	@Test 	@Ignore ( "Large file loading, not a real unit test" )
