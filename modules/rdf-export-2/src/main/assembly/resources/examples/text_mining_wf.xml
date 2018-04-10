@@ -9,6 +9,10 @@
       <Arg name="InputFile">data/examples/rdf-export-2/text_mining.oxl</Arg>
       <Arg name="graphId">default</Arg>
     </Parser>
+		<!-- 
+			The RDF format to produce. Accepts values from either Jena RDFFormat (https://goo.gl/XVQBHi)
+			or Jena Lang (https://goo.gl/gbp6bL). The default TURTLE_BLOCKS writes Turtle in an efficient way.
+		-->    
     <Export name="RDF-Exporter-2">
       <Arg name="ExportFile">/tmplnk/test.ttl</Arg>
       <Arg name="rdfLang">TURTLE_BLOCKS</Arg>
