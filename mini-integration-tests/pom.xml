@@ -24,6 +24,7 @@
     </dependency>
     
 		<!-- Used for integration tests. -->
+		
 		<dependency>
 			<groupId>net.sourceforge.ondex.modules</groupId>
 			<artifactId>oxl</artifactId>
@@ -31,6 +32,33 @@
 			<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.modules</groupId>
+			<artifactId>textmining</artifactId>
+			<version>${project.version}</version>			
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.modules</groupId>
+			<artifactId>rdf-export-2</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+			<artifactId>rdf2neo-cli</artifactId>
+			<exclusions>
+				<exclusion>
+					<!-- Let's avoid conflicts with ONDEX, which uses the SLF4J/Log4j binding -->
+					<groupId>org.slf4j</groupId>
+					<artifactId>log4j-over-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>	
+		</dependency>	
 
   </dependencies>
   
@@ -43,6 +71,10 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>**/tm-workflow.xml</include>
+					<include>**/tm_rdf_wf.xml</include>
+					<!-- Neo4j Tests are configured with this local extension of the 
+					     distribution config -->
+					<include>**/rdf2neo_config.xml</include>					
 				</includes>
 			</testResource>
 			<testResource>
@@ -50,6 +82,8 @@
 				<filtering>false</filtering>
 				<excludes>
 					<exclude>**/tm-workflow.xml</exclude>
+					<exclude>**/tm_rdf_wf.xml</exclude>
+					<exclude>**/rdf2neo_config.xml</exclude>
 				</excludes>
 			</testResource>
 		</testResources>
@@ -75,6 +109,21 @@
 									<classifier>packaged-distro</classifier>
 									<type>zip</type>
 									<outputDirectory>${project.build.directory}</outputDirectory>
+									<!-- excludes>**/log4j-over-slf4j-*.jar</excludes -->
+								</artifactItem>
+								<artifactItem>
+									<groupId>net.sourceforge.ondex.modules</groupId>
+									<artifactId>rdf-export-2</artifactId>
+									<version>${project.version}</version>
+									<type>test-jar</type>
+									<outputDirectory>${project.build.directory}/ext-test-files/rdf-export-2</outputDirectory>									
+								</artifactItem>
+								<artifactItem>
+									<groupId>net.sourceforge.ondex.modules</groupId>
+									<artifactId>neo4j-export</artifactId>
+									<version>${project.version}</version>
+									<type>test-jar</type>
+									<outputDirectory>${project.build.directory}/ext-test-files/neo4j-exporter</outputDirectory>									
 								</artifactItem>
 							</artifactItems>
 						</configuration>
@@ -82,15 +131,20 @@
 				</executions>
 			</plugin>
 
-			<!-- Tests TM workflows, using the whole ONDEX-mini -->
+
+			<!-- Tests workflows, using the whole ONDEX-mini -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.20.1</version>
  				<configuration>
-        	<systemPropertyVariables>
-            <maven.buildDirectory>${project.build.directory}</maven.buildDirectory>
-          </systemPropertyVariables>
+					<systemPropertyVariables>
+						<maven.buildDirectory>${project.build.directory}</maven.buildDirectory>
+					</systemPropertyVariables>
+					<environmentVariables>
+						<!-- this is to re-use the config shipped to the final binary with integration tests. -->
+						<RDF2NEO_HOME>${project.build.directory}/ondex-mini/tools/neo4j-exporter/</RDF2NEO_HOME>
+					</environmentVariables>					
         </configuration>				
 				<executions>
 					<execution>
@@ -108,6 +162,12 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+			<!-- Neo4j server plugin All details defined in the top POM -->
+			<plugin>
+				<groupId>com.github.harti2006</groupId>
+				<artifactId>neo4j-server-maven-plugin</artifactId>
 			</plugin>
 
 		</plugins>

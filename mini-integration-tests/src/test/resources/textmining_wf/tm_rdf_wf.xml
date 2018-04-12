@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-  An example ONDEX Mini workflow, showing how to configure the RDF exporter.
+<!--
+  A simple workflow to test the RDF exporter.
+  It loads a test OXL and then exports it.
 -->
 <Ondex version="3.0">
   <Workflow>
@@ -11,7 +12,7 @@
     </Graph>
     
     <Parser name="oxl">
-      <Arg name="InputFile">data/examples/rdf-export-2/text_mining.oxl</Arg>
+      <Arg name="InputFile">${project.build.directory}/ondex-mini/data/examples/rdf-export-2/text_mining.oxl</Arg>
       <Arg name="graphId">default</Arg>
     </Parser>
     
@@ -20,7 +21,7 @@
 			or Jena Lang (https://goo.gl/gbp6bL). The default TURTLE_BLOCKS writes Turtle in an efficient way.
 		-->    
     <Export name="RDF-Exporter-2">
-      <Arg name="ExportFile">data/examples/rdf-export-2/text_mining.ttl</Arg>
+      <Arg name="ExportFile">${project.build.directory}/text_mining.ttl</Arg>
       <Arg name="rdfLang">TURTLE_BLOCKS</Arg>
       <Arg name="graphId">default</Arg>
     </Export>

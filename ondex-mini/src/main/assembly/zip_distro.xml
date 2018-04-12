@@ -121,7 +121,7 @@
 		</fileSet>
 		<fileSet>
 			<directory>target/neo4j-exporter</directory>
-			<outputDirectory>ondex/tools/neo4j-exporter</outputDirectory>
+			<outputDirectory>/tools/neo4j-exporter</outputDirectory>
       <includes>
         <include>**/*.sh</include>
       </includes>  

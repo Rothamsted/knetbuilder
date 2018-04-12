@@ -158,6 +158,19 @@
 						</execution>
 	        </executions>
         </plugin>
+
+			 <!-- We have some test files that we reuse in the mini-integration-tests -->				      
+			 <plugin>
+			   <groupId>org.apache.maven.plugins</groupId>
+				 <artifactId>maven-jar-plugin</artifactId>
+				 <executions>
+				   <execution>
+				     <goals>
+				       <goal>test-jar</goal>
+				     </goals>
+				   </execution>
+				 </executions>
+			 </plugin>
 				         
       </plugins>
 

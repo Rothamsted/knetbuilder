@@ -22,12 +22,6 @@
 	</developers>
 
 
-	<properties>
-		<neo4j.server.version>3.3.1</neo4j.server.version>
-		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
-		<rdf2neo.version>0.0.1-SNAPSHOT</rdf2neo.version>
-	</properties>
-
 	<dependencies>
 
 		<dependency>
@@ -69,14 +63,15 @@
 
 		<dependency>
 			<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
-			<version>0.0.1-SNAPSHOT</version>
 			<artifactId>rdf2neo</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>rdf-export-2</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -99,6 +94,19 @@
 	<build>
 
 		<plugins>
+		
+			<!-- We have some test files that we reuse in the mini-integration-tests -->				      
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-jar-plugin</artifactId>
+			  <executions>
+			    <execution>
+			      <goals>
+			        <goal>test-jar</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			</plugin>
 		
 			<!-- 
 				We include an installation of the rdf2neo-cli command line tool in the final ONDEX. 
@@ -128,31 +136,10 @@
 	  			</executions>
 	  		</plugin>		
 
-			<!-- A small plug-in that starts Neo4j, we maintain our own version of this at https://github.com/Rothamsted/neo4j-server-maven-plugin -->
+			<!-- All details defined in the top POM -->
 			<plugin>
 				<groupId>com.github.harti2006</groupId>
 				<artifactId>neo4j-server-maven-plugin</artifactId>
-				<version>0.2-SNAPSHOT</version>
-				<configuration>
-					<version>${neo4j.server.version}</version>
-					<deleteDb>true</deleteDb>
-					<port>17490</port>
-					<boltPort>${neo4j.server.boltPort}</boltPort>
-				</configuration>
-				<executions>
-					<execution>
-						<id>start-neo4j-server</id>
-						<goals>
-							<goal>start</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>stop-neo4j-server</id>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>

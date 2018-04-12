@@ -6,7 +6,11 @@ import java.io.Reader;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.system.Txn;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +18,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.rdf.export.RDFFileExporter;
+import uk.ac.rothamsted.neo4j.utils.test.CypherTester;
 import uk.ac.rothamsted.rdf.neo4j.load.MultiConfigCyLoader;
+import uk.ac.rothamsted.rdf.neo4j.load.spring.LoadingSessionScope;
+import uk.ac.rothamsted.rdf.neo4j.load.support.Neo4jDataManager;
 import uk.ac.rothamsted.rdf.neo4j.load.support.RdfDataManager;
 
 /**
@@ -27,7 +35,22 @@ import uk.ac.rothamsted.rdf.neo4j.load.support.RdfDataManager;
  */
 public class Neo4JExporterIT
 {
+	private ConfigurableApplicationContext springContext = null;
+	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
+	/**
+	 * Gets the Spring configuration from a test file and uses it throughout the tests.
+	 */
+	@Before
+	public void initSpringContext () {
+		springContext = new ClassPathXmlApplicationContext ( "test_config.xml" );
+	}
+	
+	@After
+	public void closeSpringContext () {
+		if ( springContext != null ) springContext.close ();
+	}
 	
 	private void exportOxl ( String oxlPath, String tdbPath ) throws Exception
 	{
@@ -69,12 +92,8 @@ public class Neo4JExporterIT
 //				"src/main/assembly/resources/ondex_config/config.xml" 
 //			); 
 //		)
-		try ( ConfigurableApplicationContext beanCtx = new ClassPathXmlApplicationContext ( "test_config.xml" ); )
-		{			
-			MultiConfigCyLoader mloader = beanCtx.getBean ( MultiConfigCyLoader.class );
-			mloader.load ( tdbPath );
-			// TODO: test
-		}
+		MultiConfigCyLoader mloader = springContext.getBean ( MultiConfigCyLoader.class );
+		mloader.load ( tdbPath );
 	}
 	
 	@Test // @Ignore ( "TODO: re-enable later" )
@@ -84,6 +103,21 @@ public class Neo4JExporterIT
 		String testResPath = mavenBuildPath + "test-classes/";
 		
 		this.exportOxl ( testResPath + "text_mining.oxl", null );
+		
+		// Re-open a data manager 
+		springContext.getBean ( LoadingSessionScope.class ).startSession ();
+		Neo4jDataManager neoDataMgr = springContext.getBean ( Neo4jDataManager.class );
+
+		// And hand it off the Cypher tester
+		CypherTester tester = new CypherTester ( neoDataMgr );
+		tester.setCypherHeader ( NamespaceUtils.getNamespaces () );
+		
+		long cyFilesCount = tester.askFromDirectory ( 
+			f -> Assert.fail ( "Cypher test '" + f.getName () + "' not passed!" ),
+			testResPath + "text_mining_cytests" 
+		);
+		
+		Assert.assertEquals ( "Wrong no. of Test Cypher files!", 1, cyFilesCount );
 	}
 
 	/**
