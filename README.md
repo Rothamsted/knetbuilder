@@ -34,3 +34,8 @@ tutorial_files
  5. The KnetBuilder workflow integrates several datasets and creates a OXL file `tutorial_files/NeuroDiseaseKnet.oxl`
 
  6. The OXL file can be opened in the [Ondex Desktop](http://www.ondex.org) application or explored in the [KnetMiner](http://knetminer.rothamsted.ac.uk/HumanDisease/) web application
+ 
+ 
+ ## Documentation
+ 
+ We keep most of our documentation on this repository's [Wiki](https://github.com/Rothamsted/ondex-knet-builder/wiki) (note that there are many links on the right column in that page).
