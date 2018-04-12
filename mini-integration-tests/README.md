@@ -1,4 +1,4 @@
-# ONDEX Workflow Engine Tests
+# ONDEX Workflow Engine Tests
 
 This module performs integration tests running the workflow engine against test data and using test workflows. 
 
