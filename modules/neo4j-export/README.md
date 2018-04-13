@@ -10,9 +10,7 @@ Technically, this ONDEX tool is a simple wrapper that invokes rdf2neo using a co
 yield from the ONDEX RDF Exporter. 
 
 This is done by the [ondex2neo.sh](src/main/assembly/resources/ondex2neo.sh) entry point script, which passes the 
-[ONDEX-specific mappings](https://github.com/Rothamsted/ondex-knet-builder/tree/master/modules/neo4j-export/src/
-main/assembly/resources/ondex_config) to the  [rdf2neo.sh](https://github.com/Rothamsted/ondex-knet-builder/blob/
-master/modules/neo4j-export/src/main/assembly/resources/ondex2neo.sh) script provided by rdf2neo.
+[ONDEX-specific mappings](https://github.com/Rothamsted/ondex-knet-builder/tree/master/modules/neo4j-export/src/main/assembly/resources/ondex_config) to the  [rdf2neo.sh](https://github.com/Rothamsted/ondex-knet-builder/blob/master/modules/neo4j-export/src/main/assembly/resources/ondex2neo.sh) script provided by rdf2neo.
 
 **Note that technically this is not an ONDEX plug-in.** You cannot invoke this tool from within the [workflow 
 engine](https://github.com/Rothamsted/ondex-knet-builder/wiki/Downloads), because it requires to load its input 
