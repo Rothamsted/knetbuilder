@@ -1,8 +1,5 @@
 package net.sourceforge.ondex.parser.owl;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 import org.apache.jena.ontology.OntClass;
 
 import net.sourceforge.ondex.core.ONDEXGraph;

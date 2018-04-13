@@ -1,13 +1,8 @@
 package net.sourceforge.ondex.neo4j.export;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.Model;
@@ -17,7 +12,6 @@ import org.apache.jena.tdb.TDBFactory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.neo4j.driver.v1.Driver;
@@ -27,11 +21,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import info.marcobrandizi.rdfutils.jena.SparqlBasedTester;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.mini.test.MiniInvoker;
-import net.sourceforge.ondex.parser.oxl.Parser;
 import uk.ac.rothamsted.neo4j.utils.test.CypherTester;
 import uk.ac.rothamsted.rdf.neo4j.Rdf2NeoCli;
 
