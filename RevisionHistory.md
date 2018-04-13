@@ -16,12 +16,11 @@
     * Generic packages (ie, the generic parser library and a few [utilities](https://github.com/Rothamsted/ondex-base/tree/master/core/base/src/main/java/net/sourceforge/ondex/core/util))
       were migrated from the owl parser module to proper places.
     * Several mappings for common ontologies added.
-  * Internal components to index data based on Lucene  
-  	* All ONDEX code reviewed and migrated to Lucene 6.0.0.  
-  	* Berkeley support removed from the main build.
-  	* Bugfixing and Enhancements:  
-  	  * Text mining module (to support new PubMed XML, [#12](https://github.com/Rothamsted/ondex-knet-builder/issues/12), [#13](https://github.com/Rothamsted/ondex-knet-builder/issues/12)).
-  	  * New Concept Classes and and relation types added.
+  * All ONDEX code reviewed and migrated to Lucene 6.0.0.  
+  * Berkeley support removed from the main build.
+  * Bugfixing and Enhancements:  
+  	 * Text mining module (to support new PubMed XML, [#12](https://github.com/Rothamsted/ondex-knet-builder/issues/12), [#13](https://github.com/Rothamsted/ondex-knet-builder/issues/12)).
+  	 * New Concept Classes and and relation types added.
 
 ## v1.2
   * OWL parser
