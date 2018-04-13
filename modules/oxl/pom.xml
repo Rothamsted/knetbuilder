@@ -17,17 +17,14 @@
    <name>oxl</name>
 
    <dependencies>
+   
       <dependency>
          <groupId>org.codehaus.woodstox</groupId>
          <artifactId>woodstox-core-lgpl</artifactId>
-         <version>4.0.6</version>
-         <scope>provided</scope>
       </dependency>
       <dependency>
          <groupId>org.codehaus.woodstox</groupId>
          <artifactId>stax2-api</artifactId>
-         <version>3.0.1</version>
-         <scope>provided</scope>
       </dependency>
 
       <!-- ONDEX deps -->      
@@ -35,7 +32,6 @@
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>memory</artifactId>
          <version>${project.version}</version>
-         <scope>provided</scope>
       </dependency>
    </dependencies>
 </project>

@@ -75,13 +75,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.sourceforge.ondex.apps</groupId>
-			<artifactId>ondex-mini</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>net.sourceforge.ondex.modules</groupId>
 			<artifactId>oxl</artifactId>
 			<version>${project.version}</version>

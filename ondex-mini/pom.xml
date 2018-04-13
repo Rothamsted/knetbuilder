@@ -174,7 +174,11 @@
       </plugins>
    </build>
 
-   <dependencies><!-- Dependencies for maven-jar-plugin -->
+   <dependencies>
+   		<!-- 
+   			Dependencies for maven-jar-plugin
+   			TODO: what does this mean? 
+   		-->
       <dependency>
          <groupId>commons-lang</groupId>
          <artifactId>commons-lang</artifactId>
@@ -187,7 +191,6 @@
       </dependency>
 
 
-
       <!-- Dependencies required for compilation -->     
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
@@ -196,9 +199,11 @@
          <scope>compile</scope>
       </dependency>
 
+
       <!-- 
         Dependencies required for the lib directory, promoted from 'provided' 
 				to 'runtime' 
+				
 			  TODO: what does it mean?
 			-->      
 			<dependency>
@@ -225,6 +230,7 @@
          <type>zip</type>
          <scope>runtime</scope>
       </dependency>
+
 
       <!-- 
         bundled plugins - this is a hack to get them into the plugins/ directory. 
@@ -277,5 +283,24 @@
          <version>${project.version}</version>
          <scope>test</scope>
       </dependency>
+      
+			<!-- 
+				These are only here with the provided scope in order to make Maven set the correct build order, 
+				mini won't build otherwise (the first time you build a new version).
+			-->
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>rdf-export-2</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>neo4j-export</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      
    </dependencies>
 </project>

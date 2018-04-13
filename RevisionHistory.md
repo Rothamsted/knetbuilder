@@ -1,6 +1,9 @@
 # Revision History
 
-## v1.2.1-SNAPSHOT
+## 2.0.1-SNAPSHOT
+  * The next snapshot version
+
+## 2.0
   * Graph Databases and Linked Data support:
     * [New RDF Exporter](modules/rdf-export-2) plug-in.
     * [Tool to export ONDEX RDF to Neo4j](modules/neo4j-export).
