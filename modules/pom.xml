@@ -88,6 +88,8 @@
                <targetJdk>${java.version}</targetJdk>
             </configuration>
          </plugin>
+         
+         <!-- TODO: review, doesn't work on Java 10 anymore          
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
@@ -100,7 +102,7 @@
 						-link http://junit.sourceforge.net/javadoc/
                     </additionalparam>
             </configuration>
-         </plugin>
+         </plugin -->
       </plugins>
    </reporting>
 
@@ -155,6 +157,7 @@
             </executions>
          </plugin>
 
+         <!-- TODO: review, doesn't work on Java 10 anymore 
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
@@ -166,7 +169,7 @@
                      <goal>javadoc</goal>
                   </goals>
                </execution>
-            </executions>
+            </executions>            
             <configuration>
                <doclet>net.sourceforge.ondex.doclet.PluginDoclet</doclet>
                <useStandardDocletOptions>false</useStandardDocletOptions>
@@ -187,9 +190,7 @@
 						${project.build.directory}/libs4javadoc
             </additionalparam>
             </configuration>
-         </plugin>
-
-
+         </plugin -->
 
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
