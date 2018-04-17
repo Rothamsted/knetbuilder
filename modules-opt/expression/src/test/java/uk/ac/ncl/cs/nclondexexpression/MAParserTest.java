@@ -10,11 +10,11 @@ import java.util.Set;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import junit.framework.Assert;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.Attribute;
@@ -51,7 +51,7 @@ public class MAParserTest {
         ONDEXParser oxlParser = new Parser();
         oxlParser.setONDEXGraph(graph);
         ONDEXPluginArguments args = new ONDEXPluginArguments(oxlParser.getArgumentDefinitions());
-        args.addOption(FileArgumentDefinition.INPUT_FILE, "src/test/resources/ondex_metadata.xml");
+        args.addOption(FileArgumentDefinition.INPUT_FILE, "target/ext/data/xml/ondex_metadata.xml");
         oxlParser.setArguments(args);
         oxlParser.start();
     }
@@ -62,7 +62,7 @@ public class MAParserTest {
     }
 
     
-     @Test
+		@Test
      public void testParser() throws Exception {
 
         ONDEXParser parser = new MAParser();
@@ -82,6 +82,7 @@ public class MAParserTest {
 
         for (ONDEXConcept c: concepts) {
             Attribute gds = c.getAttribute(anExp);
+            @SuppressWarnings ( "unchecked" )
             Map<String,Integer> map = (Map<String,Integer>) gds.getValue();
             Assert.assertEquals("Incorrect number of expression values", 2, map.size());
         }

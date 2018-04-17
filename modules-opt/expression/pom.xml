@@ -30,12 +30,7 @@
          <scope>test</scope>
       </dependency>
 
-      <!-- Missing dependencies from "ondex.parent" -->      <!--
-    <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-    </dependency>
--->      <!-- Missing dependencies from "modules" -->      <dependency>
+		 <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>base</artifactId>
          <version>${project.version}</version>
@@ -51,7 +46,7 @@
          <version>${project.version}</version>
       </dependency>
 
-      <!-- Missing dependencies from "oxl" -->      <dependency>
+      <dependency>
          <groupId>com.thoughtworks.xstream</groupId>
          <artifactId>xstream</artifactId>
          <version>1.3.1</version>
@@ -77,10 +72,10 @@
          <groupId>de.mpg.mpiinf.csb</groupId>
          <artifactId>KPM</artifactId>
          <version>1.0</version>
-         <!-- changed from -SNAPSHOT -->
       </dependency>
 
-      <!--reinstating fastutil-->      <dependency>
+      <!--reinstating fastutil-->
+      <dependency>
          <groupId>it.unimi.dsi</groupId>
          <artifactId>fastutil</artifactId>
          <version>6.3</version>
@@ -96,7 +91,6 @@
       <dependency>
          <groupId>net.sourceforge.collections</groupId>
          <artifactId>collections-generic</artifactId>
-         <version>4.01</version>
       </dependency>
       <dependency>
          <groupId>concurrent</groupId>
@@ -144,4 +138,37 @@
          <version>3.2.6</version>
       </dependency>
    </dependencies>
+   
+   <build>
+   	<plugins>
+   	
+	  		<plugin>
+	  			<artifactId>maven-dependency-plugin</artifactId>	  			
+	  			<executions>
+	  				<execution>
+	  					<phase>generate-test-resources</phase>
+	  					<goals>
+	  						<goal>unpack</goal>
+	  					</goals>
+	  					<configuration>
+		          	<artifactItems>
+		          		<artifactItem>
+		          			<groupId>net.sourceforge.ondex</groupId>
+							    <artifactId>datadir</artifactId>
+							    <version>${project.version}</version>
+							    <classifier>data</classifier>
+							    <type>zip</type>
+							    <includes>
+								    data/xml/ondex_metadata.xml
+							    </includes>
+							    <outputDirectory>${project.build.directory}/ext</outputDirectory>							    
+		          		</artifactItem>
+		          	</artifactItems>  						
+	  					</configuration>
+	  				</execution>
+	  			</executions>
+	  		</plugin>
+	  		   	
+   	</plugins>
+   </build>
 </project>
