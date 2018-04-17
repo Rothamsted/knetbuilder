@@ -10,7 +10,6 @@
       <version>2.0.1-SNAPSHOT</version>
    </parent>
 
-   <groupId>net.sourceforge.ondex</groupId>
    <artifactId>datadir</artifactId>
    <packaging>pom</packaging>
 
