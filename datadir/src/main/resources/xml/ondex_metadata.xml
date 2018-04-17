@@ -2750,17 +2750,16 @@
 					<description>Kegg Ortholog Group of sequence similarity
 					</description>
 				</specialisationOf>
-			</cc>
+			</cc>			
 			<cc>
 				<id>Gene</id>
 				<fullname>Gene</fullname>
 				<description>Gene
 				</description>
 				<specialisationOf>
-					<id>ORF</id>
-					<fullname>ORF</fullname>
-					<description>Open reading frame
-					</description>
+					<id>NucleotideFeature</id>
+					<fullname>NucleotideFeature</fullname>
+					<description></description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -2770,10 +2769,9 @@
 					DNA or RNA, composed of exons, that codes for protein.
 				</description>
 				<specialisationOf>
-					<id>Gene</id>
-					<fullname>Gene</fullname>
-					<description>Gene
-					</description>
+					<id>NucleotideFeature</id>
+					<fullname>NucleotideFeature</fullname>
+					<description></description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -2848,10 +2846,9 @@
 				<fullname>Pseudogene</fullname>
 				<description></description>
 				<specialisationOf>
-					<id>ORF</id>
-					<fullname>ORF</fullname>
-					<description>Open reading frame
-					</description>
+					<id>NucleotideFeature</id>
+					<fullname>NucleotideFeature</fullname>
+					<description></description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -4025,15 +4022,24 @@
 				</specialisationOf>
 			</cc>
 			<cc>
+				<id>MeshTerm</id>
+				<fullname>MESH-related term</fullname>				
+				<description>A MESH-related term</description>
+				<specialisationOf>
+					<id>OntologyTerms</id>
+					<fullname>OntologyTerms</fullname>
+					<description></description>
+				</specialisationOf>
+			</cc>
+			<cc>
 				<id>MeshDescriptor</id>
 				<fullname>MeSH Descriptor</fullname>
 				<description>A descriptor record from MeSH
 				</description>
-				<specialisationOf> <!-- fixme: find a suitable parent type -->
-					<id>Thing</id>
-					<fullname>Thing</fullname>
-					<description>Thing
-					</description>
+				<specialisationOf> 
+					<id>MeshTerm</id>
+					<fullname>MESH-related term</fullname>				
+					<description>A MESH-related term</description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -4041,11 +4047,10 @@
 				<fullname>MeSH Qualifier</fullname>
 				<description>A qualifier from MeSH
 				</description>
-				<specialisationOf> <!-- fixme: find a suitable parent type -->
-					<id>Thing</id>
-					<fullname>Thing</fullname>
-					<description>Thing
-					</description>
+				<specialisationOf> 
+					<id>MeshTerm</id>
+					<fullname>MESH-related term</fullname>				
+					<description>A MESH-related term</description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -4053,11 +4058,10 @@
 				<fullname>MeSH Concept</fullname>
 				<description>A concept from MeSH
 				</description>
-				<specialisationOf> <!-- fixme: find a suitable parent type -->
-					<id>Thing</id>
-					<fullname>Thing</fullname>
-					<description>Thing
-					</description>
+				<specialisationOf> 
+					<id>MeshTerm</id>
+					<fullname>MESH-related term</fullname>				
+					<description>A MESH-related term</description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -4065,11 +4069,10 @@
 				<fullname>MeSH Semantic Type</fullname>
 				<description>A semantic type from MeSH
 				</description>
-				<specialisationOf> <!-- fixme: find a suitable parent type -->
-					<id>Thing</id>
-					<fullname>Thing</fullname>
-					<description>Thing
-					</description>
+				<specialisationOf> 
+					<id>MeshTerm</id>
+					<fullname>MESH-related term</fullname>				
+					<description>A MESH-related term</description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -4077,11 +4080,10 @@
 				<fullname>MeSH Pharmacological Action</fullname>
 				<description>A parmacological action from MeSH
 				</description>
-				<specialisationOf> <!-- fixme: find a suitable parent type -->
-					<id>Thing</id>
-					<fullname>Thing</fullname>
-					<description>Thing
-					</description>
+				<specialisationOf> 
+					<id>MeshTerm</id>
+					<fullname>MESH-related term</fullname>				
+					<description>A MESH-related term</description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -4089,11 +4091,10 @@
 				<fullname>MeSH Substance</fullname>
 				<description>A substance from MeSH
 				</description>
-				<specialisationOf> <!-- fixme: find a suitable parent type -->
-					<id>Thing</id>
-					<fullname>Thing</fullname>
-					<description>Thing
-					</description>
+				<specialisationOf> 
+					<id>MeshTerm</id>
+					<fullname>MESH-related term</fullname>				
+					<description>A MESH-related term</description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -4101,11 +4102,10 @@
 				<fullname>MeSH Supplementary Record</fullname>
 				<description>A supplementary record from MeSH
 				</description>
-				<specialisationOf> <!-- fixme: find a suitable parent type -->
-					<id>Thing</id>
-					<fullname>Thing</fullname>
-					<description>Thing
-					</description>
+				<specialisationOf> 
+					<id>MeshTerm</id>
+					<fullname>MESH-related term</fullname>				
+					<description>A MESH-related term</description>
 				</specialisationOf>
 			</cc>
 		</conceptclasses>
@@ -4295,16 +4295,6 @@
 				<isReflexive>false</isReflexive>
 				<isSymmetric>false</isSymmetric>
 				<isTransitive>false</isTransitive>
-				<specialisationOf>
-					<id>part_pass</id>
-					<fullname>participates_passively_in</fullname>
-					<description></description>
-					<inverseName>has_passive_participant</inverseName>
-					<isAntisymmetric>true</isAntisymmetric>
-					<isReflexive>false</isReflexive>
-					<isSymmetric>false</isSymmetric>
-					<isTransitive>false</isTransitive>
-				</specialisationOf>
 			</relation_type>
 			<relation_type>
 				<id>in_by</id>
@@ -5360,16 +5350,6 @@
 				<isReflexive>false</isReflexive>
 				<isSymmetric>false</isSymmetric>
 				<isTransitive>false</isTransitive>
-				<specialisationOf>
-					<id>part_pass</id>
-					<fullname>participates_passively_in</fullname>
-					<description></description>
-					<inverseName>has_passive_participant</inverseName>
-					<isAntisymmetric>true</isAntisymmetric>
-					<isReflexive>false</isReflexive>
-					<isSymmetric>false</isSymmetric>
-					<isTransitive>false</isTransitive>
-				</specialisationOf>
 			</relation_type>
 			<relation_type>
 				<id>is_part_of</id>
@@ -6110,6 +6090,16 @@
 					<isTransitive>false</isTransitive>
 				</specialisationOf>
 			</relation_type>
+			<relation_type>
+				<id>gives</id>
+				<fullname>gives</fullname>
+				<description></description>
+				<inverseName>given_by</inverseName>
+				<isAntisymmetric>true</isAntisymmetric>
+				<isReflexive>false</isReflexive>
+				<isSymmetric>false</isSymmetric>
+				<isTransitive>false</isTransitive>	
+			</relation_type>			
 			<relation_type>
 				<id>produces</id>
 				<fullname>produces</fullname>
