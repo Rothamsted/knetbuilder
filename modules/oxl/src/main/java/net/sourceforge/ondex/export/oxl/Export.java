@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
@@ -24,6 +25,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
+import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLOutputFactory2;
 import org.codehaus.stax2.XMLStreamWriter2;
 
@@ -135,6 +137,8 @@ public class Export extends ONDEXExport implements Monitorable {
 	 */
 	protected Map<String, String> annotations = null;
 
+	private Logger log = Logger.getLogger ( this.getClass () );
+	
 	static {
 		jaxbRegistry = OndexJAXBContextRegistry.instance();
 		jaxbRegistry.addClassBindings(ListHolder.class, ColorHolder.class,
@@ -561,73 +565,95 @@ public class Export extends ONDEXExport implements Monitorable {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void buildAttribute(XMLStreamWriter2 xmlw, Attribute attribute,
-			String tag) throws XMLStreamException, JAXBException {
-
-		// determines if we discover a new class that needs registering with
-		// JAXB
-		boolean rebuildMarshall = false;
-
-		if (!excludeGDSSet.contains(ALL)
-				&& !excludeGDSSet.contains(attribute.getOfType().getId())) {
-			xmlw.writeStartElement(tag);
-			// fixme: this may be in the wrong place
-
-			buildAttributeName(xmlw, attribute.getOfType(), nestedRule);
-
-			xmlw.writeStartElement(XMLTagNames.VALUE);
-
-			Set<Class> classes = null;
-
-			Object gdsValue = jaxbRegistry.applyHolder(attribute.getValue()
-					.getClass(), attribute.getValue());
-
-			if (gdsValue instanceof CollectionHolder) {
-				// wrap all elements in the collection recursively with holders
-				classes = processCollection2Holder((CollectionHolder) gdsValue);
-			} else if (gdsValue instanceof MapHolder) {
-				// wrap all elements in the map recursively with holders
-				classes = processMap2Holder((MapHolder) gdsValue);
-			} else if (gdsValue instanceof ListHolder) {
-				// wrap all elements in the list recursively with holders
-				classes = processList2Holder((ListHolder) gdsValue);
-			}
-
-			if (classes != null) {
-				for (Class c : classes) {
-					// go through classes inside data structure and check they
-					// are registered
-					if (!jaxbRegistry.isClassRegistered(c)) {
-						jaxbRegistry.addClassBindings(c);
-						rebuildMarshall = true;
+			String tag) throws XMLStreamException, JAXBException 
+	{
+		try 
+		{		
+			// determines if we discover a new class that needs registering with
+			// JAXB
+			boolean rebuildMarshall = false;
+	
+			if (!excludeGDSSet.contains(ALL)
+					&& !excludeGDSSet.contains(attribute.getOfType().getId())) {
+				xmlw.writeStartElement(tag);
+				// fixme: this may be in the wrong place
+	
+				buildAttributeName(xmlw, attribute.getOfType(), nestedRule);
+	
+				xmlw.writeStartElement(XMLTagNames.VALUE);
+	
+				Set<Class> classes = null;
+	
+				Object gdsValue = jaxbRegistry.applyHolder(attribute.getValue()
+						.getClass(), attribute.getValue());
+	
+				if (gdsValue instanceof CollectionHolder) {
+					// wrap all elements in the collection recursively with holders
+					classes = processCollection2Holder((CollectionHolder) gdsValue);
+				} else if (gdsValue instanceof MapHolder) {
+					// wrap all elements in the map recursively with holders
+					classes = processMap2Holder((MapHolder) gdsValue);
+				} else if (gdsValue instanceof ListHolder) {
+					// wrap all elements in the list recursively with holders
+					classes = processList2Holder((ListHolder) gdsValue);
+				}
+	
+				if (classes != null) {
+					for (Class c : classes) {
+						// go through classes inside data structure and check they
+						// are registered
+						if (!jaxbRegistry.isClassRegistered(c)) {
+							jaxbRegistry.addClassBindings(c);
+							rebuildMarshall = true;
+						}
 					}
 				}
+	
+				if (jaxbRegistry.hasAttributeName(attribute.getOfType())) {
+					jaxbRegistry.addAttribute(attribute.getOfType());
+				}
+	
+				Class<?> gdsClass = gdsValue.getClass();
+	
+				if (!jaxbRegistry.isClassRegistered(gdsValue.getClass())) {
+					jaxbRegistry.addClassBindings(gdsValue.getClass());
+					rebuildMarshall = true;
+				}
+	
+				xmlw.writeAttribute(XMLTagNames.JAVA_CLASS, gdsClass.getName());
+	
+				JAXBElement el = new JAXBElement(
+						new QName("", XMLTagNames.LITERAL), gdsClass, gdsValue);
+	
+				getMarshaller(rebuildMarshall).marshal(el, xmlw);
+				xmlw.writeEndElement(); // value
+	
+				boolean doindex = attribute.isDoIndex();
+				xmlw.writeStartElement(XMLTagNames.DOINDEX);
+				xmlw.writeCharacters(String.valueOf(doindex));
+				xmlw.writeEndElement();
+	
+				xmlw.writeEndElement(); // end tag gds concept
 			}
-
-			if (jaxbRegistry.hasAttributeName(attribute.getOfType())) {
-				jaxbRegistry.addAttribute(attribute.getOfType());
-			}
-
-			Class<?> gdsClass = gdsValue.getClass();
-
-			if (!jaxbRegistry.isClassRegistered(gdsValue.getClass())) {
-				jaxbRegistry.addClassBindings(gdsValue.getClass());
-				rebuildMarshall = true;
-			}
-
-			xmlw.writeAttribute(XMLTagNames.JAVA_CLASS, gdsClass.getName());
-
-			JAXBElement el = new JAXBElement(
-					new QName("", XMLTagNames.LITERAL), gdsClass, gdsValue);
-
-			getMarshaller(rebuildMarshall).marshal(el, xmlw);
-			xmlw.writeEndElement(); // value
-
-			boolean doindex = attribute.isDoIndex();
-			xmlw.writeStartElement(XMLTagNames.DOINDEX);
-			xmlw.writeCharacters(String.valueOf(doindex));
-			xmlw.writeEndElement();
-
-			xmlw.writeEndElement(); // end tag gds concept
+		}
+		catch ( Exception ex ) 
+		{
+			String typeStr = Optional.ofNullable ( attribute.getOfType () )
+			.map ( a -> String.format ( 
+					"%s (\"%s\", T[%s/%s])", 
+					a.getId (),
+					a.getFullname (),
+					a.getDataTypeAsString (), 
+					Optional.of ( a.getDataType () ).map ( Object::toString ).orElse ( "<null>" )
+				)
+			).orElse ( "<null>" );
+			
+			String valStr = Optional.ofNullable ( attribute.getValue () ).map ( Object::toString ).orElse ( "<null>" );
+			
+			String msg = String.format ( 
+				"Error while exporting attribute [%s] \"%s\": %s", typeStr, valStr, ex.getMessage () 
+			);
+			log.error ( msg, ex );
 		}
 	}
 
