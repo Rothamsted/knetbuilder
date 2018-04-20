@@ -61,6 +61,8 @@ import net.sourceforge.ondex.core.Unit;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.oxl.jaxb.CDATAStringAdapter;
+import net.sourceforge.ondex.oxl.jaxb.CDataLiteral;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
 
 /**
@@ -148,6 +150,7 @@ public class Export extends ONDEXExport implements Monitorable {
 		jaxbRegistry.addHolder(List.class, ListHolder.class);
 		jaxbRegistry.addHolder(Color.class, ColorHolder.class);
 		jaxbRegistry.addHolder(Collection.class, CollectionHolder.class);
+		jaxbRegistry.addClassBindings ( CDataLiteral.class );
 	}
 
 	public void setLegacyMode(boolean legacy) {
@@ -584,8 +587,11 @@ public class Export extends ONDEXExport implements Monitorable {
 	
 				Set<Class> classes = null;
 	
-				Object gdsValue = jaxbRegistry.applyHolder(attribute.getValue()
-						.getClass(), attribute.getValue());
+				Object attrValue = attribute.getValue ();
+				
+				Object gdsValue = jaxbRegistry.applyHolder(
+					attrValue.getClass(), attrValue
+				);
 	
 				if (gdsValue instanceof CollectionHolder) {
 					// wrap all elements in the collection recursively with holders
@@ -615,17 +621,32 @@ public class Export extends ONDEXExport implements Monitorable {
 	
 				Class<?> gdsClass = gdsValue.getClass();
 	
-				if (!jaxbRegistry.isClassRegistered(gdsValue.getClass())) {
-					jaxbRegistry.addClassBindings(gdsValue.getClass());
+				if (!jaxbRegistry.isClassRegistered( gdsClass )) {
+					jaxbRegistry.addClassBindings( gdsClass );
 					rebuildMarshall = true;
 				}
 	
 				xmlw.writeAttribute(XMLTagNames.JAVA_CLASS, gdsClass.getName());
-	
-				JAXBElement el = new JAXBElement(
-						new QName("", XMLTagNames.LITERAL), gdsClass, gdsValue);
-	
-				getMarshaller(rebuildMarshall).marshal(el, xmlw);
+				Marshaller marshaller = getMarshaller ( rebuildMarshall );
+				
+				if ( attrValue instanceof String || attrValue instanceof Character  ) {
+					// In these cases we need a CDATA wrapper
+					log.info ( "CDATA for " + attribute.getOfType ().getFullname () );
+					// marshaller.marshal ( new CDataLiteral ( gdsValue.toString () ), xmlw );
+					xmlw.writeStartElement ( XMLTagNames.LITERAL );
+					xmlw.writeCData ( gdsValue.toString () );
+					xmlw.writeEndElement ();
+				}
+				else
+				{
+					// else, go with the usual marshalling
+					JAXBElement el = new JAXBElement(
+						new QName("", XMLTagNames.LITERAL), gdsClass, 
+						gdsValue 
+					);
+					marshaller.marshal ( el, xmlw );
+				}
+				
 				xmlw.writeEndElement(); // value
 	
 				boolean doindex = attribute.isDoIndex();
@@ -651,9 +672,11 @@ public class Export extends ONDEXExport implements Monitorable {
 			String valStr = Optional.ofNullable ( attribute.getValue () ).map ( Object::toString ).orElse ( "<null>" );
 			
 			String msg = String.format ( 
-				"Error while exporting attribute [%s] \"%s\": %s", typeStr, valStr, ex.getMessage () 
+				"Error while exporting attribute \"%s\":[%s], message: %s", valStr, typeStr, ex.getMessage () 
 			);
 			log.error ( msg, ex );
+			
+			throw ex;
 		}
 	}
 
