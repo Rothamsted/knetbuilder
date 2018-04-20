@@ -150,7 +150,6 @@ public class Export extends ONDEXExport implements Monitorable {
 		jaxbRegistry.addHolder(List.class, ListHolder.class);
 		jaxbRegistry.addHolder(Color.class, ColorHolder.class);
 		jaxbRegistry.addHolder(Collection.class, CollectionHolder.class);
-		jaxbRegistry.addClassBindings ( CDataLiteral.class );
 	}
 
 	public void setLegacyMode(boolean legacy) {
@@ -631,8 +630,6 @@ public class Export extends ONDEXExport implements Monitorable {
 				
 				if ( attrValue instanceof String || attrValue instanceof Character  ) {
 					// In these cases we need a CDATA wrapper
-					log.info ( "CDATA for " + attribute.getOfType ().getFullname () );
-					// marshaller.marshal ( new CDataLiteral ( gdsValue.toString () ), xmlw );
 					xmlw.writeStartElement ( XMLTagNames.LITERAL );
 					xmlw.writeCData ( gdsValue.toString () );
 					xmlw.writeEndElement ();
