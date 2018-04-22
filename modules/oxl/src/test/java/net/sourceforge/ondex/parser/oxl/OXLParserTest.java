@@ -37,7 +37,7 @@ import net.sourceforge.ondex.export.oxl.Export;
 /**
  * @author hindlem
  */
-public class OXLParser {
+public class OXLParserTest {
 
     private ONDEXGraph og;
     private File testfile;

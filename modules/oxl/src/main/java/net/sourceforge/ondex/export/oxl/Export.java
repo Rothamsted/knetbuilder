@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collection;
@@ -34,6 +35,7 @@ import com.ctc.wstx.io.CharsetNames;
 import com.ctc.wstx.stax.WstxOutputFactory;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -61,8 +63,6 @@ import net.sourceforge.ondex.core.Unit;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
-import net.sourceforge.ondex.oxl.jaxb.CDATAStringAdapter;
-import net.sourceforge.ondex.oxl.jaxb.CDataLiteral;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
 
 /**
@@ -628,13 +628,15 @@ public class Export extends ONDEXExport implements Monitorable {
 				xmlw.writeAttribute(XMLTagNames.JAVA_CLASS, gdsClass.getName());
 				Marshaller marshaller = getMarshaller ( rebuildMarshall );
 				
-				if ( attrValue instanceof String || attrValue instanceof Character  ) {
-					// In these cases we need a CDATA wrapper
-					xmlw.writeStartElement ( XMLTagNames.LITERAL );
-					xmlw.writeCData ( gdsValue.toString () );
-					xmlw.writeEndElement ();
-				}
-				else
+// TODO: remove				
+//				if ( attrValue instanceof String || attrValue instanceof Character  ) {
+//					// In these cases we need a CDATA wrapper
+//					xmlw.writeStartElement ( XMLTagNames.LITERAL );
+//					xmlw.writeCData ( gdsValue.toString () );
+//					xmlw.writeCharacters ( "" );
+//					xmlw.writeEndElement ();
+//				}
+//				else
 				{
 					// else, go with the usual marshalling
 					JAXBElement el = new JAXBElement(
@@ -1829,8 +1831,8 @@ public class Export extends ONDEXExport implements Monitorable {
 		setOptionalArguments();
 
 		WstxOutputFactory xmlw = getXMLFactory();
-
 		XMLStreamWriter2 xmlWriteStream = getXMLStreamWriter2(xmlw);
+		xmlWriteStream = new CDATAWriterFilter ( xmlWriteStream );
 
 		fireEventOccurred(new GeneralOutputEvent("Ready to Export.",
 				"[Export - start]"));
@@ -2167,6 +2169,7 @@ public class Export extends ONDEXExport implements Monitorable {
 
 		if (fileName.toLowerCase().endsWith(".oxl")) {
 			// override packed option for .oxl
+			// TODO: WHY!?!?!?! 
 			packed = true;
 		} else if (packed && !fileName.toLowerCase().endsWith(".gz")) {
 			if (!fileName.toLowerCase().endsWith(".xml"))
@@ -2243,5 +2246,59 @@ public class Export extends ONDEXExport implements Monitorable {
 	@Override
 	public void setCancelled(boolean c) {
 		cancelled = c;
+	}
+	
+
+	/**
+	 * Wraps with zip = true
+	 */
+	public static void exportOXL ( ONDEXGraph graph, String path ) {
+		exportOXL ( graph, path, true );
+	}
+
+	/**
+	 * Convenience exporter invoker. Remember: zip is overridden and set to true if path ends with .oxl.
+	 */
+	public static void exportOXL ( ONDEXGraph graph, String path, boolean zip )
+	{
+    try
+		{
+			File oxlf = new File ( path );
+			Export plugin = new Export();
+
+			ONDEXPluginArguments args = new ONDEXPluginArguments ( plugin.getArgumentDefinitions() );
+			args.setOption ( FileArgumentDefinition.EXPORT_FILE, oxlf.getAbsolutePath() );
+			args.setOption ( ArgumentNames.EXPORT_AS_ZIP_FILE, zip );
+			plugin.setONDEXGraph ( graph );
+			plugin.setArguments ( args );
+
+			plugin.start();
+		}
+		catch ( InvalidPluginArgumentException ex ) {
+			throw new IllegalArgumentException ( String.format (  
+				"Internal error while doing OXL export to '%s': %s", path, ex.getMessage () ), 
+				ex
+			);
+		}
+		catch ( IOException ex )
+		{
+			throw new UncheckedIOException ( String.format (  
+				"I/O error while doing OXL export to '%s': %s", path, ex.getMessage () ), 
+				ex
+			);
+		}
+		catch ( XMLStreamException ex )
+		{
+			throw new RuntimeException ( String.format (  
+				"XML processing error while doing OXL export to '%s': %s", path, ex.getMessage () ), 
+				ex
+			);
+		}
+		catch ( JAXBException ex ) {
+			throw new RuntimeException ( String.format (  
+				"JAXB processing error while doing OXL export to '%s': %s", path, ex.getMessage () ), 
+				ex
+			);
+		}		
 	}
 }

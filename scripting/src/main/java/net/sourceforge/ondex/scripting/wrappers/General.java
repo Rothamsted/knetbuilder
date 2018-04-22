@@ -47,7 +47,7 @@ public class General {
     }
 
     public static void saveGraph(ONDEXGraph graph, String filename) {
-        //new OXLExport(graph, new File(filename));
+        //new OXLExportTest(graph, new File(filename));
     }
 
     /**
@@ -220,9 +220,9 @@ public class General {
         }
     }
 
-    /*private static class OXLExport extends Export {
+    /*private static class OXLExportTest extends Export {
 
-         public OXLExport(ONDEXGraph aog, File file) {
+         public OXLExportTest(ONDEXGraph aog, File file) {
 
              XMLOutputFactory2 xmlOutput = (XMLOutputFactory2) XMLOutputFactory2
                      .newInstance();

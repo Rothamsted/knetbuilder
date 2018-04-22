@@ -3,11 +3,13 @@
  */
 package net.sourceforge.ondex.export.oxl;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +17,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -28,16 +35,21 @@ import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.MetaDataFactory;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
  * @author hindlem
  */
-public class OXLExport {
+public class OXLExportTest 
+{
+		private Logger log = Logger.getLogger ( this.getClass () );
 
     @Test
     public void testListGDSCompatibility() throws Throwable {
@@ -496,4 +508,57 @@ public class OXLExport {
         }
     }
 
+    @Test
+    public void testCData () throws FileNotFoundException, IOException
+    {
+    		log.info ( "Testting CDATA exports on plain strings" );
+    		
+    		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
+    		
+    		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
+    		
+    		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
+    		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
+    		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
+    		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
+    		
+    		MetaDataFactory gfact = g.getMetaData().getFactory();
+      AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
+      String val = "A <b>test attribute</b> value";
+      c.createAttribute ( an, val, false);
+      
+      String oxlPath = "target/test_cdata.xml";
+      Export.exportOXL ( g, oxlPath, false );
+      
+      // verify the XML
+      String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
+      Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
+    }
+    
+    @Test
+    public void testCollectionsCData () throws FileNotFoundException, IOException
+    {
+    		log.info ( "Testting CDATA exports on collections" );
+    		
+    		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
+    		
+    		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
+    		
+    		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
+    		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
+    		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
+    		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
+    		
+    		MetaDataFactory gfact = g.getMetaData().getFactory();
+      AttributeName an = gfact.createAttributeName ( "testAttr", List.class );
+      String val = "A <b>test attribute</b> value";
+      c.createAttribute ( an, Stream.of ( val ).collect ( Collectors.toList () ), false);
+      
+      String oxlPath = "target/test_cdata_list.xml";
+      Export.exportOXL ( g, oxlPath, false );
+      
+      // verify the XML
+      String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
+      Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
+    }    
 }

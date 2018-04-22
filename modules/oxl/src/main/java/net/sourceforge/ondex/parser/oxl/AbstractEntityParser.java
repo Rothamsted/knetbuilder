@@ -32,7 +32,6 @@ import net.sourceforge.ondex.export.oxl.RefManager;
 import net.sourceforge.ondex.export.oxl.SetHolder;
 import net.sourceforge.ondex.export.oxl.XMLTagNames;
 import net.sourceforge.ondex.marshal.Marshaller;
-import net.sourceforge.ondex.oxl.jaxb.CDATAStringAdapter;
 import net.sourceforge.ondex.tools.data.ChemicalStructure;
 import net.sourceforge.ondex.tools.data.ChemicalStructureHolder;
 import net.sourceforge.ondex.tools.data.Protein3dStructure;

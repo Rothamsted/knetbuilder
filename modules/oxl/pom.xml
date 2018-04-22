@@ -1,37 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <artifactId>modules</artifactId>
-      <groupId>net.sourceforge.ondex</groupId>
-      <version>2.0.1-SNAPSHOT</version>
-   </parent>
+	<parent>
+		<artifactId>modules</artifactId>
+		<groupId>net.sourceforge.ondex</groupId>
+		<version>2.0.1-SNAPSHOT</version>
+	</parent>
 
-   <groupId>net.sourceforge.ondex.modules</groupId>
-   <artifactId>oxl</artifactId>
-   <packaging>jar</packaging>
+	<groupId>net.sourceforge.ondex.modules</groupId>
+	<artifactId>oxl</artifactId>
+	<packaging>jar</packaging>
 
-   <name>oxl</name>
+	<name>oxl</name>
 
-   <dependencies>
-   
-      <dependency>
-         <groupId>org.codehaus.woodstox</groupId>
-         <artifactId>woodstox-core-lgpl</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.codehaus.woodstox</groupId>
-         <artifactId>stax2-api</artifactId>
-      </dependency>
+	<dependencies>
 
-      <!-- ONDEX deps -->      
-      <dependency>
-         <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>memory</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-   </dependencies>
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>woodstox-core-lgpl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>stax2-api</artifactId>
+		</dependency>
+
+		<!-- ONDEX deps -->
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>memory</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jutils</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<properties>
+						<property>
+							<!-- Prints out spaces and test name before/after every test method and automatically -->
+							<name>listener</name>
+							<value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
+						</property>
+					</properties>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

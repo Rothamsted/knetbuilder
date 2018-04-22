@@ -1,7 +1,13 @@
 /**
  * This is for documentation on a package level.
  */
-@AnnotationForRuntime
+//@AnnotationForRuntime
+//@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters
+//({
+//	@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter ( 
+//		type = java.lang.String.class, value = net.sourceforge.ondex.oxl.jaxb.CDATAStringAdapter.class 
+//	)
+//})
 package net.sourceforge.ondex.export.oxl;
 
 import java.lang.annotation.Retention;

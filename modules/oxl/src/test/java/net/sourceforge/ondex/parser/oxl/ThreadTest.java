@@ -4,7 +4,9 @@ import static junit.framework.Assert.assertEquals;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import junit.framework.AssertionFailedError;
@@ -28,12 +30,12 @@ public class ThreadTest {
 	}
 
 	@Test
-	public void parsePoplarMany() throws PluginConfigurationException {
+	public void parsePoplarMany() throws PluginConfigurationException, InterruptedException {
 		parseManyAndCountThreads("Poplar_DEBUG_Feb2010.xml.gz", 4);
 	}
 
 	@Test
-	public void parseGrameneMany() throws PluginConfigurationException {
+	public void parseGrameneMany() throws PluginConfigurationException, InterruptedException {
 		parseManyAndCountThreads("GrameneTraitOntology.xml.gz", 4);
 	}
 
@@ -93,7 +95,7 @@ public class ThreadTest {
 	}
 
 	public void parseManyAndCountThreads(String resource, int count)
-			throws PluginConfigurationException {
+			throws PluginConfigurationException, InterruptedException {
 
 		System.out.println("Before OXL parser");
 
@@ -117,42 +119,33 @@ public class ThreadTest {
 			oxl.setONDEXGraph(theGraph);
 			oxl.start();
 		}
-
+		
 		// close all compressor threads and wait until finished
 		if (AbstractAttribute.COMPRESSOR != null) {
 			System.out.println("Closing all compressor threads");
 			AbstractAttribute.COMPRESSOR.shutdown();
 			while (!AbstractAttribute.COMPRESSOR.isTerminated()) {
 				synchronized (this) {
-					try {
-						this.wait(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					this.wait(10);
 				}
 			}
 			AbstractAttribute.COMPRESSOR = null;
 		}
 
+		Thread.sleep ( 3000 );
+		
 		System.out.println("After OXL parser");
-
+		
 		Thread[] threadsAfter = new Thread[Thread.activeCount()];
 		Thread.enumerate(threadsAfter);
+		
 		// for (Thread thread : threadsAfter) {
 		// System.out.println(thread.getName());
 		// thread.dumpStack();
 		// }
-
+		
 		// fixme: refine check to fail if more than 1 thread is spawned
-		try {
-			assertEquals("No threads created or destroyed",
-					threadsBefore.length, threadsAfter.length);
-		} catch (AssertionFailedError e) {
-			System.out.println("threads before: "
-					+ Arrays.asList(threadsBefore));
-			System.out.println("threads after: " + Arrays.asList(threadsAfter));
-			throw e;
-		}
+		Assert.assertEquals ( "No threads created or destroyed", threadsBefore.length, threadsAfter.length );
 	}
 
 	private String guessFileForResourceUsingMagicAndHope(String resource) {
@@ -162,6 +155,5 @@ public class ThreadTest {
 		} else {
 			throw new Error("Unable to file-ify resource URL: " + url);
 		}
-	}
-
+	}	
 }

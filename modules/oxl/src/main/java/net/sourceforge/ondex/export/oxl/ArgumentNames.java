@@ -34,7 +34,8 @@ public final class ArgumentNames {
 	public final static String EXPORT_AS_ZIP_FILE = "GZip";
 
 	public final static String EXPORT_AS_ZIP_FILE_DESC = "When this option is set the file wil be exported as a zip file, this is the preffered option as it reduces disc space requirements by a lot."
-			+ "\nFor example a file of 1.4 GigaByte is often compressed to a file of 50 MegaByte or less!!";
+			+ "\nFor example a file of 1.4 GigaByte is often compressed to a file of 50 MegaByte or less!!\n"
+			+ "\nWARNING! This is set to true if your export file extension is .oxl";
 
 	public final static String PRETTY_PRINTING = "pretty";
 
