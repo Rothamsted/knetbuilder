@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import net.sourceforge.ondex.event.ONDEXEvent;
 import net.sourceforge.ondex.event.ONDEXListener;
+import net.sourceforge.ondex.event.type.EventType;
 
 /**
  * 
@@ -33,10 +34,14 @@ public class ONDEXLogger implements ONDEXListener {
 
 		Logger logger = Logger.getLogger(e.getSource().getClass());
 
-		String mesg = e.getEventType().getDescription() + " "
-				+ e.getEventType().getCompleteMessage();
+		EventType et = e.getEventType ();
+		
+		StringBuilder msg = new StringBuilder ( et.getDescription () );
+		if ( msg.length () > 0 ) msg.append ( ' ' );
+		msg.append ( et.getCompleteMessage() );
+		
 
-		logger.log(e.getEventType().getLog4jLevel(), mesg);
+		logger.log ( et.getLog4jLevel(), msg.toString () );
 	}
 
 	/**

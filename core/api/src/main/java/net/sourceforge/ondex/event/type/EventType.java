@@ -10,7 +10,7 @@ import org.apache.log4j.Level;
 public abstract class EventType {
 
     // stores description
-    protected String desc = "A general event occurred.";
+    protected String desc = "";
 
     // specific message of this event type
     private final String message;

@@ -1,10 +1,14 @@
 package net.sourceforge.ondex.core.util.prototypes;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.util.CachedGraphWrapper;
 
 /**
  * These prototypes are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 
  * with the necessary parameters. They're also designed to be used with IoC frameworks like Spring.
+ * 
+ * Use {@link CachedGraphWrapper} as a convenience wrapper to create ONDEX entities
+ * from these constants.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>6 Jun 2017</dd></dl>

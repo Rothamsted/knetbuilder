@@ -18,6 +18,6 @@ public class GeneralOutputEvent extends EventType {
 	 */
 	public GeneralOutputEvent(String message, String extension) {
 		super(message, extension);
-		super.desc = "Output of some information.";
+		super.desc = "";
 	}
 }
