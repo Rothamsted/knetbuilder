@@ -1,14 +1,20 @@
 package net.sourceforge.ondex.oxl.jaxb;
 
-import java.util.Set;
-
 import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.stax2.XMLStreamWriter2;
 import org.codehaus.stax2.util.StreamWriter2Delegate;
 
 /**
- * TODO: REMOVE
+ * <p>a wrapper of {@link XMLStreamWriter2} that overrides {@link #writeCharacters(String)}
+ * and {@link #writeCharacters(char[], int, int)} methods, so that {@link #writeCData(String)} and
+ * {@link #writeCData(char[], int, int)} is invoked before invoking the delegate writing method, i.e., 
+ * wraps the writing of node text with XML's CDATA blocks.</p>
+ * 
+ * <p>This avoids issues like text containing HTML.</p>
+ * 
+ * <p>We trigger the CDATA-wrapping even when the input text contains '\n'. 
+ * This is to face a <a href = 'https://stackoverflow.com/questions/48603942'>bug in JDK &gt;8u151</a>.</p>
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>22 Apr 2018</dd></dl>
@@ -16,7 +22,7 @@ import org.codehaus.stax2.util.StreamWriter2Delegate;
  */
 public class CDATAWriterFilter extends StreamWriter2Delegate 
 {
-	final static char[] ESCAPE_CHARS = { '<', '>', '&' };
+	final static char[] ESCAPE_CHARS = { '<', '>', '&', '\n' };
 	
 	public CDATAWriterFilter ( XMLStreamWriter2 parent ) {
 		super ( parent );
@@ -43,13 +49,17 @@ public class CDATAWriterFilter extends StreamWriter2Delegate
 		if ( !( chars == null || chars.length == 0 ) )
 		{
 			int end = start + len;
+			// we don't care about out-of-bound cases, the delegate will do it 
 			if ( end < chars.length )
 				for ( int i = start; i < end; i++ )
+				{
+					char currentChar = chars [ i ];
 					for ( char escChar: ESCAPE_CHARS )
-						if ( chars [ i ] == escChar ) {
+						if ( currentChar == escChar ) {
 							this.writeCData ( chars, start, end );
 							return;
 						}
+			}
 		}
 		super.writeCharacters ( chars, start, len );
 	}
