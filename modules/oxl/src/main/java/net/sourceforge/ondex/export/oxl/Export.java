@@ -33,6 +33,9 @@ import org.codehaus.stax2.XMLStreamWriter2;
 import com.ctc.wstx.api.WstxOutputProperties;
 import com.ctc.wstx.io.CharsetNames;
 import com.ctc.wstx.stax.WstxOutputFactory;
+import com.sun.xml.bind.marshaller.NioEscapeHandler;
+import com.sun.xml.bind.marshaller.DumbEscapeHandler;
+import com.sun.xml.bind.marshaller.MinimumEscapeHandler;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -63,6 +66,7 @@ import net.sourceforge.ondex.core.Unit;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.oxl.jaxb.CDATAWriterFilter;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
 
 /**
@@ -175,18 +179,20 @@ public class Export extends ONDEXExport implements Monitorable {
 
 	/**
 	 * @return the marshaller (will create if not initialized)
-	 * @throws JAXBException
-	 *             error createing Marshaller
+	 * @throws JAXBException in case of problems with marshaller instantiation
 	 */
 	public Marshaller getMarshaller(boolean rebuild) throws JAXBException {
 		if (jaxbMarshaller == null || rebuild) {
 			if (graph != null)
-				jaxbMarshaller = jaxbRegistry.createMarshaller(graph
-						.getMetaData());
+				jaxbMarshaller = jaxbRegistry.createMarshaller(graph.getMetaData());
 			else
 				jaxbMarshaller = jaxbRegistry.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+//			jaxbMarshaller.setProperty(
+//				"com.sun.xml.bind.characterEscapeHandler",
+//				DumbEscapeHandler.theInstance 
+//			);
 		}
 		return jaxbMarshaller;
 	}
@@ -2250,16 +2256,16 @@ public class Export extends ONDEXExport implements Monitorable {
 	
 
 	/**
-	 * Wraps with zip = true
+	 * Wraps with zip = true, prettyPrint = true
 	 */
 	public static void exportOXL ( ONDEXGraph graph, String path ) {
-		exportOXL ( graph, path, true );
+		exportOXL ( graph, path, true, true );
 	}
 
 	/**
 	 * Convenience exporter invoker. Remember: zip is overridden and set to true if path ends with .oxl.
 	 */
-	public static void exportOXL ( ONDEXGraph graph, String path, boolean zip )
+	public static void exportOXL ( ONDEXGraph graph, String path, boolean zip, boolean prettyPrint )
 	{
     try
 		{
@@ -2267,8 +2273,11 @@ public class Export extends ONDEXExport implements Monitorable {
 			Export plugin = new Export();
 
 			ONDEXPluginArguments args = new ONDEXPluginArguments ( plugin.getArgumentDefinitions() );
+			
 			args.setOption ( FileArgumentDefinition.EXPORT_FILE, oxlf.getAbsolutePath() );
 			args.setOption ( ArgumentNames.EXPORT_AS_ZIP_FILE, zip );
+			args.setOption ( ArgumentNames.PRETTY_PRINTING, prettyPrint );
+			
 			plugin.setONDEXGraph ( graph );
 			plugin.setArguments ( args );
 

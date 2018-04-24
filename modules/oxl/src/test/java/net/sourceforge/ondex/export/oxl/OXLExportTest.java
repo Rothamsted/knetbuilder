@@ -26,6 +26,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -528,11 +529,15 @@ public class OXLExportTest
       c.createAttribute ( an, val, false);
       
       String oxlPath = "target/test_cdata.xml";
-      Export.exportOXL ( g, oxlPath, false );
+      Export.exportOXL ( g, oxlPath, false, true );
+      
+      g = Parser.loadOXL ( oxlPath );
+      c = g.getConcepts ().iterator ().next ();
+      Assert.assertEquals ( "Wrong reloaded attr value!", val, c.getAttribute ( an ).getValue () );
       
       // verify the XML
-      String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
-      Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
+      //String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
+      //Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
     }
     
     @Test
@@ -555,10 +560,18 @@ public class OXLExportTest
       c.createAttribute ( an, Stream.of ( val ).collect ( Collectors.toList () ), false);
       
       String oxlPath = "target/test_cdata_list.xml";
-      Export.exportOXL ( g, oxlPath, false );
+      Export.exportOXL ( g, oxlPath, false, true );
+      
+      g = Parser.loadOXL ( oxlPath );
+      c = g.getConcepts ().iterator ().next ();
+      Assert.assertEquals ( 
+      		"Wrong reloaded attr value!", 
+      		val, 
+      		((List<Object>) c.getAttribute ( an ).getValue ()).get ( 0 ) 
+      	);
       
       // verify the XML
-      String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
-      Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
+      //String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
+      //Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
     }    
 }

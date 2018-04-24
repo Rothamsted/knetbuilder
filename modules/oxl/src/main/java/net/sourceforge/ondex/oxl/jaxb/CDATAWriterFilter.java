@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.export.oxl;
+package net.sourceforge.ondex.oxl.jaxb;
 
 import java.util.Set;
 
