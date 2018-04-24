@@ -33,9 +33,6 @@ import org.codehaus.stax2.XMLStreamWriter2;
 import com.ctc.wstx.api.WstxOutputProperties;
 import com.ctc.wstx.io.CharsetNames;
 import com.ctc.wstx.stax.WstxOutputFactory;
-import com.sun.xml.bind.marshaller.NioEscapeHandler;
-import com.sun.xml.bind.marshaller.DumbEscapeHandler;
-import com.sun.xml.bind.marshaller.MinimumEscapeHandler;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -189,10 +186,12 @@ public class Export extends ONDEXExport implements Monitorable {
 				jaxbMarshaller = jaxbRegistry.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-//			jaxbMarshaller.setProperty(
-//				"com.sun.xml.bind.characterEscapeHandler",
-//				DumbEscapeHandler.theInstance 
-//			);
+			// TODO: remove? We've had JDK-related problems with PMID:28450392 (\n in the title attribute, see 
+			// https://stackoverflow.com/questions/48603942), so we've been trying several escapers.			
+			// jaxbMarshaller.setProperty(
+			//   "com.sun.xml.bind.characterEscapeHandler",
+			//		 DumbEscapeHandler.theInstance 
+			//	 );
 		}
 		return jaxbMarshaller;
 	}

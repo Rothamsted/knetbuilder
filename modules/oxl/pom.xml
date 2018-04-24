@@ -26,7 +26,8 @@
 			<artifactId>stax2-api</artifactId>
 		</dependency>
 
-		<dependency>
+		<!-- This is the old Oracle JDK implementation of JAXB, it has made invisible in recent JDK versions (>8) -->
+		<!--  dependency>
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-core</artifactId>
 		</dependency>
@@ -34,13 +35,14 @@
 		<dependency>
 		  <groupId>com.sun.xml.bind</groupId>
 		  <artifactId>jaxb-impl</artifactId>
-		</dependency>
+		</dependency -->
 		
-		<!--  dependency>
+		<!-- TODO: remove, we've been experimenting with this, to fix escaping issues (see Export.getMarshaller()) -->
+		<dependency>
 		  <groupId>org.eclipse.persistence</groupId>
 		  <artifactId>org.eclipse.persistence.moxy</artifactId>
 		  <version>2.7.1</version>
-		</dependency -->
+		</dependency>
 
 		<!-- ONDEX deps -->
 		<dependency>

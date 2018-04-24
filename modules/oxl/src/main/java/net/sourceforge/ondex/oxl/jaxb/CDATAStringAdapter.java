@@ -1,3 +1,4 @@
+//TODO: Remove, we do this via CDATAWriterFilter
 //package net.sourceforge.ondex.oxl.jaxb;
 //
 //import javax.xml.bind.annotation.adapters.XmlAdapter;

@@ -1,3 +1,4 @@
+// TODO: remove. This is to adapt NioEscapeHandler in JAXB out-of-the-box implementation to MOX flavour of JAXB.
 //package net.sourceforge.ondex.oxl.jaxb;
 //
 //import java.io.IOException;
