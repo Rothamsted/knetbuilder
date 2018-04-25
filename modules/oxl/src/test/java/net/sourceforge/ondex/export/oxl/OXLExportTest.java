@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,10 +22,8 @@ import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -569,6 +566,37 @@ public class OXLExportTest
       		val, 
       		((List<Object>) c.getAttribute ( an ).getValue ()).get ( 0 ) 
       	);
+      
+      // verify the XML
+      //String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
+      //Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
+    } 
+    
+    @Test
+    public void testNewLineJaxbBug () throws FileNotFoundException, IOException
+    {
+    		log.info ( "Testting CDATA exports on plain strings" );
+    		
+    		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
+    		
+    		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
+    		
+    		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
+    		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
+    		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
+    		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
+    		
+    		MetaDataFactory gfact = g.getMetaData().getFactory();
+      AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
+      String val = "A test\nattribute value";
+      c.createAttribute ( an, val, false);
+      
+      String oxlPath = "target/test_newline.xml";
+      Export.exportOXL ( g, oxlPath, false, true );
+      
+      g = Parser.loadOXL ( oxlPath );
+      c = g.getConcepts ().iterator ().next ();
+      Assert.assertEquals ( "Wrong reloaded attr value!", val, c.getAttribute ( an ).getValue () );
       
       // verify the XML
       //String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );

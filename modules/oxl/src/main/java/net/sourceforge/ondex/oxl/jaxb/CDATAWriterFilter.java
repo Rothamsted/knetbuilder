@@ -22,7 +22,7 @@ import org.codehaus.stax2.util.StreamWriter2Delegate;
  */
 public class CDATAWriterFilter extends StreamWriter2Delegate 
 {
-	final static char[] ESCAPE_CHARS = { '<', '>', '&', '\n' };
+	public final static char[] ESCAPE_CHARS = { '<', '>', '&' };
 	
 	public CDATAWriterFilter ( XMLStreamWriter2 parent ) {
 		super ( parent );

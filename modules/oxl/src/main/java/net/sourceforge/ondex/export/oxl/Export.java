@@ -64,6 +64,7 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
 import net.sourceforge.ondex.oxl.jaxb.CDATAWriterFilter;
+import net.sourceforge.ondex.oxl.jaxb.NewLineFixWriterFilter;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
 
 /**
@@ -631,25 +632,14 @@ public class Export extends ONDEXExport implements Monitorable {
 				}
 	
 				xmlw.writeAttribute(XMLTagNames.JAVA_CLASS, gdsClass.getName());
-				Marshaller marshaller = getMarshaller ( rebuildMarshall );
 				
-// TODO: remove				
-//				if ( attrValue instanceof String || attrValue instanceof Character  ) {
-//					// In these cases we need a CDATA wrapper
-//					xmlw.writeStartElement ( XMLTagNames.LITERAL );
-//					xmlw.writeCData ( gdsValue.toString () );
-//					xmlw.writeCharacters ( "" );
-//					xmlw.writeEndElement ();
-//				}
-//				else
-				{
-					// else, go with the usual marshalling
-					JAXBElement el = new JAXBElement(
-						new QName("", XMLTagNames.LITERAL), gdsClass, 
-						gdsValue 
-					);
-					marshaller.marshal ( el, xmlw );
-				}
+				Marshaller marshaller = getMarshaller ( rebuildMarshall );
+				JAXBElement el = new JAXBElement(
+					new QName("", XMLTagNames.LITERAL), gdsClass, 
+					gdsValue 
+				);
+
+				marshaller.marshal ( el, xmlw );
 				
 				xmlw.writeEndElement(); // value
 	
@@ -1837,7 +1827,10 @@ public class Export extends ONDEXExport implements Monitorable {
 
 		WstxOutputFactory xmlw = getXMLFactory();
 		XMLStreamWriter2 xmlWriteStream = getXMLStreamWriter2(xmlw);
+		
+		// Some tweakers of us to fix a few issues around with 
 		xmlWriteStream = new CDATAWriterFilter ( xmlWriteStream );
+		xmlWriteStream = new NewLineFixWriterFilter ( xmlWriteStream );
 
 		fireEventOccurred(new GeneralOutputEvent("Ready to Export.",
 				"[Export - start]"));
