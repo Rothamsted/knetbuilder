@@ -6,6 +6,8 @@ import javax.xml.stream.XMLStreamWriter;
 import org.codehaus.stax2.XMLStreamWriter2;
 import org.codehaus.stax2.util.StreamWriter2Delegate;
 
+import net.sourceforge.ondex.export.oxl.Export;
+
 /**
  * <p>This is to fix <a href = 'https://stackoverflow.com/questions/48603942'>bug in JDK &gt;8u151</a>.</p>
  * 
@@ -14,10 +16,12 @@ import org.codehaus.stax2.util.StreamWriter2Delegate;
  * called with the wrong code {@code '#xa'} or {@code '#xd'} (corresponding to '\r' or '\n'). This is produced
  * by some JDK-internal escape handler (again, see their linked patch).</p> 
  * 
- * <p>Waiting for the release of a new JDK, we do the same here: our {@link #writeEntityRef(String)}
- * wrapper {@link #writeCharacters(String) re-writes} \r or \n if it sees one of the wrong codes.</p>
+ * <p>Waiting for the release of a new JDK, we do as they do in the fix: our {@link #writeEntityRef(String)}
+ * wrapper {@link #writeCharacters(String) re-writes} \r or \n if it sees one of the wrong codes, thus eliminating
+ * the wrong escaping that happens in the JDK.</p>
  * 
- * <p>TODO: hopefully, won't be needed anymore once JDK8u192 is released (or if you manage to move to JDK >8).  
+ * <p>TODO: hopefully, this won't be needed anymore once JDK8u192 is released (or if you manage to move to JDK >8), so
+ * we will be able to remove this wrapper from {@link Export#start()}.</p>  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>22 Apr 2018</dd></dl>
