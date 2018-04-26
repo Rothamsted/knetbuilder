@@ -30,7 +30,7 @@ public class CDATAWriterFilter extends StreamWriter2Delegate
 	}
 
 	@Override
-	public void writeCharacters ( String s ) throws XMLStreamException
+	public void writeCharacters ( final String s ) throws XMLStreamException
 	{
 		if ( !( s == null || s.isEmpty () ) )
 		{
@@ -44,7 +44,7 @@ public class CDATAWriterFilter extends StreamWriter2Delegate
 	}
 
 	@Override
-	public void writeCharacters ( char[] chars, int start, int len ) throws XMLStreamException
+	public void writeCharacters ( final char[] chars, final int start, final int len ) throws XMLStreamException
 	{
 		if ( !( chars == null || chars.length == 0 ) )
 		{
@@ -56,7 +56,7 @@ public class CDATAWriterFilter extends StreamWriter2Delegate
 					char currentChar = chars [ i ];
 					for ( char escChar: ESCAPE_CHARS )
 						if ( currentChar == escChar ) {
-							this.writeCData ( chars, start, end );
+							this.writeCData ( chars, start, len );
 							return;
 						}
 			}

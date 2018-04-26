@@ -40,6 +40,7 @@ import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.CachedGraphWrapper;
 import net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
+import net.sourceforge.ondex.oxl.jaxb.CDATAWriterFilter;
 import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
@@ -602,4 +603,39 @@ public class OXLExportTest
       //String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
       //Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
     }    
+
+    
+    /**
+     * To test a problem that occurred in {@link CDATAWriterFilter#writeCharacters(char[], int, int)}, due to the
+     * fact that the call to the delegate had wrong invocation parameters.
+     */
+    @Test
+    public void testCDATAFilterParamsBug () throws FileNotFoundException, IOException
+    {
+    		log.info ( "Testting CDATA exports on plain strings" );
+    		
+    		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
+    		
+    		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
+    		
+    		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
+    		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
+    		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
+    		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
+    		
+    		MetaDataFactory gfact = g.getMetaData().getFactory();
+      AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
+      String val = 
+				"Overexpression of the Gm<i>GAL2</i>Gene Accelerates Flowering in<b>\r\n" + 
+				"                    <i>Arabidopsis.</i>\r\n" + 
+				"                </b>";      		
+      c.createAttribute ( an, val, false);
+      
+      String oxlPath = "target/test_cdata_params.xml";
+      Export.exportOXL ( g, oxlPath, false, true );
+      
+      g = Parser.loadOXL ( oxlPath );
+      c = g.getConcepts ().iterator ().next ();
+      Assert.assertEquals ( "Wrong reloaded attr value!", val, c.getAttribute ( an ).getValue () );      
+    }
 }
