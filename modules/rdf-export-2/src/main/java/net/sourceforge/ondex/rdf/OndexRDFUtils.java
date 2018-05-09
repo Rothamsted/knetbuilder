@@ -125,6 +125,7 @@ public class OndexRDFUtils
 		// Filter and transform as per parameters, then get rid of empty cases too
 		Optional<String> prefName = names
 		.stream ()
+		.parallel ()
 		.filter ( prefNameFilter )
 		.map ( nameMapper )
 		.filter ( name -> !StringUtils.isEmpty ( name ) )
@@ -150,6 +151,7 @@ public class OndexRDFUtils
 		// Now, let's build the result with <prefName, all the names minus the preferred name>
 		Stream<String> altNames = names
 		.stream ()
+		.parallel()
 		.map ( nameMapper )
 		.filter ( name -> !StringUtils.isEmpty ( name ) ); 
 				
