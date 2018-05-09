@@ -5,10 +5,8 @@ import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.Graph;
 
@@ -19,7 +17,6 @@ import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.rdf.OndexRDFUtils;
-import net.sourceforge.ondex.rdf.export.RDFExportUtils;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.CollectionPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.LiteralPropRdfMapper;
@@ -78,7 +75,7 @@ public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 		COMMUTILS.assertResource ( graphModel, myiri, iri ( "rdf:type" ), cciri );
 		
 		// Names split into 1 preferred and alternatives
-		Pair<Optional<String>, Stream<String>> nameStrings = RDFExportUtils.normalizeNames ( 
+		Pair<Optional<String>, Stream<String>> nameStrings = OndexRDFUtils.normalizeNames ( 
 			concept.getConceptNames (), ConceptName::isPreferred, ConceptName::getName 
 		);
 		

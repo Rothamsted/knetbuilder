@@ -39,7 +39,7 @@ public class PrefNameTest
 	 *  
 	 * @param truePrefName the name expected to be translated as unique preferred
 	 * @param fakePrefName the name initially {@link ConceptName#isPreferred() marked as preferred} that is expected
-	 * to be expored as altName.
+	 * to be exported as altName.
 	 * @param altName the name that is non-preferred since the beginning.
 	 * 
 	 */

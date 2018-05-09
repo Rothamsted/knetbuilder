@@ -18,7 +18,10 @@ import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
  */
 public class ConceptClassMapper extends MetadataMapper<ConceptClass>
 {
-	public static final String[] IGNORED_IDS = { "Thing", "UndefinedSemantics" };
+	/**
+	 * These are all mapped to the top class {@code bk:Concept}.
+	 */
+	protected static final String[] IGNORED_IDS = { "Thing", "UndefinedSemantics" };
 
 	@Override
 	public boolean map ( ConceptClass cc, Map<String, Object> params )

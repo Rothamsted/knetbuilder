@@ -1,20 +1,7 @@
 package net.sourceforge.ondex.rdf.export;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.jena.atlas.io.StringWriterI;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,14 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import info.marcobrandizi.rdfutils.jena.SparqlBasedTester;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.DataSource;
-import net.sourceforge.ondex.core.EvidenceType;
-import net.sourceforge.ondex.core.MetaDataFactory;
-import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.util.CachedGraphWrapper;
 import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**

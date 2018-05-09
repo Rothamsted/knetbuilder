@@ -19,7 +19,10 @@ import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
  */
 public class RelationTypeMapper extends MetadataMapper<RelationType>
 {
-	public static final String[] IGNORED_IDS = { "relatedTo", "r", "undefined_semantics", "none" };
+	/**
+	 * These are all mapped to the top property {@code bk:conceptsRelation}.
+	 */	
+	protected static final String[] IGNORED_IDS = { "relatedTo", "r", "undefined_semantics", "none" };
 
 	@Override
 	public boolean map ( RelationType rt, Map<String, Object> params )
