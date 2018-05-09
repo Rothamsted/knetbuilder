@@ -18,7 +18,7 @@ import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
  * The RDFExporter machinery. 
  * 
  * This triggers the exporting of an {@link ONDEXGraph}, passing it to the {@link RDFXFactory java2rdf-based RDF mappers}
- * and calling an handler parameter for the RDF chunks generated during the process.
+ * and calling an {@link #setConsumer(java.util.function.Consumer) handler} for the RDF chunks generated during the process.
  * 
  * The handler is supposed to do some concrete job, such as saving to a file or sending the RDF to a
  * triple store. 

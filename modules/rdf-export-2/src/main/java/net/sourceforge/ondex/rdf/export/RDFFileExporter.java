@@ -23,7 +23,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import uk.ac.ebi.utils.threading.HackedBlockingQueue;
 
 /**
- * TODO: comment me!
+ * A wrapper to invoke the {@link RDFExporter} and save its results to file.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Nov 2017</dd></dl>
