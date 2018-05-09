@@ -5,7 +5,7 @@ PREFIX bkr: <http://www.ondex.org/bioknet/resources/>
 PREFIX bka: <http://www.ondex.org/bioknet/attributes/>
 PREFIX dcterms: <http://purl.org/dc/terms/>
 
-SELECT ?iri ?name ?value
+SELECT ?name ?value
 {
 	{ 
 	  ?iri ?name ?value.

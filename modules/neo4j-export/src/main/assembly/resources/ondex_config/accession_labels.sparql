@@ -4,7 +4,7 @@ PREFIX bk: <http://www.ondex.org/bioknet/terms/>
 PREFIX bkr: <http://www.ondex.org/bioknet/resources/>
 PREFIX bka: <http://www.ondex.org/bioknet/attributes/>
 
-SELECT ?iri ?label
+SELECT ?label
 {
 	BIND ( bk:Accession AS ?label ).
 }
