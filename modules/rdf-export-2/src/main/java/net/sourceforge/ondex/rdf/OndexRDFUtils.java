@@ -86,7 +86,8 @@ public class OndexRDFUtils
 	 * @param prefNameFilter a predicate over the N type, which establishes if a name is considered a potential
 	 * preferred one. At the moment we pass {@link ConceptName#isPreferred()} to this.
 	 * 
-	 * @param nameMapper how N is turned into string, after {@code prefNameFilter}
+	 * @param nameMapper how N is turned into string, after {@code prefNameFilter}. At the moment we pass
+	 * {@link ConceptName#getName()} to this.
 	 * 
 	 * @return a pair of a unique preferred name, an empty optional if none was found, plus a {@link Stream} of
 	 * all the other names, which are considered alternative names.
