@@ -11,6 +11,8 @@ import net.sourceforge.ondex.export.oxl.Export;
 /**
  * <p>This is to fix <a href = 'https://stackoverflow.com/questions/48603942'>bug in JDK &gt;8u151</a>.</p>
  * 
+ * <p>In short, when some text is serialised to XML using JAXB, newlines are wrongly escaped by an internal JDK component.<p> 
+ * 
  * <p>If you see <a href = 'http://hg.openjdk.java.net/jdk8u/jdk8u-dev/jaxws/rev/6ac8c8bf6b78'>how they patched it</a>,
  * the problem is that at some point in the XML-writing pipeline {@link XMLStreamWriter#writeEntityRef(String)} is 
  * called with the wrong code {@code '#xa'} or {@code '#xd'} (corresponding to '\r' or '\n'). This is produced

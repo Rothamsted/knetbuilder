@@ -510,19 +510,20 @@ public class OXLExportTest
     @Test
     public void testCData () throws FileNotFoundException, IOException
     {
-    		log.info ( "Testting CDATA exports on plain strings" );
-    		
-    		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
-    		
-    		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
-    		
-    		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
-    		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
-    		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
-    		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
-    		
-    		MetaDataFactory gfact = g.getMetaData().getFactory();
-      AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
+  		log.info ( "Testing CDATA exports on plain strings" );
+  		
+  		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
+  		
+  		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
+  		
+  		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
+  		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
+  		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
+  		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
+  		
+  		MetaDataFactory gfact = g.getMetaData().getFactory();
+
+  		AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
       String val = "A <b>test attribute</b> value";
       c.createAttribute ( an, val, false);
       
@@ -541,18 +542,19 @@ public class OXLExportTest
     @Test
     public void testCollectionsCData () throws FileNotFoundException, IOException
     {
-    		log.info ( "Testting CDATA exports on collections" );
-    		
-    		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
-    		
-    		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
-    		
-    		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
-    		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
-    		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
-    		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
-    		
-    		MetaDataFactory gfact = g.getMetaData().getFactory();
+  		log.info ( "Testting CDATA exports on collections" );
+  		
+  		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
+  		
+  		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
+  		
+  		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
+  		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
+  		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
+  		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
+  		
+  		MetaDataFactory gfact = g.getMetaData().getFactory();
+  		
       AttributeName an = gfact.createAttributeName ( "testAttr", List.class );
       String val = "A <b>test attribute</b> value";
       c.createAttribute ( an, Stream.of ( val ).collect ( Collectors.toList () ), false);
@@ -563,10 +565,10 @@ public class OXLExportTest
       g = Parser.loadOXL ( oxlPath );
       c = g.getConcepts ().iterator ().next ();
       Assert.assertEquals ( 
-      		"Wrong reloaded attr value!", 
-      		val, 
-      		((List<Object>) c.getAttribute ( an ).getValue ()).get ( 0 ) 
-      	);
+    		"Wrong reloaded attr value!", 
+    		val, 
+    		((List<Object>) c.getAttribute ( an ).getValue ()).get ( 0 ) 
+    	);
       
       // verify the XML
       //String oxlStr = IOUtils.toString ( new FileReader ( oxlPath ) );
@@ -576,19 +578,20 @@ public class OXLExportTest
     @Test
     public void testNewLineJaxbBug () throws FileNotFoundException, IOException
     {
-    		log.info ( "Testting CDATA exports on plain strings" );
-    		
-    		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
-    		
-    		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
-    		
-    		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
-    		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
-    		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
-    		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
-    		
-    		MetaDataFactory gfact = g.getMetaData().getFactory();
-      AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
+  		log.info ( "Testting CDATA exports on plain strings" );
+  		
+  		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
+  		
+  		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
+  		
+  		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
+  		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
+  		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
+  		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
+  		
+  		MetaDataFactory gfact = g.getMetaData().getFactory();
+
+  		AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
       String val = "A test\nattribute value";
       c.createAttribute ( an, val, false);
       
@@ -612,19 +615,20 @@ public class OXLExportTest
     @Test
     public void testCDATAFilterParamsBug () throws FileNotFoundException, IOException
     {
-    		log.info ( "Testting CDATA exports on plain strings" );
-    		
-    		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
-    		
-    		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
-    		
-    		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
-    		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
-    		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
-    		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
-    		
-    		MetaDataFactory gfact = g.getMetaData().getFactory();
-      AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
+  		log.info ( "Testting CDATA exports on plain strings" );
+  		
+  		ONDEXGraph g = new MemoryONDEXGraph ( "test" );
+  		
+  		CachedGraphWrapper gw = CachedGraphWrapper.getInstance ( g );
+  		
+  		ConceptClass cc = gw.getConceptClass ( "TestCC", "A Test CC", "A test concept class.", null );
+  		DataSource ds = gw.getDataSource ( "testDS", "Test Data Source", "A test data source." );
+  		EvidenceType ev = gw.getEvidenceType ( "testEvidence", "Test Evidence", "A test evidence type." );
+  		ONDEXConcept c = gw.getConcept ( "testConcept", "", "A test concept.", ds, cc, ev );
+  		
+  		MetaDataFactory gfact = g.getMetaData().getFactory();
+
+  		AttributeName an = gfact.createAttributeName ( "testAttr", String.class );
       String val = 
 				"Overexpression of the Gm<i>GAL2</i>Gene Accelerates Flowering in<b>\r\n" + 
 				"                    <i>Arabidopsis.</i>\r\n" + 
