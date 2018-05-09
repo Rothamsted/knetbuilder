@@ -10,7 +10,7 @@ SELECT ?iri ?name ?value
 
 	?iri ?name ?value
   VALUES ( ?name ) {
-  		(dcterms:identifier)
+  	(dcterms:identifier)
     (bk:isAmbiguousAccession)
   }
 }
