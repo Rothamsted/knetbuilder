@@ -2678,8 +2678,8 @@ bkr:is_a_to_0001010_to_0000241_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000647  bk:is_a     bkr:to_0000705 ;
-        bk:prefName         "relative acid phosphatase activity" ;
         bk:altName          "RELACIDPASEACT" ;
+        bk:prefName         "relative acid phosphatase activity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000647 ;
         bk:dataSource       bk:TO ;
@@ -2822,8 +2822,8 @@ bkr:accsn_to_0000672  rdf:type  bk:Accession ;
 
 bkr:to_0000626  bk:is_a     bkr:to_0001024 ;
         bk:is_a             bkr:to_0000102 ;
-        bk:prefName         "relative phosphorus distribution between shoot and root" ;
         bk:altName          "RELPHOCONCSHRT" ;
+        bk:prefName         "relative phosphorus distribution between shoot and root" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000626 ;
         bk:dataSource       bk:TO ;
@@ -3154,21 +3154,21 @@ bkr:is_a_to_0002600_to_0000862_d41d8cd98f00b204e9800998ecf8427e
         rdf:type       bk:Relation ;
         bk:evidence    bk:IMPD .
 
-bkr:to_0005002  dcterms:identifier  "TO:0005002" ;
+bkr:to_0005002  bk:altName  "cis-9-octadecenoic acid content" ;
+        dcterms:identifier  "TO:0005002" ;
         dc:identifier       bkr:accsn_to_0005002 ;
         bk:prefName         "oleic acid content" ;
         rdfs:comment        "The oleic acid content in the essential oils present in or extracted from a plant or the plant part such as seed. ( Reference: GR:pj )" ;
+        bk:altName          "(Z)-Octadec-9-enoic acid content" ;
         bk:altName          "high oleic oil content" ;
         bk:altName          "oleic oil content" ;
+        bk:altName          "(9Z)-Octadecenoic acid content" ;
         bk:dataSource       bk:TO ;
         bk:altName          "mid oleic oil content" ;
-        bk:prefName         "(Z)-Octadec-9-enoic acid content" ;
-        bk:prefName         "(9Z)-Octadecenoic acid content" ;
         rdf:type            bk:TO ;
-        bk:prefName         "(9Z)-octadec-9-enoic acid content" ;
+        bk:altName          "(9Z)-octadec-9-enoic acid content" ;
         bk:is_a             bkr:to_0000604 ;
-        bk:evidence         bk:IMPD ;
-        bk:prefName         "cis-9-octadecenoic acid content" .
+        bk:evidence         bk:IMPD .
 
 bkr:is_a_to_0000740_to_0000739_d41d8cd98f00b204e9800998ecf8427e
         bk:relTo       bkr:to_0000739 ;
@@ -3220,8 +3220,8 @@ bkr:to_0000016  bk:is_a     bkr:to_0000247 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000642  bk:is_a     bkr:to_0002689 ;
-        bk:prefName         "leaf sheath diameter" ;
         bk:altName          "LFSDIA" ;
+        bk:prefName         "leaf sheath diameter" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000642 ;
         bk:dataSource       bk:TO ;
@@ -3272,11 +3272,11 @@ bkr:accsn_to_0020090  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0020090" .
 
-bkr:to_0000074  bk:prefName  "blast disease resistance trait" ;
-        bk:altName          "blast disease susceptibility" ;
+bkr:to_0000074  bk:altName  "blast disease susceptibility" ;
         rdfs:comment        "Causal agent: Magnaporthe grisea. ( Reference: GR:pj )" ;
         bk:prefName         "blast disease resistance" ;
         bk:evidence         bk:IMPD ;
+        bk:altName          "blast disease resistance trait" ;
         bk:is_a             bkr:to_0000439 ;
         bk:dataSource       bk:TO ;
         rdf:type            bk:TO ;
@@ -3497,8 +3497,8 @@ bkr:is_a_to_0000704_to_0000599_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0006017  bk:is_a     bkr:to_0006016 ;
+        bk:altName          "meristem determinacy" ;
         bk:prefName         "meristem identity" ;
-        bk:prefName         "meristem determinacy" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0006017 ;
         bk:dataSource       bk:TO ;
@@ -3541,8 +3541,8 @@ bkr:is_a_to_0002713_to_0002683_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000515  bk:is_a     bkr:to_0000250 ;
-        bk:prefName         "relative growth rate" ;
         bk:altName          "RELGRATE" ;
+        bk:prefName         "relative growth rate" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000515 ;
         bk:dataSource       bk:TO ;
@@ -3833,8 +3833,8 @@ bkr:accsn_to_0001035  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0001035" .
 
 bkr:to_0000467  bk:is_a     bkr:to_0000168 ;
-        bk:prefName         "cell membrane stability" ;
         bk:altName          "CELMBSTB" ;
+        bk:prefName         "cell membrane stability" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000467 ;
         bk:dataSource       bk:TO ;
@@ -3901,8 +3901,8 @@ bkr:is_a_to_0002604_to_0000864_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0006033  bk:is_a     bkr:to_0002738 ;
-        bk:prefName         "floret number per spikelet" ;
         bk:altName          "FLNBPSPK" ;
+        bk:prefName         "floret number per spikelet" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0006033 ;
         bk:dataSource       bk:TO ;
@@ -3929,6 +3929,7 @@ bkr:accsn_to_0000349  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000349" .
 
 bkr:to_0002757  bk:is_a     bkr:to_0000135 ;
+        bk:altName          "flag leaf length" ;
         bk:evidence         bk:IMPD ;
         rdf:type            bk:TO ;
         bk:is_a             bkr:to_0000832 ;
@@ -3936,8 +3937,7 @@ bkr:to_0002757  bk:is_a     bkr:to_0000135 ;
         bk:prefName         "FLFLG" ;
         dc:identifier       bkr:accsn_to_0002757 ;
         rdfs:comment        "A flag leaf morphology trait (TO:0000832) which is the length of the flag leaf (PO:0020103). ( Reference: GR:pj PO:0020103 TO:moorel )" ;
-        dcterms:identifier  "TO:0002757" ;
-        bk:prefName         "flag leaf length" .
+        dcterms:identifier  "TO:0002757" .
 
 bkr:is_a_to_0000560_to_0000361_d41d8cd98f00b204e9800998ecf8427e
         bk:relTo       bkr:to_0000361 ;
@@ -3983,8 +3983,8 @@ bkr:accsn_to_0001014  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0001014" .
 
 bkr:to_0000446  bk:is_a     bkr:to_0000748 ;
-        bk:prefName         "leaf drying" ;
         bk:altName          "LFDRY" ;
+        bk:prefName         "leaf drying" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000446 ;
         bk:dataSource       bk:TO ;
@@ -4041,7 +4041,7 @@ bkr:is_a_to_0000932_to_0000307_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000987  bk:is_a     bkr:to_0002736 ;
-        bk:prefName         "pistillate flower number trait" ;
+        bk:altName          "pistillate flower number trait" ;
         bk:prefName         "female flower number trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000987 ;
@@ -4081,8 +4081,8 @@ bkr:is_a_to_0000870_to_0000327_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000510  bk:is_a     bkr:to_0000043 ;
-        bk:prefName         "penetrated to total root ratio" ;
         bk:altName          "PENTRTRO" ;
+        bk:prefName         "penetrated to total root ratio" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000510 ;
         bk:dataSource       bk:TO ;
@@ -4144,9 +4144,9 @@ bkr:is_a_to_0006032_to_0000847_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000425  bk:is_a     bkr:to_0000250 ;
-        bk:prefName         "anther culturability" ;
         bk:altName          "anther culture response" ;
         bk:altName          "ANTCAB" ;
+        bk:prefName         "anther culturability" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000425 ;
         bk:dataSource       bk:TO ;
@@ -4220,8 +4220,8 @@ bkr:is_a_to_0000332_to_0000261_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000966  bk:is_a     bkr:to_0000976 ;
-        bk:prefName         "ear infructescence position ratio" ;
         bk:altName          "ear position ratio" ;
+        bk:prefName         "ear infructescence position ratio" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000966 ;
         bk:dataSource       bk:TO ;
@@ -4331,8 +4331,8 @@ bkr:accsn_to_0000848  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000848" .
 
 bkr:to_0020067  bk:is_a     bkr:to_0000148 ;
+        bk:altName          "barley yellow dwarf virus disease resistance" ;
         bk:prefName         "BYDV" ;
-        bk:prefName         "barley yellow dwarf virus disease resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020067 ;
         bk:dataSource       bk:TO ;
@@ -4547,8 +4547,8 @@ bkr:to_0001042  bk:is_a     bkr:to_0000597 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000924  bk:is_a     bkr:to_0000921 ;
-        bk:prefName         "cob color" ;
         bk:altName          "cobpig" ;
+        bk:prefName         "cob color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000924 ;
         bk:dataSource       bk:TO ;
@@ -4777,8 +4777,8 @@ bkr:accsn_to_0002613  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0002613" .
 
 bkr:to_0000818  bk:is_a     bkr:to_0000816 ;
+        bk:altName          "inflorescence bract cover" ;
         bk:prefName         "husk cover" ;
-        bk:prefName         "inflorescence bract cover" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000818 ;
         bk:dataSource       bk:TO ;
@@ -4853,10 +4853,10 @@ bkr:to_0000961  bk:is_a     bkr:to_0000921 ;
 
 bkr:to_1000016  bk:evidence  bk:IMPD ;
         bk:is_a             bkr:to_1000021 ;
-        bk:prefName         "plant ovary colour" ;
         bk:dataSource       bk:TO ;
         bk:prefName         "plant ovary color" ;
         rdfs:comment        "A plant ovary morphology (TO:10000021) which is the color of a plant ovary (PO:0009072). ( Reference: TO:TermGenie )" ;
+        bk:altName          "plant ovary colour" ;
         dc:identifier       bkr:accsn_to_1000016 ;
         bk:altName          "plant ovary relative color" ;
         dcterms:identifier  "TO:1000016" ;
@@ -4932,7 +4932,7 @@ bkr:accsn_to_0000843  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000843" .
 
 bkr:to_0020062  bk:is_a     bkr:to_0000439 ;
-        bk:prefName         "barley net form net blotch disease resistance" ;
+        bk:altName          "barley net form net blotch disease resistance" ;
         bk:prefName         "NFNB" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020062 ;
@@ -5038,8 +5038,8 @@ bkr:is_a_to_0000351_to_0000080_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000229  bk:is_a     bkr:to_0000075 ;
-        bk:prefName         "photoperiod sensitivity trait" ;
         bk:altName          "PPDSN" ;
+        bk:prefName         "photoperiod sensitivity trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000229 ;
         bk:dataSource       bk:TO ;
@@ -5169,13 +5169,13 @@ bkr:accsn_to_0000254  rdf:type  bk:Accession ;
 bkr:to_0002662  bk:altName  "Cold-induced wilting tolerance" ;
         rdfs:comment        "A leaf rolling trait (TO:0000085) which is the tolerance for leaf rolling or wilting observed in response to stresses like drought, water and temperature. It precedes leaf drying stage. ( Reference: GR:pj TO:moorel )" ;
         bk:altName          "wilting tolerance" ;
+        bk:altName          "leaf rolling tolerance" ;
         dc:identifier       bkr:accsn_to_0002662 ;
         bk:prefName         "LFRLTL" ;
         dcterms:identifier  "TO:0002662" ;
         bk:dataSource       bk:TO ;
         bk:evidence         bk:IMPD ;
         bk:is_a             bkr:to_0000085 ;
-        bk:prefName         "leaf rolling tolerance" ;
         rdf:type            bk:TO .
 
 bkr:accsn_to_0000880  rdf:type  bk:Accession ;
@@ -5435,10 +5435,10 @@ bkr:to_1000011  bk:altName  "schizocarp location" ;
         bk:altName          "anthocarp position" ;
         bk:altName          "syconia position" ;
         bk:altName          "silicle position" ;
+        bk:altName          "fruit position" ;
         bk:prefName         "fruit location" ;
         rdf:type            bk:TO ;
         bk:altName          "caryopsides position" ;
-        bk:prefName         "fruit position" ;
         bk:altName          "silicula position" ;
         bk:altName          "septicidal capsule position" ;
         bk:altName          "pyxides position" ;
@@ -5465,6 +5465,7 @@ bkr:to_1000011  bk:altName  "schizocarp location" ;
         bk:altName          "pepo position" ;
         bk:altName          "nutlet position" ;
         bk:altName          "syncarp position" ;
+        bk:altName          "fruit placement" ;
         bk:altName          "legume position" ;
         bk:altName          "hesperidia position" ;
         bk:altName          "utricle position" ;
@@ -5472,7 +5473,6 @@ bkr:to_1000011  bk:altName  "schizocarp location" ;
         bk:altName          "silicula relational spatial quality" ;
         bk:altName          "coenocarp position" ;
         bk:altName          "pome position" ;
-        bk:prefName         "fruit placement" ;
         bk:altName          "kernel position" ;
         dc:identifier       bkr:accsn_to_1000011 ;
         bk:altName          "stone fruit position" ;
@@ -5559,7 +5559,7 @@ bkr:accsn_to_0000212  rdf:type  bk:Accession ;
 bkr:to_0002620  bk:dataSource  bk:TO ;
         rdf:type            bk:TO ;
         bk:part_of          bkr:to_0002617 ;
-        bk:prefName         "exocarp color" ;
+        bk:altName          "exocarp color" ;
         bk:prefName         "epicarp color" ;
         rdfs:comment        "An exocarp morphology trait (TO:0000906) which is the color of an exocarp (PO:0009085). ( Reference: TO:austin_meier TO:cooperl )" ;
         dcterms:identifier  "TO:0002620" ;
@@ -5838,8 +5838,8 @@ bkr:accsn_to_0000790  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000790" .
 
 bkr:to_0000118  bk:is_a     bkr:to_0000115 ;
-        bk:prefName         "root mass density 15-30" ;
         bk:altName          "rmd 15-30" ;
+        bk:prefName         "root mass density 15-30" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000118 ;
         bk:dataSource       bk:TO ;
@@ -5848,8 +5848,8 @@ bkr:to_0000118  bk:is_a     bkr:to_0000115 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000744  bk:is_a     bkr:to_0000742 ;
-        bk:prefName         "subterranean shoot axis tuber size" ;
         bk:altName          "tuber size" ;
+        bk:prefName         "subterranean shoot axis tuber size" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000744 ;
         bk:dataSource       bk:TO ;
@@ -6082,8 +6082,8 @@ bkr:is_a_to_0000356_to_0000439_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000638  bk:is_a     bkr:to_0000804 ;
-        bk:prefName         "spike width" ;
         bk:altName          "SPIKEWD" ;
+        bk:prefName         "spike width" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000638 ;
         bk:dataSource       bk:TO ;
@@ -6220,8 +6220,8 @@ bkr:to_0000617  bk:altName  "percentage of green rice grains" ;
         rdf:type            bk:TO ;
         bk:evidence         bk:IMPD ;
         dcterms:identifier  "TO:0000617" ;
-        bk:prefName         "colored grain percentage" ;
         bk:altName          "percentage of red rice grains" ;
+        bk:prefName         "colored grain percentage" ;
         bk:altName          "percentage of colored grains" ;
         bk:is_a             bkr:to_0000707 ;
         bk:altName          "percentage of damaged yellow rice grains" ;
@@ -6381,8 +6381,8 @@ bkr:is_a_to_0000720_to_0000719_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000192  bk:is_a     bkr:to_0000261 ;
-        bk:prefName         "leaf-roller resistance" ;
         bk:altName          "LFRRS" ;
+        bk:prefName         "leaf-roller resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000192 ;
         bk:dataSource       bk:TO ;
@@ -6514,8 +6514,8 @@ bkr:is_a_to_0000699_to_0000599_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0000569  bk:is_a     bkr:to_0000205 ;
         bk:altName          "WBPH egg mortality" ;
-        bk:prefName         "white-backed planthopper egg mortality" ;
         bk:altName          "WBPHOVI" ;
+        bk:prefName         "white-backed planthopper egg mortality" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000569 ;
         bk:dataSource       bk:TO ;
@@ -6582,8 +6582,8 @@ bkr:to_0000007  bk:is_a     bkr:to_0000251 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000633  bk:is_a     bkr:to_0000352 ;
-        bk:prefName         "relative total dry weight" ;
         bk:altName          "RELTDWT" ;
+        bk:prefName         "relative total dry weight" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000633 ;
         bk:dataSource       bk:TO ;
@@ -6819,8 +6819,8 @@ bkr:accsn_to_0000488  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000488" .
 
 bkr:to_0000670  bk:is_a     bkr:to_0002736 ;
-        bk:prefName         "floret number" ;
         bk:altName          "FLNB" ;
+        bk:prefName         "floret number" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000670 ;
         bk:dataSource       bk:TO ;
@@ -6994,17 +6994,17 @@ bkr:accsn_to_0002757  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0002757" .
 
-bkr:to_0000081  bk:prefName  "DRTDWT" ;
-        bk:prefName         "drw/t" ;
+bkr:to_0000081  bk:altName  "deep root weight" ;
+        bk:altName          "deep root dry weight per tiller" ;
+        bk:altName          "DRTDWT" ;
+        bk:altName          "drw/t" ;
         dc:identifier       bkr:accsn_to_0000081 ;
         bk:is_a             bkr:to_0000078 ;
         rdf:type            bk:TO ;
-        bk:prefName         "deep root weight" ;
         dcterms:identifier  "TO:0000081" ;
         bk:dataSource       bk:TO ;
         rdfs:comment        "The average dry weight of the root, (for the root part 30cm below the soil surface) determined per tiller in a green house study. ( Reference: GR:jcl GR:pj )" ;
-        bk:prefName         "deep root dry weight" ;
-        bk:prefName         "deep root dry weight per tiller" ;
+        bk:altName          "deep root dry weight" ;
         bk:prefName         "drw" ;
         bk:evidence         bk:IMPD .
 
@@ -7034,8 +7034,8 @@ bkr:is_a_to_0000625_to_0000657_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000479  bk:is_a     bkr:to_0000254 ;
-        bk:prefName         "acid sensitivity" ;
         bk:altName          "ADSN" ;
+        bk:prefName         "acid sensitivity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000479 ;
         bk:dataSource       bk:TO ;
@@ -7149,8 +7149,8 @@ bkr:accsn_to_0002736  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0002736" .
 
 bkr:to_0000060  bk:is_a     bkr:to_0000218 ;
-        bk:prefName         "aborted uni-nucleate stage" ;
         bk:altName          "UNUABR" ;
+        bk:prefName         "aborted uni-nucleate stage" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000060 ;
         bk:dataSource       bk:TO ;
@@ -7287,17 +7287,17 @@ bkr:to_0000437  bk:altName  "degree of male sterility of male sterile lines" ;
         rdf:type            bk:TO ;
         bk:is_a             bkr:to_0000485 .
 
-bkr:to_0020106  dc:identifier  bkr:accsn_to_0020106 ;
+bkr:to_0020106  bk:altName  "Indole-3-acetic acid content" ;
+        dc:identifier       bkr:accsn_to_0020106 ;
         bk:prefName         "IAA content" ;
         dcterms:identifier  "TO:0020106" ;
         bk:is_a             bkr:to_0002672 ;
         bk:dataSource       bk:TO ;
         bk:evidence         bk:IMPD ;
-        bk:prefName         "Indole-3-acetic acid content" ;
+        bk:altName          "Indole-3-acetic acid (IAA) content" ;
         bk:is_a             bkr:to_0020093 ;
         rdf:type            bk:TO ;
-        rdfs:comment        "An auxin content (TO:0002672) which is the amount of indole-3-acetic acid (CHEBI:16411) in a plant structure (PO:0009011). ( Reference: )" ;
-        bk:prefName         "Indole-3-acetic acid (IAA) content" .
+        rdfs:comment        "An auxin content (TO:0002672) which is the amount of indole-3-acetic acid (CHEBI:16411) in a plant structure (PO:0009011). ( Reference: )" .
 
 bkr:is_a_to_0000148_to_0000242_d41d8cd98f00b204e9800998ecf8427e
         bk:relTo       bkr:to_0000242 ;
@@ -7438,8 +7438,8 @@ bkr:to_0000501  bk:is_a     bkr:to_0000803 ;
         rdfs:comment        "A spikelet morphology trait (TO:0000657) which is the weight of a spikelet (PO:0009051). ( Reference: GR:pj PO:0009051 TO:moorel )" .
 
 bkr:to_0000495  bk:is_a     bkr:to_0000674 ;
-        bk:prefName         "chlorophyll content" ;
         bk:altName          "CHLCN" ;
+        bk:prefName         "chlorophyll content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000495 ;
         bk:dataSource       bk:TO ;
@@ -7472,8 +7472,8 @@ bkr:accsn_to_0002688  rdf:type  bk:Accession ;
 bkr:to_0001017  bk:prefName  "water use efficiency" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0001017 ;
+        bk:altName          "photosynthetic rate to transpiration rate ratio" ;
         bk:evidence         bk:IMPD ;
-        bk:prefName         "photosynthetic rate to transpiration rate ratio" ;
         bk:occ_in           bkr:publication_26396590 ;
         bk:is_a             bkr:to_0000168 ;
         bk:relatedConcept   bkr:publication_26396590 ;
@@ -7623,8 +7623,8 @@ bkr:is_a_to_0000343_to_0000347_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0020058  bk:is_a     bkr:to_0000439 ;
-        bk:prefName         "barley common root rot resistance" ;
         bk:altName          "crown rot" ;
+        bk:prefName         "barley common root rot resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020058 ;
         bk:dataSource       bk:TO ;
@@ -7666,8 +7666,8 @@ bkr:accsn_to_0002731  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0002731" .
 
 bkr:to_0000936  bk:is_a     bkr:to_0000327 ;
-        bk:prefName         "infructescence yield trait" ;
         bk:altName          "seeds per panicle" ;
+        bk:prefName         "infructescence yield trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000936 ;
         bk:dataSource       bk:TO ;
@@ -7723,8 +7723,8 @@ bkr:is_a_to_0000294_to_0002717_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0020122  bk:is_a     bkr:to_0020121 ;
+        bk:altName          "two-spotted spider mite resistance" ;
         bk:prefName         "red spider mite resistance" ;
-        bk:prefName         "two-spotted spider mite resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020122 ;
         bk:dataSource       bk:TO ;
@@ -7766,8 +7766,8 @@ bkr:is_a_to_0000297_to_0006003_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0000368  bk:is_a     bkr:to_0000654 ;
         bk:altName          "SHELRATE" ;
-        bk:prefName         "shoot elongation rate" ;
         bk:altName          "elongation of plant height" ;
+        bk:prefName         "shoot elongation rate" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000368 ;
         bk:dataSource       bk:TO ;
@@ -7820,11 +7820,11 @@ bkr:to_0002743  bk:altName  "DHULGRVOL" ;
         bk:is_a             bkr:to_0002742 ;
         bk:dataSource       bk:TO ;
         dc:identifier       bkr:accsn_to_0002743 ;
+        bk:altName          "dehulled-grain volume" ;
         rdf:type            bk:TO ;
         rdfs:comment        "A fruit volume (TO:0002742) of a grain without hull (dehulled). ( Reference: GR:pj TO:moorel )" ;
         bk:prefName         "grain volume" ;
-        dcterms:identifier  "TO:0002743" ;
-        bk:prefName         "dehulled-grain volume" .
+        dcterms:identifier  "TO:0002743" .
 
 bkr:accsn_to_0000961  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
@@ -7839,8 +7839,8 @@ bkr:accsn_to_0002710  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0002710" .
 
 bkr:to_0001033  bk:is_a     bkr:to_0000456 ;
-        bk:prefName         "relative spikelet number" ;
         bk:altName          "relative number of spikelet per panicle" ;
+        bk:prefName         "relative spikelet number" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0001033 ;
         bk:dataSource       bk:TO ;
@@ -7959,8 +7959,8 @@ bkr:to_0020016  bk:is_a     bkr:to_0000184 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000973  bk:is_a     bkr:to_0000954 ;
-        bk:prefName         "spikelet rachilla shape" ;
         bk:altName          "rachilla shape" ;
+        bk:prefName         "spikelet rachilla shape" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000973 ;
         bk:dataSource       bk:TO ;
@@ -8125,8 +8125,8 @@ bkr:pub_in_protein_q0d6f4_publication_18089549_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000326  bk:is_a     bkr:to_0000748 ;
-        bk:prefName         "leaf color" ;
         bk:altName          "LFCL" ;
+        bk:prefName         "leaf color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000326 ;
         bk:dataSource       bk:TO ;
@@ -8176,8 +8176,8 @@ bkr:to_0002701  bk:is_a     bkr:to_0000301 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0002695  bk:is_a     bkr:to_0002697 ;
+        bk:altName          "beta-carotenoid content" ;
         bk:prefName         "beta-carotene content" ;
-        bk:prefName         "beta-carotenoid content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002695 ;
         bk:dataSource       bk:TO ;
@@ -8254,8 +8254,8 @@ bkr:to_0002616  bka:CitNum  "1"^^xsd:int ;
         bk:is_a             bkr:to_0000933 ;
         bk:occ_in           bkr:publication_28403831 ;
         dc:identifier       bkr:accsn_to_0002616 ;
-        rdf:type            bk:TO ;
         bk:altName          "time of flowering" ;
+        rdf:type            bk:TO ;
         bk:dataSource       bk:TO .
 
 bkr:to_0012010  bk:is_a     bkr:to_0000540 ;
@@ -8286,8 +8286,8 @@ bkr:is_a_to_0000021_to_0000080_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000384  bk:is_a     bkr:to_0000054 ;
-        bk:prefName         "nematode damage resistance" ;
         bk:altName          "NDRS" ;
+        bk:prefName         "nematode damage resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000384 ;
         bk:dataSource       bk:TO ;
@@ -8317,8 +8317,8 @@ bkr:is_a_to_0000044_to_0006012_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0020053  bk:is_a     bkr:to_0000439 ;
+        bk:altName          "wheat spot blotch disease resistance" ;
         bk:prefName         "Helminthosporium leaf blotch" ;
-        bk:prefName         "wheat spot blotch disease resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020053 ;
         bk:dataSource       bk:TO ;
@@ -8520,18 +8520,18 @@ bkr:accsn_to_1000011  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:1000011" .
 
-bkr:to_0000278  bk:evidence  bk:IMPD ;
-        bk:prefName         "root/shoot ratio" ;
+bkr:to_0000278  bk:altName  "root/shoot ratio" ;
+        bk:evidence         bk:IMPD ;
         dc:identifier       bkr:accsn_to_0000278 ;
-        bk:prefName         "root to shoot ratio" ;
-        bk:prefName         "root length to shoot length ratio" ;
-        bk:prefName         "RTSHRO" ;
+        bk:altName          "RTSHRO" ;
         rdf:type            bk:TO ;
         rdfs:comment        "The ratio determined from the parameters evaluated for root length and the shoot length in a study. ( Reference: GR:pj )" ;
         bk:prefName         "r/s" ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0000278" ;
-        bk:is_a             bkr:to_0000043 .
+        bk:altName          "root to shoot ratio" ;
+        bk:is_a             bkr:to_0000043 ;
+        bk:altName          "root length to shoot length ratio" .
 
 bkr:accsn_to_0000728  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
@@ -8795,8 +8795,8 @@ bkr:is_a_to_0000653_to_0000926_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_1000002  bk:is_a     bkr:to_0000470 ;
+        bk:altName          "secondary xylem volumetric density" ;
         bk:prefName         "wood volumetric density" ;
-        bk:prefName         "secondary xylem volumetric density" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_1000002 ;
         bk:dataSource       bk:TO ;
@@ -8819,10 +8819,10 @@ bkr:to_0002690  bk:is_a     bkr:to_0000829 ;
         dcterms:identifier  "TO:0002690" ;
         dc:identifier       bkr:accsn_to_0002690 ;
         bk:dataSource       bk:TO ;
+        bk:altName          "leaf lamina length" ;
         bk:evidence         bk:IMPD ;
         rdfs:comment        "A leaf lamina morphology trait (TO:0000829) which is the length of the leaf laimina (PO:0020039). ( Reference: GR:pj PO:0020039 TO:moorel )" ;
         bk:prefName         "leaf blade length" ;
-        bk:prefName         "leaf lamina length" ;
         bk:altName          "LFLLG" ;
         rdf:type            bk:TO .
 
@@ -8845,7 +8845,7 @@ bkr:is_a_to_0000647_to_0000705_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000236  bk:is_a     bkr:to_0000179 ;
-        bk:prefName         "crop damage resistance trait" ;
+        bk:altName          "crop damage resistance trait" ;
         bk:prefName         "crop damage resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000236 ;
@@ -9100,8 +9100,8 @@ bkr:is_a_to_0000924_to_0000921_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000273  bk:is_a     bkr:to_0000261 ;
-        bk:prefName         "armyworm resistance" ;
         bk:altName          "AWRRS" ;
+        bk:prefName         "armyworm resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000273 ;
         bk:dataSource       bk:TO ;
@@ -9412,12 +9412,12 @@ bkr:is_a_to_0002632_to_0002625_d41d8cd98f00b204e9800998ecf8427e
         rdf:type       bk:Relation ;
         bk:evidence    bk:IMPD .
 
-bkr:to_0000629  bk:is_a     bkr:to_0000365 ;
+bkr:to_0000629  bk:altName  "days to tassel flowering" ;
+        bk:is_a             bkr:to_0000365 ;
         rdf:type            bk:TO ;
         bk:is_a             bkr:to_0000344 ;
         bk:evidence         bk:IMPD ;
         dcterms:identifier  "TO:0000629" ;
-        bk:prefName         "days to tassel flowering" ;
         rdfs:comment        "It is determined as the number of days from the seed sowing to the stage when either the pollen shedding or anther exsertion occurs on the maize tassel. ( Reference: GR:pj )" ;
         bk:dataSource       bk:TO ;
         dc:identifier       bkr:accsn_to_0000629 ;
@@ -9656,19 +9656,19 @@ bkr:accsn_to_0020120  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0020120" .
 
 bkr:to_0005005  bk:is_a     bkr:to_0005004 ;
-        bk:prefName         "(Z,Z,Z)-9,12,15-octadecatrienoic acid content" ;
-        rdf:type            bk:TO ;
         bk:evidence         bk:IMPD ;
+        rdf:type            bk:TO ;
+        bk:altName          "(9Z,12Z,15Z)-Octadecatrienoic acid content" ;
         bk:dataSource       bk:TO ;
-        bk:prefName         "(9,12,15)-linolenic acid content" ;
-        bk:prefName         "cis,cis,cis-9,12,15-octadecatrienoic acid content" ;
-        bk:prefName         "9-cis,12-cis,15-cis-octadecatrienoic acid content" ;
-        bk:prefName         "(9Z,12Z,15Z)-Octadecatrienoic acid content" ;
+        bk:altName          "(Z,Z,Z)-9,12,15-octadecatrienoic acid content" ;
+        bk:altName          "9-cis,12-cis,15-cis-octadecatrienoic acid content" ;
+        bk:altName          "all-cis-9,12,15-octadecatrienoic acid content" ;
         bk:prefName         "alpha-linolenic acid content" ;
-        bk:prefName         "9,12,15-Octadecatrienoic acid content" ;
-        bk:prefName         "all-cis-9,12,15-octadecatrienoic acid content" ;
-        dc:identifier       bkr:accsn_to_0005005 ;
+        bk:altName          "(9,12,15)-linolenic acid content" ;
+        bk:altName          "9,12,15-Octadecatrienoic acid content" ;
         rdfs:comment        "The alpha-linolenic acid content in the essential oils present in or extracted from a plant or the plant part such as seed. ( Reference: GR:pj )" ;
+        dc:identifier       bkr:accsn_to_0005005 ;
+        bk:altName          "cis,cis,cis-9,12,15-octadecatrienoic acid content" ;
         dcterms:identifier  "TO:0005005" .
 
 bkr:to_0000104  bk:is_a     bkr:to_0000575 ;
@@ -9765,8 +9765,8 @@ bkr:is_a_to_0006002_to_0002673_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0000645  bk:is_a     bkr:to_0001024 ;
         bk:is_a             bkr:to_0000102 ;
-        bk:prefName         "relative phosphorus concentration" ;
         bk:altName          "RELPHOCONC" ;
+        bk:prefName         "relative phosphorus concentration" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000645 ;
         bk:dataSource       bk:TO ;
@@ -11080,8 +11080,8 @@ bkr:accsn_to_0002695  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0002695" .
 
 bkr:to_0001024  bk:is_a     bkr:to_0000465 ;
-        bk:prefName         "phosphorus content" ;
         bk:altName          "PHOCN" ;
+        bk:prefName         "phosphorus content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0001024 ;
         bk:dataSource       bk:TO ;
@@ -11097,7 +11097,7 @@ bkr:is_a_to_0000539_to_0000472_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000906  bk:is_a     bkr:to_0000843 ;
-        bk:prefName         "exocarp morphology trait" ;
+        bk:altName          "exocarp morphology trait" ;
         bk:prefName         "epicarp morphology trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000906 ;
@@ -11250,19 +11250,19 @@ bkr:to_0020007  bk:is_a     bkr:to_0000261 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_1000019  bk:is_a     bkr:to_0000537 ;
+        bk:altName          "disk floret color" ;
         dc:identifier       bkr:accsn_to_1000019 ;
         bk:dataSource       bk:TO ;
         rdf:type            bk:TO ;
         bk:prefName         "disc floret color" ;
-        bk:prefName         "disk flower color" ;
-        bk:prefName         "disk floret color" ;
         rdfs:comment        "A flower color trait (TO:0000537) which is the color of a disk flower (PO:0025332). ( Reference: TO:TermGenie )" ;
         bk:evidence         bk:IMPD ;
-        dcterms:identifier  "TO:1000019" .
+        dcterms:identifier  "TO:1000019" ;
+        bk:altName          "disk flower color" .
 
 bkr:to_0000964  bk:is_a     bkr:to_0000976 ;
+        bk:altName          "ear infructescence shape" ;
         bk:prefName         "ear shape" ;
-        bk:prefName         "ear infructescence shape" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000964 ;
         bk:dataSource       bk:TO ;
@@ -11298,8 +11298,8 @@ bkr:is_a_to_0011008_to_0000754_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000481  bk:is_a     bkr:to_0000254 ;
-        bk:prefName         "alkali sensitivity" ;
         bk:altName          "ALKSN" ;
+        bk:prefName         "alkali sensitivity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000481 ;
         bk:dataSource       bk:TO ;
@@ -11341,8 +11341,8 @@ bkr:to_0000879  bk:is_a     bkr:to_0000361 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0002628  bk:is_a     bkr:to_0002629 ;
-        bk:prefName         "fruit shape" ;
         bk:altName          "pod shape" ;
+        bk:prefName         "fruit shape" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002628 ;
         bk:dataSource       bk:TO ;
@@ -11400,8 +11400,8 @@ bkr:accsn_to_0000363  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000363" .
 
 bkr:to_0000317  bk:is_a     bkr:to_0000261 ;
-        bk:prefName         "cutworm resistance" ;
         bk:altName          "CUWRRS" ;
+        bk:prefName         "cutworm resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000317 ;
         bk:dataSource       bk:TO ;
@@ -11560,7 +11560,7 @@ bkr:to_0002750  bk:dataSource  bk:TO ;
         bk:prefName         "ligule margin hairiness" ;
         dcterms:identifier  "TO:0002750" ;
         dc:identifier       bkr:accsn_to_0002750 ;
-        bk:prefName         "ligule margin pubescence" .
+        bk:altName          "ligule margin pubescence" .
 
 bkr:is_a_to_0000142_to_0000050_d41d8cd98f00b204e9800998ecf8427e
         bk:relTo       bkr:to_0000050 ;
@@ -11700,8 +11700,8 @@ bkr:to_0020023  bk:is_a     bkr:to_0020024 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000980  bk:is_a     bkr:to_0000775 ;
+        bk:altName          "plant embryo cotyledon colour" ;
         bk:prefName         "plant embryo cotyledon color" ;
-        bk:prefName         "plant embryo cotyledon colour" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000980 ;
         bk:dataSource       bk:TO ;
@@ -11839,9 +11839,9 @@ bkr:accsn_to_0000862  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0000862" .
 
-bkr:to_0020081  bk:prefName  "metabolized energy of stover" ;
-        rdfs:comment        "The trait  takes into account energy losses occurring in the animal in faeces, urine and CH4 and estimates how much energy (in calories or joules) a given unit of ground stover is actually available for meat and milk production . Value derived from chemical and in vitro analysis of dried and ground stover. ( Reference: GCP:GCP_324.0000036 ICRISAT:Vincent_Vadez ILRI:Michael_Blummel )" ;
+bkr:to_0020081  rdfs:comment  "The trait  takes into account energy losses occurring in the animal in faeces, urine and CH4 and estimates how much energy (in calories or joules) a given unit of ground stover is actually available for meat and milk production . Value derived from chemical and in vitro analysis of dried and ground stover. ( Reference: GCP:GCP_324.0000036 ICRISAT:Vincent_Vadez ILRI:Michael_Blummel )" ;
         rdf:type            bk:TO ;
+        bk:altName          "metabolized energy of stover" ;
         dc:identifier       bkr:accsn_to_0020081 ;
         bk:evidence         bk:IMPD ;
         bk:is_a             bkr:to_0000281 ;
@@ -11874,7 +11874,7 @@ bkr:accsn_uniprotkb_q7xt34
         dcterms:identifier  "Q7XT34" .
 
 bkr:to_0000816  bk:is_a     bkr:to_0000815 ;
-        bk:prefName         "inflorescence bract morphology trait" ;
+        bk:altName          "inflorescence bract morphology trait" ;
         bk:prefName         "husk" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000816 ;
@@ -11933,7 +11933,8 @@ bkr:is_a_to_0000623_to_0000979_d41d8cd98f00b204e9800998ecf8427e
         rdf:type       bk:Relation ;
         bk:evidence    bk:IMPD .
 
-bkr:to_1000014  rdf:type    bk:TO ;
+bkr:to_1000014  bk:altName  "leaf lamina lobe length" ;
+        rdf:type            bk:TO ;
         dcterms:identifier  "TO:1000014" ;
         dc:identifier       bkr:accsn_to_1000014 ;
         bk:evidence         bk:IMPD ;
@@ -11941,7 +11942,6 @@ bkr:to_1000014  rdf:type    bk:TO ;
         bk:is_a             bkr:to_0000754 ;
         bk:dataSource       bk:TO ;
         rdfs:comment        "A leaf lamina lobe morphology trait (TO:1000013) which is the length of a leaf lamina lobe (PO:0025517). ( Reference: TO:TermGenie )" ;
-        bk:prefName         "leaf lamina lobe length" ;
         bk:prefName         "leaf lobe length" .
 
 bkr:accsn_to_0000300  rdf:type  bk:Accession ;
@@ -12642,8 +12642,8 @@ bkr:to_0000705  bk:is_a     bkr:to_0000704 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000699  bk:is_a     bkr:to_0000599 ;
-        bk:prefName         "sucrose synthase activity trait" ;
         bk:altName          "SUSACT" ;
+        bk:prefName         "sucrose synthase activity trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000699 ;
         bk:dataSource       bk:TO ;
@@ -12823,8 +12823,8 @@ bkr:is_a_to_0000477_to_0000074_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000201  bk:is_a     bkr:to_0000847 ;
-        bk:prefName         "panicle color" ;
         bk:altName          "PNCL" ;
+        bk:prefName         "panicle color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000201 ;
         bk:dataSource       bk:TO ;
@@ -12939,8 +12939,8 @@ bkr:is_a_to_0001005_to_0000077_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000657  bk:is_a     bkr:to_0000373 ;
-        bk:prefName         "spikelet morphology trait" ;
         bk:altName          "<new synonym>" ;
+        bk:prefName         "spikelet morphology trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000657 ;
         bk:dataSource       bk:TO ;
@@ -13069,8 +13069,8 @@ bkr:is_a_to_0000288_to_0000703_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000636  bk:is_a     bkr:to_0000552 ;
-        bk:prefName         "relative shoot dry weight" ;
         bk:altName          "RELSHDWT" ;
+        bk:prefName         "relative shoot dry weight" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000636 ;
         bk:dataSource       bk:TO ;
@@ -13193,8 +13193,8 @@ bkr:to_0000700  bka:CitNum  "1"^^xsd:int ;
         rdf:type            bk:TO .
 
 bkr:to_0000694  bk:is_a     bkr:to_0002728 ;
-        bk:prefName         "fruit crispness" ;
         bk:altName          "CRISP" ;
+        bk:prefName         "fruit crispness" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000694 ;
         bk:dataSource       bk:TO ;
@@ -13587,8 +13587,8 @@ bkr:is_a_to_0006045_to_0001024_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000631  bk:is_a     bkr:to_0000243 ;
-        bk:prefName         "green plantlet differentiation frequency" ;
         bk:altName          "GRNPTLDFQ" ;
+        bk:prefName         "green plantlet differentiation frequency" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000631 ;
         bk:dataSource       bk:TO ;
@@ -13644,8 +13644,8 @@ bkr:is_a_to_0000977_to_0002637_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000546  bk:is_a     bkr:to_0002691 ;
-        bk:prefName         "peduncle top diameter" ;
         bk:altName          "PDTDIA" ;
+        bk:prefName         "peduncle top diameter" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000546 ;
         bk:dataSource       bk:TO ;
@@ -13841,8 +13841,8 @@ bkr:is_a_to_0000520_to_0020095_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000042  bk:is_a     bkr:to_0000036 ;
-        bk:prefName         "f1-hybrid incompatibility" ;
         bk:altName          "F1HYBIC" ;
+        bk:prefName         "f1-hybrid incompatibility" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000042 ;
         bk:dataSource       bk:TO ;
@@ -13982,8 +13982,8 @@ bkr:to_0000504  bk:is_a     bkr:to_0000748 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000498  bk:is_a     bkr:to_0000497 ;
-        bk:prefName         "female fertility restoration trait" ;
         bk:altName          "FEMRF" ;
+        bk:prefName         "female fertility restoration trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000498 ;
         bk:dataSource       bk:TO ;
@@ -13996,8 +13996,8 @@ bkr:accsn_to_0000948  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000948" .
 
 bkr:to_0000021  bk:is_a     bkr:to_0000080 ;
-        bk:prefName         "copper sensitivity" ;
         bk:altName          "CUSN" ;
+        bk:prefName         "copper sensitivity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000021 ;
         bk:dataSource       bk:TO ;
@@ -14157,8 +14157,8 @@ bkr:accsn_to_0000359  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000359" .
 
 bkr:to_0002767  bk:is_a     bkr:to_0000549 ;
-        bk:prefName         "rhizome formation" ;
         bk:altName          "RHZFORM" ;
+        bk:prefName         "rhizome formation" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002767 ;
         bk:dataSource       bk:TO ;
@@ -14376,8 +14376,8 @@ bkr:accsn_to_0001003  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0001003" .
 
 bkr:to_0000435  bk:is_a     bkr:to_0000345 ;
-        bk:prefName         "seed longevity" ;
         bk:altName          "SDLNG" ;
+        bk:prefName         "seed longevity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000435 ;
         bk:dataSource       bk:TO ;
@@ -14466,7 +14466,7 @@ bkr:is_a_to_0001000_to_0000869_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0006001  bk:is_a     bkr:to_0000429 ;
-        bk:prefName         "salt tolerance" ;
+        bk:altName          "salt tolerance" ;
         bk:prefName         "SALTTL" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0006001 ;
@@ -14511,8 +14511,8 @@ bkr:accsn_nlm_19459961
         dcterms:identifier  "19459961" .
 
 bkr:to_0002725  bk:is_a     bkr:to_0000933 ;
-        bk:prefName         "life cycle habit" ;
         bk:altName          "LIFECYCHAB" ;
+        bk:prefName         "life cycle habit" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002725 ;
         bk:dataSource       bk:TO ;
@@ -14787,8 +14787,8 @@ bkr:to_0002619  bk:part_of  bkr:to_0002617 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000387  bk:altName  "plant quality" ;
-        bk:prefName         "plant trait" ;
         bk:altName          "plant phenotype" ;
+        bk:prefName         "plant trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000387 ;
         bk:dataSource       bk:TO ;
@@ -14815,8 +14815,8 @@ bkr:is_a_to_0000010_to_0000251_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0020056  bk:is_a     bkr:to_0000439 ;
-        bk:prefName         "barley leaf rust disease resistance" ;
         bk:altName          "brown rust" ;
+        bk:prefName         "barley leaf rust disease resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020056 ;
         bk:dataSource       bk:TO ;
@@ -14882,9 +14882,9 @@ bkr:to_0000934  bk:is_a     bkr:to_0000229 ;
         bk:prefName         "photoperiod-sensitive flowering time trait" ;
         bk:is_a             bkr:to_0002616 ;
         rdf:type            bk:TO ;
+        bk:altName          "flowering time response to photoperiod trait" ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0000934" ;
-        bk:prefName         "flowering time response to photoperiod trait" ;
         bk:evidence         bk:IMPD ;
         dc:identifier       bkr:accsn_to_0000934 .
 
@@ -14929,8 +14929,8 @@ bkr:accsn_to_0000895  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000895" .
 
 bkr:to_0020120  bk:is_a     bkr:to_0000816 ;
+        bk:altName          "involucral bract spine presence" ;
         bk:prefName         "spines on involucral bracts" ;
-        bk:prefName         "involucral bract spine presence" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020120 ;
         bk:dataSource       bk:TO ;
@@ -14982,8 +14982,8 @@ bkr:part_of_to_0000196_to_0000667_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000992  bk:is_a     bkr:to_0000283 ;
-        bk:prefName         "gibberellin biosynthesis trait" ;
         bk:altName          "gibberellin biosynthesis" ;
+        bk:prefName         "gibberellin biosynthesis trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000992 ;
         bk:dataSource       bk:TO ;
@@ -15007,8 +15007,8 @@ bkr:to_0002741  bk:is_a     bkr:to_0002739 ;
         bk:evidence         bk:IMPD ;
         rdf:type            bk:TO ;
         bk:altName          "GRSURFAR" ;
-        bk:prefName         "grain surface area" ;
-        bk:altName          "kernel surface area" .
+        bk:altName          "kernel surface area" ;
+        bk:prefName         "grain surface area" .
 
 bkr:accsn_to_1000014  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
@@ -15139,8 +15139,8 @@ bkr:is_a_to_0000604_to_0000281_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0000345  bk:is_a     bkr:to_0000931 ;
         bk:is_a             bkr:to_0000184 ;
-        bk:prefName         "seed viability" ;
         bk:altName          "SDVIA" ;
+        bk:prefName         "seed viability" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000345 ;
         bk:dataSource       bk:TO ;
@@ -15194,16 +15194,16 @@ bkr:accsn_to_0000312  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0000312" .
 
-bkr:to_0002720  bk:dataSource  bk:TO ;
-        rdfs:comment        "A leaf lamina morphology trait (TO:0000829) which is the width of the leaf lamina (PO:0020039). ( Reference: GR:pj PO:0020039 TO:moorel )" ;
+bkr:to_0002720  rdfs:comment  "A leaf lamina morphology trait (TO:0000829) which is the width of the leaf lamina (PO:0020039). ( Reference: GR:pj PO:0020039 TO:moorel )" ;
+        bk:dataSource       bk:TO ;
         rdf:type            bk:TO ;
         bk:is_a             bkr:to_0000829 ;
         dc:identifier       bkr:accsn_to_0002720 ;
         bk:evidence         bk:IMPD ;
         bk:altName          "leaf blade width" ;
+        bk:altName          "leaf lamina width" ;
         dcterms:identifier  "TO:0002720" ;
-        bk:prefName         "LFLWD" ;
-        bk:prefName         "leaf lamina width" .
+        bk:prefName         "LFLWD" .
 
 bkr:is_a_to_0000989_to_0000988_d41d8cd98f00b204e9800998ecf8427e
         bk:relTo       bkr:to_0000988 ;
@@ -15247,8 +15247,8 @@ bkr:accsn_to_0000227  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000227" .
 
 bkr:to_0002635  bk:is_a     bkr:to_0000834 ;
-        bk:prefName         "leaf margin morphology trait" ;
         bk:altName          "leaf margin curvature" ;
+        bk:prefName         "leaf margin morphology trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002635 ;
         bk:dataSource       bk:TO ;
@@ -15333,8 +15333,8 @@ bkr:occ_in_protein_q75wv3_publication_16688177_0e754ef29fd583b33f702b8c56907366
         bk:evidence    bk:TM .
 
 bkr:to_0000324  bk:is_a     bkr:to_0000319 ;
-        bk:prefName         "rubisco to soluble protein ratio" ;
         bk:altName          "RUBISCOSPROTRO" ;
+        bk:prefName         "rubisco to soluble protein ratio" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000324 ;
         bk:dataSource       bk:TO ;
@@ -15475,7 +15475,7 @@ bkr:accsn_to_0000832  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000832" .
 
 bkr:to_0020051  bk:is_a     bkr:to_0000439 ;
-        bk:prefName         "barley leaf scald disease resistance" ;
+        bk:altName          "barley leaf scald disease resistance" ;
         bk:prefName         "scald" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020051 ;
@@ -15548,8 +15548,8 @@ bkr:accsn_to_0000264  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000264" .
 
 bkr:to_0002672  bk:is_a     bkr:to_0000476 ;
-        bk:prefName         "auxin content" ;
         bk:altName          "AUXCN" ;
+        bk:prefName         "auxin content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002672 ;
         bk:dataSource       bk:TO ;
@@ -15600,8 +15600,8 @@ bkr:is_a_to_0000531_to_1000022_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000361  bk:is_a     bkr:to_0000739 ;
-        bk:prefName         "stem morphology trait" ;
         bk:altName          "core morphology trait" ;
+        bk:prefName         "stem morphology trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000361 ;
         bk:dataSource       bk:TO ;
@@ -15713,8 +15713,8 @@ bkr:to_0000276  bk:occ_in   bkr:publication_27420056 ;
         bk:relatedConcept   bkr:publication_27420056 ;
         bk:occ_in           bkr:publication_28542282 ;
         bk:relatedConcept   bkr:publication_28653336 ;
-        bk:prefName         "drought resistance" ;
-        bk:occ_in           bkr:publication_26011089 .
+        bk:occ_in           bkr:publication_26011089 ;
+        bk:altName          "drought resistance" .
 
 bkr:accsn_to_0000726  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
@@ -16111,8 +16111,8 @@ bkr:accsn_to_0000742  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000742" .
 
 bkr:to_0000213  bk:is_a     bkr:to_0000148 ;
-        bk:prefName         "rice grassy stunt 1 and 2 virus resistance" ;
         bk:altName          "RGSVRS" ;
+        bk:prefName         "rice grassy stunt 1 and 2 virus resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000213 ;
         bk:dataSource       bk:TO ;
@@ -16495,8 +16495,8 @@ bkr:accsn_to_0000190  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000190" .
 
 bkr:to_0000627  bk:is_a     bkr:to_0000102 ;
-        bk:prefName         "relative phosphorus utilization efficiency" ;
         bk:altName          "RELPHOUTZEFY" ;
+        bk:prefName         "relative phosphorus utilization efficiency" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000627 ;
         bk:dataSource       bk:TO ;
@@ -16605,8 +16605,8 @@ bkr:is_a_to_0006024_to_0006023_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000606  bk:is_a     bkr:to_0000599 ;
-        bk:prefName         "diastatic power" ;
         bk:altName          "DIASPWR" ;
+        bk:prefName         "diastatic power" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000606 ;
         bk:dataSource       bk:TO ;
@@ -16743,17 +16743,17 @@ bkr:is_a_to_0000692_to_0000439_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0005003  bk:evidence  bk:IMPD ;
         bk:altName          "high stearic oil content" ;
+        bk:altName          "n-octadecanoic acid content" ;
         bk:is_a             bkr:to_0000604 ;
         bk:prefName         "stearic acid content" ;
         dc:identifier       bkr:accsn_to_0005003 ;
-        bk:prefName         "octadecanoic acid content" ;
+        bk:altName          "octadecanoic acid content" ;
         rdfs:comment        "The stearic acid content in the essential oils present in or extracted from a plant or the plant part such as seed. ( Reference: GR:pj )" ;
-        bk:prefName         "n-octadecanoic acid content" ;
         rdf:type            bk:TO ;
+        bk:altName          "octadecoic acid content" ;
         dcterms:identifier  "TO:0005003" ;
         bk:altName          "stearic oil content" ;
         bk:altName          "low stearic oil content" ;
-        bk:prefName         "octadecoic acid content" ;
         bk:dataSource       bk:TO .
 
 bkr:is_a_to_0006061_to_0000933_d41d8cd98f00b204e9800998ecf8427e
@@ -16839,8 +16839,8 @@ bkr:to_0000017  bk:altName  "plant structure trait" ;
         rdf:type            bk:TO .
 
 bkr:to_0000643  bk:is_a     bkr:to_0000373 ;
-        bk:prefName         "inflorescence bristle length" ;
         bk:altName          "BRLG" ;
+        bk:prefName         "inflorescence bristle length" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000643 ;
         bk:dataSource       bk:TO ;
@@ -16884,8 +16884,8 @@ bkr:is_a_to_0000910_to_0002694_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000558  bk:is_a     bkr:to_0000472 ;
-        bk:prefName         "small vascular bundle number" ;
         bk:altName          "SVBNB" ;
+        bk:prefName         "small vascular bundle number" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000558 ;
         bk:dataSource       bk:TO ;
@@ -16978,8 +16978,8 @@ bkr:occ_in_to_0000276_publication_27996018_3390faf77f967ec7f17d2a3cc25cf3bb
         bk:evidence    bk:TM .
 
 bkr:to_0000622  bk:is_a     bkr:to_0000621 ;
-        bk:prefName         "flower development trait" ;
         bk:altName          "floret development trait" ;
+        bk:prefName         "flower development trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000622 ;
         bk:dataSource       bk:TO ;
@@ -17064,8 +17064,8 @@ bkr:accsn_to_0020070  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0020070" .
 
 bkr:to_0000054  bk:is_a     bkr:to_0000236 ;
-        bk:prefName         "animal damage resistance" ;
         bk:altName          "pest resistance" ;
+        bk:prefName         "animal damage resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000054 ;
         bk:dataSource       bk:TO ;
@@ -17082,8 +17082,8 @@ bkr:accsn_to_0000498  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000498" .
 
 bkr:to_0000680  bk:is_a     bkr:to_0000271 ;
-        bk:prefName         "inflorescence circumference" ;
         bk:altName          "INFLOCIRCUM" ;
+        bk:prefName         "inflorescence circumference" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000680 ;
         bk:dataSource       bk:TO ;
@@ -17443,8 +17443,8 @@ bkr:to_0012009  bk:is_a     bkr:to_0012006 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0011010  bk:is_a     bkr:to_0000426 ;
-        bk:prefName         "internode color in proxomity to colored node" ;
         bk:altName          "INCLPROXNDCL" ;
+        bk:prefName         "internode color in proxomity to colored node" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0011010 ;
         bk:dataSource       bk:TO ;
@@ -17514,15 +17514,15 @@ bkr:publication_18089549
         bka:PUB_TYPE        "[GENOME REANNOTATION]" ;
         bka:MeSH            "[User-Computer Interface, Oryza, Genes, Plant, Genomics, MicroRNAs, RNA, Small Interfering, Genome, Plant, Internet, Databases, Nucleic Acid]" .
 
-bkr:to_0002758  bk:is_a     bkr:to_0002720 ;
-        bk:prefName         "flag leaf lamina width" ;
+bkr:to_0002758  bk:altName  "flag leaf blade width" ;
+        bk:is_a             bkr:to_0002720 ;
         rdf:type            bk:TO ;
         bk:evidence         bk:IMPD ;
         bk:dataSource       bk:TO ;
         dc:identifier       bkr:accsn_to_0002758 ;
         bk:prefName         "FLFLWD" ;
-        bk:prefName         "flag leaf blade width" ;
         dcterms:identifier  "TO:0002758" ;
+        bk:altName          "flag leaf lamina width" ;
         rdfs:comment        "Actual measurements, in centimeters of the widest portion of the flag leaf lamina. ( Reference: GR:pj )" .
 
 bkr:to_0000532  dc:identifier  bkr:accsn_to_0000532 ;
@@ -17590,18 +17590,18 @@ bkr:accsn_to_0001015  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0001015" .
 
 bkr:to_0000447  bk:evidence  bk:IMPD ;
+        bk:altName          "filled grain number" ;
         bk:dataSource       bk:TO ;
+        bk:altName          "filled grain number per panicle" ;
         bk:altName          "FILGRNB" ;
         rdfs:comment        "Determined by counting the number of spikelets filled with grain in one inflorescence (panicle). ( Reference: GR:pj )" ;
         bk:altName          "filled fruit number" ;
-        bk:prefName         "filled grain number per panicle" ;
-        bk:prefName         "number of grains per panicle" ;
+        bk:altName          "number of grains per panicle" ;
         rdf:type            bk:TO ;
         dcterms:identifier  "TO:0000447" ;
         dc:identifier       bkr:accsn_to_0000447 ;
         bk:is_a             bkr:to_0002759 ;
         dc:identifier       bkr:accsn_to_0000438 ;
-        bk:prefName         "filled grain number" ;
         bk:altName          "grain number per panicle (sensu Oryza)" ;
         bk:altName          "GRNBPPN" ;
         bk:prefName         "FGRNB" .
@@ -17667,8 +17667,8 @@ bkr:accsn_to_0000329  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000329" .
 
 bkr:to_0002737  bk:is_a     bkr:to_0000670 ;
-        bk:prefName         "floret number per branch" ;
         bk:altName          "FLNBPBR" ;
+        bk:prefName         "floret number per branch" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002737 ;
         bk:dataSource       bk:TO ;
@@ -17677,8 +17677,8 @@ bkr:to_0002737  bk:is_a     bkr:to_0000670 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000511  bk:is_a     bkr:to_0020096 ;
-        bk:prefName         "phosphorus uptake" ;
         bk:altName          "PHOUP" ;
+        bk:prefName         "phosphorus uptake" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000511 ;
         bk:dataSource       bk:TO ;
@@ -18052,8 +18052,8 @@ bkr:publication_26788738
         dcterms:identifier  "26788738" .
 
 bkr:to_0012004  bk:is_a     bkr:to_0012006 ;
-        bk:prefName         "quantum yield" ;
         bk:altName          "QY" ;
+        bk:prefName         "quantum yield" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0012004 ;
         bk:dataSource       bk:TO ;
@@ -18332,8 +18332,8 @@ bkr:is_a_to_0000577_to_0000361_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0002647  bk:is_a     bkr:to_0000597 ;
-        bk:prefName         "starch digestibility" ;
         bk:altName          "STARCHDIG" ;
+        bk:prefName         "starch digestibility" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002647 ;
         bk:dataSource       bk:TO ;
@@ -18375,8 +18375,8 @@ bkr:is_a_to_0002623_to_0002728_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000819  bk:is_a     bkr:to_0000816 ;
+        bk:altName          "inflorescence bract color" ;
         bk:prefName         "husk color" ;
-        bk:prefName         "inflorescence bract color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000819 ;
         bk:dataSource       bk:TO ;
@@ -18460,12 +18460,12 @@ bkr:to_0000962  bk:is_a     bkr:to_0000921 ;
         dcterms:identifier  "TO:0000962" ;
         bk:evidence         bk:IMPD .
 
-bkr:to_1000017  rdf:type    bk:TO ;
-        bk:prefName         "stem cortex colour" ;
+bkr:to_1000017  bk:altName  "stem cortex colour" ;
+        rdf:type            bk:TO ;
         bk:dataSource       bk:TO ;
-        bk:prefName         "stem cortex relative color" ;
         bk:is_a             bkr:to_0000843 ;
         bk:prefName         "stem cortex color" ;
+        bk:altName          "stem cortex relative color" ;
         bk:evidence         bk:IMPD ;
         rdfs:comment        "A portion of plant tissue morphology trait (TO:0000843) which is the color of a stem cortex (PO:0025612). ( Reference: TO:TermGenie )" ;
         dcterms:identifier  "TO:1000017" ;
@@ -18566,8 +18566,8 @@ bkr:to_0000400  dcterms:identifier  "TO:0000400" ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000394  bk:is_a     bkr:to_0000237 ;
-        bk:prefName         "drought related trait" ;
         bk:altName          "dessication related trait" ;
+        bk:prefName         "drought related trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000394 ;
         bk:dataSource       bk:TO ;
@@ -18580,8 +18580,8 @@ bkr:accsn_to_0000844  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000844" .
 
 bkr:to_0020063  bk:is_a     bkr:to_0000439 ;
+        bk:altName          "barley spot form net blotch disease resistance" ;
         bk:prefName         "SFNB" ;
-        bk:prefName         "barley spot form net blotch disease resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020063 ;
         bk:dataSource       bk:TO ;
@@ -18970,11 +18970,11 @@ bkr:accsn_to_1000000  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:1000000" .
 
-bkr:to_0000267  bk:is_a     bkr:to_0000373 ;
+bkr:to_0000267  bk:altName  "inflorescence type" ;
+        bk:is_a             bkr:to_0000373 ;
         dc:identifier       bkr:accsn_to_0000267 ;
         bk:prefName         "INFLOTYPE" ;
         bk:dataSource       bk:TO ;
-        bk:prefName         "inflorescence type" ;
         dcterms:identifier  "TO:0000267" ;
         bk:evidence         bk:IMPD ;
         dc:identifier       bkr:accsn_to_0000500 ;
@@ -19092,6 +19092,7 @@ bkr:accsn_to_0000775  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000775" .
 
 bkr:to_1000012  bk:prefName  "whole plant size" ;
+        bk:altName          "planta entera (Spanish) size" ;
         dc:identifier       bkr:accsn_to_1000012 ;
         bk:altName          "vine size" ;
         bk:altName          "prothallium size" ;
@@ -19102,7 +19103,6 @@ bkr:to_1000012  bk:prefName  "whole plant size" ;
         bk:altName          "woody clump size" ;
         bk:altName          "seedling size" ;
         bk:altName          "prothallus size" ;
-        bk:prefName         "planta entera (Spanish) size" ;
         bk:altName          "suffrutices size" ;
         bk:altName          "tree size" ;
         bk:altName          "shrub size" ;
@@ -19405,8 +19405,8 @@ bkr:part_of_to_0000288_to_0000336_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0000283  dc:identifier  bkr:accsn_to_0000283 ;
         dc:identifier       bkr:accsn_to_0000349 ;
-        bk:prefName         "physiological process trait" ;
         rdf:type            bk:TO ;
+        bk:altName          "physiological process trait" ;
         bk:prefName         "biological process trait" ;
         bk:is_a             bkr:to_0000387 ;
         bk:dataSource       bk:TO ;
@@ -19500,8 +19500,8 @@ bkr:accsn_to_0000791  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000791" .
 
 bkr:to_0000119  bk:is_a     bkr:to_0000115 ;
-        bk:prefName         "root mass density 30-45" ;
         bk:altName          "rmd 30-45" ;
+        bk:prefName         "root mass density 30-45" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000119 ;
         bk:dataSource       bk:TO ;
@@ -20063,8 +20063,8 @@ bkr:accsn_to_0000075  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000075" .
 
 bkr:to_0000029  bk:is_a     bkr:to_0000080 ;
-        bk:prefName         "chlorine sensitivity" ;
         bk:altName          "CHLORSN" ;
+        bk:prefName         "chlorine sensitivity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000029 ;
         bk:dataSource       bk:TO ;
@@ -20142,11 +20142,11 @@ bkr:accsn_nlm_26473199
 
 bkr:to_0000087  bk:prefName  "aroma" ;
         bk:altName          "Sct" ;
+        bk:altName          "scent" ;
         dc:identifier       bkr:accsn_to_0000087 ;
         bk:dataSource       bk:TO ;
         rdf:type            bk:TO ;
         bk:is_a             bkr:to_0000488 ;
-        bk:prefName         "scent" ;
         bk:altName          "odour" ;
         rdfs:comment        "The aroma of the cooked uncooked grains. ( Reference: GR:pj ICIS:1252 IRRI:SES )" ;
         bk:is_a             bkr:to_0002694 ;
@@ -20241,8 +20241,8 @@ bkr:is_a_to_0000835_to_0000754_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000151  bk:is_a     bkr:to_0000261 ;
-        bk:prefName         "rice skipper resistance" ;
         bk:altName          "SKIPRS" ;
+        bk:prefName         "rice skipper resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000151 ;
         bk:dataSource       bk:TO ;
@@ -20419,8 +20419,8 @@ bkr:accsn_to_0000574  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000574" .
 
 bkr:to_0000528  bk:is_a     bkr:to_0000114 ;
-        bk:prefName         "total shoot elongation under submergence" ;
         bk:altName          "TSHELSUB" ;
+        bk:prefName         "total shoot elongation under submergence" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000528 ;
         bk:dataSource       bk:TO ;
@@ -20439,8 +20439,8 @@ bkr:is_a_to_0000057_to_0000228_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000045  bk:is_a     bkr:to_0000439 ;
-        bk:prefName         "udbatta disease resistance" ;
         bk:altName          "UDb" ;
+        bk:prefName         "udbatta disease resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000045 ;
         bk:dataSource       bk:TO ;
@@ -20549,8 +20549,8 @@ bkr:accsn_to_0000553  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000553" .
 
 bkr:to_0000507  bk:is_a     bkr:to_0000168 ;
-        bk:prefName         "osmotic adjustment capacity" ;
         bk:altName          "OSADJCAP" ;
+        bk:prefName         "osmotic adjustment capacity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000507 ;
         bk:dataSource       bk:TO ;
@@ -20672,8 +20672,8 @@ bkr:is_a_to_0000074_to_0000439_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000082  bk:is_a     bkr:to_0000261 ;
-        bk:prefName         "zigzag leafhopper resistance" ;
         bk:altName          "ZLFHRS" ;
+        bk:prefName         "zigzag leafhopper resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000082 ;
         bk:dataSource       bk:TO ;
@@ -20895,8 +20895,8 @@ bkr:is_a_to_0000045_to_0000439_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0002749  bk:is_a     bkr:to_0002748 ;
-        bk:prefName         "ligule pubescence" ;
         bk:altName          "LIGPUBES" ;
+        bk:prefName         "ligule pubescence" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002749 ;
         bk:dataSource       bk:TO ;
@@ -21630,7 +21630,7 @@ bkr:accsn_to_0001001  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0001001" .
 
-bkr:to_0000433  bk:prefName  "ear infructescence diameter" ;
+bkr:to_0000433  bk:altName  "ear infructescence diameter" ;
         dcterms:identifier  "TO:0000433" ;
         bk:dataSource       bk:TO ;
         bk:altName          "eard" ;
@@ -21656,7 +21656,7 @@ bkr:accsn_to_0000877  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000877" .
 
 bkr:to_0020102  bk:is_a     bkr:to_0000465 ;
-        bk:prefName         "phosphate ion content" ;
+        bk:altName          "phosphate ion content" ;
         bk:prefName         "phosphate content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020102 ;
@@ -21713,8 +21713,8 @@ bkr:to_0020017  bk:is_a     bkr:to_0000904 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000974  bk:is_a     bkr:to_0000954 ;
-        bk:prefName         "spikelet rachilla hair type" ;
         bk:altName          "rachilla hair type" ;
+        bk:prefName         "spikelet rachilla hair type" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000974 ;
         bk:dataSource       bk:TO ;
@@ -21910,7 +21910,7 @@ bkr:to_0000953  bk:is_a     bkr:to_0000077 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_1000008  bk:is_a     bkr:to_0000740 ;
-        bk:prefName         "shoot axis branch position" ;
+        bk:altName          "shoot axis branch position" ;
         bk:prefName         "branch position" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_1000008 ;
@@ -21933,7 +21933,7 @@ bkr:to_0002702  bk:is_a     bkr:to_0000439 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0002696  bk:is_a     bkr:to_0002697 ;
-        bk:prefName         "alpha-carotenoid content" ;
+        bk:altName          "alpha-carotenoid content" ;
         bk:prefName         "alpha carotene content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002696 ;
@@ -22060,14 +22060,14 @@ bkr:accsn_to_0000835  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0000835" .
 
-bkr:to_0020054  bk:prefName  "yellow rust" ;
-        bk:prefName         "BSR" ;
+bkr:to_0020054  bk:prefName  "BSR" ;
         rdfs:comment        "Causal agent: Puccinia striiformis f. sp. hordei. ( Reference: T-CAP:Victoria_Corollo_Blake )" ;
         bk:evidence         bk:IMPD ;
-        bk:prefName         "barley stripe rust disease resistance" ;
+        bk:altName          "barley stripe rust disease resistance" ;
         dcterms:identifier  "TO:0020054" ;
         bk:is_a             bkr:to_0000439 ;
         dc:identifier       bkr:accsn_to_0020054 ;
+        bk:altName          "yellow rust" ;
         rdf:type            bk:TO ;
         bk:dataSource       bk:TO .
 
@@ -22090,8 +22090,8 @@ bkr:is_a_to_0000641_to_0000783_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000306  bk:is_a     bkr:to_0000043 ;
-        bk:prefName         "root thickness" ;
         bk:altName          "RTTH" ;
+        bk:prefName         "root thickness" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000306 ;
         bk:dataSource       bk:TO ;
@@ -22294,17 +22294,17 @@ bkr:accsn_to_0000246  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0000246" .
 
-bkr:to_0002654  bk:prefName  "Pyruvate, phosphate phosphotransferase" ;
-        bk:prefName         "Pyruvate phosphate dikinase" ;
+bkr:to_0002654  bk:altName  "Pyruvate phosphate dikinase" ;
         dc:identifier       bkr:accsn_to_0002654 ;
-        bk:prefName         "pyruvate orthophosphate dikinase activity trait" ;
+        bk:altName          "pyruvate orthophosphate dikinase activity trait" ;
         bk:dataSource       bk:TO ;
         bk:prefName         "PPDK" ;
         bk:evidence         bk:IMPD ;
         dcterms:identifier  "TO:0002654" ;
         rdfs:comment        "Catalysis of the reaction: ATP + pyruvate + phosphate = AMP + phosphoenolpyruvate + diphosphate. ( Reference: EC:2.7.9.1 GO:GO\\:0050242 GR:pj )" ;
         rdf:type            bk:TO ;
-        bk:is_a             bkr:to_0000599 .
+        bk:is_a             bkr:to_0000599 ;
+        bk:altName          "Pyruvate, phosphate phosphotransferase" .
 
 bkr:is_a_to_0006059_to_0000465_d41d8cd98f00b204e9800998ecf8427e
         bk:relTo       bkr:to_0000465 ;
@@ -22504,8 +22504,8 @@ bkr:accsn_to_0002600  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0002600" .
 
 bkr:to_0000805  bk:is_a     bkr:to_0000373 ;
-        bk:prefName         "inflorescence texture" ;
         bk:altName          "head texture" ;
+        bk:prefName         "inflorescence texture" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000805 ;
         bk:dataSource       bk:TO ;
@@ -22578,9 +22578,9 @@ bkr:to_1000003  dcterms:identifier  "TO:1000003" ;
         bk:is_a             bkr:to_0000754 ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_1000003 ;
+        bk:altName          "shoot axis node colour" ;
         bk:dataSource       bk:TO ;
-        bk:prefName         "shoot axis node colour" ;
-        bk:prefName         "shoot axis node relative color" ;
+        bk:altName          "shoot axis node relative color" ;
         bk:prefName         "shoot axis node color" ;
         bk:evidence         bk:IMPD .
 
@@ -22589,8 +22589,8 @@ bkr:accsn_to_0000283  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000283" .
 
 bkr:to_0002691  bk:is_a     bkr:to_0000776 ;
+        bk:altName          "neck internode length" ;
         bk:prefName         "peduncle length" ;
-        bk:prefName         "neck internode length" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002691 ;
         bk:dataSource       bk:TO ;
@@ -22750,8 +22750,8 @@ bkr:accsn_to_0000262  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000262" .
 
 bkr:to_0002670  bk:is_a     bkr:to_0002669 ;
-        bk:prefName         "momilactone A content" ;
         bk:altName          "phytoalexin momilactone A content" ;
+        bk:prefName         "momilactone A content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002670 ;
         bk:dataSource       bk:TO ;
@@ -23158,7 +23158,8 @@ bkr:is_a_to_0000689_to_0000685_d41d8cd98f00b204e9800998ecf8427e
         rdf:type       bk:Relation ;
         bk:evidence    bk:IMPD .
 
-bkr:to_0000232  rdf:type    bk:TO ;
+bkr:to_0000232  bk:altName  "cytoplasmic male sterility (sensu Oryza)" ;
+        rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000232 ;
         rdfs:comment        "Caused by the interaction of cytoplasmic (mitochondrial) and nuclear genomes. The trait shows non-mendelian inheritance or maternal inheritance. ( Reference: GR:pj IRRI:SES )" ;
         bk:is_a             bkr:to_0000580 ;
@@ -23166,7 +23167,6 @@ bkr:to_0000232  rdf:type    bk:TO ;
         dcterms:identifier  "TO:0000232" ;
         bk:evidence         bk:IMPD ;
         bk:altName          "CMS" ;
-        bk:prefName         "cytoplasmic male sterility (sensu Oryza)" ;
         bk:altName          "<new synonym>" ;
         bk:prefName         "rice cytoplasmic male sterility" .
 
@@ -23970,8 +23970,8 @@ bkr:is_a_to_0000120_to_0000115_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0000036  bk:is_a     bkr:to_0000371 ;
         bk:is_a             bkr:to_0000035 ;
-        bk:prefName         "hybrid incompatibility" ;
         bk:altName          "HYBIC" ;
+        bk:prefName         "hybrid incompatibility" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000036 ;
         bk:dataSource       bk:TO ;
@@ -24044,8 +24044,8 @@ bkr:occ_in_protein_q0ddi1_publication_26473199_2dae98b3e412cc766594c7ce023dde59
         bk:evidence    bk:TM .
 
 bkr:to_0000577  bk:is_a     bkr:to_0000361 ;
-        bk:prefName         "stem angle" ;
         bk:altName          "STEMAG" ;
+        bk:prefName         "stem angle" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000577 ;
         bk:dataSource       bk:TO ;
@@ -24070,17 +24070,17 @@ bkr:participates_in_protein_q6zgp8_bioproc_go_0005992_d41d8cd98f00b204e9800998ec
 bkr:to_0005001  bk:altName  "low linoleic oil content" ;
         bk:evidence         bk:IMPD ;
         bk:is_a             bkr:to_0000604 ;
+        bk:altName          "9Z,12Z-octadecadienoic acid content" ;
+        bk:altName          "cis,cis-linoleic acid content" ;
         bk:altName          "high linoleic oil content" ;
-        bk:prefName         "9Z,12Z-octadecadienoic acid content" ;
+        bk:altName          "9-cis,12-cis-Octadecadienoic acid content" ;
+        bk:altName          "(Z,Z)-9,12-octadecadienoic acid content" ;
         rdfs:comment        "The linoleic acid content in the essential oils present in or extracted from a plant or the plant part such as seed. ( Reference: GR:pj )" ;
-        bk:prefName         "(9Z,12Z)-Octadecadienoic acid content" ;
-        bk:prefName         "(Z,Z)-9,12-octadecadienoic acid content" ;
+        bk:altName          "(9Z,12Z)-Octadecadienoic acid content" ;
         rdf:type            bk:TO ;
         dcterms:identifier  "TO:0005001" ;
-        bk:prefName         "cis,cis-linoleic acid content" ;
-        bk:prefName         "9-cis,12-cis-Octadecadienoic acid content" ;
+        bk:altName          "linoleic acid content" ;
         bk:prefName         "linoleic oil content" ;
-        bk:prefName         "linoleic acid content" ;
         dc:identifier       bkr:accsn_to_0005001 ;
         bk:dataSource       bk:TO .
 
@@ -24239,8 +24239,8 @@ bkr:is_a_to_0000696_to_0006007_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000073  bk:is_a     bkr:to_0000080 ;
-        bk:prefName         "manganese sensitivity" ;
         bk:altName          "MNSN" ;
+        bk:prefName         "manganese sensitivity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000073 ;
         bk:dataSource       bk:TO ;
@@ -24494,8 +24494,8 @@ bkr:is_a_to_0000840_to_0000839_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000514  bk:is_a     bkr:to_0020096 ;
-        bk:prefName         "potassium uptake" ;
         bk:altName          "KUP" ;
+        bk:prefName         "potassium uptake" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000514 ;
         bk:dataSource       bk:TO ;
@@ -24615,8 +24615,8 @@ bkr:is_a_to_0000613_to_0002728_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0002719  bk:is_a     bkr:to_0002718 ;
-        bk:prefName         "awn thickness" ;
         bk:altName          "AWNTH" ;
+        bk:prefName         "awn thickness" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002719 ;
         bk:dataSource       bk:TO ;
@@ -24637,8 +24637,8 @@ bk:TRANS  rdf:type           bk:EvidenceType ;
         dcterms:identifier   "TRANS" .
 
 bkr:to_0000487  bk:is_a     bkr:to_0000575 ;
-        bk:prefName         "endosperm color" ;
         bk:altName          "ENDCL" ;
+        bk:prefName         "endosperm color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000487 ;
         bk:dataSource       bk:TO ;
@@ -24706,8 +24706,8 @@ bkr:is_a_to_0002659_to_0002613_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000408  bk:is_a     bkr:to_0000667 ;
-        bk:prefName         "hot paste viscosity" ;
         bk:altName          "HPVIS" ;
+        bk:prefName         "hot paste viscosity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000408 ;
         bk:dataSource       bk:TO ;
@@ -24814,8 +24814,8 @@ bkr:accsn_to_0005009  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0005009" .
 
 bkr:to_0000466  bk:is_a     bkr:to_0000465 ;
-        bk:prefName         "carbon content" ;
         bk:altName          "CBCN" ;
+        bk:prefName         "carbon content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000466 ;
         bk:dataSource       bk:TO ;
@@ -24923,8 +24923,8 @@ bkr:is_a_to_0000623_to_0000271_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000530  bk:is_a     bkr:to_0000566 ;
-        bk:prefName         "adaxial stomatal frequency" ;
         bk:altName          "ADXSTOFQ" ;
+        bk:prefName         "adaxial stomatal frequency" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000530 ;
         bk:dataSource       bk:TO ;
@@ -25062,8 +25062,8 @@ bkr:to_0020029  bk:is_a     bkr:to_0000055 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000986  bk:is_a     bkr:to_0002736 ;
+        bk:altName          "staminate flower number trait" ;
         bk:prefName         "male flower number trait" ;
-        bk:prefName         "staminate flower number trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000986 ;
         bk:dataSource       bk:TO ;
@@ -25149,8 +25149,8 @@ bkr:accsn_to_0002696  rdf:type  bk:Accession ;
 
 bkr:to_0000907  dc:identifier  bkr:accsn_to_0000907 ;
         rdf:type            bk:TO ;
+        bk:altName          "exocarp thickness" ;
         bk:dataSource       bk:TO ;
-        bk:prefName         "exocarp thickness" ;
         rdfs:comment        "An exocarp morphology trait (TO:0000906) (TO:0000843) which is the thickness of the exocarp (PO:0009085). ( Reference: TO:cooperl )" ;
         bk:is_a             bkr:to_0002625 ;
         dcterms:identifier  "TO:0000907" ;
@@ -25304,8 +25304,8 @@ bkr:to_0020008  bk:is_a     bkr:to_0000023 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000965  bk:is_a     bkr:to_0000976 ;
+        bk:altName          "ear infructescence aspect" ;
         bk:prefName         "ear aspect" ;
-        bk:prefName         "ear infructescence aspect" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000965 ;
         bk:dataSource       bk:TO ;
@@ -25515,8 +25515,8 @@ bkr:accsn_to_0005004  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0005004" .
 
 bkr:to_0000461  bk:is_a     bkr:to_0000369 ;
-        bk:prefName         "basic vegetative phase" ;
         bk:altName          "BAVEGPH" ;
+        bk:prefName         "basic vegetative phase" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000461 ;
         bk:dataSource       bk:TO ;
@@ -25702,8 +25702,8 @@ bkr:to_0002666  bk:is_a     bkr:to_0001024 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000440  bk:is_a     bkr:to_0002759 ;
-        bk:prefName         "grain number per plant" ;
         bk:altName          "GRNBPPT" ;
+        bk:prefName         "grain number per plant" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000440 ;
         bk:dataSource       bk:TO ;
@@ -25803,8 +25803,8 @@ bkr:accsn_to_0002691  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0002691" .
 
 bkr:to_0001020  bk:is_a     bkr:to_0000281 ;
-        bk:prefName         "exudate sap volume" ;
         bk:altName          "Sap per tiller" ;
+        bk:prefName         "exudate sap volume" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0001020 ;
         bk:dataSource       bk:TO ;
@@ -25881,8 +25881,8 @@ bkr:is_a_to_0002741_to_0002739_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0020082  bk:is_a     bkr:to_0000281 ;
-        bk:prefName         "stover nitrogen content" ;
         bk:altName          "stover related traits" ;
+        bk:prefName         "stover nitrogen content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020082 ;
         bk:dataSource       bk:TO ;
@@ -25914,8 +25914,8 @@ bkr:is_a_to_0000184_to_0000836_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000817  bk:is_a     bkr:to_0000816 ;
+        bk:altName          "inflorescence bract length" ;
         bk:prefName         "husk length" ;
-        bk:prefName         "inflorescence bract length" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000817 ;
         bk:dataSource       bk:TO ;
@@ -26108,8 +26108,8 @@ bkr:to_0020061  bk:is_a     bkr:to_0000439 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000313  bk:is_a     bkr:to_0000598 ;
-        bk:prefName         "perodidase-71 content" ;
         bk:altName          "P71CN" ;
+        bk:prefName         "perodidase-71 content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000313 ;
         bk:dataSource       bk:TO ;
@@ -26298,8 +26298,8 @@ bkr:protein_q10kf5  bk:pub_in  bkr:publication_18089549 ;
         bk:pub_in           bkr:publication_24280374 ;
         bk:occ_in           bkr:publication_16688177 ;
         bk:occ_in           bkr:publication_16240171 ;
-        bk:prefName         "Probable trehalose-phosphate phosphatase 9" ;
         bk:altName          "OsTPP9" ;
+        bk:prefName         "Probable trehalose-phosphate phosphatase 9" ;
         bk:cat_c            bkr:ec_3_1_3_12 ;
         bk:altName          "LOC_Os03g26910" ;
         bk:relatedConcept   bkr:publication_18365248 .
@@ -26646,7 +26646,7 @@ bkr:accsn_to_0000773  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000773" .
 
 bkr:to_1000010  bk:is_a     bkr:to_0000837 ;
-        bk:prefName         "caruncle colour" ;
+        bk:altName          "caruncle colour" ;
         bk:prefName         "caruncle color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_1000010 ;
@@ -26728,8 +26728,8 @@ bkr:is_a_to_0000750_to_0000774_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000159  bk:is_a     bkr:to_0000265 ;
-        bk:prefName         "blue light sensitivity" ;
         bk:altName          "BLTSN" ;
+        bk:prefName         "blue light sensitivity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000159 ;
         bk:dataSource       bk:TO ;
@@ -26823,8 +26823,8 @@ bkr:is_a_to_0000566_to_0000843_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000706  bk:is_a     bkr:to_0000597 ;
-        bk:prefName         "hull color" ;
         bk:altName          "HULCL" ;
+        bk:prefName         "hull color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000706 ;
         bk:dataSource       bk:TO ;
@@ -27004,8 +27004,8 @@ bkr:accsn_go_0009409  rdf:type  bk:Accession ;
         dcterms:identifier  "GO:0009409" .
 
 bkr:to_0000117  bk:is_a     bkr:to_0000054 ;
-        bk:prefName         "rat damage resistance" ;
         bk:altName          "RD" ;
+        bk:prefName         "rat damage resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000117 ;
         bk:dataSource       bk:TO ;
@@ -27046,8 +27046,8 @@ bkr:is_a_to_0020052_to_0000439_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000260  bk:is_a     bkr:to_0000054 ;
-        bk:prefName         "bird damage resistance" ;
         bk:altName          "BD" ;
+        bk:prefName         "bird damage resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000260 ;
         bk:dataSource       bk:TO ;
@@ -27189,8 +27189,8 @@ bkr:is_a_to_0000181_to_0000184_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000154  bk:is_a     bkr:to_0000261 ;
-        bk:prefName         "thrips resistance" ;
         bk:altName          "THRIPSRS" ;
+        bk:prefName         "thrips resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000154 ;
         bk:dataSource       bk:TO ;
@@ -27216,8 +27216,8 @@ bkr:occ_in_to_0000276_publication_28542282_7341301ac58b0ca1546b74b37be8aadb
         bk:evidence    bk:TM .
 
 bkr:to_0000780  bk:is_a     bkr:to_0000776 ;
-        bk:prefName         "peduncle attachment" ;
         bk:altName          "pod attachment" ;
+        bk:prefName         "peduncle attachment" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000780 ;
         bk:dataSource       bk:TO ;
@@ -27543,17 +27543,17 @@ bkr:is_a_to_0000541_to_0000748_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000112  bk:dataSource  bk:TO ;
+        bk:altName          "disease tolerance" ;
         bk:relatedConcept   bkr:publication_28653336 ;
         rdf:type            bk:TO ;
         dcterms:identifier  "TO:0000112" ;
-        bk:prefName         "disease resistance trait" ;
+        bk:altName          "disease resistance" ;
         rdfs:comment        "An assay to determine the resistance exhibited by a plant or a group of plants (population) in response to the disease caused by a pathogen infection as compared to the susceptible and or the reference plants of the same species. ( Reference: GR:pj )" ;
-        bk:prefName         "disease tolerance" ;
         dc:identifier       bkr:accsn_to_0000112 ;
         bk:altName          "disease susceptibility" ;
+        bk:altName          "disease resistance trait" ;
         bka:CitNum          "1"^^xsd:int ;
         bk:is_a             bkr:to_0000236 ;
-        bk:prefName         "disease resistance" ;
         bk:prefName         "disease control" ;
         bk:evidence         bk:IMPD ;
         bk:occ_in           bkr:publication_28653336 .
@@ -27588,8 +27588,8 @@ bkr:is_a_to_0020086_to_0000419_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000027  bk:is_a     bkr:to_0000077 ;
-        bk:prefName         "culm number" ;
         bk:altName          "CmN" ;
+        bk:prefName         "culm number" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000027 ;
         bk:dataSource       bk:TO ;
@@ -27614,8 +27614,8 @@ bkr:is_a_to_0000810_to_0000807_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000170  bk:is_a     bkr:to_0000114 ;
-        bk:prefName         "elongation ability" ;
         bk:altName          "Elon" ;
+        bk:prefName         "elongation ability" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000170 ;
         bk:dataSource       bk:TO ;
@@ -28097,8 +28097,8 @@ bkr:is_a_to_0000774_to_0000749_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000505  bk:is_a     bkr:to_0000748 ;
-        bk:prefName         "leaf weight" ;
         bk:altName          "LFWT" ;
+        bk:prefName         "leaf weight" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000505 ;
         bk:dataSource       bk:TO ;
@@ -28176,8 +28176,8 @@ bkr:is_a_to_0000206_to_0000541_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000563  bk:is_a     bkr:to_0000657 ;
-        bk:prefName         "spikelet length to width ratio" ;
         bk:altName          "SPKLGWDRO" ;
+        bk:prefName         "spikelet length to width ratio" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000563 ;
         bk:dataSource       bk:TO ;
@@ -28330,8 +28330,8 @@ bkr:to_0002768  bk:is_a     bkr:to_0000657 ;
         bk:is_a             bkr:to_0000271 .
 
 bkr:to_0000542  bk:is_a     bkr:to_0002637 ;
-        bk:prefName         "leaf length to width ratio" ;
         bk:altName          "LFLGWDRO" ;
+        bk:prefName         "leaf length to width ratio" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000542 ;
         bk:dataSource       bk:TO ;
@@ -28417,14 +28417,14 @@ bkr:to_0002747  bk:altName  "10-grain weight" ;
         bk:altName          "ten dehulled-grain weight" ;
         bk:dataSource       bk:TO ;
         bk:altName          "TENGRWT" ;
-        bk:prefName         "10-dehulled grain weight" ;
         rdf:type            bk:TO ;
-        bk:prefName         "TENDHULGRWT" ;
         rdfs:comment        "Weight of 10-dehulled grain having pericarp (seed coat). ( Reference: GR:pj )" ;
+        bk:prefName         "TENDHULGRWT" ;
         dc:identifier       bkr:accsn_to_0002747 ;
         bk:evidence         bk:IMPD ;
         bk:altName          "ten grain weight" ;
         bk:is_a             bkr:to_0000590 ;
+        bk:altName          "10-dehulled grain weight" ;
         dcterms:identifier  "TO:0002747" .
 
 bkr:to_0000521  bk:is_a     bkr:to_0020095 ;
@@ -28493,8 +28493,8 @@ bkr:accsn_to_0001004  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0001004" .
 
 bkr:to_0000436  bk:is_a     bkr:to_0000485 ;
-        bk:prefName         "spikelet sterility" ;
         bk:altName          "SPKST" ;
+        bk:prefName         "spikelet sterility" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000436 ;
         bk:dataSource       bk:TO ;
@@ -28661,8 +28661,8 @@ bkr:occ_in_protein_q9fwq2_publication_16688177_0e754ef29fd583b33f702b8c56907366
         bk:evidence    bk:TM .
 
 bkr:to_0000415  bk:is_a     bkr:to_0000218 ;
-        bk:prefName         "aborted bi-nucleate stage" ;
         bk:altName          "BNUABR" ;
+        bk:prefName         "aborted bi-nucleate stage" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000415 ;
         bk:dataSource       bk:TO ;
@@ -28823,8 +28823,8 @@ bkr:is_a_to_0000610_to_0000325_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0020057  bk:is_a     bkr:to_0000439 ;
-        bk:prefName         "wheat leaf rust disease resistance" ;
         bk:altName          "brown rust" ;
+        bk:prefName         "wheat leaf rust disease resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020057 ;
         bk:dataSource       bk:TO ;
@@ -28952,8 +28952,8 @@ bkr:accsn_to_0001020  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0001020" .
 
 bkr:to_0000452  bk:is_a     bkr:to_0000540 ;
-        bk:prefName         "leaf area to spikelet number ratio" ;
         bk:altName          "LFARSPKNBRO" ;
+        bk:prefName         "leaf area to spikelet number ratio" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000452 ;
         bk:dataSource       bk:TO ;
@@ -29091,9 +29091,9 @@ bkr:is_a_to_0000601_to_0000160_d41d8cd98f00b204e9800998ecf8427e
         rdf:type       bk:Relation ;
         bk:evidence    bk:IMPD .
 
-bkr:to_0000431  bk:dataSource  bk:TO ;
+bkr:to_0000431  bk:altName  "ear infructescence length" ;
+        bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0000431" ;
-        bk:prefName         "ear infructescence length" ;
         bk:altName          "EARLG" ;
         bk:evidence         bk:IMPD ;
         bk:prefName         "ear length" ;
@@ -29268,8 +29268,8 @@ bkr:accsn_to_0002682  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0002682" .
 
 bkr:to_0001011  bk:is_a     bkr:to_0000279 ;
+        bk:altName          "deep root dry weight to total root dry weight ratio" ;
         bk:prefName         "deep root weight ratio" ;
-        bk:prefName         "deep root dry weight to total root dry weight ratio" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0001011 ;
         bk:dataSource       bk:TO ;
@@ -29415,10 +29415,10 @@ bkr:to_1000006  dcterms:identifier  "TO:1000006" ;
         dc:identifier       bkr:accsn_to_1000006 ;
         rdf:type            bk:TO ;
         bk:evidence         bk:IMPD ;
-        bk:prefName         "tuberous root tuber diameter" ;
         rdfs:comment        "A tuberous root tuber morphology trait (TO:1000007) which is the diameter of a tuberous root tuber (PO:0025476). ( Reference: TO:TermGenie )" ;
         bk:is_a             bkr:to_1000007 ;
-        bk:prefName         "storage root diameter" .
+        bk:prefName         "storage root diameter" ;
+        bk:altName          "tuberous root tuber diameter" .
 
 bkr:to_0002700  bk:is_a     bkr:to_0002694 ;
         bk:prefName         "pungency" ;
@@ -29485,8 +29485,8 @@ bkr:accsn_to_0000833  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000833" .
 
 bkr:to_0020052  bk:is_a     bkr:to_0000439 ;
+        bk:altName          "barley spot blotch disease resistance" ;
         bk:prefName         "spot blotch" ;
-        bk:prefName         "barley spot blotch disease resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020052 ;
         bk:dataSource       bk:TO ;
@@ -29537,8 +29537,8 @@ bkr:accsn_to_0000748  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000748" .
 
 bkr:to_0000930  bk:is_a     bkr:to_0000653 ;
-        bk:prefName         "seed shattering" ;
         bk:altName          "hilum abscission" ;
+        bk:prefName         "seed shattering" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000930 ;
         bk:dataSource       bk:TO ;
@@ -29934,8 +29934,8 @@ bkr:is_a_to_0000855_to_0000274_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0000718  bk:is_a     bkr:to_0020016 ;
         bk:is_a             bkr:to_0000931 ;
-        bk:prefName         "wrinkled seed" ;
         bk:altName          "wrinkled kernel" ;
+        bk:prefName         "wrinkled seed" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000718 ;
         bk:dataSource       bk:TO ;
@@ -30057,8 +30057,8 @@ bkr:is_a_to_0000234_to_0000198_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000293  bk:is_a     bkr:to_0000495 ;
-        bk:prefName         "chlorophyll-a content" ;
         bk:altName          "chl-a" ;
+        bk:prefName         "chlorophyll-a content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000293 ;
         bk:dataSource       bk:TO ;
@@ -30200,8 +30200,8 @@ bkr:is_a_to_0002690_to_0000829_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000187  bk:is_a     bkr:to_1000022 ;
-        bk:prefName         "anther color" ;
         bk:altName          "ANTCL" ;
+        bk:prefName         "anther color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000187 ;
         bk:dataSource       bk:TO ;
@@ -30246,7 +30246,7 @@ bkr:is_a_to_0001005_to_0000576_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0005009  bk:is_a     bkr:to_0000261 ;
-        bk:prefName         "European corn borer resistance" ;
+        bk:altName          "European corn borer resistance" ;
         bk:prefName         "ECB resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0005009 ;
@@ -30377,8 +30377,8 @@ bkr:cooc_wi_to_0000599_protein_q6h5l4_a1d39e187e5e4db5bcac7e67c1ea9259
         bka:CoCitNum       "2"^^xsd:int .
 
 bkr:to_0000649  bk:is_a     bkr:to_0000776 ;
-        bk:prefName         "peduncle width" ;
         bk:altName          "PDCWD" ;
+        bk:prefName         "peduncle width" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000649 ;
         bk:dataSource       bk:TO ;
@@ -30751,8 +30751,8 @@ bkr:is_a_to_0000459_to_0000227_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000665  bk:is_a     bkr:to_0000587 ;
-        bk:prefName         "grain core area white" ;
         bk:altName          "GRCARWHT" ;
+        bk:prefName         "grain core area white" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000665 ;
         bk:dataSource       bk:TO ;
@@ -31054,8 +31054,8 @@ bkr:is_a_to_0000437_to_0000485_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000538  bk:is_a     bkr:to_0000472 ;
-        bk:prefName         "large vascular bundle number to leaf area ratio" ;
         bk:altName          "LVBNBLFARRO" ;
+        bk:prefName         "large vascular bundle number to leaf area ratio" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000538 ;
         bk:dataSource       bk:TO ;
@@ -31103,7 +31103,6 @@ bkr:is_a_to_0000416_to_0000358_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000681  rdf:type    bk:TO ;
-        bk:prefName         "ear infructescence circumference" ;
         dcterms:identifier  "TO:0000681" ;
         rdfs:comment        "An ear infructescence morphology trait (TO:0000976) that is the circumference of an ear infructescence (PO:0025597). ( Reference: TO:cooperl )" ;
         dc:identifier       bkr:accsn_to_0000681 ;
@@ -31111,6 +31110,7 @@ bkr:to_0000681  rdf:type    bk:TO ;
         bk:altName          "EARCIRCUM" ;
         bk:is_a             bkr:to_0000431 ;
         bk:evidence         bk:IMPD ;
+        bk:altName          "ear infructescence circumference" ;
         bk:prefName         "ear circumference" .
 
 bkr:accsn_to_0000022  rdf:type  bk:Accession ;
@@ -31627,7 +31627,7 @@ bkr:participates_in_protein_q9fwq2_bioproc_go_0005992_d41d8cd98f00b204e9800998ec
         bk:evidence    bk:ECO_0000314 .
 
 bkr:to_0006014  bk:is_a     bkr:to_0000748 ;
-        bk:prefName         "leaf arrangement" ;
+        bk:altName          "leaf arrangement" ;
         bk:prefName         "phyllotaxy" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0006014 ;
@@ -31660,8 +31660,8 @@ bkr:to_0002738  rdf:type    bk:TO ;
         bk:prefName         "florets per panicle" ;
         bk:altName          "floret number per panicle" ;
         bk:evidence         bk:IMPD ;
+        bk:altName          "floret number per inflorescence" ;
         dcterms:identifier  "TO:0002738" ;
-        bk:prefName         "floret number per inflorescence" ;
         bk:altName          "florets per inflorescence" ;
         bk:is_a             bkr:to_0000274 ;
         bk:altName          "FLNBPINFLO" ;
@@ -31795,9 +31795,9 @@ bkr:is_a_to_0020087_to_0000043_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000570  bk:is_a     bkr:to_0000242 ;
-        bk:prefName         "watery lesion percentage" ;
         bk:altName          "WLPCENT" ;
         bk:altName          "percentage of watery lesion" ;
+        bk:prefName         "watery lesion percentage" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000570 ;
         bk:dataSource       bk:TO ;
@@ -32020,8 +32020,8 @@ bkr:accsn_to_0005007  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0005007" .
 
 bkr:to_0000464  bk:is_a     bkr:to_0000357 ;
-        bk:prefName         "albino plantlet differentiation frequency" ;
         bk:altName          "ALBPTLDFQ" ;
+        bk:prefName         "albino plantlet differentiation frequency" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000464 ;
         bk:dataSource       bk:TO ;
@@ -32082,8 +32082,8 @@ bkr:to_0006030  bk:evidence  bk:IMPD ;
         dcterms:identifier  "TO:0006030" .
 
 bkr:to_0000379  bk:is_a     bkr:to_0000667 ;
-        bk:prefName         "cool paste viscosity" ;
         bk:altName          "CPVIS" ;
+        bk:prefName         "cool paste viscosity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000379 ;
         bk:dataSource       bk:TO ;
@@ -32133,8 +32133,8 @@ bkr:to_0002754  bk:altName  "INFLOAXISTEX" ;
         rdfs:comment        "An inflorescence morphology trait (TO:0000782) which is the texture of the inflorescence axis (PO:0020122). ( Reference: GR:pj PO:0020122 POC:cooperl )" ;
         bk:is_a             bkr:to_0000782 ;
         dc:identifier       bkr:accsn_to_0002754 ;
+        bk:altName          "inflorescence axis texture" ;
         rdf:type            bk:TO ;
-        bk:prefName         "inflorescence axis texture" ;
         bk:altName          "PNAXISTEX" ;
         bk:dataSource       bk:TO ;
         bk:evidence         bk:IMPD .
@@ -32386,8 +32386,8 @@ bkr:to_0000899  bk:is_a     bkr:to_0000898 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0002648  bk:is_a     bkr:to_0000931 ;
-        bk:prefName         "water absorption by seed" ;
         bk:altName          "WABSORPSD" ;
+        bk:prefName         "water absorption by seed" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002648 ;
         bk:dataSource       bk:TO ;
@@ -32411,8 +32411,8 @@ bkr:accsn_to_0000866  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000866" .
 
 bkr:to_0020085  bk:is_a     bkr:to_0000654 ;
+        bk:altName          "stem senescence" ;
         bk:prefName         "culm senescence" ;
-        bk:prefName         "stem senescence" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020085 ;
         bk:dataSource       bk:TO ;
@@ -32497,16 +32497,16 @@ bkr:to_0020006  bk:is_a     bkr:to_0000261 ;
 bkr:to_1000018  dcterms:identifier  "TO:1000018" ;
         rdfs:comment        "A portion of plant tissue morphology trait (TO:0000843) which is the color of a stem epidermis (PO:0025178). ( Reference: TO:TermGenie )" ;
         rdf:type            bk:TO ;
-        bk:prefName         "stem epidermis relative color" ;
+        bk:altName          "stem epidermis colour" ;
         dc:identifier       bkr:accsn_to_1000018 ;
         bk:prefName         "stem epidermis color" ;
-        bk:prefName         "stem epidermis colour" ;
         bk:dataSource       bk:TO ;
+        bk:altName          "stem epidermis relative color" ;
         bk:is_a             bkr:to_0000843 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000963  bk:is_a     bkr:to_0000976 ;
-        bk:prefName         "ear infructescence color" ;
+        bk:altName          "ear infructescence color" ;
         bk:prefName         "ear color" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000963 ;
@@ -32635,7 +32635,7 @@ bkr:is_a_to_0020080_to_0000327_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0020064  bk:is_a     bkr:to_0000439 ;
-        bk:prefName         "barley septoria disease resistance" ;
+        bk:altName          "barley septoria disease resistance" ;
         bk:prefName         "SSLB" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020064 ;
@@ -32746,8 +32746,8 @@ bkr:is_a_to_0012007_to_0012004_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000374  bk:is_a     bkr:to_0000667 ;
-        bk:prefName         "breakdown viscosity" ;
         bk:altName          "BRKVIS" ;
+        bk:prefName         "breakdown viscosity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000374 ;
         bk:dataSource       bk:TO ;
@@ -32948,8 +32948,8 @@ bkr:is_a_to_0000390_to_0000587_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000268  bk:is_a     bkr:to_0000373 ;
-        bk:prefName         "inflorescence shape" ;
         bk:altName          "head shape" ;
+        bk:prefName         "inflorescence shape" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000268 ;
         bk:dataSource       bk:TO ;
@@ -33015,9 +33015,9 @@ bkr:to_0020080  rdf:type    bk:TO ;
         bk:altName          "stover related trait" ;
         dc:identifier       bkr:accsn_to_0020080 ;
         bk:dataSource       bk:TO ;
-        bk:prefName         "in vitro organic matter digestibility" ;
         bk:prefName         "stover organic matter digestability" ;
         rdfs:comment        "This trait determines the amount of organic matter from the stover that would eventually be digested by animals. Value derived from chemical and in vitro analysis with rumen microbial inoculum of dried and ground stover, usually using Near Infrared Reflectance Spectrophotometry (NIRS) after appropriate calibration. ( Reference: GCP:GCP_324.0000031 ICRISAT:Vincent_Vadez ILRI:Michael_Blummel )" ;
+        bk:altName          "in vitro organic matter digestibility" ;
         bk:evidence         bk:IMPD ;
         dcterms:identifier  "TO:0020080" .
 
@@ -33128,8 +33128,8 @@ bkr:is_a_to_0006006_to_0000291_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_1000013  bk:is_a     bkr:to_0000754 ;
+        bk:altName          "leaf lamina lobe morphology trait" ;
         bk:prefName         "leaf lobe morphology trait" ;
-        bk:prefName         "leaf lamina lobe morphology trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_1000013 ;
         bk:dataSource       bk:TO ;
@@ -33284,8 +33284,8 @@ bkr:to_0000709  bk:is_a     bkr:to_0000748 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0002680  bk:is_a     bkr:to_0000325 ;
-        bk:prefName         "albumin content" ;
         bk:altName          "albumen content" ;
+        bk:prefName         "albumin content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002680 ;
         bk:dataSource       bk:TO ;
@@ -33308,15 +33308,15 @@ bkr:is_a_to_0000742_to_0000739_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000226  bk:altName  "AUMIN" ;
-        bk:prefName         "auricle absent" ;
         bk:is_a             bkr:to_0002717 ;
         rdfs:comment        "A measure of either the absence of auricle or the length of auricle being zero. ( Reference: GR:pj )" ;
-        bk:prefName         "auricle absence" ;
         dcterms:identifier  "TO:0000226" ;
         bk:evidence         bk:IMPD ;
         bk:is_a             bkr:to_0000655 ;
         rdf:type            bk:TO ;
+        bk:altName          "auricle absent" ;
         bk:dataSource       bk:TO ;
+        bk:altName          "auricle absence" ;
         dc:identifier       bkr:accsn_to_0000226 ;
         bk:prefName         "auricleless" .
 
@@ -34255,9 +34255,9 @@ bkr:is_a_to_0002645_to_0000667_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000635  bk:is_a     bkr:to_0000667 ;
-        bk:prefName         "popping expansion volume" ;
         bk:altName          "POPEXPVOL" ;
         bk:altName          "popcorn volume" ;
+        bk:prefName         "popping expansion volume" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000635 ;
         bk:dataSource       bk:TO ;
@@ -34382,8 +34382,8 @@ bkr:to_0000614  bk:is_a     bkr:to_1000023 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0011007  bk:is_a     bkr:to_0002718 ;
-        bk:prefName         "awn width" ;
         bk:altName          "AWNWD" ;
+        bk:prefName         "awn width" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0011007 ;
         bk:dataSource       bk:TO ;
@@ -34476,9 +34476,9 @@ bkr:to_0000046  bk:is_a     bkr:to_0000036 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000672  bk:is_a     bkr:to_0000162 ;
-        bk:prefName         "bran percentage" ;
         bk:altName          "rice bran percentage" ;
         bk:altName          "BRAPCENT" ;
+        bk:prefName         "bran percentage" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000672 ;
         bk:dataSource       bk:TO ;
@@ -34605,8 +34605,8 @@ bkr:is_a_to_0000546_to_0002691_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000508  bk:is_a     bkr:to_0000227 ;
-        bk:prefName         "penetrated root length" ;
         bk:altName          "PENRTLG" ;
+        bk:prefName         "penetrated root length" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000508 ;
         bk:dataSource       bk:TO ;
@@ -34767,8 +34767,8 @@ bkr:is_a_to_0002723_to_0000830_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000004  bk:is_a     bkr:to_0000111 ;
-        bk:prefName         "reversible male sterility" ;
         bk:altName          "RMS" ;
+        bk:prefName         "reversible male sterility" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000004 ;
         bk:dataSource       bk:TO ;
@@ -34955,8 +34955,8 @@ bkr:is_a_to_0000328_to_0006003_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000524  bk:is_a     bkr:to_0000286 ;
-        bk:prefName         "submergence tolerance" ;
         bk:altName          "SUBTL" ;
+        bk:prefName         "submergence tolerance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000524 ;
         bk:dataSource       bk:TO ;
@@ -35088,8 +35088,8 @@ bkr:to_0000503  bk:is_a     bkr:to_0000085 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000497  bk:is_a     bkr:to_0000420 ;
-        bk:prefName         "fertility restoration trait" ;
         bk:altName          "RF" ;
+        bk:prefName         "fertility restoration trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000497 ;
         bk:dataSource       bk:TO ;
@@ -35127,8 +35127,8 @@ bkr:to_0001019  bk:is_a     bkr:to_0000327 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000020  bk:is_a     bkr:to_0000148 ;
-        bk:prefName         "black streak dwarf virus resistance" ;
         bk:altName          "BSDVRS" ;
+        bk:prefName         "black streak dwarf virus resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000020 ;
         bk:dataSource       bk:TO ;
@@ -35339,8 +35339,8 @@ bkr:accsn_to_0000358  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000358" .
 
 bkr:to_0002766  bk:is_a     bkr:to_0002748 ;
-        bk:prefName         "ligule margin shape" ;
         bk:altName          "LIGMSHP" ;
+        bk:prefName         "ligule margin shape" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002766 ;
         bk:dataSource       bk:TO ;
@@ -35498,10 +35498,10 @@ bkr:accsn_to_0000337  rdf:type  bk:Accession ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:0000337" .
 
-bkr:to_0002745  bk:prefName  "dehulled-grain curved length" ;
+bkr:to_0002745  bk:altName  "dehulled-grain curved length" ;
+        bk:altName          "curved length of dehulled-grain" ;
         rdf:type            bk:TO ;
         bk:dataSource       bk:TO ;
-        bk:prefName         "curved length of dehulled-grain" ;
         dcterms:identifier  "TO:0002745" ;
         bk:prefName         "grain curved length" ;
         rdfs:comment        "A grain length (TO:0000734) which is the curved surface of grain without hull (dehulled). ( Reference: GR:pj TO:moorel )" ;
@@ -35683,8 +35683,8 @@ bkr:to_0002724  bk:is_a     bkr:to_0000835 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000492  bk:is_a     bkr:to_0000748 ;
-        bk:prefName         "leaf shape" ;
         bk:altName          "LFSHP" ;
+        bk:prefName         "leaf shape" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000492 ;
         bk:dataSource       bk:TO ;
@@ -35800,15 +35800,15 @@ bkr:to_0000954  bk:is_a     bkr:to_0000784 ;
 
 bkr:to_1000009  dc:identifier  bkr:accsn_to_1000009 ;
         bk:is_a             bkr:to_0000740 ;
-        bk:prefName         "branching angle" ;
         bk:prefName         "branch angle" ;
+        bk:altName          "branching angle" ;
         rdfs:comment        "A branch morphology trait (TO:0000740) which is the angle of a branch (PO:0025073). ( Reference: TO:TermGenie )" ;
         rdf:type            bk:TO ;
         bk:evidence         bk:IMPD ;
         bk:dataSource       bk:TO ;
         dcterms:identifier  "TO:1000009" ;
-        bk:prefName         "shoot axis branch angle" ;
-        bk:is_a             bkr:to_1000008 .
+        bk:is_a             bkr:to_1000008 ;
+        bk:altName          "shoot axis branch angle" .
 
 bkr:to_0002703  bk:is_a     bkr:to_0000242 ;
         bk:is_a             bkr:to_0000112 ;
@@ -35848,8 +35848,8 @@ bkr:is_a_to_0000250_to_0000133_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000471  bk:is_a     bkr:to_0000043 ;
-        bk:prefName         "root penetration index" ;
         bk:altName          "RTPNID" ;
+        bk:prefName         "root penetration index" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000471 ;
         bk:dataSource       bk:TO ;
@@ -35931,8 +35931,8 @@ bkr:is_a_to_0000467_to_0000168_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0020055  bk:is_a     bkr:to_0000439 ;
-        bk:prefName         "wheat stripe rust disease resistance" ;
         bk:altName          "yellow rust" ;
+        bk:prefName         "wheat stripe rust disease resistance" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0020055 ;
         bk:dataSource       bk:TO ;
@@ -35985,8 +35985,8 @@ bkr:is_a_to_0000197_to_0002748_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000307  bk:is_a     bkr:to_0006006 ;
-        bk:prefName         "hexose content" ;
         bk:altName          "HEXCN" ;
+        bk:prefName         "hexose content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000307 ;
         bk:dataSource       bk:TO ;
@@ -36039,8 +36039,8 @@ bkr:is_a_to_0000918_to_0000911_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000450  bk:is_a     bkr:to_0000396 ;
+        bk:altName          "grain yield per panicle" ;
         bk:prefName         "GRYLDPPN" ;
-        bk:prefName         "grain yield per panicle" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000450 ;
         bk:dataSource       bk:TO ;
@@ -36103,7 +36103,7 @@ bkr:to_0020034  bk:is_a     bkr:to_0000869 ;
         bk:evidence         bk:IMPD .
 
 bkr:to_0000991  bk:is_a     bkr:to_0000989 ;
-        bk:prefName         "epicormic shoot system number" ;
+        bk:altName          "epicormic shoot system number" ;
         bk:prefName         "stem sucker number" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000991 ;
@@ -36212,12 +36212,12 @@ bkr:is_a_to_0000710_to_0000575_d41d8cd98f00b204e9800998ecf8427e
 
 bkr:to_0000344  bk:evidence  bk:IMPD ;
         dc:identifier       bkr:accsn_to_0000344 ;
+        bk:altName          "days to flowering trait" ;
         rdfs:comment        "A flowering time trait (TO:0002616)which is the number of days required for an individual flower (PO:0009046), a whole plant (PO:0000003) or a plant population to reach flowering stage (PO:0007616) from a predetermined time point (e.g. the date of seed sowing, seedling transplant, or seedling emergence). ( Reference: GR:pj TO:cooperl )" ;
         bk:prefName         "days to flowering" ;
         dcterms:identifier  "TO:0000344" ;
         bk:altName          "Delay in flowering time" ;
         bk:dataSource       bk:TO ;
-        bk:prefName         "days to flowering trait" ;
         bk:altName          "DTFL" ;
         bk:is_a             bkr:to_0002616 ;
         rdf:type            bk:TO .
@@ -36579,8 +36579,8 @@ bkr:accsn_to_0000263  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0000263" .
 
 bkr:to_0002671  bk:is_a     bkr:to_0002669 ;
-        bk:prefName         "momilactone B content" ;
         bk:altName          "phytoalexin momilactone B content" ;
+        bk:prefName         "momilactone B content" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0002671 ;
         bk:dataSource       bk:TO ;
@@ -36711,8 +36711,8 @@ bkr:accsn_to_0006045  rdf:type  bk:Accession ;
         dcterms:identifier  "TO:0006045" .
 
 bkr:to_0000275  bk:is_a     bkr:to_0000845 ;
-        bk:prefName         "perianth morphology trait" ;
         bk:altName          "perianth related trait" ;
+        bk:prefName         "perianth morphology trait" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000275 ;
         bk:dataSource       bk:TO ;
@@ -36858,8 +36858,8 @@ bkr:is_a_to_0000865_to_0000862_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000254  bk:is_a     bkr:to_0000238 ;
-        bk:prefName         "growth media pH sensitivity" ;
         bk:altName          "soil pH stress" ;
+        bk:prefName         "growth media pH sensitivity" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000254 ;
         bk:dataSource       bk:TO ;
@@ -36947,8 +36947,8 @@ bkr:is_a_to_0000722_to_0002686_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000801  bk:is_a     bkr:to_0006031 ;
-        bk:prefName         "inflorescence depth" ;
         bk:altName          "head depth" ;
+        bk:prefName         "inflorescence depth" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000801 ;
         bk:dataSource       bk:TO ;
@@ -37023,8 +37023,8 @@ bkr:is_a_to_0000067_to_0000199_d41d8cd98f00b204e9800998ecf8427e
         bk:evidence    bk:IMPD .
 
 bkr:to_0000233  bk:is_a     bkr:to_0000043 ;
-        bk:prefName         "root volume" ;
         bk:altName          "RTVOL" ;
+        bk:prefName         "root volume" ;
         rdf:type            bk:TO ;
         dc:identifier       bkr:accsn_to_0000233 ;
         bk:dataSource       bk:TO ;
