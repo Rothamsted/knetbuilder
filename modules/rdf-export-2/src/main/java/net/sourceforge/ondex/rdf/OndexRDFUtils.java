@@ -107,11 +107,11 @@ public class OndexRDFUtils
 	 * collection are scanned.</p>
 	 * 
 	 * <p>Moreover, the selection depends only on the name's string representation (i.e., on whatever 
-	 * {@code prefNameFilter} returns. The criteria are also arbitrary somehow (e.g., longer mixed-case names might 
-	 * be more significant than upper case acronyms). This is because the method is supposed to be used to fix 
-	 * ambiguities and errors. Ultimately, having two values for a property like "preferred Name" is inconsistent and 
-	 * if you don't this method to cause unintended visualisations for your data, you should fix the data 
-	 * (i.e., ensure that the property is used in a functional way).
+	 * {@code nameMapper} returns. The criteria are also arbitrary somehow (e.g., longer mixed-case names might 
+	 * be more significant than upper case acronyms, while we select the latter). This is because the method is supposed 
+	 * to be used to fix ambiguities and errors. Ultimately, having two values for a property like "preferred Name" 
+	 * is an inconsistency and if you don't this method to cause unintended visualisations for your data, you should fix 
+	 * the data (i.e., ensure that the property is used in a functional way).
 	 * </p>
 	 */
 	public static <N> Pair<Optional<String>, Stream<String>> normalizeNames ( 
