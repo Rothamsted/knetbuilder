@@ -26,26 +26,6 @@
 			<artifactId>stax2-api</artifactId>
 		</dependency>
 
-		<!-- 
-			This is the old Oracle JDK implementation of JAXB, it has made invisible in recent JDK versions (>8).
-			TODO: review when migrating to >J10 
-		-->
-		<!--  dependency>
-			<groupId>org.glassfish.jaxb</groupId>
-			<artifactId>jaxb-core</artifactId>
-		</dependency>
-
-		<dependency>
-		  <groupId>com.sun.xml.bind</groupId>
-		  <artifactId>jaxb-impl</artifactId>
-		</dependency -->
-		
-		<!-- TODO: remove, we've been experimenting with this, to fix escaping issues (see Export.getMarshaller()) -->
-		<!-- dependency>
-		  <groupId>org.eclipse.persistence</groupId>
-		  <artifactId>org.eclipse.persistence.moxy</artifactId>
-		  <version>2.7.1</version>
-		</dependency -->
 
 		<!-- ONDEX deps -->
 		<dependency>
@@ -65,6 +45,13 @@
 			<artifactId>jutils</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.machinezoo.noexception</groupId>
+			<artifactId>noexception</artifactId>
+			<scope>test</scope>
+		</dependency>      
+		
 	</dependencies>
 
 	<build>
