@@ -41,7 +41,6 @@
       </dependency>
 
 			<dependency>
-				<!-- Cute utility that allows for quick handling of exceptions (eg, checked/unchecked wrapping) -->
 				<groupId>com.machinezoo.noexception</groupId>
 				<artifactId>noexception</artifactId>
 			</dependency>      
