@@ -62,10 +62,12 @@
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="TO:" />
 					<property name = "dataSourcesMapper" ref = "toDataSourcesMapper" />
+					<!-- property name = "addedPrefix" value="TO:" / -->
 				</bean>
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="TO:" />
 					<property name = "dataSourcesMapper" ref = "toDataSourcesMapper" />
+					<!-- property name = "addedPrefix" value="TO:" / -->
 				</bean>
 
 				<!-- These are declared via owl:Axiom instances, so we need its special mapper -->				
@@ -100,5 +102,4 @@
 		</property>
 	</bean>	
 
-	
 </beans>

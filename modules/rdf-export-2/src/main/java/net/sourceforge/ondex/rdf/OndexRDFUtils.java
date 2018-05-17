@@ -121,14 +121,15 @@ public class OndexRDFUtils
 		if ( names == null || names.isEmpty () ) 
 			return Pair.of ( Optional.empty (), Stream.empty () );
 							
-		// Now let's select the preferred one
-		// Filter and transform as per parameters, then get rid of empty cases too
+		// Now let's select the preferred one		
+		// First, filter and transform as per parameters, then get rid of empty cases too
 		Optional<String> prefName = names
 		.stream ()
 		.parallel ()
 		.filter ( prefNameFilter )
 		.map ( nameMapper )
 		.filter ( name -> !StringUtils.isEmpty ( name ) )
+		// And then the preferred
 		.min ( (name1, name2) -> 
 		{
 			// Shortest wins
@@ -148,7 +149,7 @@ public class OndexRDFUtils
 			return name1.compareTo ( name2 );
 		});
 		
-		// Now, let's build the result with <prefName, all the names minus the preferred name>
+		// Now let's build the result with <prefName, all the names minus the preferred name>
 		Stream<String> altNames = names
 		.stream ()
 		.parallel()

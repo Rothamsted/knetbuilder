@@ -1,4 +1,9 @@
 #!/bin/bash
+WORKDIR=$(pwd)
+cd $(dirname $0)
+MYDIR=$(pwd)
+cd "$WORKDIR"
+
 WORKFLOW=$1
 shift
 
@@ -28,5 +33,5 @@ fi
 #                    -Djava.rmi.server.hostname=localhost
 #                    -Dcom.sun.management.jmxremote.local.only=false"
 
-java -Dondex.dir=./data -jar lib/ondex-mini-${project.version}.jar \
+java -Dondex.dir="$MYDIR/data" -jar "$MYDIR/lib/ondex-mini-2.0.1-SNAPSHOT.jar" \
      -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS
