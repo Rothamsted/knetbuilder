@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.FileReader;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
@@ -74,23 +77,8 @@ public class OWLParser extends ONDEXParser
 	{
     List<String> owlInputPaths = getArguments().getObjectValueList ( FileArgumentDefinition.INPUT_FILE, String.class );
     String springXmlPath = (String) getArguments().getUniqueValue( "configFile" );
-
-		ApplicationContext ctx = new FileSystemXmlApplicationContext ( springXmlPath );
-
-		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
-		for ( String owlPath: owlInputPaths )
-		{
-			log.info ( "Loading file '{}'", owlPath );
-			model.read ( 
-				new BufferedReader ( new FileReader ( owlPath ) ), 
-				"RDF/XML" 
-			);
-		}
-		
-		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-		owlMap.map2Graph ( model, this.graph );
-		
-		((Closeable) ctx ).close ();
+    
+    OWLMapper.mapFrom ( graph, springXmlPath, owlInputPaths.toArray ( new String [ 0 ] ) );
 	}
 
 	@Override

@@ -1,5 +1,10 @@
 package net.sourceforge.ondex.parser.owl;
 
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -8,14 +13,18 @@ import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser.ConceptClassMapper;
 import net.sourceforge.ondex.parser.ExploringMapper;
+import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
 
 /**
  * <p>This is the top level mapper/parser. Usually a class of this type is configured via 
@@ -33,6 +42,7 @@ import net.sourceforge.ondex.parser.ExploringMapper;
 public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	private static Logger slog = LoggerFactory.getLogger ( OWLMapper.class );
 	
 	private OWLVisitable visitableHelper = new OWLVisitable ();  
 	
@@ -95,6 +105,66 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 	}
 
 	
+	/**
+	 * Creates a Spring container from the XML configuration file and then invokes 
+	 * {@link #mapFrom(ONDEXGraph, ApplicationContext, String...)}
+	 *  
+	 */
+	public static ONDEXGraph mapFrom ( ONDEXGraph graph, String springXmlPath, String... owlInputPaths )
+	{
+		try ( FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext ( springXmlPath ) ) {
+			return mapFrom ( graph, ctx, owlInputPaths );
+		}
+	}
+	
+	
+	/**
+	 * Maps OWL inputs by using the {@link OWLMapper} configured in a spring container.
+	 * Moreover, it gets the Jena {@link Model} to be used for OWL loading from the Spring configuration too.
+	 * 
+	 */
+	public static ONDEXGraph mapFrom ( ONDEXGraph graph, ApplicationContext ctx, String... owlInputPaths )
+	{
+		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
+		
+		// Let's keep track of the loading, useful with large files.
+		ScheduledExecutorService timerService = Executors.newScheduledThreadPool ( 1 );
+		timerService.scheduleAtFixedRate (
+			() -> slog.info ( "{} RDF triples loaded", model.size () ), 
+			60, 60, TimeUnit.SECONDS 
+		);
+		
+		try 
+		{
+			for ( String owlPath: owlInputPaths )
+			{
+				slog.info ( "Loading file '{}'", owlPath );
+				try {
+					model.read ( 
+						new BufferedReader ( new FileReader ( owlPath ) ), 
+						"RDF/XML" 
+					);
+				}
+				catch ( FileNotFoundException ex ) 
+				{
+					throw new UncheckedFileNotFoundException (  
+						String.format ( "OWL file '%s' not found, details: %s", owlPath, ex.getMessage () ), 
+						ex 
+					);
+				}
+			}
+		}
+		finally {
+			timerService.shutdownNow ();
+		}
+		
+		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
+		owlMap.map2Graph ( model, graph );
+		
+		return graph;		
+	}
+
+		
 	/** 
 	 * Wraps the parent's corresponding method by checking if the input was {@link #isVisited(OntClass)} and 
 	 * by {@link #setVisited(OntClass, boolean) marking it as visited} before invoking
