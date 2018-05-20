@@ -25,7 +25,6 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
 import net.sourceforge.ondex.parser.medline2.transformer.Transformer;
 import net.sourceforge.ondex.parser.medline2.xml.XMLParser;
-import uk.ac.ebi.utils.runcontrol.MultipleAttemptsExecutor;
 
 /**
  * @author keywan
