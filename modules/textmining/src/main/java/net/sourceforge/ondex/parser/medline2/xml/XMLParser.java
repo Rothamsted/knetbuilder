@@ -30,6 +30,7 @@ import net.sourceforge.ondex.parser.medline2.Parser;
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
 import uk.ac.ebi.utils.regex.RegEx;
+import uk.ac.ebi.utils.runcontrol.MultipleAttemptsExecutor;
 import uk.ac.ebi.utils.xml.XmlFilterUtils;
 
 /**
@@ -149,15 +150,15 @@ public class XMLParser {
 	 * @param Set of PubMed IDs
 	 * @return List of publications (Abstract)
 	 */
-	public Set<Abstract> parsePummedID(HashSet<String> ids) throws MalformedURLException, IOException, XMLStreamException {
+	public Set<Abstract> parsePummedID(HashSet<String> ids) throws MalformedURLException, IOException, XMLStreamException 
+	{
+		// PubMED connections are hectic and need to be tried multiple times
+    MultipleAttemptsExecutor attempter = new MultipleAttemptsExecutor ( 5, 500, 5000, IOException.class );
 
-		Set<Abstract> allabstracts = new HashSet<Abstract>();
-
+		final Set<Abstract> allabstracts = new HashSet<Abstract>();
 
 		HttpURLConnection.setFollowRedirects(false);
 		HttpURLConnection.setDefaultAllowUserInteraction(false);
-
-		XMLStreamReader2 staxXmlReader;
 
 		String accession = "";
 
@@ -197,26 +198,45 @@ public class XMLParser {
 		Iterator<String> it = accsessions.iterator();
 		int i = 0;
 
-		while (it.hasNext()) {
+		while (it.hasNext()) 
+		{
 
 			i++;
-			Set<Abstract> abstracts = new HashSet<Abstract>();
-
 			accession = it.next();
 
 			String efetchString = Parser.EFETCH_WS + accession;
 //			System.out.println("\t For "+ efetchString +"...");
 
 			URL efetch = new URL(efetchString);
-			HttpURLConnection httpConn = (HttpURLConnection) efetch.openConnection();
-			httpConn.setConnectTimeout(0);
-
-			// Wrap certain elements with CDATA			
-			InputStream xmlin = XmlFilterUtils.cdataWrapper ( httpConn.getInputStream(), CDATA_ELEMENTS );
-			staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( xmlin );
-			abstracts = this.parse(staxXmlReader);
+			final Set<Abstract> abstracts = new HashSet<> ();
+			
+			// As said above, this needs to be tried multiple times.
+			try {
+				attempter.executeChecked ( () -> 
+				{
+					HttpURLConnection httpConn = (HttpURLConnection) efetch.openConnection();
+					httpConn.setConnectTimeout( 10*60*1000 );
+		
+					// Wrap certain elements with CDATA			
+					InputStream xmlin = XmlFilterUtils.cdataWrapper ( httpConn.getInputStream(), CDATA_ELEMENTS );
+					XMLStreamReader2 staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( xmlin );
+					abstracts.clear ();
+					abstracts.addAll ( this.parse ( staxXmlReader ) );
+				});
+			}
+			catch ( Exception ex ) 
+			{
+				// IOEx happens only all attempts above have failed
+				if ( ex instanceof IOException ) throw (IOException) ex;
+				if ( ex instanceof XMLStreamException ) throw (XMLStreamException) ex;
+				throw new Error ( 
+					"Internal error: for some weird reason, we got an exception of unexpected type, message: " + ex.getMessage (),
+					ex
+				);
+			}
+				
 			allabstracts.addAll(abstracts);
-
+			
 			if(i % 10 == 0){
 				System.out.println("Retrieved "+ i * 100 + " out of "+ids.size()+" PMIDs.");
 			}

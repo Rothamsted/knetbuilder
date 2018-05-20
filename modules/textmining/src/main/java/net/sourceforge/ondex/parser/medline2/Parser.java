@@ -25,6 +25,7 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
 import net.sourceforge.ondex.parser.medline2.transformer.Transformer;
 import net.sourceforge.ondex.parser.medline2.xml.XMLParser;
+import uk.ac.ebi.utils.runcontrol.MultipleAttemptsExecutor;
 
 /**
  * @author keywan
@@ -148,7 +149,7 @@ public class Parser extends ONDEXParser {
                     }
                 }
                 //System.out.println("pmidSet: " + pmidSet.iterator().next());
-                abs.addAll(xmlParser.parsePummedID(pmidSet));
+                abs.addAll( xmlParser.parsePummedID ( pmidSet ) );
 	            fireEventOccurred(new GeneralOutputEvent(
 	                    "Number of publications found: "+pmidSet.size(), Parser.getCurrentMethodName()));
             }
