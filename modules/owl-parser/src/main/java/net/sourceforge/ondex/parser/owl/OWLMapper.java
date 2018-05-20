@@ -131,7 +131,7 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 		ScheduledExecutorService timerService = Executors.newScheduledThreadPool ( 1 );
 		timerService.scheduleAtFixedRate (
 			() -> slog.info ( "{} RDF triples loaded", model.size () ), 
-			60, 60, TimeUnit.SECONDS 
+			5, 5, TimeUnit.MINUTES 
 		);
 		
 		try 
