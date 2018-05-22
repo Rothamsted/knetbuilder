@@ -1,18 +1,9 @@
 package net.sourceforge.ondex.parser.owl.plugin;
 
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.FileReader;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-import org.apache.jena.ontology.OntModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
