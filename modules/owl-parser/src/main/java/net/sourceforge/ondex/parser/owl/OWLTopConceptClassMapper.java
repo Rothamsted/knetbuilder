@@ -54,8 +54,13 @@ public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, Concept
 	private ConceptClassPrototype genericConceptClass = Utils.GENERIC_ONTOLOGY_CONCEPT_CLASS;
 	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+
+	public OWLTopConceptClassMapper ()
+	{
+		super ( new DefaultConceptClassMapper<> () );
+	}
 	
-	
+
 	@Override
 	public ConceptClass map ( OntClass cls, ONDEXGraph graph )
 	{
@@ -129,12 +134,6 @@ public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, Concept
 		this.setTopClasses ( clss );
 	}
 	
-		
-	public OWLTopConceptClassMapper ()
-	{
-		super ( new DefaultConceptClassMapper<> () );
-	}
-
 	public ConceptClassPrototype getGenericConceptClass ()
 	{
 		return genericConceptClass;
@@ -148,7 +147,7 @@ public class OWLTopConceptClassMapper extends DecoratingMapper<OntClass, Concept
 	@SuppressWarnings ( { "unchecked", "rawtypes" } )
 	private DefaultConceptClassMapper<OntClass> getMyBaseMapper ()
 	{
-		return (DefaultConceptClassMapper<OntClass>) (Mapper) this.getBaseMapper ();
+		return (DefaultConceptClassMapper<OntClass>) (Mapper) this.baseMapper;
 	}
 	
 	

@@ -1,14 +1,10 @@
 package net.sourceforge.ondex.parser.owl;
 
-import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.FileReader;
-
-import org.apache.jena.ontology.OntModel;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.export.oxl.Export;
 
 /**
  * A scrap test to ensure the whole ontology can be loaded.
@@ -20,23 +16,25 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class LoadingTest
 {
 	@Test
-	@Ignore ( "Not a real test, very time consuming" )
+	//@Ignore ( "Not a real test, very time consuming" )
 	public void testLoad () throws Exception
 	{
-		String owlDir = "/Users/brandizi/Documents/Work/RRes/tasks/owl_parser/";
-		//load ( "go_cfg.xml", owlDir + "go.owl" );
+		String owlDir = "/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/knet-pipelines/ontologies/";
+		ONDEXGraph g = load ( "go_cfg.xml", owlDir + "go.owl" );
 		//load ( "doid_cfg.xml", owlDir + "doid.owl" );
 		//load ( "to_cfg.xml", owlDir + "trait_ontology.owl" );
 		//load ( "fypo_cfg.xml", owlDir + "fypo.owl" );
 		
-		owlDir = "/Users/brandizi/Documents/Work/RRes/ondex_data/owl-parser_test_data/";
-		load ( "po_cfg.xml", owlDir + "po.owl" );
+		//owlDir = "/Users/brandizi/Documents/Work/RRes/ondex_data/owl-parser_test_data/";
+		//load ( "po_cfg.xml", owlDir + "po.owl" );
+		
+		Export.exportOXL ( g, "target/loading_test.oxl" );
 	}
 	
-	public static void load ( String cfgPath, String owlPath ) throws Exception
+	public static ONDEXGraph load ( String cfgPath, String owlPath ) throws Exception
 	{
 		try ( ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext ( cfgPath ) ) {
-			OWLMapper.mapFrom ( null, ctx, owlPath );
+			return OWLMapper.mapFrom ( null, ctx, owlPath );
 		}
 	}
 }

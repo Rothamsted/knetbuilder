@@ -65,6 +65,13 @@
 				<artifactId>spring-context</artifactId>
 			</dependency>
 			      
+			<dependency>
+				<groupId>net.sourceforge.ondex.modules</groupId>
+				<artifactId>oxl</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>			
+			</dependency>			      
+			      
    </dependencies>
    
    <build>

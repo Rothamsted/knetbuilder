@@ -76,6 +76,39 @@
 			</set>
 		</property>
 	</bean> <!-- /accessionsMapper -->
+
+	<!-- 
+		We need to map like biological_process => BioProc
+		TODO: Report examples about ChainingLiteralMapper, StringMapper, ChainingLiteralMapper
+	-->
+	<bean id = "idMapper" class = "net.sourceforge.ondex.parser.owl.ChainingLiteralMapper">
+		<property name="baseMapper">
+			<bean class = "net.sourceforge.ondex.parser.owl.IRIBasedIdMapper" />
+		</property>
+		<property name="postProcessor">
+			<bean class = "net.sourceforge.ondex.parser.utils.StringMapper">
+				<property name="map">
+					<map>
+						<entry key="GO_0008150" value="BioProc" />
+						<entry key="GO_0003674" value="MolFunc" />
+						<entry key="GO_0005575" value="CelComp" />
+					</map>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+  <!-- We need to convert IDs like 'biological_process' to 'Biological_Process' -->
+	<bean id = "nameMapper" class = "net.sourceforge.ondex.parser.owl.ChainingLiteralMapper">
+		<property name="baseMapper">
+			<bean class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
+			  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:label' )}" />
+			</bean>
+		</property>
+		<property name="postProcessor">
+			<bean class = "net.sourceforge.ondex.parser.utils.WordCapitalizer" />
+		</property>
+	</bean>
 	
 </beans>
 	
