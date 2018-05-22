@@ -19,18 +19,8 @@ public abstract class DecoratingMapper<S, O> implements Mapper<S, O>
 		this ( null );
 	}
 
-	public DecoratingMapper ( Mapper<?, ?> baseMapper )
+	protected DecoratingMapper ( Mapper<?, ?> baseMapper )
 	{
-		this.baseMapper = baseMapper;
-	}
-
-
-	@SuppressWarnings ( "unchecked" )
-	protected <BS, BO> Mapper<BS, BO> getBaseMapper () {
-		return (Mapper<BS, BO>) baseMapper;
-	}
-
-	protected <BS, BO> void  setBaseMapper ( Mapper<BS, BO> baseMapper ) {
 		this.baseMapper = baseMapper;
 	}
 }

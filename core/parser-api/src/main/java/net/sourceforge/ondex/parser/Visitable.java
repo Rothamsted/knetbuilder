@@ -17,14 +17,23 @@ package net.sourceforge.ondex.parser;
  */
 public interface Visitable<T>
 {
+	/** 
+	 * Always false, you need to override this to provide a true implementation. 
+	 */
 	public default boolean isVisited ( T value ) {
 		return false;
 	}
 	
+	/**
+	 * @return the previous value.
+	 */
 	public default boolean setVisited ( T value, boolean isVisited ) {
 		return this.isVisited ( value );
 	}
 	
+	/**
+	 * Defaults to true. 
+	 */
 	public default boolean setVisited ( T value ) {
 		return this.setVisited ( value, true );
 	}

@@ -23,7 +23,7 @@ import net.sourceforge.ondex.core.ONDEXRelation;
  * The nodes found to be related to the roots are then further explored by taking them as new roots and the process is 
  * recursively repeated in a top-down fashion, until the linkers return empty results.</p> 
  * 
- * <p>This kind of mapper is more generic of a mapper that explores a tree structure, such as an ontology, which is the 
+ * <p>This kind of mapper is more generic than a mapper that explores a tree structure (such as an ontology), which is the 
  * typical case where this kind of mapper is expected to be used.</p>
  *
  * <p>Further options and details are available, see the method's comments below.</p>

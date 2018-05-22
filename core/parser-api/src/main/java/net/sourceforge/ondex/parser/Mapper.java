@@ -10,9 +10,8 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  * <dl><dt>Date:</dt><dd>30 May 2017</dd></dl>
  *
  */
-@FunctionalInterface
 public interface Mapper<S, O> extends Visitable<S>
-{
+{	
 	public O map ( S source, ONDEXGraph graph );
 	
 	public default O map ( S source ) {

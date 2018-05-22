@@ -25,7 +25,7 @@ public abstract class HoldingMapper<S, O> extends DecoratingMapper<S, O> impleme
 		this ( null );
 	}
 
-	public HoldingMapper ( Mapper<?, ?> baseMapper )
+	public HoldingMapper ( Mapper<S, O> baseMapper )
 	{
 		super ( baseMapper );
 	}
@@ -36,7 +36,7 @@ public abstract class HoldingMapper<S, O> extends DecoratingMapper<S, O> impleme
 	public synchronized O map ( S source, ONDEXGraph graph )
 	{
 		if ( this.mappedValue != null ) return this.mappedValue; 
-		return this.mappedValue = (O) this.getBaseMapper ().map ( source, graph );
+		return this.mappedValue = ((Mapper<S, O>) this.baseMapper).map ( source, graph );
 	}
 
 }
