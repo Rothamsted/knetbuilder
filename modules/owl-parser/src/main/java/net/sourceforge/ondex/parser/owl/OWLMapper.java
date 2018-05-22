@@ -1,10 +1,8 @@
 package net.sourceforge.ondex.parser.owl;
 
 import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -52,7 +50,7 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 	}
 
 	/**
-	 * It is preferred that you use this on top-levl invocations, rather than {@link #map(OntModel, ONDEXGraph)}. This
+	 * It is preferred that you use this on top-level invocation, rather than {@link #map(OntModel, ONDEXGraph)}. This
 	 * does further operations (e.g., logging the mapping progress) and also returns the {@link ONDEXGraph} that is 
 	 * filled with mappings from the input model. 
 	 * 
@@ -159,9 +157,7 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 		}
 		
 		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-		owlMap.map2Graph ( model, graph );
-		
-		return graph;		
+		return owlMap.map2Graph ( model, graph );
 	}
 
 		
