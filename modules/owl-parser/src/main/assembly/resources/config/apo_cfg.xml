@@ -60,13 +60,11 @@
 			
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="APO:" />
-					<property name = "dataSourcesMapper" ref = "apoDataSource" />
 					<property name="addedPrefix" value = "APO_" />
 				</bean>
 				
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="APO:" />
-					<property name = "dataSourcesMapper" ref = "apoDataSource" />
 					<property name="addedPrefix" value = "APO_" />
 				</bean>
 				
@@ -89,14 +87,10 @@
 		</property>
 	</bean>	
 	
-	<!-- Data source that represents Ascomycete Phenotype Ontology itself and used on several components -->
-	<bean id = "apoDataSource" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
-				<property name = "id" value = "APO" />
-				<property name = "fullName" value = "Ascomycete Phenotype Ontology" />
-			</bean>
-		</property>
-	</bean>		
 
+	<bean id = "dataSourcePrototype" class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+		<property name = "id" value = "APO" />
+		<property name = "fullName" value = "Ascomycete Phenotype Ontology" />
+	</bean>
+	
 </beans>

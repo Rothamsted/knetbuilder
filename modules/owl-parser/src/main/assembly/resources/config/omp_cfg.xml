@@ -60,13 +60,11 @@
 				
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="OMP:" />
-					<property name = "dataSourcesMapper" ref = "ompDataSource" />
 					<property name="addedPrefix" value = "OMP_" />
 				</bean>
 				
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="OMP:" />
-					<property name = "dataSourcesMapper" ref = "ompDataSource" />
 					<property name="addedPrefix" value = "OMP_" />
 				</bean>
 				
@@ -89,14 +87,10 @@
 		</property>
 	</bean>
 
-	<!-- Data source that represents Ontology of Microbial Phenotypes itself and used on several components -->
-	<bean id = "ompDataSource" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
-				<property name = "id" value = "OMP" />
-				<property name = "fullName" value = "Ontology of Microbial Phenotypes" />
-			</bean>
-		</property>
-	</bean>		
+
+	<bean id = "dataSourcePrototype" class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+		<property name = "id" value = "OMP" />
+		<property name = "fullName" value = "Ontology of Microbial Phenotypes" />
+	</bean>
 
 </beans>

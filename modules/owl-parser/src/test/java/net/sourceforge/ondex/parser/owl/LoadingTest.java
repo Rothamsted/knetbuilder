@@ -26,6 +26,8 @@ public class LoadingTest
 		//load ( "to_cfg.xml", owlDir + "trait_ontology.owl" );
 		//load ( "fypo_cfg.xml", owlDir + "fypo.owl" );
 		
+		//ONDEXGraph g = load ( "co_cfg.xml", owlDir + "co_321.owl" );
+		
 		//owlDir = "/Users/brandizi/Documents/Work/RRes/ondex_data/owl-parser_test_data/";
 		//load ( "po_cfg.xml", owlDir + "po.owl" );
 		

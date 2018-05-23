@@ -66,10 +66,12 @@
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="GO:" />
 					<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" />
+					<property name = "addedPrefix" value="GO:" />
 				</bean>
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="GO:" />
 					<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" />
+					<property name = "addedPrefix" value="GO:" />
 				</bean>
 				<ref bean = "wpXrefAccMapper" />
 				<ref bean = "enzymeXrefAccMapper" />				
@@ -110,5 +112,7 @@
 		</property>
 	</bean>
 	
+	<bean id = "dataSourcePrototype" parent = "goDataSourcePrototype" />
+
 </beans>
 	

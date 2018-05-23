@@ -25,6 +25,7 @@ public class ONDEXNamespaces implements Namespaces
 			put ( "obo", "http://purl.obolibrary.org/obo/" );
 			put ( "oboInOwl", "http://www.geneontology.org/formats/oboInOwl#" );
 			put ( "odx", "http://www.ondex.org/terms#" );
+			put ( "co_321", "http://www.cropontology.org/rdf/CO_321:" );
 		}};
 	}
 }

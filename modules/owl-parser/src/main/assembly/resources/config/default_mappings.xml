@@ -124,11 +124,17 @@
 	  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:comment' )}" />
 	</bean>
 		
-	<bean id = "dataSourceMapper" class = "net.sourceforge.ondex.parser.ConstDataSourceMapper">
-		<property name="value" value = "#{T( net.sourceforge.ondex.parser.owl.Utils ).OWL_PARSER_DATA_SOURCE }" />
-	</bean>	
-
 		
+		
+	<bean id = "dataSourceMapper" class = "net.sourceforge.ondex.parser.ConstDataSourceMapper">
+		<property name="value" ref = "dataSourcePrototype" />
+	</bean>
+	<bean id = "dataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
+		<property name="value" ref = "dataSourcePrototype" />
+	</bean>
+	<util:constant id = "dataSourcePrototype" 
+		static-field = "net.sourceforge.ondex.parser.owl.Utils.OWL_PARSER_DATA_SOURCE"/>
+
 		
 		
 	<!-- ____________________________ Misc Utilities ____________________________ -->

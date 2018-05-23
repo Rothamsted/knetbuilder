@@ -24,15 +24,17 @@
 	<bean id = "idAccMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
 		<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:id' )}" />
 		<!-- You require these in your exension 
-		<property name = "dataSourcePrefix" value="GO:" />
-		<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" /> -->
+		<property name = "dataSourcePrefix" value="GO:" / -->
+		<!-- Just override dataSourcePrototype to fit the default here -->
+		<property name = "dataSourcesMapper" ref = "dataSourcesMapper" />
 	</bean>
 	
 	<bean id = "altIdAccMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
 		<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:hasAlternativeId' )}" />
 		<!-- You require these in your exension 
-		<property name = "dataSourcePrefix" value="GO:" />
-		<property name = "dataSourcesMapper" ref = "goDataSourcesMapper" /> -->
+		<property name = "dataSourcePrefix" value="GO:" / -->
+		<!-- Just override dataSourcePrototype to fit the default here -->
+		<property name = "dataSourcesMapper" ref = "dataSourcesMapper" />
 	</bean>
 	
 	<bean id = "goXrefAccMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
@@ -183,13 +185,15 @@
 	
 	<!-- This is used by both GO and other ontologies that refer to GO terms. -->
 	<bean id = "goDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
-				<property name = "id" value = "GO" />
-				<property name = "fullName" value = "Gene Ontology" />
-			</bean>
-		</property>
+		<property name = "value" ref = "goDataSourcePrototype" />
 	</bean>		
+	
+	<bean id = "goDataSourcePrototype" class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+		<property name = "id" value = "GO" />
+		<property name = "fullName" value = "Gene Ontology" />
+	</bean>
+	
+	
 	
 	<!-- This too is used in a couple of ontologies -->
 	<bean id = "patoDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">

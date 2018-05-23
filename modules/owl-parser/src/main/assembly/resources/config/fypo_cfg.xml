@@ -60,13 +60,11 @@
 							
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="FYPO:" />
-					<property name = "dataSourcesMapper" ref = "fypoDataSource" />
 					<property name="addedPrefix" value = "FYPO_" />
 				</bean>
 				
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="FYPO:" />
-					<property name = "dataSourcesMapper" ref = "fypoDataSource" />
 					<property name="addedPrefix" value = "FYPO_" />
 				</bean>
 
@@ -90,14 +88,11 @@
 		</property>
 	</bean>
 
-	<!-- Data source that represents Fission Yeast Phenotype Ontology itself and used on several components -->
-	<bean id = "fypoDataSource" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
-				<property name = "id" value = "FYPO" />
-				<property name = "fullName" value = "Fission Yeast Phenotype Ontology" />
-			</bean>
-		</property>
-	</bean>		
+	
+	<bean id = "dataSourcePrototype" class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+		<property name = "id" value = "FYPO" />
+		<property name = "fullName" value = "Fission Yeast Phenotype Ontology" />
+	</bean>
+	
 
 </beans>

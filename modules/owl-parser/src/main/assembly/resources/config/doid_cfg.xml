@@ -48,11 +48,9 @@
 			<set>
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="DOID:" />
-					<property name = "dataSourcesMapper" ref = "doidDataSourcesMapper" />
 				</bean>
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="DOID:" />
-					<property name = "dataSourcesMapper" ref = "doidDataSourcesMapper" />
 				</bean>
 				<ref bean = "wpXrefAccMapper" />
 				<ref bean = "pmedXrefAccMapper" />
@@ -71,15 +69,11 @@
 		</property>
 	</bean>
 
-
-	<bean id = "doidDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
-				<property name = "id" value = "DOID" />
-				<property name = "fullName" value = "Disease Ontology (http://disease-ontology.org)" />
-			</bean>
-		</property>
-	</bean>	
 	
+	<bean id = "dataSourcePrototype" class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+		<property name = "id" value = "DOID" />
+		<property name = "fullName" value = "Disease Ontology (http://disease-ontology.org)" />
+	</bean>
+		
 </beans>
 	

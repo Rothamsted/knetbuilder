@@ -64,13 +64,11 @@
 			<set>
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="PO:" />
-					<property name = "dataSourcesMapper" ref = "poDataSourcesMapper" />
-					<property name = "addedPrefix" value="PO:" />
+					<!-- property name = "addedPrefix" value="PO:" / -->
 				</bean>
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="PO:" />
-					<property name = "dataSourcesMapper" ref = "poDataSourcesMapper" />
-					<property name = "addedPrefix" value="PO:" />
+					<!-- property name = "addedPrefix" value="PO:" / -->
 				</bean>
 			</set>
 		</property>
@@ -89,14 +87,10 @@
 	</bean>
 
 
-  <!-- The data source representing the PO ontology as a whole -->
-	<bean id = "poDataSourcesMapper" class = "net.sourceforge.ondex.parser.ConstDataSourcesMapper">
-		<property name = "value">
-			<bean class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
-				<property name = "id" value = "PO" />
-				<property name = "fullName" value = "Plant Ontology" />
-			</bean>
-		</property>
+	<bean id = "dataSourcePrototype" class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+		<property name = "id" value = "PO" />
+		<property name = "fullName" value = "Plant Ontology" />
+		<property name = "description" value = "The Plant Ontology (http://wiki.plantontology.org/)" />
 	</bean>
 
 </beans>
