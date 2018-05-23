@@ -65,16 +65,20 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 			log.info ( "Parsing OWL dataset with {} triple(s)", model.size () ); 
 			
 			final ONDEXGraph graph1 = graph; // just because the timer below needs a final
+			int gsz0 = graph.getConcepts ().size (); // Graph doesn't necessarily start empty.
 
 			// Before delving into the mapping, let's setup a reporter, to give a sense that we're going ahead
 			timerService.scheduleAtFixedRate (
-				() -> log.info ( "Mapped {} OWL Classes", graph1.getConcepts ().size () ), 
+				() -> log.info ( "Mapped {} OWL Classes", graph1.getConcepts ().size () - gsz0 ), 
 				30, 30, TimeUnit.SECONDS 
 			);
 
 			this.map ( model, graph ).count ();
 	
-			log.info ( "Everything from the OWL file mapped. Total classes: {}", graph.getConcepts ().size () );
+			log.info ( 
+				"Everything from the OWL file mapped. Total classes: {}", 
+				graph.getConcepts ().size () - gsz0 
+			);
 			return graph;
 		}
 		finally {
@@ -124,11 +128,12 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 	public static ONDEXGraph mapFrom ( ONDEXGraph graph, ApplicationContext ctx, String... owlInputPaths )
 	{
 		OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
+		long msz0 = model.size (); // Just in case it doesn't start empty
 		
 		// Let's keep track of the loading, useful with large files.
 		ScheduledExecutorService timerService = Executors.newScheduledThreadPool ( 1 );
 		timerService.scheduleAtFixedRate (
-			() -> slog.info ( "{} RDF triples loaded", model.size () ), 
+			() -> slog.info ( "{} RDF triples loaded", model.size () - msz0 ), 
 			5, 5, TimeUnit.MINUTES 
 		);
 		
@@ -137,7 +142,8 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 			for ( String owlPath: owlInputPaths )
 			{
 				slog.info ( "Loading file '{}'", owlPath );
-				try {
+				try 
+				{
 					model.read ( 
 						new BufferedReader ( new FileReader ( owlPath ) ), 
 						"RDF/XML" 
