@@ -1,8 +1,7 @@
 #!/bin/bash
-MEMORY=2G
 DATA=data/
 OVTK_DATA=config/
-echo "Running OVTK with $MEMORY and data dir $DATA edit runme.sh to change this amount"
+echo "Running OVTK on top of '$DATA'"
 
 for J in lib/*jar
 do
