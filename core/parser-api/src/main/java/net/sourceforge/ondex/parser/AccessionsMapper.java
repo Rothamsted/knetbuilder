@@ -4,7 +4,7 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ONDEXConcept;
 
 /**
- * A mapper that produces multiple {@link ConceptAccession}, possibily combining {@link Scanner scanners} and
+ * A mapper that produces multiple {@link ConceptAccession}, possibly combining {@link Scanner scanners} and
  * {@link AccessionMapper single-accession mappers}. 
  *
  * @author brandizi

@@ -5,10 +5,10 @@ import java.util.stream.Stream;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * Similarly to {@link ScannerMapper}, a scanner stream mapper takes the items SI returned by a scanner processing a 
+ * Similarly to {@link ScannerMapper}, a scanner pair mapper takes the SI items returned by a scanner processing a 
  * data source S1 and maps them to ONDEX elements. Since this class is a {@link PairMapper}, it assumes that the 
  * second data source item SI2 passed to the {@link #map(Object, Object, ONDEXGraph)} method is a constant set by the 
- * invoker. For examples, @see {@link AbstractAccessionsMapper}. 
+ * invoker. For examples, @see {@link ScannerAccessionsMapper}. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>24 Jul 2017</dd></dl>

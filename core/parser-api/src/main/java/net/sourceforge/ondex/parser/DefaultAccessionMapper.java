@@ -26,6 +26,7 @@ public class DefaultAccessionMapper<S> implements AccessionMapper<S>
 	public ConceptAccession map ( S src, ONDEXConcept concept, ONDEXGraph graph )
 	{
 		String accession = this.getAccessionValueMapper ().map ( src, graph );
+		if ( accession == null ) return null;
 		
 		DataSource dataSrc = 
 			Optional.ofNullable ( this.getDataSourceMapper () )

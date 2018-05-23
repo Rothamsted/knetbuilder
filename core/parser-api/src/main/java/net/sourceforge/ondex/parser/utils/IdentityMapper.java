@@ -1,6 +1,7 @@
-package net.sourceforge.ondex.parser;
+package net.sourceforge.ondex.parser.utils;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.parser.Mapper;
 
 /**
  * A facility that does nothing, its {@link #map(Object, ONDEXGraph)} method simply returns its input.
