@@ -58,7 +58,7 @@ public class CDATAWriterFilter extends StreamWriter2Delegate
 						if ( currentChar == escChar ) {
 							this.writeCData ( chars, start, len );
 							return;
-						}
+					}
 			}
 		}
 		super.writeCharacters ( chars, start, len );
