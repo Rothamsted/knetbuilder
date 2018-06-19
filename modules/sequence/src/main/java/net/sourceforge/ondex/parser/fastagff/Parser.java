@@ -260,7 +260,7 @@ public class Parser extends ONDEXParser {
 					c1.createAttribute(anLocation, chromosome, false);
 				}
 
-                                System.out.println("ondex2gene: geneId= "+ geneId +", c1.id= "+ c1.getId());
+                                // System.out.println("ondex2gene: geneId= "+ geneId +", c1.id= "+ c1.getId());
 				ondex2gene.put(geneId, c1.getId());
 				geneProps.clear(); // clear hashmap
 			}
@@ -306,7 +306,7 @@ public class Parser extends ONDEXParser {
 						c2.createConceptAccession(secuenceName, dsAccession, false);
 						c2.createAttribute(anSecuenceAA, secuence, false);
 						c2.createAttribute(anTaxid, taxid, false);
-                                                System.out.println("ondex2protein: sequenceName= "+ secuenceName +", c2.id= "+ c2.getId());
+                                                // System.out.println("ondex2protein: sequenceName= "+ secuenceName +", c2.id= "+ c2.getId());
 						ondex2protein.put(secuenceName, c2.getId());
 						// saves the new secuence name and clears the secuence
 						secuenceName = FASTArow.split("\\s|\\|")[0].substring(1).toUpperCase();
@@ -419,7 +419,7 @@ public class Parser extends ONDEXParser {
 					} else {
 						ondexGeneId = ondex2gene.get(pAcc.split("\\.")[0]);
 					}
-					 System.out.println("ondexGeneId retrieved: "+ ondexGeneId);
+					 //System.out.println("ondexGeneId retrieved: "+ ondexGeneId);
 				} else {
 					missingGenes++;
 					continue;
