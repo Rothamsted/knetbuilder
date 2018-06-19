@@ -51,7 +51,7 @@ public class Parser extends ONDEXParser {
 
 	@Override
 	public String getVersion() {
-		return "16/08/2016";
+		return "18/06/2018";
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class Parser extends ONDEXParser {
 					String[] col = splited[8].split(";");
 					for (String col1 : col) {
 						String[] gene_props = col1.split("=");
-						geneProps.put(gene_props[0].toUpperCase(), gene_props[1]);
+						geneProps.put(gene_props[0].toUpperCase(), gene_props[1].toUpperCase());
 					}
 					// geneId = col[0].split("=")[1].toUpperCase();
 					// geneDescription = col[1].split("=")[1].toUpperCase();
@@ -260,6 +260,7 @@ public class Parser extends ONDEXParser {
 					c1.createAttribute(anLocation, chromosome, false);
 				}
 
+                                System.out.println("ondex2gene: geneId= "+ geneId +", c1.id= "+ c1.getId());
 				ondex2gene.put(geneId, c1.getId());
 				geneProps.clear(); // clear hashmap
 			}
@@ -298,19 +299,21 @@ public class Parser extends ONDEXParser {
 				if (FASTArow.substring(0, 1).equals(">")) {
 					if (!secuenceName.isEmpty()) {
 						// creates protein concept when find the next > symbol
+                                                secuenceName= secuenceName.toUpperCase(); // upper case
 						ONDEXConcept c2 = graph.getFactory().createConcept(secuenceName, "", "", dsConcept, ccProtein,
 								etIMPD);
 						c2.createConceptName(secuenceName, true);
 						c2.createConceptAccession(secuenceName, dsAccession, false);
 						c2.createAttribute(anSecuenceAA, secuence, false);
 						c2.createAttribute(anTaxid, taxid, false);
+                                                System.out.println("ondex2protein: sequenceName= "+ secuenceName +", c2.id= "+ c2.getId());
 						ondex2protein.put(secuenceName, c2.getId());
-						// saves the new secuence name and clears de secuence
-						secuenceName = FASTArow.split("\\s|\\|")[0].substring(1);// .toUpperCase();
+						// saves the new secuence name and clears the secuence
+						secuenceName = FASTArow.split("\\s|\\|")[0].substring(1).toUpperCase();
 						secuence = "";
 					} else {
 						// saves the first secuence name
-						secuenceName = FASTArow.split("\\s|\\|")[0].substring(1);// .toUpperCase();
+						secuenceName = FASTArow.split("\\s|\\|")[0].substring(1).toUpperCase();
 					}
 				} else {
 					// concate the secuence to the current secuence name
@@ -362,7 +365,7 @@ public class Parser extends ONDEXParser {
 					String[] splited = Mappingrow.split("\t");
 
 					String geneId = splited[geneColumn].toUpperCase();
-					String proteinId = splited[proteinColumn];
+					String proteinId = splited[proteinColumn].toUpperCase();
 
 					if (ondex2protein.get(proteinId) == null) {
 						missingProteins++;
@@ -416,8 +419,7 @@ public class Parser extends ONDEXParser {
 					} else {
 						ondexGeneId = ondex2gene.get(pAcc.split("\\.")[0]);
 					}
-					// System.out.println("ondexGeneId retrieved: "+
-					// ondexGeneId);
+					 System.out.println("ondexGeneId retrieved: "+ ondexGeneId);
 				} else {
 					missingGenes++;
 					continue;
@@ -426,7 +428,7 @@ public class Parser extends ONDEXParser {
 				ONDEXConcept geneCocnept = graph.getConcept(ondexGeneId);
 				ONDEXConcept proteinCocnept = graph.getConcept(ondexProteinId);
 
-				graph.getFactory().createRelation(geneCocnept, proteinCocnept, rtEncodes, etIMPD);
+				graph.getFactory().createRelation(geneCocnept, proteinCocnept, rtEncodes, etIMPD); // encodes relation
 			}
 			System.out.println("Mapping File Not Provided");
 			System.out.println("Amount of missing genes: " + missingGenes);
