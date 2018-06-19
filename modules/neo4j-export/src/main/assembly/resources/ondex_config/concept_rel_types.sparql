@@ -43,4 +43,3 @@ SELECT ?iri ?type ?fromIri ?toIri
     AS ?iri
   )   
 }
-LIMIT 1000
