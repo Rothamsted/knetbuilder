@@ -361,7 +361,7 @@ public class ConfigParser
 			AttributePrototype result = (AttributePrototype) MethodUtils.invokeStaticMethod ( 
 				DefConst.class, methodName, args, argsClasses
 			);		
-			
+
 			if ( parent instanceof ConceptPrototype )  ( (ConceptPrototype) parent).addAttributes ( result );
 			else if ( parent instanceof RelationPrototype )  ( (RelationPrototype) parent).addAttributes ( result );
 			else throw new IllegalArgumentException (
