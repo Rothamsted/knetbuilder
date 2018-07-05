@@ -30,7 +30,7 @@
   	 * Text mining module (to support new PubMed XML, [#12](https://github.com/Rothamsted/ondex-knet-builder/issues/12), [#13](https://github.com/Rothamsted/ondex-knet-builder/issues/12)).
   	 * New Concept Classes and and relation types added.
 
-## v1.2
+## 1.2
   * OWL parser
     * Some debugging and improvements in parsing GO, TO, FYPO ontologies
     * Options to customise accession prefixes in the final ONDEX graph
