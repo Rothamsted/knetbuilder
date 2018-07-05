@@ -28,27 +28,9 @@
 			<artifactId>api</artifactId>
 			<groupId>net.sourceforge.ondex.core</groupId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>net.sourceforge.ondex.core</groupId>
-			<artifactId>workflow-api</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sourceforge.ondex.core</groupId>
-			<artifactId>memory</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
