@@ -1,0 +1,6 @@
+==== FreeMarker Test ====
+
+
+	Hello, ${who}!
+
+.
