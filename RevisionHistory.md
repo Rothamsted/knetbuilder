@@ -1,6 +1,11 @@
 # Revision History
 
-## 2.0.1-SNAPSHOT
+
+## 2.1.1-SNAPSHOT
+  * Moving to next release.
+
+
+## 2.1
   * Improvements to OWL/Ondex mappings ([example](https://github.com/Rothamsted/ondex-knet-builder/commit/eff609d09550cc96f2ed877a91b45764aa6528e6)). 
   * Minor changes to the launching scripts ([example](https://github.com/Rothamsted/ondex-desktop/commit/0b2f5145207fb21553b682c78f81752b553eed09)).
   * Fixing problems with OXL Import/Export ([#12](https://github.com/Rothamsted/ondex-knet-builder/issues/12), [#14](https://github.com/Rothamsted/ondex-knet-builder/issues/14)).
@@ -30,6 +35,7 @@
   * Bugfixing and Enhancements:  
   	 * Text mining module (to support new PubMed XML, [#12](https://github.com/Rothamsted/ondex-knet-builder/issues/12), [#13](https://github.com/Rothamsted/ondex-knet-builder/issues/12)).
   	 * New Concept Classes and and relation types added.
+
 
 ## 1.2
   * OWL parser
