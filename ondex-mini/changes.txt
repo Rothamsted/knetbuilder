@@ -1,6 +1,0 @@
-Version 0.0.2:
-==============
-  * It is now possible to specify native libraries on the command line using argument -l
-    All listed libraries will be loaded on startup.
-  * Uses api:0.0.2 and base:0.0.2
-
