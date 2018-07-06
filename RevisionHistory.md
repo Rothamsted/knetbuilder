@@ -8,6 +8,7 @@
   * Internal changes:  
     * Improvements in the parser API ([1](https://github.com/Rothamsted/ondex-base/commit/4e3d238111a3367c7531b4815c0a777b1261ed6f), [2](https://github.com/Rothamsted/ondex-base/commit/7b3406761162ef0aa44f2706a349f341d3d8a9a1), [3](https://github.com/Rothamsted/ondex-base/commit/ff79d961a4f0fcf5c3a15d8ec7be99e694660419)).  
     * Minor review of the common type definitions (see [ondex_metadata.xml](https://github.com/Rothamsted/ondex-base/blob/master/datadir/src/main/resources/xml/ondex_metadata.xml)).  
+    * Minor fixes to fasta-gff3 Parser and JSON Export plugins
     * Minor [review of some logging messages](https://github.com/Rothamsted/ondex-base/commit/38238b3fb0460a7d2e8417610b03309dfa5dfa74).  
   
 
