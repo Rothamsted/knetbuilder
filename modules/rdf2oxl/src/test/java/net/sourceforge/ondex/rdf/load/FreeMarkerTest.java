@@ -3,32 +3,29 @@ package net.sourceforge.ondex.rdf.load;
 import static java.lang.System.out;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.zip.GZIPInputStream;
 
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.ModelMaker;
+import org.apache.jena.riot.RDFFormat;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import freemarker.core.ParseException;
+import com.google.common.io.Resources;
+
 import freemarker.template.Configuration;
-import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.TemplateNotFoundException;
 import info.marcobrandizi.rdfutils.jena.SparqlUtils;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
+import uk.ac.ebi.utils.io.IOUtils;
 
 /**
  * TODO: comment me!
@@ -106,4 +103,61 @@ public class FreeMarkerTest
 		Template tpl = tplConfig.getTemplate ( "fremarker_sparql_test.ftlh" );		
 		tpl.process ( data, new OutputStreamWriter ( out ) );		
 	}
+	
+	
+	@Test
+	public void testJson () throws IOException, TemplateException
+	{		
+		// See StringTemplateLoader for the template-from-string case
+		
+		Template tpl = tplConfig.getTemplate ( "json_test.ftlh" );
+		
+		String json = IOUtils.readResource ( "freemarker_test/test.json" );
+		@SuppressWarnings ( "serial" )
+		Map<String, Object> data = new HashMap<String, Object> () {{
+			put ( "json", json );
+		}};
+		
+				
+		tpl.process ( data, new OutputStreamWriter ( System.out ) );
+	}	
+	
+	
+	@Test
+	public void testJsSparql () throws Exception
+	{
+		Model model = ModelFactory.createDefaultModel ();
+		model.read ( "file:target/test-classes/freemarker_test/foaf_ex.rdf" );
+		
+		String sparql = NamespaceUtils.asSPARQLProlog () + 
+			"CONSTRUCT {\n" + 
+			"  ?a bk:name ?aname; bk:friendName ?bname\n" +
+			"}\n" +
+			"WHERE {\n" + 
+			"  ?a a foaf:Person;\n" + 
+			"	    foaf:name ?aname .\n" + 
+			"\n" + 
+			"	 OPTIONAL \n" + 
+			"	 {\n" + 
+			"	   ?a foaf:knows ?b .\n" + 
+			"	   ?b foaf:name ?bname .\n" + 
+			"	 }\n" + 
+			"}\n";
+
+		//out.println ( sparql );
+		
+		Model m = SparqlUtils.construct ( sparql, model );
+		StringWriter sw = new StringWriter ();
+		m.write ( sw, "JSON-LD" );
+		
+		// out.print ( sw.toString () );		
+		
+		@SuppressWarnings ( "serial" )
+		Map<String, Object> data = new HashMap<String, Object> () {{
+			put ( "json", sw.toString () );
+		}};
+
+		Template tpl = tplConfig.getTemplate ( "js_sparql_test.ftlh" );		
+		tpl.process ( data, new OutputStreamWriter ( out ) );		
+	}	
 }
