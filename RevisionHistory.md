@@ -2,7 +2,7 @@
 
 
 ## 2.1.1-SNAPSHOT
-  * Moving to next release.
+  * Next dev release.
 
 
 ## 2.1
