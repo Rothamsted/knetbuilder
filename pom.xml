@@ -235,12 +235,13 @@
 		        <plugin>
 					    <groupId>com.github.harti2006</groupId>
 						  <artifactId>neo4j-server-maven-plugin</artifactId>
-						  <version>1.0.1</version>
+						  <version>1.1-SNAPSHOT</version>
 							<configuration>
 								<version>${neo4j.server.version}</version>
 								<port>${neo4j.server.httpPort}</port>
 								<boltPort>${neo4j.server.boltPort}</boltPort>
 								<deleteDb>true</deleteDb>
+								<serverReadyAttempts>120</serverReadyAttempts>
 							</configuration>
 							<executions>
 								<execution>
