@@ -33,8 +33,9 @@ public class RDFFileExporter
 	
 	public void export ( ONDEXGraph g, final OutputStream out, final String langOrFormat )
 	{
-		try ( RDFExporter xport = new RDFExporter (); )
+		try
 		{
+			RDFExporter xport = new RDFExporter (); 			
 			final Pair<RDFFormat, Lang> jlang = JenaIoUtils.getLangOrFormat ( langOrFormat );
 						
 			// There's no point in true parallelism here, because the output stream below is not written

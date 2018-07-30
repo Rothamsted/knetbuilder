@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.load;
+package net.sourceforge.ondex.rdf.convert;
 
 import static java.lang.System.out;
 
@@ -6,18 +6,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.riot.RDFFormat;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.google.common.io.Resources;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -28,7 +24,7 @@ import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import uk.ac.ebi.utils.io.IOUtils;
 
 /**
- * TODO: comment me!
+ * Basic tests with the FreeMarker framework.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>4 Jul 2018</dd></dl>
@@ -65,6 +61,9 @@ public class FreeMarkerTest
 	}
 	
 	
+	/**
+	 * Tests templates that use @ResultSet straight.
+	 */
 	@Test
 	public void testWithSparql () throws Exception
 	{
@@ -85,7 +84,7 @@ public class FreeMarkerTest
 			"}\n";
 
 		//out.println ( sparql );
-		
+
 		ResultSet rs = SparqlUtils.select ( sparql, model );
 		
 		/*
@@ -97,7 +96,7 @@ public class FreeMarkerTest
 		@SuppressWarnings ( "serial" )
 		Map<String, Object> data = new HashMap<String, Object> () {{
 			put ( "who", "Marco" );
-			put ( "solutions", rs );
+			put ( "solutions", rs ); // pass the cursor to the template, it will loop over it.
 		}};
 
 		Template tpl = tplConfig.getTemplate ( "fremarker_sparql_test.ftlh" );		
@@ -105,6 +104,9 @@ public class FreeMarkerTest
 	}
 	
 	
+	/**
+	 * Tests a template that gets data as a JSON string. 
+	 */
 	@Test
 	public void testJson () throws IOException, TemplateException
 	{		
@@ -118,11 +120,14 @@ public class FreeMarkerTest
 			put ( "json", json );
 		}};
 		
-				
 		tpl.process ( data, new OutputStreamWriter ( System.out ) );
 	}	
 	
 	
+	/**
+	 * Tests the approach of first transforming a {@code SPARQL CONSTRUCT} result (or any {@link Model} into a 
+	 * JSON string, which is then passed to the template.
+	 */	
 	@Test
 	public void testJsSparql () throws Exception
 	{

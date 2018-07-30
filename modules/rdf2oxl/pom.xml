@@ -38,13 +38,17 @@
     <dependency>
       <groupId>info.marcobrandizi</groupId>
       <artifactId>rdfutils-jena</artifactId>
-      <version>2.0.1-SNAPSHOT</version>
     </dependency>
     
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.28</version>
+		</dependency>
+    
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
 		</dependency>
     
 	</dependencies>
