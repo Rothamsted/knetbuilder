@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.riot.Lang;
@@ -42,8 +41,7 @@ public class RDFFileExporter
 			// in a thread-safe way, so it would need synchronisation at model level (going more fine-grained
 			// is too complicated) making the true processing single-thread anyway
 			//
-			ThreadPoolExecutor executor = HackedBlockingQueue.createExecutor ( 1, 1 ); 
-			xport.setExecutor ( executor );
+			xport.setExecutorFactory ( () -> HackedBlockingQueue.createExecutor ( 1, 1 ) );
 			xport.setDestinationMaxSize ( 50000 );
 			
 			xport.setConsumer ( m -> 
