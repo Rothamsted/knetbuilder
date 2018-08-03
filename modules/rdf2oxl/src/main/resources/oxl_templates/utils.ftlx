@@ -1,0 +1,4 @@
+<#-- Return an array out of the parameter, putting it into an array if it's a singleton -->
+<#function to_seq object>
+  <#return (object?is_string || !object?is_enumerable)?then ( [ object ], object )>
+</#function>

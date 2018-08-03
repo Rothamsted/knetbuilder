@@ -1,0 +1,68 @@
+<#include "graph_header.ftlx">
+<#include "utils.ftlx">
+<#-- 
+
+  Reports XML for property natures, e.g., symmetric, transitive  
+
+-->
+<#macro prop_nature jsNatures>
+  <#-- Normalize to array -->
+  <#local natures = jsNatures>
+  <#if natures?is_string>
+  	<#local natures = [ natures ]>
+  </#if>
+	<#local natureMap = { 
+	  'isReflexive': 'owl:ReflexiveProperty',
+	  'isAntisymmetric': 'owl:AsymmetricProperty', 
+	  'isSymmetric': 'owl:SymmetricProperty', 
+	  'isTransitive': 'owl:TransitiveProperty'}
+	>	  
+	<#list natureMap as xml, rdf>
+	  		<${xml}>${( natures?seq_contains( rdf  ) )?c}</${xml}>
+	</#list>  
+</#macro>
+<#--  
+
+  
+  Common property descriptors, which are used both for a proprty and its parent
+  
+-->
+<#macro common_descriptors relType>
+				<id>${relType.identifier}</id>
+			<#noautoesc>
+				<fullname><![CDATA[${(relType.label[ '@value' ])!''}]]></fullname>
+				<description><![CDATA[${(relType.description[ '@value' ])!''}]]></description>
+			</#noautoesc>
+				<inverseName>${(relType._inverseId)!'none'}</inverseName>
+				<@prop_nature (relType._nature)![] />
+</#macro>
+<#-- 
+
+
+										------------------------------------------ MAIN ------------------------------------------ 
+
+-->
+<#-- 
+	We need this support lookup table, in order to find property parents quickly.
+-->
+<#assign parentProps = {}>
+<#list js as rt>
+	<#if !to_seq ( rt [ '@type' ] )?seq_contains ( '_OxlParentProperty' )><#continue></#if>
+	<#assign parentProps += { rt [ '@id' ]: rt }>
+</#list>
+<#list js as rt> 
+  <#if !to_seq ( rt [ '@type' ] )?seq_contains ( '_OxlProperty' )><#continue></#if>
+			<relation_type>
+			  <@common_descriptors rt />
+				<#--
+				  Parent
+				  
+				  TODO: For the moment, conceptsRelation might be come a parent relation, with its own XML descriptors, but 
+				  no top-level definition. If this works in Ondex, we can keep it and replace relatedTo with conceptsRelation. 
+				-->
+				<specialisationOf>
+					<#assign parentJs = parentProps [ rt.subPropertyOf ]>
+					<@common_descriptors parentJs />
+				</specialisationOf>
+			</relation_type>
+</#list>
