@@ -380,47 +380,60 @@
    </profiles>
 
 	 <repositories>
+	 		<!-- Includes releases and a couple of others -->	 
       <repository>
-         <id>ondex-releases-all</id>
-         <name>Internal Releases</name>
+         <id>ondex-repo</id>
+         <name>Ondex Repository</name>
          <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
          <releases><enabled>true</enabled></releases>
          <snapshots><enabled>false</enabled></snapshots>
       </repository>
       <repository>
-         <id>ondex-snapshots-all</id>
-         <name>Internal Snapshots</name>
+         <id>ondex-snapshots</id>
+         <name>Ondex Repository for Snapshots</name>
          <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
          <releases><enabled>false</enabled></releases>
          <snapshots><enabled>true</enabled></snapshots>
       </repository>
-      <!-- TODO: are these inluded in the ones above? -->
-      <repository>
-         <id>ondex-releases</id>
-         <name>Internal Releases</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
-         <releases><enabled>true</enabled></releases>
-         <snapshots><enabled>false</enabled></snapshots>
-      </repository>
-      <repository>
-         <id>ondex-snapshots</id>
-         <name>Internal Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
-         <releases><enabled>false</enabled></releases>
-         <snapshots><enabled>true</enabled></snapshots>
-      </repository>            
+
+			<repository>
+				<id>marcobrandizi.info</id>
+				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+				<releases><enabled>true</enabled></releases>
+				<snapshots><enabled>true</enabled></snapshots>
+			</repository>
+			
+			<repository>
+			  <id>EBIBioSamples-GH-repo</id>
+			  <url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
+			  <snapshots><enabled>true</enabled></snapshots>
+			</repository>
+			                 
 	 </repositories>
 
    <pluginRepositories>
+
+			<!-- Includes releases and a couple of others -->
       <pluginRepository>
-         <id>ondex_repo</id>
-         <name>ondex_repo</name>
-         <url>${nexus.repro}/content/groups/public</url>
+         <id>ondex-repo</id>
+         <name>Ondex Repository</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
+         <releases><enabled>true</enabled></releases>
+         <snapshots><enabled>false</enabled></snapshots>
       </pluginRepository>
+      <pluginRepository>
+         <id>ondex-snapshots</id>
+         <name>Ondex Repository for Snapshots</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+      </pluginRepository>
+
       <pluginRepository>
       	<id>sonatype-releases</id>
       	<url>https://oss.sonatype.org/content/repositories/releases</url>
-      </pluginRepository>      
+      </pluginRepository>
+        
    </pluginRepositories>
 
    <dependencies>
