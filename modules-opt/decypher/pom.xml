@@ -28,13 +28,16 @@
             </exclusion>
          </exclusions>
       </dependency>
-      <dependency>
+      <!-- 
+        MB, 2018: Not available publicly anymore, due to licence issues (). If we're lucky, it's optional and we can run
+      	without it. 
+      -->
+      <!--  dependency>
          <groupId>javax.management</groupId>
          <artifactId>jmxri</artifactId>
          <version>1.2.1</version>
          <scope>compile</scope>
-      </dependency>
-
+      </dependency -->
 
 
       <!-- ONDEX deps -->      
