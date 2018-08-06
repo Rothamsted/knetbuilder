@@ -1,0 +1,6 @@
+prefix bk:  <http://www.ondex.org/bioknet/terms/>
+
+SELECT ?resourceIri
+{
+  ?resourceIri a bk:Publication.
+}

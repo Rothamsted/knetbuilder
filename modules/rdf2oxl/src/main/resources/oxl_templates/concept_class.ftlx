@@ -1,0 +1,13 @@
+<#include "graph_header.ftlx">
+<#list js as cc>
+			<cc>
+				<id>${cc.identifier}</id>
+			<#noautoesc>
+				<fullname><![CDATA[${(cc.label[ '@value' ])!''}]]></fullname>
+				<description><![CDATA[${(cc.description[ '@value' ])!''}]]></description>
+			</#noautoesc>
+				<specialisationOf>
+					<idRef>${cc._parentId}</idRef>
+				</specialisationOf>
+			</cc>
+</#list>

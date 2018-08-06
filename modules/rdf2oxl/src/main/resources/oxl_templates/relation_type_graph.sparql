@@ -1,0 +1,74 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bk: <http://www.ondex.org/bioknet/terms/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+CONSTRUCT 
+{
+	?rt a bk:_OxlProperty. # Main loop in the template will filter these
+	?rt dcterms:identifier ?id.
+	?rt rdfs:label ?label.
+	?rt dcterms:description ?description.
+
+	?rt bk:_nature ?nature. 
+  ?rt bk:_inverseId ?inverseId.
+	
+	?rt rdfs:subPropertyOf ?parent.
+
+	?parent a bk:_OxlParentProperty. # Main loop in the template will skip these, they will be used by their children only
+	?parent dcterms:identifier ?parentId.
+	?parent rdfs:label ?parentLabel.
+	?parent dcterms:description ?parentDescription.
+
+	?parent bk:_nature ?parentNature. 
+  ?parent bk:_inverseId ?parentInverseId.
+}
+WHERE # -----------------------------------------------------------------------------------------------------------
+{
+	# Match list parameter of relation type IRIs
+	VALUES ( ?rt ) {
+    $resourceIris
+	}
+
+	?rt dcterms:identifier ?id.
+	
+	OPTIONAL { ?rt rdfs:label ?label }
+	OPTIONAL { ?rt dcterms:description ?description }
+
+  # Property Nature
+	OPTIONAL { 
+		?rt a ?nature 
+		FILTER ( ?nature IN ( owl:ReflexiveProperty, owl:AsymmetricProperty, owl:SymmetricProperty, owl:TransitiveProperty ) )
+	}
+
+  # Inverse property
+  OPTIONAL {
+  	?rt owl:inverseOf ?inverse.
+    ?inverse bk:isOndexPreferred true.
+  	?inverse dcterms:identifier ?inverseId.
+  }
+
+
+	# Parent
+	#
+	?rt rdfs:subPropertyOf ?parent.
+  ?parent bk:isOndexPreferred true. 
+	
+	?parent dcterms:identifier ?parentId.
+
+	OPTIONAL { ?parent rdfs:label ?parentLabel }
+	OPTIONAL { ?parent dcterms:description ?parentDescription }
+
+	# Parent's Nature		
+	OPTIONAL { 
+		?parent a ?parentNature 
+		FILTER ( ?parentNature IN ( owl:ReflexiveProperty, owl:AsymmetricProperty, owl:SymmetricProperty, owl:TransitiveProperty ) )
+	}
+	
+	# Parent's Inverse
+  OPTIONAL {
+  	?parent owl:inverseOf ?parentInverse.
+    ?parentInverse bk:isOndexPreferred true.    
+  	?parentInverse dcterms:identifier ?parentInverseId.
+  }
+}
