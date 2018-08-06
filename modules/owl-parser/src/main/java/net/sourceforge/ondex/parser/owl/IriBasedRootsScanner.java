@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.parser.owl;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.jena.ontology.OntClass;
@@ -50,7 +51,11 @@ public class IriBasedRootsScanner implements Scanner<OntModel, OntClass>
 	public Stream<OntClass> scan ( OntModel model )
 	{
 		String topClsIri = this.getTopClassIri ();
-		return Collections.singleton ( model.getOntClass ( topClsIri ) )
+		OntClass ontClass = Optional.ofNullable ( model.getOntClass ( topClsIri ) )
+			.orElseThrow ( () -> new NullPointerException ( 
+				"There is no OWL class for the URI '" + topClsIri + "', plese review the OWL parser configuration" ) 
+		);		
+		return Collections.singleton ( ontClass )
 			.stream ()
 			.peek ( cls -> log.info ( "Scanning from the class <{}>", cls.getURI () ) );
 	}

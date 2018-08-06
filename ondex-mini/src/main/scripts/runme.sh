@@ -33,5 +33,5 @@ fi
 #                    -Djava.rmi.server.hostname=localhost
 #                    -Dcom.sun.management.jmxremote.local.only=false"
 
-java -Dondex.dir="$MYDIR/data" -jar "$MYDIR/lib/ondex-mini-2.0.1-SNAPSHOT.jar" \
+java -Dondex.dir="$MYDIR/data" -jar "$MYDIR"/lib/ondex-mini-*.jar \
      -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS

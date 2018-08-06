@@ -16,7 +16,7 @@ EOT
   exit 1
 fi
 
-export TRNSF='/bin/cp --recursive --no-dereference --preserve --verbose'
+export TRNSF='cp --recursive --no-dereference --preserve --verbose'
 
 cd "$(dirname $0)" 
 cd target

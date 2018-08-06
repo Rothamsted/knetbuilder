@@ -64,7 +64,6 @@
 			<directory>${basedir}</directory>
 			<outputDirectory></outputDirectory>
 			<includes>
-				<include>changes.txt</include>
 				<include>LICENSE*.*</include>
 				<include>README*.*</include>
 			</includes>

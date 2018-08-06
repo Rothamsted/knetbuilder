@@ -1,7 +1,21 @@
 # Revision History
 
-## 2.0.1-SNAPSHOT
-  * The next snapshot version
+
+## 2.1.1-SNAPSHOT
+  * Next dev release.
+
+
+## 2.1
+  * Improvements to OWL/Ondex mappings ([example](https://github.com/Rothamsted/ondex-knet-builder/commit/eff609d09550cc96f2ed877a91b45764aa6528e6)). 
+  * Minor changes to the launching scripts ([example](https://github.com/Rothamsted/ondex-desktop/commit/0b2f5145207fb21553b682c78f81752b553eed09)).
+  * Fixing problems with OXL Import/Export ([#12](https://github.com/Rothamsted/ondex-knet-builder/issues/12), [#14](https://github.com/Rothamsted/ondex-knet-builder/issues/14)).
+  * Fixing issues with the FASTA parser ([1](https://github.com/Rothamsted/ondex-knet-builder/commit/3795afd8c10c3000bbc6f443dd0b33b5cd309f5a), [2](https://github.com/Rothamsted/ondex-knet-builder/commit/dbea4cd20bbbcfe2140a284c187d5fd4b66a5add)).
+  * Internal changes:  
+    * Improvements in the parser API ([1](https://github.com/Rothamsted/ondex-base/commit/4e3d238111a3367c7531b4815c0a777b1261ed6f), [2](https://github.com/Rothamsted/ondex-base/commit/7b3406761162ef0aa44f2706a349f341d3d8a9a1), [3](https://github.com/Rothamsted/ondex-base/commit/ff79d961a4f0fcf5c3a15d8ec7be99e694660419)).  
+    * Minor review of the common type definitions (see [ondex_metadata.xml](https://github.com/Rothamsted/ondex-base/blob/master/datadir/src/main/resources/xml/ondex_metadata.xml)).  
+    * Minor fixes to fasta-gff3 Parser and JSON Export plugins
+    * Minor [review of some logging messages](https://github.com/Rothamsted/ondex-base/commit/38238b3fb0460a7d2e8417610b03309dfa5dfa74).  
+  
 
 ## 2.0
   * Graph Databases and Linked Data support:
@@ -22,7 +36,8 @@
   	 * Text mining module (to support new PubMed XML, [#12](https://github.com/Rothamsted/ondex-knet-builder/issues/12), [#13](https://github.com/Rothamsted/ondex-knet-builder/issues/12)).
   	 * New Concept Classes and and relation types added.
 
-## v1.2
+
+## 1.2
   * OWL parser
     * Some debugging and improvements in parsing GO, TO, FYPO ontologies
     * Options to customise accession prefixes in the final ONDEX graph

@@ -14,7 +14,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 /**
  * Build node json objects using their various attributes.
  * @author Ajit Singh
- * @version 28/03/18
+ * @version 16/07/18
  */
 public class AddConceptNodeInfo {
 
