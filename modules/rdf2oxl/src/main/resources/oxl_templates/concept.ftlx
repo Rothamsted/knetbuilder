@@ -1,0 +1,37 @@
+<#include "graph_header.ftlx">
+<#include "utils.ftlx">
+<#macro renderName name isPreferred>
+						<concept_name>
+							<name>${name}</name>
+							<isPreferred>${isPreferred?c}</isPreferred>
+						</concept_name>
+</#macro>
+<#list js as concept>
+			<concept>
+				<id>${conceptIds [ concept [ '@id' ] ]}</id>
+				<pid>${(concept.identifier)!''}</pid>
+				<ofType><idRef>${concept._conceptClassId}</idRef></ofType>				
+			<#noautoesc>
+				<description><![CDATA[${(concept.description)!''}]]></description>
+				<annotation><![CDATA[${(concept.comment)!''}]]></annotation>
+				<conames>
+					<#if concept.prefName??>
+						<#-- 
+							This is supposed to be one only, but sometimes it isn't 
+							TODO: report a warning
+						-->
+						<#assign isFirst = true />
+						<#list to_seq ( concept.prefName ) as name>
+							<@renderName name isFirst />
+							<#assign isFirst = false />
+						</#list>
+					</#if>
+					<#if concept.altName??>
+						<#list to_seq ( concept.altName ) as name>
+							<@renderName name false />
+						</#list>
+					</#if>
+				</conames>
+			</#noautoesc>
+			</concept>
+</#list>

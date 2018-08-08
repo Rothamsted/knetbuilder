@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
-import info.marcobrandizi.rdfutils.jena.SparqlUtils;
 import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
 
 /**
@@ -47,7 +46,7 @@ public class ResourceHandler implements Consumer<Set<Resource>>
 		// Get a VALUES-compliant representation of all these URIs
 		if ( res.size () == 0 ) return;
 		
-		String valuesStr = res.stream ()
+		String valuesStr = res.parallelStream ()
 		.map ( Resource::getURI )
 		.map ( uri -> "( <" + uri + "> )" )
 		.collect ( Collectors.joining ( "\n" ) );

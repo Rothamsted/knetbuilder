@@ -81,7 +81,7 @@ public class ResourceProcessorTest
 			Configuration tplConfig = ctx.getBean ( Configuration.class );
 			tplConfig.setDirectoryForTemplateLoading ( new File ( "target/test-classes/support_test" ) );
 			
-			ResourceHandler handler = ctx.getBean ( ResourceHandler.class );
+			ResourceHandler handler = (ResourceHandler) ctx.getBean ( "resourceHandler" );
 			handler.setConstructTemplate ( IOUtils.readFile ( "target/test-classes/support_test/resource_graph.sparql" ) );
 			handler.setOxlTemplateName ( "resource.ftlh" );
 			handler.setOutWriter ( new OutputStreamWriter ( System.out ) );

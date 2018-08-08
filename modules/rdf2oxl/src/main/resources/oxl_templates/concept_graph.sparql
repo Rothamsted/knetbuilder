@@ -1,0 +1,31 @@
+CONSTRUCT 
+{
+  ?concept 
+    dcterms:identifier ?pid;
+  	bk:prefName ?prefName;
+  	bk:altName ?altName;    
+  	dcterms:description ?description;
+  	rdfs:comment ?annotation;
+    bk:_conceptClassId ?ccId
+}
+WHERE
+{
+	VALUES ( ?concept ) {
+	  $resourceIris
+	} 
+
+	# TODO: datasources, accessions, evidence, tags, attributes.
+	
+  ?concept rdf:type ?conceptClass.
+  		
+  ?conceptClass bk:isOndexPreferred true.
+  ?conceptClass dcterms:identifier ?ccIdRaw.
+  
+  BIND ( IF ( ?ccIdRaw = 'Concept', 'Thing', ?ccIdRaw ) AS ?ccId )
+     
+  OPTIONAL { ?concept dcterms:identifier ?pid }
+  OPTIONAL { ?concept bk:prefName ?prefName }
+  OPTIONAL { ?concept bk:altName ?altName }
+  OPTIONAL { ?concept dcterms:description ?description }
+  OPTIONAL { ?concept rdfs:comment ?annotation }  
+}

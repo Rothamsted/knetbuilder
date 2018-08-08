@@ -1,0 +1,7 @@
+SELECT ?resourceIri 
+WHERE {
+  ?resourceIri rdf:type/rdfs:subClassOf* bk:Concept.
+  
+  # These are foo test cases in the ontology file.
+  FILTER ( ?resourceIri NOT IN ( bk:testConcept0_1, bk:testConcept0_2 ) )
+}

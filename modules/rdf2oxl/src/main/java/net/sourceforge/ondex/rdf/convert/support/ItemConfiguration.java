@@ -1,5 +1,11 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
 /**
  * TODO: comment me!
  *
@@ -15,14 +21,16 @@ public class ItemConfiguration
 	private String header;
 	private String graphTemplateName;
 	private String trailer;
-	
+	private ResourceHandler resourceHandler;
+		
 	public ItemConfiguration () {
 		super ();
 	}
-	
-	public ItemConfiguration ( 
+		
+	public <RH extends ResourceHandler> ItemConfiguration ( 
 		String name, String resourcesQueryName, String constructTemplateName, 
-		String header, String graphTemplateName, String trailer 
+		String header, String graphTemplateName, String trailer,
+		ResourceHandler resourceHandler
 	)
 	{
 		super ();
@@ -32,8 +40,8 @@ public class ItemConfiguration
 		this.header = header;
 		this.graphTemplateName = graphTemplateName;
 		this.trailer = trailer;
+		this.resourceHandler = resourceHandler;
 	}
-
 
 
 
@@ -96,4 +104,15 @@ public class ItemConfiguration
 	{
 		this.trailer = trailer;
 	}
+
+	public ResourceHandler getResourceHandler ()
+	{
+		return resourceHandler;
+	}
+
+	public void setResourceHandler ( ResourceHandler ResourceHandler )
+	{
+		this.resourceHandler = ResourceHandler;
+	}
+
 }

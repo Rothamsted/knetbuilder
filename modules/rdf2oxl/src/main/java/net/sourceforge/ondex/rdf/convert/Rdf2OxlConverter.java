@@ -5,7 +5,10 @@ import static java.lang.String.format;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,23 +35,17 @@ public class Rdf2OxlConverter
 	private ResourceProcessor resourceProcessor;
 	
 	private String templateClassPath;
-
 	
 	public void convert ( Writer oxlOut )
-	{		
+	{				
 		for ( ItemConfiguration item: getItems () )
 		{
-			ResourceHandler handler = null;
-			
 			try
 			{
 				ResourceProcessor processor = this.getResourceProcessor ();
-				
-				if ( handler == null ) {
-					// After the first time, it's always the same
-					handler = (ResourceHandler) processor.getConsumer ();
-					handler.setOutWriter ( oxlOut );
-				}
+				ResourceHandler handler = item.getResourceHandler ();
+				processor.setConsumer ( handler );				
+				handler.setOutWriter ( oxlOut );
 
 				String itemName = item.getName ();
 				

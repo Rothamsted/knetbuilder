@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
+import net.sourceforge.ondex.rdf.convert.Rdf2OxlConverter;
 import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.threading.BatchProcessor;
 import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
@@ -150,7 +151,6 @@ public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resou
 		this.logPrefix = logPrefix;
 	}
 
-	@Autowired @Qualifier ( "resourceHandler" )
 	@Override
 	public BatchProcessor<String, Set<Resource>> setConsumer ( Consumer<Set<Resource>> consumer )
 	{
