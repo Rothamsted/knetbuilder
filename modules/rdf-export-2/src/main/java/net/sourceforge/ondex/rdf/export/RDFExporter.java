@@ -85,7 +85,10 @@ public class RDFExporter extends RDFLoader<ONDEXGraph>
 		executor.shutdown ();
 
 		this.waitExecutor ( "Waiting for RDF export completion, please wait" );
-		log.info ( "RDF export finished, a total of {} concepts+relations exported", concepts.size () + relations.size () );
+		log.info ( 
+			"RDF export finished, a total of {} concepts+relations exported, {} triples created",
+			concepts.size () + relations.size (), xfact.getTriplesCountTracker ()
+		);
 	}
 	
 	private RDFXFactory handleNewXTask ( RDFXFactory xfact ) {

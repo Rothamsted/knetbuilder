@@ -16,7 +16,7 @@ SELECT ?iri ?type ?fromIri ?toIri
     
     # This is taken care of by the reified relation queries (reified relations always have a direct statement too)
     # For optimisation purposes, this filter goes here only, the next UNION branch doesn't yield reified relations.
-    FILTER NOT EXISTS {
+    MINUS {
       ?reifiedIri bk:relFrom ?fromIri; bk:relTo ?toIri; bk:relTypeRef ?type.
     }
   } 
