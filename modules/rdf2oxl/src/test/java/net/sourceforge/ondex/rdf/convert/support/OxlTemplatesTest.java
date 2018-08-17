@@ -47,7 +47,7 @@ public class OxlTemplatesTest
 				m.read ( Resources.getResource ( "oxl_templates_test/bk_ondex.owl" ).openStream (), "RDF/XML" );
 			}));
 									
-			ResourceHandler handler = ctx.getBean ( ResourceHandler.class );
+			ResourceHandler handler = (ResourceHandler) ctx.getBean ( "resourceHandler" );
 			handler.setConstructTemplate ( 
 				NamespaceUtils.asSPARQLProlog () + IOUtils.readResource ( "oxl_templates/concept_class_graph.sparql" ) 
 			);
@@ -56,6 +56,7 @@ public class OxlTemplatesTest
 			handler.setOutWriter ( writer );
 						
 			ResourceProcessor proc = ctx.getBean ( ResourceProcessor.class );
+			proc.setConsumer ( handler );
 			proc.setHeader ( "<conceptclasses>\n" );
 			proc.setTrailer ( "</conceptclasses>\n" );
 			

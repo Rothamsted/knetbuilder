@@ -23,7 +23,7 @@ import uk.ac.ebi.utils.ids.IdUtils;
  * <dl><dt>Date:</dt><dd>7 Aug 2018</dd></dl>
  *
  */
-@Component
+@Component ( "conceptHandler" )
 public class ConceptHandler extends ResourceHandler
 {
 	private Map<String, Integer> conceptIds = new HashMap<> ( 50000 );

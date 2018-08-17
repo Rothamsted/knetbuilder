@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * <dl><dt>Date:</dt><dd>7 Aug 2018</dd></dl>
  *
  */
-@Component
+@Component ( "relationHandler" )
 public class RelationHandler extends ResourceHandler
 {
 	@Override
