@@ -84,7 +84,8 @@ public class ResourceProcessorTest
 			handler.setOxlTemplateName ( "resource.ftlh" );
 			handler.setOutWriter ( new OutputStreamWriter ( System.out ) );
 						
-			ResourceProcessor proc = (ResourceProcessor) ctx.getBean ( "resourceProcessor" );			
+			ResourceProcessor proc = (ResourceProcessor) ctx.getBean ( "resourceProcessor" );
+			proc.setConsumer ( handler );
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
 		}
 	}

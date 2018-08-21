@@ -1,6 +1,6 @@
 <#include "graph_header.ftlx">
 <#include "utils.ftlx">
-<#include "dump_util.ftl">
+<#--  include "dump_util.ftl" -->
 <#macro render_name name is_preferred>
 						<concept_name>
 							<name>${name}</name>
@@ -9,11 +9,10 @@
 </#macro>
 <#list js as concept>
 			<concept>
-			  <@dump concept />
 				<#--  id>${ conceptIds [ NamespaceUtils.iri ( "bkr:publication_17206375" ) ] }</id -->
-				<#--  id>${conceptIds [ NamespaceUtils.iri ( concept [ '@id' ] ) ]}</id -->
+				<id>${conceptIds [ NamespaceUtils.iri ( concept [ '@id' ] ) ]}</id>
 				<pid>${(concept.identifier)!''}</pid>
-				<#--   ofType><idRef>${concept [ "_conceptClassId" ]}</idRef></ofType -->				
+				<ofType><idRef>${ concept._conceptClassId }</idRef></ofType>				
 			<#noautoesc>
 				<description><![CDATA[${(concept.description)!''}]]></description>
 				<annotation><![CDATA[${(concept.comment)!''}]]></annotation>

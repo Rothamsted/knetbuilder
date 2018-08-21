@@ -8,6 +8,7 @@ import java.io.Writer;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.system.Txn;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,6 +40,13 @@ public class Rdf2OxlConverterTest
 	public static void closeResources ()
 	{
 		springContext.close ();
+	}
+	
+	@After
+	public void closeSession ()
+	{
+		TDBEndPointHelper sparqlHelper = springContext.getBean ( TDBEndPointHelper.class );
+		sparqlHelper.close ();
 	}
 	
 	
@@ -81,8 +89,9 @@ public class Rdf2OxlConverterTest
 				m.read ( Resources.getResource ( "support_test/publications.ttl" ).openStream (), null, "TURTLE" );
 			}));
 			
+			
 			Rdf2OxlConverter converter = springContext.getBean ( Rdf2OxlConverter.class );
-			converter.convert ( writer );			
+			converter.convert ( writer );
 		}
 	}
 }

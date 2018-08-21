@@ -17,6 +17,7 @@ import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.rdf.convert.support.ItemConfiguration;
+import net.sourceforge.ondex.rdf.convert.support.Resettable;
 import net.sourceforge.ondex.rdf.convert.support.ResourceHandler;
 import net.sourceforge.ondex.rdf.convert.support.ResourceProcessor;
 import uk.ac.ebi.utils.io.IOUtils;
@@ -31,45 +32,64 @@ import uk.ac.ebi.utils.io.IOUtils;
 @Component
 public class Rdf2OxlConverter
 {
-	private List<ItemConfiguration> items;
+	@Autowired @Qualifier ( "itemConfigurations" )
+	private List<ItemConfiguration> itemConfigurations;
 	
-	private ResourceProcessor resourceProcessor;
-	
+	@Autowired @Qualifier ( "templateClassPath" )	
 	private String templateClassPath;
+
+	/**
+	 * This is {@link ResourceProcessor} by default, {@link ItemConfiguration} can override it.
+	 */
+	@Autowired @Qualifier ( "resourceProcessor" )	
+	private ResourceProcessor defaultResourceProcessor;
+		
+	/**
+	 * Same as {@link #defaultResourceProcessor}
+	 */
+	@Autowired @Qualifier ( "resourceHandler" )	
+	private ResourceHandler defaultResourceHandler;
+	
+	
+	@Autowired ( required = false )
+	private List<Resettable> toBeResetComponents;
+	
 	
 	public void convert ( Writer oxlOut )
-	{				
-		for ( ItemConfiguration item: getItems () )
+	{		
+		if ( this.toBeResetComponents != null )
+			toBeResetComponents.forEach ( Resettable::reset );
+		
+		for ( ItemConfiguration itemCfg: this.itemConfigurations )
 		{
 			try
 			{
-				ResourceProcessor processor = item.getResourceProcessor ();
-				if ( processor == null ) processor = this.getResourceProcessor ();
+				ResourceProcessor processor = itemCfg.getResourceProcessor ();
+				if ( processor == null ) processor = this.defaultResourceProcessor;
 
-				ResourceHandler handler = item.getResourceHandler ();
-				if ( handler == null ) handler = (ResourceHandler) processor.getConsumer ();
-					else processor.setConsumer ( handler );
+				ResourceHandler handler = itemCfg.getResourceHandler ();
+				if ( handler == null ) handler = this.defaultResourceHandler;
 					
 				processor.setConsumer ( handler );				
 				handler.setOutWriter ( oxlOut );
 
-				String itemName = item.getName ();
+				String itemName = itemCfg.getName ();
 				
-				String constructTemplate = item.getConstructTemplateName ();
+				String constructTemplate = itemCfg.getConstructTemplateName ();
 				if ( constructTemplate != null ) constructTemplate = 
 					NamespaceUtils.asSPARQLProlog () 
 					+ readResource ( this.templateClassPath + "/" + constructTemplate ); 
 				handler.setConstructTemplate ( constructTemplate );
 
-				processor.setHeader ( item.getHeader () );
-				processor.setTrailer ( item.getTrailer () );
-				handler.setOxlTemplateName ( item.getGraphTemplateName () );
+				processor.setHeader ( itemCfg.getHeader () );
+				processor.setTrailer ( itemCfg.getTrailer () );
+				handler.setOxlTemplateName ( itemCfg.getGraphTemplateName () );
 				
 				processor.setLogPrefix ( "[" + itemName + " Processor]" );
 				handler.setLogPrefix ( "[" + itemName + " Handler]" );
 				
 				// Some processors get URIs from previously fetched data, so this might be null  
-				String resourcesSparql = item.getResourcesQueryName ();
+				String resourcesSparql = itemCfg.getResourcesQueryName ();
 				if ( resourcesSparql != null ) resourcesSparql = 
 						NamespaceUtils.asSPARQLProlog () + readResource ( this.templateClassPath + "/" + resourcesSparql );
 							
@@ -77,46 +97,10 @@ public class Rdf2OxlConverter
 			}
 			catch ( IOException ex ) {
 				throw new UncheckedIOException ( 
-					format ( "I/O error while processing %s: %s", item.getName (), ex.getMessage () ),
+					format ( "I/O error while processing %s: %s", itemCfg.getName (), ex.getMessage () ),
 					ex
 				);
 			}				
 		}
 	}
-	
-	public List<ItemConfiguration> getItems ()
-	{
-		return items;
-	}
-
-	@Autowired @Qualifier ( "itemConfigurations" )
-	public void setItems ( List<ItemConfiguration> items )
-	{
-		this.items = items;
-	}
-
-	public ResourceProcessor getResourceProcessor ()
-	{
-		return resourceProcessor;
-	}
-
-	/**
-	 * This is {@link ResourceProcessor} by default, {@link ItemConfiguration} can override it.
-	 */
-	@Autowired @Qualifier ( "resourceProcessor" )
-	public void setResourceProcessor ( ResourceProcessor resourceProcessor )
-	{
-		this.resourceProcessor = resourceProcessor;
-	}
-
-	public String getTemplateClassPath ()
-	{
-		return templateClassPath;
-	}
-
-	@Autowired @Qualifier ( "templateClassPath" )
-	public void setTemplateClassPath ( String templateClassPath )
-	{
-		this.templateClassPath = templateClassPath;
-	}	
 }

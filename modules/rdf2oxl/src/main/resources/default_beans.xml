@@ -18,32 +18,7 @@
 	-->
   <context:component-scan base-package = "net.sourceforge.ondex.rdf.convert" />
 
-
 	<!-- This is the only Endpoint helper for now. -->
 	<bean class = "info.marcobrandizi.rdfutils.jena.TDBEndPointHelper" autowire-candidate = "true" />
-	
-	
-	<!-- Some initialisation for FreeMarker 
-	<bean class = "freemarker.template.Configuration">
-		<constructor-arg>
-			<util:constant static-field = "freemarker.template.Configuration.VERSION_2_3_28" />
-		</constructor-arg>
-		<property name = "templateLoader">
-			<bean class = "freemarker.cache.MultiTemplateLoader">
-				<constructor-arg>
-					<array>
-						<bean class = "freemarker.cache.ClassTemplateLoader">
-							<constructor-arg value = "#{ " />
-						</bean>
-					</array>
-				</constructor-arg>
-			</bean>
-		</property>
-		<property name = "defaultEncoding" value = "UTF-8" />
-		<property name = "templateExceptionHandler">
-			<util:constant static-field = "freemarker.template.TemplateExceptionHandler.RETHROW_HANDLER" />
-		</property>
-		<property name = "logTemplateExceptions" value = "true" />
-		<property name = "wrapUncheckedExceptions" value = "true" />
-	</bean -->	
+
 </beans>

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component ( "conceptIdHandler" )
-public class ConceptIdHandler extends ResourceHandler
+public class ConceptIdHandler extends ResourceHandler implements Resettable
 {
 	private Map<String, Integer> conceptIds = new HashMap<> ( 50000 );
 			
@@ -28,12 +28,9 @@ public class ConceptIdHandler extends ResourceHandler
 	{
 		super ();
 		
-		this.setDataPreProcessor ( m -> 
-		{
-			Map<String, Object> result = new HashMap<> ();
-			result.put ( "conceptIds", conceptIds );
-			return result;
-		});
+		final Map<String, Object> conceptIdsWrapper = new HashMap<> ();
+		conceptIdsWrapper.put ( "conceptIds", conceptIds );
+		this.setDataPreProcessor ( m -> conceptIdsWrapper );
 	}
 
 
@@ -50,7 +47,7 @@ public class ConceptIdHandler extends ResourceHandler
 		});
 	}
 	
-	
+	@Override
 	public void reset () {
 		this.conceptIds.clear ();
 	}

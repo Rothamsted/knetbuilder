@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
+import net.sourceforge.ondex.rdf.convert.Rdf2OxlConverter;
 import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.threading.BatchProcessor;
 import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
@@ -22,6 +23,9 @@ import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
 /**
  * TODO: comment me!
  *
+ * The {@link #setConsumer(Consumer) consumer} for this processor is set by {@link Rdf2OxlConverter}, which has its own
+ * Spring-coming default and also values taken from {@link ItemConfiguration}. 
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Jul 2018</dd></dl>
  *
@@ -141,10 +145,4 @@ public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resou
 	{
 		this.logPrefix = logPrefix;
 	}
-
-	@javax.annotation.Resource ( name = "resourceHandler" ) @Override
-	public BatchProcessor<String, Set<Resource>> setConsumer ( Consumer<Set<Resource>> consumer )
-	{
-		return super.setConsumer ( consumer );
-	}	
 }
