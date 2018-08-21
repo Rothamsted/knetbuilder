@@ -1,4 +1,14 @@
-<#-- Return an array out of the parameter, putting it into an array if it's a singleton -->
+<#-- Returns an array out of the parameter, putting it into an array if it's a singleton -->
 <#function to_seq object>
   <#return (object?is_string || !object?is_enumerable)?then ( [ object ], object )>
 </#function>
+<#-- Renders common stuff about concepts and relations -->
+<#macro render_ondex_entity e>
+					<#if e.relatedConcept??>
+						<contexts>
+							<#list to_seq ( e.relatedConcept ) as relatedConceptIri>
+								<context><id>${conceptIds [ relatedConceptIri ]}</id></context>
+							</#list>
+						</contexts>
+					</#if>
+</#macro>

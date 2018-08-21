@@ -1,12 +1,10 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
-import java.io.File;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.riot.Lang;
 import org.apache.jena.system.Txn;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -14,7 +12,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.google.common.io.Resources;
 import com.machinezoo.noexception.Exceptions;
 
-import freemarker.template.Configuration;
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import uk.ac.ebi.utils.io.IOUtils;
@@ -55,7 +52,7 @@ public class OxlTemplatesTest
 			
 			handler.setOutWriter ( writer );
 						
-			ResourceProcessor proc = ctx.getBean ( ResourceProcessor.class );
+			ResourceProcessor proc = (ResourceProcessor) ctx.getBean ( "resourceProcessor" );
 			proc.setConsumer ( handler );
 			proc.setHeader ( "<conceptclasses>\n" );
 			proc.setTrailer ( "</conceptclasses>\n" );

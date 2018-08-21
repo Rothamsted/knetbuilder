@@ -1,11 +1,5 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-
 /**
  * TODO: comment me!
  *
@@ -21,6 +15,7 @@ public class ItemConfiguration
 	private String header;
 	private String graphTemplateName;
 	private String trailer;
+	private ResourceProcessor resourceProcessor;
 	private ResourceHandler resourceHandler;
 		
 	public ItemConfiguration () {
@@ -29,7 +24,16 @@ public class ItemConfiguration
 		
 	public <RH extends ResourceHandler> ItemConfiguration ( 
 		String name, String resourcesQueryName, String constructTemplateName, 
+		String header, String graphTemplateName, String trailer
+	) {
+		this ( name, resourcesQueryName, constructTemplateName, header, graphTemplateName, trailer, null, null );
+	}
+	
+	
+	public <RH extends ResourceHandler> ItemConfiguration ( 
+		String name, String resourcesQueryName, String constructTemplateName, 
 		String header, String graphTemplateName, String trailer,
+		ResourceProcessor resourceProcessor,
 		ResourceHandler resourceHandler
 	)
 	{
@@ -40,6 +44,7 @@ public class ItemConfiguration
 		this.header = header;
 		this.graphTemplateName = graphTemplateName;
 		this.trailer = trailer;
+		this.resourceProcessor = resourceProcessor;
 		this.resourceHandler = resourceHandler;
 	}
 
@@ -103,6 +108,17 @@ public class ItemConfiguration
 	public void setTrailer ( String trailer )
 	{
 		this.trailer = trailer;
+	}
+	
+	
+	public ResourceProcessor getResourceProcessor ()
+	{
+		return resourceProcessor;
+	}
+
+	public void setResourceProcessor ( ResourceProcessor resourceProcessor )
+	{
+		this.resourceProcessor = resourceProcessor;
 	}
 
 	public ResourceHandler getResourceHandler ()

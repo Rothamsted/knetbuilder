@@ -1,10 +1,8 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
 import static java.lang.String.format;
-import static java.lang.System.out;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.HashSet;
@@ -14,15 +12,9 @@ import java.util.function.Consumer;
 import org.apache.jena.rdf.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
-import net.sourceforge.ondex.rdf.convert.Rdf2OxlConverter;
 import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.threading.BatchProcessor;
 import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
@@ -34,7 +26,7 @@ import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
  * <dl><dt>Date:</dt><dd>25 Jul 2018</dd></dl>
  *
  */
-@Component 
+@Component ( "resourceProcessor" )
 public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resource>>
 {
 	private String header, trailer;
@@ -63,13 +55,13 @@ public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resou
 		{
 			log.info ( "{}: starting Reading RDF", logPrefix );
 						
+			ResourceHandler handler = (ResourceHandler) getConsumer ();
+
+			Writer outWriter = handler.getOutWriter ();
+			if ( this.header != null ) outWriter.write ( this.header );
+			
 			@SuppressWarnings ( "unchecked" )
 			Set<Resource> chunk[] = new Set[] { this.getDestinationSupplier ().get () };
-
-			ResourceHandler handler = (ResourceHandler) getConsumer ();
-			Writer outWriter = handler.getOutWriter ();
-			
-			if ( this.header != null ) outWriter.write ( this.header );
 			
 			sparqlHelper.processSelect ( logPrefix, resourcesQuery, sol -> 
 			{
@@ -80,10 +72,9 @@ public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resou
 			});
 				
 			// Process last chunk
-			handleNewTask ( chunk [ 0 ], true );
-			
+			handleNewTask ( chunk [ 0 ], true );			
 			this.waitExecutor ( logPrefix + ": waiting for RDF resource processing tasks to finish" );
-			
+
 			if ( this.trailer != null ) outWriter.write ( this.trailer );
 			
 			log.info ( "{}: all RDF resources processed", logPrefix );
@@ -151,9 +142,9 @@ public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resou
 		this.logPrefix = logPrefix;
 	}
 
-	@Override
+	@javax.annotation.Resource ( name = "resourceHandler" ) @Override
 	public BatchProcessor<String, Set<Resource>> setConsumer ( Consumer<Set<Resource>> consumer )
 	{
 		return super.setConsumer ( consumer );
-	}
+	}	
 }

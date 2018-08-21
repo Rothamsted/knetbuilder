@@ -1,17 +1,14 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 
-import freemarker.cache.MultiTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 
@@ -23,7 +20,9 @@ import freemarker.template.TemplateExceptionHandler;
  *
  */
 @org.springframework.context.annotation.Configuration 
-@DependsOn ({ "resourceHandler", "conceptHandler", "relationHandler" })
+@DependsOn ({ 
+	"resourceHandler", "conceptHandler", "relationHandler", "resourceProcessor", "conceptProcessor" 
+})
 public class Rdf2OxlConfiguration implements ApplicationContextAware
 {
 	private ApplicationContext applicationContext;
@@ -49,20 +48,25 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 	
 	@Bean ( name = "itemConfigurations" )
 	public List<ItemConfiguration> getItemConfigurations ()
-	{
-		ResourceHandler defaultHandler = (ResourceHandler) applicationContext.getBean ( "resourceHandler" );
-		
+	{		
 		return Arrays.asList ( new ItemConfiguration[] {
 			new ItemConfiguration ( 
 				"Concept Classes", "concept_class_iris.sparql", "concept_class_graph.sparql", 
-				"\t\t<conceptclasses>\n", "concept_class.ftlx", "\t\t</conceptclasses>\n", defaultHandler
+				"\t\t<conceptclasses>\n", "concept_class.ftlx", "\t\t</conceptclasses>\n"
 			),
 			new ItemConfiguration (
 				"Relation Types", "relation_type_iris.sparql", "relation_type_graph.sparql", 
-				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n", defaultHandler ),
+				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n" ),
+
 			new ItemConfiguration (
-				"Concepts", "concept_iris.sparql", "concept_graph.sparql", 
+				"Concept IDs", "concept_iris.sparql", null, 
+				null, null, null,
+				null, (ResourceHandler) applicationContext.getBean ( "conceptIdHandler" )
+			),			
+			new ItemConfiguration (
+				"Concepts", null, "concept_graph.sparql", 
 				"\t\t<concepts>\n", "concept.ftlx", "\t\t</concepts>\n",
+				(ResourceProcessor) applicationContext.getBean ( "conceptProcessor" ),
 				(ConceptHandler) applicationContext.getBean ( "conceptHandler" )
 			)
 		});

@@ -8,12 +8,10 @@ import org.apache.jena.query.Dataset;
 import org.apache.jena.system.Txn;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
-import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
 import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.io.IOUtils;
@@ -86,9 +84,7 @@ public class ResourceProcessorTest
 			handler.setOxlTemplateName ( "resource.ftlh" );
 			handler.setOutWriter ( new OutputStreamWriter ( System.out ) );
 						
-			ResourceProcessor proc = ctx.getBean ( ResourceProcessor.class );
-			proc.setConsumer ( handler );
-			
+			ResourceProcessor proc = (ResourceProcessor) ctx.getBean ( "resourceProcessor" );			
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
 		}
 	}

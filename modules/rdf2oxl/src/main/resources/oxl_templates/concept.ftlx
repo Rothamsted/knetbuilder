@@ -1,16 +1,19 @@
 <#include "graph_header.ftlx">
 <#include "utils.ftlx">
-<#macro renderName name isPreferred>
+<#include "dump_util.ftl">
+<#macro render_name name is_preferred>
 						<concept_name>
 							<name>${name}</name>
-							<isPreferred>${isPreferred?c}</isPreferred>
+							<isPreferred>${is_preferred?c}</isPreferred>
 						</concept_name>
 </#macro>
 <#list js as concept>
 			<concept>
-				<id>${conceptIds [ concept [ '@id' ] ]}</id>
+			  <@dump concept />
+				<#--  id>${ conceptIds [ NamespaceUtils.iri ( "bkr:publication_17206375" ) ] }</id -->
+				<#--  id>${conceptIds [ NamespaceUtils.iri ( concept [ '@id' ] ) ]}</id -->
 				<pid>${(concept.identifier)!''}</pid>
-				<ofType><idRef>${concept._conceptClassId}</idRef></ofType>				
+				<#--   ofType><idRef>${concept [ "_conceptClassId" ]}</idRef></ofType -->				
 			<#noautoesc>
 				<description><![CDATA[${(concept.description)!''}]]></description>
 				<annotation><![CDATA[${(concept.comment)!''}]]></annotation>
@@ -20,15 +23,15 @@
 							This is supposed to be one only, but sometimes it isn't 
 							TODO: report a warning
 						-->
-						<#assign isFirst = true />
+						<#assign is_first = true />
 						<#list to_seq ( concept.prefName ) as name>
-							<@renderName name isFirst />
-							<#assign isFirst = false />
+							<@render_name name is_first />
+							<#assign is_first = false />
 						</#list>
 					</#if>
 					<#if concept.altName??>
 						<#list to_seq ( concept.altName ) as name>
-							<@renderName name false />
+							<@render_name name false />
 						</#list>
 					</#if>
 				</conames>

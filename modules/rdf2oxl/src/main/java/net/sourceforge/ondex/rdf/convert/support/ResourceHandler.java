@@ -23,7 +23,7 @@ import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
  * <dl><dt>Date:</dt><dd>25 Jul 2018</dd></dl>
  *
  */
-@Component ( "resourceHandler" ) 
+@Component ( "resourceHandler" )
 public class ResourceHandler implements Consumer<Set<Resource>>
 {
 	private Writer outWriter;

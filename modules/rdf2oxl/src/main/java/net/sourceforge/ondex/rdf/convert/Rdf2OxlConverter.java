@@ -1,18 +1,19 @@
 package net.sourceforge.ondex.rdf.convert;
 
 import static java.lang.String.format;
+import static uk.ac.ebi.utils.io.IOUtils.readResource;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.rdf.convert.support.ItemConfiguration;
@@ -42,17 +43,23 @@ public class Rdf2OxlConverter
 		{
 			try
 			{
-				ResourceProcessor processor = this.getResourceProcessor ();
+				ResourceProcessor processor = item.getResourceProcessor ();
+				if ( processor == null ) processor = this.getResourceProcessor ();
+
 				ResourceHandler handler = item.getResourceHandler ();
+				if ( handler == null ) handler = (ResourceHandler) processor.getConsumer ();
+					else processor.setConsumer ( handler );
+					
 				processor.setConsumer ( handler );				
 				handler.setOutWriter ( oxlOut );
 
 				String itemName = item.getName ();
 				
-				handler.setConstructTemplate ( 
+				String constructTemplate = item.getConstructTemplateName ();
+				if ( constructTemplate != null ) constructTemplate = 
 					NamespaceUtils.asSPARQLProlog () 
-					+ IOUtils.readResource ( this.templateClassPath + "/" + item.getConstructTemplateName () ) 
-				);
+					+ readResource ( this.templateClassPath + "/" + constructTemplate ); 
+				handler.setConstructTemplate ( constructTemplate );
 
 				processor.setHeader ( item.getHeader () );
 				processor.setTrailer ( item.getTrailer () );
@@ -61,10 +68,12 @@ public class Rdf2OxlConverter
 				processor.setLogPrefix ( "[" + itemName + " Processor]" );
 				handler.setLogPrefix ( "[" + itemName + " Handler]" );
 				
-				processor.process (
-					NamespaceUtils.asSPARQLProlog () 
-					+ IOUtils.readResource ( this.templateClassPath + "/" + item.getResourcesQueryName () )
-				);
+				// Some processors get URIs from previously fetched data, so this might be null  
+				String resourcesSparql = item.getResourcesQueryName ();
+				if ( resourcesSparql != null ) resourcesSparql = 
+						NamespaceUtils.asSPARQLProlog () + readResource ( this.templateClassPath + "/" + resourcesSparql );
+							
+				processor.process ( resourcesSparql );
 			}
 			catch ( IOException ex ) {
 				throw new UncheckedIOException ( 
@@ -91,7 +100,10 @@ public class Rdf2OxlConverter
 		return resourceProcessor;
 	}
 
-	@Autowired
+	/**
+	 * This is {@link ResourceProcessor} by default, {@link ItemConfiguration} can override it.
+	 */
+	@Autowired @Qualifier ( "resourceProcessor" )
 	public void setResourceProcessor ( ResourceProcessor resourceProcessor )
 	{
 		this.resourceProcessor = resourceProcessor;

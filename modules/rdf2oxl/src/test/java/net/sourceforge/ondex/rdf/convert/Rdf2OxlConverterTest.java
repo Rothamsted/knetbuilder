@@ -3,7 +3,6 @@ package net.sourceforge.ondex.rdf.convert;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.jena.query.Dataset;

@@ -6,7 +6,8 @@ CONSTRUCT
   	bk:altName ?altName;    
   	dcterms:description ?description;
   	rdfs:comment ?annotation;
-    bk:_conceptClassId ?ccId
+    bk:_conceptClassId ?ccId;
+    bk:relatedConcept ?relatedConcept
 }
 WHERE
 {
@@ -27,5 +28,7 @@ WHERE
   OPTIONAL { ?concept bk:prefName ?prefName }
   OPTIONAL { ?concept bk:altName ?altName }
   OPTIONAL { ?concept dcterms:description ?description }
-  OPTIONAL { ?concept rdfs:comment ?annotation }  
+  OPTIONAL { ?concept rdfs:comment ?annotation }
+  
+  OPTIONAL { ?concept bk:relatedConcept ?relatedConcept }
 }
