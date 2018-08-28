@@ -8,6 +8,7 @@
 						</concept_name>
 </#macro>
 <#list js as concept>
+	<#if !concept._conceptClassId??><#continue></#if>
 			<concept>
 				<#--  id>${ conceptIds [ NamespaceUtils.iri ( "bkr:publication_17206375" ) ] }</id -->
 				<id>${conceptIds [ NamespaceUtils.iri ( concept [ '@id' ] ) ]}</id>

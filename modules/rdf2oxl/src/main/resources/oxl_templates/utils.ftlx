@@ -1,8 +1,39 @@
-<#-- Returns an array out of the parameter, putting it into an array if it's a singleton -->
+<#-- 
+
+	Returns an array out of the parameter, putting it into an array if it's a singleton 
+
+-->
 <#function to_seq object>
   <#return (object?is_string || !object?is_enumerable)?then ( [ object ], object )>
 </#function>
-<#-- Renders common stuff about concepts and relations -->
+<#-- 
+
+-->
+<#function jsld_instances json_ld classId>
+	<#local result = {}>
+	<#list json_ld as js_obj>
+		<#if !to_seq ( js_obj [ '@type' ] )?seq_contains ( classId )><#continue /></#if>
+		<#local result += { js_obj [ '@id' ]: js_obj }>
+	</#list>
+	<#return result />
+</#function>
+<#-- 
+  
+  Often used for main properties of metadata entities (eg, concept classes, evidence 
+
+-->
+<#macro render_metadata m>
+				<id>${m.identifier}</id>
+			<#noautoesc>
+				<fullname><![CDATA[${(m.label[ '@value' ])!''}]]></fullname>
+				<description><![CDATA[${(m.description[ '@value' ])!''}]]></description>
+			</#noautoesc>
+</#macro>
+<#-- 
+
+	Renders common stuff about concepts and relations 
+
+-->
 <#macro render_ondex_entity e>
 					<#if e.relatedConcept??>
 						<contexts>
@@ -10,5 +41,14 @@
 								<context><id>${conceptIds [ relatedConceptIri ]}</id></context>
 							</#list>
 						</contexts>
+					</#if>
+					<#if e.evidence??>
+						<evidences>
+							<#list to_seq ( e.evidence ) as evidence>
+								<evidence>
+									<@render_metadata evidence />
+								</evidence>
+							</#list>
+						</evidences>
 					</#if>
 </#macro>

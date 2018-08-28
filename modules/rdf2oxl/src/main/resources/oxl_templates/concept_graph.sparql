@@ -7,7 +7,14 @@ CONSTRUCT
   	dcterms:description ?description;
   	rdfs:comment ?annotation;
     bk:_conceptClassId ?ccId;
-    bk:relatedConcept ?relatedConcept
+    bk:relatedConcept ?relatedConcept;
+    bk:evidence ?evidence.
+    
+  ?evidence
+    rdf:type bk:EvidenceType;
+		dcterms:identifier ?evId;
+    rdfs:label ?evLabel;
+  	dcterms:description ?evDescription    
 }
 WHERE
 {
@@ -15,7 +22,10 @@ WHERE
 	  $resourceIris
 	} 
 
-	# TODO: datasources, accessions, evidence, tags, attributes.
+	# TODO: continue with evidence
+	#   1) JSON-LD framing, so that objects are nested (also, review relation types)
+	#   2) change the templates.
+	# TODO: datasources, accessions, evidence, attributes.
 	
   ?concept rdf:type ?conceptClass.
   		
@@ -31,4 +41,10 @@ WHERE
   OPTIONAL { ?concept rdfs:comment ?annotation }
   
   OPTIONAL { ?concept bk:relatedConcept ?relatedConcept }
+  OPTIONAL { 
+  	?concept bk:evidence ?evidence. 
+		?evidence dcterms:identifier ?evId.
+    OPTIONAL { evidence rdfs:label ?evLabel }
+  	OPTIONAL { evidence dcterms:description ?evDescription }
+  }
 }

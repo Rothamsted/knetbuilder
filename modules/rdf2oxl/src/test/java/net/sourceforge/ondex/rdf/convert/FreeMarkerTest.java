@@ -9,11 +9,26 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.jena.graph.Graph;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.JsonLDWriteContext;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFFormat;
+import org.apache.jena.riot.WriterGraphRIOT;
+import org.apache.jena.riot.system.PrefixMap;
+import org.apache.jena.riot.system.RiotLib;
+import org.apache.jena.sparql.core.DatasetGraph;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.github.jsonldjava.core.JsonLdConsts.Embed;
+import com.github.jsonldjava.core.JsonLdOptions;
+import com.github.jsonldjava.core.JsonLdProcessor;
+import com.github.jsonldjava.core.JsonLdUtils;
+import com.github.jsonldjava.utils.JsonUtils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -163,6 +178,84 @@ public class FreeMarkerTest
 		}};
 
 		Template tpl = tplConfig.getTemplate ( "js_sparql_test.ftlh" );		
+		tpl.process ( data, new OutputStreamWriter ( out ) );		
+	}	
+	
+	@Test
+	public void testJsSparqlFraming () throws Exception
+	{
+		Model model = ModelFactory.createDefaultModel ();
+		model.read ( "file:target/test-classes/freemarker_test/foaf_ex.rdf" );
+		
+		String sparql = NamespaceUtils.asSPARQLProlog () + 
+			"CONSTRUCT {\n" + 
+			"  ?a a foaf:Person;"
+			+ "   foaf:name ?aname;\n"
+			+ "   foaf:knows ?b.\n"
+			+ "\n"
+			+ "?b a foaf:Person; foaf:name ?bname\n" +
+			"}\n" +
+			"WHERE {\n" + 
+			"  ?a a foaf:Person;\n" + 
+			"	    foaf:name ?aname .\n" + 
+			"\n" + 
+			"	 OPTIONAL \n" + 
+			"	 {\n" + 
+			"	   ?a foaf:knows ?b .\n" + 
+			"	   ?b foaf:name ?bname .\n" + 
+			"	 }\n" + 
+			"}\n";
+
+		//out.println ( sparql );
+		
+		Model m = SparqlUtils.construct ( sparql, model );
+		StringWriter sw = new StringWriter ();
+		
+		m.write ( sw, "JSON-LD" );
+		
+		@SuppressWarnings ( "unchecked" )
+		Map<String, Object> js = (Map<String, Object>) JsonUtils.fromString ( sw.toString () );
+		
+		JsonLdOptions jsOpts = new JsonLdOptions ();
+		jsOpts.setEmbed ( "@always" );
+		
+		Object jsldCtx = js.get ( "@context" );
+		js = JsonLdProcessor.frame ( js, jsldCtx, jsOpts );
+		// Compaction needs to be redone
+		js = JsonLdProcessor.compact ( js, jsldCtx, jsOpts );
+	
+//		JsonLDWriteContext ctx = new JsonLDWriteContext ();
+//
+////		DatasetGraph dsgraph = DatasetFactory.create ( m ).asDatasetGraph ();
+////		ctx.setupContext ( null, dsgraph );
+//
+//		JsonLdOptions opts = new JsonLdOptions ();
+//		opts.setEmbed ( "@always" );
+//		ctx.setOptions ( opts );
+//		
+////		Map<String, Object> frctx = new HashMap<> ( NamespaceUtils.getNamespaces () );
+////		
+////		Map<String, String> knows = new HashMap<> ();
+////		knows.put ( "@id", "foaf:knows" );
+////		knows.put ( "@type", "@id" );
+////		frctx.put ( "knows", knows );
+////		
+////		frctx.put ( "name", "foaf:name" );
+////		
+////		Map<String, Object> frame = new HashMap<> ();
+////		frame.put ( "@type", "foaf:Person" );
+////		frame.put ( "@context", frctx ); 
+////		ctx.setFrame ( frame );
+//		
+//		Graph graph = m.getGraph ();
+//		PrefixMap prefixes = RiotLib.prefixMap ( graph );
+//		WriterGraphRIOT writer = RDFDataMgr.createGraphWriter ( RDFFormat.JSONLD_COMPACT_PRETTY );
+//		writer.write ( sw, graph, prefixes, null, ctx );
+//		
+		Map<String, Object> data = new HashMap<String, Object> ();
+		data.put ( "persons", js.get ( "@graph" ) );
+
+		Template tpl = tplConfig.getTemplate ( "framed_js_sparql_test.ftlh" );		
 		tpl.process ( data, new OutputStreamWriter ( out ) );		
 	}	
 }

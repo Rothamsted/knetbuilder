@@ -28,11 +28,7 @@
   
 -->
 <#macro common_descriptors relType>
-				<id>${relType.identifier}</id>
-			<#noautoesc>
-				<fullname><![CDATA[${(relType.label[ '@value' ])!''}]]></fullname>
-				<description><![CDATA[${(relType.description[ '@value' ])!''}]]></description>
-			</#noautoesc>
+				<@render_metadata relType />
 				<inverseName>${(relType._inverseId)!'none'}</inverseName>
 				<@prop_nature (relType._nature)![] />
 </#macro>
@@ -45,10 +41,10 @@
 <#-- 
 	We need this support lookup table, in order to find property parents quickly.
 -->
-<#assign parentProps = {}>
+<#assign parent_props = {}>
 <#list js as rt>
 	<#if !to_seq ( rt [ '@type' ] )?seq_contains ( '_OxlParentProperty' )><#continue></#if>
-	<#assign parentProps += { rt [ '@id' ]: rt }>
+	<#assign parent_props += { rt [ '@id' ]: rt }>
 </#list>
 <#list js as rt> 
   <#if !to_seq ( rt [ '@type' ] )?seq_contains ( '_OxlProperty' )><#continue></#if>
@@ -61,7 +57,7 @@
 				  no top-level definition. If this works in Ondex, we can keep it and replace relatedTo with conceptsRelation. 
 				-->
 				<specialisationOf>
-					<#assign parentJs = parentProps [ rt.subPropertyOf ]>
+					<#assign parentJs = parent_props [ rt.subPropertyOf ]>
 					<@common_descriptors parentJs />
 				</specialisationOf>
 			</relation_type>

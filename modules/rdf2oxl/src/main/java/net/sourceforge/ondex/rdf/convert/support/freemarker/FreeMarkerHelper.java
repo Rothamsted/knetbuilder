@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.rdf.convert.support.freemarker;
 
 import static java.lang.String.format;
+import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -13,6 +14,11 @@ import org.apache.jena.rdf.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.jsonldjava.core.JsonLdError;
+import com.github.jsonldjava.core.JsonLdOptions;
+import com.github.jsonldjava.core.JsonLdProcessor;
+import com.github.jsonldjava.utils.JsonUtils;
+
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
@@ -22,6 +28,7 @@ import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.Version;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**
  * TODO: comment me!
@@ -69,16 +76,39 @@ public class FreeMarkerHelper
 
 	public void processJenaModel ( Model model, String templateName, Writer outWriter, Map<String, Object> initialData )
 	{
-		StringWriter sw = new StringWriter ();
-		model.write ( sw, "JSON-LD" );
-					
-		if ( initialData == null ) initialData = new HashMap<> ();
-		initialData.put ( "json", sw.toString () );
+		try
+		{
+			if ( initialData == null ) initialData = new HashMap<> ();
 
-		// This might be useful in several cases
-		initialData.put ( NamespaceUtils.class.getSimpleName (), getStaticClassWrapper ( NamespaceUtils.class ) );
-		
-		this.processTemplate ( templateName, outWriter, initialData );
+			StringWriter sw = new StringWriter ();
+			model.write ( sw, "JSON-LD" );
+						
+			// We need some post-processing of what Jena returns
+			@SuppressWarnings ( "unchecked" )
+			Map<String, Object> js = (Map<String, Object>) JsonUtils.fromString ( sw.toString () );
+			
+			JsonLdOptions jsOpts = new JsonLdOptions ();
+			jsOpts.setEmbed ( "@always" );
+			
+			Object jsldCtx = js.get ( "@context" );
+			js = JsonLdProcessor.frame ( js, jsldCtx, jsOpts );
+			// Compaction needs to be redone
+			js = JsonLdProcessor.compact ( js, jsldCtx, jsOpts );
+			
+			initialData.put ( "js", js.get ( "@graph" ) );
+
+			// This might be useful in several cases
+			initialData.put ( NamespaceUtils.class.getSimpleName (), getStaticClassWrapper ( NamespaceUtils.class ) );
+			
+			this.processTemplate ( templateName, outWriter, initialData );
+		}
+		catch ( IOException | JsonLdError ex )
+		{
+			throwEx ( 
+				UncheckedTemplateException.class, ex,
+				"Error while processing template '%s': %s", templateName, ex.getMessage () 
+			);
+		}
 	}
 	
 	public Configuration getTemplateConfig ()
