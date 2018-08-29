@@ -235,7 +235,7 @@
 		        <plugin>
 					    <groupId>com.github.harti2006</groupId>
 						  <artifactId>neo4j-server-maven-plugin</artifactId>
-						  <version>1.1-SNAPSHOT</version>
+						  <version>1.1</version>
 							<configuration>
 								<version>${neo4j.server.version}</version>
 								<port>${neo4j.server.httpPort}</port>
@@ -246,15 +246,11 @@
 							<executions>
 								<execution>
 									<id>start-neo4j-server</id>
-									<goals>
-										<goal>start</goal>
-									</goals>
+									<goals><goal>start</goal></goals>
 								</execution>
 								<execution>
 									<id>stop-neo4j-server</id>
-									<goals>
-										<goal>stop</goal>
-									</goals>
+									<goals><goal>stop</goal></goals>
 								</execution>
 							</executions>		        
 		        </plugin>
