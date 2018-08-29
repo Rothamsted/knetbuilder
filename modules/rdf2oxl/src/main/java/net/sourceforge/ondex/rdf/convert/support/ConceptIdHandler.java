@@ -3,10 +3,7 @@ package net.sourceforge.ondex.rdf.convert.support;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -61,7 +58,7 @@ public class ConceptIdHandler extends ResourceHandler implements Resettable
 
 
 	@Bean ( "conceptIdsTemplateRef" ) @Override
-	protected BiFunction<Model, Map<String, Object>, Map<String, Object>> getDataPreProcessor ()
+	protected DataPreProcessor getDataPreProcessor ()
 	{
 		return super.getDataPreProcessor ();
 	}	

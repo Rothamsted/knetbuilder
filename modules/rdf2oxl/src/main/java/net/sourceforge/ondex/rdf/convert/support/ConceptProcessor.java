@@ -7,7 +7,6 @@ import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -15,8 +14,6 @@ import org.apache.jena.rdf.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import uk.ac.ebi.utils.threading.BatchProcessor;
 
 /**
  * TODO: comment me!

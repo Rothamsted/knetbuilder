@@ -7,20 +7,16 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.rdf.convert.support.ItemConfiguration;
 import net.sourceforge.ondex.rdf.convert.support.Resettable;
 import net.sourceforge.ondex.rdf.convert.support.ResourceHandler;
 import net.sourceforge.ondex.rdf.convert.support.ResourceProcessor;
-import uk.ac.ebi.utils.io.IOUtils;
 
 /**
  * TODO: comment me!

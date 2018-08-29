@@ -1,12 +1,10 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.jena.rdf.model.Model;
@@ -28,6 +26,20 @@ import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
 @Component ( "resourceHandler" )
 public class ResourceHandler implements Consumer<Set<Resource>>
 {
+	public static interface DataPreProcessor 
+		extends BiFunction<Model, Map<String, Object>, Map<String, Object>>
+	{
+		public default DataPreProcessor merge ( DataPreProcessor otherProc )
+		{
+			if ( otherProc == null ) return this;
+			return (model, data) -> {
+				Map<String, Object> result = DataPreProcessor.this.apply ( model, data );
+				result.putAll ( otherProc.apply ( model, result ) );
+				return result;
+			};
+		}
+	}
+	
 	private Writer outWriter;
 	
 	private String oxlTemplateName;
@@ -36,8 +48,7 @@ public class ResourceHandler implements Consumer<Set<Resource>>
 	private SparqlEndPointHelper sparqlHelper;
 	private FreeMarkerHelper templateHelper;
 	
-	private BiFunction<Model, Map<String, Object>, Map<String, Object>> dataPreProcessor;
-	
+	private DataPreProcessor dataPreProcessor;
 	
 	private String logPrefix = "[RDF Hanlder]";
 	
@@ -133,12 +144,12 @@ public class ResourceHandler implements Consumer<Set<Resource>>
 	}
 
 	
-	protected BiFunction<Model, Map<String, Object>, Map<String, Object>> getDataPreProcessor ()
+	protected DataPreProcessor getDataPreProcessor ()
 	{
 		return dataPreProcessor;
 	}
 
-	protected void setDataPreProcessor ( BiFunction<Model, Map<String, Object>, Map<String, Object>> dataPreProcessor )
+	protected void setDataPreProcessor ( DataPreProcessor dataPreProcessor )
 	{
 		this.dataPreProcessor = dataPreProcessor;
 	}

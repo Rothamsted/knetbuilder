@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 import static org.apache.commons.collections15.CollectionUtils.containsAny;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +11,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.apache.commons.collections15.CollectionUtils;
-import org.apache.commons.collections15.map.HashedMap;
 
 /**
  * TODO: Never used yet, maybe to be removed.
@@ -50,6 +46,25 @@ public class JsonUtils
 		return filterOnProp ( jsArray, prop, jsObj -> containsAny ( toList ( jsObj ), asList ( values ) ) );
 	}
 
+	public static Map<String, Object> indexJsonLdTypes ( Map<String, Object> data, String indexKey, String...types )
+	{
+	  @SuppressWarnings ( "unchecked" )
+		List<Map<String, Object>> graphArray = (List<Map<String, Object>>) data.get ( "js" );
+	  Map<String, Object> result = new HashMap<> ();
+	  
+	  // Wrap in its slot for FTL
+	  result.put ( indexKey,
+	  	// Index (i.e., create a map) over @id	
+	  	JsonUtils.indexJsArray (
+		  	// Extracts objects of right @type
+	  		JsonUtils.filterOnProp ( graphArray.stream (), "@type", (Object[]) types ), 
+	  		"@id"
+	  	)
+	  );
+	  return result;
+	}
+	
+	
 	@SuppressWarnings ( "unchecked" )
 	public static <T> List<T> toList ( Object jsObj )
 	{

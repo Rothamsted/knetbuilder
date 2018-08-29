@@ -2,7 +2,6 @@ package net.sourceforge.ondex.rdf.convert.support.freemarker;
 
 import static java.lang.String.format;
 import static uk.ac.ebi.utils.exceptions.ExceptionUtils.buildEx;
-import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -15,9 +14,6 @@ import org.apache.jena.rdf.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.github.jsonldjava.core.JsonLdError;
-import com.github.jsonldjava.core.JsonLdOptions;
-import com.github.jsonldjava.core.JsonLdProcessor;
 import com.github.jsonldjava.utils.JsonUtils;
 
 import freemarker.ext.beans.BeansWrapper;
@@ -27,9 +23,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModelException;
-import freemarker.template.Version;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**
  * TODO: comment me!
