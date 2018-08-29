@@ -44,7 +44,7 @@ WHERE
   OPTIONAL { 
   	?concept bk:evidence ?evidence. 
 		?evidence dcterms:identifier ?evId.
-    OPTIONAL { evidence rdfs:label ?evLabel }
-  	OPTIONAL { evidence dcterms:description ?evDescription }
+    OPTIONAL { ?evidence rdfs:label ?evLabel }
+  	OPTIONAL { ?evidence dcterms:description ?evDescription }
   }
 }

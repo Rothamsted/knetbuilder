@@ -1,4 +1,5 @@
 <#include "graph_header.ftlx">
+<#include "utils.ftlx">
 <#list js as cc>
 			<cc>
 				<@render_metadata cc />

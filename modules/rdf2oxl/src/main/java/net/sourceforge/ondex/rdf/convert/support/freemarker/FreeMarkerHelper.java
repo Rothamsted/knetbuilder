@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.rdf.convert.support.freemarker;
 
 import static java.lang.String.format;
+import static uk.ac.ebi.utils.exceptions.ExceptionUtils.buildEx;
 import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
 
 import java.io.IOException;
@@ -69,16 +70,11 @@ public class FreeMarkerHelper
 	}
 	
 	
-	public void processJenaModel ( Model model, String templateName, Writer outWriter )
-	{
-		processJenaModel ( model, templateName, outWriter, null );
-	}
-
-	public void processJenaModel ( Model model, String templateName, Writer outWriter, Map<String, Object> initialData )
+	public Map<String, Object> getTemplateData ( Model model )
 	{
 		try
 		{
-			if ( initialData == null ) initialData = new HashMap<> ();
+			Map<String, Object> result = new HashMap<> ();
 
 			StringWriter sw = new StringWriter ();
 			model.write ( sw, "JSON-LD" );
@@ -86,30 +82,23 @@ public class FreeMarkerHelper
 			// We need some post-processing of what Jena returns
 			@SuppressWarnings ( "unchecked" )
 			Map<String, Object> js = (Map<String, Object>) JsonUtils.fromString ( sw.toString () );
-			
-			JsonLdOptions jsOpts = new JsonLdOptions ();
-			jsOpts.setEmbed ( "@always" );
-			
-			Object jsldCtx = js.get ( "@context" );
-			js = JsonLdProcessor.frame ( js, jsldCtx, jsOpts );
-			// Compaction needs to be redone
-			js = JsonLdProcessor.compact ( js, jsldCtx, jsOpts );
-			
-			initialData.put ( "js", js.get ( "@graph" ) );
+						
+			result.put ( "js", js.get ( "@graph" ) );
 
 			// This might be useful in several cases
-			initialData.put ( NamespaceUtils.class.getSimpleName (), getStaticClassWrapper ( NamespaceUtils.class ) );
-			
-			this.processTemplate ( templateName, outWriter, initialData );
+			result.put ( NamespaceUtils.class.getSimpleName (), getStaticClassWrapper ( NamespaceUtils.class ) );
+
+			return result;
 		}
-		catch ( IOException | JsonLdError ex )
+		catch ( IOException ex )
 		{
-			throwEx ( 
-				UncheckedTemplateException.class, ex,
-				"Error while processing template '%s': %s", templateName, ex.getMessage () 
+			throw buildEx ( 
+				UncheckedIOException.class, ex,
+				"Error while getting JSON-LD data from Jena: %s", ex.getMessage () 
 			);
 		}
 	}
+	
 	
 	public Configuration getTemplateConfig ()
 	{
@@ -122,6 +111,10 @@ public class FreeMarkerHelper
 		this.templateConfig = templateConfig;
 	}
 		
+	/**
+	 * A static class wrapper, which allows to refer static methods in FTL. If you send the wrapper with a 
+	 * key in an hash map data model, then you can do {@code <name>.<staticMethod>(...)} in the template.
+	 */
 	public TemplateHashModel getStaticClassWrapper ( Class<?> clazz )
 	{
 		String className = clazz.getName ();

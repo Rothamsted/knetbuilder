@@ -38,14 +38,6 @@
 										------------------------------------------ MAIN ------------------------------------------ 
 
 -->
-<#-- 
-	We need this support lookup table, in order to find property parents quickly.
--->
-<#assign parent_props = {}>
-<#list js as rt>
-	<#if !to_seq ( rt [ '@type' ] )?seq_contains ( '_OxlParentProperty' )><#continue></#if>
-	<#assign parent_props += { rt [ '@id' ]: rt }>
-</#list>
 <#list js as rt> 
   <#if !to_seq ( rt [ '@type' ] )?seq_contains ( '_OxlProperty' )><#continue></#if>
 			<relation_type>
@@ -53,11 +45,11 @@
 				<#--
 				  Parent
 				  
-				  TODO: For the moment, conceptsRelation might be come a parent relation, with its own XML descriptors, but 
+				  TODO: For the moment, conceptsRelation becomes a parent relation, with its own XML descriptors, but 
 				  no top-level definition. If this works in Ondex, we can keep it and replace relatedTo with conceptsRelation. 
 				-->
 				<specialisationOf>
-					<#assign parentJs = parent_props [ rt.subPropertyOf ]>
+					<#assign parentJs = parentProps [ rt.subPropertyOf ]>
 					<@common_descriptors parentJs />
 				</specialisationOf>
 			</relation_type>

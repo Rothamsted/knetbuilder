@@ -8,6 +8,8 @@
 </#function>
 <#-- 
 
+  All instances of a given class mentioned in a JSON-LD object
+  
 -->
 <#function jsld_instances json_ld classId>
 	<#local result = {}>
@@ -16,6 +18,17 @@
 		<#local result += { js_obj [ '@id' ]: js_obj }>
 	</#list>
 	<#return result />
+</#function>
+<#-- 
+	
+  Builds an index out of an object sequence
+  TODO: never used!
+-->
+<#function seq_index seq key_prop>
+	<#local result = {}>
+	<#list seq as item>
+		<#local result += { result [ key_prop ]: item }>
+	</#list>
 </#function>
 <#-- 
   
@@ -34,21 +47,23 @@
 	Renders common stuff about concepts and relations 
 
 -->
-<#macro render_ondex_entity e>
-					<#if e.relatedConcept??>
+<#macro render_related_concepts e>
+	<#if e.relatedConcept??>
 						<contexts>
 							<#list to_seq ( e.relatedConcept ) as relatedConceptIri>
-								<context><id>${conceptIds [ relatedConceptIri ]}</id></context>
+								<context><id>${conceptIds [ NamespaceUtils.iri ( relatedConceptIri ) ]}</id></context>
 							</#list>
 						</contexts>
-					</#if>
-					<#if e.evidence??>
+	</#if>
+</#macro>
+<#macro render_evidences e>
+	<#if e.evidence??>
 						<evidences>
-							<#list to_seq ( e.evidence ) as evidence>
+							<#list to_seq ( e.evidence ) as evidenceIri>
 								<evidence>
-									<@render_metadata evidence />
+									<@render_metadata evidenceTypes [ evidenceIri ] />
 								</evidence>
 							</#list>
 						</evidences>
-					</#if>
+	</#if>
 </#macro>

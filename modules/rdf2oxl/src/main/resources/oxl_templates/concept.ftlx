@@ -13,10 +13,14 @@
 				<#--  id>${ conceptIds [ NamespaceUtils.iri ( "bkr:publication_17206375" ) ] }</id -->
 				<id>${conceptIds [ NamespaceUtils.iri ( concept [ '@id' ] ) ]}</id>
 				<pid>${(concept.identifier)!''}</pid>
-				<ofType><idRef>${ concept._conceptClassId }</idRef></ofType>				
 			<#noautoesc>
-				<description><![CDATA[${(concept.description)!''}]]></description>
 				<annotation><![CDATA[${(concept.comment)!''}]]></annotation>
+				<description><![CDATA[${(concept.description)!''}]]></description>
+			</#noautoesc>
+				<#-- data source -->				
+				<ofType><idRef>${ concept._conceptClassId }</idRef></ofType>
+				<@render_evidences concept />								
+			<#noautoesc>
 				<conames>
 					<#if concept.prefName??>
 						<#-- 
@@ -36,5 +40,8 @@
 					</#if>
 				</conames>
 			</#noautoesc>
+				<#-- accessions -->
+				<#-- attributes -->
+				<@render_related_concepts concept />			
 			</concept>
 </#list>

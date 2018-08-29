@@ -3,6 +3,7 @@ package net.sourceforge.ondex.rdf.convert.support;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.apache.jena.rdf.model.Model;
@@ -30,7 +31,7 @@ public class ConceptIdHandler extends ResourceHandler implements Resettable
 		
 		final Map<String, Object> conceptIdsWrapper = new HashMap<> ();
 		conceptIdsWrapper.put ( "conceptIds", conceptIds );
-		this.setDataPreProcessor ( m -> conceptIdsWrapper );
+		this.setDataPreProcessor ( (m, j) -> conceptIdsWrapper );
 	}
 
 
@@ -58,9 +59,10 @@ public class ConceptIdHandler extends ResourceHandler implements Resettable
 		return conceptIds;
 	}
 
-	@Bean ( "conceptIdsTemplateRef" )
-	@Override
-	public Function<Model, Map<String, Object>> getDataPreProcessor () {
+
+	@Bean ( "conceptIdsTemplateRef" ) @Override
+	protected BiFunction<Model, Map<String, Object>, Map<String, Object>> getDataPreProcessor ()
+	{
 		return super.getDataPreProcessor ();
-	}
+	}	
 }

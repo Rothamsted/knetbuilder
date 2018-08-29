@@ -2,12 +2,14 @@ package net.sourceforge.ondex.rdf.convert.support;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,17 +22,9 @@ import org.springframework.stereotype.Component;
 @Component ( "relationHandler" )
 public class RelationHandler extends ResourceHandler
 {
-	@Override
-	public void accept ( Set<Resource> res )
-	{
-		super.accept ( res );
-	}
-
-
-	@Autowired @Qualifier ( "conceptIdsTemplateRef" )
-	@Override
-	public void setDataPreProcessor ( Function<Model, Map<String, Object>> dataPreProcessor )
+	@Autowired @Qualifier ( "conceptIdsTemplateRef" ) @Override
+	protected void setDataPreProcessor ( BiFunction<Model, Map<String, Object>, Map<String, Object>> dataPreProcessor )
 	{
 		super.setDataPreProcessor ( dataPreProcessor );
-	}
+	}	
 }

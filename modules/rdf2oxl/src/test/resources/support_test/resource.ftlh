@@ -1,5 +1,3 @@
-<#assign js = json?eval>
-<#assign js = js[ '@graph' ]???then( js[ '@graph' ], [ js ] )>
 
 
 ==== Publications Test ====

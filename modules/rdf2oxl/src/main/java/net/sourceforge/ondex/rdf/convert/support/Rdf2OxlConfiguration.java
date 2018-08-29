@@ -21,7 +21,9 @@ import freemarker.template.TemplateExceptionHandler;
  */
 @org.springframework.context.annotation.Configuration 
 @DependsOn ({ 
-	"resourceHandler", "conceptHandler", "relationHandler", "resourceProcessor", "conceptProcessor" 
+	"resourceHandler", "relationTypeHandler", 
+	"conceptHandler", "relationHandler",
+	"resourceProcessor", "conceptProcessor" 
 })
 public class Rdf2OxlConfiguration implements ApplicationContextAware
 {
@@ -49,15 +51,18 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 	@Bean ( name = "itemConfigurations" )
 	public List<ItemConfiguration> getItemConfigurations ()
 	{		
-		return Arrays.asList ( new ItemConfiguration[] {
+		return Arrays.asList ( new ItemConfiguration[] 
+		{
 			new ItemConfiguration ( 
 				"Concept Classes", "concept_class_iris.sparql", "concept_class_graph.sparql", 
 				"\t\t<conceptclasses>\n", "concept_class.ftlx", "\t\t</conceptclasses>\n"
 			),
 			new ItemConfiguration (
 				"Relation Types", "relation_type_iris.sparql", "relation_type_graph.sparql", 
-				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n" ),
-
+				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n",
+				null, (RelationTypeHandler) applicationContext.getBean ( "relationTypeHandler" )
+			),
+			
 			new ItemConfiguration (
 				"Concept IDs", "concept_iris.sparql", null, 
 				null, null, null,
