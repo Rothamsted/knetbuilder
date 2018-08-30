@@ -79,9 +79,10 @@ public class FreeMarkerHelper
 						
 			result.put ( "js", js.get ( "@graph" ) );
 
-			// This might be useful in several cases
-			result.put ( NamespaceUtils.class.getSimpleName (), getStaticClassWrapper ( NamespaceUtils.class ) );
-
+			// These might be useful in several cases
+			addStaticClassWrapper ( result, NamespaceUtils.class );
+			addStaticClassWrapper ( result, net.sourceforge.ondex.rdf.convert.support.JsonUtils.class );
+	
 			return result;
 		}
 		catch ( IOException ex )
@@ -126,5 +127,15 @@ public class FreeMarkerHelper
 				"Error while getting template wrapper for '" + className + "': " + ex.getMessage (), ex 
 			);
 		}				
+	}
+	
+	public void addStaticClassWrapper ( Map<String, Object> data, String name, Class<?> clazz )
+	{
+		data.put ( name, getStaticClassWrapper ( clazz ) );
+	}
+
+	public void addStaticClassWrapper ( Map<String, Object> data, Class<?> clazz )
+	{
+		addStaticClassWrapper ( data, clazz.getSimpleName (), clazz );
 	}
 }

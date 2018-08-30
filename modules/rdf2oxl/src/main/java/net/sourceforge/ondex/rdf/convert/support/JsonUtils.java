@@ -46,10 +46,22 @@ public class JsonUtils
 		return filterOnProp ( jsArray, prop, jsObj -> containsAny ( toList ( jsObj ), asList ( values ) ) );
 	}
 
+	
 	public static Map<String, Object> indexJsonLdTypes ( Map<String, Object> data, String indexKey, String...types )
 	{
+	  return indexJsonLdTypes ( data, "js", indexKey, types );
+	}
+	
+	public static Map<String, Object> indexJsonLdTypes ( Map<String, Object> data, String graphVarName, String indexKey, String...types )
+	{
 	  @SuppressWarnings ( "unchecked" )
-		List<Map<String, Object>> graphArray = (List<Map<String, Object>>) data.get ( "js" );
+		List<Map<String, Object>> jsonLdGraph = (List<Map<String, Object>>) data.get ( graphVarName );
+	  return indexJsonLdTypes ( jsonLdGraph, indexKey, types );
+	}
+	
+	
+	public static Map<String, Object> indexJsonLdTypes ( List<Map<String, Object>> jsonLdGraph, String indexKey, String...types )
+	{
 	  Map<String, Object> result = new HashMap<> ();
 	  
 	  // Wrap in its slot for FTL
@@ -57,7 +69,7 @@ public class JsonUtils
 	  	// Index (i.e., create a map) over @id	
 	  	JsonUtils.indexJsArray (
 		  	// Extracts objects of right @type
-	  		JsonUtils.filterOnProp ( graphArray.stream (), "@type", (Object[]) types ), 
+	  		JsonUtils.filterOnProp ( jsonLdGraph.stream (), "@type", (Object[]) types ), 
 	  		"@id"
 	  	)
 	  );
