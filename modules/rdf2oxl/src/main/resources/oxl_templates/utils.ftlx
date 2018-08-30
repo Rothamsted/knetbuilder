@@ -58,10 +58,13 @@
 </#macro>
 <#macro render_evidences e>
 	<#if e.evidence??>
+		<#if !evidence_types??>
+			<#global evidence_types = JsonUtils.indexJsonLdTypes ( js, "EvidenceType" ) />
+		</#if>
 						<evidences>
 							<#list to_seq ( e.evidence ) as evidenceIri>
 								<evidence>
-									<@render_metadata evidenceTypes [ evidenceIri ] />
+									<@render_metadata evidence_types [ evidenceIri ] />
 								</evidence>
 							</#list>
 						</evidences>

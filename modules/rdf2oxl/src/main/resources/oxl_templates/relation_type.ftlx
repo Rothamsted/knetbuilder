@@ -27,10 +27,10 @@
   Common property descriptors, which are used both for a proprty and its parent
   
 -->
-<#macro common_descriptors relType>
-				<@render_metadata relType />
-				<inverseName>${(relType._inverseId)!'none'}</inverseName>
-				<@prop_nature (relType._nature)![] />
+<#macro common_descriptors rel_type>
+				<@render_metadata rel_type />
+				<inverseName>${(rel_type._inverseId)!'none'}</inverseName>
+				<@prop_nature (rel_type._nature)![] />
 </#macro>
 <#-- 
 
@@ -38,10 +38,11 @@
 										------------------------------------------ MAIN ------------------------------------------ 
 
 -->
-<#list js as rt> 
-  <#if !to_seq ( rt [ '@type' ] )?seq_contains ( '_OxlProperty' )><#continue></#if>
+<#global parent_props = JsonUtils.indexJsonLdTypes ( js, "_OxlParentProperty" ) />
+<#list js as rel_type> 
+  <#if !to_seq ( rel_type [ '@type' ] )?seq_contains ( '_OxlProperty' )><#continue></#if>
 			<relation_type>
-			  <@common_descriptors rt />
+			  <@common_descriptors rel_type />
 				<#--
 				  Parent
 				  
@@ -49,8 +50,8 @@
 				  no top-level definition. If this works in Ondex, we can keep it and replace relatedTo with conceptsRelation. 
 				-->
 				<specialisationOf>
-					<#assign parentJs = parentProps [ rt.subPropertyOf ]>
-					<@common_descriptors parentJs />
+					<#assign parent_js = parent_props [ rel_type.subPropertyOf ]>
+					<@common_descriptors parent_js />
 				</specialisationOf>
 			</relation_type>
 </#list>

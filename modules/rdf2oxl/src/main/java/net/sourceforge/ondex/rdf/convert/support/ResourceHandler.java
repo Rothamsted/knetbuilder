@@ -3,6 +3,7 @@ package net.sourceforge.ondex.rdf.convert.support;
 import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -26,19 +27,7 @@ import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
 @Component ( "resourceHandler" )
 public class ResourceHandler implements Consumer<Set<Resource>>
 {
-	public static interface DataPreProcessor 
-		extends BiFunction<Model, Map<String, Object>, Map<String, Object>>
-	{
-		public default DataPreProcessor merge ( DataPreProcessor otherProc )
-		{
-			if ( otherProc == null ) return this;
-			return (model, data) -> {
-				Map<String, Object> result = DataPreProcessor.this.apply ( model, data );
-				result.putAll ( otherProc.apply ( model, result ) );
-				return result;
-			};
-		}
-	}
+	public static interface DataPreProcessor extends BiConsumer<Model, Map<String, Object>> {}
 	
 	private Writer outWriter;
 	
@@ -76,7 +65,7 @@ public class ResourceHandler implements Consumer<Set<Resource>>
 				model ->
 				{		
 					Map<String, Object> data = templateHelper.getTemplateData ( model );
-					if ( dataPreProcessor != null ) data.putAll ( dataPreProcessor.apply ( model, data ) );
+					if ( dataPreProcessor != null ) dataPreProcessor.accept ( model, data );
 					templateHelper.processTemplate ( oxlTemplateName, this.outWriter, data );
 				}
 			);

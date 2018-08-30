@@ -25,10 +25,7 @@ public class ConceptIdHandler extends ResourceHandler implements Resettable
 	public ConceptIdHandler ()
 	{
 		super ();
-		
-		final Map<String, Object> conceptIdsWrapper = new HashMap<> ();
-		conceptIdsWrapper.put ( "conceptIds", conceptIds );
-		this.setDataPreProcessor ( (m, j) -> conceptIdsWrapper );
+		this.setDataPreProcessor ( (model, data) -> data.put ( "conceptIds", conceptIds ) );
 	}
 
 

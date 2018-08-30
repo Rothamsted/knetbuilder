@@ -21,8 +21,7 @@ import freemarker.template.TemplateExceptionHandler;
  */
 @org.springframework.context.annotation.Configuration 
 @DependsOn ({ 
-	"resourceHandler", "relationTypeHandler", 
-	"conceptHandler", "relationHandler",
+	"resourceHandler", "conceptHandler", "relationHandler",
 	"resourceProcessor", "conceptProcessor" 
 })
 public class Rdf2OxlConfiguration implements ApplicationContextAware
@@ -59,8 +58,7 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 			),
 			new ItemConfiguration (
 				"Relation Types", "relation_type_iris.sparql", "relation_type_graph.sparql", 
-				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n",
-				null, (RelationTypeHandler) applicationContext.getBean ( "relationTypeHandler" )
+				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n"
 			),
 			
 			new ItemConfiguration (

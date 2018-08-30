@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert;
+package net.sourceforge.ondex.rdf.convert.support;
 
 import static java.lang.System.out;
 
