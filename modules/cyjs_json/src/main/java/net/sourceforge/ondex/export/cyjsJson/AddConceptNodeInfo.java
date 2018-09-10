@@ -112,6 +112,9 @@ public class AddConceptNodeInfo {
   if(conceptName.contains("<span")) {
      //val= "<html>"+ conceptName +"</html>";
      concept_text_bgColor= "gold";
+     if(conceptName.contains("#")) { // if a color is already provided within the <span> tag, use that HEX colour code
+        concept_text_bgColor= conceptName.substring(conceptName.indexOf("#"), conceptName.indexOf("#")+7);
+       }
      concept_text_bgOpacity= "1";
      // remove all html content (including <span> tags) from conceptName to be displayed
      Document doc = Jsoup.parse(val);
