@@ -10,7 +10,7 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 /**
  * Build edge json objects using their various attributes.
  * @author Ajit Singh
- * @version 28/03/18
+ * @version 10/09/18
  */
 public class AddRelationEdgeInfo {
     
@@ -92,16 +92,20 @@ public class AddRelationEdgeInfo {
   else if(edgeLbl.equals(EdgeLabel.encodes.toString())) {
      colour= EdgeColour.grey.toString();
     }
-  else if((edgeLbl.equals(EdgeLabel.participates_in.toString())) ||
-          (edgeLbl.equals(EdgeLabel.has_mutant.toString()))) {
+  else if(edgeLbl.equals(EdgeLabel.participates_in.toString())) {
      colour= EdgeColour.teal.toString();
+    }
+  else if(edgeLbl.equals(EdgeLabel.has_mutant.toString())) {
+     colour= EdgeColour.cyan.toString();
     }
   else if(edgeLbl.equals(EdgeLabel.has_similar_sequence.toString())) {
      colour= EdgeColour.fireBrick.toString();
     }
-  else if((edgeLbl.equals(EdgeLabel.cooccurs_with.toString())) ||
-          (edgeLbl.equals(EdgeLabel.regulates.toString()))) {
+  else if(edgeLbl.equals(EdgeLabel.cooccurs_with.toString())) {
      colour= EdgeColour.blue.toString();
+    }
+  else if(edgeLbl.equals(EdgeLabel.regulates.toString())) {
+     colour= EdgeColour.slateBlue.toString();
     }
   else if(edgeLbl.equals(EdgeLabel.has_protein_domain.toString())) {
      colour= EdgeColour.crimson.toString();
@@ -139,7 +143,7 @@ public class AddRelationEdgeInfo {
     }
   else if((edgeLbl.equals(EdgeLabel.has_variation.toString())) || 
           (edgeLbl.equals(EdgeLabel.has_target.toString()))) {
-     colour= EdgeColour.navy.toString();
+     colour= EdgeColour.olive.toString();
     }
   else if(edgeLbl.equals(EdgeLabel.activated_by.toString())) {
      colour= EdgeColour.magenta.toString();
@@ -167,7 +171,7 @@ public class AddRelationEdgeInfo {
      colour= EdgeColour.navy.toString();
     }
   else if(edgeLbl.equals(EdgeLabel.leads_to.toString())) {
-     colour= EdgeColour.slateBlue.toString();
+     colour= EdgeColour.olive.toString();
     }
 
   return colour;
