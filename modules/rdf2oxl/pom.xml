@@ -9,9 +9,9 @@
 	</parent>
 
 	<groupId>net.sourceforge.ondex.modules</groupId>
-	<artifactId>neo4j-export</artifactId>
+	<artifactId>rdf2oxl</artifactId>
 
-	<name>ONDEX Neo4J Exporter</name>
+	<name>ONDEX RDF-to-OXL Converter</name>
 	<description></description>
 
 	<developers>
@@ -24,54 +24,47 @@
 
 	<dependencies>
 
-		<dependency>
-			<artifactId>api</artifactId>
-			<groupId>net.sourceforge.ondex.core</groupId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
-			<artifactId>rdf2neo</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
+ 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>rdf-export-2</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
+ 			<artifactId>rdf-common</artifactId>
+		  <version>${project.version}</version>
+ 		</dependency>
+
+    <dependency>
+      <groupId>uk.ac.ebi</groupId>
+      <artifactId>jutils-io</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>info.marcobrandizi</groupId>
+      <artifactId>rdfutils-jena</artifactId>
+    </dependency>
+    
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.28</version>
+		</dependency>
+    
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>net.sourceforge.ondex.modules</groupId>
-			<artifactId>oxl</artifactId>
-			<version>${project.version}</version>
-			<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
-			<scope>test</scope>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
 		</dependency>
-
+		    
 	</dependencies>
+
 
 	<build>
 
 		<plugins>
 		
 			<!-- We have some test files that we reuse in the mini-integration-tests -->				      
-			<plugin>
+			<!--plugin>
 			  <groupId>org.apache.maven.plugins</groupId>
 			  <artifactId>maven-jar-plugin</artifactId>
 			  <executions>
@@ -81,71 +74,8 @@
 			      </goals>
 			    </execution>
 			  </executions>
-			</plugin>
+			</plugin -->
 		
-			<!-- 
-				We include an installation of the rdf2neo-cli command line tool in the final ONDEX. 
-				The dependency plug-in pours this into target/dependency/rdf2neo-cli-VERSION, then the 
-				Assembly plugin repackage this in the final distro structure, removing the version bit.
-			-->
-	  		<plugin>
-	  			<artifactId>maven-dependency-plugin</artifactId>	  			
-	  			<executions>
-	  				<execution>
-	  					<phase>prepare-package</phase>
-	  					<goals>
-	  						<goal>unpack</goal>
-	  					</goals>
-	  					<configuration>
-		          	<artifactItems>
-		            	<artifactItem>
-								    <groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
-										<artifactId>rdf2neo-cli</artifactId>
-								    <version>0.0.1-SNAPSHOT</version>
-		               	<type>zip</type>
-		               	<excludes>**/examples/</excludes>
-		             	</artifactItem>
-		          	</artifactItems>  						
-	  					</configuration>
-	  				</execution>
-	  			</executions>
-	  		</plugin>		
-
-			<!-- All details defined in the top POM -->
-			<plugin>
-				<groupId>com.github.harti2006</groupId>
-				<artifactId>neo4j-server-maven-plugin</artifactId>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.20.1</version>
-				<configuration>
-					<trimStackTrace>false</trimStackTrace>
-					<systemPropertyVariables>
-						<neo4j.server.boltPort>${neo4j.server.boltPort}</neo4j.server.boltPort>						
-					</systemPropertyVariables>
-	      		<environmentVariables>
-	      			<!-- this is to re-use the config shipped to the final binary with integration tests. -->
-	      			<RDF2NEO_HOME>${project.basedir}/src/main/assembly/resources</RDF2NEO_HOME>
-	      		</environmentVariables>					
-				</configuration>
-				<executions>
-					<execution>
-						<id>failsafe-test</id>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>failsafe-verify</id>
-						<goals>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

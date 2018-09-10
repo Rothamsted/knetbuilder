@@ -1,0 +1,72 @@
+<#-- 
+
+	Returns an array out of the parameter, putting it into an array if it's a singleton 
+
+-->
+<#function to_seq object>
+  <#return (object?is_string || !object?is_enumerable)?then ( [ object ], object )>
+</#function>
+<#-- 
+
+  All instances of a given class mentioned in a JSON-LD object
+  
+-->
+<#function jsld_instances json_ld classId>
+	<#local result = {}>
+	<#list json_ld as js_obj>
+		<#if !to_seq ( js_obj [ '@type' ] )?seq_contains ( classId )><#continue /></#if>
+		<#local result += { js_obj [ '@id' ]: js_obj }>
+	</#list>
+	<#return result />
+</#function>
+<#-- 
+	
+  Builds an index out of an object sequence
+  TODO: never used!
+-->
+<#function seq_index seq key_prop>
+	<#local result = {}>
+	<#list seq as item>
+		<#local result += { result [ key_prop ]: item }>
+	</#list>
+</#function>
+<#-- 
+  
+  Often used for main properties of metadata entities (eg, concept classes, evidence 
+
+-->
+<#macro render_metadata m>
+				<id>${m.identifier}</id>
+			<#noautoesc>
+				<fullname><![CDATA[${(m.label[ '@value' ])!''}]]></fullname>
+				<description><![CDATA[${(m.description[ '@value' ])!''}]]></description>
+			</#noautoesc>
+</#macro>
+<#-- 
+
+	Renders common stuff about concepts and relations 
+
+-->
+<#macro render_related_concepts e>
+	<#if e.relatedConcept??>
+						<contexts>
+							<#list to_seq ( e.relatedConcept ) as relatedConceptIri>
+								<context><id>${conceptIds [ NamespaceUtils.iri ( relatedConceptIri ) ]}</id></context>
+							</#list>
+						</contexts>
+	</#if>
+</#macro>
+<#macro render_evidences e>
+	<#if e.evidence??>
+		<#if !evidence_types??>
+			<#global evidence_types = JsonUtils.indexJsonLdTypes ( js, "EvidenceType" ) />
+		</#if>
+						<evidences>
+							<#list to_seq ( e.evidence ) as evidenceIri>
+								<evidence>
+									<@render_metadata evidence_types [ evidenceIri ] />
+								</evidence>
+							</#list>
+						</evidences>
+	</#if>
+</#macro>

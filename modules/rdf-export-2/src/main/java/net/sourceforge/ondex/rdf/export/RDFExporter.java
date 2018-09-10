@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import org.apache.jena.rdf.model.Model;
 
-import info.marcobrandizi.rdfutils.jena.elt.RDFProcessor;
+import info.marcobrandizi.rdfutils.jena.elt.RDFLoader;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
@@ -27,7 +27,7 @@ import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
  * <dl><dt>Date:</dt><dd>21 Nov 2017</dd></dl>
  *
  */
-public class RDFExporter extends RDFProcessor<ONDEXGraph>
+public class RDFExporter extends RDFLoader<ONDEXGraph>
 {
 	@Override
 	public final void process ( ONDEXGraph graph, Object...opts ) {
@@ -85,7 +85,10 @@ public class RDFExporter extends RDFProcessor<ONDEXGraph>
 		executor.shutdown ();
 
 		this.waitExecutor ( "Waiting for RDF export completion, please wait" );
-		log.info ( "RDF export finished, a total of {} concepts+relations exported", concepts.size () + relations.size () );
+		log.info ( 
+			"RDF export finished, a total of {} concepts+relations exported, {} triples created",
+			concepts.size () + relations.size (), xfact.getTriplesCountTracker ()
+		);
 	}
 	
 	private RDFXFactory handleNewXTask ( RDFXFactory xfact ) {

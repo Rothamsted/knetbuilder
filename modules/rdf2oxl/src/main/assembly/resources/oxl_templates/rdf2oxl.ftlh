@@ -1,0 +1,150 @@
+<#ftl output_format="XML">
+<?xml version="1.0" encoding="UTF-8"?>
+<ondex:ondexdata 
+	xmlns:ondex="http://ondex.sourceforge.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:schemaLocation="http://ondex.sourceforge.net/ondex.xsd">
+  
+  <version>1.8</version>
+  <info>
+    <numberOfConcepts>1436</numberOfConcepts>
+    <numberOfRelations>1880</numberOfRelations>
+    <graphName>default</graphName>
+  </info>
+  
+  <ondexmetadata>
+	</ondexmetadata>
+  
+  <ondexdataseq>
+    <concepts>
+      <concept>
+        <id>1</id>
+        <pid>Q75WV3</pid>
+        <annotation>Created: 2012-06-13; Modified: 2017-08-30; Version: 81</annotation>
+        <description/>
+        <elementOf>
+          <idRef>UNIPROTKB-SwissProt</idRef>
+        </elementOf>
+        <ofType>
+          <idRef>Protein</idRef>
+        </ofType>
+        <evidences>
+          <evidence>
+            <idRef>IMPD</idRef>
+          </evidence>
+        </evidences>
+        <conames>
+          <concept_name>
+            <name>Probable trehalose-phosphate phosphatase 1</name>
+            <isPreferred>true</isPreferred>
+          </concept_name>
+          <concept_name>
+            <name>Trehalose 6-phosphate phosphatase</name>
+            <isPreferred>false</isPreferred>
+          </concept_name>
+          <concept_name>
+            <name>Os02g0661100</name>
+            <isPreferred>false</isPreferred>
+          </concept_name>
+          <concept_name>
+            <name>TPP1</name>
+            <isPreferred>false</isPreferred>
+          </concept_name>
+          <concept_name>
+            <name>OsTPP1</name>
+            <isPreferred>false</isPreferred>
+          </concept_name>
+          <concept_name>
+            <name>LOC_Os02g44230</name>
+            <isPreferred>false</isPreferred>
+          </concept_name>
+        </conames>
+        <coaccessions>
+          <concept_accession>
+            <accession>Q75WV3</accession>
+            <elementOf>
+              <idRef>UNIPROTKB</idRef>
+            </elementOf>
+            <ambiguous>false</ambiguous>
+          </concept_accession>
+        </coaccessions>
+        <cogds>
+          <concept_gds>
+            <attrname>
+              <idRef>TAXID</idRef>
+            </attrname>
+            <value java_class="java.lang.String">
+              <literal>39947</literal>
+            </value>
+            <doindex>false</doindex>
+          </concept_gds>
+          <concept_gds>
+            <attrname>
+              <idRef>CitNum</idRef>
+            </attrname>
+            <value java_class="java.lang.Integer">
+              <literal>8</literal>
+            </value>
+            <doindex>false</doindex>
+          </concept_gds>
+        </cogds>
+        <contexts>
+          <context>
+            <id>64</id>
+          </context>
+          <context>
+            <id>38</id>
+          </context>
+          <context>
+            <id>56</id>
+          </context>
+          <context>
+            <id>60</id>
+          </context>
+          <context>
+            <id>63</id>
+          </context>
+        </contexts>
+      </concept>    
+		</concepts>
+		
+    <relations>
+      <relation>
+        <fromConcept>1028</fromConcept>
+        <toConcept>57</toConcept>
+        <ofType>
+          <idRef>occ_in</idRef>
+        </ofType>
+        <evidences>
+          <evidence>
+            <idRef>TM</idRef>
+          </evidence>
+        </evidences>
+        <relgds>
+          <relation_gds>
+            <attrname>
+              <idRef>TFIDF</idRef>
+            </attrname>
+            <value java_class="java.lang.Double">
+              <literal>5.050684928894043</literal>
+            </value>
+            <doindex>false</doindex>
+          </relation_gds>
+          <relation_gds>
+            <attrname>
+              <idRef>EVIDENCE</idRef>
+            </attrname>
+            <value java_class="net.sourceforge.ondex.export.oxl.SetHolder">
+              <literal>
+                <item>
+                  <set xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">The relative drought stress tolerance was determined based on a set of parameters including plant height, leaf length, leaf width, leaf sheath length, leaf relative water content (RWC), electrolyte leakage (EL), photosynthetic rate (Pn), stomatal conductance (g s), transpiration rate (Tr), intercellular CO2 concentration (Ci), and water use efficiency (WUE).</set>
+                </item>
+              </literal>
+            </value>
+            <doindex>false</doindex>
+          </relation_gds>
+        </relgds>
+      </relation>
+      </relations>		
+  </ondexdataseq>
+</ondex:ondexdata>

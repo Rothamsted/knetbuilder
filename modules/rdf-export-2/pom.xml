@@ -26,7 +26,13 @@
 	 </developers>
    
    <dependencies>
-   
+   		
+   		<dependency>
+				<groupId>${project.groupId}</groupId>
+   			<artifactId>rdf-common</artifactId>
+			  <version>${project.version}</version>
+   		</dependency>
+   		
 			<dependency>
 				<artifactId>api</artifactId>
 			  <groupId>net.sourceforge.ondex.core</groupId>
@@ -170,24 +176,6 @@
    </build>
    
    <repositories>
-			
-			<!-- rdfutils -->
-			<repository>
-				<id>marcobrandizi.info</id>
-				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
-				<releases><enabled>true</enabled></releases>
-				<snapshots><enabled>true</enabled></snapshots>
-			</repository>
-
-			<!-- jutils, java2rdf -->
-			<repository>
-		    <id>EBIBioSamples-GH-repo</id>
-		    <url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
-		    <snapshots>
-	        <enabled>true</enabled>
-		    </snapshots>
-	    </repository>			
-
    </repositories>   
 
 </project>
