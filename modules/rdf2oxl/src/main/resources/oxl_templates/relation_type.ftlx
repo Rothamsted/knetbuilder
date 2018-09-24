@@ -5,19 +5,19 @@
   Reports XML for property natures, e.g., symmetric, transitive  
 
 -->
-<#macro prop_nature jsNatures>
+<#macro prop_nature js_natures>
   <#-- Normalize to array -->
-  <#local natures = jsNatures>
+  <#local natures = js_natures>
   <#if natures?is_string>
   	<#local natures = [ natures ]>
   </#if>
-	<#local natureMap = { 
+	<#local nature_map = { 
 	  'isReflexive': 'owl:ReflexiveProperty',
 	  'isAntisymmetric': 'owl:AsymmetricProperty', 
 	  'isSymmetric': 'owl:SymmetricProperty', 
 	  'isTransitive': 'owl:TransitiveProperty'}
 	>	  
-	<#list natureMap as xml, rdf>
+	<#list nature_map as xml, rdf>
 	  		<${xml}>${( natures?seq_contains( rdf  ) )?c}</${xml}>
 	</#list>  
 </#macro>
@@ -40,14 +40,16 @@
 -->
 <#global parent_props = JsonUtils.indexJsonLdTypes ( js, "_OxlParentProperty" ) />
 <#list js as rel_type> 
-  <#if !to_seq ( rel_type [ '@type' ] )?seq_contains ( '_OxlProperty' )><#continue></#if>
+  <#if !to_seq ( rel_type [ '@type' ] )?seq_contains ( '_OxlProperty' )><#continue /></#if>
 			<relation_type>
 			  <@common_descriptors rel_type />
 				<#--
 				  Parent
 				  
 				  TODO: For the moment, conceptsRelation becomes a parent relation, with its own XML descriptors, but 
-				  no top-level definition. If this works in Ondex, we can keep it and replace relatedTo with conceptsRelation. 
+				  no top-level definition. If this works in Ondex, we can keep it and replace relatedTo with conceptsRelation.
+				  
+				  TODO: The XML parser supports idRef (like in cc), so you don't need to repeat the whole thing here 
 				-->
 				<specialisationOf>
 					<#assign parent_js = parent_props [ rel_type.subPropertyOf ]>

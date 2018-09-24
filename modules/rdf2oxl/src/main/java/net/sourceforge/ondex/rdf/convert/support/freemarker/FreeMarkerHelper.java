@@ -23,6 +23,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModelException;
+import info.marcobrandizi.rdfutils.XsdMapper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 
 /**
@@ -82,6 +83,7 @@ public class FreeMarkerHelper
 			// These might be useful in several cases
 			addStaticClassWrapper ( result, NamespaceUtils.class );
 			addStaticClassWrapper ( result, net.sourceforge.ondex.rdf.convert.support.JsonUtils.class );
+			addStaticClassWrapper ( result, XsdMapper.class );
 	
 			return result;
 		}
@@ -116,8 +118,7 @@ public class FreeMarkerHelper
 		
 		try
 		{
-			BeansWrapper wrapper = new BeansWrapperBuilder ( this.templateConfig.getIncompatibleImprovements () )
-				.build ();
+			BeansWrapper wrapper = new BeansWrapperBuilder ( this.templateConfig.getIncompatibleImprovements () ).build ();
 			TemplateHashModel staticModels = wrapper.getStaticModels ();
 			return (TemplateHashModel) staticModels.get ( className );
 		}

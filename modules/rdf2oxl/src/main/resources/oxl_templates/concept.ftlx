@@ -7,8 +7,25 @@
 							<isPreferred>${is_preferred?c}</isPreferred>
 						</concept_name>
 </#macro>
+<#macro render_accessions concept>
+			<#if !concept._accession??><#return /></#if>
+			<coaccessions>
+				<#list to_seq ( concept._accession ) as accession_iri>
+					<#if !accessions??>
+						<#global accessions = JsonUtils.indexJsonLdTypes ( js, "Accession" ) />
+					</#if>
+					<#assign accession = accessions [ accession_iri ] />
+					<concept_accession>
+						<accession>${accession.identifier}</accession>
+						<@render_data_source accession />
+						<#-- No idea why Jena doesn't remove the prefix only in this case -->
+						<ambiguous>${(accession[ "bk:isAmbiguousAccession" ])???then('true', 'false')}</ambiguous>
+					</concept_accession>
+				</#list>
+			</coaccessions>
+</#macro>
 <#list js as concept>
-	<#if !concept._conceptClassId??><#continue></#if>
+	<#if !concept._conceptClassId??><#continue /></#if>
 			<concept>
 				<id>${conceptIds [ NamespaceUtils.iri ( concept [ '@id' ] ) ]}</id>
 				<pid>${(concept.identifier)!''}</pid>
@@ -16,7 +33,7 @@
 				<annotation><![CDATA[${(concept.comment)!''}]]></annotation>
 				<description><![CDATA[${(concept.description)!''}]]></description>
 			</#noautoesc>
-				<#-- data source -->				
+				<@render_data_source concept />								
 				<ofType><idRef>${ concept._conceptClassId }</idRef></ofType>
 				<@render_evidences concept />								
 			<#noautoesc>
@@ -39,8 +56,8 @@
 					</#if>
 				</conames>
 			</#noautoesc>
-				<#-- accessions -->
-				<#-- attributes -->
-				<@render_related_concepts concept />			
+				<@render_accessions concept />
+				<@render_attribute_values concept 'cogds' 'concept_gds'/>
+				<@render_related_concepts concept />	
 			</concept>
 </#list>

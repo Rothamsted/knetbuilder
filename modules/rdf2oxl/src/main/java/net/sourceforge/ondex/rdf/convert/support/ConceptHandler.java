@@ -1,10 +1,12 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
-import static net.sourceforge.ondex.rdf.convert.support.JsonUtils.indexJsonLdTypes;
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import info.marcobrandizi.rdfutils.XsdMapper;
 
 /**
  * TODO: comment me!
@@ -16,9 +18,16 @@ import org.springframework.stereotype.Component;
 @Component ( "conceptHandler" )
 public class ConceptHandler extends ResourceHandler
 {
+
+	/**
+	 * Injects the {@code conceptIdsTemplateRef} bean, provided by {@link ConceptIdHandler} and also adds
+	 * {@link XsdMapper} to the classes available to the template engine. This is used to translate 
+	 * attribute values from xsd: values to Java 
+   *
+	 */
 	@Autowired @Qualifier ( "conceptIdsTemplateRef" ) @Override
 	protected void setDataPreProcessor ( DataPreProcessor dataPreProcessor )
-	{		
+	{	
 		super.setDataPreProcessor ( dataPreProcessor );
 	}	
 }

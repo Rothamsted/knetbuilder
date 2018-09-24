@@ -94,4 +94,5 @@ public class Rdf2OxlConverterTest
 			converter.convert ( writer );
 		}
 	}
+
 }

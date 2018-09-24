@@ -4,7 +4,6 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,19 @@ import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
 @Component ( "resourceHandler" )
 public class ResourceHandler implements Consumer<Set<Resource>>
 {
-	public static interface DataPreProcessor extends BiConsumer<Model, Map<String, Object>> {}
+	/**
+	 * A notation to represent a function passed to {@link ResourceHandler#setDataPreProcessor(DataPreProcessor)}
+	 */
+	public static interface DataPreProcessor extends BiConsumer<Model, Map<String, Object>>
+	{
+		@Override
+		default DataPreProcessor andThen ( BiConsumer<? super Model, ? super Map<String, Object>> after )
+		{
+			// This is to avoid cast exception
+			BiConsumer<Model, Map<String, Object>> composed = BiConsumer.super.andThen ( after );
+			return (model, data) -> composed.accept ( model, data );
+		}	
+	}
 	
 	private Writer outWriter;
 	
@@ -132,7 +143,10 @@ public class ResourceHandler implements Consumer<Set<Resource>>
 		this.templateHelper = templateHelper;
 	}
 
-	
+	/**
+	 * This property can be set with a function that enriches the {@link Model} and hashed data passed to the template
+	 * engine with handler-custom values. 
+	 */
 	protected DataPreProcessor getDataPreProcessor ()
 	{
 		return dataPreProcessor;

@@ -47,7 +47,7 @@ public abstract class ONDEXEntityMapper<OE extends ONDEXEntity> extends BeanRdfM
 		RdfMapperFactory xfact = this.getMapperFactory ();
 		Graph graphModel = xfact.getGraphModel ();
 		
-		String myiri = this.getRdfUriGenerator ().getUri ( oe );		
+		String myiri = this.getRdfUriGenerator ().getUri ( oe, params );		
 		
 		
 		// Map the attributes
@@ -68,7 +68,7 @@ public abstract class ONDEXEntityMapper<OE extends ONDEXEntity> extends BeanRdfM
 				Literal vl = attrValGen.getLiteral ( thisVal, params );
 				if ( vl == null ) continue;
 				
-				String attrProp = xfact.getUri ( attr.getOfType () );
+				String attrProp = xfact.getUri ( attr.getOfType (), params );
 				COMMUTILS.assertLiteral ( graphModel, myiri, attrProp, vl );
 				
 				if ( !attr.isDoIndex () ) continue;

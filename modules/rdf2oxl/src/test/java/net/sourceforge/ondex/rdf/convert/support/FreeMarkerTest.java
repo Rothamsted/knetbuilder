@@ -123,7 +123,7 @@ public class FreeMarkerTest
 		Map<String, Object> data = new HashMap<String, Object> () {{
 			put ( "json", json );
 		}};
-		
+				
 		tpl.process ( data, new OutputStreamWriter ( System.out ) );
 	}	
 	

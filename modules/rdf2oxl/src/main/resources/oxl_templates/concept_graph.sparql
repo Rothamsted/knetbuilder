@@ -8,13 +8,49 @@ CONSTRUCT
   	rdfs:comment ?annotation;
     bk:_conceptClassId ?ccId;
     bk:relatedConcept ?relatedConcept;
-    bk:evidence ?evidence.
+    bk:evidence ?evidence;
+		bk:dataSource ?dataSource;
+  	# dc:identifier isn't practical here, cause URI compaction will make this to clash with dcterms:identifier above
+  	bk:_accession ?accession;
+		bk:_attribute ?attribIri
+  .
     
   ?evidence
     rdf:type bk:EvidenceType;
 		dcterms:identifier ?evId;
     rdfs:label ?evLabel;
-  	dcterms:description ?evDescription    
+  	dcterms:description ?evDescription
+	.
+
+  ?dataSource
+    rdf:type bk:DataSource;
+		dcterms:identifier ?dsId;
+    rdfs:label ?dsLabel;
+  	dcterms:description ?dsDescription
+  .
+   
+  ?accession 
+  	rdf:type bk:Accession; 
+  	dcterms:identifier ?accessionId;
+		bk:isAmbiguousAccession ?isAmbiguousAccession;
+  	bk:dataSource ?accDataSource
+  . 
+  
+  ?accDataSource
+    rdf:type bk:DataSource;
+		dcterms:identifier ?accDsId;
+    rdfs:label ?accDsLabel;
+  	dcterms:description ?accDsDescription      	
+  .
+
+  ?attribIri
+		rdf:type bk:_AttributeValue;
+    bk:_attribType ?attribId;
+		bk:_attribLexValue ?attribLexValue;
+    bk:_attribXsd ?attribXsd;
+		bk:isIndexed ?attribIsIndexed;
+		bk:ondexRange ?ondexRange
+  .
 }
 WHERE
 {
@@ -22,9 +58,6 @@ WHERE
 	  $resourceIris
 	} 
 
-	# TODO: continue with evidence
-	#   1) JSON-LD framing, so that objects are nested (also, review relation types)
-	#   2) change the templates.
 	# TODO: datasources, accessions, evidence, attributes.
 	
   ?concept rdf:type ?conceptClass.
@@ -39,12 +72,56 @@ WHERE
   OPTIONAL { ?concept bk:altName ?altName }
   OPTIONAL { ?concept dcterms:description ?description }
   OPTIONAL { ?concept rdfs:comment ?annotation }
-  
+
+	# Tags  
   OPTIONAL { ?concept bk:relatedConcept ?relatedConcept }
+
+	# Evidence
   OPTIONAL { 
   	?concept bk:evidence ?evidence. 
 		?evidence dcterms:identifier ?evId.
     OPTIONAL { ?evidence rdfs:label ?evLabel }
   	OPTIONAL { ?evidence dcterms:description ?evDescription }
   }
+
+	# Data source
+  OPTIONAL { 
+  	?concept bk:dataSource ?dataSource. 
+		?dataSource dcterms:identifier ?dsId.
+    OPTIONAL { ?dataSource rdfs:label ?dsLabel }
+  	OPTIONAL { ?dataSource dcterms:description ?dsDescription }
+  }
+  
+  # Accession
+  OPTIONAL {
+  	?concept dc:identifier ?accession.
+  	
+  	?accession dcterms:identifier ?accessionId.
+  	OPTIONAL { ?accession bk:isAmbiguousAccession ?isAmbiguousAccession }
+	  
+  	?accession bk:dataSource ?accDataSource. 
+		?accDataSource dcterms:identifier ?accDsId.
+    OPTIONAL { ?accDataSource rdfs:label ?accDsLabel }
+  	OPTIONAL { ?accDataSource dcterms:description ?accDsDescription }
+  }
+
+	# Attributes
+	OPTIONAL {
+		?concept ?attribProp ?attribValue.
+
+		?attribProp rdfs:subPropertyOf* bk:attribute;
+		            dcterms:identifier ?attribId.
+		OPTIONAL { ?attribProp rdfs:range ?attribRange } 
+		OPTIONAL { ?attribProp bk:isIndexed ?attribIsIndexed }
+		OPTIONAL { ?attribProp bk:ondexRange ?ondexRange } 
+
+		BIND ( STR ( ?attribValue ) AS ?attribLexValue )
+		BIND ( STR ( DATATYPE ( ?attribValue ) ) AS ?_attribXsd )
+		
+		BIND ( IF ( BOUND ( ?_attribXsd ), ?_attribXsd, STR ( ?attribRange ) ) AS ?attribXsd )
+		
+		# Let's define an attribute as an object with IRI
+		BIND ( MD5 ( CONCAT ( STR ( ?concept ), STR ( ?attribProp ), STR ( ?attribValue ) ) ) AS ?attribHash )
+		BIND ( IRI ( CONCAT ( STR ( bk:_attrib_ ), ?attribHash ) ) AS ?attribIri )
+	}
 }
