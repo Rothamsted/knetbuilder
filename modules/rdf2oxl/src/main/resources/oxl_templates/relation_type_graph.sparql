@@ -13,15 +13,7 @@ CONSTRUCT
 	?rt bk:_nature ?nature. 
   ?rt bk:_inverseId ?inverseId.
 	
-	?rt rdfs:subPropertyOf ?parent.
-
-	?parent a bk:_OxlParentProperty. # Main loop in the template will skip these, they will be used by their children only
-	?parent dcterms:identifier ?parentId.
-	?parent rdfs:label ?parentLabel.
-	?parent dcterms:description ?parentDescription.
-
-	?parent bk:_nature ?parentNature. 
-  ?parent bk:_inverseId ?parentInverseId.
+	?rt bk:_parentId ?parentId.
 }
 WHERE # -----------------------------------------------------------------------------------------------------------
 {
@@ -55,20 +47,4 @@ WHERE # -----------------------------------------------------------------------
   ?parent bk:isOndexPreferred true. 
 	
 	?parent dcterms:identifier ?parentId.
-
-	OPTIONAL { ?parent rdfs:label ?parentLabel }
-	OPTIONAL { ?parent dcterms:description ?parentDescription }
-
-	# Parent's Nature		
-	OPTIONAL { 
-		?parent a ?parentNature 
-		FILTER ( ?parentNature IN ( owl:ReflexiveProperty, owl:AsymmetricProperty, owl:SymmetricProperty, owl:TransitiveProperty ) )
-	}
-	
-	# Parent's Inverse
-  OPTIONAL {
-  	?parent owl:inverseOf ?parentInverse.
-    ?parentInverse bk:isOndexPreferred true.    
-  	?parentInverse dcterms:identifier ?parentInverseId.
-  }
 }

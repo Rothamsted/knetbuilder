@@ -1,0 +1,28 @@
+SELECT ?iri ?type ?fromIri ?toIri
+{
+  # BEWARE that the following is optimised, it might become significantly slower if you change order/structure
+  # 
+  { 
+    # Use a subquery to get them once for all
+    { select distinct ?type { ?type rdfs:subPropertyOf* bk:conceptsRelation } }
+  		
+    # And 
+    ?fromIri ?type ?toIri.
+    
+    # This is taken care of by the reified relation queries (reified relations always have a direct statement too).
+    MINUS {
+      ?reifiedIri bk:relFrom ?fromIri; bk:relTo ?toIri; bk:relTypeRef ?type.
+    }
+  } 
+    
+  # IRI is used in Cypher to assign an ID to each relation		
+  BIND ( 
+    IRI ( 
+      CONCAT ( 
+        STR ( bkr: ),
+        MD5 ( CONCAT ( STR ( ?type ), STR ( ?fromIri ), STR ( ?toIri ) ) )
+      ) 
+    )
+    AS ?iri
+  )   
+}

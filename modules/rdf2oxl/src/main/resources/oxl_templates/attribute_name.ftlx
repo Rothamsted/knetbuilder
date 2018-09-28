@@ -1,0 +1,32 @@
+<#include "graph_header.ftlx">
+<#include "utils.ftlx">
+<#list js as attrib_name>
+			<attrname>
+				<@render_metadata attrib_name />
+				<#if attrib_name._unitId??>
+					<#-- Format suitable for the subsequent call -->
+					<#assign umeta = { 
+							identifier: attrib_name._unitId,
+							label: { '@value': (attrib_name.label)!'' },
+							description: { '@value': (attrib_name.description)!'' }
+						} />
+					<unit>
+						<@render_metadata umeta />
+					</unit>
+				</#if>
+				<#if attrib_name.range??>
+					<!-- ${attrib_name.range} -->
+					<#assign java_class = 
+						(XsdMapper.javaClassWithDefault ( NamespaceUtils.iri ( attrib_name.range ) ))!''
+					/>
+					<#if java_class != ''>
+						<datatype>${java_class.getCanonicalName ()}</datatype>
+					</#if>
+				</#if>
+				<#if (attrib_name._parentId)!'attribute' != 'attribute'>
+					<specialisationOf>
+						<idRef>${attrib_name._parentId}</idRef>
+					</specialisationOf>
+				</#if>
+			</attrname>
+</#list>

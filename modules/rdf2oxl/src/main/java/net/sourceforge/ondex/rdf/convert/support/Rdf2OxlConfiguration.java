@@ -52,15 +52,6 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 	{		
 		return Arrays.asList ( new ItemConfiguration[] 
 		{
-			new ItemConfiguration ( 
-				"Concept Classes", "concept_class_iris.sparql", "concept_class_graph.sparql", 
-				"\t\t<conceptclasses>\n", "concept_class.ftlx", "\t\t</conceptclasses>\n"
-			),
-			new ItemConfiguration (
-				"Relation Types", "relation_type_iris.sparql", "relation_type_graph.sparql", 
-				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n"
-			),
-			
 			new ItemConfiguration (
 				"Concept IDs", "concept_iris.sparql", null, 
 				null, null, null,
@@ -71,6 +62,18 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 				"\t\t<concepts>\n", "concept.ftlx", "\t\t</concepts>\n",
 				(ResourceProcessor) applicationContext.getBean ( "conceptProcessor" ),
 				(ConceptHandler) applicationContext.getBean ( "conceptHandler" )
+			),
+			new ItemConfiguration ( 
+				"Attribute Names", "attribute_name_iris.sparql", "attribute_name_graph.sparql", 
+				"\t\t<attrnames>\n", "attribute_name.ftlx", "\t\t</attrnames>\n"
+			),
+			new ItemConfiguration ( 
+				"Concept Classes", "concept_class_iris.sparql", "concept_class_graph.sparql", 
+				"\t\t<conceptclasses>\n", "concept_class.ftlx", "\t\t</conceptclasses>\n"
+			),
+			new ItemConfiguration (
+				"Relation Types", "relation_type_iris.sparql", "relation_type_graph.sparql", 
+				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n"
 			)
 		});
 	}

@@ -12,10 +12,13 @@ SELECT ?iri ?type ?fromIri ?toIri
   { 
     # Use a subquery to get them once for all
     { select distinct ?type { ?type rdfs:subPropertyOf* bk:conceptsRelation } }
-  		?fromIri ?type ?toIri.
+  		
+    # And then let's pick up all straight relations
+    ?fromIri ?type ?toIri.
     
-    # This is taken care of by the reified relation queries (reified relations always have a direct statement too)
-    # For optimisation purposes, this filter goes here only, the next UNION branch doesn't yield reified relations.
+    # If it's also a reified relation, it is taken care of by the reified relation queries (reified relations always 
+    # have a direct statement too). For optimisation purposes, this filter goes here only, the next UNION branch 
+    # doesn't yield reified relations.
     MINUS {
       ?reifiedIri bk:relFrom ?fromIri; bk:relTo ?toIri; bk:relTypeRef ?type.
     }
