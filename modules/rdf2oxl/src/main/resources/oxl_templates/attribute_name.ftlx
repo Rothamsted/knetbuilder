@@ -24,9 +24,7 @@
 					</#if>
 				</#if>
 				<#if (attrib_name._parentId)!'attribute' != 'attribute'>
-					<specialisationOf>
-						<idRef>${attrib_name._parentId}</idRef>
-					</specialisationOf>
+					<specialisationOf><idRef>${attrib_name._parentId}</idRef></specialisationOf>
 				</#if>
 			</attrname>
 </#list>

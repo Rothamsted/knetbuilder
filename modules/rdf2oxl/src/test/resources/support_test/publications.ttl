@@ -73,3 +73,6 @@ bkr:foo_acc  rdf:type  bk:Accession ;
 	dcterms:identifier  "FOO:1";
 	bk:isAmbiguousAccession true
 .
+
+bkr:publication_26396590 bk:part_of bkr:publication_17206375.
+

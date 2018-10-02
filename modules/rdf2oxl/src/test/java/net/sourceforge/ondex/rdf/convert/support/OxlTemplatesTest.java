@@ -34,7 +34,7 @@ public class OxlTemplatesTest
 		)
 		{
 			TDBEndPointHelper sparqlHelper = ctx.getBean ( TDBEndPointHelper.class );
-			sparqlHelper.open ( "target/test-classes/support_test/basics_tdb" );
+			sparqlHelper.open ( "target/test-classes/support_test/oxl_templates_tdb" );
 			
 			Dataset ds = sparqlHelper.getDataSet ();
 			Txn.executeWrite ( ds, Exceptions.sneak ().runnable ( () ->
@@ -44,7 +44,7 @@ public class OxlTemplatesTest
 				m.read ( Resources.getResource ( "oxl_templates_test/bk_ondex.owl" ).openStream (), "RDF/XML" );
 			}));
 									
-			ResourceHandler handler = (ResourceHandler) ctx.getBean ( "resourceHandler" );
+			QuerySolutionHandler handler = (QuerySolutionHandler) ctx.getBean ( "resourceHandler" );
 			handler.setConstructTemplate ( 
 				NamespaceUtils.asSPARQLProlog () + IOUtils.readResource ( "oxl_templates/concept_class_graph.sparql" ) 
 			);
@@ -52,7 +52,7 @@ public class OxlTemplatesTest
 			
 			handler.setOutWriter ( writer );
 						
-			ResourceProcessor proc = (ResourceProcessor) ctx.getBean ( "resourceProcessor" );
+			QueryProcessor proc = (QueryProcessor) ctx.getBean ( "resourceProcessor" );
 			proc.setConsumer ( handler );
 			proc.setHeader ( "<conceptclasses>\n" );
 			proc.setTrailer ( "</conceptclasses>\n" );

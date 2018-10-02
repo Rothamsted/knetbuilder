@@ -5,11 +5,11 @@ import static java.lang.String.format;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.query.QuerySolution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -30,7 +30,7 @@ import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
  *
  */
 @Component ( "resourceProcessor" )
-public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resource>>
+public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySolution>>
 {
 	private String header, trailer;
 	
@@ -39,15 +39,15 @@ public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resou
 		
 	private String logPrefix = "[RDF Processor]";
 	
-	public ResourceProcessor ()
+	public QueryProcessor ()
 	{
 		super ();
 		this.setDestinationMaxSize ( 1000 );
-		this.setDestinationSupplier ( () -> new HashSet<> () );
+		this.setDestinationSupplier ( () -> new LinkedList<> () );
 	}	
 	
 	@Override
-	protected long getDestinationSize ( Set<Resource> dest ) {
+	protected long getDestinationSize ( List<QuerySolution> dest ) {
 		return dest.size ();
 	}
 
@@ -58,17 +58,17 @@ public class ResourceProcessor extends SizeBasedBatchProcessor<String, Set<Resou
 		{
 			log.info ( "{}: starting Reading RDF", logPrefix );
 						
-			ResourceHandler handler = (ResourceHandler) getConsumer ();
+			QuerySolutionHandler handler = (QuerySolutionHandler) getConsumer ();
 
 			Writer outWriter = handler.getOutWriter ();
 			if ( this.header != null ) outWriter.write ( this.header );
 			
 			@SuppressWarnings ( "unchecked" )
-			Set<Resource> chunk[] = new Set[] { this.getDestinationSupplier ().get () };
+			List<QuerySolution> chunk[] = new List[] { this.getDestinationSupplier ().get () };
 			
 			sparqlHelper.processSelect ( logPrefix, resourcesQuery, sol -> 
 			{
-				chunk [ 0 ].add ( sol.getResource ( "resourceIri" ) );
+				chunk [ 0 ].add ( sol );
 
 				// As usually, this triggers a new chunk-processing task when we have enough items to process.
 				chunk [ 0 ] = handleNewTask ( chunk [ 0 ] );

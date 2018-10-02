@@ -1,14 +1,14 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
 import java.io.Writer;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -24,10 +24,10 @@ import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
  *
  */
 @Component ( "resourceHandler" )
-public class ResourceHandler implements Consumer<Set<Resource>>
+public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 {
 	/**
-	 * A notation to represent a function passed to {@link ResourceHandler#setDataPreProcessor(DataPreProcessor)}
+	 * A notation to represent a function passed to {@link QuerySolutionHandler#setDataPreProcessor(DataPreProcessor)}
 	 */
 	public static interface DataPreProcessor extends BiConsumer<Model, Map<String, Object>>
 	{
@@ -54,13 +54,13 @@ public class ResourceHandler implements Consumer<Set<Resource>>
 	
 	
 	@Override
-	public void accept ( Set<Resource> res )
+	public void accept ( List<QuerySolution> sols )
 	{
 		// Get a VALUES-compliant representation of all these URIs
-		if ( res.size () == 0 ) return;
+		if ( sols.size () == 0 ) return;
 		
-		String valuesStr = res.parallelStream ()
-		.map ( Resource::getURI )
+		String valuesStr = sols.parallelStream ()
+		.map ( sol -> sol.getResource ( "resourceIri" ).getURI () )
 		.map ( uri -> "( <" + uri + "> )" )
 		.collect ( Collectors.joining ( "\n" ) );
 		

@@ -113,9 +113,7 @@
 		<${group_xml_tag}>
 			<#list grouped_values as attr_type, attr_entries>
 				<${entry_xml_tag}>
-					<attrname>
-						<idRef>${attr_type}</idRef>
-					</attrname>
+					<attrname><idRef>${attr_type}</idRef></attrname>
 					<#if attr_entries?size == 1>
 						<#-- 
 							Single value goes into a value element

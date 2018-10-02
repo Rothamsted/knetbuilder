@@ -44,8 +44,6 @@
 			<relation_type>
 			  <@common_descriptors rel_type />
 				<#-- Parent -->
-				<specialisationOf>
-					<idRef>${rel_type._parentId}</idRef>				
-				</specialisationOf>
+				<specialisationOf><idRef>${rel_type._parentId}</idRef></specialisationOf>
 			</relation_type>
 </#list>

@@ -23,7 +23,7 @@ import uk.ac.ebi.utils.io.IOUtils;
  * <dl><dt>Date:</dt><dd>27 Jul 2018</dd></dl>
  *
  */
-public class ResourceProcessorTest
+public class QueryProcessorTest
 {
 	private static Configuration tplConfig = new Configuration ( Configuration.VERSION_2_3_28 );
 	
@@ -50,14 +50,14 @@ public class ResourceProcessorTest
 			FreeMarkerHelper tplHelper = new FreeMarkerHelper ();
 			tplHelper.setTemplateConfig ( tplConfig );
 			
-			ResourceHandler handler = new ResourceHandler ();
+			QuerySolutionHandler handler = new QuerySolutionHandler ();
 			handler.setConstructTemplate ( IOUtils.readFile ( "target/test-classes/support_test/resource_graph.sparql" ) );
 			handler.setOxlTemplateName ( "resource.ftlh" );
 			handler.setTemplateHelper ( tplHelper );
 			handler.setSparqlHelper ( sparqlHelper );
 			handler.setOutWriter ( new OutputStreamWriter ( System.out ) );
 			
-			ResourceProcessor proc = new ResourceProcessor ();						
+			QueryProcessor proc = new QueryProcessor ();						
 			proc.setConsumer ( handler );
 			proc.setSparqlHelper ( sparqlHelper );
 			
@@ -79,12 +79,12 @@ public class ResourceProcessorTest
 			Configuration tplConfig = ctx.getBean ( Configuration.class );
 			tplConfig.setDirectoryForTemplateLoading ( new File ( "target/test-classes/support_test" ) );
 			
-			ResourceHandler handler = (ResourceHandler) ctx.getBean ( "resourceHandler" );
+			QuerySolutionHandler handler = (QuerySolutionHandler) ctx.getBean ( "resourceHandler" );
 			handler.setConstructTemplate ( IOUtils.readFile ( "target/test-classes/support_test/resource_graph.sparql" ) );
 			handler.setOxlTemplateName ( "resource.ftlh" );
 			handler.setOutWriter ( new OutputStreamWriter ( System.out ) );
 						
-			ResourceProcessor proc = (ResourceProcessor) ctx.getBean ( "resourceProcessor" );
+			QueryProcessor proc = (QueryProcessor) ctx.getBean ( "resourceProcessor" );
 			proc.setConsumer ( handler );
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
 		}

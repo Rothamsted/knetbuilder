@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component ( "relationHandler" )
-public class RelationHandler extends ResourceHandler
+public class RelationHandler extends QuerySolutionHandler
 {
 	@Autowired @Qualifier ( "conceptIdsTemplateRef" ) @Override
 	protected void setDataPreProcessor ( DataPreProcessor dataPreProcessor )

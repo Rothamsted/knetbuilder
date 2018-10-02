@@ -1,15 +1,15 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.query.QuerySolution;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
- * To be used with {@link ResourceProcessor} with SPARQL that fetches all concept IRIs. This handler
+ * To be used with {@link QueryProcessor} with SPARQL that fetches all concept IRIs. This handler
  * prepares a map of {@code IRI -> int ID} to be used in {@link ConceptHandler} and {@link RelationHandler},
  * so you need this before re-running  
  *
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component ( "conceptIdHandler" )
-public class ConceptIdHandler extends ResourceHandler implements Resettable
+public class ConceptIdHandler extends QuerySolutionHandler implements Resettable
 {
 	private Map<String, Integer> conceptIds = new HashMap<> ( 50000 );
 			
@@ -30,10 +30,10 @@ public class ConceptIdHandler extends ResourceHandler implements Resettable
 
 
 	@Override
-	public void accept ( Set<Resource> res )
+	public void accept ( List<QuerySolution> sols )
 	{
-		res.stream ()
-		.map ( Resource::getURI )
+		sols.stream ()
+		.map ( sol -> sol.getResource ( "resourceIri" ).getURI () )
 		.forEach ( uri -> { 
 			synchronized ( conceptIds ) {
 				// We are assuming they're all distinct, so each one is new and we don't need putIfAbsent()
@@ -48,8 +48,7 @@ public class ConceptIdHandler extends ResourceHandler implements Resettable
 	}
 		
 	@Bean ( "conceptIds" )
-	public Map<String, Integer> getConceptIds ()
-	{
+	public Map<String, Integer> getConceptIds () {
 		return conceptIds;
 	}
 

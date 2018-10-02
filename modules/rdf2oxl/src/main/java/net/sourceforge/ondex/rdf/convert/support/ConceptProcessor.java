@@ -5,12 +5,13 @@ import static java.lang.String.format;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.QuerySolutionMap;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component ( "conceptProcessor" )
-public class ConceptProcessor extends ResourceProcessor
+public class ConceptProcessor extends QueryProcessor
 {	
 	@Autowired @Qualifier ( "conceptIds" )
 	private Map<String, Integer> conceptIds;
@@ -36,19 +37,21 @@ public class ConceptProcessor extends ResourceProcessor
 		{
 			log.info ( "{}: Reusing previous IRIs", logPrefix );
 						
-			ResourceHandler handler = (ResourceHandler) getConsumer ();
+			QuerySolutionHandler handler = (QuerySolutionHandler) getConsumer ();
 			Writer outWriter = handler.getOutWriter ();
 			
 			if ( this.getHeader () != null ) outWriter.write ( this.getHeader () );
 			
 			@SuppressWarnings ( "unchecked" )
-			Set<Resource> chunk[] = new Set[] { this.getDestinationSupplier ().get () };
+			List<QuerySolution> chunk[] = new List[] { this.getDestinationSupplier ().get () };
 
 			Model model = ModelFactory.createDefaultModel ();
 			
 			this.conceptIds.forEach ( (iri, id) -> 
 			{
-				chunk [ 0 ].add ( model.createResource ( iri ) );
+				QuerySolutionMap sol = new QuerySolutionMap ();
+				sol.add ( "resourceIri", model.createResource ( iri ) );
+				chunk [ 0 ].add ( sol );
 			
 				// As usually, this triggers a new chunk-processing task when we have enough items to process.
 				chunk [ 0 ] = handleNewTask ( chunk [ 0 ] );

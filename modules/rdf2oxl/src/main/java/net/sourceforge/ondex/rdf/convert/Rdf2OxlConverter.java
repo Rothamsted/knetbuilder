@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.rdf.convert.support.ItemConfiguration;
 import net.sourceforge.ondex.rdf.convert.support.Resettable;
-import net.sourceforge.ondex.rdf.convert.support.ResourceHandler;
-import net.sourceforge.ondex.rdf.convert.support.ResourceProcessor;
+import net.sourceforge.ondex.rdf.convert.support.QuerySolutionHandler;
+import net.sourceforge.ondex.rdf.convert.support.QueryProcessor;
 
 /**
  * TODO: comment me!
@@ -35,16 +35,16 @@ public class Rdf2OxlConverter
 	private String templateClassPath;
 
 	/**
-	 * This is {@link ResourceProcessor} by default, {@link ItemConfiguration} can override it.
+	 * This is {@link QueryProcessor} by default, {@link ItemConfiguration} can override it.
 	 */
 	@Autowired @Qualifier ( "resourceProcessor" )	
-	private ResourceProcessor defaultResourceProcessor;
+	private QueryProcessor defaultQueryProcessor;
 		
 	/**
-	 * Same as {@link #defaultResourceProcessor}
+	 * Same as {@link #defaultQueryProcessor}
 	 */
 	@Autowired @Qualifier ( "resourceHandler" )	
-	private ResourceHandler defaultResourceHandler;
+	private QuerySolutionHandler defaultQuerySolutionHandler;
 	
 	
 	@Autowired ( required = false )
@@ -60,11 +60,11 @@ public class Rdf2OxlConverter
 		{
 			try
 			{
-				ResourceProcessor processor = itemCfg.getResourceProcessor ();
-				if ( processor == null ) processor = this.defaultResourceProcessor;
+				QueryProcessor processor = itemCfg.getQueryProcessor ();
+				if ( processor == null ) processor = this.defaultQueryProcessor;
 
-				ResourceHandler handler = itemCfg.getResourceHandler ();
-				if ( handler == null ) handler = this.defaultResourceHandler;
+				QuerySolutionHandler handler = itemCfg.getQuerySolutionHandler ();
+				if ( handler == null ) handler = this.defaultQuerySolutionHandler;
 					
 				processor.setConsumer ( handler );				
 				handler.setOutWriter ( oxlOut );

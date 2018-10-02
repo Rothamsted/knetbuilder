@@ -15,14 +15,14 @@ public class ItemConfiguration
 	private String header;
 	private String graphTemplateName;
 	private String trailer;
-	private ResourceProcessor resourceProcessor;
-	private ResourceHandler resourceHandler;
+	private QueryProcessor queryProcessor;
+	private QuerySolutionHandler querySolutionHandler;
 		
 	public ItemConfiguration () {
 		super ();
 	}
 		
-	public <RH extends ResourceHandler> ItemConfiguration ( 
+	public <RH extends QuerySolutionHandler> ItemConfiguration ( 
 		String name, String resourcesQueryName, String constructTemplateName, 
 		String header, String graphTemplateName, String trailer
 	) {
@@ -30,11 +30,11 @@ public class ItemConfiguration
 	}
 	
 	
-	public <RH extends ResourceHandler> ItemConfiguration ( 
+	public <RH extends QuerySolutionHandler> ItemConfiguration ( 
 		String name, String resourcesQueryName, String constructTemplateName, 
 		String header, String graphTemplateName, String trailer,
-		ResourceProcessor resourceProcessor,
-		ResourceHandler resourceHandler
+		QueryProcessor queryProcessor,
+		QuerySolutionHandler querySolutionHandler
 	)
 	{
 		super ();
@@ -44,8 +44,8 @@ public class ItemConfiguration
 		this.header = header;
 		this.graphTemplateName = graphTemplateName;
 		this.trailer = trailer;
-		this.resourceProcessor = resourceProcessor;
-		this.resourceHandler = resourceHandler;
+		this.queryProcessor = queryProcessor;
+		this.querySolutionHandler = querySolutionHandler;
 	}
 
 
@@ -111,24 +111,24 @@ public class ItemConfiguration
 	}
 	
 	
-	public ResourceProcessor getResourceProcessor ()
+	public QueryProcessor getQueryProcessor ()
 	{
-		return resourceProcessor;
+		return queryProcessor;
 	}
 
-	public void setResourceProcessor ( ResourceProcessor resourceProcessor )
+	public void setQueryProcessor ( QueryProcessor queryProcessor )
 	{
-		this.resourceProcessor = resourceProcessor;
+		this.queryProcessor = queryProcessor;
 	}
 
-	public ResourceHandler getResourceHandler ()
+	public QuerySolutionHandler getQuerySolutionHandler ()
 	{
-		return resourceHandler;
+		return querySolutionHandler;
 	}
 
-	public void setResourceHandler ( ResourceHandler ResourceHandler )
+	public void setQuerySolutionHandler ( QuerySolutionHandler querySolutionHandler )
 	{
-		this.resourceHandler = ResourceHandler;
+		this.querySolutionHandler = querySolutionHandler;
 	}
 
 }

@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,7 @@ import info.marcobrandizi.rdfutils.XsdMapper;
  *
  */
 @Component ( "conceptHandler" )
-public class ConceptHandler extends ResourceHandler
+public class ConceptHandler extends QuerySolutionHandler
 {
 
 	/**

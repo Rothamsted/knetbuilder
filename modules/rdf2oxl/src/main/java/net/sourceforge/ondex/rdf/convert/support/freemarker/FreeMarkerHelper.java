@@ -71,14 +71,17 @@ public class FreeMarkerHelper
 		{
 			Map<String, Object> result = new HashMap<> ();
 
-			StringWriter sw = new StringWriter ();
-			model.write ( sw, "JSON-LD" );
-						
-			// We need some post-processing of what Jena returns
-			@SuppressWarnings ( "unchecked" )
-			Map<String, Object> js = (Map<String, Object>) JsonUtils.fromString ( sw.toString () );
-						
-			result.put ( "js", js.get ( "@graph" ) );
+			if ( model != null )
+			{
+				StringWriter sw = new StringWriter ();
+				model.write ( sw, "JSON-LD" );
+							
+				// We need some post-processing of what Jena returns
+				@SuppressWarnings ( "unchecked" )
+				Map<String, Object> js = (Map<String, Object>) JsonUtils.fromString ( sw.toString () );
+							
+				result.put ( "js", js.get ( "@graph" ) );
+			}
 
 			// These might be useful in several cases
 			addStaticClassWrapper ( result, NamespaceUtils.class );

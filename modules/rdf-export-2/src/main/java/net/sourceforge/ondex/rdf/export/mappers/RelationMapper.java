@@ -126,6 +126,9 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 		COMMUTILS.assertResource ( graph, reifiedIri, iri ( "bk:relFrom" ), fromIri );
 		COMMUTILS.assertResource ( graph, reifiedIri, iri ( "bk:relTo" ), toIri );
 		
+		// The OXL has the qualifier slot, which the OXL parser explicitly ignores when present, so, we 
+		// do it here too.
+		
 		return true;
 	}
 
