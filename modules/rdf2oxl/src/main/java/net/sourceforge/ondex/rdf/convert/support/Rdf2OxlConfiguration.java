@@ -59,16 +59,23 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 			),			
 			new ItemConfiguration (
 				"Concepts", null, "concept_graph.sparql", 
-				"\t\t<concepts>\n", "concept.ftlx", "\t\t</concepts>\n",
+				"\t\t<ondexdataseq>\n\t\t\t<concepts>\n", "concept.ftlx", "\t\t\t</concepts>\n",
 				applicationContext.getBean ( ConceptProcessor.class ),
 				applicationContext.getBean ( ConceptHandler.class )
 			),
 			new ItemConfiguration (
 				"Straight Relations", "straight_relation_iris.sparql", null, 
-				"\t\t<relations>\n", "straight_relation.ftlx", null,
+				"\t\t\t<relations>\n", "straight_relation.ftlx", null,
 				applicationContext.getBean ( StraightRelationProcessor.class ),
 				applicationContext.getBean ( StraightRelationHandler.class )
 			),
+			new ItemConfiguration (
+				"Reified Relations", "reified_relation_iris.sparql", "reified_relation_graph.sparql", 
+				null, "reified_relation.ftlx", "\t\t\t</relations>\n\t\t</ondexdataseq>\n",
+				null,
+				applicationContext.getBean ( RelationHandler.class )
+			),
+			// TODO: <ondexmetadata>
 			new ItemConfiguration ( 
 				"Attribute Names", "attribute_name_iris.sparql", "attribute_name_graph.sparql", 
 				"\t\t<attrnames>\n", "attribute_name.ftlx", "\t\t</attrnames>\n"

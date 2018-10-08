@@ -1,11 +1,11 @@
 <#include "utils.ftlx">
 <#--  include "dump_util.ftl" -->
-<#list relations as relation>
-	<relation>
-		<fromConcept>${relation.fromId}</fromConcept>
-		<toConcept>${relation.toId}</toConcept>
-	  <#-- The OXL has the qualifier slot, which the OXL parser explicitly ignores when present, so, we 
-				 do it here too. -->
-		<ofType>${relation.typeId}</ofType>
-	</relation>
+<#list relations![] as relation>
+		<relation>
+			<fromConcept>${relation.fromId}</fromConcept>
+			<toConcept>${relation.toId}</toConcept>
+		  <#-- The OXL has the qualifier slot, which the OXL parser explicitly ignores when present, so, we 
+					 do it here too. -->
+			<ofType><idRef>${relation.typeId}</idRef></ofType>
+		</relation>
 </#list>

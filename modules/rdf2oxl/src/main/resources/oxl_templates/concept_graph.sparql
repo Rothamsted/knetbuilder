@@ -73,7 +73,7 @@ WHERE
   OPTIONAL { ?concept dcterms:description ?description }
   OPTIONAL { ?concept rdfs:comment ?annotation }
 
-	# Tags  
+	# Tags
   OPTIONAL { ?concept bk:relatedConcept ?relatedConcept }
 
 	# Evidence
@@ -97,10 +97,12 @@ WHERE
   	?concept dc:identifier ?accession.
   	
   	?accession dcterms:identifier ?accessionId.
+
   	OPTIONAL { ?accession bk:isAmbiguousAccession ?isAmbiguousAccession }
 	  
   	?accession bk:dataSource ?accDataSource. 
 		?accDataSource dcterms:identifier ?accDsId.
+
     OPTIONAL { ?accDataSource rdfs:label ?accDsLabel }
   	OPTIONAL { ?accDataSource dcterms:description ?accDsDescription }
   }
@@ -111,6 +113,7 @@ WHERE
 
 		?attribProp rdfs:subPropertyOf* bk:attribute;
 		            dcterms:identifier ?attribId.
+
 		OPTIONAL { ?attribProp rdfs:range ?attribRange } 
 		OPTIONAL { ?attribProp bk:isIndexed ?attribIsIndexed }
 		OPTIONAL { ?attribProp bk:ondexRange ?ondexRange } 

@@ -98,10 +98,14 @@
 		<#list to_seq ( e._attribute ) as attr_iri>
 		  <#local attr = attribute_values [ attr_iri ] /> 
 		  <#local entry = (grouped_values [ attr._attribType ])![] />
+		  <#-- 
+		    java.lang.Object is meaningless and probably an error (how can one rebuild a specific object out of it?
+		    so, let's get rid of such a case by falling back to the default 
+		  -->
 		  <#local entry += [{ 
 		  	'xsd': attr._attribXsd, 'lex_value': attr._attribLexValue, 
 		  	'is_indexed': (attr.attribIsIndexed)!false,
-		  	'java_class': (attr.ondexRange)!'' 
+		  	'java_class': ( (attr.ondexRange)?? && attr.ondexRange != 'java.lang.Object' )?then ( attr.ondexRange, '' ) 
 		  }]/>
 		  <#local grouped_values += { attr._attribType: entry } />
 		</#list>

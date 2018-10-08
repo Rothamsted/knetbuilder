@@ -1,0 +1,7 @@
+SELECT ?resourceIri 
+{
+	?resourceIri a bk:Relation.
+
+  # These are foo test cases in the ontology file.
+  FILTER ( ?resourceIri NOT IN ( bk:testStmt0 ) )
+}

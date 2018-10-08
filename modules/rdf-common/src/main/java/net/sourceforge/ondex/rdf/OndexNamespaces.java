@@ -22,7 +22,9 @@ public class OndexNamespaces implements Namespaces
 		{{
 			put ( "bk", "http://www.ondex.org/bioknet/terms/" );
 			put ( "bkr", "http://www.ondex.org/bioknet/resources/" );
-			put ( "bka", "http://www.ondex.org/bioknet/attributes/" );
+			put ( "bka", "http://www.ondex.org/bioknet/terms/attributes/" );
+			put ( "bkds", "http://www.ondex.org/bioknet/terms/dataSources/" );
+			put ( "bkev", "http://www.ondex.org/bioknet/terms/evidences/" );			
 		}};
 	}
 }

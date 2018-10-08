@@ -4,7 +4,7 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix bk:  <http://www.ondex.org/bioknet/terms/> .
 @prefix bka:  <http://www.ondex.org/bioknet/terms/attributes/> .
-@prefix bke: <http://www.ondex.org/bioknet/terms/evidences/>.
+@prefix bkev: <http://www.ondex.org/bioknet/terms/evidences/>.
 @prefix bkds: <http://www.ondex.org/bioknet/terms/dataSources/>.
 @prefix dcterms:  <http://purl.org/dc/terms/> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
@@ -45,7 +45,7 @@ bkr:publication_17206375
         dc:identifier       bkr:foo_acc ;
         bk:dataSource       bk:NLM_UNIPROTKB ;
         bka:Abstract        "The putative raffinose synthase gene from rice was cloned and expressed in Escherichia coli. The enzyme displayed an optimum activity at 45 degrees C and pH 7.0, and a sulfhydryl group was required for its activity. The enzyme was specific for galactinol and p-nitrophenyl-alpha-D-galactoside as galactosyl donors, and sucrose, lactose, 4-beta-galactobiose, N-acetyl-D-lactosamine, trehalose and lacto-N-biose were recognized as galactosyl acceptors. ";
-        bk:evidence bke:IMPD;
+        bk:evidence bkev:IMPD;
         bk:relatedConcept bkr:testAnnotation;
         bk:dataSource bkds:PubMed;
         bka:EVIDENCE "A food evidence attribute"
@@ -76,3 +76,11 @@ bkr:foo_acc  rdf:type  bk:Accession ;
 
 bkr:publication_26396590 bk:part_of bkr:publication_17206375.
 
+bkr:testRel1 a bk:Relation;
+	bk:relFrom bkr:publication_26396590;
+	bk:relTo bkr:publication_17206375; 
+	bk:relTypeRef bk:related;
+	bk:relatedConcept bkr:testAnnotation;
+	bk:evidence bkev:IMPD;		
+	bka:Score 0.95
+.

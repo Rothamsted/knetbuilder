@@ -61,7 +61,7 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 		
 		String valuesStr = sols.parallelStream ()
 		.map ( sol -> sol.getResource ( "resourceIri" ).getURI () )
-		.map ( uri -> "( <" + uri + "> )" )
+		.map ( iri -> "( <" + iri + "> )" )
 		.collect ( Collectors.joining ( "\n" ) );
 		
 		// And use it in the SPARQL template
