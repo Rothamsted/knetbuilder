@@ -77,9 +77,17 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 			),
 			// TODO: <ondexmetadata>
 			new ItemConfiguration ( 
+				"Data Sources", "data_source_iris.sparql", "ds_evidence_graph.sparql", 
+				"\t\t<cvs>\n", "data_source.ftlx", "\t\t</cvs>\n"
+			),
+			new ItemConfiguration ( 
 				"Attribute Names", "attribute_name_iris.sparql", "attribute_name_graph.sparql", 
 				"\t\t<attrnames>\n", "attribute_name.ftlx", "\t\t</attrnames>\n"
 			),
+			new ItemConfiguration ( 
+				"Evidences", "evidence_iris.sparql", "ds_evidence_graph.sparql", 
+				"\t\t<evidences>\n", "evidence.ftlx", "\t\t</evidences>\n"
+			),			
 			new ItemConfiguration ( 
 				"Concept Classes", "concept_class_iris.sparql", "concept_class_graph.sparql", 
 				"\t\t<conceptclasses>\n", "concept_class.ftlx", "\t\t</conceptclasses>\n"

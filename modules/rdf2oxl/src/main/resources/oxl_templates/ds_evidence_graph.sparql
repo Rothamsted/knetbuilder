@@ -1,0 +1,18 @@
+CONSTRUCT 
+{
+  ?dsOrEvidence
+    dcterms:identifier ?id;
+    rdfs:label ?label;
+  	dcterms:description ?description;
+}
+WHERE
+{
+	VALUES ( ?dsOrEvidence ) {
+	  $resourceIris
+	} 
+
+  ?dsOrEvidence dcterms:identifier ?id.
+  
+  OPTIONAL { ?dsOrEvidence rdfs:label ?label }
+  OPTIONAL { ?dsOrEvidence dcterms:description ?description }
+}
