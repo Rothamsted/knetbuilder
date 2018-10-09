@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.annotation.Order;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
@@ -20,10 +21,7 @@ import freemarker.template.TemplateExceptionHandler;
  *
  */
 @org.springframework.context.annotation.Configuration 
-@DependsOn ({ 
-	"resourceHandler", "conceptHandler", "relationHandler", "straightRelationHandler",
-	"resourceProcessor", "conceptProcessor", "straightRelationProcessor"
-})
+@Order ( +10 ) // this is using several beans that have to be initialised before.
 public class Rdf2OxlConfiguration implements ApplicationContextAware
 {
 	private ApplicationContext applicationContext;
@@ -52,50 +50,77 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 	{		
 		return Arrays.asList ( new ItemConfiguration[] 
 		{
-			new ItemConfiguration (
-				"Concept IDs", "concept_iris.sparql", null, 
-				null, null, null,
-				null, applicationContext.getBean ( ConceptIdHandler.class )
-			),			
-			new ItemConfiguration (
-				"Concepts", null, "concept_graph.sparql", 
-				"\t\t<ondexdataseq>\n\t\t\t<concepts>\n", "concept.ftlx", "\t\t\t</concepts>\n",
-				applicationContext.getBean ( ConceptProcessor.class ),
-				applicationContext.getBean ( ConceptHandler.class )
-			),
-			new ItemConfiguration (
-				"Straight Relations", "straight_relation_iris.sparql", null, 
-				"\t\t\t<relations>\n", "straight_relation.ftlx", null,
-				applicationContext.getBean ( StraightRelationProcessor.class ),
-				applicationContext.getBean ( StraightRelationHandler.class )
-			),
-			new ItemConfiguration (
-				"Reified Relations", "reified_relation_iris.sparql", "reified_relation_graph.sparql", 
-				null, "reified_relation.ftlx", "\t\t\t</relations>\n\t\t</ondexdataseq>\n",
-				null,
-				applicationContext.getBean ( RelationHandler.class )
-			),
-			// TODO: <ondexmetadata>
-			new ItemConfiguration ( 
-				"Data Sources", "data_source_iris.sparql", "ds_evidence_graph.sparql", 
-				"\t\t<cvs>\n", "data_source.ftlx", "\t\t</cvs>\n"
-			),
-			new ItemConfiguration ( 
-				"Attribute Names", "attribute_name_iris.sparql", "attribute_name_graph.sparql", 
-				"\t\t<attrnames>\n", "attribute_name.ftlx", "\t\t</attrnames>\n"
-			),
-			new ItemConfiguration ( 
-				"Evidences", "evidence_iris.sparql", "ds_evidence_graph.sparql", 
-				"\t\t<evidences>\n", "evidence.ftlx", "\t\t</evidences>\n"
-			),			
-			new ItemConfiguration ( 
-				"Concept Classes", "concept_class_iris.sparql", "concept_class_graph.sparql", 
-				"\t\t<conceptclasses>\n", "concept_class.ftlx", "\t\t</conceptclasses>\n"
-			),
-			new ItemConfiguration (
-				"Relation Types", "relation_type_iris.sparql", "relation_type_graph.sparql", 
-				"\t\t<relationtypes>\n", "relation_type.ftlx", "\t\t</relationtypes>\n"
-			)
+			new ItemConfigurationBuilder ( "Graph Summary" )
+				.withResourcesQueryName ( "graph_summary.sparql" )
+				.withQuerySolutionHandler ( applicationContext.getBean ( GraphSummaryHandler.class ) )
+			.build (),
+			new ItemConfigurationBuilder ( "Concept IDs" )
+				.withResourcesQueryName ( "concept_iris.sparql" )
+				.withQuerySolutionHandler ( applicationContext.getBean ( ConceptIdHandler.class ) )
+			.build (),
+			new ItemConfigurationBuilder ( "Concepts" )
+				.withConstructTemplateName ( "concept_graph.sparql" )
+				.withHeader ( "\t<ondexdataseq>\n\t\t<concepts>\n" )
+				.withTrailer ( "\t\t</concepts>\n" )
+				.withGraphTemplateName ( "concept.ftlx" )
+				.withQueryProcessor ( applicationContext.getBean ( ConceptProcessor.class ) )
+				.withQuerySolutionHandler ( applicationContext.getBean ( ConceptHandler.class ) )
+			.build (),
+			new ItemConfigurationBuilder ( "Straight Relations" )
+				.withResourcesQueryName ( "straight_relation_iris.sparql" )
+				.withHeader ( "\t\t<relations>\n" )
+				.withGraphTemplateName ( "straight_relation.ftlx" )
+				.withQuerySolutionHandler ( applicationContext.getBean ( StraightRelationHandler.class ) )
+			.build (),
+			new ItemConfigurationBuilder ( "Reified Relations" )
+				.withResourcesQueryName ( "reified_relation_iris.sparql" )
+				.withConstructTemplateName ( "reified_relation_graph.sparql" )
+				.withTrailer ( "\t\t</relations>\n\t</ondexdataseq>\n" )
+				.withGraphTemplateName ( "reified_relation.ftlx" )
+				.withQuerySolutionHandler ( applicationContext.getBean ( RelationHandler.class ) )
+			.build (),
+			new ItemConfigurationBuilder ( "Data Sources" )
+				.withResourcesQueryName ( "data_source_iris.sparql" )
+				.withConstructTemplateName ( "metadata_graph.sparql" )
+				.withGraphTemplateName ( "data_source.ftlx" )
+				.withHeader ( "\t<ondexmetadata>\n\t\t<cvs>\n" )
+				.withTrailer ( "\t\t</cvs>\n" )
+			.build (),
+			new ItemConfigurationBuilder ( "Units" )
+				.withResourcesQueryName ( "unit_iris.sparql" )
+				.withConstructTemplateName ( "metadata_graph.sparql" )
+				.withGraphTemplateName ( "unit.ftlx" )
+				.withHeader ( "\t\t<units>\n" )
+				.withTrailer ( "\t\t</units>\n" )
+			.build (),
+			new ItemConfigurationBuilder ( "Attribute Names" )
+				.withResourcesQueryName ( "attribute_name_iris.sparql" )
+				.withConstructTemplateName ( "attribute_name_graph.sparql" )
+				.withGraphTemplateName ( "attribute_name.ftl" )
+				.withHeader ( "\t\t<attrnames>\n" )
+				.withTrailer ( "\t\t</attrnames>\n" )
+			.build (),
+			new ItemConfigurationBuilder ( "Evidences" )
+				.withResourcesQueryName ( "evidence_iris.sparql" )
+				.withConstructTemplateName ( "metadata_graph.sparql" )
+				.withGraphTemplateName ( "evidence.ftlx" )
+				.withHeader ( "\t\t<evidences>\n" )
+				.withTrailer ( "\t\t</evidences>\n" )
+			.build (),
+			new ItemConfigurationBuilder ( "Concept Classes" )
+				.withResourcesQueryName ( "concept_class_iris.sparql" )
+				.withConstructTemplateName ( "concept_class_graph.sparql" )
+				.withGraphTemplateName ( "concept_class.ftlx" )
+				.withHeader ( "\t\t<conceptclasses>\n" )
+				.withTrailer ( "\t\t</conceptclasses>\n" )
+			.build (),
+			new ItemConfigurationBuilder ( "Relation Types" )
+				.withResourcesQueryName ( "relation_type_iris.sparql" )
+				.withConstructTemplateName ( "relation_type_graph.sparql" )
+				.withGraphTemplateName ( "relation_type.ftlx" )
+				.withHeader ( "\t\t<relationtypes>\n" )
+				.withTrailer ( "\t\t</relationtypes>\n\t\t</ondexmetadata>\n</ondex>" )
+			.build ()
 		});
 	}
 

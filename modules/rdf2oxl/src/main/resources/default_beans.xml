@@ -9,8 +9,7 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd"
 >
 
-	<description><![CDATA[
-	]]></description>
+	<description></description>
 
 	<!-- 
 	  Just leave this here. It means some components are got from the Java source files, by means of
@@ -20,5 +19,5 @@
 
 	<!-- This is the only Endpoint helper for now. -->
 	<bean class = "info.marcobrandizi.rdfutils.jena.TDBEndPointHelper" autowire-candidate = "true" />
-
+		
 </beans>

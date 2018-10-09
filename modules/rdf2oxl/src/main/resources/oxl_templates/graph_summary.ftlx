@@ -1,0 +1,8 @@
+<#include "graph_header.ftlx">
+<#include "utils.ftlx">
+<ondex>
+	<version>1.8</version>
+	<info>
+		<numberOfConcepts>${conceptsCount}</numberOfConcepts>
+		<numberOfRelations>${relationsCount}</numberOfRelations>
+	</info>
