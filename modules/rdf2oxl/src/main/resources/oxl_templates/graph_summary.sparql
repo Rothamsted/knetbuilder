@@ -16,7 +16,7 @@ WHERE
   	OPTIONAL {
 			?reifiedRel 
 				bk:relFrom ?c1;
-				bk:relTypeRef ?relationProp
+				bk:relTypeRef ?relationProp;
 				bk:relTo ?c2;
   	}
   	BIND ( 

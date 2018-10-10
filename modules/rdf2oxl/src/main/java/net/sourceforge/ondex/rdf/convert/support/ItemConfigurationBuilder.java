@@ -1,9 +1,7 @@
 package net.sourceforge.ondex.rdf.convert.support;
 
-import java.util.function.Consumer;
-
 /**
- * TODO: comment me!
+ * TODO: comment me! 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>9 Oct 2018</dd></dl>

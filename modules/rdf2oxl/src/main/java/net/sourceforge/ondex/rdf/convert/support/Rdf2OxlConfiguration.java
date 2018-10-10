@@ -7,7 +7,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 
 import freemarker.template.Configuration;
@@ -52,6 +51,7 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 		{
 			new ItemConfigurationBuilder ( "Graph Summary" )
 				.withResourcesQueryName ( "graph_summary.sparql" )
+				.withGraphTemplateName ( "graph_summary.ftlx" )
 				.withQuerySolutionHandler ( applicationContext.getBean ( GraphSummaryHandler.class ) )
 			.build (),
 			new ItemConfigurationBuilder ( "Concept IDs" )
@@ -96,7 +96,7 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 			new ItemConfigurationBuilder ( "Attribute Names" )
 				.withResourcesQueryName ( "attribute_name_iris.sparql" )
 				.withConstructTemplateName ( "attribute_name_graph.sparql" )
-				.withGraphTemplateName ( "attribute_name.ftl" )
+				.withGraphTemplateName ( "attribute_name.ftlx" )
 				.withHeader ( "\t\t<attrnames>\n" )
 				.withTrailer ( "\t\t</attrnames>\n" )
 			.build (),
@@ -119,7 +119,7 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 				.withConstructTemplateName ( "relation_type_graph.sparql" )
 				.withGraphTemplateName ( "relation_type.ftlx" )
 				.withHeader ( "\t\t<relationtypes>\n" )
-				.withTrailer ( "\t\t</relationtypes>\n\t\t</ondexmetadata>\n</ondex>" )
+				.withTrailer ( "\t\t</relationtypes>\n\t</ondexmetadata>\n</ondex>" )
 			.build ()
 		});
 	}
