@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert.support.freemarker;
+package net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker;
 
 import freemarker.template.TemplateException;
 

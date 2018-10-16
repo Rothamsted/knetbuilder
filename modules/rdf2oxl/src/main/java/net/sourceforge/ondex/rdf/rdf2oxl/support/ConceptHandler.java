@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert.support;
+package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

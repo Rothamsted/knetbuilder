@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert;
+package net.sourceforge.ondex.rdf.rdf2oxl;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,7 +18,8 @@ import com.google.common.io.Resources;
 import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
-import net.sourceforge.ondex.rdf.convert.support.ItemConfiguration;
+import net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlConverter;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration;
 
 /**
  * TODO: comment me!
@@ -46,6 +47,7 @@ public class Rdf2OxlConverterTest
 	@After
 	public void closeSession ()
 	{
+		@SuppressWarnings ( "resource" )
 		TDBEndPointHelper sparqlHelper = springContext.getBean ( TDBEndPointHelper.class );
 		sparqlHelper.close ();
 	}

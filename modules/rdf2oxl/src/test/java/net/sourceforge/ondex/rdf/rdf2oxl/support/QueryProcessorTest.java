@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert.support;
+package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
-import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.QueryProcessor;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.QuerySolutionHandler;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.io.IOUtils;
 
 /**

@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert.support;
+package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import java.io.Writer;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
-import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 
 /**
  * TODO: comment me!

@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert;
+package net.sourceforge.ondex.rdf.rdf2oxl;
 
 import static java.lang.String.format;
 import static uk.ac.ebi.utils.io.IOUtils.readResource;
@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import net.sourceforge.ondex.rdf.convert.support.ItemConfiguration;
-import net.sourceforge.ondex.rdf.convert.support.Resettable;
-import net.sourceforge.ondex.rdf.convert.support.QuerySolutionHandler;
-import net.sourceforge.ondex.rdf.convert.support.QueryProcessor;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.QueryProcessor;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.QuerySolutionHandler;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.Resettable;
 
 /**
  * TODO: comment me!

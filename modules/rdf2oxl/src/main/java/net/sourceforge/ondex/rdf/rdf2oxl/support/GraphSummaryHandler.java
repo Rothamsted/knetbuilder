@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert.support;
+package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import net.sourceforge.ondex.rdf.convert.support.freemarker.FreeMarkerHelper;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**

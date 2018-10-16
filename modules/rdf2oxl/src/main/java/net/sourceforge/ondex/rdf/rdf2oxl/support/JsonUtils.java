@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert.support;
+package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.collections15.CollectionUtils.containsAny;

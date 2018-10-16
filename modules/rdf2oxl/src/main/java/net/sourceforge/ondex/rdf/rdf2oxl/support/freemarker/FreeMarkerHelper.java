@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert.support.freemarker;
+package net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker;
 
 import static java.lang.String.format;
 import static uk.ac.ebi.utils.exceptions.ExceptionUtils.buildEx;
@@ -85,7 +85,7 @@ public class FreeMarkerHelper
 
 			// These might be useful in several cases
 			addStaticClassWrapper ( result, NamespaceUtils.class );
-			addStaticClassWrapper ( result, net.sourceforge.ondex.rdf.convert.support.JsonUtils.class );
+			addStaticClassWrapper ( result, net.sourceforge.ondex.rdf.rdf2oxl.support.JsonUtils.class );
 			addStaticClassWrapper ( result, XsdMapper.class );
 	
 			return result;

@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.rdf.convert.support;
+package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -14,6 +14,8 @@ import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.QueryProcessor;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.QuerySolutionHandler;
 import uk.ac.ebi.utils.io.IOUtils;
 
 /**

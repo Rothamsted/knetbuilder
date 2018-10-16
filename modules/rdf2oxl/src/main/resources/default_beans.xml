@@ -15,12 +15,12 @@
 	  Just leave this here. It means some components are got from the Java source files, by means of
 	  Spring annotations. You do need this base (which the declaration below extend/override). 
 	-->
-  <context:component-scan base-package = "net.sourceforge.ondex.rdf.convert" />
+  <context:component-scan base-package = "net.sourceforge.ondex.rdf.rdf2oxl" />
 
 	<!-- This is the only Endpoint helper for now. -->
 	<bean class = "info.marcobrandizi.rdfutils.jena.TDBEndPointHelper" autowire-candidate = "true" />
 		
-	<bean class = "net.sourceforge.ondex.rdf.convert.support.ItemConfiguration" id = "testConfig">
+	<bean class = "net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration" id = "testConfig">
 		<property name="header">
 			<value><![CDATA[#{T(org.apache.commons.lang3.StringEscapeUtils).unescapeJava (
 				"\tJust a <b>test</b> value."
