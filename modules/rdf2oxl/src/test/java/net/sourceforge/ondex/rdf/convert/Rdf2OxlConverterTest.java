@@ -18,6 +18,7 @@ import com.google.common.io.Resources;
 import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
+import net.sourceforge.ondex.rdf.convert.support.ItemConfiguration;
 
 /**
  * TODO: comment me!
@@ -95,4 +96,10 @@ public class Rdf2OxlConverterTest
 		}
 	}
 
+	@Test
+	public void testBean ()
+	{
+		ItemConfiguration icfg = springContext.getBean ( "testConfig", ItemConfiguration.class );
+		System.out.println ( icfg.getHeader () );
+	}
 }

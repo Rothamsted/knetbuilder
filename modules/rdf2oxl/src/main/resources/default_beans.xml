@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd"
 >
 
-	<description></description>
+	<description><![CDATA[]]></description>
 
 	<!-- 
 	  Just leave this here. It means some components are got from the Java source files, by means of
@@ -20,4 +20,11 @@
 	<!-- This is the only Endpoint helper for now. -->
 	<bean class = "info.marcobrandizi.rdfutils.jena.TDBEndPointHelper" autowire-candidate = "true" />
 		
+	<bean class = "net.sourceforge.ondex.rdf.convert.support.ItemConfiguration" id = "testConfig">
+		<property name="header">
+			<value><![CDATA[#{T(org.apache.commons.lang3.StringEscapeUtils).unescapeJava (
+				"\tJust a <b>test</b> value."
+			)}]]></value>
+		</property>
+	</bean>
 </beans>

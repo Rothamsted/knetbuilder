@@ -161,10 +161,9 @@
 		<!-- We need the loadingSession scope, since a new driver is created for each query set -->
 		
 		<bean id = "neoDriver" 
-				  class = "org.neo4j.driver.v1.GraphDatabase" factory-method="driver"
-				  scope = "loadingSession"
-		>
-			
+				  class = "org.neo4j.driver.v1.GraphDatabase" factory-method = "driver"
+				  scope = "loadingSession">
+				  			
 			<constructor-arg value = "bolt://127.0.0.1:7687" />
 					
 			<constructor-arg>
