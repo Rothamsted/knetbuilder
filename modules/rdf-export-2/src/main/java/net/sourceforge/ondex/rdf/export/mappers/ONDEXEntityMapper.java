@@ -17,6 +17,7 @@ import net.sourceforge.ondex.core.ONDEXEntity;
 import uk.ac.ebi.fg.java2rdf.mapping.BeanRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.CollectionPropRdfMapper;
+import uk.ac.ebi.fg.java2rdf.mapping.properties.LiteralPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.ResourcePropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfLiteralGenerator;
 
@@ -31,6 +32,7 @@ public abstract class ONDEXEntityMapper<OE extends ONDEXEntity> extends BeanRdfM
 	private RdfLiteralGenerator<Object> attrValGen = new RdfLiteralGenerator<> ();
 	
 	{
+		this.addPropertyMapper ( "id", new LiteralPropRdfMapper<> ( iri ( "bk:ondexId" ) ) );
 		this.addPropertyMapper ( "evidence", new CollectionPropRdfMapper<OE, EvidenceType, String> ( 
 			new ResourcePropRdfMapper<> ( iri ( "bk:evidence" ) )
 		));
