@@ -48,6 +48,8 @@ import net.sourceforge.ondex.exception.type.ParsingFailedException;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
+import uk.ac.ebi.utils.exceptions.UnexpectedValueException;
 
 /**
  * Parser for OXL files.
@@ -413,9 +415,9 @@ public class Parser extends ONDEXParser {
 		}
 		catch ( PluginConfigurationException ex )
 		{
-			throw new RuntimeException ( MessageFormat.format ( 
-				"Internal error while loading '{}': {}", filePath, ex.getMessage () 
-			), ex);
+			throw ExceptionUtils.buildEx ( UnexpectedValueException.class, ex,
+			  "Internal error while loading '%s': %s", filePath, ex.getMessage ()		
+			);
 		}
 	}
 	

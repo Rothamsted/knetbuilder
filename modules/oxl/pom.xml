@@ -43,7 +43,6 @@
 		<dependency>
 			<groupId>uk.ac.ebi</groupId>
 			<artifactId>jutils</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>

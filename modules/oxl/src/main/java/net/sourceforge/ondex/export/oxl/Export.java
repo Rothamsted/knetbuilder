@@ -66,6 +66,9 @@ import net.sourceforge.ondex.export.ONDEXExport;
 import net.sourceforge.ondex.oxl.jaxb.CDATAWriterFilter;
 import net.sourceforge.ondex.oxl.jaxb.NewLineFixWriterFilter;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
+import uk.ac.ebi.utils.exceptions.UnexpectedEventException;
+import uk.ac.ebi.utils.exceptions.UnexpectedValueException;
 
 /**
  * Builds complete XML exchange format documents and/or ONDEX relations and
@@ -2276,30 +2279,21 @@ public class Export extends ONDEXExport implements Monitorable {
 			plugin.start();
 		}
 		catch ( InvalidPluginArgumentException ex ) {
-			throw new IllegalArgumentException ( String.format (  
-				"Internal error while doing OXL export to '%s': %s", path, ex.getMessage () ), 
-				ex
+			throw ExceptionUtils.buildEx ( UnexpectedValueException.class, ex,
+			  "Internal error while OXL-exporting to '%s': %s", path, ex.getMessage ()		
 			);
 		}
 		catch ( IOException ex )
 		{
-			throw new UncheckedIOException ( String.format (  
-				"I/O error while doing OXL export to '%s': %s", path, ex.getMessage () ), 
-				ex
+			throw ExceptionUtils.buildEx ( UncheckedIOException.class, ex,
+			  "I/O error while doing OXL export to '%s': %s", path, ex.getMessage ()		
 			);
 		}
-		catch ( XMLStreamException ex )
+		catch ( XMLStreamException | JAXBException ex )
 		{
-			throw new RuntimeException ( String.format (  
-				"XML processing error while doing OXL export to '%s': %s", path, ex.getMessage () ), 
-				ex
+			throw ExceptionUtils.buildEx ( UnexpectedEventException.class, ex,
+			  "XML processing error while doing OXL export to '%s': %s", path, ex.getMessage ()		
 			);
 		}
-		catch ( JAXBException ex ) {
-			throw new RuntimeException ( String.format (  
-				"JAXB processing error while doing OXL export to '%s': %s", path, ex.getMessage () ), 
-				ex
-			);
-		}		
 	}
 }
