@@ -11,14 +11,19 @@
   <#if natures?is_string>
   	<#local natures = [ natures ]>
   </#if>
+  <#-- 
+  	DO NOT CHANGE THE ORDER! The damn OXL parser parses these in exactly this order and
+  	Freemarker is guaranteed to preserve the order of hashes defined this way
+  	(https://freemarker.apache.org/docs/ref_builtins_hash.html). 
+  -->
 	<#local nature_map = { 
-	  'isReflexive': 'owl:ReflexiveProperty',
 	  'isAntisymmetric': 'owl:AsymmetricProperty', 
+	  'isReflexive': 'owl:ReflexiveProperty',
 	  'isSymmetric': 'owl:SymmetricProperty', 
 	  'isTransitive': 'owl:TransitiveProperty'}
 	>	  
 	<#list nature_map as xml, rdf>
-	  		<${xml}>${( natures?seq_contains( rdf  ) )?c}</${xml}>
+	  		<${xml}>${( natures?seq_contains( rdf ) )?c}</${xml}>
 	</#list>  
 </#macro>
 <#--  

@@ -7,5 +7,9 @@
 		  <#-- The OXL has the qualifier slot, which the OXL parser explicitly ignores when present, so, we 
 					 do it here too. -->
 			<ofType><idRef>${relation.typeId}</idRef></ofType>
+			<#-- 
+				TODO: The damn parser makes the evidence mandatory, so we need to add something like 'unknown'.
+				Same for concepts.				 
+			-->
 		</relation>
 </#list>

@@ -8,8 +8,10 @@
 </#function>
 <#-- 
 
-  All instances of a given class mentioned in a JSON-LD object
+  All instances of a given class mentioned in a JSON-LD object.
   
+  That is, filters objects with @type corresponding the classId parameter and returns 
+  a hash of @id => object.  
 -->
 <#function jsld_instances json_ld classId>
 	<#local result = {}>
@@ -46,17 +48,14 @@
 
 	Renders common stuff about concepts and relations 
 
+-->
+<#--
+	Renders concepts generically related to a concept or a relation, what is named contexts in Ondex.
+
   The first way doesn't work, the OXL parser seems broken. Second way seems to be still supported from an
   old version of OXL spec.
+  
 -->
-<#-- macro render_related_concepts e>
-	<#if !e.relatedConcept??><#return /></#if>
-					<contexts>
-						<#list to_seq ( e.relatedConcept ) as related_concept_iri>
-							<context><id>${conceptIds [ NamespaceUtils.iri ( related_concept_iri ) ]}</id></context>
-						</#list>
-					</contexts>
-</#macro-->
 <#macro render_related_concepts e>
 	<#if !e.relatedConcept??><#return /></#if>
 	<#assign context_ids = "" />
@@ -96,7 +95,8 @@
 </#macro>
 <#macro render_attribute_values e group_xml_tag entry_xml_tag>
 	<#if !e._attribute??>
-		<${group_xml_tag}/>	
+		<#-- This is mandatory, the parser expects it even when there is no attribute inside. -->	
+		<${group_xml_tag}/>
 		<#return />
 	</#if>
 		<#if !attribute_values??>
