@@ -24,6 +24,7 @@ bkr:publication_26396590
         bk:dataSource       bk:NLM ;
         bka:EVIDENCE 				"A foo evidence attribute 1", "A foo evidence attribute 2";
         bka:PVALUE 					0.001;
+        bk:evidence 				bkev:IMPD;
         rdf:type            bk:Publication
 .
 
@@ -48,14 +49,15 @@ bkr:publication_17206375
         bk:evidence bkev:IMPD;
         bk:relatedConcept bkr:testAnnotation;
         bk:dataSource bkds:PubMed;
-        bka:EVIDENCE "A food evidence attribute"
+        bka:EVIDENCE "A foo evidence attribute"
 .
 
 bkr:testAnnotation
 	a bk:Annotation;
 	bk:prefName 'Test Annotation';
 	dcterms:identifier "testDescription";
-	dcterms:description "Just a test concept, used to annotate stuff"
+	dcterms:description "Just a test concept, used to annotate stuff";
+	bk:evidence 				bkev:M	
 .
 
 bkr:accsn_nlm_17206375  rdf:type  bk:Accession ;

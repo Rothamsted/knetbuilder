@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import static java.lang.System.out;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,12 +9,15 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.jsonldjava.core.JsonLdOptions;
 import com.github.jsonldjava.core.JsonLdProcessor;
@@ -26,6 +30,7 @@ import freemarker.template.TemplateExceptionHandler;
 import info.marcobrandizi.rdfutils.jena.SparqlUtils;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.regex.RegEx;
 
 /**
  * Basic tests with the FreeMarker framework.
@@ -37,6 +42,7 @@ import uk.ac.ebi.utils.io.IOUtils;
 public class FreeMarkerTest
 {
 	private static Configuration tplConfig = new Configuration ( Configuration.VERSION_2_3_28 );
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	@BeforeClass
 	public static void initFreeMarker () throws IOException
@@ -61,7 +67,8 @@ public class FreeMarkerTest
 			put ( "who", "Marco" );
 		}};
 		
-		tpl.process ( data, new OutputStreamWriter ( System.out ) );
+		String out = TestUtils.processTemplate ( tpl, data );		
+		assertTrue ( "Wrong output!", out.contains ( "Hello, Marco!" ) );
 	}
 	
 	
@@ -104,7 +111,11 @@ public class FreeMarkerTest
 		}};
 
 		Template tpl = tplConfig.getTemplate ( "fremarker_sparql_test.ftlh" );		
-		tpl.process ( data, new OutputStreamWriter ( out ) );		
+		String out = TestUtils.processTemplate ( tpl, data );		
+		
+		assertTrue ( "Wrong output (header)!", out.contains ( "Hello, Marco!" ) );
+		assertTrue ( "Wrong output (friendship 1)", out.contains ( "Tim Berners-Lee	Jim Hendler" ) );
+		assertTrue ( "Wrong output (friendship 2)", out.contains ( "Tim Berners-Lee	John Gage" ) );
 	}
 	
 	
@@ -125,6 +136,11 @@ public class FreeMarkerTest
 		}};
 				
 		tpl.process ( data, new OutputStreamWriter ( System.out ) );
+		String out = TestUtils.processTemplate ( tpl, data );
+		
+		assertTrue ( "Wrong output (header)!", out.contains ( "Title: Hello, World!" ) );
+		assertTrue ( "Wrong output (row 1)!", out.contains ( "1	Item 1" ) );
+		assertTrue ( "Wrong output (row 2)!", out.contains ( "2	Item 2" ) );
 	}	
 	
 	
@@ -167,7 +183,16 @@ public class FreeMarkerTest
 		}};
 
 		Template tpl = tplConfig.getTemplate ( "js_sparql_test.ftlh" );		
-		tpl.process ( data, new OutputStreamWriter ( out ) );		
+		String out = TestUtils.processTemplate ( tpl, data );
+		
+		assertTrue ( "Wrong output (name 1)", out.contains ( "Name: Danny Ayers" ) );
+		assertTrue ( 
+			"Wrong output (friendship 1)", 
+			new RegEx ( 
+				".+Name: Tim Berners-Lee.+$.*(^\\s+Friend: .+$)+.*^\\s+Friend: Ora Lassila.+",
+				Pattern.MULTILINE | Pattern.DOTALL
+			).matches ( out )
+		);
 	}	
 	
 	@Test
@@ -213,38 +238,21 @@ public class FreeMarkerTest
 		// Compaction needs to be redone
 		js = JsonLdProcessor.compact ( js, jsldCtx, jsOpts );
 	
-//		JsonLDWriteContext ctx = new JsonLDWriteContext ();
-//
-////		DatasetGraph dsgraph = DatasetFactory.create ( m ).asDatasetGraph ();
-////		ctx.setupContext ( null, dsgraph );
-//
-//		JsonLdOptions opts = new JsonLdOptions ();
-//		opts.setEmbed ( "@always" );
-//		ctx.setOptions ( opts );
-//		
-////		Map<String, Object> frctx = new HashMap<> ( NamespaceUtils.getNamespaces () );
-////		
-////		Map<String, String> knows = new HashMap<> ();
-////		knows.put ( "@id", "foaf:knows" );
-////		knows.put ( "@type", "@id" );
-////		frctx.put ( "knows", knows );
-////		
-////		frctx.put ( "name", "foaf:name" );
-////		
-////		Map<String, Object> frame = new HashMap<> ();
-////		frame.put ( "@type", "foaf:Person" );
-////		frame.put ( "@context", frctx ); 
-////		ctx.setFrame ( frame );
-//		
-//		Graph graph = m.getGraph ();
-//		PrefixMap prefixes = RiotLib.prefixMap ( graph );
-//		WriterGraphRIOT writer = RDFDataMgr.createGraphWriter ( RDFFormat.JSONLD_COMPACT_PRETTY );
-//		writer.write ( sw, graph, prefixes, null, ctx );
-//		
-		Map<String, Object> data = new HashMap<String, Object> ();
+		Map<String, Object> data = new HashMap<> ();
 		data.put ( "persons", js.get ( "@graph" ) );
 
 		Template tpl = tplConfig.getTemplate ( "framed_js_sparql_test.ftlh" );		
-		tpl.process ( data, new OutputStreamWriter ( out ) );		
+
+		String out = TestUtils.processTemplate ( tpl, data );
+		
+		assertTrue ( "Wrong output (name 1)", out.contains ( "Name: Danny Ayers" ) );
+		assertTrue ( 
+			"Wrong output (friendship 1)", 
+			new RegEx ( 
+				".+Name: Tim Berners-Lee.+$.*(^\\s+Friend: .+$)+.*^\\s+Friend: Ora Lassila.+",
+				Pattern.MULTILINE | Pattern.DOTALL
+			).matches ( out )
+		);
+		
 	}	
 }

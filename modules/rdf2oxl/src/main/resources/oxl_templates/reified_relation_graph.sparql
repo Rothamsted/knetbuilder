@@ -60,13 +60,14 @@ WHERE
 		            dcterms:identifier ?attribId.
 		            
 		OPTIONAL { ?attribProp rdfs:range ?attribRange } 
-		OPTIONAL { ?attribProp bk:isIndexed ?attribIsIndexed }
-		OPTIONAL { ?attribProp bk:ondexRange ?ondexRange } 
+		OPTIONAL { ?attribProp bk:isIndexed ?attribIsIndexed. FILTER ( xsd:boolean ( ?attribIsIndexed ) ) }
+		OPTIONAL { ?attribProp bk:ondexRange ?ondexRange. } 
 
 		BIND ( STR ( ?attribValue ) AS ?attribLexValue )
 		BIND ( STR ( DATATYPE ( ?attribValue ) ) AS ?_attribXsd )
 		
-		BIND ( IF ( BOUND ( ?_attribXsd ), ?_attribXsd, STR ( ?attribRange ) ) AS ?attribXsd )
+		# xsd:string is generic and range takes priority in that case. 
+		BIND ( IF ( ?_attribXsd != xsd:string, ?_attribXsd, STR ( ?attribRange ) ) AS ?attribXsd )
 		
 		# Let's define an attribute as an object with IRI
 		BIND ( MD5 ( CONCAT ( STR ( ?reifiedRel ), STR ( ?attribProp ), STR ( ?attribValue ) ) ) AS ?attribHash )

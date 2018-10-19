@@ -1,8 +1,12 @@
 package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.system.Txn;
@@ -57,13 +61,22 @@ public class QueryProcessorTest
 			handler.setOxlTemplateName ( "resource.ftlh" );
 			handler.setTemplateHelper ( tplHelper );
 			handler.setSparqlHelper ( sparqlHelper );
-			handler.setOutWriter ( new OutputStreamWriter ( System.out ) );
+			
+			Writer out = new TestUtils.OutputCollectorWriter ();
+			handler.setOutWriter ( out );
 			
 			QueryProcessor proc = new QueryProcessor ();						
 			proc.setConsumer ( handler );
 			proc.setSparqlHelper ( sparqlHelper );
 			
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
+			
+			assertTrue ( "Wrong output (title)",
+				out.toString ().contains ( "Title: Assessment of drought tolerance of 49 switchgrass" ) 
+			);
+			assertTrue ( "Wrong output (abstract)", 
+				out.toString ().contains ( "Abstract:\nThe putative raffinose synthase gene from rice" ) 
+			);
 		}
 	}
 	
@@ -84,11 +97,20 @@ public class QueryProcessorTest
 			QuerySolutionHandler handler = (QuerySolutionHandler) ctx.getBean ( "resourceHandler" );
 			handler.setConstructTemplate ( IOUtils.readFile ( "target/test-classes/support_test/resource_graph.sparql" ) );
 			handler.setOxlTemplateName ( "resource.ftlh" );
-			handler.setOutWriter ( new OutputStreamWriter ( System.out ) );
+			
+			Writer out = new TestUtils.OutputCollectorWriter ();			
+			handler.setOutWriter ( out );
 						
 			QueryProcessor proc = (QueryProcessor) ctx.getBean ( "resourceProcessor" );
 			proc.setConsumer ( handler );
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
+			
+			assertTrue ( "Wrong output (title)",
+				out.toString ().contains ( "Title: Assessment of drought tolerance of 49 switchgrass" ) 
+			);
+			assertTrue ( "Wrong output (abstract)", 
+				out.toString ().contains ( "Abstract:\nThe putative raffinose synthase gene from rice" ) 
+			);	
 		}
 	}
 }

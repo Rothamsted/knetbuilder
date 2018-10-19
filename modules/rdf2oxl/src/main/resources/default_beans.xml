@@ -20,6 +20,8 @@
 	<!-- This is the only Endpoint helper for now. -->
 	<bean class = "info.marcobrandizi.rdfutils.jena.TDBEndPointHelper" autowire-candidate = "true" />
 		
+		
+	<!-- Just a test to move Rdf2OxlConfiguration to the XML, which should have a simpler syntax -->
 	<bean class = "net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration" id = "testConfig">
 		<property name="header">
 			<value><![CDATA[#{T(org.apache.commons.lang3.StringEscapeUtils).unescapeJava (

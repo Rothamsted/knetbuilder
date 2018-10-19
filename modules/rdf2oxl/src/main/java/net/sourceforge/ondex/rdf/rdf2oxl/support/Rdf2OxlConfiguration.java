@@ -54,31 +54,6 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 				.withGraphTemplateName ( "graph_summary.ftlx" )
 				.withQuerySolutionHandler ( applicationContext.getBean ( GraphSummaryHandler.class ) )
 			.build (),
-			new ItemConfigurationBuilder ( "Concept IDs" )
-				.withResourcesQueryName ( "concept_iris.sparql" )
-				.withQuerySolutionHandler ( applicationContext.getBean ( ConceptIdHandler.class ) )
-			.build (),
-			new ItemConfigurationBuilder ( "Concepts" )
-				.withConstructTemplateName ( "concept_graph.sparql" )
-				.withHeader ( "\t<ondexdataseq>\n\t\t<concepts>\n" )
-				.withTrailer ( "\t\t</concepts>\n" )
-				.withGraphTemplateName ( "concept.ftlx" )
-				.withQueryProcessor ( applicationContext.getBean ( ConceptProcessor.class ) )
-				.withQuerySolutionHandler ( applicationContext.getBean ( ConceptHandler.class ) )
-			.build (),
-			new ItemConfigurationBuilder ( "Straight Relations" )
-				.withResourcesQueryName ( "straight_relation_iris.sparql" )
-				.withHeader ( "\t\t<relations>\n" )
-				.withGraphTemplateName ( "straight_relation.ftlx" )
-				.withQuerySolutionHandler ( applicationContext.getBean ( StraightRelationHandler.class ) )
-			.build (),
-			new ItemConfigurationBuilder ( "Reified Relations" )
-				.withResourcesQueryName ( "reified_relation_iris.sparql" )
-				.withConstructTemplateName ( "reified_relation_graph.sparql" )
-				.withTrailer ( "\t\t</relations>\n\t</ondexdataseq>\n" )
-				.withGraphTemplateName ( "reified_relation.ftlx" )
-				.withQuerySolutionHandler ( applicationContext.getBean ( RelationHandler.class ) )
-			.build (),
 			new ItemConfigurationBuilder ( "Data Sources" )
 				.withResourcesQueryName ( "data_source_iris.sparql" )
 				.withConstructTemplateName ( "metadata_graph.sparql" )
@@ -119,7 +94,32 @@ public class Rdf2OxlConfiguration implements ApplicationContextAware
 				.withConstructTemplateName ( "relation_type_graph.sparql" )
 				.withGraphTemplateName ( "relation_type.ftlx" )
 				.withHeader ( "\t\t<relationtypes>\n" )
-				.withTrailer ( "\t\t</relationtypes>\n\t</ondexmetadata>\n</ondex>" )
+				.withTrailer ( "\t\t</relationtypes>\n\t</ondexmetadata>\n" )
+			.build (),
+			new ItemConfigurationBuilder ( "Concept IDs" )
+				.withResourcesQueryName ( "concept_iris.sparql" )
+				.withQuerySolutionHandler ( applicationContext.getBean ( ConceptIdHandler.class ) )
+			.build (),
+			new ItemConfigurationBuilder ( "Concepts" )
+				.withConstructTemplateName ( "concept_graph.sparql" )
+				.withHeader ( "\t<ondexdataseq>\n\t\t<concepts>\n" )
+				.withTrailer ( "\t\t</concepts>\n" )
+				.withGraphTemplateName ( "concept.ftlx" )
+				.withQueryProcessor ( applicationContext.getBean ( ConceptProcessor.class ) )
+				.withQuerySolutionHandler ( applicationContext.getBean ( ConceptHandler.class ) )
+			.build (),
+			new ItemConfigurationBuilder ( "Straight Relations" )
+				.withResourcesQueryName ( "straight_relation_iris.sparql" )
+				.withHeader ( "\t\t<relations>\n" )
+				.withGraphTemplateName ( "straight_relation.ftlx" )
+				.withQuerySolutionHandler ( applicationContext.getBean ( StraightRelationHandler.class ) )
+			.build (),
+			new ItemConfigurationBuilder ( "Reified Relations" )
+				.withResourcesQueryName ( "reified_relation_iris.sparql" )
+				.withConstructTemplateName ( "reified_relation_graph.sparql" )
+				.withTrailer ( "\t\t</relations>\n\t</ondexdataseq>\n</ondex>\n" )
+				.withGraphTemplateName ( "reified_relation.ftlx" )
+				.withQuerySolutionHandler ( applicationContext.getBean ( RelationHandler.class ) )
 			.build ()
 		});
 	}

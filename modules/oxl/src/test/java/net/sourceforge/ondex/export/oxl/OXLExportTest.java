@@ -38,7 +38,6 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.CachedGraphWrapper;
-import net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.oxl.jaxb.CDATAWriterFilter;
 import net.sourceforge.ondex.parser.oxl.Parser;
@@ -50,7 +49,8 @@ public class OXLExportTest
 {
 		private Logger log = Logger.getLogger ( this.getClass () );
 
-    @Test
+    @SuppressWarnings ( "unchecked" )
+		@Test
     public void testListGDSCompatibility() throws Throwable {
         File testfile = new File(System.getProperty("java.io.tmpdir") + File.separator + "testoxl.xml");
         ONDEXGraph g = new MemoryONDEXGraph("test");
@@ -73,7 +73,7 @@ public class OXLExportTest
         ONDEXConcept c = g.getFactory().createConcept("concept", dataSource, cc, et);
 
         AttributeName an = g.getMetaData().getFactory().createAttributeName("an", List.class);
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         c.createAttribute(an, list, false);
 
@@ -108,7 +108,8 @@ public class OXLExportTest
 
     }
 
-    @Test
+    @SuppressWarnings ( "rawtypes" )
+		@Test
     public void testMapGDSCompatibility() throws Throwable {
         File testfile = new File(System.getProperty("java.io.tmpdir") + File.separator + "testoxl.xml");
         ONDEXGraph g = new MemoryONDEXGraph("test");
@@ -179,7 +180,8 @@ public class OXLExportTest
 
     }
 
-    @Test
+    @SuppressWarnings ( "unchecked" )
+		@Test
     public void testSetGDSCompatibility() throws Throwable {
         File testfile = new File(System.getProperty("java.io.tmpdir") + File.separator + "testoxl.xml");
         ONDEXGraph g = new MemoryONDEXGraph("test");
@@ -202,7 +204,7 @@ public class OXLExportTest
         ONDEXConcept c = g.getFactory().createConcept("concept", dataSource, cc, et);
 
         AttributeName an = g.getMetaData().getFactory().createAttributeName("an", Set.class);
-        Set<Integer> set = new HashSet<Integer>();
+        Set<Integer> set = new HashSet<>();
         set.add(1);
         set.add(2);
         set.add(3);
@@ -238,7 +240,8 @@ public class OXLExportTest
     }
 
 
-    @Test
+    @SuppressWarnings ( "unchecked" )
+		@Test
     public void testListOfListsGDSCompatibility() throws Throwable {
         File testfile = new File(System.getProperty("java.io.tmpdir") + File.separator + "testoxl2.xml");
 
@@ -264,14 +267,14 @@ public class OXLExportTest
         ONDEXConcept c = g.getFactory().createConcept("concept", dataSource, cc, et);
 
         AttributeName an = g.getMetaData().getFactory().createAttributeName("an", List.class);
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
-        List<Integer> list1 = new ArrayList<Integer>();
+        List<Integer> list1 = new ArrayList<>();
         list1.add(2);
-        List<Integer> list2 = new ArrayList<Integer>();
+        List<Integer> list2 = new ArrayList<>();
         list2.add(3);
 
-        List<List<Integer>> listAll = new ArrayList<List<Integer>>();
+        List<List<Integer>> listAll = new ArrayList<>();
         listAll.add(list);
         listAll.add(list1);
         listAll.add(list2);
@@ -307,7 +310,8 @@ public class OXLExportTest
         }
     }
 
-    @Test
+    @SuppressWarnings ( "unchecked" )
+		@Test
     public void testListOfListOfColorsGDSCompatibility() throws Throwable {
         File testfile = new File(System.getProperty("java.io.tmpdir") + File.separator + "testoxl2.xml");
 
@@ -333,17 +337,17 @@ public class OXLExportTest
         ONDEXConcept c = g.getFactory().createConcept("concept", dataSource, cc, et);
 
         AttributeName an = g.getMetaData().getFactory().createAttributeName("an", List.class);
-        List<Color> list = new ArrayList<Color>();
+        List<Color> list = new ArrayList<>();
         list.add(Color.BLACK);
         list.add(Color.RED);
-        List<Color> list1 = new ArrayList<Color>();
+        List<Color> list1 = new ArrayList<>();
         list1.add(Color.GREEN);
         list1.add(Color.RED);
-        List<Color> list2 = new ArrayList<Color>();
+        List<Color> list2 = new ArrayList<>();
         list2.add(Color.RED);
         list2.add(Color.ORANGE);
 
-        List<List<Color>> listAll = new ArrayList<List<Color>>();
+        List<List<Color>> listAll = new ArrayList<>();
         listAll.add(list);
         listAll.add(list1);
         listAll.add(list2);
@@ -453,7 +457,8 @@ public class OXLExportTest
 
     // OXL-4 regression test
 
-    @Test
+    @SuppressWarnings ( { "unchecked", "unused" } )
+		@Test
     public void testConceptSetGDSExport() throws PluginConfigurationException, JAXBException, XMLStreamException, IOException {
         File testfile = new File(System.getProperty("java.io.tmpdir") + File.separator + "testoxl.xml");
 
@@ -539,7 +544,8 @@ public class OXLExportTest
       //Assert.assertTrue ( "CDATA-wrapped attribute not found!",  oxlStr.contains ( "<![CDATA[" + val + "]]>" ) );      
     }
     
-    @Test
+		@Test
+    @SuppressWarnings ( "unchecked" )
     public void testCollectionsCData () throws FileNotFoundException, IOException
     {
   		log.info ( "Testting CDATA exports on collections" );

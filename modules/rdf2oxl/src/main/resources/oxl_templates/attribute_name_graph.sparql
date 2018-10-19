@@ -5,9 +5,10 @@ CONSTRUCT
     rdfs:label ?label;
   	dcterms:description ?description;
   	rdfs:range ?dataType;
+		bk:ondexRange ?ondexRange;  	
   	bk:_unitId ?unitId;
   	bk:_unitLabel ?unitLabel;
-  	bk:_unitDescription ?unitDescription  	
+  	bk:_unitDescription ?unitDescription
 }
 WHERE
 {
@@ -33,6 +34,7 @@ WHERE
   OPTIONAL { ?attrib dcterms:description ?description }
   
   OPTIONAL { ?attrib rdfs:range ?dataType } 
+  OPTIONAL { ?attrib bk:ondexRange ?ondexRange }
        
   # Unit
   #

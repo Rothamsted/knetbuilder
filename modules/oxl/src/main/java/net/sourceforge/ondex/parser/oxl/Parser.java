@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +16,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.stream.StreamFilter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
@@ -77,6 +77,7 @@ public class Parser extends ONDEXParser {
 				"com.ctc.wstx.stax.WstxInputFactory");
 		xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
 		xmlif.configureForSpeed();
+		xmlif.setProperty ( XMLInputFactory2.IS_COALESCING, true );
 	}
 
 	private HashSet<AttributeName> ignoreGDSAttributeGDS = null;
@@ -294,7 +295,7 @@ public class Parser extends ONDEXParser {
 	public void start(InputStream stream) throws ParsingFailedException,
 			InconsistencyException {
 		try {
-			start(xmlif.createXMLStreamReader(stream));
+			start ( xmlif.createXMLStreamReader ( stream, CharsetNames.CS_UTF8 ) );
 		} catch (XMLStreamException e) {
 			throw new ParsingFailedException(e);
 		}
@@ -303,7 +304,7 @@ public class Parser extends ONDEXParser {
 	public void start(Reader reader) throws ParsingFailedException {
 		try {
 			XMLStreamReader xmlr;
-			xmlr = xmlif.createXMLStreamReader(reader);
+			xmlr = xmlif.createXMLStreamReader ( reader );
 			start(xmlr);
 		} catch (XMLStreamException e) {
 			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
@@ -313,7 +314,11 @@ public class Parser extends ONDEXParser {
 	}
 
 	/**
-	 * Parses OXL from an XMLStreamReader
+	 * Parses OXL from an XMLStreamReader.
+	 * 
+	 * Beware that this method wraps the parameter reader with a filter that strips all extra-whitespaces away
+	 * from the input (See <a href='https://goo.gl/wirWjg'>here</a> for details). This was made necessary by 
+	 * the rdf2oxl tool in 2018, which doesn't spawn a compact XML. 
 	 * 
 	 * @param xmlr
 	 *            the stream to parse XML from
@@ -321,10 +326,20 @@ public class Parser extends ONDEXParser {
 	 *             if the oxl xml could not be processed
 	 * @throws InconsistencyException
 	 */
-	public void start(XMLStreamReader xmlr) throws ParsingFailedException {
-		// configure Parser
-		try {
-			// start parsing
+	public void start(XMLStreamReader xmlr) throws ParsingFailedException 
+	{
+		try 
+		{
+			// We need to ignore the extra-whitespaces, our parsers rely on that heavily
+			xmlr = xmlif.createFilteredReader ( xmlr,
+				new StreamFilter() 
+				{
+					@Override
+					public boolean accept ( XMLStreamReader reader ) {
+						return !reader.isWhiteSpace ();
+					}
+			});
+
 			XmlParser parser = new XmlParser(this);
 
 			// hashtable for id mapping old to new concept ids

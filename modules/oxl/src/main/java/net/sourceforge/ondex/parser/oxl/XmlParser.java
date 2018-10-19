@@ -82,7 +82,8 @@ public class XmlParser implements XmlComponentParser {
 	 */
 	public void parse(XMLStreamReader staxXmlReader) throws XMLStreamException,
 			JAXBException, InconsistencyException, ClassNotFoundException,
-			InstantiationException, IllegalAccessException {
+			InstantiationException, IllegalAccessException 
+	{
 
 		// main loop
 		while (staxXmlReader.hasNext() && !cancelled) {

@@ -8,7 +8,10 @@
 						</concept_name>
 </#macro>
 <#macro render_accessions concept>
-			<#if !concept._accession??><#return /></#if>
+	<#if !concept._accession??>
+			<coaccessions/>			
+			<#return />
+	</#if>
 			<coaccessions>
 				<#list to_seq ( concept._accession ) as accession_iri>
 					<#if !accessions??>

@@ -1,11 +1,15 @@
 package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.system.Txn;
+import org.jdom.xpath.XPath;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,6 +21,7 @@ import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.QueryProcessor;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.QuerySolutionHandler;
 import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.xml.XPathReader;
 
 /**
  * TODO: comment me!
@@ -30,8 +35,9 @@ public class OxlTemplatesTest
 	@Test
 	public void testConceptClasses () throws Exception
 	{
+
 		try (
-			Writer writer = new OutputStreamWriter ( System.out );	
+			Writer writer = new TestUtils.OutputCollectorWriter ();	
 			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext ( "default_beans.xml" ) 
 		)
 		{
@@ -63,6 +69,27 @@ public class OxlTemplatesTest
 				NamespaceUtils.asSPARQLProlog () + 
 				IOUtils.readResource ( "oxl_templates/concept_class_iris.sparql" ) 
 			);
+			
+			writer.flush ();
+			
+			// Verify 
+			XPathReader xpath = new XPathReader ( writer.toString () );
+			assertEquals ( "Disease class not found or too many of them!", 
+				1,
+				xpath.readNodeList ( "/conceptclasses/cc[id = 'Disease']" ).getLength ()
+			);
+			assertEquals ( "EC's fullname not found!",
+				"Enzyme Classification", xpath.readString ( "/conceptclasses/cc[id='EC']/fullname" )
+			);
+			assertEquals ( "Environment's description not found!",
+				"Treatment or surrounding conditions",
+				xpath.readString ( "/conceptclasses/cc[id='Environment']/description" )
+			);
+			assertEquals ( "GeneOntologyTerms' parent not found!",
+				"OntologyTerms",
+				xpath.readString ( "/conceptclasses/cc[id='GeneOntologyTerms']/specialisationOf/idRef" )
+			);			
+			
 		} // try
 	}	// testConceptClasses()
 }
