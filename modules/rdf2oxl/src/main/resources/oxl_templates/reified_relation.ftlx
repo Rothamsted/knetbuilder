@@ -1,7 +1,6 @@
 <#include "graph_header.ftlx">
 <#include "utils.ftlx">
 <#list js as relation>
-	<#--  TODO: there are some without ID, needs to be fixed in meta/onto converter -->
 	<#if !relation._typeId??><#continue /></#if>
 			<relation>
 				<fromConcept>${conceptIds [ NamespaceUtils.iri ( relation.relFrom ) ]}</fromConcept>

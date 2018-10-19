@@ -4306,6 +4306,14 @@
     <rdf:type rdf:resource="http://www.ondex.org/bioknet/terms/DataSource"/>
     <terms:identifier>UC</terms:identifier>
   </owl:NamedIndividual>
+  <bk:EvidenceType rdf:about="http://www.ondex.org/bioknet/terms/evidences/unknown">
+    <rdfs:label xml:lang="en">Unknown Evidence</rdfs:label>
+    <terms:description xml:lang="en">When the data source is unknown/unspecified, e.g. well-known or operative information, which does not need much of a source of evidence.</terms:description>
+    <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</bk:isOndexPreferred>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <terms:identifier>unknown</terms:identifier>
+  </bk:EvidenceType>
   <bk:EvidenceType rdf:about="http://www.ondex.org/bioknet/terms/evidences/IPI">
     <rdfs:label xml:lang="en">Inferred from Physical Interaction</rdfs:label>
     <terms:description xml:lang="en">Covers physical interactions between the gene product of interest and another molecule (or ion, or complex). For functions such as protein binding or nucleic acid binding, a binding assay is simultaneously IPI and IDA; IDA is preferred because the assay directly detects the binding. We thought that experiments detecting only antibody binding were not suitable as evidence for function or process (note that an effect of an antibody on an activity or process can support a function or process annotation, using the IMP code).</terms:description>
@@ -4912,7 +4920,7 @@
     <terms:identifier>CHEBI</terms:identifier>
   </owl:NamedIndividual>
   <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/dataSources/unknown">
-    <rdfs:label xml:lang="en">unknown data source</rdfs:label>
+    <rdfs:label xml:lang="en">Unknown Data Source</rdfs:label>
     <terms:description xml:lang="en">When the data source is unknown, e.g. data parsed from excel spreadsheets not part of a particular database or consortium.</terms:description>
     <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</bk:isOndexPreferred>

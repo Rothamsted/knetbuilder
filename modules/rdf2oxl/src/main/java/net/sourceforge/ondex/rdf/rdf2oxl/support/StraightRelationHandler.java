@@ -51,7 +51,7 @@ public class StraightRelationHandler extends QuerySolutionHandler
 			
 			Map<String, Object> relMap = new HashedMap<> ();
 			relMap.put ( "fromId", fromId );
-			relMap.put ( "typeId", sol.getLiteral ( "typeId" ).getString () );
+			relMap.put ( "_typeId", sol.getLiteral ( "_typeId" ).getString () );
 			relMap.put ( "toId", toId );
 			return relMap;
 		})

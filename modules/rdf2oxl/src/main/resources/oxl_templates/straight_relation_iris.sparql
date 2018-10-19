@@ -1,15 +1,15 @@
-SELECT ?from ?typeId ?to
+SELECT ?from ?_typeId ?to
 {
   # BEWARE that the following is optimised, it might become significantly slower if you change order/structure
   # 
  	
   # Use a subquery to get them once for all
   { 
-  	SELECT DISTINCT ?type ?typeId 
+  	SELECT DISTINCT ?type ?_typeId 
   	{ 
   		?type rdfs:subPropertyOf* bk:conceptsRelation;
   					bk:isOndexPreferred true;
-  				  dcterms:identifier ?typeId;
+  				  dcterms:identifier ?_typeId;
   	}
   }
   		
@@ -18,6 +18,9 @@ SELECT ?from ?typeId ?to
     
   # This is taken care of by the reified relation queries (reified relations always have a direct statement too).
   MINUS {
-    ?reifiedRel bk:relFrom ?from; bk:relTo ?to; bk:relTypeRef ?type.
+    ?reifiedRel 
+    	bk:relFrom ?from;
+    	bk:relTo ?to;
+    	bk:relTypeRef ?type.
   }
 }

@@ -57,8 +57,6 @@ WHERE
 	VALUES ( ?concept ) {
 	  $resourceIris
 	} 
-
-	# TODO: datasources, accessions, evidence, attributes.
 	
   ?concept rdf:type ?conceptClass.
   		

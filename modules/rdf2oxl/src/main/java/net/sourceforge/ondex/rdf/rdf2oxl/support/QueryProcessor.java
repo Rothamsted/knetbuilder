@@ -7,6 +7,7 @@ import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import org.apache.jena.query.QuerySolution;
@@ -14,9 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.google.common.util.concurrent.UncheckedExecutionException;
+
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
 import net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlConverter;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
 
 /**
@@ -38,6 +42,9 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 	private FreeMarkerHelper templateHelper;
 		
 	private String logPrefix = "[RDF Processor]";
+	
+	private Exception executionException = null;
+
 	
 	public QueryProcessor ()
 	{
@@ -78,6 +85,13 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 			handleNewTask ( chunk [ 0 ], true );			
 			this.waitExecutor ( logPrefix + ": waiting for RDF resource processing tasks to finish" );
 
+			// Did everything go fine?
+			Exception lastEx = getExecutionException ();
+			if ( lastEx != null ) throw new UncheckedExecutionException ( 
+				"Error while processing RDF in parallel, everything stops here", 
+				lastEx 
+			);
+			
 			if ( this.trailer != null ) outWriter.write ( this.trailer );
 			
 			log.info ( "{}: all RDF resources processed", logPrefix );
@@ -91,7 +105,52 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 		}
 	}
 
+
+	@Override
+	protected List<QuerySolution> handleNewTask ( List<QuerySolution> currentDest, boolean forceFlush )
+	{
+		Exception lastEx = this.getExecutionException ();
+		if ( lastEx != null ) throw new UncheckedExecutionException ( 
+			"Error while processing RDF in parallel, everything stops here", 
+			lastEx 
+		);
+		
+		if ( !( forceFlush || this.decideNewTask ( currentDest ) ) ) return currentDest;
+
+		getExecutor ().submit ( () -> 
+		{
+			try {
+				this.getConsumer ().accept ( currentDest );
+			}
+			catch ( Exception ex ) {
+				setExecutionException ( ex );
+				String msg = format ( 
+					"Error while running RDF processing thread %s: %s", 
+					Thread.currentThread ().getName (), ex.getMessage () 
+				);
+				log.error ( msg, ex ); 
+			}
+		});
+		
+		return this.getDestinationSupplier ().get ();
+	}
 	
+	
+	protected synchronized void setExecutionException ( Exception ex ) 
+	{
+		if ( this.executionException != null ) return;
+		this.executionException = ex;
+	}
+	
+	/**
+	 * This is used by the {@link QueryProcessor#handleNewTask(List, boolean) processor}, to stop further processing
+	 * when any running thread terminates with an exception.
+	 */
+	public synchronized Exception getExecutionException () {
+		return this.executionException;
+	}
+	
+
 	public SparqlEndPointHelper getSparqlHelper ()
 	{
 		return sparqlHelper;

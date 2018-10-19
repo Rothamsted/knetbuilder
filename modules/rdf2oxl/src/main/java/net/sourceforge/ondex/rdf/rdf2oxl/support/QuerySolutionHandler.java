@@ -7,8 +7,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.apache.jena.atlas.logging.Log;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -49,16 +52,17 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 	private FreeMarkerHelper templateHelper;
 	
 	private DataPreProcessor dataPreProcessor;
-	
+		
 	private String logPrefix = "[RDF Hanlder]";
 	
+	protected Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	@Override
 	public void accept ( List<QuerySolution> sols )
 	{
-		// Get a VALUES-compliant representation of all these URIs
 		if ( sols.size () == 0 ) return;
 		
+		// Get a VALUES-compliant representation of all these URIs
 		String valuesStr = sols.parallelStream ()
 		.map ( sol -> sol.getResource ( "resourceIri" ).getURI () )
 		.map ( iri -> "( <" + iri + "> )" )
@@ -84,6 +88,7 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 	}
 
 
+	
 	public Writer getOutWriter ()
 	{
 		return outWriter;
