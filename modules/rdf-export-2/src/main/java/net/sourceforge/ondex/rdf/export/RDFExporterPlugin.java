@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.rdf.export;
 
 import static net.sourceforge.ondex.args.FileArgumentDefinition.EXPORT_FILE;
+import static net.sourceforge.ondex.rdf.export.RDFFileExporter.DEFAULT_X_LANG;
 
 import org.apache.commons.lang3.Validate;
 
@@ -59,9 +60,9 @@ public class RDFExporterPlugin extends ONDEXExport
       new StringArgumentDefinition ( 
 		    "rdfLang", 
 				"The RDF format to produce. Accepts values from either <a href = 'https://goo.gl/XVQBHi'>RDFFormat</a> " +
-				"or <a href = 'https://goo.gl/gbp6bL'>Lang</a>. The default TURTLE_BLOCKS writes Turtle in an efficient way.", 
+				"or <a href = 'https://goo.gl/gbp6bL'>Lang</a>. The default " + DEFAULT_X_LANG + " writes Turtle in an efficient way.", 
 				true, // required
-				"TURTLE_BLOCKS", // default
+				DEFAULT_X_LANG, // default
 				false // canBeMultiple
       	)
     	};

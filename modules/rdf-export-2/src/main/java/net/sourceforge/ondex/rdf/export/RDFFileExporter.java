@@ -28,6 +28,8 @@ import uk.ac.ebi.utils.threading.HackedBlockingQueue;
  */
 public class RDFFileExporter
 {
+	public static final String DEFAULT_X_LANG = "TURTLE_BLOCKS"; 
+	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	public void export ( ONDEXGraph g, final OutputStream out, final String langOrFormat )

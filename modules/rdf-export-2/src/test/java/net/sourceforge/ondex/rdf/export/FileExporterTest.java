@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.rdf.export;
 
+import static net.sourceforge.ondex.rdf.export.RDFFileExporter.DEFAULT_X_LANG;
+
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -33,7 +35,7 @@ public class FileExporterTest
 		
 		String outPath = mavenBuildPath + "test.ttl";
 		RDFFileExporter fx = new RDFFileExporter ();		
-		fx.export ( g, outPath, "TURTLE_BLOCKS" );
+		fx.export ( g, outPath, DEFAULT_X_LANG );
 		
 		// Verify the resulting RDF		
 		SparqlBasedTester tester = new SparqlBasedTester ( outPath, NamespaceUtils.asSPARQLProlog () );
@@ -54,7 +56,7 @@ public class FileExporterTest
 		ONDEXGraph g = Parser.loadOXL ( "/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/ArabidopsisKNET_201708.oxl" );
 		
 		RDFFileExporter fx = new RDFFileExporter ();
-		fx.export ( g, mavenBuildPath + "test.ttl", "TURTLE_BLOCKS" );
+		fx.export ( g, mavenBuildPath + "test.ttl", DEFAULT_X_LANG );
 	}
 
 	
@@ -66,7 +68,7 @@ public class FileExporterTest
 		ONDEXGraph g = Parser.loadOXL ( "/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/WheatKNET.oxl" );
 		
 		RDFFileExporter fx = new RDFFileExporter ();
-		fx.export ( g, mavenBuildPath + "wheat.ttl", "TURTLE_BLOCKS" );
+		fx.export ( g, mavenBuildPath + "wheat.ttl", DEFAULT_X_LANG );
 		log.info ( "DONE" );
 	}	
 	

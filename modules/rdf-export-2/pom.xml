@@ -12,7 +12,7 @@
    <groupId>net.sourceforge.ondex.modules</groupId>
    <artifactId>rdf-export-2</artifactId>
 
-   <name>ONDEX RDF Exporter</name>
+   <name>Ondex RDF Exporter</name>
    <description>
    	Tools to manage RDF export from ONDEX graphs.
    	See src/main/java/net/sourceforge/ondex/rdf/export/package-info.java for details.
@@ -105,7 +105,7 @@
 				<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
 				<scope>test</scope>
 			</dependency>
-			
+						
    </dependencies>
    
    <build>
