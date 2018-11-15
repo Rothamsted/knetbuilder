@@ -85,11 +85,6 @@ public class Neo4JExporterIT
 		
 		log.info ( "Exporting to Neo4j from the TDB" );			
 				
-//		try ( 
-//			ConfigurableApplicationContext beanCtx = new FileSystemXmlApplicationContext ( 
-//				"src/main/assembly/resources/ondex_config/config.xml" 
-//			); 
-//		)
 		MultiConfigCyLoader mloader = springContext.getBean ( MultiConfigCyLoader.class );
 		mloader.load ( tdbPath );
 	}

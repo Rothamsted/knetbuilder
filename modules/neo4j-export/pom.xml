@@ -88,28 +88,28 @@
 				The dependency plug-in pours this into target/dependency/rdf2neo-cli-VERSION, then the 
 				Assembly plugin repackage this in the final distro structure, removing the version bit.
 			-->
-	  		<plugin>
-	  			<artifactId>maven-dependency-plugin</artifactId>	  			
-	  			<executions>
-	  				<execution>
-	  					<phase>prepare-package</phase>
-	  					<goals>
-	  						<goal>unpack</goal>
-	  					</goals>
-	  					<configuration>
-		          	<artifactItems>
-		            	<artifactItem>
-								    <groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
-										<artifactId>rdf2neo-cli</artifactId>
-								    <version>0.0.1-SNAPSHOT</version>
-		               	<type>zip</type>
-		               	<excludes>**/examples/</excludes>
-		             	</artifactItem>
-		          	</artifactItems>  						
-	  					</configuration>
-	  				</execution>
-	  			</executions>
-	  		</plugin>		
+  		<plugin>
+  			<artifactId>maven-dependency-plugin</artifactId>	  			
+  			<executions>
+  				<execution>
+  					<phase>prepare-package</phase>
+  					<goals>
+  						<goal>unpack</goal>
+  					</goals>
+  					<configuration>
+	          	<artifactItems>
+	            	<artifactItem>
+							    <groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+									<artifactId>rdf2neo-cli</artifactId>
+							    <version>0.0.1-SNAPSHOT</version>
+	               	<type>zip</type>
+	               	<excludes>**/examples/</excludes>
+	             	</artifactItem>
+	          	</artifactItems>  						
+  					</configuration>
+  				</execution>
+  			</executions>
+  		</plugin>		
 
 			<!-- All details defined in the top POM -->
 			<plugin>
@@ -133,15 +133,11 @@
 				<executions>
 					<execution>
 						<id>failsafe-test</id>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
+						<goals><goal>integration-test</goal></goals>
 					</execution>
 					<execution>
 						<id>failsafe-verify</id>
-						<goals>
-							<goal>verify</goal>
-						</goals>
+						<goals><goal>verify</goal></goals>
 					</execution>
 				</executions>
 			</plugin>

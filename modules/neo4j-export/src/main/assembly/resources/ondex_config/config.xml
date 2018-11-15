@@ -10,9 +10,7 @@
     <!-- This assumes that you started from rdf2neo.sh, which defines the environment variable below, or that you
          have defined it somewhere else. -->
     <bean id = "pwd" class = "java.lang.String">
-      <constructor-arg value =
-        "#{ systemEnvironment [ 'RDF2NEO_HOME' ] + '/ondex_config/' }"
-      />
+      <constructor-arg value = "#{ systemEnvironment [ 'RDF2NEO_HOME' ] + '/ondex_config/' }" />
     </bean>
 
 

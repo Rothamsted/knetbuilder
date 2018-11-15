@@ -23,6 +23,7 @@ SELECT ?name ?value
 		VALUES ( ?name ) {
 		  (bk:evidence)
 		  (bk:relatedConcept)
+		  (bk:ondexId)
 		}	
 	}
 }

@@ -16,6 +16,7 @@ SELECT ?name ?value
 	    (rdfs:comment)
 	    (bk:prefName)
 	    (bk:altName)
+	    (bk:ondexId)
 	  }
 	}
 	UNION {
