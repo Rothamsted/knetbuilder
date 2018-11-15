@@ -118,6 +118,10 @@
                          <outputDirectory>${project.build.directory}</outputDirectory>                        
                       </artifactItem>
 	                    <artifactItem>
+	                    	 <!-- 
+	                    	 	This is a stand-alone command-line tool, which is embedded in the 
+	                    	  Mini shipped package.
+	                    	 -->
 	                       <groupId>net.sourceforge.ondex.modules</groupId>
 	                       <artifactId>neo4j-export</artifactId>
 	                       <version>${project.version}</version>
