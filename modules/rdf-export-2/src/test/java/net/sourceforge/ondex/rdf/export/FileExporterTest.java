@@ -1,7 +1,9 @@
 package net.sourceforge.ondex.rdf.export;
 
 import static net.sourceforge.ondex.rdf.export.RDFFileExporter.DEFAULT_X_LANG;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -47,6 +49,23 @@ public class FileExporterTest
 		);
 	}
 
+	@Test
+	public void testLangParam ()
+	{
+		String mavenPomPath = System.getProperty ( "maven.basedir", "." ) + "/";
+		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
+		
+		ONDEXGraph g = Parser.loadOXL ( mavenPomPath + "src/main/assembly/resources/examples/text_mining.oxl" );
+		
+		String outPath = mavenBuildPath + "test.rdf";
+		RDFFileExporter fx = new RDFFileExporter ();		
+		fx.export ( g, outPath, "RDFXML" );
+		
+		File fout = new File ( outPath );
+		
+		assertTrue ( "XML/RDF File not created!", fout.exists () );
+		assertTrue ( "XML/RDF File is empty!", fout.length () > 0 );		
+	}
 	
 	@Test @Ignore ( "Large file loading, not a real unit test" )
 	public void testkNetMinerAra ()

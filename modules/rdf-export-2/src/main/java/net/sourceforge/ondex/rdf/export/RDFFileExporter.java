@@ -10,7 +10,10 @@ import java.io.UncheckedIOException;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
+import org.apache.jena.riot.system.StreamOps;
+import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.riot.system.StreamRDFWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +52,25 @@ public class RDFFileExporter
 			xport.setConsumer ( m -> 
 			{ 
 				log.trace ( "BEGIN RDF writing thread {}", Thread.currentThread ().getName () );
-				if ( jlang.getLeft () != null )
-					StreamRDFWriter.write ( out, m.getGraph (), jlang.getLeft () );
-				else
-					StreamRDFWriter.write ( out, m.getGraph (), jlang.getRight () );
+				
+				// This should be the way to ensure output streaming in Jena.
+				// However, this recognises a few languages/formats only (those registered by StreamRDFWriter)
+				// and non-streaming formats are not recognised (e.g. RDFXML).
+				//
+				// The good news is formats like TURTLE_BLOCKS are still streamed by RDFDataMgr
+				// TODO: clarify this with Jena community.
+				
+				/*
+				StreamRDF writer = jlang.getLeft () != null 
+					? StreamRDFWriter.getWriterStream ( out, jlang.getLeft () )
+					: StreamRDFWriter.getWriterStream ( out, jlang.getRight () );
+
+				StreamOps.graphToStream ( m.getGraph (), writer );
+
+				if ( jlang.getLeft () != null ) RDFDataMgr.write ( out, m, jlang.getLeft () );
+				else RDFDataMgr.write ( out, m, jlang.getRight () );
+				*/
+				
 				log.trace ( "END RDF writing thread {}", Thread.currentThread ().getName () );
 			});
 			
@@ -71,8 +89,7 @@ public class RDFFileExporter
 	
 	public void export ( ONDEXGraph g, File file, String langOrFormat )
 	{
-		try ( OutputStream out = new BufferedOutputStream ( new FileOutputStream ( file ) ) )
-		{
+		try ( OutputStream out = new BufferedOutputStream ( new FileOutputStream ( file ) ) ) {
 			export ( g, out, langOrFormat );
 		}
 		catch ( FileNotFoundException ex ) {
@@ -85,9 +102,9 @@ public class RDFFileExporter
 		}
 	}
 	
-	public void export ( ONDEXGraph g, String path, String lang )
+	public void export ( ONDEXGraph g, String path, String langOrFormat )
 	{
-		export ( g, new File ( path ), lang );
+		export ( g, new File ( path ), langOrFormat );
 	}
 
 }
