@@ -129,7 +129,7 @@ public class ConceptParser extends AbstractEntityParser {
 		xmlr.nextTag(); // evidences
 		Collection<EvidenceType> evidences = parseEvidences(xmlr);
 
-		if (evidences == null)
+		if (evidences == null || evidences.size () == 0)
 			throw new InconsistencyException(
 					"An evidence type is missing in the XML at Concept " + pid
 							+ " can not continue with concept.");

@@ -127,7 +127,7 @@ public abstract class AbstractEntityParser implements XmlComponentParser {
 	protected Collection<EvidenceType> parseEvidences(XMLStreamReader xmlr)
 			throws XMLStreamException {
 
-		ArrayList<EvidenceType> evidences = new ArrayList<EvidenceType>(1);
+		ArrayList<EvidenceType> evidences = new ArrayList<>(1);
 		int eventType = xmlr.getEventType();
 		while (xmlr.hasNext()) {
 
