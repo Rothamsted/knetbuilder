@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+    <artifactId>modules</artifactId>
+    <groupId>net.sourceforge.ondex</groupId>
+    <version>2.1.1-SNAPSHOT</version>
+  </parent>
+
+	<groupId>net.sourceforge.ondex.modules</groupId>
+	<artifactId>rdf-export-2-cli</artifactId>
+
+	<name>Ondex RDF Exporter CLI</name>
+	<description>
+		Command-line interface for the RDF Exporter.
+		Note that this is not shipped with Ondex or Mini, if you need the CLI wrapper for the
+		RDF exporter, you've to download it from our Maven repository (TODO).</description>
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>rdf-export-2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- Use Logback as concrete logger -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+
+		<!-- 
+			Intercepts log4j and sends it to SL4J
+			This bridge is needed because we already use components based on Log4j, the ones following might be needed
+			in your application, so they're commented here. 
+		-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.4</version>
+		</dependency>			
+
+    <dependency>
+      <groupId>net.sourceforge.ondex.core</groupId>
+      <artifactId>base</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>net.sourceforge.ondex.core</groupId>
+      <artifactId>workflow-api</artifactId>
+      <version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+    </dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>tools</artifactId>
+			<version>${project.version}</version>		
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.modules</groupId>
+			<artifactId>oxl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<finalName>${project.artifactId}_${project.version}</finalName>
+
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<plugins>
+		
+			<!-- We re-use examples from the companion project -->
+  		<plugin>
+  			<artifactId>maven-dependency-plugin</artifactId>	  			
+  			<executions>
+  				<execution>
+  					<phase>generate-test-resources</phase>
+  					<goals>
+  						<goal>unpack</goal>
+  					</goals>
+  					<configuration>
+	          	<artifactItems>
+	            	<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>rdf-export-2</artifactId>
+									<version>${project.version}</version>
+	               	<type>zip</type>
+									<classifier>bundle</classifier>
+	               	<includes>**/examples/text_mining.oxl</includes>
+	             	</artifactItem>
+	          	</artifactItems>  						
+  					</configuration>
+  				</execution>
+  			</executions>
+  		</plugin>				
+
+		  <plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-surefire-plugin</artifactId>
+		    <version>2.20</version>			    
+		    <configuration>
+		      <properties>
+		        <property>
+		        	<!-- Prints out spaces and test name before/after every test method and automatically -->
+		          <name>listener</name>
+		          <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>			          
+		        </property>
+		       </properties>
+           <forkMode>always</forkMode>
+           <forkCount>1</forkCount>
+           <!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
+           <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
+           <argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>                          
+		    </configuration>
+		  </plugin>
+
+
+			<!-- The package for line commands is built through this -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archiverConfig>
+						<fileMode>0755</fileMode>
+						<directoryMode>0755</directoryMode>
+						<defaultDirectoryMode>0755</defaultDirectoryMode>
+					</archiverConfig>
+				</configuration>
+				<executions>
+        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+					<execution>
+						<id>make-assembly-packaged_with_jars</id>
+						<phase />
+					</execution>    
+					<execution>
+						<id>pkg</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>${project.artifactId}_${project.version}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<attach>true</attach>
+							<descriptors>
+								<descriptor>src/main/assembly/pkg.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
+	
+</project>
