@@ -66,10 +66,10 @@ public class RDFFileExporter
 					: StreamRDFWriter.getWriterStream ( out, jlang.getRight () );
 
 				StreamOps.graphToStream ( m.getGraph (), writer );
+				*/
 
 				if ( jlang.getLeft () != null ) RDFDataMgr.write ( out, m, jlang.getLeft () );
 				else RDFDataMgr.write ( out, m, jlang.getRight () );
-				*/
 				
 				log.trace ( "END RDF writing thread {}", Thread.currentThread ().getName () );
 			});
