@@ -17,7 +17,6 @@
       <module>ondex-desktop</module>
       <module>ondex-doc</module>
       <module>ondex-knet-builder</module>
-      <module>ondex-integration-tests</module>
    </modules>
 
    <licenses>

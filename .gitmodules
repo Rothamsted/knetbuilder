@@ -13,9 +13,6 @@
 [submodule "ondex-knet-builder"]
 	path = ondex-knet-builder
 	url = https://github.com/Rothamsted/ondex-knet-builder
-[submodule "ondex-integration-tests"]
-	path = ondex-integration-tests
-	url = https://github.com/Rothamsted/ondex-integration-tests
 [submodule "ondex-old-components"]
 	path = ondex-old-components
 	url = https://github.com/Rothamsted/ondex-old-components

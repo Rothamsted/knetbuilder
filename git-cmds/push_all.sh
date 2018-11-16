@@ -4,7 +4,7 @@ cd "$(dirname $0)/.."
 #
 echo -e "\n\n\tWARNING: run this command only after you have committed changes in ondex-full.\n"
 
-for repo in ondex-base ondex-desktop ondex-integration-tests ondex-opt ondex-base ondex-doc ondex-knet-builder ondex-old-components
+for repo in ondex-base ondex-desktop ondex-opt ondex-base ondex-doc ondex-knet-builder ondex-old-components
 do
   echo -e "\n\n$repo"
   cd "$repo"
