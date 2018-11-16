@@ -7,7 +7,6 @@ import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import org.apache.jena.query.QuerySolution;
@@ -20,7 +19,6 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
 import net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlConverter;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
-import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
 
 /**

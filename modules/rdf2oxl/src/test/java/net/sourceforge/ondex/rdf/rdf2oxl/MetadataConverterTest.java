@@ -2,26 +2,14 @@ package net.sourceforge.ondex.rdf.rdf2oxl;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.system.Txn;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.common.io.Resources;
-import com.machinezoo.noexception.Exceptions;
 
-import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
-import net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlConverter;
-import net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration;
-import net.sourceforge.ondex.rdf.rdf2oxl.support.Rdf2OxlConfiguration;
 import uk.ac.ebi.utils.xml.XPathReader;
 
 /**

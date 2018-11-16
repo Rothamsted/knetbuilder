@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
-import static java.lang.System.out;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;

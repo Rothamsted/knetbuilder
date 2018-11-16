@@ -3,17 +3,14 @@ package net.sourceforge.ondex.rdf.rdf2oxl.support;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.collections15.map.HashedMap;
 import org.apache.jena.query.QuerySolution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
-import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**
  * TODO: comment me!

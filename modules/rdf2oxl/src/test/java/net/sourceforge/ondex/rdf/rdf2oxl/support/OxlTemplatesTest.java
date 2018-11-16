@@ -2,14 +2,11 @@ package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.system.Txn;
-import org.jdom.xpath.XPath;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -18,8 +15,6 @@ import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import net.sourceforge.ondex.rdf.rdf2oxl.support.QueryProcessor;
-import net.sourceforge.ondex.rdf.rdf2oxl.support.QuerySolutionHandler;
 import uk.ac.ebi.utils.io.IOUtils;
 import uk.ac.ebi.utils.xml.XPathReader;
 

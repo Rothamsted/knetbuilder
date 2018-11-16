@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.rdf.rdf2oxl;
 
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -17,7 +16,6 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
  * TODO: comment me!

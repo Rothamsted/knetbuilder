@@ -1,16 +1,13 @@
 package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import java.io.FileWriter;
-import java.io.FilterOutputStream;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import org.apache.commons.io.output.TeeOutputStream;
 import org.apache.commons.io.output.WriterOutputStream;

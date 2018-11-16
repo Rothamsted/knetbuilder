@@ -13,12 +13,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.google.common.io.Resources;
 import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.TestUtils;
 
 /**
