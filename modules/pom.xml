@@ -56,9 +56,9 @@
       <module>validator</module>
       <module>rdf-common</module>
       <module>rdf-export-2</module>
+			<module>rdf-export-2-cli</module>
       <module>rdf2oxl</module>
       <module>neo4j-export</module>
-			<module>rdf-export-2-cli</module>
   </modules>
 
    <reporting>

@@ -36,14 +36,43 @@ public class DataConverterTest extends AbstractConverterTest
 	}
 	
 	@Test
-	public void testConcepts () throws IOException
+	public void testPubConcept () throws IOException
 	{
-		final String oxlPrefix = "/ondex/ondexdataseq/concepts";
-
+		final String oxlPrefix = "/ondex/ondexdataseq/concepts/concept[pid = '26396590']";
 		XPathReader xpath = new XPathReader ( resultOxl );
+
 		assertEquals ( "Concept PMID:26396590 not found or too many of them!", 
 			1,
-			xpath.readNodeList ( oxlPrefix + "/concept[pid = '26396590']" ).getLength ()
+			xpath.readNodeList ( oxlPrefix ).getLength ()
+		);
+
+		assertEquals ( "Concept PMID:26396590's JOURNAL_REF is wrong!", 
+			"Biotechnology for biofuels",
+			xpath.readString ( oxlPrefix +
+				"/cogds/concept_gds[attrname/idRef = 'JOURNAL_REF']/value[@java_class = 'java.lang.String']/literal" 
+			)
+		);
+	}
+
+	@Test
+	public void testAnnotation ()
+	{
+		final String oxlPrefix = "/ondex/ondexdataseq/concepts/concept[pid = 'testAnnotation']";
+		XPathReader xpath = new XPathReader ( resultOxl );
+
+		assertEquals ( "testAnnotation not found or too many of them!", 
+			1,
+			xpath.readNodeList ( oxlPrefix ).getLength ()
+		);
+		
+		assertEquals ( "testAnnotation's description is wrong!", 
+			"Just a test concept, used to annotate stuff",
+			xpath.readString ( oxlPrefix + "/description" )
+		);
+
+		assertEquals ( "testAnnotation's evidence is wrong!", 
+			"Manual curation",
+			xpath.readString ( oxlPrefix + "/evidences/evidence/fullname" )
 		);		
 	}
 	
