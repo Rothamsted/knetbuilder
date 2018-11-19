@@ -8,6 +8,8 @@ import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -28,7 +30,10 @@ import net.sourceforge.ondex.rdf.rdf2oxl.support.Resettable;
 @Component
 public class Rdf2OxlConverter
 {
-	@Autowired @Qualifier ( "itemConfigurations" )
+	/* For some reason a bean defined as util:list is only fit in here when @Resource is used, and not
+	 * @Autowired as cases below (<a href = "https://stackoverflow.com/questions/8618612">ref</a>). 
+	 */
+	@Resource ( name = "itemConfigurations" )
 	private List<ItemConfiguration> itemConfigurations;
 	
 	@Autowired @Qualifier ( "templateClassPath" )	

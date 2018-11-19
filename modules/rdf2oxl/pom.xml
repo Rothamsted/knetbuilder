@@ -61,11 +61,11 @@
 			<artifactId>spring-context</artifactId>
 		</dependency>
 		
-		<!-- dependency>
+		<dependency>
 		  <groupId>commons-beanutils</groupId>
 		  <artifactId>commons-beanutils</artifactId>
 		  <version>1.9.3</version>
-		</dependency -->		
+		</dependency>		
 		    
 		<dependency>
 			<groupId>net.sourceforge.ondex.modules</groupId>
