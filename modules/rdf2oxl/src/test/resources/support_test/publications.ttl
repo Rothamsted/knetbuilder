@@ -57,7 +57,9 @@ bkr:testAnnotation
 	bk:prefName 'Test Annotation';
 	dcterms:identifier "testAnnotation";
 	dcterms:description "Just a test concept, used to annotate stuff";
-	bk:evidence 				bkev:M	
+	bk:evidence 				bkev:M;
+	bka:EVIDENCE "Foo Evidence 1", "Foo Evidence 2";
+	bka:Score 0.90, 0.95
 .
 
 bkr:accsn_nlm_17206375  rdf:type  bk:Accession ;

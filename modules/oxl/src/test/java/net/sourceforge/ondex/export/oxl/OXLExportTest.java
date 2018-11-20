@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -36,6 +38,7 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.MetaDataFactory;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.CachedGraphWrapper;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
@@ -647,5 +650,29 @@ public class OXLExportTest
       g = Parser.loadOXL ( oxlPath );
       c = g.getConcepts ().iterator ().next ();
       Assert.assertEquals ( "Wrong reloaded attr value!", val, c.getAttribute ( an ).getValue () );      
+    }
+    
+    @Test @Ignore ( "Not a real test, just to know set export format" )
+    public void testSetAttr ()
+    {
+    	ONDEXGraph g = new MemoryONDEXGraph ( "default" );
+    	ONDEXGraphMetaData meta = g.getMetaData ();
+    	    	
+      DataSource ds = meta.createDataSource ( "fooDs", "Foo DS", "" );
+    	ConceptClass cc = meta.createConceptClass ( "FooClass", "Foo Class", "", null );
+    	EvidenceType ev = meta.createEvidenceType ( "fooEv", "Foo Evidence", "" );
+    	
+    	ONDEXConcept c = g.createConcept ( "fooConcept", "", "", ds, cc, Collections.singleton ( ev ) );
+    	AttributeName aname = meta.createAttributeName ( "fooAttr", "Foo Attribute", "", null, Set.class , null );
+    	
+    	Set<Double> aval = new HashSet<> ();
+    	//aval.add ( "Foo Value 1" );
+    	//aval.add ( "Foo Value 2" );
+    	aval.add ( 0.5 );
+    	aval.add ( 1.8 );
+    	
+    	c.createAttribute ( aname, aval, false );
+    	
+    	Export.exportOXL ( g, "target/set-export-test.xml", false, true );
     }
 }

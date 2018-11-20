@@ -1,12 +1,18 @@
 package net.sourceforge.ondex.rdf.rdf2oxl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.google.common.io.Resources;
 
@@ -27,8 +33,8 @@ public class DataConverterTest extends AbstractConverterTest
 	public static void initData () throws IOException
 	{
 		resultOxl = generateOxl (
-			"target/concepts_test.oxl", 
-			"target/concepts_test_tdb",
+			"target/data_converter_test.oxl", 
+			"target/data_converter_test_tdb",
 			Pair.of ( Resources.getResource ( "bioknet.owl" ).openStream (), "RDF/XML" ),
 			Pair.of ( Resources.getResource ( "oxl_templates_test/bk_ondex.owl" ).openStream (), "RDF/XML" ),
 			Pair.of ( Resources.getResource ( "support_test/publications.ttl" ).openStream (), "TURTLE" )
@@ -73,17 +79,36 @@ public class DataConverterTest extends AbstractConverterTest
 		assertEquals ( "testAnnotation's evidence is wrong!", 
 			"Manual curation",
 			xpath.readString ( oxlPrefix + "/evidences/evidence/fullname" )
-		);		
+		);
+				
+		NodeList evs = xpath.readNodeList ( 
+			oxlPrefix + "/cogds/concept_gds[attrname/idRef = 'EVIDENCE']" +
+			"/value[@java_class = 'net.sourceforge.ondex.export.oxl.CollectionHolder']/literal[@clazz = 'java.util.HashSet']" +
+			"/item/values[@type='xsd:string']/text()" 
+		);
+		assertNotNull ( "Multi-evidence attribute is null!", evs );
+		assertEquals ( "Multi-evidence attribute is wrong!", 2, evs.getLength () );
+		
+		List<String> evStrings = IntStream.range ( 0, 2 )
+		.mapToObj ( evs::item )
+		.map ( Node::getNodeValue )
+		.sorted ()
+		.collect ( Collectors.toList () );
+		
+		assertEquals ( "Evidence 1 is wrong!", "Foo Evidence 1", evStrings.get ( 0 ) );
+		assertEquals ( "Evidence 2 is wrong!", "Foo Evidence 2", evStrings.get ( 1 ) );
 	}
 	
 	
 	/**
+	 * TODO: Remove
+	 * 
 	 * Just a test to move {@link Rdf2OxlConfiguration} to the XML, which should have a simpler syntax.
 	 */
-	@Test
-	public void testBean ()
-	{
-		ItemConfiguration icfg = springContext.getBean ( "testConfig", ItemConfiguration.class );
-		System.out.println ( icfg.getHeader () );
-	}
+//	@Test 
+//	public void testBean ()
+//	{
+//		ItemConfiguration icfg = springContext.getBean ( "testConfig", ItemConfiguration.class );
+//		System.out.println ( icfg.getHeader () );
+//	}
 }

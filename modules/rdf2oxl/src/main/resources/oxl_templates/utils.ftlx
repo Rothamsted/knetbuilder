@@ -99,84 +99,85 @@
 		<${group_xml_tag}/>
 		<#return />
 	</#if>
-		<#if !attribute_values??>
+	<#if !attribute_values??>
 			<#global attribute_values = JsonUtils.indexJsonLdTypes ( js, "_AttributeValue" ) />
-		</#if>
-		<#--  
+	</#if>
+	<#--  
+	
+		We must group multi-value attributes too, this way:
+		attr._attribType => [ { xsd: attrib._attribXsd, lexValue: attrib._attribLexValue } ]
 		
-			We must group multi-value attributes too, this way:
-			attr._attribType => [ { xsd: attrib._attribXsd, lexValue: attrib._attribLexValue } ]
-			
-			from an object like:
-				rdf:type bk:_AttributeValue;
-		    bk:_attribType ?attribId;
-				bk:_attribLexValue ?attribLexValue;
-		    bk:_attribXsd ?attribXsd;
-		    bk:attribIsIndexed ?isAttribIndexed				
-		-->
-		<#local grouped_values = {}>
-		<#list to_seq ( e._attribute ) as attr_iri>
-		  <#local attr = attribute_values [ attr_iri ] /> 
-		  <#local entry = (grouped_values [ attr._attribType ])![] />
-		  <#-- 
-		    java.lang.Object is meaningless and probably an error (how can one rebuild a specific object out of it?
-		    so, let's get rid of such a case by falling back to the default (string). 
-		  -->
-		  <#local java_class = ( (attr.ondexRange)?? && attr.ondexRange != 'java.lang.Object' )?then ( attr.ondexRange, '' ) />
-		  <#local entry += [{ 
-		  	'xsd': attr._attribXsd, 'lex_value': attr._attribLexValue, 
-		  	'is_indexed': (attr.attribIsIndexed)!false,
-		  	'java_class': java_class 
-		  }]/>
-		  <#local grouped_values += { attr._attribType: entry } />
-		</#list>
-		<#-- 
+		from an object like:
+			rdf:type bk:_AttributeValue;
+	    bk:_attribType ?attribId;
+			bk:_attribLexValue ?attribLexValue;
+	    bk:_attribXsd ?attribXsd;
+	    bk:attribIsIndexed ?isAttribIndexed				
+	-->
+	<#local grouped_values = {}>
+	<#list to_seq ( e._attribute ) as attr_iri>
+	  <#local attr = attribute_values [ attr_iri ] /> 
+	  <#local entry = (grouped_values [ attr._attribType ])![] />
+	  <#-- 
+	    java.lang.Object is meaningless and probably an error (how can one rebuild a specific object out of it?
+	    so, let's get rid of such a case by falling back to the default (string). 
+	  -->
+	  <#local java_class = ( (attr.ondexRange)?? && attr.ondexRange != 'java.lang.Object' )?then ( attr.ondexRange, '' ) />
+	  <#local entry += [{ 
+	  	'xsd': attr._attribXsd, 'lex_value': attr._attribLexValue, 
+	  	'is_indexed': (attr.attribIsIndexed)!false,
+	  	'java_class': java_class 
+	  }]/>
+	  <#local grouped_values += { attr._attribType: entry } />
+	</#list>
+	<#-- 
+	
+		OK, ready for rendering now
 		
-			OK, ready for rendering now
-			
-		-->
-		<${group_xml_tag}>
-			<#list grouped_values as attr_type, attr_entries>
-				<${entry_xml_tag}>
-					<attrname><idRef>${attr_type}</idRef></attrname>
-					<#-- java.util.* is usually a collection, which we translate always as set -->
-					<#if attr_entries?size == 1 && !((attr_entries [ 0 ].java_class)!'')?starts_with ( "java.util." )>
-						<#-- 
-							Single value goes into a value element
-						-->
-						<#local attr_entry = attr_entries [ 0 ] />
-						<#local attr_java_val = XsdMapper.javaValueWithDefault ( attr_entry.xsd, attr_entry.lex_value ) />
-						<#local attr_java_class = (attr_entry.java_class != '')?then (
-							attr_entry.java_class, attr_java_val.getClass().getCanonicalName() 
-						)>
-						<value java_class="${attr_java_class}">
-							<literal>${attr_entry.lex_value}</literal>
-						</value>		
-					<#else>
-						<#-- 
-							Multi-values need to be wrapped into an holder, we support set holder only, original holders of
-						  other type (list, map) are lost 
-						-->
-				    <value java_class="net.sourceforge.ondex.export.oxl.SetHolder">
-				      <literal>
-				        <item>
-				        	<#list attr_entries as attr_entry>
-				          <set 
-				          	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				          	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-				          	xsi:type="${attr_entry.xsd?replace ( "http://www.w3.org/2001/XMLSchema#", "xsd:")}">${attr_entry.lex_value}</set>
-				          </#list>
-				        </item>
-				      </literal>
-				    </value>
-					</#if>
-				  <#-- 
-				  	Since they are defined at the attr type level, they're the same for all values.
-				  	We report this attribute to the template only when it's true.
-				  	We have to report false values too, since the OXL parser makes this attrib mandatory.
-				  -->
-						<doindex>${(attr_entries [ 0 ].is_indexed)?then('true','false')}</doindex>
-				</${entry_xml_tag}>
-			</#list><#-- grouped_values -->
-		</${group_xml_tag}>
+	-->
+	<${group_xml_tag}>
+		<#list grouped_values as attr_type, attr_entries>
+			<${entry_xml_tag}>
+				<attrname><idRef>${attr_type}</idRef></attrname>
+				<#-- java.util.* is usually a collection, which we translate always as set -->
+				<#if attr_entries?size == 1 && !((attr_entries [ 0 ].java_class)!'')?starts_with ( "java.util." )>
+					<#-- 
+						Single value goes into a value element
+					-->
+					<#local attr_entry = attr_entries [ 0 ] />
+					<#local attr_java_val = XsdMapper.javaValueWithDefault ( attr_entry.xsd, attr_entry.lex_value ) />
+					<#local attr_java_class = (attr_entry.java_class != '')?then (
+						attr_entry.java_class, attr_java_val.getClass().getCanonicalName() 
+					)>
+					<value java_class="${attr_java_class}">
+						<literal>${attr_entry.lex_value}</literal>
+					</value>		
+				<#else>
+					<#-- 
+						Multi-values need to be wrapped into an holder, we support set holder only, original holders of
+					  other type (list, map) are lost 
+					-->
+			    <value java_class="net.sourceforge.ondex.export.oxl.CollectionHolder">
+			      <literal clazz="java.util.HashSet">
+			        <item>
+				        <#list attr_entries as attr_entry>
+			        	<values
+			        		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			        		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			        		xsi:type="${attr_entry.xsd?replace ( "http://www.w3.org/2001/XMLSchema#", "xsd:")}"
+			        	>${attr_entry.lex_value}</values>
+			          </#list>
+			        </item>
+			      </literal>
+			    </value>
+				</#if>
+			  <#-- 
+			  	Since they are defined at the attr type level, they're the same for all values.
+			  	We report this attribute to the template only when it's true.
+			  	We have to report false values too, since the OXL parser makes this attrib mandatory.
+			  -->
+					<doindex>${(attr_entries [ 0 ].is_indexed)?then('true','false')}</doindex>
+			</${entry_xml_tag}>
+		</#list><#-- grouped_values -->
+	</${group_xml_tag}>
 </#macro>

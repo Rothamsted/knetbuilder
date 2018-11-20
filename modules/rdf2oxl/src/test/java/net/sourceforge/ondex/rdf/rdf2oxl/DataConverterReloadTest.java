@@ -5,6 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.BeforeClass;
@@ -17,8 +21,11 @@ import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 
 /**
  * TODO: comment me!
@@ -33,14 +40,13 @@ public class DataConverterReloadTest extends AbstractConverterReloadTest
 	public static void initData () throws IOException
 	{
 		resultGraph = loadOxl (
-			"target/concepts_reload_test.xml", 
-			"target/concepts_reload_test_tdb",
+			"target/data_reload_test.xml", 
+			"target/data_reload_test_tdb",
 			Pair.of ( Resources.getResource ( "bioknet.owl" ).openStream (), "RDF/XML" ),
 			Pair.of ( Resources.getResource ( "oxl_templates_test/bk_ondex.owl" ).openStream (), "RDF/XML" ),
 			Pair.of ( Resources.getResource ( "support_test/publications.ttl" ).openStream (), "TURTLE" )
 		);
 	}
-	
 	
 	@Test
 	public void testConceptsReload ()
@@ -58,6 +64,30 @@ public class DataConverterReloadTest extends AbstractConverterReloadTest
 		assertNotNull ( "Test Concept not found!", concept );
 	}
 	
+	@Test
+	public void testReloadedEvidence ()
+	{
+		ConceptClass cc = resultGraph.getMetaData ().getConceptClass ( "Publication" );
+		assertNotNull ( "Test Class not found!", cc );
+				
+		ONDEXConcept concept = resultGraph
+		.getConceptsOfConceptClass ( cc )
+		.stream ()
+		.filter ( c -> "26396590".equals ( c.getPID () ) )
+		.findFirst ()
+		.orElse ( null );
+		
+		assertNotNull ( "Test Concept not found!", concept );
+		
+		Set<EvidenceType> evs = concept.getEvidence ();
+		assertNotNull ( "Test Evidence not found (null)", evs );
+		assertEquals ( "Test Evidence cardinality wrong", 1, evs.size () );
+		
+		EvidenceType ev = evs.iterator ().next ();
+		
+		assertEquals ( "Test Evidence label is wrong!", "Imported from database", ev.getFullname () );
+		assertEquals ( "Test Evidence description is wrong!", "imported from database", ev.getDescription () );
+	}	
 	
 	@Test
 	public void testReloadedAccession ()
@@ -119,4 +149,138 @@ public class DataConverterReloadTest extends AbstractConverterReloadTest
 		assertNotNull ( "Test Attribute not found!", attr );
 		assertEquals ( "Test Attribute's value is wrong!", "Biotechnology for biofuels", attr.getValue () );
 	}
+	
+	@Test
+	public void testReloadedNumericAttributes ()
+	{
+		ONDEXGraphMetaData meta = resultGraph.getMetaData ();
+		
+		ConceptClass cc = meta.getConceptClass ( "Publication" );
+		assertNotNull ( "Test Class not found!", cc );
+
+		ONDEXConcept concept = resultGraph
+		.getConceptsOfConceptClass ( cc )
+		.stream ()
+		.filter ( c -> "26396590".equals ( c.getPID () ) )
+		.findFirst ()
+		.orElse ( null );
+		
+		assertNotNull ( "Test Concept not found!", concept );
+
+		AttributeName aname = meta.getAttributeName ( "PVALUE" );
+
+		assertNotNull ( "Test Attribute Name not found!", aname );
+
+		Attribute attr = concept.getAttribute ( aname );
+		assertNotNull ( "Test Attribute not found!", attr );
+		// type is in the metadata definition for this attribute.
+		assertEquals ( "Test Attribute's value is wrong!", 0.001f, attr.getValue () );
+		
+		aname = meta.getAttributeName ( "YEAR" );
+		assertNotNull ( "YEAR Attribute Type not found!", aname );
+		attr = concept.getAttribute ( aname );
+		assertNotNull ( "YEAR not found!", attr );
+		// Unspecified attribute/value type, should fall into BigDecimal
+		assertEquals ( "YEAR's value is wrong!", 2015, attr.getValue () );
+	}	
+	
+	@Test
+	public void testReloadedAttributeSet ()
+	{
+		ONDEXGraphMetaData meta = resultGraph.getMetaData ();
+		
+		ConceptClass cc = meta.getConceptClass ( "Annotation" );
+		assertNotNull ( "Test Class not found!", cc );
+
+		ONDEXConcept concept = resultGraph
+		.getConceptsOfConceptClass ( cc )
+		.stream ()
+		.filter ( c -> "testAnnotation".equals ( c.getPID () ) )
+		.findFirst ()
+		.orElse ( null );
+		
+		assertNotNull ( "Test Concept not found!", concept );
+
+		AttributeName aname = meta.getAttributeName ( "EVIDENCE" );
+
+		assertNotNull ( "Test Attribute Name not found!", aname );
+
+		Attribute attr = concept.getAttribute ( aname );
+		assertNotNull ( "Test Attribute not found!", attr );
+		
+		Object aval = attr.getValue ();
+		assertNotNull ( "Evidences Attribute not found!", aval);
+		assertTrue ( "Evidences Attribute isn't a set!", aval instanceof Set );
+
+		@SuppressWarnings ( "unchecked" )
+		SortedSet<String> evs = new TreeSet<> ( (Set<String>) aval );
+		
+		assertEquals ( "Eveidences Attribute has wrong size!", 2, evs.size () );
+
+		assertEquals ( "Evidence 1 is wrong!", "Foo Evidence 1", evs.first () );
+		assertEquals ( "Evidence 2 is wrong!", "Foo Evidence 2", evs.last () );
+	}	
+
+	
+	@Test
+	public void testReloadedNumericAttributeSet ()
+	{
+		ONDEXGraphMetaData meta = resultGraph.getMetaData ();
+		
+		ConceptClass cc = meta.getConceptClass ( "Annotation" );
+		assertNotNull ( "Test Class not found!", cc );
+
+		ONDEXConcept concept = resultGraph
+		.getConceptsOfConceptClass ( cc )
+		.stream ()
+		.filter ( c -> "testAnnotation".equals ( c.getPID () ) )
+		.findFirst ()
+		.orElse ( null );
+		
+		assertNotNull ( "Test Concept not found!", concept );
+
+		AttributeName aname = meta.getAttributeName ( "Score" );
+
+		assertNotNull ( "Test Attribute Name not found!", aname );
+
+		Attribute attr = concept.getAttribute ( aname );
+		assertNotNull ( "Test Attribute not found!", attr );
+		
+		Object aval = attr.getValue ();
+		assertNotNull ( "Evidences Attribute not found!", aval);
+		assertTrue ( "Evidences Attribute isn't a set!", aval instanceof Set );
+
+		@SuppressWarnings ( "unchecked" )
+		SortedSet<BigDecimal> evs = new TreeSet<> ( (Set<BigDecimal>) aval );
+		
+		assertEquals ( "Eveidences Attribute has wrong size!", 2, evs.size () );
+
+		assertEquals ( "Evidence 1 is wrong!", 0.90, evs.first ().doubleValue (), 0.001 );
+		assertEquals ( "Evidence 2 is wrong!", 0.95, evs.last ().doubleValue (), 0.001 );
+	}	
+		
+	@Test
+	public void testReloadedRelation ()
+	{
+		ONDEXGraphMetaData meta = resultGraph.getMetaData ();
+		
+		RelationType rt = meta.getRelationType ( "related" );
+		assertNotNull ( "Test Relation Type not found!", rt );
+						
+		Set<ONDEXRelation> rels = resultGraph.getRelationsOfRelationType ( rt );
+		assertNotNull ( "Test Relation not found (null result)!", rels );
+		assertNotNull ( "Test Relation not found (wrong size result)!", rels.size () == 1 );
+				
+		ONDEXRelation rel = rels.iterator ().next ();
+
+		assertEquals ( "From is wrong!", "26396590", rel.getFromConcept ().getPID () );
+		assertEquals ( "To is wrong!", "17206375", rel.getToConcept ().getPID () );
+		
+		AttributeName aname = meta.getAttributeName ( "Score" );
+		assertNotNull ( "Score Attribute Type not found!", aname );
+		Attribute attr = rel.getAttribute ( aname );
+		assertNotNull ( "Score not found!", attr );
+		// Unspecified attribute/value type, should fallback to BigDecimal
+		assertEquals ( "Score value is wrong!", BigDecimal.valueOf ( 0.95 ), attr.getValue () );
+	}	
 }
