@@ -36,4 +36,5 @@ public class Rdf2OxlConfiguration
 		
 		return result;
 	}
+	
 }

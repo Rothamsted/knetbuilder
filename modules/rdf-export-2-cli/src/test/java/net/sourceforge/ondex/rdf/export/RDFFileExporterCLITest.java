@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.rdf.export;
 
-import static java.lang.System.getProperty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

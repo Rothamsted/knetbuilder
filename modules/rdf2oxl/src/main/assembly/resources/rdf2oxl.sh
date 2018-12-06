@@ -1,10 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 # This is the Bash Launcher.
 # 
 
 # These are passed to the JVM. they're appended, so that you can predefine it from the shell
-# You need a lot of memory with big OXLs
 OPTS="$OPTS -Xms2G -Xmx4G"
 
 # We always work with universal text encoding.
@@ -24,24 +23,28 @@ OPTS="$OPTS -Dfile.encoding=UTF-8"
 #
 ###
 
-cd "$(dirname $0)"
-MYDIR="$(pwd)"
+export WORK_DIR="$(pwd)"
+if [ "$RDF2NEO_HOME" == "" ]; then
+	cd "$(dirname $0)"
+	export RDF2NEO_HOME="$(pwd)"
+	cd "$WORK_DIR"
+fi
 
 # Additional .jar files or other CLASSPATH directories can be set with this.
 # (see http://kevinboone.net/classpath.html for details)  
-export CLASSPATH="$CLASSPATH:$MYDIR:$MYDIR/lib/*"
+export CLASSPATH="$CLASSPATH:$RDF2NEO_HOME:$RDF2NEO_HOME/lib/*"
 
 # See here for an explanation about ${1+"$@"} :
 # http://stackoverflow.com/questions/743454/space-in-java-command-line-arguments 
 
 java \
-	$OPTS net.sourceforge.ondex.rdf.export.RDFFileExporterCLI ${1+"$@"}
+	$OPTS net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlCLI ${1+"$@"}
 
-ex_code=$?
+EXCODE=$?
 
 # We assume stdout is for actual output, that might be pipelined to some other command, the rest (including logging)
 # goes to stderr.
 # 
 echo Java Finished. Quitting the Shell Too. >&2
 echo >&2
-exit $ex_code
+exit $EXCODE

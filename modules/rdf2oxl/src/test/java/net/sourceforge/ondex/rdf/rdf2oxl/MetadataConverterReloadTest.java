@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.function.Function;
 
@@ -13,10 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.common.io.Resources;
-
 import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.MetaData;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.RelationType;
 
@@ -35,8 +33,8 @@ public class MetadataConverterReloadTest extends AbstractConverterReloadTest
 		resultGraph = loadOxl (
 			"target/metadata_reload_test.xml", 
 			"target/metadata_reload_test_tdb",
-			Pair.of ( Resources.getResource ( "bioknet.owl" ).openStream (), "RDF/XML" ),
-			Pair.of ( Resources.getResource ( "oxl_templates_test/bk_ondex.owl" ).openStream (), "RDF/XML" )
+			Pair.of ( new FileInputStream ( "src/main/assembly/resources/data/bioknet.owl" ), "RDF/XML" ),
+			Pair.of ( new FileInputStream ( "src/main/assembly/resources/data/bk_ondex.owl" ), "RDF/XML" )
 		);
 	}
 	

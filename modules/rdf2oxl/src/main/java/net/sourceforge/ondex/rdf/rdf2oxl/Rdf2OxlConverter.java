@@ -1,19 +1,29 @@
 package net.sourceforge.ondex.rdf.rdf2oxl;
 
 import static java.lang.String.format;
+import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
 import static uk.ac.ebi.utils.io.IOUtils.readResource;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.io.output.WriterOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.QueryProcessor;
@@ -56,7 +66,7 @@ public class Rdf2OxlConverter
 	private List<Resettable> toBeResetComponents;
 	
 	
-	public void convert ( Writer oxlOut )
+	protected void convertRaw ( Writer oxlOut )
 	{		
 		if ( this.toBeResetComponents != null )
 			toBeResetComponents.forEach ( Resettable::reset );
@@ -103,5 +113,80 @@ public class Rdf2OxlConverter
 				);
 			}				
 		}
+	}
+	
+	
+	public void convert ( Writer oxlOut, boolean compress )
+	{
+		try	{
+			if ( compress ) oxlOut = new OutputStreamWriter ( new GZIPOutputStream ( 
+				new WriterOutputStream ( oxlOut, "UTF-8" ), (int) 1E6 ) 
+			); 
+			convertRaw ( oxlOut );
+		}
+		catch ( IOException ex ) {
+			throwEx ( UncheckedIOException.class, ex, 
+				"I/O Error while running compresses rdf2oxl: %s", ex.getMessage () 
+			);
+		}
+	}
+		
+	public void convert ( File file, boolean compress )
+	{
+		try ( Writer w = new FileWriter ( file ); ) {
+			convert ( w, compress );
+		}
+		catch ( IOException ex ) {
+			throwEx ( UncheckedIOException.class, ex, "I/O Error while running rdf2oxl: %s", ex.getMessage () );
+		}
+	}
+	
+	public void convert ( String oxlPath, boolean compress )
+	{
+		try {
+			convert ( new File ( oxlPath ), compress );
+		}
+		catch ( UncheckedIOException ex ) {
+			throwEx ( UncheckedIOException.class, ex, "I/O Error while making OXL file '%s': %s", oxlPath, ex.getMessage () );
+		}
+	}
+
+	
+	public static ConfigurableApplicationContext getConverterConfiguration () {
+		return getConverterConfiguration ( null );
+	}
+	
+	public static ConfigurableApplicationContext getConverterConfiguration ( String springXmlPath )
+	{
+		return springXmlPath == null
+				? new ClassPathXmlApplicationContext ( "default_beans.xml" )
+				: new FileSystemXmlApplicationContext ( springXmlPath );
+	}
+	
+	public static void convert ( ConfigurableApplicationContext springContext, String tdbPath, String oxlPath, boolean compress ) 
+	{
+		TDBEndPointHelper sparqlHelper = springContext.getBean ( TDBEndPointHelper.class );
+		sparqlHelper.open ( tdbPath );
+
+		Rdf2OxlConverter converter = springContext.getBean ( Rdf2OxlConverter.class );
+		converter.convert ( oxlPath, compress );
+	}
+
+	public static void convert ( String springXmlPath, String tdbPath, String oxlPath, boolean compress ) 
+	{
+		convert ( getConverterConfiguration ( springXmlPath ), tdbPath, oxlPath, compress );
+	}
+
+	public static void convert ( String springXmlPath, String tdbPath, String oxlPath ) 
+	{
+		convert ( getConverterConfiguration ( springXmlPath ), tdbPath, oxlPath, true );
+	}
+
+	public static void convert ( String tdbPath, String oxlPath, boolean compress ) {
+		convert ( getConverterConfiguration (), tdbPath, oxlPath, compress );
+	}
+
+	public static void convert ( String tdbPath, String oxlPath ) {
+		convert ( tdbPath, oxlPath, true );
 	}
 }

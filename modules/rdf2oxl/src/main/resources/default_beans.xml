@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd"
 >
 
-	<description><![CDATA[]]></description>
+	<description><![CDATA[The Base Spring configuration for rdf2oxl.]]></description>
 
 	<!-- 
 	  Just leave this here. It means some components are got from the Java source files, by means of
@@ -19,7 +19,6 @@
 
 	<!-- This is the only Endpoint helper for now. -->
 	<bean class = "info.marcobrandizi.rdfutils.jena.TDBEndPointHelper" autowire-candidate = "true" />
-
 
 	<!-- 
 	  A configuration item corresponds to a particular section of the OXL. It contains attributes like 

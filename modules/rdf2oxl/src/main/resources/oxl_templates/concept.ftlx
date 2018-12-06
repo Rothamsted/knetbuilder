@@ -1,6 +1,6 @@
 <#include "graph_header.ftlx">
 <#include "utils.ftlx">
-<#--  include "dump_util.ftl" -->
+<#-- include "dump_util.ftl" -->
 <#macro render_name name is_preferred>
 						<concept_name>
 							<name>${name}</name>
@@ -15,8 +15,15 @@
 			<coaccessions>
 				<#list to_seq ( concept._accession ) as accession_iri>
 					<#if !accessions??>
-						<#global accessions = JsonUtils.indexJsonLdTypes ( js, "Accession" ) />
+						<#global accessions = JsonUtils.indexJsonLdTypes ( js, "Accession", "bk:Accession" ) />
 					</#if>
+					<#-- 
+					<#if !(accessions [ accession_iri ])??>
+						<!-- ACCESSIONS - ->
+						<@dump accessions />
+						<#stop "Cannot find accession '" + accession_iri + "'" />
+					</#if>
+					-->
 					<#assign accession = accessions [ accession_iri ] />
 					<concept_accession>
 						<accession>${accession.identifier}</accession>
@@ -30,7 +37,7 @@
 <#list js as concept>
 	<#if !concept._conceptClassId??><#continue /></#if>
 			<concept>
-				<id>${conceptIds [ NamespaceUtils.iri ( concept [ '@id' ] ) ]}</id>
+				<id>${conceptIds [ NamespaceUtils.iriAny ( concept [ '@id' ] ) ]}</id>
 				<pid>${(concept.identifier)!''}</pid>
 			<#noautoesc>
 				<annotation><![CDATA[${(concept.comment)!''}]]></annotation>

@@ -43,8 +43,8 @@ public class OxlTemplatesTest
 			Txn.executeWrite ( ds, Exceptions.sneak ().runnable ( () ->
 			{
 				Model m = ds.getDefaultModel ();
-				m.read ( Resources.getResource ( "bioknet.owl" ).openStream (), "RDF/XML" );
-				m.read ( Resources.getResource ( "oxl_templates_test/bk_ondex.owl" ).openStream (), "RDF/XML" );
+				m.read ( "src/main/assembly/resources/data/bioknet.owl" );
+				m.read ( "src/main/assembly/resources/data/bk_ondex.owl" );
 			}));
 									
 			QuerySolutionHandler handler = (QuerySolutionHandler) ctx.getBean ( "resourceHandler" );

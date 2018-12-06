@@ -12,7 +12,7 @@
   
   That is, filters objects with @type corresponding the classId parameter and returns 
   a hash of @id => object.  
--->
+-- TODO: REMOVE>
 <#function jsld_instances json_ld classId>
 	<#local result = {}>
 	<#list json_ld as js_obj>
@@ -20,7 +20,7 @@
 		<#local result += { js_obj [ '@id' ]: js_obj }>
 	</#list>
 	<#return result />
-</#function>
+</#function -->
 <#-- 
 	
   Builds an index out of an object sequence
@@ -61,7 +61,7 @@
 	<#assign context_ids = "" />
 	<#assign sep = "" />
 	<#list to_seq ( e.relatedConcept ) as related_concept_iri>
-		<#assign context_ids += sep + conceptIds [ NamespaceUtils.iri ( related_concept_iri ) ] />
+		<#assign context_ids += sep + conceptIds [ NamespaceUtils.iriAny ( related_concept_iri ) ] />
 		<#assign sep = "," />
 	</#list>
 					<context>${context_ids}</context>
@@ -72,10 +72,10 @@
 		<#return />
 	</#if>
 	<#if !evidence_types??>
-		<#global evidence_types = JsonUtils.indexJsonLdTypes ( js, "EvidenceType" ) />
+		<#global evidence_types = JsonUtils.indexJsonLdTypes ( js, "EvidenceType", "bk:EvidenceType" ) />
 	</#if>
 						<evidences>
-	<#-- More mess in the OXL parser: it doesn't support idRef for evidences... -->
+							<#-- More mess in the OXL parser: it doesn't support idRef for evidences... -->
 							<#list to_seq ( e.evidence ) as evidence_iri>
 								<evidence>
 									<@render_metadata evidence_types [ evidence_iri ] />
@@ -85,7 +85,7 @@
 </#macro>
 <#macro render_data_source e>
 		<#if !data_sources??>
-			<#global data_sources = JsonUtils.indexJsonLdTypes ( js, "DataSource" ) />
+			<#global data_sources = JsonUtils.indexJsonLdTypes ( js, "DataSource", "bk:DataSource" ) />
 		</#if>
 			<#assign ds_id = (e.dataSource)!'unknown'/>
 			<#if ds_id != 'unknown'>
@@ -100,7 +100,7 @@
 		<#return />
 	</#if>
 	<#if !attribute_values??>
-			<#global attribute_values = JsonUtils.indexJsonLdTypes ( js, "_AttributeValue" ) />
+			<#global attribute_values = JsonUtils.indexJsonLdTypes ( js, "_AttributeValue", "bk:_AttributeValue" ) />
 	</#if>
 	<#--  
 	
@@ -149,27 +149,22 @@
 					<#local attr_java_class = (attr_entry.java_class != '')?then (
 						attr_entry.java_class, attr_java_val.getClass().getCanonicalName() 
 					)>
-					<value java_class="${attr_java_class}">
-						<literal>${attr_entry.lex_value}</literal>
-					</value>		
+					<#-- DO NOT BREAK IT INTO MULTIPLE LINES. The OXL parser has issues with attribute values -->
+					<value java_class="${attr_java_class}"><literal><![CDATA[${attr_entry.lex_value}]]></literal></value>
 				<#else>
 					<#-- 
 						Multi-values need to be wrapped into an holder, we support set holder only, original holders of
 					  other type (list, map) are lost 
 					-->
-			    <value java_class="net.sourceforge.ondex.export.oxl.CollectionHolder">
-			      <literal clazz="java.util.HashSet">
-			        <item>
-				        <#list attr_entries as attr_entry>
-			        	<values
+					<#-- DO NOT CHANGE THE FORMATTING! The OXL parser has issues with attribute values -->
+			    <value java_class="net.sourceforge.ondex.export.oxl.CollectionHolder"
+			      ><literal clazz="java.util.HashSet"><item
+				        ><#list attr_entries as attr_entry><values
 			        		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 			        		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			        		xsi:type="${attr_entry.xsd?replace ( "http://www.w3.org/2001/XMLSchema#", "xsd:")}"
-			        	>${attr_entry.lex_value}</values>
-			          </#list>
-			        </item>
-			      </literal>
-			    </value>
+			        	><![CDATA[${attr_entry.lex_value}]]></values
+			          ></#list></item></literal></value>
 				</#if>
 			  <#-- 
 			  	Since they are defined at the attr type level, they're the same for all values.

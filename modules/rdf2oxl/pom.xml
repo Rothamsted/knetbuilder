@@ -110,21 +110,7 @@
 	<build>
 
 		<plugins>
-		
-			<!-- We have some test files that we reuse in the mini-integration-tests -->				      
-			<!--plugin>
-			  <groupId>org.apache.maven.plugins</groupId>
-			  <artifactId>maven-jar-plugin</artifactId>
-			  <executions>
-			    <execution>
-			      <goals>
-			        <goal>test-jar</goal>
-			      </goals>
-			    </execution>
-			  </executions>
-			</plugin -->
 
-				
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -146,25 +132,34 @@
 			</plugin>
 
 
+			<!-- The package for line commands is built through this -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>${maven.assembly.plugin.version}</version>
+				<configuration>
+					<archiverConfig>
+						<fileMode>0755</fileMode>
+						<directoryMode>0755</directoryMode>
+						<defaultDirectoryMode>0755</defaultDirectoryMode>
+					</archiverConfig>
+				</configuration>
 				<executions>
-					<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
 					<execution>
-						<id>make-assembly-packaged_with_jars</id>
+						<id>make-cli-distro</id>
 						<phase />
-					</execution>
-
+					</execution>    
 					<execution>
-						<id>assembly-bundle</id>
+						<id>pkg</id>
 						<phase>package</phase>
 						<goals>
-							<goal>attached</goal>
+							<goal>single</goal>
 						</goals>
 						<configuration>
+							<finalName>${project.artifactId}-${project.version}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<attach>true</attach>
 							<descriptors>
-								<descriptor>src/main/assembly/bundle.xml</descriptor>
+								<descriptor>src/main/assembly/pkg.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>

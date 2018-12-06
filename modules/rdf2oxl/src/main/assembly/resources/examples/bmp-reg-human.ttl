@@ -1,0 +1,594 @@
+@prefix schema: <http://schema.org/> .
+@prefix :      <http://purl.obolibrary.org/obo/go.owl#> .
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix oboInOwl: <http://www.geneontology.org/formats/oboInOwl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix go:    <http://purl.obolibrary.org/obo/go#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix bkr:   <http://www.ondex.org/bioknet/resources/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix bk:    <http://www.ondex.org/bioknet/terms/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix bp:    <http://www.biopax.org/release/biopax-level3.owl#> .
+@prefix sd:    <http://www.w3.org/ns/sparql-service-description#> .
+@prefix bkev:  <http://www.ondex.org/bioknet/terms/evidences/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix terms: <http://www.geneontology.org/formats/oboInOwl#http://purl.org/dc/terms/> .
+@prefix bkds:  <http://www.ondex.org/bioknet/terms/dataSources/> .
+@prefix faldo: <http://biohackathon.org/resource/faldo#> .
+@prefix bka:   <http://www.ondex.org/bioknet/terms/attributes/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+bkr:BMPR1A_acc  a           bk:Accession ;
+        dcterms:identifier  "BMPR1A"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:SMAD4  a                bk:Protein ;
+        dc:identifier       bkr:SMAD4_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "SMAD4"^^<xsd:string> .
+
+bkr:NOG_acc  a              bk:Accession ;
+        dcterms:identifier  "NOG"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:RUNX2  a                bk:Protein ;
+        dc:identifier       bkr:RUNX2_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "RUNX2"^^<xsd:string> .
+
+bkr:SMURF1  a               bk:Protein ;
+        dc:identifier       bkr:SMURF1_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "SMURF1"^^<xsd:string> .
+
+bkr:BMP2  a                 bk:Protein ;
+        dc:identifier       bkr:BMP2_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "BMP2"^^<xsd:string> .
+
+bkr:TOB1_acc  a             bk:Accession ;
+        dcterms:identifier  "TOB1"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:TOB2  a                 bk:Protein ;
+        dc:identifier       bkr:TOB2_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "TOB2"^^<xsd:string> .
+
+bkr:SMAD4_acc  a            bk:Accession ;
+        dcterms:identifier  "SMAD4"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:SMAD1_acc  a            bk:Accession ;
+        dcterms:identifier  "SMAD1"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:RUNX2_acc  a            bk:Accession ;
+        dcterms:identifier  "RUNX2"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:BMPR2  a                bk:Protein ;
+        dc:identifier       bkr:BMPR2_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "BMPR2"^^<xsd:string> .
+
+bkr:TOB1  a                 bk:Protein ;
+        dc:identifier       bkr:TOB1_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "TOB1"^^<xsd:string> .
+
+bkr:BMP2_acc  a             bk:Accession ;
+        dcterms:identifier  "BMP2"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:SMAD1  a                bk:Protein ;
+        dc:identifier       bkr:SMAD1_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "SMAD1"^^<xsd:string> .
+
+bkr:BMPR1B  a               bk:Protein ;
+        dc:identifier       bkr:BMPR1B_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "BMPR1B"^^<xsd:string> .
+
+bkr:SMAD6  a                bk:Protein ;
+        dc:identifier       bkr:SMAD6_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "SMAD6"^^<xsd:string> .
+
+bkr:BMPR2_acc  a            bk:Accession ;
+        dcterms:identifier  "BMPR2"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:SMAD6_acc  a            bk:Accession ;
+        dcterms:identifier  "SMAD6"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:BMPR1A  a               bk:Protein ;
+        dc:identifier       bkr:BMPR1A_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "BMPR1A"^^<xsd:string> .
+
+bkr:TOB2_acc  a             bk:Accession ;
+        dcterms:identifier  "TOB2"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:SMURF1_acc  a           bk:Accession ;
+        dcterms:identifier  "SMURF1"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+bkr:BMPR1B_acc  a           bk:Accession ;
+        dcterms:identifier  "BMPR1B"^^<xsd:string> ;
+        bk:dataSource       bkds:UNIPROTKB .
+
+<http://www.wikipathways.org/id1>
+        a            bk:Path ;
+        bk:evidence  bkev:IMPD ;
+        bk:prefName  "Bone Morphogenic Protein (BMP) Signalling and Regulation"^^<xsd:string> .
+
+bkr:NOG  a                  bk:Protein ;
+        dc:identifier       bkr:NOG_acc ;
+        bk:participates_in  <http://www.wikipathways.org/id1> ;
+        bk:prefName         "NOG"^^<xsd:string> .
+@prefix schema: <http://schema.org/> .
+@prefix :      <http://purl.obolibrary.org/obo/go.owl#> .
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix oboInOwl: <http://www.geneontology.org/formats/oboInOwl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix go:    <http://purl.obolibrary.org/obo/go#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix bkr:   <http://www.ondex.org/bioknet/resources/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix bk:    <http://www.ondex.org/bioknet/terms/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix bp:    <http://www.biopax.org/release/biopax-level3.owl#> .
+@prefix sd:    <http://www.w3.org/ns/sparql-service-description#> .
+@prefix bkev:  <http://www.ondex.org/bioknet/terms/evidences/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix terms: <http://www.geneontology.org/formats/oboInOwl#http://purl.org/dc/terms/> .
+@prefix bkds:  <http://www.ondex.org/bioknet/terms/dataSources/> .
+@prefix faldo: <http://biohackathon.org/resource/faldo#> .
+@prefix bka:   <http://www.ondex.org/bioknet/terms/attributes/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+obo:GO_0044464_acc  a       bk:Accession ;
+        dcterms:identifier  "GO_0044464" ;
+        bk:dataSource       bkds:GO .
+
+obo:GO_0043234  a      bk:GeneOntologyTerms ;
+        dc:identifier  obo:GO_0043234_acc ;
+        bk:is_a        obo:GO_0032991 ;
+        bk:prefName    "protein complex" .
+
+obo:GO_0044424  a      bk:GeneOntologyTerms ;
+        dc:identifier  obo:GO_0044424_acc ;
+        bk:is_a        obo:GO_0044464 ;
+        bk:prefName    "intracellular part" .
+
+obo:GO_0043234_acc  a       bk:Accession ;
+        dcterms:identifier  "GO_0043234" ;
+        bk:dataSource       bkds:GO .
+
+obo:GO_0030014  a      bk:GeneOntologyTerms ;
+        dc:identifier  obo:GO_0030014_acc ;
+        bk:is_a        obo:GO_0044424 , obo:GO_0043234 ;
+        bk:prefName    "CCR4-NOT complex" .
+
+obo:GO_0005575  a      bk:GeneOntologyTerms ;
+        dc:identifier  obo:GO_0005575_acc ;
+        bk:prefName    "cellular_component" .
+
+obo:GO_0044464  a      bk:GeneOntologyTerms ;
+        dc:identifier  obo:GO_0044464_acc ;
+        bk:is_a        obo:GO_0005575 ;
+        bk:prefName    "cell part" .
+
+obo:GO_0030014_acc  a       bk:Accession ;
+        dcterms:identifier  "GO_0030014" ;
+        bk:dataSource       bkds:GO .
+
+obo:GO_0032991_acc  a       bk:Accession ;
+        dcterms:identifier  "GO_0032991" ;
+        bk:dataSource       bkds:GO .
+
+obo:GO_0044424_acc  a       bk:Accession ;
+        dcterms:identifier  "GO_0044424" ;
+        bk:dataSource       bkds:GO .
+
+obo:GO_0005575_acc  a       bk:Accession ;
+        dcterms:identifier  "GO_0005575" ;
+        bk:dataSource       bkds:GO .
+
+obo:GO_0032991  a      bk:GeneOntologyTerms ;
+        dc:identifier  obo:GO_0032991_acc ;
+        bk:is_a        obo:GO_0005575 ;
+        bk:prefName    "macromolecular complex" .
+@prefix schema: <http://schema.org/> .
+@prefix :      <http://purl.obolibrary.org/obo/go.owl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix bkr:   <http://www.ondex.org/bioknet/resources/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix bk:    <http://www.ondex.org/bioknet/terms/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix bp:    <http://www.biopax.org/release/biopax-level3.owl#> .
+@prefix protCore: <http://purl.uniprot.org/core/> .
+@prefix sd:    <http://www.w3.org/ns/sparql-service-description#> .
+@prefix prot:  <http://purl.uniprot.org/uniprot/> .
+@prefix bkev:  <http://www.ondex.org/bioknet/terms/evidences/> .
+@prefix terms: <http://www.geneontology.org/formats/oboInOwl#http://purl.org/dc/terms/> .
+@prefix faldo: <http://biohackathon.org/resource/faldo#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix oboInOwl: <http://www.geneontology.org/formats/oboInOwl#> .
+@prefix go:    <http://purl.obolibrary.org/obo/go#> .
+@prefix protCit: <http://purl.uniprot.org/citations/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix bkds:  <http://www.ondex.org/bioknet/terms/dataSources/> .
+@prefix bka:   <http://www.ondex.org/bioknet/terms/attributes/> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+bkr:citation_TOB1_23236473
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:23236473 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:citation_TOB1_23186163
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:23186163 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:citation_TOB1_8632892
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:8632892 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:citation_TOB1_14702039
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:14702039 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:citation_TOB1_19276069
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:19276069 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:citation_TOB1_19690332
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:19690332 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:citation_TOB1_21336257
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:21336257 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:citation_TOB1_20068231
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:20068231 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:citation_TOB1_18669648
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:18669648 ;
+        bk:relTypeRef  bk:published_in .
+
+bkr:TOB1  a                 bk:Protein ;
+        bk:is_annotated_by  obo:GO_0030014 ;
+        bk:prefName         "TOB1" ;
+        bk:published_in     bkr:23236473 , bkr:19276069 , bkr:23186163 , bkr:15489334 , bkr:21336257 , bkr:18669648 , bkr:8632892 , bkr:14702039 , bkr:19690332 , bkr:20068231 .
+
+bkr:citation_TOB1_15489334
+        a              bk:Relation ;
+        bka:Score      0.95 ;
+        bk:evidence    bkev:TM ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:15489334 ;
+        bk:relTypeRef  bk:published_in .
+@prefix schema: <http://schema.org/> .
+@prefix :      <http://purl.obolibrary.org/obo/go.owl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix bkr:   <http://www.ondex.org/bioknet/resources/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix bk:    <http://www.ondex.org/bioknet/terms/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix bp:    <http://www.biopax.org/release/biopax-level3.owl#> .
+@prefix protCore: <http://purl.uniprot.org/core/> .
+@prefix sd:    <http://www.w3.org/ns/sparql-service-description#> .
+@prefix prot:  <http://purl.uniprot.org/uniprot/> .
+@prefix bkev:  <http://www.ondex.org/bioknet/terms/evidences/> .
+@prefix terms: <http://www.geneontology.org/formats/oboInOwl#http://purl.org/dc/terms/> .
+@prefix faldo: <http://biohackathon.org/resource/faldo#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix oboInOwl: <http://www.geneontology.org/formats/oboInOwl#> .
+@prefix go:    <http://purl.obolibrary.org/obo/go#> .
+@prefix protCit: <http://purl.uniprot.org/citations/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix bkds:  <http://www.ondex.org/bioknet/terms/dataSources/> .
+@prefix bka:   <http://www.ondex.org/bioknet/terms/attributes/> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
+@prefix obo:   <http://purl.obolibrary.org/obo/> .
+@prefix dc:    <http://purl.org/dc/elements/1.1/> .
+
+bkr:20068231  a             bk:Publication ;
+        dc:identifier       bkr:20068231_acc ;
+        bka:AbstractHeader  "Quantitative phosphoproteomics reveals widespread full phosphorylation site occupancy during mitosis." ;
+        bka:PMID            "20068231" ;
+        bka:YEAR            "2010"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "20068231" .
+
+bkr:21336257  a             bk:Publication ;
+        dc:identifier       bkr:21336257_acc ;
+        bka:AbstractHeader  "Anti-proliferative protein Tob negatively regulates CPEB3 target by recruiting Caf1 deadenylase." ;
+        bka:PMID            "21336257" ;
+        bka:YEAR            "2011"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "21336257" .
+
+bkr:15489334_acc  a         bk:Accession ;
+        dcterms:identifier  "15489334" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:23186163_acc  a         bk:Accession ;
+        dcterms:identifier  "23186163" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:19690332  a             bk:Publication ;
+        dc:identifier       bkr:19690332_acc ;
+        bka:AbstractHeader  "Quantitative phosphoproteomic analysis of T cell receptor signaling reveals system-wide modulation of protein-protein interactions." ;
+        bka:PMID            "19690332" ;
+        bka:YEAR            "2009"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "19690332" .
+
+bkr:15489334  a             bk:Publication ;
+        dc:identifier       bkr:15489334_acc ;
+        bka:AbstractHeader  "The status, quality, and expansion of the NIH full-length cDNA project: the Mammalian Gene Collection (MGC)." ;
+        bka:PMID            "15489334" ;
+        bka:YEAR            "2004"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "15489334" .
+
+bkr:18669648  a             bk:Publication ;
+        dc:identifier       bkr:18669648_acc ;
+        bka:AbstractHeader  "A quantitative atlas of mitotic phosphorylation." ;
+        bka:PMID            "18669648" ;
+        bka:YEAR            "2008"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "18669648" .
+
+bkr:23186163  a             bk:Publication ;
+        dc:identifier       bkr:23186163_acc ;
+        bka:AbstractHeader  "Toward a comprehensive characterization of a human cancer cell phosphoproteome." ;
+        bka:PMID            "23186163" ;
+        bka:YEAR            "2013"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "23186163" .
+
+bkr:14702039  a             bk:Publication ;
+        dc:identifier       bkr:14702039_acc ;
+        bka:AbstractHeader  "Complete sequencing and characterization of 21,243 full-length human cDNAs." ;
+        bka:PMID            "14702039" ;
+        bka:YEAR            "2004"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "14702039" .
+
+bkr:8632892  a              bk:Publication ;
+        dc:identifier       bkr:8632892_acc ;
+        bka:AbstractHeader  "Tob, a novel protein that interacts with p185erbB2, is associated with anti-proliferative activity." ;
+        bka:PMID            "8632892" ;
+        bka:YEAR            "1996"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "8632892" .
+
+bkr:8632892_acc  a          bk:Accession ;
+        dcterms:identifier  "8632892" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:19276069_acc  a         bk:Accession ;
+        dcterms:identifier  "19276069" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:18669648_acc  a         bk:Accession ;
+        dcterms:identifier  "18669648" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:20068231_acc  a         bk:Accession ;
+        dcterms:identifier  "20068231" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:23236473_acc  a         bk:Accession ;
+        dcterms:identifier  "23236473" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:19690332_acc  a         bk:Accession ;
+        dcterms:identifier  "19690332" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:21336257_acc  a         bk:Accession ;
+        dcterms:identifier  "21336257" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:19276069  a             bk:Publication ;
+        dc:identifier       bkr:19276069_acc ;
+        bka:AbstractHeader  "Structural basis for the antiproliferative activity of the Tob-hCaf1 complex." ;
+        bka:PMID            "19276069" ;
+        bka:YEAR            "2009"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "19276069" .
+
+bkr:14702039_acc  a         bk:Accession ;
+        dcterms:identifier  "14702039" ;
+        bk:dataSource       bkds:PubMed .
+
+bkr:23236473  a             bk:Publication ;
+        dc:identifier       bkr:23236473_acc ;
+        bka:AbstractHeader  "The anti-proliferative activity of BTG/TOB proteins is mediated via the Caf1a (CNOT7) and Caf1b (CNOT8) deadenylase subunits of the Ccr4-not complex." ;
+        bka:PMID            "23236473" ;
+        bka:YEAR            "2012"^^xsd:gYear ;
+        bk:evidence         bkev:IMPD , bkev:NAS ;
+        bk:prefName         "23236473" .
+@prefix bkev:  <http://www.ondex.org/bioknet/terms/evidences/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix bkds:  <http://www.ondex.org/bioknet/terms/dataSources/> .
+@prefix bkr:  <http://www.ondex.org/bioknet/resources/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix bk:  <http://www.ondex.org/bioknet/terms/> .
+@prefix bka:  <http://www.ondex.org/bioknet/terms/attributes/> .
+
+bkr:TOB1  bk:expressed_by  bkr:degex_patient_1 .
+
+bkr:degex_patient_1_tob1
+        rdf:type       bk:Relation ;
+        bka:PVALUE     "0.000000600497806344172"^^xsd:double ;
+        bk:evidence    bkev:EXP ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:degex_patient_1 ;
+        bk:relTypeRef  bk:expressed_by .
+
+bkr:SMAD1  bk:expressed_by  bkr:degex_patient_1 .
+
+bkr:degex_patient_1_smad1
+        rdf:type       bk:Relation ;
+        bka:PVALUE     "0.000000754527501513066"^^xsd:double ;
+        bk:evidence    bkev:EXP ;
+        bk:relFrom     bkr:SMAD1 ;
+        bk:relTo       bkr:degex_patient_1 ;
+        bk:relTypeRef  bk:expressed_by .
+
+bkr:BMPR2  bk:expressed_by  bkr:degex_patient_1 .
+
+bkr:degex_patient_1_bmpr2
+        rdf:type       bk:Relation ;
+        bka:PVALUE     "0.0000000588968741986782"^^xsd:double ;
+        bk:evidence    bkev:EXP ;
+        bk:relFrom     bkr:BMPR2 ;
+        bk:relTo       bkr:degex_patient_1 ;
+        bk:relTypeRef  bk:expressed_by .
+
+bkr:RUNX2  bk:expressed_by  bkr:degex_patient_1 .
+
+bkr:degex_patient_1_runx2
+        rdf:type       bk:Relation ;
+        bka:PVALUE     "0.000000261748871275369"^^xsd:double ;
+        bk:evidence    bkev:EXP ;
+        bk:relFrom     bkr:RUNX2 ;
+        bk:relTo       bkr:degex_patient_1 ;
+        bk:relTypeRef  bk:expressed_by .
+
+bkr:BMPR2  bk:expressed_by  bkr:degex_patient_1 .
+
+bkr:degex_patient_1_bmpr2
+        rdf:type       bk:Relation ;
+        bka:PVALUE     "0.000000603507498720886"^^xsd:double ;
+        bk:evidence    bkev:EXP ;
+        bk:relFrom     bkr:BMPR2 ;
+        bk:relTo       bkr:degex_patient_1 ;
+        bk:relTypeRef  bk:expressed_by .
+
+bkr:TOB1  bk:expressed_by  bkr:degex_patient_2 .
+
+bkr:degex_patient_2_tob1
+        rdf:type       bk:Relation ;
+        bka:PVALUE     "0.000000596766633617822"^^xsd:double ;
+        bk:evidence    bkev:EXP ;
+        bk:relFrom     bkr:TOB1 ;
+        bk:relTo       bkr:degex_patient_2 ;
+        bk:relTypeRef  bk:expressed_by .
+
+bkr:SMURF1  bk:expressed_by  bkr:degex_patient_2 .
+
+bkr:degex_patient_2_smurf1
+        rdf:type       bk:Relation ;
+        bka:PVALUE     "0.000000252516243921889"^^xsd:double ;
+        bk:evidence    bkev:EXP ;
+        bk:relFrom     bkr:SMURF1 ;
+        bk:relTo       bkr:degex_patient_2 ;
+        bk:relTypeRef  bk:expressed_by .
+
+bkr:RUNX2  bk:expressed_by  bkr:degex_patient_2 .
+
+bkr:degex_patient_2_runx2
+        rdf:type       bk:Relation ;
+        bka:PVALUE     "0.000000115606394287974"^^xsd:double ;
+        bk:evidence    bkev:EXP ;
+        bk:relFrom     bkr:RUNX2 ;
+        bk:relTo       bkr:degex_patient_2 ;
+        bk:relTypeRef  bk:expressed_by .
+@prefix bkev:  <http://www.ondex.org/bioknet/terms/evidences/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix bkds:  <http://www.ondex.org/bioknet/terms/dataSources/> .
+@prefix bkr:  <http://www.ondex.org/bioknet/resources/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix bk:  <http://www.ondex.org/bioknet/terms/> .
+@prefix bka:  <http://www.ondex.org/bioknet/terms/attributes/> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+
+bkr:degex_patient_1  rdf:type  bk:ExperimentalSample ;
+        bk:prefName         "Patient 1" ;
+        bk:is_annotated_by  bkr:degex_smad1_inhibitor ;
+        bk:member_of        bkr:sampleExp .
+
+bkr:degex_smad1_inhibitor
+        rdf:type     bk:Annotation ;
+        bk:prefName  "SMAD1 Inhibitor" .
+
+bkr:degex_patient_2  rdf:type  bk:ExperimentalSample ;
+        bk:prefName         "Patient 2" ;
+        bk:is_annotated_by  bkr:degex_smad6_blocker ;
+        bk:member_of        bkr:sampleExp .
+
+bkr:degex_smad6_blocker
+        rdf:type     bk:Annotation ;
+        bk:prefName  "SMAD6 Blocker" .
+
+bkr:degex_patient_3  rdf:type  bk:ExperimentalSample ;
+        bk:prefName         "Patient 3" ;
+        bk:is_annotated_by  bkr:degex_control ;
+        bk:member_of        bkr:sampleExp .
+
+bkr:degex_control  rdf:type  bk:Annotation ;
+        bk:prefName  "Control" .

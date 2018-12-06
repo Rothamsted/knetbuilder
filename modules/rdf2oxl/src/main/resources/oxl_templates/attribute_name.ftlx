@@ -25,7 +25,7 @@
 					<#assign java_class = attrib_name.ondexRange />
 				<#elseif attrib_name.range??>
 					<#assign range_class = 
-						(XsdMapper.javaClassWithDefault ( NamespaceUtils.iri ( attrib_name.range ) ))!''
+						(XsdMapper.javaClassWithDefault ( NamespaceUtils.iriAny ( attrib_name.range ) ))!''
 					/>
 					<#if range_class != ''>
 						<#assign java_class = range_class.getCanonicalName () />

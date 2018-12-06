@@ -56,10 +56,8 @@ public class JsonUtils
 	@SuppressWarnings ( "unchecked" )
 	public static <T> List<T> toList ( Object jsObj )
 	{
-		if ( jsObj == null ) return 
-			new ArrayList<T> ();
-		if ( jsObj instanceof List )
-			return (List<T>) jsObj;
-		return new ArrayList<T> ( Collections.singleton ( (T) jsObj ) );
+		if ( jsObj == null ) return new ArrayList<> ();
+		if ( jsObj instanceof List ) return (List<T>) jsObj;
+		return new ArrayList<> ( Collections.singleton ( (T) jsObj ) );
 	}
 }

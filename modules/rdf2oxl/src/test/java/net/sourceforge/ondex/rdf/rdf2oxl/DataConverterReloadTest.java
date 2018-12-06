@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -42,8 +43,8 @@ public class DataConverterReloadTest extends AbstractConverterReloadTest
 		resultGraph = loadOxl (
 			"target/data_reload_test.xml", 
 			"target/data_reload_test_tdb",
-			Pair.of ( Resources.getResource ( "bioknet.owl" ).openStream (), "RDF/XML" ),
-			Pair.of ( Resources.getResource ( "oxl_templates_test/bk_ondex.owl" ).openStream (), "RDF/XML" ),
+			Pair.of ( new FileInputStream ( "src/main/assembly/resources/data/bioknet.owl" ), "RDF/XML" ),
+			Pair.of ( new FileInputStream ( "src/main/assembly/resources/data/bk_ondex.owl" ), "RDF/XML" ),
 			Pair.of ( Resources.getResource ( "support_test/publications.ttl" ).openStream (), "TURTLE" )
 		);
 	}

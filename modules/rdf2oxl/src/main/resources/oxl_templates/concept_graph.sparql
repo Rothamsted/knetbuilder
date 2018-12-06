@@ -66,10 +66,12 @@ WHERE
   BIND ( IF ( ?ccIdRaw = 'Concept', 'Thing', ?ccIdRaw ) AS ?ccId )
      
   OPTIONAL { ?concept dcterms:identifier ?pid }
-  OPTIONAL { ?concept bk:prefName ?prefName }
-  OPTIONAL { ?concept bk:altName ?altName }
-  OPTIONAL { ?concept dcterms:description ?description }
-  OPTIONAL { ?concept rdfs:comment ?annotation }
+
+	# Sometimes we get a whole structure for this, so...
+  OPTIONAL { ?concept bk:prefName ?_prefName. BIND ( STR ( ?_prefName ) AS ?prefName ) }
+  OPTIONAL { ?concept bk:altName ?_altName. BIND ( STR ( ?_altName ) AS ?altName ) }
+  OPTIONAL { ?concept dcterms:description ?_description. BIND ( STR ( ?_description ) AS ?description ) }
+  OPTIONAL { ?concept rdfs:comment ?_annotation. BIND ( STR ( ?_annotation ) AS ?annotation ) }
 
 	# Tags
   OPTIONAL { ?concept bk:relatedConcept ?relatedConcept }

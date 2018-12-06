@@ -40,18 +40,20 @@ public class StraightRelationHandler extends QuerySolutionHandler
 		{
 			String fromIri = sol.getResource ( "from" ).getURI ();
 			String toIri = sol.getResource ( "to" ).getURI ();
+			String relTypeId = sol.getLiteral ( "_typeId" ).getString ();
 			
 			Integer fromId = this.conceptIds.get ( fromIri );
 			Integer toId = this.conceptIds.get ( toIri );
 
 			if ( fromId == null || toId == null ) ExceptionUtils.throwEx ( 
 				IllegalArgumentException.class, 
-				"Error with the input RDF, cannot find concept ID(s) for the relation <%s> <%s>", fromIri, toIri
+				"Error with the input RDF, cannot find concept ID(s) for the relation <%s> (<%s> <%s>)",
+				relTypeId, fromIri, toIri
 			);
 			
 			Map<String, Object> relMap = new HashedMap<> ();
 			relMap.put ( "fromId", fromId );
-			relMap.put ( "_typeId", sol.getLiteral ( "_typeId" ).getString () );
+			relMap.put ( "_typeId", relTypeId );
 			relMap.put ( "toId", toId );
 			return relMap;
 		})

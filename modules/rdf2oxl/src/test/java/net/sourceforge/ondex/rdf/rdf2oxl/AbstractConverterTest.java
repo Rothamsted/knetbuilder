@@ -36,24 +36,16 @@ public abstract class AbstractConverterTest
 		springContext = new ClassPathXmlApplicationContext ( "default_beans.xml" );
 	}
 
+	
 	@SafeVarargs
 	protected static String generateOxl ( String outPath, String tdbPath, Pair<InputStream, String>... rdfInputs ) throws IOException
 	{
+		TestUtils.generateTDB ( springContext, tdbPath, rdfInputs );
+		
 		try ( Writer writer = new TestUtils.OutputCollectorWriter ( outPath ) )
 		{
-			TDBEndPointHelper sparqlHelper = springContext.getBean ( TDBEndPointHelper.class );
-			sparqlHelper.open ( tdbPath );
-			
-			Dataset ds = sparqlHelper.getDataSet ();
-			Txn.executeWrite ( ds, Exceptions.sneak ().runnable ( () ->
-			{
-				Model m = ds.getDefaultModel ();
-				for ( Pair<InputStream, String> rdfInput: rdfInputs )
-					m.read ( rdfInput.getLeft (),  null, rdfInput.getRight () );
-			}));
-			
 			Rdf2OxlConverter converter = springContext.getBean ( Rdf2OxlConverter.class );
-			converter.convert ( writer );
+			converter.convert ( writer, false );
 			
 			writer.flush ();
 			return writer.toString ();

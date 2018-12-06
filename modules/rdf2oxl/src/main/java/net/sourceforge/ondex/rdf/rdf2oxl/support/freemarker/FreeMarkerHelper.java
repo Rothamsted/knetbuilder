@@ -81,6 +81,10 @@ public class FreeMarkerHelper
 				Map<String, Object> js = (Map<String, Object>) JsonUtils.fromString ( sw.toString () );
 							
 				result.put ( "js", js.get ( "@graph" ) );
+				
+				// We also need to let our namespace manager know the namespaces used in this model
+				model.getNsPrefixMap ();
+				NamespaceUtils.registerNs ( model.getNsPrefixMap () );
 			}
 
 			// These might be useful in several cases

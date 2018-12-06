@@ -60,12 +60,14 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 	public void accept ( List<QuerySolution> sols )
 	{
 		if ( sols.size () == 0 ) return;
-		
+				
 		// Get a VALUES-compliant representation of all these URIs
 		String valuesStr = sols.parallelStream ()
 		.map ( sol -> sol.getResource ( "resourceIri" ).getURI () )
 		.map ( iri -> "( <" + iri + "> )" )
 		.collect ( Collectors.joining ( "\n" ) );
+		
+		if ( log.isTraceEnabled () ) log.trace ( "Rendering IRIs: \n{}", valuesStr );
 		
 		// And use it in the SPARQL template
 		String sparqlConstruct = constructTemplate.replace ( "$resourceIris", valuesStr );

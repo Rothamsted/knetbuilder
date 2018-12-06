@@ -169,7 +169,7 @@
 				<executions>
         	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
 					<execution>
-						<id>make-assembly-packaged_with_jars</id>
+						<id>make-cli-distro</id>
 						<phase />
 					</execution>    
 					<execution>

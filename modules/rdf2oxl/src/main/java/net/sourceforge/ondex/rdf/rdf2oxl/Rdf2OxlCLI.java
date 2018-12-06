@@ -1,7 +1,6 @@
-package net.sourceforge.ondex.rdf.export;
+package net.sourceforge.ondex.rdf.rdf2oxl;
 
 import static java.lang.System.out;
-import static net.sourceforge.ondex.rdf.export.RDFFileExporter.DEFAULT_X_LANG;
 
 import java.io.PrintWriter;
 
@@ -14,8 +13,6 @@ import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
  * TODO: comment me!
@@ -24,7 +21,7 @@ import net.sourceforge.ondex.parser.oxl.Parser;
  * <dl><dt>Date:</dt><dd>12 Nov 2018</dd></dl>
  *
  */
-public class RDFFileExporterCLI
+public class Rdf2OxlCLI
 {
 	/**
 	 * If you set this to true, main() will not invoke {@link System#exit(int)}. This is useful in unit tests.
@@ -33,7 +30,7 @@ public class RDFFileExporterCLI
 			
 	private static int exitCode = 0;
 	
-	private static Logger log = LoggerFactory.getLogger ( RDFFileExporterCLI.class );
+	private static Logger log = LoggerFactory.getLogger ( Rdf2OxlCLI.class );
 
 	
 	
@@ -46,22 +43,20 @@ public class RDFFileExporterCLI
 			CommandLine cli = clparser.parse ( getOptions(), args );
 			args = cli.getArgs ();
 			
-			if ( cli.hasOption ( "help" ) || args.length < 2 ) {
+			if ( cli.hasOption ( "help" ) || !cli.hasOption ( "tdb" ) || args.length < 1 ) {
 				printUsage ();
 				return;
 			}
-
+			
 			out.println ();
 
-			String inPath = args [ 0 ], outPath = args [ 1 ];
-			String outLang = cli.getOptionValue ( "lang", DEFAULT_X_LANG );
-
-			log.info ( "Loading '{}'", inPath );
-			ONDEXGraph graph = Parser.loadOXL ( inPath );
+			String oxlPath = args [ 0 ];
+			String tdbPath = cli.getOptionValue ( "tdb", null );
+			String springFile = cli.getOptionValue ( "config", null );
+			boolean zipFlag = !cli.hasOption ( "plain" );
 			
-			log.info ( "Graph Loaded, now exporting to RDF", inPath );
-			RDFFileExporter xporter = new RDFFileExporter ();
-			xporter.export ( graph, outPath, outLang );
+			// if springFile is null, this will pick the Spring config from the classpath
+			Rdf2OxlConverter.convert ( springFile, tdbPath, oxlPath, zipFlag );
 			
 			out.println ();
 			if ( exitCode == 0 ) log.info ( "Conversion finished." );
@@ -88,12 +83,31 @@ public class RDFFileExporterCLI
 			.build ()
 		);
 		
-		opts.addOption ( Option.builder ( "l" )
-			.longOpt ( "lang" )
-			.desc ( "The RDF format to produce. Accepts values from either Jena's RDFFormat (https://goo.gl/XVQBHi) " +
-				"or Jena's Lang (https://goo.gl/gbp6bL). The default " + DEFAULT_X_LANG + " writes Turtle in an efficient way." )
-			.hasArg ()
-			.argName ( "RDF Language" )
+		opts.addOption ( Option.builder ( "c" ) 
+			.desc ( "Configuration file (see examples/sample-cfg.xml). Uses an embedded default otherwise"
+					+   "WARNING! use 'file:///...' to specify absolute paths (Spring requirement)." )
+			.longOpt ( "config" )
+			.argName ( "bean configuration file.xml" )
+			.numberOfArgs ( 1 )
+			.build ()
+		);
+		
+		opts.addOption ( Option.builder ( "t" ) 
+			.desc ( 
+				"Uses a TDB databases at this location as input. For the moment this parameter is mandatory, " + 
+		    "we will add more SPARQL endpoint types in future."
+			)
+			.longOpt ( "tdb" )
+			.argName ( "TDB path" )
+			.numberOfArgs ( 1 )
+			.build ()
+		);
+
+		opts.addOption ( Option.builder ( "p" ) 
+			.desc ( 
+				"Doesn't compress (GZIP) the output"
+			)
+			.longOpt ( "plain" )
 			.build ()
 		);
 		
@@ -104,18 +118,18 @@ public class RDFFileExporterCLI
 	{
 		out.println ();
 
-		out.println ( "\n\n *** Ondex RDF Exporter ***" );
-		out.println ( "\nExports Ondex's OXL files to RDF" );
+		out.println ( "\n\n *** Ondex RDF/OXL Converter ***" );
+		out.println ( "\nImports BioKNO-based RDF files into Ondex OXL files" );
 		
 		out.println ( "\nSyntax:" );
-		out.println ( "\n\todx2rdf.sh [options] <path/to/.oxl> <path/to/rdf>" );		
+		out.println ( "\n\trdf2odx.sh [options] <path/to/*.oxl>" );		
 		
 		out.println ( "\nOptions:" );
 		HelpFormatter helpFormatter = new HelpFormatter ();
 		PrintWriter pw = new PrintWriter ( out, true );
 		helpFormatter.printOptions ( pw, 100, getOptions (), 2, 4 );
 		
-		out.println ( "\n" );
+		out.println ( "\nStart from this code to make your CLI\n\n" );
 		
 		exitCode = 1;
 	}

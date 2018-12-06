@@ -3,13 +3,12 @@ package net.sourceforge.ondex.rdf.rdf2oxl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.google.common.io.Resources;
 
 import uk.ac.ebi.utils.xml.XPathReader;
 
@@ -29,8 +28,8 @@ public class MetadataConverterTest extends AbstractConverterTest
 		resultOxl = generateOxl (
 			"target/metadata_test.oxl", 
 			"target/metadata_test_tdb",
-			Pair.of ( Resources.getResource ( "bioknet.owl" ).openStream (), "RDF/XML" ),
-			Pair.of ( Resources.getResource ( "oxl_templates_test/bk_ondex.owl" ).openStream (), "RDF/XML" )
+			Pair.of ( new FileInputStream ( "src/main/assembly/resources/data/bioknet.owl" ), "RDF/XML" ),
+			Pair.of ( new FileInputStream ( "src/main/assembly/resources/data/bk_ondex.owl" ), "RDF/XML" )
 		);
 	}
 
