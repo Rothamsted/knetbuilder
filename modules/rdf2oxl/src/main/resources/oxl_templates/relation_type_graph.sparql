@@ -44,7 +44,7 @@ WHERE # -----------------------------------------------------------------------
 	# Parent
 	#
 	?rt rdfs:subPropertyOf ?parent.
-  ?parent bk:isOndexPreferred true. 
+  ?parent bk:isOndexPreferred true.
 	
-	?parent dcterms:identifier ?parentId.
+	?parent dcterms:identifier ?_parentId. BIND ( STR ( ?_parentId ) AS ?parentId )
 }

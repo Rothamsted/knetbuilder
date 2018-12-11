@@ -17,8 +17,6 @@ import org.w3c.dom.NodeList;
 
 import com.google.common.io.Resources;
 
-import net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration;
-import net.sourceforge.ondex.rdf.rdf2oxl.support.Rdf2OxlConfiguration;
 import uk.ac.ebi.utils.xml.XPathReader;
 
 /**

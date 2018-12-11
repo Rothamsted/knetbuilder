@@ -84,7 +84,7 @@ public class Rdf2OxlCLI
 		);
 		
 		opts.addOption ( Option.builder ( "c" ) 
-			.desc ( "Configuration file (see examples/sample-cfg.xml). Uses an embedded default otherwise"
+			.desc ( "Configuration file (see examples/sample-cfg.xml). Uses an embedded default otherwise. "
 					+   "WARNING! use 'file:///...' to specify absolute paths (Spring requirement)." )
 			.longOpt ( "config" )
 			.argName ( "bean configuration file.xml" )

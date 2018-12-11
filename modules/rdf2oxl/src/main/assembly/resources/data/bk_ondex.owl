@@ -1555,21 +1555,24 @@
     <terms:identifier>given_by</terms:identifier>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/inhibited_by">
-    <rdfs:label xml:lang="en">inhibited_by</rdfs:label>
-    <terms:description xml:lang="en">inhibition of a gene's expression by a transcription factor</terms:description>
-    <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</bk:isOndexPreferred>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-    <rdfs:subPropertyOf>
-      <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/rg_by"/>
-    </rdfs:subPropertyOf>
+    <terms:identifier>inhibited_by</terms:identifier>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/inhibits"/>
     </owl:inverseOf>
-    <terms:identifier>inhibited_by</terms:identifier>
+    <rdfs:label xml:lang="en">inhibited_by</rdfs:label>
+    <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</bk:isOndexPreferred>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/rg_by"/>
+    </rdfs:subPropertyOf>
+    <terms:description xml:lang="en">inhibition of a gene's expression by a transcription factor</terms:description>
     <owl:equivalentProperty>
       <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/in_by"/>
     </owl:equivalentProperty>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/regulated_by"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/transformation_of">
     <rdfs:label xml:lang="en">transformation_of</rdfs:label>
@@ -1864,23 +1867,6 @@
   <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/has_member">
     <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/conceptsRelation"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/activated_by">
-    <rdfs:label xml:lang="en">activated_by</rdfs:label>
-    <terms:description xml:lang="en">activation of a gene's expression by a transcription factor</terms:description>
-    <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</bk:isOndexPreferred>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
-    <rdfs:subPropertyOf>
-      <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/rg_by"/>
-    </rdfs:subPropertyOf>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/activates"/>
-    </owl:inverseOf>
-    <terms:identifier>activated_by</terms:identifier>
-    <owl:equivalentProperty>
-      <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/ac_by"/>
-    </owl:equivalentProperty>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/annotates">
     <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/conceptsRelation"/>
   </owl:ObjectProperty>
@@ -2080,6 +2066,9 @@
     >true</bk:isOndexPreferred>
     <rdfs:subPropertyOf>
       <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/rg_by"/>
+    </rdfs:subPropertyOf>
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/regulated_by"/>
     </rdfs:subPropertyOf>
     <terms:identifier>expressed_by</terms:identifier>
     <owl:equivalentProperty rdf:resource="http://www.ondex.org/bioknet/terms/ex_by"/>
@@ -2840,14 +2829,15 @@
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/equivalent">
     <rdfs:label xml:lang="en">is_equivalent_to</rdfs:label>
+    <owl:equivalentProperty rdf:resource="http://www.ondex.org/bioknet/terms/equ"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+    <terms:identifier>equivalent</terms:identifier>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ReflexiveProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/physical_relation"/>
     <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</bk:isOndexPreferred>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ReflexiveProperty"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
     <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/physical"/>
-    <terms:identifier>equivalent</terms:identifier>
-    <owl:equivalentProperty rdf:resource="http://www.ondex.org/bioknet/terms/equ"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/ipara">
     <rdfs:label xml:lang="en">inparalogue</rdfs:label>
@@ -3136,6 +3126,7 @@
     <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</bk:isOndexPreferred>
     <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/rg_by"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/regulated_by"/>
     <terms:identifier>repressed_by</terms:identifier>
     <owl:equivalentProperty rdf:resource="http://www.ondex.org/bioknet/terms/re_by"/>
   </owl:ObjectProperty>
@@ -4353,6 +4344,12 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <terms:identifier>IMPM</terms:identifier>
   </bk:EvidenceType>
+  <rdf:Description rdf:about="http://www.ondex.org/bioknet/terms/encoded_by">
+    <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</bk:isOndexPreferred>
+    <terms:identifier>encoded_by</terms:identifier>
+    <owl:equivalentProperty rdf:resource="http://www.ondex.org/bioknet/terms/enc_by"/>
+  </rdf:Description>
   <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/dataSources/MeSH">
     <rdfs:label xml:lang="en">Medline Subject Headings</rdfs:label>
     <terms:description xml:lang="en">MeSH is the National Library of Medicine's controlled vocabulary thesaurus. It consists of sets of terms naming descriptors in a hierarchical structure that permits searching at various levels of specificity. - http://www.nlm.nih.gov/mesh/</terms:description>
@@ -5237,6 +5234,12 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
     <terms:identifier>M</terms:identifier>
   </bk:EvidenceType>
+  <rdf:Description rdf:about="http://www.ondex.org/bioknet/terms/genetic_relation">
+    <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</bk:isOndexPreferred>
+    <terms:identifier>genetic_relation</terms:identifier>
+    <owl:equivalentProperty rdf:resource="http://www.ondex.org/bioknet/terms/genetic"/>
+  </rdf:Description>
   <bk:EvidenceType rdf:about="http://www.ondex.org/bioknet/terms/evidences/IDA">
     <rdfs:label xml:lang="en">Inferred from Direct Assay</rdfs:label>
     <terms:description xml:lang="en">Inferred from: Enzyme assays - In vitro reconstitution (e.g. transcription) - Immunofluorescence (for cellular component) - Cell fractionation (for cellular component) - Physical interaction/binding assay (sometimes appropriate for cellular component or molecular function)</terms:description>
@@ -5397,6 +5400,18 @@
     <rdf:type rdf:resource="http://www.ondex.org/bioknet/terms/DataSource"/>
     <terms:identifier>MGI</terms:identifier>
   </owl:NamedIndividual>
+  <owl:AsymmetricProperty rdf:about="http://www.ondex.org/bioknet/terms/activated_by">
+    <owl:equivalentProperty rdf:resource="http://www.ondex.org/bioknet/terms/ac_by"/>
+    <bk:isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</bk:isOndexPreferred>
+    <rdfs:label xml:lang="en">activated_by</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/rg_by"/>
+    <owl:inverseOf rdf:resource="http://www.ondex.org/bioknet/terms/activates"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <terms:description xml:lang="en">activation of a gene's expression by a transcription factor</terms:description>
+    <terms:identifier>activated_by</terms:identifier>
+    <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/regulated_by"/>
+  </owl:AsymmetricProperty>
   <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/dataSources/CL">
     <rdfs:label xml:lang="en">Cell Ontology</rdfs:label>
     <terms:description xml:lang="en">The Cell Ontology is designed as a structured controlled vocabulary for cell types. - http://www.obofoundry.org/cgi-bin/detail.cgi?id=cell</terms:description>
