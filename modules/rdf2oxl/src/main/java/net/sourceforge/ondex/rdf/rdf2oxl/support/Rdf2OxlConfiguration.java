@@ -14,7 +14,7 @@ import freemarker.template.TemplateExceptionHandler;
  *
  */
 @org.springframework.context.annotation.Configuration 
-@Order ( +10 ) // this is using several beans that have to be initialised before.
+@Order ( +10 ) // I'm using several beans that have to be initialised in advance.
 public class Rdf2OxlConfiguration
 {
 	

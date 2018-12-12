@@ -3,10 +3,17 @@ SELECT
 	(COUNT ( DISTINCT ?relation ) AS ?relationsCount)
 WHERE
 {
-  { ?concept a/rdfs:subClassOf* bk:Concept. }
+	# Matching concepts
+  { 
+  	?concept a/rdfs:subClassOf* bk:Concept. 
+
+  	# These are foo test cases in the ontology file.
+  	FILTER ( ?concept NOT IN ( bk:testConcept0_1, bk:testConcept0_2 ) )
+  }
   
   UNION
   
+  # Matching relations
   {
     # The subquery is to optimise it
     {SELECT DISTINCT ?relationProp { ?relationProp rdfs:subPropertyOf+ bk:conceptsRelation. }}

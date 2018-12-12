@@ -8,6 +8,8 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.QuerySolutionMap;
 import org.apache.jena.rdf.model.Model;
@@ -29,6 +31,11 @@ public class ConceptProcessor extends QueryProcessor
 	@Autowired @Qualifier ( "conceptIds" )
 	private Map<String, Integer> conceptIds;
 	
+	// @Autowired @Qualifier ( "graphSummary" )
+	@Resource ( name = "graphSummary" )
+	private Map<String, Object> graphSummary;
+
+	
 	@Override
 	public void process ( String foo, Object... opts )
 	{		
@@ -36,6 +43,13 @@ public class ConceptProcessor extends QueryProcessor
 		try
 		{
 			log.info ( "{}: Reusing previous IRIs", logPrefix );
+
+			// Some sanity check
+			long conceptsCount = (long) graphSummary.get ( "conceptsCount" );
+			if ( conceptIds.size () != conceptsCount ) log.warn ( 
+				"Mismatch between SPARQL-counted concepts ({}) and those collected ({})",
+				conceptsCount, conceptIds.size ()
+			);
 						
 			QuerySolutionHandler handler = (QuerySolutionHandler) getConsumer ();
 			Writer outWriter = handler.getOutWriter ();
@@ -73,4 +87,5 @@ public class ConceptProcessor extends QueryProcessor
 			);
 		}
 	}
+	
 }

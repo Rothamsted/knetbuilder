@@ -10,7 +10,7 @@ CONSTRUCT
     bk:relatedConcept ?relatedConcept;
     bk:evidence ?evidence;
 		bk:dataSource ?dataSource;
-  	# dc:identifier isn't practical here, cause URI compaction will make this to clash with dcterms:identifier above
+  	# /* dc:identifier isn't practical here, cause URI compaction will make this to clash with dcterms:identifier above */
   	bk:_accession ?accession;
 		bk:_attribute ?attribIri
   .
@@ -96,7 +96,8 @@ WHERE
   OPTIONAL {
   	?concept dc:identifier ?accession.
   	
-  	?accession dcterms:identifier ?accessionId.
+  	?accession dcterms:identifier ?_accessionId.
+		BIND ( STR ( ?_accessionId ) AS ?accessionId )
 
   	OPTIONAL { ?accession bk:isAmbiguousAccession ?isAmbiguousAccession }
 	  
@@ -124,7 +125,7 @@ WHERE
 		# xsd:string is generic and range takes priority in that case. 
 		BIND ( IF ( ?_attribXsd != xsd:string, ?_attribXsd, STR ( ?attribRange ) ) AS ?attribXsd )
 		
-		# Let's define an attribute as an object with IRI
+		# /* Let's define an attribute as an object with IRI */
 		BIND ( MD5 ( CONCAT ( STR ( ?concept ), STR ( ?attribProp ), STR ( ?attribValue ) ) ) AS ?attribHash )
 		BIND ( IRI ( CONCAT ( STR ( bk:_attrib_ ), ?attribHash ) ) AS ?attribIri )
 	}

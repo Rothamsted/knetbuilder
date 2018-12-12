@@ -2,6 +2,8 @@ package net.sourceforge.ondex.rdf.rdf2oxl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -42,13 +44,13 @@ public abstract class AbstractConverterTest
 	{
 		TestUtils.generateTDB ( springContext, tdbPath, rdfInputs );
 		
-		try ( Writer writer = new TestUtils.OutputCollectorWriter ( outPath ) )
+		try ( OutputStream out = new TestUtils.CollectingOutputStream ( outPath ) )
 		{
 			Rdf2OxlConverter converter = springContext.getBean ( Rdf2OxlConverter.class );
-			converter.convert ( writer, false );
+			converter.convert ( out, false );
 			
-			writer.flush ();
-			return writer.toString ();
+			// writer.flush ();
+			return out.toString ();
 		}		
 	}
 

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jena.query.QuerySolution;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class ConceptIdHandler extends QuerySolutionHandler implements Resettable
 {
 	private Map<String, Integer> conceptIds = new HashMap<> ( 50000 );
-			
+				
 	public ConceptIdHandler ()
 	{
 		super ();

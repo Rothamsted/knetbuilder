@@ -43,6 +43,8 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 	
 	private Exception executionException = null;
 
+	protected long lastExecutionCount = -1;
+	
 	
 	public QueryProcessor ()
 	{
@@ -71,7 +73,7 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 			@SuppressWarnings ( "unchecked" )
 			List<QuerySolution> chunk[] = new List[] { this.getDestinationSupplier ().get () };
 			
-			sparqlHelper.processSelect ( logPrefix, resourcesQuery, sol -> 
+			lastExecutionCount = sparqlHelper.processSelect ( logPrefix, resourcesQuery, sol -> 
 			{
 				chunk [ 0 ].add ( sol );
 

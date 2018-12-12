@@ -158,6 +158,7 @@
 ]]></value>
 				</property>
 				<property name='querySolutionHandler' ref='straightRelationHandler' />
+				<property name = "queryProcessor" ref = 'relationProcessor' />
 			</bean>
 		
 			<bean class='net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration'>
@@ -172,6 +173,7 @@
 ]]></value>
 				</property>
 				<property name='querySolutionHandler' ref='relationHandler' />
+				<property name = "queryProcessor" ref = 'relationProcessor' />				
 			</bean>
 		</util:list>
 		

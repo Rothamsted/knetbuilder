@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import javax.annotation.Resource;
+
 import org.apache.jena.query.QuerySolution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
@@ -21,23 +24,32 @@ import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
  */
 @Component ( "graphSummaryHandler" )
 public class GraphSummaryHandler extends QuerySolutionHandler
-{
-	@Autowired @Qualifier ( "conceptIds" )
-	private Map<String, Integer> conceptIds = new HashMap<> ( 50000 );
-
+{	
+	private Map<String, Object> graphSummary = new HashMap<> ();
+	
 	@Override
 	public void accept ( List<QuerySolution> sols )
 	{
 		FreeMarkerHelper tplHelper = this.getTemplateHelper ();
 		Map<String, Object> data = tplHelper.getTemplateData ( null );
+		graphSummary.clear ();
 		
 		QuerySolution sol = sols.iterator ().next ();
 
 		Stream.of ( "conceptsCount", "relationsCount" )
-			.forEach ( key -> data.put ( key, sol.getLiteral ( key ).getLong () ) );
+		.forEach ( key -> {
+			long val = sol.getLiteral ( key ).getLong ();
+			data.put ( key, val );
+			graphSummary.put ( key, val );
+		});
 		
 		DataPreProcessor dpp = this.getDataPreProcessor ();
 		if ( dpp != null ) dpp.accept ( null, data );
 		tplHelper.processTemplate ( this.getOxlTemplateName (), this.getOutWriter (), data );
+	}
+
+	@Bean ( "graphSummary" )
+	public Map<String, Object> getGraphSummary () {
+		return graphSummary;
 	}
 }

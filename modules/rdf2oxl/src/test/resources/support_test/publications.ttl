@@ -80,6 +80,9 @@ bkr:foo_acc  rdf:type  bk:Accession ;
 
 bkr:publication_26396590 bk:part_of bkr:publication_17206375.
 
+
+bkr:publication_26396590 bk:related bkr:publication_17206375.
+
 bkr:testRel1 a bk:Relation;
 	bk:relFrom bkr:publication_26396590;
 	bk:relTo bkr:publication_17206375; 

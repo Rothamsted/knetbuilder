@@ -5,8 +5,9 @@ import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
 import static uk.ac.ebi.utils.io.IOUtils.readResource;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.io.Writer;
@@ -15,7 +16,6 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.io.output.WriterOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -68,61 +68,73 @@ public class Rdf2OxlConverter
 	
 	protected void convertRaw ( Writer oxlOut )
 	{		
-		if ( this.toBeResetComponents != null )
-			toBeResetComponents.forEach ( Resettable::reset );
-		
-		for ( ItemConfiguration itemCfg: this.itemConfigurations )
+		try 
 		{
-			try
+			if ( this.toBeResetComponents != null ) toBeResetComponents.forEach ( Resettable::reset );
+			
+			for ( ItemConfiguration itemCfg: this.itemConfigurations )
 			{
-				QueryProcessor processor = itemCfg.getQueryProcessor ();
-				if ( processor == null ) processor = this.defaultQueryProcessor;
-
-				QuerySolutionHandler handler = itemCfg.getQuerySolutionHandler ();
-				if ( handler == null ) handler = this.defaultQuerySolutionHandler;
+				try
+				{
+					QueryProcessor processor = itemCfg.getQueryProcessor ();
+					if ( processor == null ) processor = this.defaultQueryProcessor;
+	
+					QuerySolutionHandler handler = itemCfg.getQuerySolutionHandler ();
+					if ( handler == null ) handler = this.defaultQuerySolutionHandler;
+						
+					processor.setConsumer ( handler );				
+					handler.setOutWriter ( oxlOut );
+	
+					String itemName = itemCfg.getName ();
 					
-				processor.setConsumer ( handler );				
-				handler.setOutWriter ( oxlOut );
-
-				String itemName = itemCfg.getName ();
-				
-				String constructTemplate = itemCfg.getConstructTemplateName ();
-				if ( constructTemplate != null ) constructTemplate = 
-					NamespaceUtils.asSPARQLProlog () 
-					+ readResource ( this.templateClassPath + "/" + constructTemplate ); 
-				handler.setConstructTemplate ( constructTemplate );
-
-				processor.setHeader ( itemCfg.getHeader () );
-				processor.setTrailer ( itemCfg.getTrailer () );
-				handler.setOxlTemplateName ( itemCfg.getGraphTemplateName () );
-				
-				processor.setLogPrefix ( "[" + itemName + " Processor]" );
-				handler.setLogPrefix ( "[" + itemName + " Handler]" );
-				
-				// Some processors get URIs from previously fetched data, so this might be null  
-				String resourcesSparql = itemCfg.getResourcesQueryName ();
-				if ( resourcesSparql != null ) resourcesSparql = 
-						NamespaceUtils.asSPARQLProlog () + readResource ( this.templateClassPath + "/" + resourcesSparql );
-							
-				processor.process ( resourcesSparql );
+					String constructTemplate = itemCfg.getConstructTemplateName ();
+					if ( constructTemplate != null ) constructTemplate = 
+						NamespaceUtils.asSPARQLProlog () 
+						+ readResource ( this.templateClassPath + "/" + constructTemplate ); 
+					handler.setConstructTemplate ( constructTemplate );
+	
+					processor.setHeader ( itemCfg.getHeader () );
+					processor.setTrailer ( itemCfg.getTrailer () );
+					handler.setOxlTemplateName ( itemCfg.getGraphTemplateName () );
+					
+					processor.setLogPrefix ( "[" + itemName + " Processor]" );
+					handler.setLogPrefix ( "[" + itemName + " Handler]" );
+					
+					// Some processors get URIs from previously fetched data, so this might be null  
+					String resourcesSparql = itemCfg.getResourcesQueryName ();
+					if ( resourcesSparql != null ) resourcesSparql = 
+							NamespaceUtils.asSPARQLProlog () + readResource ( this.templateClassPath + "/" + resourcesSparql );
+								
+					processor.process ( resourcesSparql );
+				}
+				catch ( IOException ex ) {
+					throw new UncheckedIOException ( 
+						format ( "I/O error while processing %s: %s", itemCfg.getName (), ex.getMessage () ),
+						ex
+					);
+				}				
+			} // for
+		} // main try
+		finally 
+		{
+			try {
+				if ( oxlOut != null ) oxlOut.close ();
 			}
 			catch ( IOException ex ) {
-				throw new UncheckedIOException ( 
-					format ( "I/O error while processing %s: %s", itemCfg.getName (), ex.getMessage () ),
-					ex
-				);
-			}				
+				throwEx ( UncheckedIOException.class, ex, "Error while converting to OXL: %s", ex.getMessage () );
+			}			
 		}
 	}
 	
 	
-	public void convert ( Writer oxlOut, boolean compress )
+	public void convert ( OutputStream oxlOut, boolean compress )
 	{
-		try	{
-			if ( compress ) oxlOut = new OutputStreamWriter ( new GZIPOutputStream ( 
-				new WriterOutputStream ( oxlOut, "UTF-8" ), (int) 1E6 ) 
-			); 
-			convertRaw ( oxlOut );
+		try	
+		{
+			Writer oxlw = compress
+				? new OutputStreamWriter ( new GZIPOutputStream (	oxlOut, (int) 1E6 ) )
+				: new OutputStreamWriter ( oxlOut );
+			convertRaw ( oxlw );
 		}
 		catch ( IOException ex ) {
 			throwEx ( UncheckedIOException.class, ex, 
@@ -133,8 +145,8 @@ public class Rdf2OxlConverter
 		
 	public void convert ( File file, boolean compress )
 	{
-		try ( Writer w = new FileWriter ( file ); ) {
-			convert ( w, compress );
+		try {
+			convert ( new FileOutputStream ( file ), compress );
 		}
 		catch ( IOException ex ) {
 			throwEx ( UncheckedIOException.class, ex, "I/O Error while running rdf2oxl: %s", ex.getMessage () );

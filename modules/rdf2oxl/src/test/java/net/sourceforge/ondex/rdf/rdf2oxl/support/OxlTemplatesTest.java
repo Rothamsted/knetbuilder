@@ -2,6 +2,8 @@ package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.jena.query.Dataset;
@@ -32,7 +34,8 @@ public class OxlTemplatesTest
 	{
 
 		try (
-			Writer writer = new TestUtils.OutputCollectorWriter ();	
+			OutputStream out = new TestUtils.CollectingOutputStream ();	
+			Writer writer = new OutputStreamWriter ( out );
 			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext ( "default_beans.xml" ) 
 		)
 		{
@@ -66,9 +69,9 @@ public class OxlTemplatesTest
 			);
 			
 			writer.flush ();
-			
+						
 			// Verify 
-			XPathReader xpath = new XPathReader ( writer.toString () );
+			XPathReader xpath = new XPathReader ( out.toString () );
 			assertEquals ( "Disease class not found or too many of them!", 
 				1,
 				xpath.readNodeList ( "/conceptclasses/cc[id = 'Disease']" ).getLength ()

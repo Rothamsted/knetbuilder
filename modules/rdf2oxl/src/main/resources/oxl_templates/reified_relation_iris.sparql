@@ -4,4 +4,12 @@ SELECT ?resourceIri
 
   # These are foo test cases in the ontology file.
   FILTER ( ?resourceIri NOT IN ( bk:testStmt0 ) )
+  
+ 	?resourceIri 
+		bk:relFrom ?c1;
+		bk:relTypeRef ?relationProp;
+		bk:relTo ?c2.
+
+	# The straight-triple counter-part must always exist
+  ?c1 ?relationProp ?c2.
 }

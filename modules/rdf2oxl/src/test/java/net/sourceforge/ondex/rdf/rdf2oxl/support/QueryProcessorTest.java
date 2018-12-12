@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import org.apache.jena.query.Dataset;
@@ -44,6 +46,7 @@ public class QueryProcessorTest
 	{
 		try ( 
 			TDBEndPointHelper sparqlHelper = new TDBEndPointHelper ( "target/test-classes/support_test/basics_tdb" );
+			OutputStream out = new TestUtils.CollectingOutputStream ();
 		)
 		{
 			Dataset ds = sparqlHelper.getDataSet ();
@@ -58,14 +61,15 @@ public class QueryProcessorTest
 			handler.setTemplateHelper ( tplHelper );
 			handler.setSparqlHelper ( sparqlHelper );
 			
-			Writer out = new TestUtils.OutputCollectorWriter ();
-			handler.setOutWriter ( out );
+			handler.setOutWriter ( new OutputStreamWriter ( out ) );
 			
 			QueryProcessor proc = new QueryProcessor ();						
 			proc.setConsumer ( handler );
 			proc.setSparqlHelper ( sparqlHelper );
 			
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
+			
+			out.flush ();
 			
 			assertTrue ( "Wrong output (title)",
 				out.toString ().contains ( "Title: Assessment of drought tolerance of 49 switchgrass" ) 
@@ -79,7 +83,10 @@ public class QueryProcessorTest
 	@Test
 	public void testSpring () throws Exception
 	{
-		try ( ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext ( "default_beans.xml" ) )
+		try ( 
+			ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext ( "default_beans.xml" );
+			OutputStream out = new TestUtils.CollectingOutputStream ();
+		)
 		{
 			TDBEndPointHelper sparqlHelper = ctx.getBean ( TDBEndPointHelper.class );
 			sparqlHelper.open ( "target/test-classes/support_test/basics_tdb" );
@@ -94,12 +101,13 @@ public class QueryProcessorTest
 			handler.setConstructTemplate ( IOUtils.readFile ( "target/test-classes/support_test/resource_graph.sparql" ) );
 			handler.setOxlTemplateName ( "resource.ftlh" );
 			
-			Writer out = new TestUtils.OutputCollectorWriter ();			
-			handler.setOutWriter ( out );
+			handler.setOutWriter ( new OutputStreamWriter ( out ) );
 						
 			QueryProcessor proc = (QueryProcessor) ctx.getBean ( "resourceProcessor" );
 			proc.setConsumer ( handler );
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
+			
+			out.flush ();
 			
 			assertTrue ( "Wrong output (title)",
 				out.toString ().contains ( "Title: Assessment of drought tolerance of 49 switchgrass" ) 

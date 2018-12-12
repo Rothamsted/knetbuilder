@@ -1,6 +1,8 @@
 package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FilterOutputStream;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,52 +42,75 @@ public class TestUtils
 {
 	private static Logger log = LoggerFactory.getLogger ( TestUtils.class );
 	
-	public static class OutputCollectorWriter extends FilterWriter
+	/**
+	 * 
+	 * TODO: comment me!
+	 *
+	 * TODO: Move to jutils.
+	 *
+	 */
+	public static class CollectingOutputStream extends OutputStream
 	{
 		private StringWriter sw = new StringWriter ();
+		private TeeOutputStream splitOut;
 		
-		public OutputCollectorWriter ( Writer destinationWriter )
+		public CollectingOutputStream ( OutputStream out )
 		{
-			super ( new StringWriter () );
-			this.lock = this.out = new OutputStreamWriter ( new TeeOutputStream (
-					new WriterOutputStream ( sw , "UTF-8"),
-					new WriterOutputStream ( destinationWriter, "UTF-8" )
-			));
+			this.splitOut = new TeeOutputStream ( out, new WriterOutputStream ( sw, "UTF-8" ) );
 		}
-		
-		public OutputCollectorWriter ( OutputStream destinationStream )
-		{
-			this ( new OutputStreamWriter ( destinationStream ) );
-		}
-		
-		public OutputCollectorWriter ()
+				
+		public CollectingOutputStream ()
 		{
 			this ( System.out );
 		}
 
-		public OutputCollectorWriter ( String outPath ) throws IOException
+		public CollectingOutputStream ( String outPath ) throws IOException
 		{
-			this ( new FileWriter ( outPath ) );
+			this ( new FileOutputStream ( outPath ) );
 		}
-		
 		
 		@Override
 		public String toString () {
 			return this.sw.toString ();
+		}
+
+		public void write ( byte[] b ) throws IOException
+		{
+			splitOut.write ( b );
+		}
+
+		public void write ( byte[] b, int off, int len ) throws IOException
+		{
+			splitOut.write ( b, off, len );
+		}
+
+		public void write ( int b ) throws IOException
+		{
+			splitOut.write ( b );
+		}
+
+		public void flush () throws IOException
+		{
+			splitOut.flush ();
+		}
+
+		public void close () throws IOException
+		{
+			splitOut.close ();
 		}
 	}
 
 	public static String processTemplate ( Template tpl, Map<String, Object> data )
 		throws IOException, TemplateException
 	{
-		String out = getOutput ( w -> tpl.process ( data, w ) );
+		String out = getOutput ( w -> tpl.process ( data, new OutputStreamWriter ( w ) ));
 		log.info ( "\n\nProcessed Template:\n{}\n", out );
 		return out;
 	}
-	
-	public static String getOutput ( ThrowingConsumer<Writer> action )
+		
+	public static String getOutput ( ThrowingConsumer<OutputStream> action )
 	{
-		OutputCollectorWriter w = new OutputCollectorWriter ();
+		CollectingOutputStream w = new CollectingOutputStream ();
 		Exceptions.sneak ().run ( () -> action.accept ( w ) ); 
 		return w.toString ();
 	}
