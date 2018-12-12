@@ -36,6 +36,7 @@ public class RelationProcessor extends QueryProcessor implements Resettable
 		this.relationsCount += this.lastExecutionCount;
 		long summaryCount = (long) graphSummary.get ( "relationsCount" );
 		
+		// Let's do this sanity check
 		if ( this.relationsCount != summaryCount ) log.warn ( 
 			"Mismatch between SPARQL-counted relations ({}) and those collected ({})",
 			summaryCount, this.relationsCount 
