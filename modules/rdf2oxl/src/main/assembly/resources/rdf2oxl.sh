@@ -37,8 +37,7 @@ export CLASSPATH="$CLASSPATH:$RDF2NEO_HOME:$RDF2NEO_HOME/lib/*"
 # See here for an explanation about ${1+"$@"} :
 # http://stackoverflow.com/questions/743454/space-in-java-command-line-arguments 
 
-java \
-	$OPTS net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlCLI ${1+"$@"}
+java $OPTS net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlCLI ${1+"$@"}
 
 EXCODE=$?
 

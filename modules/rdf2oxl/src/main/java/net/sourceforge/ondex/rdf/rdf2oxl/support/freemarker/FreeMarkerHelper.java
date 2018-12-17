@@ -83,7 +83,6 @@ public class FreeMarkerHelper
 				result.put ( "js", js.get ( "@graph" ) );
 				
 				// We also need to let our namespace manager know the namespaces used in this model
-				model.getNsPrefixMap ();
 				NamespaceUtils.registerNs ( model.getNsPrefixMap () );
 			}
 

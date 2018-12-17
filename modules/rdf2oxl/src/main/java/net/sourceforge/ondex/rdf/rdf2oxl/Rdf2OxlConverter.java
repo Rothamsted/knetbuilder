@@ -159,7 +159,7 @@ public class Rdf2OxlConverter
 			convert ( new File ( oxlPath ), compress );
 		}
 		catch ( UncheckedIOException ex ) {
-			throwEx ( UncheckedIOException.class, ex, "I/O Error while making OXL file '%s': %s", oxlPath, ex.getMessage () );
+			throwEx ( UncheckedIOException.class, ex.getCause (), "I/O Error while making OXL file '%s': %s", oxlPath, ex.getMessage () );
 		}
 	}
 

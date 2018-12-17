@@ -9,7 +9,7 @@ do
   key="${!iarg}" # variable indirection, equivalent to $i, where i is the value of iarg
   if [[ "$key" == '-t' ]] || [[ "$key" == '--tdb' ]]; then 
   	((iarg++))
-  	TDB_PATH="${!iarg}";
+  	tdb_path="${!iarg}";
   	((iarg++))
 	fi
   if [[ "$key" == '-h' ]] || [[ "$key" == '--help' ]]; then
@@ -28,8 +28,8 @@ if  [[ $# -lt 2 ]] || [[ $flag_help ]]; then
 	
 	$(basename $0) [rdf2oxl.sh options] <OXL-FILE> <RDF-FILE>...
 	
-	Loads the files into the TDB triple store set by RDF2NEO_TDB (uses a default in /tmp if not set),
-	then invokes tdb2rdf.sh passing this TDB and the -c option.
+	Loads the files into the TDB triple store set by --tdb or TDB_PATH (uses a default in /tmp if none is set),
+	then invokes rdf2oxl.sh passing this TDB and the -c option.
 		
 	Requires JENA_HOME to be set.	
 	
@@ -42,11 +42,11 @@ if [ "$JENA_HOME" == '' ]; then
 	exit 1
 fi
 
-if [ "$TDB_PATH" == "" ]; then
-	export TDB_PATH=/tmp/rdf2neo_tdb
-	echo "Generating new TDB at '$TDB_PATH'"
-  rm -Rf "$TDB_PATH"
-  mkdir "$TDB_PATH"
+if [ "$tdb_path" == "" ]; then
+	export tdb_path=/tmp/rdf2neo_tdb
+	echo "Generating new TDB at '$tdb_path'"
+  rm -Rf "$tdb_path"
+  mkdir "$tdb_path"
 else
 	tdb_flag=1
 fi
@@ -59,7 +59,7 @@ shift $ifiles # RDF files are now the only args
 # http://stackoverflow.com/questions/743454/space-in-java-command-line-arguments 
 
 echo -e "\n\n  Invoking tdbloader\n"
-echo "$JENA_HOME/bin/tdbloader" --loc="$TDB_PATH" ${1+"$@"}
+"$JENA_HOME/bin/tdbloader" --loc="$tdb_path" ${1+"$@"}
 
 
 echo -e "\n\n  Invoking rdf2oxl.sh"
@@ -67,7 +67,7 @@ set -- ${args[@]::$ifiles} # Back to the original arguments minus the RDF files
 if [[ $tdb_flag ]]; then
 	./rdf2oxl.sh ${1+"$@"}
 else
-	./rdf2oxl.sh --tdb "'$TDB_PATH'" ${1+"$@"}
+	./rdf2oxl.sh --tdb "$tdb_path" ${1+"$@"}
 fi
 
 excode=$?
