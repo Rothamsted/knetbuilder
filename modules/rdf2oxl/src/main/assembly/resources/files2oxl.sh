@@ -9,18 +9,19 @@ do
   key="${!iarg}" # variable indirection, equivalent to $i, where i is the value of iarg
   if [[ "$key" == '-t' ]] || [[ "$key" == '--tdb' ]]; then 
   	((iarg++))
-  	tdb_path="${!iarg}";
+  	tdb_path="${!iarg}"
   	((iarg++))
 	fi
   if [[ "$key" == '-h' ]] || [[ "$key" == '--help' ]]; then
   	help_flag=1 
   	((iarg++))
+  	break
 	fi
 	if [[ $key != -* ]]; then break; fi
 done
 
 
-if  [[ $# -lt 2 ]] || [[ $flag_help ]]; then
+if  [[ $# -lt 2 ]] || [[ $help_flag ]]; then
 				cat <<EOT
 	
 	
@@ -44,30 +45,33 @@ fi
 
 if [ "$tdb_path" == "" ]; then
 	export tdb_path=/tmp/rdf2neo_tdb
-	echo "Generating new TDB at '$tdb_path'"
+	echo -e "\n\n\tGenerating new TDB at '$tdb_path'\n"
   rm -Rf "$tdb_path"
   mkdir "$tdb_path"
 else
+	echo -e "\n\nUsing TDB at '$tdb_path'\n"
 	tdb_flag=1
 fi
 
-ifiles=$(($iarg )) # The index of the first RDF file arg
-args=( "$@" ) # Save args 
-shift $ifiles # RDF files are now the only args
+ifiles=$(( $iarg )) # The index of the first RDF file arg
+args=( ${1+"$@"} ) # Save args 
+shift $ifiles # now RDF files are the only args
 
 # See here for an explanation about ${1+"$@"} :
 # http://stackoverflow.com/questions/743454/space-in-java-command-line-arguments 
 
 echo -e "\n\n  Invoking tdbloader\n"
-"$JENA_HOME/bin/tdbloader" --loc="$tdb_path" ${1+"$@"}
+echo "$JENA_HOME/bin/tdbloader" --loc="$tdb_path" ${1+"$@"}
 
 
-echo -e "\n\n  Invoking rdf2oxl.sh"
-set -- ${args[@]::$ifiles} # Back to the original arguments minus the RDF files
+echo -e "\n\n  Invoking rdf2oxl.sh\n"
+# Back to the original arguments minus the RDF files
+echo ">>>>ARGS:$args"
+set -- ${1+"$args"}
 if [[ $tdb_flag ]]; then
-	./rdf2oxl.sh ${1+"$@"}
+	echo ./rdf2oxl.sh ${1+"$@"}
 else
-	./rdf2oxl.sh --tdb "$tdb_path" ${1+"$@"}
+	echo ./rdf2oxl.sh --tdb "$tdb_path" ${1+"$@"}
 fi
 
 excode=$?
