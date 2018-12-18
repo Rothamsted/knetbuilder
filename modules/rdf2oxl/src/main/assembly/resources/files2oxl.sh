@@ -1,79 +1,47 @@
 #!/bin/bash
-export WORK_DIR="$(pwd)"
 
-# Parse Params 
+# This is the Bash Launcher.
+# 
 
-iarg=1
-while [[ $iarg -lt $# ]]
-do
-  key="${!iarg}" # variable indirection, equivalent to $i, where i is the value of iarg
-  if [[ "$key" == '-t' ]] || [[ "$key" == '--tdb' ]]; then 
-  	((iarg++))
-  	tdb_path="${!iarg}"
-  	((iarg++))
-	fi
-  if [[ "$key" == '-h' ]] || [[ "$key" == '--help' ]]; then
-  	help_flag=1 
-  	((iarg++))
-  	break
-	fi
-	if [[ $key != -* ]]; then break; fi
-done
+# These are passed to the JVM. they're appended, so that you can predefine it from the shell
+OPTS="$OPTS -Xms2G -Xmx4G"
 
+# We always work with universal text encoding.
+OPTS="$OPTS -Dfile.encoding=UTF-8"
 
-if  [[ $# -lt 2 ]] || [[ $help_flag ]]; then
-				cat <<EOT
-	
-	
-	*** rdf2oxl, the RDF-to-OXL converter ***
-	
-	$(basename $0) [rdf2oxl.sh options] <OXL-FILE> <RDF-FILE>...
-	
-	Loads the files into the TDB triple store set by --tdb or TDB_PATH (uses a default in /tmp if none is set),
-	then invokes rdf2oxl.sh passing this TDB and the -c option.
-		
-	Requires JENA_HOME to be set.	
-	
-EOT
-  exit 1
-fi
+# Monitoring with jvisualvm/jconsole (end-user doesn't usually need this)
+#OPTS="$OPTS 
+# -Dcom.sun.management.jmxremote.port=5010
+# -Dcom.sun.management.jmxremote.authenticate=false
+# -Dcom.sun.management.jmxremote.ssl=false"
+       
+# Used for invoking a command in debug mode (end user doesn't usually need this)
+#OPTS="$OPTS -Xdebug -Xnoagent"
+#OPTS="$OPTS -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 
-if [ "$JENA_HOME" == '' ]; then
-	echo -e "\n\n  Please set JENA_HOME to the path of the Jena binaries, which includes bin/ utilities\n"
-	exit 1
-fi
+# You shouldn't need to change the rest
+#
+###
 
-if [ "$tdb_path" == "" ]; then
-	export tdb_path=/tmp/rdf2neo_tdb
-	echo -e "\n\n\tGenerating new TDB at '$tdb_path'\n"
-  rm -Rf "$tdb_path"
-  mkdir "$tdb_path"
-else
-	echo -e "\n\nUsing TDB at '$tdb_path'\n"
-	tdb_flag=1
-fi
+export WORKDIR="$(pwd)"
+cd "$(dirname $0)"
+export MYDIR="$(pwd)"
+cd "$WORKDIR"
 
-ifiles=$(( $iarg )) # The index of the first RDF file arg
-args=( ${1+"$@"} ) # Save args 
-shift $ifiles # now RDF files are the only args
+# Additional .jar files or other CLASSPATH directories can be set with this.
+# (see http://kevinboone.net/classpath.html for details)  
+export CLASSPATH="$CLASSPATH:$MYDIR/lib/*"
 
 # See here for an explanation about ${1+"$@"} :
 # http://stackoverflow.com/questions/743454/space-in-java-command-line-arguments 
 
-echo -e "\n\n  Invoking tdbloader\n"
-echo "$JENA_HOME/bin/tdbloader" --loc="$tdb_path" ${1+"$@"}
+java $OPTS net.sourceforge.ondex.rdf.rdf2oxl.Files2OxlCLI ${1+"$@"}
 
+EXCODE=$?
 
-echo -e "\n\n  Invoking rdf2oxl.sh\n"
-# Back to the original arguments minus the RDF files
-echo ">>>>ARGS:$args"
-set -- ${1+"$args"}
-if [[ $tdb_flag ]]; then
-	echo ./rdf2oxl.sh ${1+"$@"}
-else
-	echo ./rdf2oxl.sh --tdb "$tdb_path" ${1+"$@"}
-fi
-
-excode=$?
-echo -e "\n\n  files2oxl.sh finished"
-exit $excode
+# We assume stdout is for actual output, that might be pipelined to some other command, the rest (including logging)
+# goes to stderr.
+# 
+echo Java Finished. Quitting the Shell Too. >&2
+echo >&2
+exit $EXCODE

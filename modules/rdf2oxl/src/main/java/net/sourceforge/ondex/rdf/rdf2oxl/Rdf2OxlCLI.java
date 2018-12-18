@@ -28,7 +28,7 @@ public class Rdf2OxlCLI
 	 */
 	public static final String NO_EXIT_PROP = "net.sourceforge.ondex.debug.no_jvm_exit"; 
 			
-	private static int exitCode = 0;
+	static int exitCode = 0;
 	
 	private static Logger log = LoggerFactory.getLogger ( Rdf2OxlCLI.class );
 
@@ -73,7 +73,7 @@ public class Rdf2OxlCLI
 		}
 	}
 	
-	private static Options getOptions ()
+	static Options getOptions ()
 	{
 		Options opts = new Options ();
 
@@ -114,10 +114,8 @@ public class Rdf2OxlCLI
 		return opts;		
 	}
 	
-	private static void printUsage ()
+	static void printUsage ()
 	{
-		out.println ();
-
 		out.println ( "\n\n *** Ondex RDF/OXL Converter ***" );
 		out.println ( "\nImports BioKNO-based RDF files into Ondex OXL files" );
 		
@@ -129,7 +127,7 @@ public class Rdf2OxlCLI
 		PrintWriter pw = new PrintWriter ( out, true );
 		helpFormatter.printOptions ( pw, 100, getOptions (), 2, 4 );
 		
-		out.println ( "\nStart from this code to make your CLI\n\n" );
+		out.println ();
 		
 		exitCode = 1;
 	}
@@ -138,7 +136,7 @@ public class Rdf2OxlCLI
 	 * This can be used when {@link #NO_EXIT_PROP} is "true" and you're invoking the main() method from 
 	 * a JUnit test. It tells you the OS exit code that the JVM would return upon exit.
 	 */
-	public static int getExitCode () {
+	static int getExitCode () {
 		return exitCode;
 	}	
 }

@@ -115,24 +115,7 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 			lastEx 
 		);
 		
-		if ( !( forceFlush || this.decideNewTask ( currentDest ) ) ) return currentDest;
-
-		getExecutor ().submit ( () -> 
-		{
-			try {
-				this.getConsumer ().accept ( currentDest );
-			}
-			catch ( Exception ex ) {
-				setExecutionException ( ex );
-				String msg = format ( 
-					"Error while running RDF processing thread %s: %s", 
-					Thread.currentThread ().getName (), ex.getMessage () 
-				);
-				log.error ( msg, ex ); 
-			}
-		});
-		
-		return this.getDestinationSupplier ().get ();
+		return super.handleNewTask ( currentDest, forceFlush );
 	}
 	
 	
@@ -203,4 +186,25 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 	{
 		this.logPrefix = logPrefix;
 	}
+
+	
+	@Override
+	protected Runnable wrapTask ( Runnable task )
+	{
+		return super.wrapTask ( () -> 
+		{
+			try {
+				task.run ();
+			}
+			catch ( Exception ex ) 
+			{
+				this.setExecutionException ( ex );
+				String msg = format ( 
+					"Error while running RDF processing thread %s: %s", 
+					Thread.currentThread ().getName (), ex.getMessage () 
+				);
+				log.error ( msg, ex ); 
+			}
+		});
+	}	
 }

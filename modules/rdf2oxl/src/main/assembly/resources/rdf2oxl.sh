@@ -19,20 +19,19 @@ OPTS="$OPTS -Dfile.encoding=UTF-8"
 #OPTS="$OPTS -Xdebug -Xnoagent"
 #OPTS="$OPTS -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 
+
 # You shouldn't need to change the rest
 #
 ###
 
-export WORK_DIR="$(pwd)"
-if [ "$RDF2NEO_HOME" == "" ]; then
-	cd "$(dirname $0)"
-	export RDF2NEO_HOME="$(pwd)"
-	cd "$WORK_DIR"
-fi
+export WORKDIR="$(pwd)"
+cd "$(dirname $0)"
+export MYDIR="$(pwd)"
+cd "$WORKDIR"
 
 # Additional .jar files or other CLASSPATH directories can be set with this.
 # (see http://kevinboone.net/classpath.html for details)  
-export CLASSPATH="$CLASSPATH:$RDF2NEO_HOME:$RDF2NEO_HOME/lib/*"
+export CLASSPATH="$CLASSPATH:$MYDIR/lib/*"
 
 # See here for an explanation about ${1+"$@"} :
 # http://stackoverflow.com/questions/743454/space-in-java-command-line-arguments 
