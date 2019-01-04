@@ -16,10 +16,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
+import net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlConverter;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 
 /**
- * TODO: comment me!
+ * # The query solution handler
+ * 
+ * Each instance of this processes sets of URIs about a resource type, to extract details via `SPARQL CONSTRUCT`, build
+ * `JSON-LD` data and pass them to the {@link FreeMarkerHelper XML/OXL template engine}.  
+ * 
+ * See my [package description](package-summary.html) for details. for details.  
+ * 
+ * As in other cases, configuration details for the handlers are set via Spring and {@link Rdf2OxlConverter}.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Jul 2018</dd></dl>
@@ -29,14 +37,14 @@ import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 {
 	/**
-	 * A notation to represent a function passed to {@link QuerySolutionHandler#setDataPreProcessor(DataPreProcessor)}
+	 * An interface to represent a function passed to {@link QuerySolutionHandler#setDataPreProcessor(DataPreProcessor)}.
 	 */
 	public static interface DataPreProcessor extends BiConsumer<Model, Map<String, Object>>
 	{
+		/** We override this in order to avoid cast exception issues. */
 		@Override
 		default DataPreProcessor andThen ( BiConsumer<? super Model, ? super Map<String, Object>> after )
 		{
-			// This is to avoid cast exception
 			BiConsumer<Model, Map<String, Object>> composed = BiConsumer.super.andThen ( after );
 			return (model, data) -> composed.accept ( model, data );
 		}	
@@ -56,6 +64,15 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 	
 	protected Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
+	/** 
+	 * See {@link net.sourceforge.ondex.rdf.rdf2oxl.support} for details.  
+	 * 
+	 * The described behaviour is achieved by using {@link #getSparqlHelper()}, which method 
+	 * {@link SparqlEndPointHelper#processConstruct(String, String, Consumer)} is invoked with a code that makes
+	 * use of {@link #getConstructTemplate()} to obtain data from sols, and then adds possible additional data coming from
+	 * {@link #getTemplateHelper()} and/or {@link #getDataPreProcessor()}.
+	 *    
+	 */
 	@Override
 	public void accept ( List<QuerySolution> sols )
 	{
@@ -79,9 +96,12 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 				logPrefix,
 				sparqlConstruct,
 				model ->
-				{		
+				{	
+					// some data massage to the JSON-LD that is extracted from the RDF CONSTRUCT results (ie, model)
 					Map<String, Object> data = templateHelper.getTemplateData ( model );
+					// Do I have customised data too?
 					if ( dataPreProcessor != null ) dataPreProcessor.accept ( model, data );
+					// And eventually here we go
 					templateHelper.processTemplate ( oxlTemplateName, this.outWriter, data );
 				}
 			);
@@ -89,7 +109,9 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 	}
 
 
-	
+	/**
+	 * All the OXL output is written here.
+	 */
 	public Writer getOutWriter ()
 	{
 		return outWriter;
@@ -101,7 +123,16 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 		this.outWriter = outWriter;
 	}
 
-
+	/** 
+	 * 
+	 * The name of the OXL/XML template to generate OXL for the entity type the handler is configured with.
+	 * 
+	 * Currently we use FreeMarker as template engine, so this should point to some *.ftlx.    
+	 * 
+	 * This is usually found in the class path setup by {@link Rdf2OxlConfiguration#getTemplateClassPath()} (usually via
+	 * Spring).  
+	 * 
+	 */
 	public String getOxlTemplateName ()
 	{
 		return oxlTemplateName;
@@ -113,7 +144,16 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 		this.oxlTemplateName = oxlTemplateName;
 	}
 
-
+	/**
+	 * The name of a `*.sparql` file, which contain a CONSTRUCT query to fetch resource details about a set of URIs of a 
+	 * given type (eg, concept, relation).  
+	 * 
+	 * Our {@link #accept(List)} method replaces $resourceIris in this file with its current parameter, to generate the 
+	 * their details.  
+	 * 
+	 * See examples in main/resources/oxl_templates.  
+	 * 
+	 */
 	public String getConstructTemplate ()
 	{
 		return constructTemplate;
@@ -125,7 +165,11 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 		this.constructTemplate = constructTemplate;
 	}
 
-
+	/**
+	 * The {@link SparqlEndPointHelper} used to interact with the RDF data source for the conversion. This is usually
+	 * configured via Spring.
+	 * 
+	 */
 	public SparqlEndPointHelper getSparqlHelper ()
 	{
 		return sparqlHelper;
@@ -137,7 +181,10 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 		this.sparqlHelper = sparqlHelper;
 	}
 
-
+	/**
+	 * The {@link FreeMarkerHelper OXL/XML template engine} used to produce the final output. This is usually configured 
+	 * via Spring.
+	 */
 	public FreeMarkerHelper getTemplateHelper ()
 	{
 		return templateHelper;
@@ -163,7 +210,11 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 		this.dataPreProcessor = dataPreProcessor;
 	}
 
-
+	/**
+	 * This is used to in log messages, to allow for associating the messages to the respective component, entity type
+	 * it processed, and possibly other details (e.g., the `LIMIT/OFFSET` window or the thread name).
+	 * 
+	 */
 	public String getLogPrefix ()
 	{
 		return logPrefix;

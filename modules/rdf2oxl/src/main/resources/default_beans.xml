@@ -9,7 +9,10 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd"
 >
 
-	<description><![CDATA[The Base Spring configuration for rdf2oxl.]]></description>
+	<description><![CDATA[The Base Spring configuration for rdf2oxl.
+	 
+	  A detailed description of the tool is given in
+	  /odxgh_rdf2oxl/src/main/java/net/sourceforge/ondex/rdf/rdf2oxl/support/package-info.java]]></description>
 
 	<!-- 
 	  Just leave this here. It means some components are got from the Java source files, by means of
@@ -24,8 +27,8 @@
 	  A configuration item corresponds to a particular section of the OXL. It contains attributes like 
 	  query to get data for that section and templates to generate XML from the data.
 	-->
-		<util:list id = "itemConfigurations" 
-			value-type = "net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration">
+	<util:list id = "itemConfigurations" 
+						 value-type = "net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration">
 			
 			<bean class='net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration'>
 				<property name='name' value='Graph Summary' />
@@ -175,16 +178,6 @@
 				<property name='querySolutionHandler' ref='relationHandler' />
 				<property name = "queryProcessor" ref = 'relationProcessor' />				
 			</bean>
-		</util:list>
+	</util:list>
 		
-	
-	<!-- TODO: Remove -->	
-	<!-- Just a test to move Rdf2OxlConfiguration to the XML, which should have a simpler syntax -->
-	<bean class = "net.sourceforge.ondex.rdf.rdf2oxl.support.ItemConfiguration" id = "testConfig">
-		<property name="header">
-			<value><![CDATA[#{T(org.apache.commons.lang3.StringEscapeUtils).unescapeJava (
-				"\tJust a <b>test</b> value."
-			)}]]></value>
-		</property>
-	</bean>
 </beans>

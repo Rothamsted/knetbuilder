@@ -22,10 +22,15 @@ import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
 
 /**
- * TODO: comment me!
+ * # The SPARQL query processor
+ * 
+ * Each instance gets resource URIs for a given type (e.g., concepts, relations) and pass them to a 
+ * {@link QuerySolutionHandler}, for getting resource details and passing them to the OXL renderer.  
+ * 
+ * See my [package description](package-summary.html) for details.  
  *
  * The {@link #setConsumer(Consumer) consumer} for this processor is set by {@link Rdf2OxlConverter}, which has its own
- * Spring-coming default and also values taken from {@link ItemConfiguration}. 
+ * Spring-coming defaults and also values taken from {@link ItemConfiguration}.  
  * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Jul 2018</dd></dl>
