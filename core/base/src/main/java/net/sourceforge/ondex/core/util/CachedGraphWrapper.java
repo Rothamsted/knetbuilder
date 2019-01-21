@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -18,6 +19,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.Unit;
 import net.sourceforge.ondex.core.util.prototypes.AccessionPrototype;
 import net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype;
 import net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype;
@@ -216,6 +218,24 @@ public class CachedGraphWrapper
 		
 		return this.getAccession ( proto.getAccession (), proto.getDataSource (), proto.isAmbiguous (), concept );
 	}	
+	
+	public synchronized AttributeName getAttributeName ( 
+		String id, String fullName, String description, Unit unit, Class<?> datatype, AttributeName parent 
+	)
+	{
+		return this.cacheGet ( 
+			AttributeName.class, id, 
+			() -> this.graph.getMetaData ().createAttributeName ( id, fullName, description, unit, datatype, parent )
+		);
+	}
+
+	public synchronized AttributeName getAttributeName ( 
+		String id, String fullName, String description, Class<?> datatype 
+	)
+	{
+		return this.getAttributeName ( id, fullName, description, null, datatype, null );
+	}
+	
 	
 	/**
 	 * Facility to return cached objects, or, create and return them, if not already in the cache. 
