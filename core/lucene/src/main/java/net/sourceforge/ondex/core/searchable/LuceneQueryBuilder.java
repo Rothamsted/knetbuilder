@@ -717,7 +717,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	}
 	
 	/**
-	 * Wrapper of {@link #searchByAttribute(String, String, String, Analyzer)}. 
+	 * Wrapper of {@link #searchByAttribute(String, String, String, Analyzer)} with attrName = an.getId().  
 	 */
 	private static Query searchByAttribute ( 
 		String attrFieldPrefix, AttributeName an, String term, Analyzer analyzer

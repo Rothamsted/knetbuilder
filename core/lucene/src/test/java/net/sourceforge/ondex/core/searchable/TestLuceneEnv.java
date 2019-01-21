@@ -427,4 +427,38 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue("relation not in index", lenv.relationExistsInIndex(r5.getId()));
 		assertTrue("relation not in index", lenv.relationExistsInIndex(r6.getId()));
 	}
+	
+	public void testIRISearch() 
+	{
+		String ns = "http://www.ondex.org/test/res/";
+		
+		AttributeName iria = og.getMetaData ().createAttributeName (
+			"iri", "IRI", "IRI/URI of an entity", null, String.class, null
+		);
+		ONDEXConcept concept1 = og.getFactory().createConcept ( "A", dataSource, cc, et );
+		concept1.createAttribute ( iria, ns + "concept:A", false );
+
+		ONDEXConcept concept2 = og.getFactory().createConcept ( "B", dataSource, cc, et );
+		concept2.createAttribute ( iria, ns + "concept:B", false );
+
+		ONDEXRelation r1 = og.getFactory().createRelation(concept1, concept2, rts, et);
+		r1.createAttribute ( iria, ns + "rel:AB", false );
+
+		lenv.setONDEXGraph ( og );
+		
+		ONDEXConcept c1res = lenv.getConceptByIRI ( ns + "concept:A" );
+		assertNotNull ( "Concept A not found!", c1res );
+		assertEquals ( "Concept A different than expected!", concept1.getPID (), c1res.getPID () );
+		
+		ONDEXConcept c2res = lenv.getConceptByIRI ( ns + "concept:B" );
+		assertNotNull ( "Concept B not found!", c2res );
+		assertEquals ( "Concept B different than expected!", concept2.getPID (), c2res.getPID () );
+		
+		ONDEXRelation r1res = lenv.getRelationByIRI ( ns + "rel:AB" );
+		assertNotNull ( "Relation not found!", c2res );
+		assertEquals ( "Found Relation different than expected (type)!", r1.getOfType ().getId (), r1res.getOfType ().getId () );		
+		assertEquals ( "Found Relation different than expected (from)!", r1.getFromConcept ().getPID (), r1.getFromConcept ().getPID () );		
+		assertEquals ( "Found Relation different than expected (to)!", r1.getToConcept ().getPID (), r1.getToConcept ().getPID () );		
+	}
+
 }

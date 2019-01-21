@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.SimpleCollector;
@@ -43,6 +45,8 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.machinezoo.noexception.Exceptions;
 
@@ -189,9 +193,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	private final static BitSet EMPTYBITSET = new BitSet(0);
 
 	private final static Map<Integer, Float> EMPTYSCOREMAP = new HashMap<Integer, Float>( 0 );
-	
+
+	/* Options to reflect these names are set in the class initialising block, see below */
 	private final static FieldType FIELD_TYPE_STORED_INDEXED_NO_NORMS = new FieldType ( TextField.TYPE_STORED );
 	private final static FieldType FIELD_TYPE_STORED_INDEXED_VECT_STORE = new FieldType ( TextField.TYPE_STORED );
+	private final static FieldType FIELD_TYPE_STORED_INDEXED_UNCHANGED = new FieldType ( StringField.TYPE_STORED );
 
 
 	/**
@@ -215,6 +221,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	private final static double RAM_BUFFER_QUOTA = 0.1;
 
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
+	
 	/**
 	 * Optimises the RAM to be used for Lucene indexes, based on {@link #RAM_BUFFER_QUOTA} and
 	 * max memory available.
@@ -301,9 +310,15 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 	static
 	{
-		LuceneEnv.FIELD_TYPE_STORED_INDEXED_NO_NORMS.setOmitNorms ( true );
-		LuceneEnv.FIELD_TYPE_STORED_INDEXED_VECT_STORE.setStoreTermVectors ( true );
+		FIELD_TYPE_STORED_INDEXED_NO_NORMS.setOmitNorms ( true );
+		FIELD_TYPE_STORED_INDEXED_NO_NORMS.freeze ();
 		
+		FIELD_TYPE_STORED_INDEXED_VECT_STORE.setStoreTermVectors ( true );
+		FIELD_TYPE_STORED_INDEXED_VECT_STORE.freeze ();
+		
+		FIELD_TYPE_STORED_INDEXED_UNCHANGED.setOmitNorms ( true );
+		FIELD_TYPE_STORED_INDEXED_UNCHANGED.freeze ();
+				
 		EXECUTOR = Executors.newCachedThreadPool ();
 		Runtime.getRuntime ().addShutdownHook ( 
 			new Thread ( 
@@ -705,7 +720,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 					int entityId = Optional.ofNullable ( document.get ( field ) )
 						.map ( Integer::valueOf )
 						.orElseThrow ( () -> new NullPointerException ( String.format ( 
-							"Internal error: for some reason I have a null ID for the Lucene query: \"%s\" and the field \"%s\"", 
+							"Internal error: for some reason I have a null ID for the Lucene field: \"%s\" and the query \"%s\"", 
 							field, 
 							q.toString () 
 						)));
@@ -752,7 +767,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	}
 
 	
-	
+	/**
+	 * Searches an {@link ONDEXEntity}, by first searching the entity in Lucene, via q, and then picking it from the
+	 * {@link #getONDEXGraph() managed Ondex graph}, using the Lucene's ID field named 'field'.
+	 * 
+	 */
 	private <E extends ONDEXEntity> Set<E> searchEntity ( Query q, String field, Class<E> returnValueClass )
 	{
 		try
@@ -779,9 +798,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				int entityId = Optional.ofNullable ( document.get ( field ) )
 					.map ( Integer::valueOf )
 					.orElseThrow ( () -> new NullPointerException ( String.format ( 
-						"Internal error: for some reason I have a null ID for the Lucene query: \"%s\" and the field \"%s\"", 
-						field, 
-						q.toString () 
+						"Internal error: for some reason I have a null ID for the Lucene field: \"%s\" and the query \"%s\"", 
+						q.toString (), 
+						field 
 					)));
 				
 				set.set ( entityId );
@@ -820,6 +839,39 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		return searchEntity ( q, RELID_FIELD, ONDEXRelation.class );
 	}
 
+	/**
+	 * Base method to get a single concept or relation by using the 'iri' attribute.  
+	 */
+	private <E extends ONDEXEntity> E getEntityByIRI ( String iri, Function<Query, Set<E>> searcher )
+	{
+		PhraseQuery q = new PhraseQuery ( "iri", iri );
+		Set<E> results = searcher.apply ( q );
+		if ( results == null ) return null;
+		int size = results.size ();
+		if ( size == 0 ) return null;
+		E result = results.iterator ().next ();
+		if ( size > 1 ) log.warn ( 
+			"I've found {} instances of {} for '{}'", size, result.getClass ().getSimpleName (), iri 
+		);
+		return result; 
+	}
+	
+	/**
+	 * These IRI-based fetching methods are used with the new architecture, to bridge graph databases and in-memory Ondex
+	 * graphs.
+	 */
+	public ONDEXConcept getConceptByIRI ( String iri ) {
+		return getEntityByIRI ( iri, this::searchInConcepts );
+	}
+	
+	/**
+	 * These IRI-based fetching methods are used with the new architecture, to bridge graph databases and in-memory Ondex
+	 * graphs.
+	 */
+	public ONDEXRelation getRelationByIRI ( String iri ) {
+		return getEntityByIRI ( iri, this::searchInRelations );
+	}
+	
 	
 	private <E extends ONDEXEntity> ScoredHits<E> searchScoredEntity ( 
 		Query q, String field, Class<E> returnedValueClass, int limit 
@@ -908,12 +960,12 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		so.setLog4jLevel(Level.INFO); // todo: fix this - should be configured
 										// externally
 		fireEventOccurred(so);
+		
+		// store an immutable version of the graph
+		this.og = new LuceneONDEXGraph(aog);
 
 		// start indexing
 		indexONDEXGraph(aog, create);
-
-		// make the ONDEXGraph immutable
-		og = new LuceneONDEXGraph(aog);
 	}
 
 	/**
@@ -1002,6 +1054,23 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		});
 	}
 
+	private Document getCommonFields ( ONDEXEntity e )
+	{
+		AttributeName iriAttrType = this.og.getMetaData ().getAttributeName ( "iri" );
+		
+		String iri = iriAttrType == null 
+			? null 
+			: Optional.ofNullable ( e.getAttribute ( iriAttrType ) )
+				.map ( attr -> (String) attr.getValue () )
+				.orElse ( null );
+		
+		Document doc = new Document ();
+		if ( iri != null ) doc.add ( new Field ( "iri", iri, FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
+		
+		return doc;
+	}
+	
+	
 	/**
 	 * Add the given ONDEXConcept to the current index.
 	 * 
@@ -1045,10 +1114,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		}
 
 		// create a new document for each concept and sets fields
-		Document doc = new Document ();
+		Document doc = this.getCommonFields ( c );
 		
-		doc.add ( new Field ( CONID_FIELD, conceptID, FIELD_TYPE_STORED_INDEXED_NO_NORMS ) );
-		doc.add ( new Field ( PID_FIELD, parserID, StoredField.TYPE ) );
+		doc.add ( new Field ( CONID_FIELD, conceptID, FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
+		doc.add ( new Field ( PID_FIELD, parserID, StringField.TYPE_STORED ) );
 		
 		doc.add ( new Field ( CC_FIELD, c.getOfType ().getId (), StringField.TYPE_STORED ) );
 		doc.add ( new Field ( DataSource_FIELD, c.getElementOf ().getId (), StringField.TYPE_STORED ) );
@@ -1192,11 +1261,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		if ( it_attribute.size () == 0 ) return;
 
 		// create a Document for each relation and store ids
-		Document doc = new Document ();
+		Document doc = this.getCommonFields ( r );
 
-		doc.add ( new Field ( RELID_FIELD, String.valueOf ( r.getId () ), StringField.TYPE_NOT_STORED ) );
-		doc.add ( new Field ( FROM_FIELD, String.valueOf ( r.getFromConcept ().getId () ), StringField.TYPE_NOT_STORED ) );
-		doc.add ( new Field ( TO_FIELD, String.valueOf ( r.getToConcept ().getId () ), StoredField.TYPE ) );
+		doc.add ( new Field ( RELID_FIELD, String.valueOf ( r.getId () ), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
+		doc.add ( new Field ( FROM_FIELD, String.valueOf ( r.getFromConcept ().getId () ), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
+		doc.add ( new Field ( TO_FIELD, String.valueOf ( r.getToConcept ().getId () ), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
 		doc.add ( new Field ( OFTYPE_FIELD, r.getOfType ().getId (), StringField.TYPE_STORED ) );
 
 		// mapping attribute name to gds value
