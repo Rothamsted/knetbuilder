@@ -275,7 +275,7 @@
 		<maven.dependency.plugin.version>3.0.0</maven.dependency.plugin.version>
 		<maven.failsafe.plugin.version>2.6</maven.failsafe.plugin.version>
 		<maven.jar.plugin.version>2.3</maven.jar.plugin.version>
-		<maven.javadoc.plugin.version>3.0.1</maven.javadoc.plugin.version>
+		<maven.javadoc.plugin.version>2.6.1</maven.javadoc.plugin.version>
 		<maven.pmd.plugin.version>2.4</maven.pmd.plugin.version>
 		<maven.project.info.reports.plugin.version>2.1.2</maven.project.info.reports.plugin.version>
 		<maven.scm.plugin.version>1.2</maven.scm.plugin.version>
