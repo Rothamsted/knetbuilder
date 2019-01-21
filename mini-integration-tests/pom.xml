@@ -52,7 +52,7 @@
 			<artifactId>rdf2neo-cli</artifactId>
 			<exclusions>
 				<exclusion>
-					<!-- Let's avoid conflicts with ONDEX, which uses the SLF4J/Log4j binding -->
+					<!-- Let's avoid conflicts with Ondex, which uses the SLF4J/Log4j binding -->
 					<groupId>org.slf4j</groupId>
 					<artifactId>log4j-over-slf4j</artifactId>
 				</exclusion>

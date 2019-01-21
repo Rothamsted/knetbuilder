@@ -186,6 +186,7 @@
 			
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.1</version>
 				<configuration>
 					<!-- This allows the Javadoc tool to recognise Markdown syntax in Javadoc comments -->
 					<doclet>ch.raffael.doclets.pegdown.PegdownDoclet</doclet>
