@@ -14,7 +14,10 @@
 	<description>
 		Command-line interface for the RDF Exporter.
 		Note that this is not shipped with Ondex or Mini, if you need the CLI wrapper for the
-		RDF exporter, you've to download it from our Maven repository (TODO).</description>
+		RDF exporter, you've to download it from our Maven repository:		
+		http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots/net/sourceforge/ondex/modules/rdf-export-2-cli/
+		(look for rdf-export-2-cli_XXX.zip).
+	</description>
 
 	<dependencies>
 	
