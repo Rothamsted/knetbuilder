@@ -25,9 +25,10 @@ import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModelException;
 import info.marcobrandizi.rdfutils.XsdMapper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
+import net.sourceforge.ondex.rdf.rdf2oxl.support.Rdf2OxlConfiguration;
 
 /**
- * TODO: comment me!
+ * A few utilities to use the FreeMarker template engine.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Jul 2018</dd></dl>
@@ -38,10 +39,17 @@ public class FreeMarkerHelper
 {
 	private Configuration templateConfig;
 
+	/**
+	 * Defaults to `data = null`
+	 */
 	public void processTemplate ( String templateName, Writer outWriter ) {
 		processTemplate ( templateName, outWriter, null );
 	}
 
+	/**
+	 * Invokes a template with some data.
+	 * 
+	 */
 	public void processTemplate ( String templateName, Writer outWriter, Map<String, Object> data )
 	{
 		try 
@@ -64,7 +72,15 @@ public class FreeMarkerHelper
 		}		
 	}
 	
-	
+	/**
+	 * Gets a map of data from a Jena RDF {@link Model}. In order to do so, it converts the `model` into `JSON-LS`
+	 * (using the Jena's internals) and then extracts the `@graph` object from the result, to put it into the a `js`
+	 * key in the resulting map.  
+	 * 
+	 * Moreover, it adds some utilities to the same resulting map, so that they can be invoked from within FreeMarker
+	 * templates (see the implementation).  
+	 * 
+	 */
 	public Map<String, Object> getTemplateData ( Model model )
 	{
 		try
@@ -102,7 +118,9 @@ public class FreeMarkerHelper
 		}
 	}
 	
-	
+	/**
+	 * See {@link Rdf2OxlConfiguration#getTemplateConfiguration()}
+	 */
 	public Configuration getTemplateConfig ()
 	{
 		return templateConfig;
@@ -136,11 +154,17 @@ public class FreeMarkerHelper
 		}				
 	}
 	
+	/**
+	 * See {@link #getStaticClassWrapper(Class)}
+	 */
 	public void addStaticClassWrapper ( Map<String, Object> data, String name, Class<?> clazz )
 	{
 		data.put ( name, getStaticClassWrapper ( clazz ) );
 	}
 
+	/**
+	 * Gets the name to be seen inside FreeMarker from the {@link Class#getSimpleName() class's simple name}.  
+	 */
 	public void addStaticClassWrapper ( Map<String, Object> data, Class<?> clazz )
 	{
 		addStaticClassWrapper ( data, clazz.getSimpleName (), clazz );

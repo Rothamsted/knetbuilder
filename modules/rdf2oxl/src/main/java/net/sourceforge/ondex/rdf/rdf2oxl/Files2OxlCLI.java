@@ -18,7 +18,10 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * TODO: comment me!
+ * This variant is a simple wrapper that first loads files into a TDB database and then invokes {@link Rdf2OxlCLI}.  
+ * 
+ * For the moment, it relies on the Jena's distribution and its `tdbloader` command. This class is used by invocation 
+ * scripts in the final distribution, see `src/main/assembly/resources`.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Nov 2018</dd></dl>

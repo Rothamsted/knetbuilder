@@ -7,7 +7,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * # A special {@link QueryProcessor} for relations
+ * 
+ * This just gets some summary information from {@link GraphSummaryHandler}, in order to compare these to the relations
+ * collected via the one-by-one query. 
+ * 
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Dec 2018</dd></dl>
  *
@@ -17,7 +21,7 @@ public class RelationProcessor extends QueryProcessor implements Resettable
 {
 	private long relationsCount = -1;
 
-	// @Autowired @Qualifier ( "graphSummary" )
+	// This doesn't work with maps @Autowired @Qualifier ( "graphSummary" )
 	@Resource ( name = "graphSummary" )
 	private Map<String, Object> graphSummary;
 	
@@ -40,6 +44,9 @@ public class RelationProcessor extends QueryProcessor implements Resettable
 		);
 	}
 
+	/**
+	 * Resets the processed relations internal counter.  
+	 */
 	@Override
 	public void reset () {
 		this.relationsCount = -1;

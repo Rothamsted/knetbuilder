@@ -21,7 +21,7 @@ import uk.ac.ebi.utils.io.IOUtils;
 import uk.ac.ebi.utils.xml.XPathReader;
 
 /**
- * TODO: comment me!
+ * Simple tests about using FreeMarker for OXL conversion.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>31 Jul 2018</dd></dl>

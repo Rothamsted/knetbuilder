@@ -1,15 +1,11 @@
 package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.FilterOutputStream;
-import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.Map;
 
 import org.apache.commons.io.output.TeeOutputStream;
@@ -32,7 +28,7 @@ import freemarker.template.TemplateException;
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
 
 /**
- * TODO: comment me!
+ * A few test utilities used with RDF2OXL tests.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>16 Oct 2018</dd></dl>
@@ -44,7 +40,7 @@ public class TestUtils
 	
 	/**
 	 * 
-	 * TODO: comment me!
+	 * An {@link OutputStream} that collects the flow coming from upstream into a string. Useful for testing.
 	 *
 	 * TODO: Move to jutils.
 	 *
@@ -100,6 +96,7 @@ public class TestUtils
 		}
 	}
 
+	/** A simple wrapper that processes a FreeMarker template and returns its output */
 	public static String processTemplate ( Template tpl, Map<String, Object> data )
 		throws IOException, TemplateException
 	{
@@ -108,6 +105,9 @@ public class TestUtils
 		return out;
 	}
 		
+  /**
+   * Uses {@link CollectingOutputStream} to collect the `action` output into a string.
+   */
 	public static String getOutput ( ThrowingConsumer<OutputStream> action )
 	{
 		CollectingOutputStream w = new CollectingOutputStream ();
@@ -115,6 +115,9 @@ public class TestUtils
 		return w.toString ();
 	}
 	
+	/**
+	 * A simple wrapper that uses the RDF2OXL configuration to load RDF files into a TDB triple store.
+	 */
 	@SafeVarargs	
 	public static void generateTDB ( ApplicationContext springContext, String tdbPath, Pair<InputStream, String>... rdfInputs )
 		throws IOException
@@ -131,6 +134,7 @@ public class TestUtils
 		}));
 	}		
 
+	/** Uses the RDF2OXL default Spring context (`default_beans.xml` in the classpath) */
 	@SafeVarargs	
 	public static void generateTDB ( String tdbPath, Pair<InputStream, String>... rdfInputs ) throws IOException
 	{

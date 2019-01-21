@@ -5,18 +5,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import javax.annotation.Resource;
-
 import org.apache.jena.query.QuerySolution;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 
 /**
- * TODO: comment me!
+ * # The Graph Summary Handler
+ * 
+ * This gets graph summarising figures from special aggregate-based query and renders these numbers on the corresponding
+ * Ondex section.  
+ * 
+ * We also do some sanity check in {@link ConceptProcessor}, by comparing the no of entities collected and rendered by 
+ * querying them one-by-one with the summaries obtained hereby.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>28 Sep 2018</dd></dl>
@@ -27,6 +29,9 @@ public class GraphSummaryHandler extends QuerySolutionHandler
 {	
 	private Map<String, Object> graphSummary = new HashMap<> ();
 	
+	/**
+	 * Expects a single solution with conceptsCount and relationsCount.
+	 */
 	@Override
 	public void accept ( List<QuerySolution> sols )
 	{

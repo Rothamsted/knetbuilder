@@ -7,7 +7,10 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 
 /**
- * TODO: comment me!
+ * # Some basic configuration for Spring.
+ * 
+ * This is inherited from `default_beans.xml`, which defines many other Spring beans. If you want to define your own 
+ * Spring config file, we recommend that you import from `default_beans.xml`, or from this configuration object.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>31 Jul 2018</dd></dl>

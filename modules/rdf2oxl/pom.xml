@@ -12,7 +12,7 @@
 	<artifactId>rdf2oxl</artifactId>
 
 	<name>ONDEX RDF-to-OXL Converter</name>
-	<description></description>
+	<description>A command-line tool to convert BioKNO-based RDF data into Ondex OXL format</description>
 
 	<developers>
 		<developer>

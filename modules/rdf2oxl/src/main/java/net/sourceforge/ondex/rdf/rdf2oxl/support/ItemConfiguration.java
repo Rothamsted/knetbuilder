@@ -1,7 +1,17 @@
 package net.sourceforge.ondex.rdf.rdf2oxl.support;
 
+import net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlConverter;
+
 /**
- * TODO: comment me!
+ * # The Item Configuration class
+ * 
+ * Used in Spring (see `main/resources/default_beans.xml) to define the configuration list passed to 
+ * {@link Rdf2OxlConverter#itemConfigurations}. Each configuration is typically about an OXL type (eg, concept, 
+ * relation) and puts together the {@link QueryProcessor} that gets URIs of the type instances with the
+ * {@link QuerySolutionHandler handler} that should process/render those instances.  
+ * 
+ * See the [package description](package-summary.html) for details.  
+ *
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>1 Aug 2018</dd></dl>
@@ -22,6 +32,9 @@ public class ItemConfiguration
 		super ();
 	}
 		
+	/**
+	 * These are facilities used for writing tests.
+	 */
 	public <RH extends QuerySolutionHandler> ItemConfiguration ( 
 		String name, String resourcesQueryName, String constructTemplateName, 
 		String header, String graphTemplateName, String trailer
@@ -29,7 +42,9 @@ public class ItemConfiguration
 		this ( name, resourcesQueryName, constructTemplateName, header, graphTemplateName, trailer, null, null );
 	}
 	
-	
+	/**
+	 * These are facilities used for writing tests.
+	 */	
 	public <RH extends QuerySolutionHandler> ItemConfiguration ( 
 		String name, String resourcesQueryName, String constructTemplateName, 
 		String header, String graphTemplateName, String trailer,
@@ -49,7 +64,9 @@ public class ItemConfiguration
 	}
 
 
-
+	/**
+	 * Usually the type of entity a configuration deals with (eg, Concept, Relation).
+	 */
 	public String getName ()
 	{
 		return name;
@@ -60,6 +77,10 @@ public class ItemConfiguration
 		this.name = name;
 	}
 
+	/**
+	 * The SPARQL query that gets URIs for the instances of the resource type the configuration deals with (eg, all the 
+	 * Concept instances).
+	 */
 	public String getResourcesQueryName ()
 	{
 		return resourcesQueryName;
@@ -70,6 +91,10 @@ public class ItemConfiguration
 		this.resourcesQueryName = resourcesQueryName;
 	}
 
+	/**
+	 * A SPARQL `CONSTRUCT` query to retrieve resource details. See {@link QuerySolutionHandler} for details.  
+	 * 
+	 */
 	public String getConstructTemplateName ()
 	{
 		return constructTemplateName;

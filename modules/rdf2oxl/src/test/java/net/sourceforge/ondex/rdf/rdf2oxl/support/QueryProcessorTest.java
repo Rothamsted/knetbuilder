@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.system.Txn;
@@ -21,7 +20,7 @@ import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.io.IOUtils;
 
 /**
- * TODO: comment me!
+ * Simple tests for the {@link QueryProcessor} basics.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>27 Jul 2018</dd></dl>

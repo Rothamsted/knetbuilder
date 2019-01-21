@@ -19,7 +19,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- * TODO: comment me!
+ * # The Concept Processor
+ * 
+ * This is a special {@link QueryProcessor}, which gets the concept URIs to be passed to the {@link ConceptHandler}
+ * not from a SPARQL query, but auto-wired from {@link ConceptIdHandler}, which has to be invoked in advance in order
+ * to get a URI/ID mapping.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Jul 2018</dd></dl>
@@ -28,10 +32,18 @@ import org.springframework.stereotype.Component;
 @Component ( "conceptProcessor" )
 public class ConceptProcessor extends QueryProcessor
 {	
+	/**
+	 * This is auto-wired from {@link ConceptIdHandler}.
+	 */
 	@Autowired @Qualifier ( "conceptIds" )
 	private Map<String, Integer> conceptIds;
 	
-	// @Autowired @Qualifier ( "graphSummary" )
+	/**
+	 *  This comes from {@link GraphSummaryHandler} and is used to verify that the size of 
+	 *  {@link #conceptIds fetched concept instances} matches the summary info in the RDF counts.
+	 *  
+	 *  @Autowired doesn't work very well for {@link Map}.
+	 */
 	@Resource ( name = "graphSummary" )
 	private Map<String, Object> graphSummary;
 

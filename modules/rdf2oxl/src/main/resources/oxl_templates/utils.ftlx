@@ -7,21 +7,6 @@
   <#return (object?is_string || !object?is_enumerable)?then ( [ object ], object )>
 </#function>
 <#-- 
-
-  All instances of a given class mentioned in a JSON-LD object.
-  
-  That is, filters objects with @type corresponding the classId parameter and returns 
-  a hash of @id => object.  
--- TODO: REMOVE>
-<#function jsld_instances json_ld classId>
-	<#local result = {}>
-	<#list json_ld as js_obj>
-		<#if !to_seq ( js_obj [ '@type' ] )?seq_contains ( classId )><#continue /></#if>
-		<#local result += { js_obj [ '@id' ]: js_obj }>
-	</#list>
-	<#return result />
-</#function -->
-<#-- 
 	
   Builds an index out of an object sequence
   TODO: never used!

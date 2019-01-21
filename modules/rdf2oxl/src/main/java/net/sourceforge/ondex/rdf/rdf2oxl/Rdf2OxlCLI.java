@@ -15,7 +15,11 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * TODO: comment me!
+ * # The command-line version of the RDF/OXL converter
+ * 
+ * This variant accepts the path of a TDB triple store as input, where the graph to be converted is fetched from.  
+ * 
+ * This class is used by invocation scripts in the final distribution, see `src/main/assembly/resources`.     
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Nov 2018</dd></dl>

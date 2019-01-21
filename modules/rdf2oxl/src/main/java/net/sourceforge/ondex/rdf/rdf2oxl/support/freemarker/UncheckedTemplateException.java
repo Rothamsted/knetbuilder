@@ -3,7 +3,7 @@ package net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker;
 import freemarker.template.TemplateException;
 
 /**
- * TODO: comment me!
+ * Unchecked variant of {@link TemplateException} used by FreeMarker.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 Jul 2018</dd></dl>

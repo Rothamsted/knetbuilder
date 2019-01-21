@@ -27,7 +27,7 @@ import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
  * Each instance gets resource URIs for a given type (e.g., concepts, relations) and pass them to a 
  * {@link QuerySolutionHandler}, for getting resource details and passing them to the OXL renderer.  
  * 
- * See my [package description](package-summary.html) for details.  
+ * See the [package description](package-summary.html) for details.  
  *
  * The {@link #setConsumer(Consumer) consumer} for this processor is set by {@link Rdf2OxlConverter}, which has its own
  * Spring-coming defaults and also values taken from {@link ItemConfiguration}.  

@@ -19,7 +19,7 @@ import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.RelationType;
 
 /**
- * TODO: comment me!
+ * Loads specific files to test Ondex metadata conversion and reload.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>17 Oct 2018</dd></dl>

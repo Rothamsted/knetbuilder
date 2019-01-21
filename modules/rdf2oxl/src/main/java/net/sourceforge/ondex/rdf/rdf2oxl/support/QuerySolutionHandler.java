@@ -25,7 +25,24 @@ import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
  * Each instance of this processes sets of URIs about a resource type, to extract details via `SPARQL CONSTRUCT`, build
  * `JSON-LD` data and pass them to the {@link FreeMarkerHelper XML/OXL template engine}.  
  * 
- * See my [package description](package-summary.html) for details. for details.  
+ * See the [package description](package-summary.html) for an overview of the rdf2oxl architecture.  
+ * 
+ * More in detail, {@link #accept(List)} uses {@link #getConstructTemplate()} from its operations.
+ * {@link #getConstructTemplate()} is assumed to be a SPARQL `CONSTRUCT` template, parameterised over a set 
+ * of instance resource URIs, coming from {@link QueryProcessor} (eg, set of concept URIs). The query should extract
+ * proper details for the resources (eg, concept names, description, etc). The URIs are passed to the query by 
+ * considering a `$resourceIris` placeholder inside a `VALUES`:
+ *  
+ * ```sql
+ * VALUES ( ?conceptIri ) {
+ *   $resourceIris
+ * }
+ * ```
+ * 
+ * the graph returned by this query is converted into JSON-LD, the corresponding JSON is extracted from it and passed to
+ * the {@link #getOxlTemplateName() OXL template}, which render resource details into XML/OXL.  
+ * 
+ * See examples in main/resources/oxl_templates.    
  * 
  * As in other cases, configuration details for the handlers are set via Spring and {@link Rdf2OxlConverter}.  
  *
@@ -65,7 +82,7 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 	protected Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	/** 
-	 * See {@link net.sourceforge.ondex.rdf.rdf2oxl.support} for details.  
+	 * See above for details.  
 	 * 
 	 * The described behaviour is achieved by using {@link #getSparqlHelper()}, which method 
 	 * {@link SparqlEndPointHelper#processConstruct(String, String, Consumer)} is invoked with a code that makes
@@ -145,13 +162,10 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 	}
 
 	/**
-	 * The name of a `*.sparql` file, which contain a CONSTRUCT query to fetch resource details about a set of URIs of a 
-	 * given type (eg, concept, relation).  
+	 * The name of a `*.sparql` file, which contain a `CONSTRUCT` query to fetch resource details about a set of URIs of a 
+	 * given type (eg, concept, relation).
 	 * 
-	 * Our {@link #accept(List)} method replaces $resourceIris in this file with its current parameter, to generate the 
-	 * their details.  
-	 * 
-	 * See examples in main/resources/oxl_templates.  
+	 * See above for details.  
 	 * 
 	 */
 	public String getConstructTemplate ()

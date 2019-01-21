@@ -13,7 +13,7 @@ import org.junit.Test;
 import uk.ac.ebi.utils.xml.XPathReader;
 
 /**
- * TODO: comment me!
+ * Loads specific files to test Ondex metadata conversion.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>1 Aug 2018</dd></dl>
