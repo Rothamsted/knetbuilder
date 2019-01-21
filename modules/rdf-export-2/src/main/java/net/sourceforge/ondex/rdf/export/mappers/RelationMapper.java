@@ -53,13 +53,14 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 			
 			RdfMapperFactory xfact = this.getMapperFactory ();
 			
-			// The attributes part.
+			// We need the ID part of the URIs, so let's use an empty namespace 
 			final Map<String, Object> noNs = Collections.singletonMap ( "instanceNamespace", "" );
-			
 			String fromPart = xfact.getUri ( rel.getFromConcept (), noNs ); 
 			String toPart = xfact.getUri ( rel.getToConcept (), noNs );
-			
-			// So, we need this complex attributes stringfication, to take them into account.
+
+			// The attributes part.
+			// So, we need this complex stringfication of attributes, to take relations that differ in attributes only
+			// into account.
 			String attrPart = rel
 				.getAttributes ()
 				.stream ()
