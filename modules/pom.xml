@@ -162,10 +162,7 @@
             <version>${maven.javadoc.plugin.version}</version>
             <executions>
                <execution>
-                  <phase>compile</phase>
-                  <goals>
-                     <goal>javadoc</goal>
-                  </goals>
+                  <goals><goal>javadoc</goal></goals>
                </execution>
             </executions>
             <configuration>
