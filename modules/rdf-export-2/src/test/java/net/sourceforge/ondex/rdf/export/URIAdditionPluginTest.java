@@ -1,11 +1,20 @@
 package net.sourceforge.ondex.rdf.export;
 
+import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.ns;
+import static net.sourceforge.ondex.rdf.export.RDFFileExporter.DEFAULT_X_LANG;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.StringReader;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.commons.io.output.WriterOutputStream;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.vocabulary.RDF;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -17,11 +26,13 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.rdf.OndexRDFUtils;
 
 /**
  * A few tests for {@link URIAdditionPlugin}.
@@ -64,6 +75,43 @@ public class URIAdditionPluginTest
 		testTemplate ( "http://www.somewhere.net/examples/" );
 	}
 	
+	/**
+	 * Tests that already-existing URI attributes are reused.
+	 */
+	@Test
+	public void testUriAttribRDFExport ()
+	{
+		// Add URIs with custom namespace
+		String ns = "http://www.somewhere.net/examples/";
+		testTemplate ( ns );
+		
+		// Now export using default ns, which shoul be ignored, cause it should pick URIs that are already in the
+		// Ondex graph.
+		RDFFileExporter xporter = new RDFFileExporter ();
+		StringBuilderWriter sw = new StringBuilderWriter ();
+		xporter.export ( this.graph, new WriterOutputStream ( sw, "UTF-8" ), DEFAULT_X_LANG );
+
+		// Now, let's test they've the right URIs
+		AttributeName uriAttrType = this.graph.getMetaData ().getAttributeName ( "iri" );
+		
+		Model m = ModelFactory.createDefaultModel ();
+		m.read ( new StringReader ( sw.toString () ), null, "TURTLE" );
+		log.info ( "Generated RDF:\n{}", sw.toString () );
+		
+		Stream.of ( conceptA, conceptB, relAB )
+		.forEach ( odxEnt -> 
+		{
+			String id =  odxEnt instanceof ONDEXConcept ?  ( (ONDEXConcept) odxEnt ).getPID () : "A->B"; 
+			String typeUri = iri ( "bk", odxEnt instanceof ONDEXConcept ? "TestCC" : "Relation" );
+			
+			String uri = (String) odxEnt.getAttribute ( uriAttrType ).getValue ();
+			StmtIterator itr = m.listStatements ( 
+				m.getResource ( uri ), RDF.type, m.getResource ( typeUri ) 
+			);
+			assertTrue ( "Entity " + id + " not found in the RDF!", itr.hasNext () );
+		});
+	}
+	
 	
 	private void testTemplate ( String instanceNamespace )
 	{
@@ -73,7 +121,6 @@ public class URIAdditionPluginTest
 		if ( instanceNamespace != null ) uriAdder.setInstanceNamespace ( instanceNamespace );
 		else instanceNamespace = ns ( "bkr" ); 
 		final String instanceNamespaceConst = instanceNamespace;	
-		
 		
 		uriAdder.run ();
 		
@@ -107,11 +154,10 @@ public class URIAdditionPluginTest
 		assertTrue ( "URI format for A->B is wrong (namespace)", uri.startsWith ( instanceNamespace ) );
 		assertTrue ( 
 			"URI format for A->B is wrong (ID)", 
-			uri.contains ( ( 
-				relAB.getOfType ().getId () + "_" 
-			  + conceptA.getOfType ().getId () + "_" + conceptA.getPID () + "_" 
-				+ conceptB.getOfType ().getId () + "_" + conceptB.getPID () 
-			).toLowerCase () ) 
+			uri.matches ( 
+				// reltype_from_to_attrs
+				"^http://.+" + relAB.getOfType ().getId ().toLowerCase () + "_.+_.+_?.*" 
+			) 
 		);
 	}
 }

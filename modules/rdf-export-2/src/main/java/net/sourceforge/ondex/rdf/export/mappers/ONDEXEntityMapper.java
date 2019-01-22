@@ -7,19 +7,25 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.rdf.api.Graph;
 import org.apache.commons.rdf.api.Literal;
 
 import net.sourceforge.ondex.core.Attribute;
+import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.EvidenceType;
+import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.core.base.AttributeNameImpl;
 import uk.ac.ebi.fg.java2rdf.mapping.BeanRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.CollectionPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.LiteralPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.ResourcePropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfLiteralGenerator;
+import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 
 /**
  * 
@@ -28,7 +34,40 @@ import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfLiteralGenerator;
  *
  */
 public abstract class ONDEXEntityMapper<OE extends ONDEXEntity> extends BeanRdfMapper<OE>
-{
+{	
+	public static abstract class AbstractUriGenerator<OE extends ONDEXEntity> extends RdfUriGenerator<OE>
+	{
+		/**
+		 * Convenience {@link AttributeName} used to extract the URI attribute.
+		 */
+		@SuppressWarnings ( "serial" )
+		private static class UriAttrType extends AttributeNameImpl
+		{
+			public UriAttrType () {
+				// We just need the ID for search purposes, the rest is irrelevant
+				super ( -1, "iri", "", "", null, String.class.getCanonicalName (), null );			
+			}
+		}
+		
+		/** 
+		 * Convenience {@link AttributeName} used to extract the URI attribute.
+		 */
+		protected static final AttributeName URI_ATTR_TYPE = new UriAttrType ();	
+
+		/**
+		 * Returns the URI, if `oe` has the URI_ATTR_TYPE property, else returns null. So, we override
+		 * this base to get the specific entity's URI, if not already stored.
+		 */
+		@Override
+		public String getUri ( OE oe, Map<String, Object> params )
+		{
+			return Optional.ofNullable ( oe.getAttribute ( URI_ATTR_TYPE ) )
+				.map ( uri -> (String) uri.getValue () )
+				.orElse ( null );
+		}
+	}
+	
+	
 	private RdfLiteralGenerator<Object> attrValGen = new RdfLiteralGenerator<> ();
 	
 	{

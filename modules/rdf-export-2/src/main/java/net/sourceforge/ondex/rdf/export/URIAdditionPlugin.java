@@ -204,15 +204,12 @@ public class URIAdditionPlugin extends ONDEXTransformer
 		.parallelStream ()
 		.forEach ( entity -> 
 		{
-			String uri = uriGenerator.getUri ( entity, nsParam );
 			Attribute uriAttr = entity.getAttribute ( uriAttributeType );
+			// Default URI generators return the existing attribute, so let's reset
+			if ( uriAttr != null ) entity.deleteAttribute ( uriAttributeType );
 			
-			if ( uriAttr == null )
-				entity.createAttribute ( uriAttributeType, uri, this.uriIndexingEnabled );
-			else {
-				uriAttr.setValue ( uri );
-				uriAttr.setDoIndex ( this.uriIndexingEnabled );
-			}
+			String uri = uriGenerator.getUri ( entity, nsParam );
+			entity.createAttribute ( uriAttributeType, uri, this.uriIndexingEnabled );
 		});
 	}
 

@@ -3,6 +3,7 @@ package net.sourceforge.ondex.rdf.export.mappers;
 import static info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils.COMMUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import static org.apache.commons.collections4.CollectionUtils.sizeIsEmpty;
+import static uk.ac.ebi.utils.ids.IdUtils.hashUriSignature;
 
 import java.util.Collections;
 import java.util.Map;
@@ -16,7 +17,6 @@ import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.rdf.OndexRDFUtils;
 import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
-import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
 import uk.ac.ebi.utils.ids.IdUtils;
 
@@ -39,11 +39,14 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 	 * the same type, and the same attributes (which are compared based on name, type, unit, string value).  
 	 *   
 	 */
-	public static class UriGenerator extends RdfUriGenerator<ONDEXRelation>
+	public static class UriGenerator extends AbstractUriGenerator<ONDEXRelation>
 	{
 		@Override
 		public String getUri ( ONDEXRelation rel, Map<String, Object> params )
 		{
+			String uriAttr = super.getUri ( rel, params );
+			if ( uriAttr != null ) return uriAttr;
+			
 			String ns = Java2RdfUtils.getParam ( params, "instanceNamespace", NamespaceUtils.ns ( "bkr" ) );
 			
 			String rtPart = Optional
@@ -55,8 +58,14 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 			
 			// We need the ID part of the URIs, so let's use an empty namespace 
 			final Map<String, Object> noNs = Collections.singletonMap ( "instanceNamespace", "" );
-			String fromPart = xfact.getUri ( rel.getFromConcept (), noNs ); 
+			
+			String fromPart = xfact.getUri ( rel.getFromConcept (), noNs );
+			// Sometimes the URI already exists and, in that case, we don't want 'http://...' thrown inside the relation URI
+			if ( fromPart.matches ( "^[a-z]+://.+" ) ) fromPart = hashUriSignature ( fromPart );
+			
 			String toPart = xfact.getUri ( rel.getToConcept (), noNs );
+			// ditto
+			if ( toPart.matches ( "^[a-z]+://.+" ) ) toPart = hashUriSignature ( toPart );
 
 			// The attributes part.
 			// So, we need this complex stringfication of attributes, to take relations that differ in attributes only

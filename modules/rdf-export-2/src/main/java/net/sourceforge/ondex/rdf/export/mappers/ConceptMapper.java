@@ -31,11 +31,14 @@ import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
  */
 public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 {
-	public static class UriGenerator extends RdfUriGenerator<ONDEXConcept>
+	public static class UriGenerator extends AbstractUriGenerator<ONDEXConcept>
 	{
 		@Override
 		public String getUri ( ONDEXConcept c, Map<String, Object> params )
 		{
+			String uriAttr = super.getUri ( c, params );
+			if ( uriAttr != null ) return uriAttr;
+			
 			String ns = Java2RdfUtils.getParam ( params, "instanceNamespace", NamespaceUtils.ns ( "bkr" ) );
 			
 			String ccPart = Optional
