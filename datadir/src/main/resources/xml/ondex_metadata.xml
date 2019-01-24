@@ -2035,6 +2035,13 @@
 				</description>
 				<datatype>net.sourceforge.ondex.tools.data.ChemicalStructure</datatype>
 			</attrname>
+			<attrname>
+				<id>iri</id>
+				<fullname>Entity IRI</fullname>
+				<description>IRI/URI associated to the concept or relation, so that Ondex tools can be bridged with 
+				RDF or other graph database tools.</description>
+				<datatype>java.lang.String</datatype>			
+			</attrname>			
 		</attrnames>
 		<evidences>
 			<evidence>
