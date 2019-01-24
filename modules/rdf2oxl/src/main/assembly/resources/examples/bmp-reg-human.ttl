@@ -152,6 +152,12 @@ bk:QTL  a                    owl:Class ;
         dcterms:identifier   "QTL" ;
         bk:isOndexPreferred  true .
 
+bp:EvidenceCodeVocabulary
+        a                 owl:Class ;
+        rdfs:comment      "Definition: A reference to the PSI Molecular Interaction ontology (MI) experimental method types, including \"interaction detection method\", \"participant identification method\", \"feature detection method\". Homepage at http://www.psidev.info/.  Browse at http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=MI\n\nTerms from the Pathway Tools Evidence Ontology may also be used. Homepage http://brg.ai.sri.com/evidence-ontology/" ;
+        rdfs:subClassOf   bp:ControlledVocabulary ;
+        owl:disjointWith  bp:RelationshipTypeVocabulary , bp:CellularLocationVocabulary , bp:EntityReferenceTypeVocabulary , bp:SequenceRegionVocabulary , bp:SequenceModificationVocabulary , bp:ExperimentalFormVocabulary , bp:CellVocabulary , bp:PhenotypeVocabulary , bp:TissueVocabulary , bp:InteractionVocabulary .
+
 bka:2Lconf  a                owl:DatatypeProperty ;
         rdfs:label           "two level confidence measure"@en ;
         rdfs:subPropertyOf   bk:attribute ;
@@ -159,12 +165,6 @@ bka:2Lconf  a                owl:DatatypeProperty ;
         dcterms:identifier   "2Lconf" ;
         bk:isOndexPreferred  true ;
         bk:ondexRange        "java.lang.Boolean" .
-
-bp:EvidenceCodeVocabulary
-        a                 owl:Class ;
-        rdfs:comment      "Definition: A reference to the PSI Molecular Interaction ontology (MI) experimental method types, including \"interaction detection method\", \"participant identification method\", \"feature detection method\". Homepage at http://www.psidev.info/.  Browse at http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=MI\n\nTerms from the Pathway Tools Evidence Ontology may also be used. Homepage http://brg.ai.sri.com/evidence-ontology/" ;
-        rdfs:subClassOf   bp:ControlledVocabulary ;
-        owl:disjointWith  bp:RelationshipTypeVocabulary , bp:CellularLocationVocabulary , bp:EntityReferenceTypeVocabulary , bp:SequenceRegionVocabulary , bp:SequenceModificationVocabulary , bp:ExperimentalFormVocabulary , bp:CellVocabulary , bp:PhenotypeVocabulary , bp:TissueVocabulary , bp:InteractionVocabulary .
 
 bk:hasActivity  a            owl:ObjectProperty ;
         rdfs:label           "has activity"@en ;
@@ -761,9 +761,9 @@ bp:author  a          owl:DatatypeProperty ;
         rdfs:domain   bp:PublicationXref ;
         rdfs:range    xsd:string .
 
-bk:equivalent  a                owl:TransitiveProperty , owl:SymmetricProperty , owl:ReflexiveProperty , owl:ObjectProperty ;
+bk:equivalent  a                owl:ObjectProperty , owl:TransitiveProperty , owl:ReflexiveProperty , owl:SymmetricProperty ;
         rdfs:label              "is_equivalent_to"@en ;
-        rdfs:subPropertyOf      bk:physical ;
+        rdfs:subPropertyOf      bk:physical_relation , bk:physical ;
         dcterms:identifier      "equivalent" ;
         bk:isOndexPreferred     true ;
         owl:equivalentProperty  bk:equ .
@@ -897,7 +897,7 @@ obo:GO_0030014  a        bk:GeneOntologyTerms , owl:Class ;
 
 bk:activated_by  a              owl:AsymmetricProperty , owl:ObjectProperty ;
         rdfs:label              "activated_by"@en ;
-        rdfs:subPropertyOf      bk:rg_by ;
+        rdfs:subPropertyOf      bk:rg_by , bk:regulated_by ;
         dcterms:description     "activation of a gene's expression by a transcription factor"@en ;
         dcterms:identifier      "activated_by" ;
         bk:isOndexPreferred     true ;
@@ -1599,21 +1599,21 @@ skos:scopeNote  a           rdf:Property , owl:AnnotationProperty ;
 
 bk:expressed_by  a              owl:ObjectProperty ;
         rdfs:label              "expressed_by"@en ;
-        rdfs:subPropertyOf      bk:rg_by ;
+        rdfs:subPropertyOf      bk:regulated_by , bk:rg_by ;
         dcterms:description     "interactions via DNA binding"@en ;
         dcterms:identifier      "expressed_by" ;
         bk:isOndexPreferred     true ;
         owl:equivalentProperty  bk:ex_by .
 
-bp:notFeature  a      owl:ObjectProperty ;
-        rdfs:comment  "Sequence features where the owner physical entity has a feature. If not specified, other potential features are not known." ;
-        rdfs:domain   bp:PhysicalEntity ;
-        rdfs:range    bp:EntityFeature .
-
 <http://purl.uniprot.org/uniprot/P50616#SIP48E53CC1BE585594>
         a               protCore:Compositional_Bias_Annotation ;
         rdfs:comment    "Poly-Gln" ;
         protCore:range  <http://purl.uniprot.org/range/22576479320749614tt237tt245> .
+
+bp:notFeature  a      owl:ObjectProperty ;
+        rdfs:comment  "Sequence features where the owner physical entity has a feature. If not specified, other potential features are not known." ;
+        rdfs:domain   bp:PhysicalEntity ;
+        rdfs:range    bp:EntityFeature .
 
 <http://purl.uniprot.org/uniprot/#_kb.P50616_up.classifiedWith_obo.GO_0030514>
         a                     rdf:Statement ;
@@ -1622,14 +1622,14 @@ bp:notFeature  a      owl:ObjectProperty ;
         rdf:subject           prot:P50616 ;
         protCore:attribution  <http://purl.uniprot.org/uniprot/P50616#attribution-B1AD608CDB988A04F52DFA346E696863> .
 
+bk:constraints  a            owl:AnnotationProperty ;
+        dcterms:description  "TODO: description."@en .
+
 bk:RRNAGene  a               owl:Class ;
         rdfs:label           "rRNA-Gene"@en ;
         rdfs:subClassOf      bk:NcRNAGene ;
         dcterms:identifier   "RRNAGene" ;
         bk:isOndexPreferred  true .
-
-bk:constraints  a            owl:AnnotationProperty ;
-        dcterms:description  "TODO: description."@en .
 
 <http://purl.uniprot.org/disprot/DP00794>
         a                  protCore:Resource ;
@@ -2477,7 +2477,7 @@ bkds:SGN  a                  owl:NamedIndividual , bk:DataSource ;
 
 bk:repressed_by  a              owl:ObjectProperty ;
         rdfs:label              "repressed_by"@en ;
-        rdfs:subPropertyOf      bk:rg_by ;
+        rdfs:subPropertyOf      bk:regulated_by , bk:rg_by ;
         dcterms:description     "gene's expression is repressed by transcripiton factor"@en ;
         dcterms:identifier      "repressed_by" ;
         bk:isOndexPreferred     true ;
@@ -3192,6 +3192,11 @@ skos:historyNote  a         rdf:Property , owl:AnnotationProperty ;
         rdfs:subPropertyOf  skos:note ;
         skos:definition     "A note about the past state/use/meaning of a concept."@en .
 
+bp:physicalEntity  a  owl:FunctionalProperty , owl:ObjectProperty ;
+        rdfs:comment  "The physical entity to be annotated with stoichiometry."@en ;
+        rdfs:domain   bp:Stoichiometry ;
+        rdfs:range    bp:PhysicalEntity .
+
 bp:RnaRegionReference
         a                 owl:Class ;
         rdfs:comment      "Definition: A RNARegion reference is a grouping of several RNARegion entities that are common in sequence and genomic position.  Members can differ in celular location, sequence features, mutations and bound partners." ;
@@ -3230,11 +3235,6 @@ bkds:IPI  a                  owl:NamedIndividual , bk:DataSource ;
         dcterms:description  "IPI provides a top level guide to the main databases that describe the proteomes of higher eukaryotic organisms. - http://www.ebi.ac.uk/IPI"@en ;
         dcterms:identifier   "IPI" ;
         bk:isOndexPreferred  true .
-
-bp:physicalEntity  a  owl:FunctionalProperty , owl:ObjectProperty ;
-        rdfs:comment  "The physical entity to be annotated with stoichiometry."@en ;
-        rdfs:domain   bp:Stoichiometry ;
-        rdfs:range    bp:PhysicalEntity .
 
 bk:Treatment  a              owl:Class ;
         rdfs:label           "Treatment"@en ;
@@ -3428,12 +3428,12 @@ bp:Dna  a                 owl:Class ;
         rdfs:comment      "Definition: A physical entity consisting of a sequence of deoxyribonucleotide monophosphates; a deoxyribonucleic acid.\nUsage: DNA should be used for pools of individual DNA molecules. For describing subregions on those molecules use DNARegion.\nExamples: a chromosome, a plasmid. A specific example is chromosome 7 of Homo sapiens." ;
         rdfs:subClassOf   bp:PhysicalEntity ;
         rdfs:subClassOf   [ a                  owl:Restriction ;
-                            owl:allValuesFrom  bp:DnaReference ;
-                            owl:onProperty     bp:entityReference
-                          ] ;
-        rdfs:subClassOf   [ a                  owl:Restriction ;
                             owl:allValuesFrom  bp:Dna ;
                             owl:onProperty     bp:memberPhysicalEntity
+                          ] ;
+        rdfs:subClassOf   [ a                  owl:Restriction ;
+                            owl:allValuesFrom  bp:DnaReference ;
+                            owl:onProperty     bp:entityReference
                           ] ;
         owl:disjointWith  bp:Protein , bp:SmallMolecule , bp:DnaRegion , bp:RnaRegion , bp:Complex , bp:Rna .
 
@@ -3763,9 +3763,9 @@ bk:Describeable  a           owl:Class ;
         dcterms:description  "This is an abstract container to factorise those individuals for which a minimum of description attributes can be defined.\n\nThese are:\n\n- dcterms:identifier, to provide a resource identifier. Note that this is possibly valid only within a given context. it is also recommended that it is unique/unambiguous under that context, however, that is not strictly prescribed.\n\n- rdfs:label, to provide a resource human-readable label\n\n- dcterms:description, to provide a longer resource description."@en ;
         skos:editorialNote   "[kNetMiner] these properties correspond to id, fullName, description in the ONDEX model."@en .
 
-bk:inhibited_by  a              owl:AsymmetricProperty , owl:ObjectProperty ;
+bk:inhibited_by  a              owl:ObjectProperty , owl:AsymmetricProperty ;
         rdfs:label              "inhibited_by"@en ;
-        rdfs:subPropertyOf      bk:rg_by ;
+        rdfs:subPropertyOf      bk:rg_by , bk:regulated_by ;
         dcterms:description     "inhibition of a gene's expression by a transcription factor"@en ;
         dcterms:identifier      "inhibited_by" ;
         bk:isOndexPreferred     true ;
@@ -3910,12 +3910,12 @@ bp:Protein  a             owl:Class ;
         rdfs:comment      "Definition: A physical entity consisting of a sequence of amino acids; a protein monomer; a single polypeptide chain.\nExamples: The epidermal growth factor receptor (EGFR) protein." ;
         rdfs:subClassOf   bp:PhysicalEntity ;
         rdfs:subClassOf   [ a                  owl:Restriction ;
-                            owl:allValuesFrom  bp:ProteinReference ;
-                            owl:onProperty     bp:entityReference
-                          ] ;
-        rdfs:subClassOf   [ a                  owl:Restriction ;
                             owl:allValuesFrom  bp:Protein ;
                             owl:onProperty     bp:memberPhysicalEntity
+                          ] ;
+        rdfs:subClassOf   [ a                  owl:Restriction ;
+                            owl:allValuesFrom  bp:ProteinReference ;
+                            owl:onProperty     bp:entityReference
                           ] ;
         owl:disjointWith  bp:RnaRegion , bp:SmallMolecule , bp:Dna , bp:Rna , bp:DnaRegion , bp:Complex .
 
@@ -4395,6 +4395,15 @@ bk:LTR  a                    owl:Class ;
         rdfs:subClassOf      bk:TRRSubFeature ;
         dcterms:identifier   "LTR" ;
         bk:isOndexPreferred  true .
+
+bka:iri  a                   owl:DatatypeProperty ;
+        rdfs:label           "Entity IRI"@en ;
+        rdfs:range           xsd:string ;
+        rdfs:subPropertyOf   bk:attribute ;
+        dcterms:description  "IRI/URI associated to the concept or relation, so that Ondex tools can be bridged with RDF or other graph database tools."@en ;
+        dcterms:identifier   "iri" ;
+        bk:isOndexPreferred  true ;
+        bk:ondexRange        "java.lang.String" .
 
 bp:left  a                  owl:ObjectProperty ;
         rdfs:comment        "The participants on the left side of the conversion interaction. Since conversion interactions may proceed in either the left-to-right or right-to-left direction, occupants of the left property may be either reactants or products. left is a sub-property of participants." ;
@@ -5022,12 +5031,12 @@ bp:DnaReference  a        owl:Class ;
         rdfs:comment      "Definition: A DNA reference is a grouping of several DNA entities that are common in sequence.  Members can differ in celular location, sequence features, SNPs, mutations and bound partners.\n\nComments : Note that this is not a reference gene. Genes are non-physical,stateless continuants. Their physical manifestations can span multiple DNA molecules, sometimes even across chromosomes due to regulatory regions. Similarly a gene is not necessarily made up of deoxyribonucleic acid and can be present in multiple copies ( which are different DNA regions)." ;
         rdfs:subClassOf   bp:EntityReference ;
         rdfs:subClassOf   [ a                  owl:Restriction ;
-                            owl:allValuesFrom  bp:DnaRegionReference ;
-                            owl:onProperty     bp:subRegion
-                          ] ;
-        rdfs:subClassOf   [ a                  owl:Restriction ;
                             owl:allValuesFrom  bp:DnaReference ;
                             owl:onProperty     bp:memberEntityReference
+                          ] ;
+        rdfs:subClassOf   [ a                  owl:Restriction ;
+                            owl:allValuesFrom  bp:DnaRegionReference ;
+                            owl:onProperty     bp:subRegion
                           ] ;
         owl:disjointWith  bp:RnaReference , bp:DnaRegionReference , bp:ProteinReference , bp:SmallMoleculeReference , bp:RnaRegionReference .
 
@@ -5494,6 +5503,10 @@ bp:GeneticInteraction
         a                 owl:Class ;
         rdfs:comment      "Definition : Genetic interactions between genes occur when two genetic perturbations (e.g. mutations) have a combined phenotypic effect not caused by either perturbation alone. A gene participant in a genetic interaction represents the gene that is perturbed. Genetic interactions are not physical interactions but logical (AND) relationships. Their physical manifestations can be complex and span an arbitarily long duration. \n\nRationale: Currently,  BioPAX provides a simple definition that can capture most genetic interactions described in the literature. In the future, if required, the definition can be extended to capture other logical relationships and different, participant specific phenotypes. \n\nExample: A synthetic lethal interaction occurs when cell growth is possible without either gene A OR B, but not without both gene A AND B. If you knock out A and B together, the cell will die." ;
         rdfs:subClassOf   bp:Interaction ;
+        rdfs:subClassOf   [ a                owl:Restriction ;
+                            owl:cardinality  1 ;
+                            owl:onProperty   bp:phenotype
+                          ] ;
         rdfs:subClassOf   [ a                  owl:Restriction ;
                             owl:allValuesFrom  bp:Gene ;
                             owl:onProperty     bp:participant
@@ -5501,10 +5514,6 @@ bp:GeneticInteraction
         rdfs:subClassOf   [ a                   owl:Restriction ;
                             owl:minCardinality  2 ;
                             owl:onProperty      bp:participant
-                          ] ;
-        rdfs:subClassOf   [ a                owl:Restriction ;
-                            owl:cardinality  1 ;
-                            owl:onProperty   bp:phenotype
                           ] ;
         rdfs:subClassOf   [ a                   owl:Restriction ;
                             owl:maxCardinality  1 ;
@@ -5597,10 +5606,6 @@ bkr:23236473_acc  a         bk:Accession ;
 bk:is_not_function_of
         a                   owl:ObjectProperty ;
         rdfs:subPropertyOf  bk:conceptsRelation .
-
-<http://www.ondex.org/bioknet/knetminer_extensions/>
-        a            owl:Ontology ;
-        owl:imports  bk: .
 
 <http://purl.uniprot.org/uniprot/#_kb.P50616_up.annotation_0891238D536732D8>
         a                     rdf:Statement ;
@@ -6788,6 +6793,10 @@ bka:BEGIN  a                 owl:DatatypeProperty ;
         bk:isOndexPreferred  true ;
         bk:ondexRange        "java.lang.Integer" .
 
+<http://www.ondex.org/bioknet/kNetMiner_extensions/>
+        a            owl:Ontology ;
+        owl:imports  bk: .
+
 bkds:UM-R  a                 owl:NamedIndividual , bk:DataSource ;
         rdfs:label           "UM-BBD_reactionID"@en ;
         dcterms:description  "UM-BBD_reactionID"@en ;
@@ -7311,33 +7320,33 @@ bk:MatingLocusSubFeature
         dcterms:identifier   "MatingLocusSubFeature" ;
         bk:isOndexPreferred  true .
 
-skos:broadMatch  a          rdf:Property , owl:ObjectProperty ;
-        rdfs:isDefinedBy    <http://www.w3.org/2004/02/skos/core> ;
-        rdfs:label          "has broader match"@en ;
-        rdfs:subPropertyOf  skos:mappingRelation , skos:broader ;
-        owl:inverseOf       skos:narrowMatch ;
-        skos:definition     "skos:broadMatch is used to state a hierarchical mapping link between two conceptual resources in different concept schemes."@en .
-
 bp:SmallMolecule  a       owl:Class ;
         rdfs:comment      "Definition: A pool of molecules that are neither complexes nor are genetically encoded.\n\nRationale: Identity of small molecules are based on structure, rather than sequence as in the case of DNA, RNA or Protein. A small molecule reference is a grouping of several small molecule entities  that have the same chemical structure.  \n\nUsage : Smalle Molecules can have a cellular location and binding features. They can't have modification features as covalent modifications of small molecules are not considered as state changes but treated as different molecules.\nSome non-genomic macromolecules, such as large complex carbohydrates are currently covered by small molecules despite they lack a static structure. Better coverage for such molecules require representation of generic stoichiometry and polymerization, currently planned for BioPAX level 4.\n\nExamples: glucose, penicillin, phosphatidylinositol" ;
         rdfs:subClassOf   bp:PhysicalEntity ;
         rdfs:subClassOf   [ a                  owl:Restriction ;
-                            owl:allValuesFrom  bp:SmallMolecule ;
-                            owl:onProperty     bp:memberPhysicalEntity
+                            owl:allValuesFrom  bp:BindingFeature ;
+                            owl:onProperty     bp:feature
                           ] ;
         rdfs:subClassOf   [ a                  owl:Restriction ;
-                            owl:allValuesFrom  bp:SmallMoleculeReference ;
-                            owl:onProperty     bp:entityReference
+                            owl:allValuesFrom  bp:SmallMolecule ;
+                            owl:onProperty     bp:memberPhysicalEntity
                           ] ;
         rdfs:subClassOf   [ a                  owl:Restriction ;
                             owl:allValuesFrom  bp:BindingFeature ;
                             owl:onProperty     bp:notFeature
                           ] ;
         rdfs:subClassOf   [ a                  owl:Restriction ;
-                            owl:allValuesFrom  bp:BindingFeature ;
-                            owl:onProperty     bp:feature
+                            owl:allValuesFrom  bp:SmallMoleculeReference ;
+                            owl:onProperty     bp:entityReference
                           ] ;
         owl:disjointWith  bp:Complex , bp:RnaRegion , bp:EntityReference , bp:Dna , bp:DnaRegion , bp:Protein , bp:Rna .
+
+skos:broadMatch  a          rdf:Property , owl:ObjectProperty ;
+        rdfs:isDefinedBy    <http://www.w3.org/2004/02/skos/core> ;
+        rdfs:label          "has broader match"@en ;
+        rdfs:subPropertyOf  skos:mappingRelation , skos:broader ;
+        owl:inverseOf       skos:narrowMatch ;
+        skos:definition     "skos:broadMatch is used to state a hierarchical mapping link between two conceptual resources in different concept schemes."@en .
 
 bk:HierarchyNode  a          owl:Class ;
         rdfs:label           "Hierarchy Node"@en ;
@@ -7998,6 +8007,10 @@ bk:GISL  a                   owl:Class ;
         rdfs:subClassOf      bk:GenInt ;
         dcterms:identifier   "GISL" ;
         bk:isOndexPreferred  true .
+
+bk:encoded_by  dcterms:identifier  "encoded_by" ;
+        bk:isOndexPreferred     true ;
+        owl:equivalentProperty  bk:enc_by .
 
 bk:adjacent_to  a            owl:ObjectProperty ;
         rdfs:label           "adjacent_to"@en ;
@@ -8950,3 +8963,8 @@ bkev:EXP  a                  owl:NamedIndividual , bk:EvidenceType ;
         dcterms:description  "This code is used in an annotation to indicate that an experimental assay has been located in the cited reference, whose results indicate a gene product's function, process involvement, or subcellular location (indicated by the GO term). The EXP code is the parent code for the IDA, IPI, IMP, IGI and IEP experimental codes."@en ;
         dcterms:identifier   "EXP" ;
         bk:isOndexPreferred  true .
+
+bk:genetic_relation  dcterms:identifier
+                "genetic_relation" ;
+        bk:isOndexPreferred     true ;
+        owl:equivalentProperty  bk:genetic .

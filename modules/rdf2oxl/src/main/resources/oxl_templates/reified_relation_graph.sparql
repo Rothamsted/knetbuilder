@@ -53,24 +53,34 @@ WHERE
   }	
 	
 	# Attributes
-	OPTIONAL {
+	{
 		?reifiedRel ?attribProp ?attribValue.
 
 		?attribProp rdfs:subPropertyOf* bk:attribute;
 		            dcterms:identifier ?attribId.
-		            
-		OPTIONAL { ?attribProp rdfs:range ?attribRange } 
-		OPTIONAL { ?attribProp bk:isIndexed ?attribIsIndexed. FILTER ( xsd:boolean ( ?attribIsIndexed ) ) }
-		OPTIONAL { ?attribProp bk:ondexRange ?ondexRange. } 
 
-		BIND ( STR ( ?attribValue ) AS ?attribLexValue )
-		BIND ( STR ( DATATYPE ( ?attribValue ) ) AS ?_attribXsd )
-		
-		# xsd:string is generic and range takes priority in that case. 
-		BIND ( IF ( ?_attribXsd != xsd:string, ?_attribXsd, STR ( ?attribRange ) ) AS ?attribXsd )
-		
-		# Let's define an attribute as an object with IRI
-		BIND ( MD5 ( CONCAT ( STR ( ?reifiedRel ), STR ( ?attribProp ), STR ( ?attribValue ) ) ) AS ?attribHash )
-		BIND ( IRI ( CONCAT ( STR ( bk:_attrib_ ), ?attribHash ) ) AS ?attribIri )
+		FILTER ( ?attribProp != bka:iri ) # if already here, we'd better trust our own generated URI.  		            
 	}
+	UNION {
+		# See concept_graph.sparql for an explanation about OXL's iri attribute.	
+		#
+		?reifiedRel rdf:type ?conceptClass.
+		BIND ( 'iri' AS ?attribId )
+		BIND ( bka:iri AS ?attribProp )
+		BIND ( STR ( ?reifiedRel ) AS ?attribValue )
+	}
+		            
+	OPTIONAL { ?attribProp rdfs:range ?attribRange } 
+	OPTIONAL { ?attribProp bk:isIndexed ?attribIsIndexed. FILTER ( xsd:boolean ( ?attribIsIndexed ) ) }
+	OPTIONAL { ?attribProp bk:ondexRange ?ondexRange. } 
+
+	BIND ( STR ( ?attribValue ) AS ?attribLexValue )
+	BIND ( STR ( DATATYPE ( ?attribValue ) ) AS ?_attribXsd )
+	
+	# xsd:string is generic and range takes priority in that case. 
+	BIND ( IF ( ?_attribXsd != xsd:string, ?_attribXsd, STR ( ?attribRange ) ) AS ?attribXsd )
+	
+	# Let's define an attribute as an object with IRI
+	BIND ( MD5 ( CONCAT ( STR ( ?reifiedRel ), STR ( ?attribProp ), STR ( ?attribValue ) ) ) AS ?attribHash )
+	BIND ( IRI ( CONCAT ( STR ( bk:_attrib_ ), ?attribHash ) ) AS ?attribIri )	
 }

@@ -15,7 +15,8 @@ import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**
- * TODO: comment me!
+ * This is a special {@link QuerySolutionHandler}, which doesn't require any CONSTRUCT query, as all 
+ * the variable it needs are already in the {@link #accept(List)}'s parameter.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>28 Sep 2018</dd></dl>

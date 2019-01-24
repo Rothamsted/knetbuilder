@@ -152,6 +152,37 @@ public class DataConverterReloadTest extends AbstractConverterReloadTest
 	}
 	
 	@Test
+	public void testIriAttribute ()
+	{
+		ONDEXGraphMetaData meta = resultGraph.getMetaData ();
+		
+		ConceptClass cc = meta.getConceptClass ( "Publication" );
+		assertNotNull ( "Test Class not found!", cc );
+
+		ONDEXConcept concept = resultGraph
+		.getConceptsOfConceptClass ( cc )
+		.stream ()
+		.filter ( c -> "26396590".equals ( c.getPID () ) )
+		.findFirst ()
+		.orElse ( null );
+		
+		assertNotNull ( "Test Concept not found!", concept );
+
+		AttributeName aname = meta.getAttributeName ( "iri" );
+
+		assertNotNull ( "Test Attribute Name not found!", aname );
+
+		Attribute attr = concept.getAttribute ( aname );
+		assertNotNull ( "IRI Attribute not found!", attr );
+		String iri = (String) attr.getValue ();
+		assertTrue ( 
+			"IRI value is wrong (" + iri + ")!", 
+			iri.matches ( "^http://.+/resources/publication_26396590$" ) 
+		);
+	}	
+	
+	
+	@Test
 	public void testReloadedNumericAttributes ()
 	{
 		ONDEXGraphMetaData meta = resultGraph.getMetaData ();
@@ -283,5 +314,29 @@ public class DataConverterReloadTest extends AbstractConverterReloadTest
 		assertNotNull ( "Score not found!", attr );
 		// Unspecified attribute/value type, should fallback to BigDecimal
 		assertEquals ( "Score value is wrong!", BigDecimal.valueOf ( 0.95 ), attr.getValue () );
+	}
+	
+	@Test
+	public void testRelationIRIAttribute ()
+	{
+		ONDEXGraphMetaData meta = resultGraph.getMetaData ();
+		
+		RelationType rt = meta.getRelationType ( "related" );
+		assertNotNull ( "Test Relation Type not found!", rt );
+						
+		Set<ONDEXRelation> rels = resultGraph.getRelationsOfRelationType ( rt );
+		assertNotNull ( "Test Relation not found!", rels );
+				
+		ONDEXRelation rel = rels.iterator ().next ();
+		
+		AttributeName aname = meta.getAttributeName ( "iri" );
+		Attribute attr = rel.getAttribute ( aname );
+		assertNotNull ( "Relation's iri attribute not found!", attr );
+		String iri = (String) attr.getValue ();
+		assertTrue ( 
+			"IRI value is wrong (" + iri + ")!", 
+			iri.matches ( "^http://.+/resources/testRel1$" ) 
+		);
 	}	
+	
 }

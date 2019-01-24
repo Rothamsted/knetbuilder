@@ -109,24 +109,39 @@ WHERE
   }
 
 	# Attributes
-	OPTIONAL {
+	{ 
 		?concept ?attribProp ?attribValue.
-
+		
 		?attribProp rdfs:subPropertyOf* bk:attribute;
-		            dcterms:identifier ?attribId.
-
-		OPTIONAL { ?attribProp rdfs:range ?attribRange } 
-		OPTIONAL { ?attribProp bk:isIndexed ?attribIsIndexed. FILTER ( xsd:boolean ( ?attribIsIndexed ) ) }
-		OPTIONAL { ?attribProp bk:ondexRange ?ondexRange } 
-
-		BIND ( STR ( ?attribValue ) AS ?attribLexValue )
-		BIND ( STR ( DATATYPE ( ?attribValue ) ) AS ?_attribXsd )
+								dcterms:identifier ?attribId.
 		
-		# xsd:string is generic and range takes priority in that case. 
-		BIND ( IF ( ?_attribXsd != xsd:string, ?_attribXsd, STR ( ?attribRange ) ) AS ?attribXsd )
-		
-		# /* Let's define an attribute as an object with IRI */
-		BIND ( MD5 ( CONCAT ( STR ( ?concept ), STR ( ?attribProp ), STR ( ?attribValue ) ) ) AS ?attribHash )
-		BIND ( IRI ( CONCAT ( STR ( bk:_attrib_ ), ?attribHash ) ) AS ?attribIri )
+		FILTER ( ?attribProp != bka:iri ) # if already here, we'd better trust our own generated URI.  
+	} 
+	UNION {
+	  # The 'iri' attribute, when it doesn't already exist in the RDF.
+	  # We need this in the OXL to bridge elements found via RDF or graph databases with elements managed
+	  # via Ondex and data loaded from OXL.
+	  #
+	  
+	  # This is just to force the binding from the outside, else the BIND ( ?concept ... ) below doesn't work, cause
+	  # it is evaluated inside-out. See https://stackoverflow.com/questions/34085427
+		?concept rdf:type ?conceptClass.
+		BIND ( 'iri' AS ?attribId )
+		BIND ( bka:iri AS ?attribProp )
+		BIND ( STR ( ?concept ) AS ?attribValue )
 	}
+
+	OPTIONAL { ?attribProp rdfs:range ?attribRange } 
+	OPTIONAL { ?attribProp bk:isIndexed ?attribIsIndexed. FILTER ( xsd:boolean ( ?attribIsIndexed ) ) }
+	OPTIONAL { ?attribProp bk:ondexRange ?ondexRange } 
+
+	BIND ( STR ( ?attribValue ) AS ?attribLexValue )
+	BIND ( STR ( DATATYPE ( ?attribValue ) ) AS ?_attribXsd )
+	
+	# xsd:string is generic and range takes priority in that case. 
+	BIND ( IF ( ?_attribXsd != xsd:string, ?_attribXsd, STR ( ?attribRange ) ) AS ?attribXsd )
+	
+	# /* Let's define an attribute as an object with IRI */
+	BIND ( MD5 ( CONCAT ( STR ( ?concept ), STR ( ?attribProp ), STR ( ?attribValue ) ) ) AS ?attribHash )
+	BIND ( IRI ( CONCAT ( STR ( bk:_attrib_ ), ?attribHash ) ) AS ?attribIri )
 }

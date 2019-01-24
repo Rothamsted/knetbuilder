@@ -51,7 +51,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	private String uriAttributeFullName = "Entity IRI";
 	private String uriAttributeDescription = 
 		"IRI/URI associated to the concept or relation, so that Ondex tools can be " +
-		"bridged with RDF or other graph database tools";
+		"bridged with RDF or other graph database tools.";
 	
 	private String instanceNamespace = NamespaceUtils.ns ( "bkr" );
 	private RdfUriGenerator<ONDEXConcept> conceptUriGenerator = new ConceptMapper.UriGenerator ();

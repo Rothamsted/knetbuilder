@@ -22,5 +22,8 @@ SELECT ?name ?value
 	UNION {
 	  ?iri ?name ?value.
 	  ?name rdfs:subPropertyOf* bk:attribute.
+	  # This is an attribute added by the RDF exporter, we already have it as 'iri' property, so let's avoid
+	  # redundancies
+	  FILTER ( ?name != bka:iri ) 
 	}
 }

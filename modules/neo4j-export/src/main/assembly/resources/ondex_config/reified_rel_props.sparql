@@ -10,6 +10,9 @@ SELECT ?name ?value
   {
 		?iri ?name ?value.
 		?name rdfs:subPropertyOf* bk:attribute.
+		
+		# See concept_props.sparql
+	  FILTER ( ?name != bka:iri )
 	}
 	UNION 
 	{
