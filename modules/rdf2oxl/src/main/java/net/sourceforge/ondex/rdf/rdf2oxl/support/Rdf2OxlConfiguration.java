@@ -28,7 +28,7 @@ public class Rdf2OxlConfiguration
 	}
 	
 	@Bean
-	public Configuration getTemplateConfiguration ()
+	public Configuration getTemplateEngineConfiguration ()
 	{
 		Configuration result = new freemarker.template.Configuration ( Configuration.VERSION_2_3_28 );
 		result.setDefaultEncoding ( "UTF-8" );

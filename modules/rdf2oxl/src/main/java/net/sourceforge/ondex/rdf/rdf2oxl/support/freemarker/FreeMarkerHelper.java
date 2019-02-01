@@ -119,7 +119,7 @@ public class FreeMarkerHelper
 	}
 	
 	/**
-	 * See {@link Rdf2OxlConfiguration#getTemplateConfiguration()}
+	 * See {@link Rdf2OxlConfiguration#getTemplateEngineConfiguration()}
 	 */
 	public Configuration getTemplateConfig ()
 	{

@@ -26,13 +26,11 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.CachedGraphWrapper;
-import net.sourceforge.ondex.rdf.OndexRDFUtils;
 
 /**
  * A few tests for {@link URIAdditionPlugin}.
@@ -85,7 +83,7 @@ public class URIAdditionPluginTest
 		String ns = "http://www.somewhere.net/examples/";
 		testTemplate ( ns );
 		
-		// Now export using default ns, which shoul be ignored, cause it should pick URIs that are already in the
+		// Now export using default ns, which should be ignored, cause it should pick URIs that are already in the
 		// Ondex graph.
 		RDFFileExporter xporter = new RDFFileExporter ();
 		StringBuilderWriter sw = new StringBuilderWriter ();
@@ -104,9 +102,9 @@ public class URIAdditionPluginTest
 			String id =  odxEnt instanceof ONDEXConcept ?  ( (ONDEXConcept) odxEnt ).getPID () : "A->B"; 
 			String typeUri = iri ( "bk", odxEnt instanceof ONDEXConcept ? "TestCC" : "Relation" );
 			
-			String uri = (String) odxEnt.getAttribute ( uriAttrType ).getValue ();
+			String iri = (String) odxEnt.getAttribute ( uriAttrType ).getValue ();
 			StmtIterator itr = m.listStatements ( 
-				m.getResource ( uri ), RDF.type, m.getResource ( typeUri ) 
+				m.getResource ( iri ), RDF.type, m.getResource ( typeUri ) 
 			);
 			assertTrue ( "Entity " + id + " not found in the RDF!", itr.hasNext () );
 		});
