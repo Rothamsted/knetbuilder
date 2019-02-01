@@ -39,7 +39,12 @@ import net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype;
  * 
  * <p>Note that this class would normally be a <a href = "https://en.wikipedia.org/wiki/Decorator_pattern">decorator</a>, 
  * but we prefer not to implement this way here (for the time being), for it would require too much review of 
- * existing code.</p> 
+ * existing code.</p>
+ * 
+ * <p><b>WARNING</>: the getXXX() methods below work well ONLY for empty graphs, which are being created. For instance,
+ * {@link #getConcept(String, String, String, DataSource, ConceptClass, EvidenceType)} assumes that NO CONCEPT like the 
+ * parameter has been created yet when you call the method for the first time. Then it creates a new concept and caches
+ * it for subsequent calls to the same method or to {@link #getConcept(String)}.</p>
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
@@ -86,17 +91,15 @@ public class CachedGraphWrapper
 			{
 				// Or a prototype to build it. In case of loops, this will lead to stack overflow
 				ConceptClassPrototype parentProto = proto.getParentPrototype ();
-				if ( parentProto != null )
-						proto.setParent ( this.getConceptClass ( parentProto ) );
+				if ( parentProto != null ) proto.setParent ( this.getConceptClass ( parentProto ) );
 			}
 			
 			return this.cacheGet ( 
 				ConceptClass.class, proto.getId (), 
-					() -> this.graph.getMetaData ().getFactory ().createConceptClass ( 
-					proto.getId (), proto.getFullName (), proto.getDescription (), 
-					proto.getParent () 
-				)
-			);
+				() -> this.graph.getMetaData ().getFactory ().createConceptClass ( 
+				proto.getId (), proto.getFullName (), proto.getDescription (), 
+				proto.getParent () 
+			));
 		}
 		catch ( StackOverflowError ex ) 
 		{
@@ -115,7 +118,8 @@ public class CachedGraphWrapper
 		);
 	}
 	
-	public synchronized ONDEXConcept getConcept ( String id ) {
+	public synchronized ONDEXConcept getConcept ( String id ) 
+	{
 		return this.cacheGet ( ONDEXConcept.class, id );
 	}
 	
@@ -212,8 +216,7 @@ public class CachedGraphWrapper
 		{
 			// Or a prototype to build it. In case of loops, this will lead to stack overflow
 			DataSourcePrototype dsProto = proto.getDataSourcePrototype ();
-			if ( dsProto != null )
-					proto.setDataSource ( this.getDataSource ( dsProto ) );
+			if ( dsProto != null ) proto.setDataSource ( this.getDataSource ( dsProto ) );
 		}
 		
 		return this.getAccession ( proto.getAccession (), proto.getDataSource (), proto.isAmbiguous (), concept );
@@ -235,8 +238,7 @@ public class CachedGraphWrapper
 	{
 		return this.getAttributeName ( id, fullName, description, null, datatype, null );
 	}
-	
-	
+		
 	/**
 	 * Facility to return cached objects, or, create and return them, if not already in the cache. 
 	 */	
