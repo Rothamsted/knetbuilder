@@ -1,5 +1,8 @@
 package net.sourceforge.ondex.algorithm.graphquery;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,6 +19,7 @@ import java.util.concurrent.Future;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.StateDoesNotExistException;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.StateMachineInvalidException;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.TransitionDoesNotExistException;
+import net.sourceforge.ondex.algorithm.graphquery.flatfile.StateMachineFlatFileParser2;
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -28,16 +32,17 @@ import net.sourceforge.ondex.core.util.BitSetFunctions;
  *
  * @author hindlem
  */
-public class GraphTraverser {
+public class GraphTraverser extends AbstractGraphTraverser {
 
     private static ExecutorService EXECUTOR;
 
-    private final Map<Transition, Set<ONDEXRelation>> transitionViewCache = new HashMap<Transition, Set<ONDEXRelation>>();
+    private final Map<Transition, Set<ONDEXRelation>> transitionViewCache = new HashMap<>();
 
-    private final StateMachine sm;
+    private StateMachine sm;
 
     private int maxLengthOfAnyRoute;
-
+        
+    
     /**
      * @param sm the state machine to traverse
      * @param maxLengthOfAnyStateDerivedRoute
@@ -46,16 +51,7 @@ public class GraphTraverser {
     public GraphTraverser(StateMachine sm, int maxLengthOfAnyStateDerivedRoute) {
         this.sm = sm;
         this.maxLengthOfAnyRoute = maxLengthOfAnyStateDerivedRoute;
-       
-        if (EXECUTOR == null) {
-            //EXECUTOR = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-            EXECUTOR = Executors.newFixedThreadPool(1);
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                public void run() {
-                    EXECUTOR.shutdownNow();
-                }
-            });
-        }
+        init ();
     }
 
     /**
@@ -64,7 +60,61 @@ public class GraphTraverser {
     public GraphTraverser(StateMachine sm) {
         this(sm, Integer.MAX_VALUE);
     }
+       
+    
+    private synchronized void init ()
+    {
+    	if ( EXECUTOR == null )
+    	{
+				// EXECUTOR = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+				EXECUTOR = Executors.newFixedThreadPool ( 1 );
+				Runtime.getRuntime ().addShutdownHook ( new Thread () {
+					public void run () {
+						EXECUTOR.shutdownNow ();
+					}
+				});
+    	}
+    	
+    	if ( this.sm != null ) return;
+    	
+    	String stateMachineFilePath = this.getOption ( "StateMachineFilePath" );
+    	if ( stateMachineFilePath == null ) throw new IllegalArgumentException (
+	  			"Cannot initialise the StateMachine graph traverser: "
+	  		+ "you must configure a path for the StateMachine File (usually in config.xml)"
+    	);
+    	
+    	this.sm = loadSemanticMotifs ( stateMachineFilePath ); 
+    }
+    
+    
+  	private StateMachine loadSemanticMotifs ( String smFile ) 
+  	{
+  		StateMachineFlatFileParser2 smp = null;
+  		try 
+  		{
+				URL motifsUrl = Thread.currentThread ().getContextClassLoader ().getResource ( smFile );
+	
+				ONDEXGraph graph = this.getOption ( "ONDEXGraph", null );
+				if ( graph == null ) throw new IllegalArgumentException (
+					"ONDEXGraph option not set" 
+				);
+				smp = new StateMachineFlatFileParser2 ();
+				smp.parseReader ( new BufferedReader ( new InputStreamReader ( motifsUrl.openStream () ) ), graph );
+	
+				log.debug ( "Completed State Machine" );
+  		} 
+  		catch (Exception e) {
+  			throw new IllegalArgumentException ( String.format ( 
+					"Error while initialising State Machine Graph Traverser: %s", e.getMessage () ),
+					e
+				);
+  		}
 
+  		return smp.getStateMachine();
+  	}
+    
+    
+    
     /**
      * No multi threading here this implementation threads on start states
      * Only concept ids with valid routes out are returned
@@ -74,9 +124,12 @@ public class GraphTraverser {
      * @param filter  allows method caller to filter results as they are returned (can be null)
      * @return StateDerivedPaths extracted
      */
-    public List<EvidencePathNode> traverseGraph(ONDEXGraph aog, ONDEXConcept concept, FilterPaths<EvidencePathNode> filter) {
+    @Override
+		public List<EvidencePathNode> traverseGraph(ONDEXGraph aog, ONDEXConcept concept, FilterPaths<EvidencePathNode> filter) {
 
-        Set<Transition> transitions = sm.getAllTransitions();
+        init ();
+        
+    		Set<Transition> transitions = sm.getAllTransitions();
         for (Transition transition : transitions) {
             transitionViewCache.put(transition,
                     aog.getRelationsOfRelationType(transition.getValidRelationType()));
@@ -108,8 +161,11 @@ public class GraphTraverser {
      * @param filter   allows method caller to filter results as they are returned (can be null)
      * @return a map of starting points to StateDerivedPaths extracted
      */
-    public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraph(ONDEXGraph aog, Set<ONDEXConcept> concepts, FilterPaths<EvidencePathNode> filter) {
+    @Override
+		public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraph(ONDEXGraph aog, Set<ONDEXConcept> concepts, FilterPaths<EvidencePathNode> filter) {
 
+    		init ();
+    	
 //        for (Transition transition : sm.getAllTransitions()) {
 //            Set<ONDEXRelation> rv = BitSetFunctions.copy(aog.getRelations());
 //            for (ONDEXRelation r : rv) {
@@ -310,5 +366,4 @@ public class GraphTraverser {
     public void setMaxLengthOfAnyRoute(int maxLengthOfAnyRoute) {
         this.maxLengthOfAnyRoute = maxLengthOfAnyRoute;
     }
-
 }
