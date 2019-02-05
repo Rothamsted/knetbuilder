@@ -66,19 +66,29 @@
 							<!--  IRI-based -->
 							<property name = "accessionValueMapper" ref = "idMapper" />
 							<property name = "dataSourceMapper" ref = "dataSourceMapper" />
+							<property name = "ambiguityMapper">
+								<bean class = "net.sourceforge.ondex.parser.ConstMapper">
+									<property name = "value" value = "#{false}"/>
+								</bean>
+							</property>
 						</bean>
 					</property>
 				</bean>
 				<bean class = "net.sourceforge.ondex.parser.utils.Single2AccessionsMapper">
 					<property name = "accessionMapper">
 						<bean class = "net.sourceforge.ondex.parser.DefaultAccessionMapper">
-							<!--  IRI-based -->
+							<!--  based on the rdf1:acronym property -->
 							<property name = "accessionValueMapper">
 								<bean class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
 								  <property name = "propertyIri" value = "http://www.cropontology.org/rdf/acronym" />
 								</bean>
 							</property>
 							<property name = "dataSourceMapper" ref = "dataSourceMapper" />
+							<property name = "ambiguityMapper">
+								<bean class = "net.sourceforge.ondex.parser.ConstMapper">
+									<property name = "value" value = "#{false}"/>
+								</bean>
+							</property>
 						</bean>
 					</property>
 				</bean>
