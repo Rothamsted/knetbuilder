@@ -127,7 +127,7 @@ public class MappingWriter {
         }
 		
 		System.out.println("Add number of publications a concept is cited in...");
-		addCitationCountGDS();
+		// addCitationCountGDS();
 		
 		System.out.println("Created text mining relations: "+ getNumOfRelations());
 
