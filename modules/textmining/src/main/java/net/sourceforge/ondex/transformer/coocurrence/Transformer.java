@@ -311,9 +311,9 @@ public class Transformer extends ONDEXTransformer implements
                     	r.createAttribute(attIP_TFIDF, score1, false);
                     	
                     	//tag concept and relation with publication
-                    	from.addTag(qual);
-                    	to.addTag(qual);
-                    	r.addTag(qual);
+//                     	from.addTag(qual);
+//                     	to.addTag(qual);
+//                     	r.addTag(qual);
                         
                     }
                     else{
@@ -341,27 +341,27 @@ public class Transformer extends ONDEXTransformer implements
                         }
                         
                         // tag association with publication
-                    	from.addTag(qual);
-                    	to.addTag(qual);
-                    	existRel.addTag(qual);
+//                     	from.addTag(qual);
+//                     	to.addTag(qual);
+//                     	existRel.addTag(qual);
                         
                       if (valuePMID != null) 
                       {
                         // concatenate a new PMID, if it's available on the existing relation
                       	//
                       	Attribute bPMIDAttr = existRel.getAttribute ( attPMID );
-												String bPMID = bPMIDAttr == null ? null : bPMIDAttr.getValue ().toString ();
+				String bPMID = bPMIDAttr == null ? null : bPMIDAttr.getValue ().toString ();
 
-												if ( bPMID != null )
-												{
-													// Sometimes it happens the PMID is already there, for reasons to be investigated
-													if ( !valuePMID.contains ( bPMID ) && !bPMID.contains ( valuePMID ) )
-														// if not, eventually join them
-														bPMIDAttr.setValue ( valuePMID + ", " + bPMID );
-												} 
-												else
-													// else, this is the first PMID you see, so just add it
-													existRel.createAttribute ( attPMID, valuePMID, false );
+				if ( bPMID != null )
+				{
+					// Sometimes it happens the PMID is already there, for reasons to be investigated
+					if ( !valuePMID.contains ( bPMID ) && !bPMID.contains ( valuePMID ) )
+						// if not, eventually join them
+						bPMIDAttr.setValue ( valuePMID + ", " + bPMID );
+				} 
+				else
+					// else, this is the first PMID you see, so just add it
+					existRel.createAttribute ( attPMID, valuePMID, false );
                       }
                       
                       // count number of co-citation
