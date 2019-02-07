@@ -147,7 +147,7 @@ public class MappingWriter {
 						&& !rel.getFromConcept().equals(con)){
 					con = rel.getFromConcept();
 					//increase its CitNum
-					increaseCitCount(con);
+					//increaseCitCount(con);
 				}
 				else{
 //					System.out.println(con.getPID() + " was already cited in " + conPub.getPID());
