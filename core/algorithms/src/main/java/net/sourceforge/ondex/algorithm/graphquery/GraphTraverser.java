@@ -40,7 +40,7 @@ public class GraphTraverser extends AbstractGraphTraverser {
 
     private StateMachine sm;
 
-    private int maxLengthOfAnyRoute;
+    private int maxLengthOfAnyRoute = -1;
         
     
     /**
@@ -60,7 +60,23 @@ public class GraphTraverser extends AbstractGraphTraverser {
     public GraphTraverser(StateMachine sm) {
         this(sm, Integer.MAX_VALUE);
     }
-       
+      
+    
+    /**
+     * This is for component managers like Spring or initalisation via class name + options 
+     * (see {@link AbstractGraphTraverser#getInstance(Map)}.
+     * 
+     * This traverser requires a {@link StateMachine} before invoking traverse() methods. When invoked with this
+     * empty constructor, you need to setup the "StateMachineFilePath" {@link #getOptions() option}, either after 
+     * instantiation, or in the options passed to {@link AbstractGraphTraverser#getInstance(Map)}.
+     * 
+     * We also accept the "MaxLengthOfAnyStateDerivedRoute" option.
+     * 
+     */
+    public GraphTraverser ()
+    {
+    }
+    
     
     private synchronized void init ()
     {
@@ -75,8 +91,11 @@ public class GraphTraverser extends AbstractGraphTraverser {
 				});
     	}
     	
-    	if ( this.sm != null ) return;
+    	if ( this.maxLengthOfAnyRoute == -1 ) 
+    		this.maxLengthOfAnyRoute = this.getOption ( "MaxLengthOfAnyStateDerivedRoute", Integer.MAX_VALUE );
     	
+    	if ( this.sm != null ) return;
+    	    	
     	String stateMachineFilePath = this.getOption ( "StateMachineFilePath" );
     	if ( stateMachineFilePath == null ) throw new IllegalArgumentException (
 	  			"Cannot initialise the StateMachine graph traverser: "
