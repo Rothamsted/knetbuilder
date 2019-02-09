@@ -60,14 +60,28 @@ public class ONDEXGraphUtils
 	}
 
 	/**
-	 * @return the concept or relation attribute of type nameId. If none is available, returns null.  
+	 * @return the concept or relation attribute of type nameId. If none is available, returns null.
+	 * @failIfNoAttribName true if you want an exception when the attribute type nameId doesn't exist.  
+	 */
+	public static Attribute getAttribute ( ONDEXGraph graph, ONDEXEntity entity, String nameId, boolean failIfNoAttribName )
+	{
+		AttributeName aname = graph.getMetaData ().getAttributeName ( nameId );
+		if ( aname == null )
+		{
+			if ( !failIfNoAttribName ) return null;
+			throw new IllegalArgumentException ( String.format (
+			  "No attribute type '%s' in the grqph", nameId
+			));
+		}
+		return entity.getAttribute ( aname );
+	}
+
+	/**
+	 * Defaults to true.
 	 */
 	public static Attribute getAttribute ( ONDEXGraph graph, ONDEXEntity entity, String nameId )
 	{
-		AttributeName aname = graph.getMetaData ().getAttributeName ( nameId );
-		if ( aname == null ) throw new IllegalArgumentException ( String.format (
-		  "No attribute type '%s' in the grqph", nameId
-		));
-		return entity.getAttribute ( aname );
+		return getAttribute ( graph, entity, nameId, true );
 	}
+
 }
