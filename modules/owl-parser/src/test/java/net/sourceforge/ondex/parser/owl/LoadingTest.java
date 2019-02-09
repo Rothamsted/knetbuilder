@@ -17,7 +17,7 @@ import net.sourceforge.ondex.export.oxl.Export;
 public class LoadingTest
 {
 	@Test
-	@Ignore ( "Not a real test, very time consuming" )
+	//@Ignore ( "Not a real test, very time consuming" )
 	public void testLoad () throws Exception
 	{
 		String owlDir = "/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/knet-pipelines/ontologies/";
