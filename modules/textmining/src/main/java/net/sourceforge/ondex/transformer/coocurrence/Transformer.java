@@ -166,11 +166,15 @@ public class Transformer extends ONDEXTransformer implements
         	Set<ONDEXRelation> pubLinks = graph.getRelationsOfConcept(cPub);
         	int countPubIn = 0;
         	for(ONDEXRelation pubLink : pubLinks){
-        		if(pubLink.getOfType().getId().equals("pub_in")){
+			//check for both links pub_in AND occ_in
+        		if(pubLink.getOfType().getId().equals("pub_in") || pubLink.getOfType().getId().equals("occ_in")){
         			countPubIn++;
         		}
         	}
-        	if(countPubIn >= 10){
+		//A good abstract will ocntain a few trait names and gene names.
+		//In wheat genes of same gene family will have the same name and map to same publication.
+		//A limit of 50 seems sensbile to account for this but it needs some empiric evaluation.
+        	if(countPubIn >= 50){
         		relations.removeAll(pubLinks);
         	}
         }
