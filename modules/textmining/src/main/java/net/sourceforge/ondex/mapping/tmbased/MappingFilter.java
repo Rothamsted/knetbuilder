@@ -81,7 +81,7 @@ public class MappingFilter {
                 filterLowScore(pubMap, 0.3);
             }
             if (filter.toLowerCase().equals(BESTHITS_FILTER.toLowerCase())) {
-                takeBestHitsPerConceptClass(pubMap, 3);
+                takeBestHitsPerConceptClass(pubMap, 50);
             }
         }
     }
