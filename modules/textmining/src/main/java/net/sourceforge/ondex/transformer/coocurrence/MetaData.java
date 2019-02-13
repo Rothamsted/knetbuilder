@@ -3,6 +3,7 @@ package net.sourceforge.ondex.transformer.coocurrence;
 public class MetaData {
 	
 	public static final String RT_COOC_WITH = "cooc_wi";
+	public static final String RT_OCC_IN = "occ_in";
 	public static final String ATT_EVIDENCE = "EVIDENCE";
 	public static final String ET_TRANS = "TRANS";
 	public static final String ATT_TFIDF = "TFIDF";
