@@ -58,6 +58,7 @@ public class Transformer extends ONDEXTransformer implements
         ArgumentNames {
 	
     private RelationType rtCoocWith;
+    private RelationType rtOccIn;
     private EvidenceType etTRANS;
     private AttributeName attIP_TFIDF;
     private AttributeName attMAX_TFIDF;
@@ -103,9 +104,14 @@ public class Transformer extends ONDEXTransformer implements
 
     	ONDEXGraphMetaData md = graph.getMetaData();
     	
-		rtCoocWith = md.getRelationType(MetaData.RT_COOC_WITH);
+	rtCoocWith = md.getRelationType(MetaData.RT_COOC_WITH);
 		if (rtCoocWith == null) {
 			fireEventOccurred(new RelationTypeMissingEvent(MetaData.RT_COOC_WITH, Mapping.getCurrentMethodName()));
+		}
+	    
+	rtOccIn = md.getRelationType(MetaData.RT_OCC_IN);
+		if (rtOccIn == null) {
+			fireEventOccurred(new RelationTypeMissingEvent(MetaData.RT_OCC_IN, Mapping.getCurrentMethodName()));
 		}
 		
         etTRANS = md.getEvidenceType(MetaData.ET_TRANS);
@@ -157,8 +163,10 @@ public class Transformer extends ONDEXTransformer implements
         }
         
         //all relations to, from Publication
-        Set<ONDEXRelation> relations = BitSetFunctions.copy(graph.getRelationsOfConceptClass(ccPublication));
+        //Set<ONDEXRelation> relations = BitSetFunctions.copy(graph.getRelationsOfConceptClass(ccPublication));
         
+	Set<ONDEXRelation> relations = BitSetFunctions.copy(graph.getRelationsOfRelationType(rtOccIn));
+	    
         System.out.println("Relations for co-occurrence before filtering: " + relations.size());
         
         // only consider publications with less than N pub_in or occ_in relations
@@ -166,8 +174,8 @@ public class Transformer extends ONDEXTransformer implements
         	Set<ONDEXRelation> pubLinks = graph.getRelationsOfConcept(cPub);
         	int countPubIn = 0;
         	for(ONDEXRelation pubLink : pubLinks){
-			//check for both links pub_in AND occ_in
-        		if(pubLink.getOfType().getId().equals("pub_in") || pubLink.getOfType().getId().equals("occ_in")){
+			//check for occ_in relations only (not pub_in)
+        		if(pubLink.getOfType().getId().equals("occ_in")){
         			countPubIn++;
         		}
         	}
