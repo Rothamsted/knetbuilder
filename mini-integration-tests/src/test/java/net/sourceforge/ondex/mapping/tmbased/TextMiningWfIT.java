@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.mapping.tmbased;
 
+import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -40,6 +42,10 @@ public class TextMiningWfIT
 		invoker.invoke ( wfPath + "tm-workflow.xml" );
 		ONDEXGraph graph = Parser.loadOXL ( wfPath + "out.oxl" );
 				
+		String termAcc = "TO:0000599";
+		String protAcc = "Q6ZAL2";
+		
+		
 		// Do we have this concept?
 		//
 		ONDEXConcept testConcept = 
@@ -47,7 +53,7 @@ public class TextMiningWfIT
 			.stream ()
 			.filter ( c ->
 				Optional.ofNullable ( c.getConceptAccessions () )
-				.map ( accs -> accs.stream ().anyMatch ( acc -> "TO:0000599".equals ( acc.getAccession () ) )  )
+				.map ( accs -> accs.stream ().anyMatch ( acc -> termAcc.equals ( acc.getAccession () ) )  )
 				.orElse ( false )
 			)
 			.findFirst ()
@@ -63,7 +69,7 @@ public class TextMiningWfIT
 		.stream ()
 		.filter ( r -> 
 			Optional.ofNullable ( r.getToConcept ().getConceptAccessions () )
-			.map ( accs -> accs.stream ().anyMatch ( acc -> acc.getAccession ().contains ( "Q6ZAL2" ) ) )
+			.map ( accs -> accs.stream ().anyMatch ( acc -> acc.getAccession ().contains ( protAcc ) ) )
 			.orElse ( false )
 		)
 		.findFirst ()
@@ -85,8 +91,13 @@ public class TextMiningWfIT
 		assertEquals ( "Test PMIDs attribute value not found!", 1, pmids.size () );
 		String pmidsStr = pmids.iterator ().next ();
 		
-		assertTrue ( "Link Q6ZAL2 -> PMID:16240171 not found!", pmidsStr.contains ( "16240171" ) );
-		assertTrue ( "Link Q6ZAL2 -> PMID:17257172 not found!", pmidsStr.contains ( "17257172" ) );
+		//Stream.of ( "16240171", "17257172" )
+		Stream.of ( "17257172" )
+		.forEach ( pmid -> 
+			assertTrue (  
+				format ( "No PMID attribute %s found in %s -> %s!", pmid, termAcc, protAcc ), 
+				pmidsStr.contains ( pmid ) )
+		);
 		
 		assertTrue ( "Bad test score!",
 			testRel
