@@ -163,9 +163,9 @@ public class Transformer extends ONDEXTransformer implements
         }
         
         //all relations to, from Publication
-        //Set<ONDEXRelation> relations = BitSetFunctions.copy(graph.getRelationsOfConceptClass(ccPublication));
+        Set<ONDEXRelation> relations = BitSetFunctions.copy(graph.getRelationsOfConceptClass(ccPublication));
         
-	Set<ONDEXRelation> relations = BitSetFunctions.copy(graph.getRelationsOfRelationType(rtOccIn));
+	// Set<ONDEXRelation> relations = BitSetFunctions.copy(graph.getRelationsOfRelationType(rtOccIn));
 	    
         System.out.println("Relations for co-occurrence before filtering: " + relations.size());
         
@@ -174,8 +174,8 @@ public class Transformer extends ONDEXTransformer implements
         	Set<ONDEXRelation> pubLinks = graph.getRelationsOfConcept(cPub);
         	int countPubIn = 0;
         	for(ONDEXRelation pubLink : pubLinks){
-			//check for occ_in relations only (not pub_in)
-        		if(pubLink.getOfType().getId().equals("occ_in")){
+			//check for pub_in and occ_in relations
+        		if(pubLink.getOfType().getId().equals("pub_in") || pubLink.getOfType().getId().equals("occ_in")){
         			countPubIn++;
         		}
         	}
@@ -188,7 +188,7 @@ public class Transformer extends ONDEXTransformer implements
         }
         
         // get relations of qualifier concept class
-        System.out.println("Relations for co-occurrence after filtering publications with more than 10 citations: " + relations.size());
+        System.out.println("Relations for co-occurrence after filtering publications with more than 50 citations: " + relations.size());
         
         //relation id -> set of evidence sentences
     	HashMap<Integer, HashSet<String>> relation2evitext = new HashMap<Integer, HashSet<String>>();
