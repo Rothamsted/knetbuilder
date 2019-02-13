@@ -81,11 +81,12 @@ public class TextMiningWfIT
 		.map ( attr -> (String) attr.getValue () )
 		.collect ( Collectors.toSet () );
 		
-		assertEquals ( "Test PMIDs not found!", 1, pmids.size () );
-		String pmid = pmids.iterator ().next ();
+		// All PMIDs are joined into one string only.
+		assertEquals ( "Test PMIDs attribute value not found!", 1, pmids.size () );
+		String pmidsStr = pmids.iterator ().next ();
 		
-		assertTrue ( "Test PMID 1 not found!", pmid.contains ( "16240171" ) );
-		assertTrue ( "Test PMID 2 not found!", pmid.contains ( "17257172" ) );
+		assertTrue ( "Link Q6ZAL2 -> PMID:16240171 not found!", pmidsStr.contains ( "16240171" ) );
+		assertTrue ( "Link Q6ZAL2 -> PMID:17257172 not found!", pmidsStr.contains ( "17257172" ) );
 		
 		assertTrue ( "Bad test score!",
 			testRel
