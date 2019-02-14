@@ -2,6 +2,7 @@ package net.sourceforge.ondex.filter.conceptclass;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -228,9 +229,12 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 						// Then, no relations to retain if there's no incident concept
 						selectedR.clear ();
 					else
-						selectedC.parallelStream ()
+					{
+						selectedC.stream ()
+							.sequential ()
 							.map ( c -> graph.getRelationsOfConcept ( c ) )
 							.forEach ( rels -> selectedR.retainAll ( rels ) );
+					}
 				}
 			}
 
