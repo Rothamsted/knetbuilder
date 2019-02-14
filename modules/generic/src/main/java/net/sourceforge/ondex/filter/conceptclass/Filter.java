@@ -216,10 +216,10 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 						.getRelationsOfConceptClass(cc));
 				// restrict by data source
 				if (dataSource != null) {
-					selectedC.retainAll(graph
-							.getConceptsOfDataSource(dataSource));
-					selectedR.retainAll(graph
-							.getRelationsOfDataSource(dataSource));
+					selectedC.retainAll(graph.getConceptsOfDataSource(dataSource));
+					
+					// removes relations from/to any concepts of specified DS regardless of CC.
+					// selectedR.retainAll(graph.getRelationsOfDataSource(dataSource));
 				}
 			}
 
