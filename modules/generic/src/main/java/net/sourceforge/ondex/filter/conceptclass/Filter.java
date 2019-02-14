@@ -216,10 +216,21 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 						.getRelationsOfConceptClass(cc));
 				// restrict by data source
 				if (dataSource != null) {
-					selectedC.retainAll(graph.getConceptsOfDataSource(dataSource));
-					
-					// removes relations from/to any concepts of specified DS regardless of CC.
+					selectedC.retainAll ( graph.getConceptsOfDataSource(dataSource) );
+
+					// This is wrong, see ConceptClassFilterTest.testUnfilteredCCFilteredDS()
+					// and #15
 					// selectedR.retainAll(graph.getRelationsOfDataSource(dataSource));
+
+					// We actually want to propagate to relations involved in selectedC.
+					// TODO: is this efficient enough?
+					if ( selectedC.size () == 0 )
+						// Then, no relations to retain if there's no incident concept
+						selectedR.clear ();
+					else
+						selectedC.parallelStream ()
+							.map ( c -> graph.getRelationsOfConcept ( c ) )
+							.forEach ( rels -> selectedR.retainAll ( rels ) );
 				}
 			}
 
