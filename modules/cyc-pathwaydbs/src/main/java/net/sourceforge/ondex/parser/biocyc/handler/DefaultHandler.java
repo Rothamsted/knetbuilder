@@ -397,9 +397,9 @@ public abstract class DefaultHandler implements MetaData {
 			System.err.println("Missing DataSource mapping: " + cv);
 			cv = "unknown";
 		}
-		System.out.println("cv: "+ cv +", get DataSource: "+ cvMap.get(cv));
+		// System.out.println("cv: "+ cv +", get DataSource: "+ cvMap.get(cv));
 		elementOf = graph.getMetaData().getDataSource(cvMap.get(cv));
-		System.out.println(", elementOf: "+ elementOf);
+		// System.out.println(", elementOf: "+ elementOf);
 		if (elementOf == null)
 			throw new DataSourceMissingException(cv + " is missing.");
 
