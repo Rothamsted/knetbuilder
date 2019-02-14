@@ -220,7 +220,7 @@ public class Parser extends ONDEXParser {
                                             protId= xmlr.getAttributeValue(i);
                                       }
                                    }
-                                System.out.println("XML: id: "+ id +", protId: "+ protId +", geneId: "+ geneId);
+                                // System.out.println("XML: id: "+ id +", protId: "+ protId +", geneId: "+ geneId);
 
 				if(!ondexConcepts.containsKey(id)){
 
