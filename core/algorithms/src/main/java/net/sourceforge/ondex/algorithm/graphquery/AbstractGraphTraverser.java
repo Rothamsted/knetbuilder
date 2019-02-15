@@ -84,9 +84,9 @@ public abstract class AbstractGraphTraverser
 	{
 		GT result = null;
 		
-		String graphTraverserFQN = (String) options.getOrDefault (
-			"GraphTraverserClass", GraphTraverser.class.getCanonicalName () 
-		);
+		String graphTraverserFQN = (String) options.get ( "GraphTraverserClass" );
+		if ( graphTraverserFQN == null || "".equals ( graphTraverserFQN ) )
+			graphTraverserFQN = GraphTraverser.class.getCanonicalName ();
 		
 		clog.info ( "Initialising Graph Traverser + '" + graphTraverserFQN + "'" );
 		try
