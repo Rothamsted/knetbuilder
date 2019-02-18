@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,10 +34,11 @@ public class TabXsdTest
 		v.setSchemaSource ( new StreamSource ( Resources.getResource ( this.getClass (), "/tab_parser.xsd" ).openStream () ) );
 		ValidationResult r = v.validateSchema ();
 		for ( ValidationProblem p: r.getProblems () )
-			log.log ( 
-				ProblemType.ERROR.equals ( p.getType () ) ? Level.ERROR : Level.WARN,
-				"Validation error: " + p.toString ()
-		);
+		{
+			String msg = "Validation error: " + p.toString ();
+			if ( ProblemType.ERROR.equals ( p.getType () ) ) log.error ( msg );
+			else log.warn ( msg );
+		}
 		Assert.assertTrue ( "Schema validation error!", r.isValid () );
 	}
 
@@ -55,10 +56,11 @@ public class TabXsdTest
 				new StreamSource ( Resources.getResource ( this.getClass (), "/" + inResName ).openStream () ) 
 			);
 			for ( ValidationProblem p: r.getProblems () )
-				log.log ( 
-					ProblemType.ERROR.equals ( p.getType () ) ? Level.ERROR : Level.WARN,
-					"Validation error: " + p.toString ()
-			);
+			{
+				String msg = "Validation error: " + p.toString ();
+				if ( ProblemType.ERROR.equals ( p.getType () ) ) log.error ( msg );
+				else log.warn ( msg );
+			}
 			Assert.assertTrue ( String.format ( "Validation error for %s!", inResName ), r.isValid () );
 		}
 	}

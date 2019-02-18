@@ -5,7 +5,7 @@ import java.io.FilenameFilter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;

@@ -3,7 +3,7 @@ package net.sourceforge.ondex.parser.fasta.ensembl;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;

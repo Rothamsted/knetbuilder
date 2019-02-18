@@ -20,7 +20,7 @@ import javax.xml.stream.StreamFilter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import org.codehaus.stax2.XMLInputFactory2;
 
 import com.ctc.wstx.io.CharsetNames;

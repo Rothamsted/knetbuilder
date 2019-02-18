@@ -3,7 +3,7 @@ package net.sourceforge.ondex.parser.fasta.ncbi;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;

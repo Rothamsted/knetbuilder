@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.config.ValidatorRegistry;
