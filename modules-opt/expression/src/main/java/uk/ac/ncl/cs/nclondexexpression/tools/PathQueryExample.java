@@ -7,7 +7,6 @@ package uk.ac.ncl.cs.nclondexexpression.tools;
 
 import java.util.Map;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
 import org.apache.log4j.Logger;
 
 import net.sourceforge.ondex.core.AttributeName;

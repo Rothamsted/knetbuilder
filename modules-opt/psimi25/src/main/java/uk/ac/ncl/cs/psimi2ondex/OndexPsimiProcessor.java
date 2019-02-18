@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
-
 import net.sf.psidev.mi.Attribute;
 import net.sf.psidev.mi.AttributeList;
 import net.sf.psidev.mi.Availability;
@@ -41,6 +39,7 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
 import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.DataSourceMissingException;

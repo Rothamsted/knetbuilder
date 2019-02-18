@@ -8,7 +8,6 @@ package uk.ac.ncl.cs.ondex.merger;
 import java.util.Collection;
 import java.util.HashSet;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
 import org.apache.log4j.Logger;
 
 import net.sourceforge.ondex.core.ConceptClass;
