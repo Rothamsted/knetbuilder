@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.event.type;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 /**
  * EventType for data file errors.

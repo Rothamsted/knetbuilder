@@ -685,8 +685,7 @@ public class PluginRegistry {
                     LOG.debug("Loaded: " + this.cls);
                 } catch (Exception e) {
                     //Should never happen by this point.
-                	Logger.getRootLogger().log(Priority.WARN, e.getMessage());
-                    ;
+                	Logger.getRootLogger().warn (e.getMessage());
                 }
             }
             return this.argDef;
