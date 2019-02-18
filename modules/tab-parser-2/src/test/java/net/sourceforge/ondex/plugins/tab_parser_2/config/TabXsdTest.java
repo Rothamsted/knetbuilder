@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.xml.transform.stream.StreamSource;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;

@@ -20,7 +20,6 @@ import javax.xml.stream.StreamFilter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
 import org.codehaus.stax2.XMLInputFactory2;
 
 import com.ctc.wstx.io.CharsetNames;
@@ -41,6 +40,7 @@ import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
 import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.ParsingErrorEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;

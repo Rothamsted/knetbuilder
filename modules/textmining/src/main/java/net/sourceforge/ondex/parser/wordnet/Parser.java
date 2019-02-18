@@ -3,11 +3,10 @@ package net.sourceforge.ondex.parser.wordnet;
 import java.io.File;
 import java.util.ArrayList;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
-
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 

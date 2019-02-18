@@ -2,8 +2,6 @@ package net.sourceforge.ondex.parser.medline;
 
 import java.util.Hashtable;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
-
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DataURL;
@@ -16,6 +14,7 @@ import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.RangeArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.medline.args.ArgumentNames;

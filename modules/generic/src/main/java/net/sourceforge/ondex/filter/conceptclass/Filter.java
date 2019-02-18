@@ -2,7 +2,6 @@ package net.sourceforge.ondex.filter.conceptclass;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
