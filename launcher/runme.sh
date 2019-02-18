@@ -15,8 +15,8 @@ if [ "$JAVA_TOOL_OPTIONS" == "" ]; then
 fi
 
 # Enable the debugger, this is sometimes needed by developers
-#JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Xdebug -Xnoagent -Djava.compiler=NONE
-#									 -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
+JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Xdebug -Xnoagent -Djava.compiler=NONE
+									 -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 
 # JMX connection to be used via SSH (map both ports) and with client tools like jvisualvm
 #JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS  -Dcom.sun.management.jmxremote.ssl=false
