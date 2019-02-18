@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.event.type;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
-
 /**
  * EventType for deserialisation errors.
  * 

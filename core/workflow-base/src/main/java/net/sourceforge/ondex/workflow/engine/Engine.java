@@ -24,7 +24,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.event.type.EventType.Level;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 
@@ -49,6 +48,7 @@ import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.ONDEXListener;
 import net.sourceforge.ondex.event.type.EnvironmentVariable;
 import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.export.ONDEXExport;

@@ -32,7 +32,6 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 import org.clapper.util.classutil.AbstractClassFilter;
 import org.clapper.util.classutil.AndClassFilter;
 import org.clapper.util.classutil.ClassFilter;
