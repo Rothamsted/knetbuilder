@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FloatRangeArgumentDefinition;

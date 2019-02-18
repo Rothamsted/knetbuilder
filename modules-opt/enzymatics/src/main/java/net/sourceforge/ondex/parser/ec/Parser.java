@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.DataURL;

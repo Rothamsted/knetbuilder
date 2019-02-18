@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sf.psidev.mi.Attribute;
 import net.sf.psidev.mi.AttributeList;

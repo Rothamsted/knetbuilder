@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import org.apache.log4j.Logger;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
@@ -146,7 +146,7 @@ public class MiTaxIdFilter extends ONDEXFilter {
 
         killSingletons();
 
-        logger.log(Level.INFO, "deleting "+__deletedConcepts.size()+
+        logger.info ("deleting "+__deletedConcepts.size()+
                 " concepts and "+__deletedRelations.size()+" relations...");
         
     }

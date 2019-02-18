@@ -8,7 +8,7 @@ package uk.ac.ncl.cs.ondex.merger;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import org.apache.log4j.Logger;
 
 import net.sourceforge.ondex.core.ConceptClass;
@@ -89,11 +89,11 @@ public class MergerTools {
     private static Logger logger = Logger.getLogger(Merger.class);
 
     public static void log(String msg) {
-        logger.log(Level.INFO, msg);
+        logger.info ( msg );
     }
 
     public static void complain(String msg) {
-        logger.log(Level.WARN, msg);
+        logger.warn ( msg );
     }
 
     /**

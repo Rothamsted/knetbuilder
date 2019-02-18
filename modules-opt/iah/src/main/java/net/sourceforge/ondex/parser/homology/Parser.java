@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;

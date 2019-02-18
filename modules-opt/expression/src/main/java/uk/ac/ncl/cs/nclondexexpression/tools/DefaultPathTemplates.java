@@ -80,8 +80,10 @@ public class DefaultPathTemplates {
             try {
                 reader.close();
             } catch (IOException ex) {
-                Logger.getLogger(DefaultPathTemplates.class.getName()).log(Level.SEVERE,
-                        "unable to close file handle to interal mapping file", ex);
+                Logger.getLogger(DefaultPathTemplates.class.getName()).log (
+                	Level.SEVERE,
+                  "unable to close file handle to interal mapping file", ex
+                );
             }
         }
 

@@ -2,7 +2,7 @@ package net.sourceforge.ondex.parser.tair;
 
 import java.io.File;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.DataURL;

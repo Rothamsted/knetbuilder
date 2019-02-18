@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import org.sbml.jsbml.AbstractNamedSBase;
 import org.sbml.jsbml.Annotation;
 import org.sbml.jsbml.CVTerm;

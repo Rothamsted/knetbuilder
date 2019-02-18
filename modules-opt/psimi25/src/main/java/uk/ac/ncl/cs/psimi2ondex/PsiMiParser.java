@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.zip.ZipFile;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import org.apache.log4j.Logger;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -153,7 +153,7 @@ public class PsiMiParser extends ONDEXParser {
             /*
              * Package up the input file as stream and parse it.
              */
-            logger.log(Level.INFO,"Parsing file: "+inputFile.getAbsolutePath());
+            logger.info ("Parsing file: "+inputFile.getAbsolutePath());
 
             InputStream in = new FileInputStream(inputFile);
 
@@ -269,11 +269,10 @@ public class PsiMiParser extends ONDEXParser {
     private Logger logger = Logger.getLogger(this.getClass());
 
     public void log(String msg) {
-        logger.log(Level.INFO, msg);
+        logger.info(msg);
     }
 
     public void complain(String msg) {
-        logger.log(Level.WARN, msg);
+        logger.info(msg);
     }
-
 }

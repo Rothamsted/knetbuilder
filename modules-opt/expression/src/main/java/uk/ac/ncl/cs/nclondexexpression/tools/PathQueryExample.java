@@ -7,7 +7,7 @@ package uk.ac.ncl.cs.nclondexexpression.tools;
 
 import java.util.Map;
 
-import org.apache.log4j.Level;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import org.apache.log4j.Logger;
 
 import net.sourceforge.ondex.core.AttributeName;
@@ -62,7 +62,7 @@ public class PathQueryExample {
 
 
         } catch (ParsingFailedException ex) {
-            Logger.getLogger(PathQueryExample.class).log(Level.ERROR, ex.getMessage(), ex);
+            Logger.getLogger(PathQueryExample.class).error(ex.getMessage(), ex);
         }
 
 
