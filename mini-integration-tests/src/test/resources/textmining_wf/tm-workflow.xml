@@ -51,7 +51,8 @@
 		<!-- Create relations TO-Publication and Protein-Publication -->
 		<Mapping name="tmbased">
 			<Arg name="OnlyPreferredNames">false</Arg>
-			<Arg name="UseFullText">false</Arg>
+			<!-- TODO: At some point, it stopped to relate TO terms to pubs, when this is false -->
+			<Arg name="UseFullText">true</Arg>
 			<Arg name="Search">exact</Arg>
 			<Arg name="graphId">default</Arg>
 			<Arg name="ConceptClass">Protein</Arg>
