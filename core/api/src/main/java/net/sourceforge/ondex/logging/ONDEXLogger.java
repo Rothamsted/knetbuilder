@@ -41,7 +41,7 @@ public class ONDEXLogger implements ONDEXListener {
 		msg.append ( et.getCompleteMessage() );
 		
 
-		logger.log ( et.getLog4jLevel(), msg.toString () );
+		et.getLog4jLevel().log ( logger, msg.toString () );
 	}
 
 	/**

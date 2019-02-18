@@ -1,6 +1,9 @@
 package net.sourceforge.ondex.event.type;
 
-import org.apache.log4j.Level;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
+import org.apache.log4j.Logger;
 
 /**
  * Abstract class specifying the kind of event that occurred.
@@ -21,6 +24,36 @@ public abstract class EventType {
     // specifies a Log4j level for this event type
     private Level log4jLevel = Level.DEBUG;
 
+    /**
+     * 
+     * Custom level, to make methods like {@link EventType#setLog4jLevel(Level)} independent on 
+     * any logging system.
+     *
+     * @author brandizi
+     * <dl><dt>Date:</dt><dd>18 Feb 2019</dd></dl>
+     *
+     */
+    public static enum Level 
+    {
+    	FATAL( (log, msg) -> log.fatal ( msg ) ), 
+    	ERROR( (log, msg) -> log.fatal ( msg ) ),
+    	WARN( (log, msg) -> log.fatal ( msg ) ),
+    	INFO( (log, msg) -> log.fatal ( msg ) ),
+    	DEBUG( (log, msg) -> log.fatal ( msg ) ),
+    	TRACE( (log, msg) -> log.fatal ( msg ) );
+    	
+    	private BiConsumer<Logger, String> loggerConsumer;
+    	  
+    	Level ( BiConsumer<Logger, String> loggerConsumer ) {
+    		this.loggerConsumer = loggerConsumer;
+    	}
+    	public void log ( Logger logger, String message )
+    	{
+    		loggerConsumer.accept ( logger, message );
+    	}
+    }
+    
+    
     /**
      * Constructor takes a message and a possible extension for this EventType.
      *
