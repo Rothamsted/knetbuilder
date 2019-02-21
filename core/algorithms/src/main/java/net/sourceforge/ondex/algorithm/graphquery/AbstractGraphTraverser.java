@@ -88,7 +88,7 @@ public abstract class AbstractGraphTraverser
 		if ( graphTraverserFQN == null || "".equals ( graphTraverserFQN ) )
 			graphTraverserFQN = GraphTraverser.class.getCanonicalName ();
 		
-		clog.info ( "Initialising Graph Traverser + '" + graphTraverserFQN + "'" );
+		clog.info ( "Initialising Graph Traverser '" + graphTraverserFQN + "'" );
 		try
 		{
 			@SuppressWarnings ( "unchecked" )
