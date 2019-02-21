@@ -111,8 +111,10 @@ public class GraphTraverser extends AbstractGraphTraverser {
   		StateMachineFlatFileParser2 smp = null;
   		try 
   		{
-				URL motifsUrl = Thread.currentThread ().getContextClassLoader ().getResource ( smFile );
-	
+  			URL motifsUrl = smFile.startsWith ( "file://" )
+  					? new URL ( smFile )
+  					: Thread.currentThread().getContextClassLoader().getResource ( smFile );
+  				
 				ONDEXGraph graph = this.getOption ( "ONDEXGraph", null );
 				if ( graph == null ) throw new IllegalArgumentException (
 					"ONDEXGraph option not set" 
