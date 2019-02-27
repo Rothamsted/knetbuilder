@@ -64,11 +64,11 @@
 			<set>
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="PO:" />
-					<!-- property name = "addedPrefix" value="PO:" / -->
+					<property name = "addedPrefix" value="PO:" />
 				</bean>
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="PO:" />
-					<!-- property name = "addedPrefix" value="PO:" / -->
+					<property name = "addedPrefix" value="PO:" />
 				</bean>
 			</set>
 		</property>
