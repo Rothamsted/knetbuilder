@@ -71,20 +71,15 @@
 				<filtering>true</filtering>
 				<includes>
 					<include>**/tm-workflow.xml</include>
-					<include>**/tm_rdf_wf.xml</include>
+					<include>**/*_wf.xml</include>
 					<!-- Neo4j Tests are configured with this local extension of the 
 					     distribution config -->
-					<include>**/rdf2neo_config.xml</include>					
+					<include>**/rdf2neo_config.xml</include>
 				</includes>
 			</testResource>
 			<testResource>
 				<directory>src/test/resources</directory>
 				<filtering>false</filtering>
-				<excludes>
-					<exclude>**/tm-workflow.xml</exclude>
-					<exclude>**/tm_rdf_wf.xml</exclude>
-					<exclude>**/rdf2neo_config.xml</exclude>
-				</excludes>
 			</testResource>
 		</testResources>
 

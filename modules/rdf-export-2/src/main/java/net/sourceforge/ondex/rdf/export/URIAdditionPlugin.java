@@ -6,10 +6,12 @@ import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean2;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.ModelFactory;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
@@ -54,16 +56,14 @@ public class URIAdditionPlugin extends ONDEXTransformer
 		"bridged with RDF or other graph database tools.";
 	
 	private String instanceNamespace = NamespaceUtils.ns ( "bkr" );
-	private RdfUriGenerator<ONDEXConcept> conceptUriGenerator = new ConceptMapper.UriGenerator ();
-	private RdfUriGenerator<ONDEXRelation> relationUriGenerator = new RelationMapper.UriGenerator ();
+	private RdfUriGenerator<ONDEXConcept> conceptUriGenerator; 
+	private RdfUriGenerator<ONDEXRelation> relationUriGenerator; 
 	private boolean uriIndexingEnabled = false;
 	
 	{
-		/* This is used internally by our URI generators. The model is used by this factory, but here it will be left empty */
-		RDFXFactory xfact = new RDFXFactory ( ModelFactory.createDefaultModel () );
-		
-		conceptUriGenerator.setMapperFactory ( xfact );
-		relationUriGenerator.setMapperFactory ( xfact );
+		// Initialising them this way forces the setup of necessary internal stuff (eg, mapper factory, see the setter)
+		this.setConceptUriGenerator ( ConceptMapper.UriGenerator.class.getName () );
+		this.setRelationUriGenerator ( RelationMapper.UriGenerator.class.getName () );
 	}
 	
 	
@@ -123,7 +123,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 				"A subclass of the internal class " + RdfUriGenerator.class.getCanonicalName () + ", which is used to generate" +
 				"URIs from concepts. Must be the Java FQN of a class available from the classpath. Must accept ONDEXConcept as input (see the code).", 
 				false, // required
-				this.conceptUriGenerator.getClass ().getCanonicalName (), // default
+				this.conceptUriGenerator.getClass ().getName (), // default
 				false // canBeMultiple
 	    ),
 	    new StringArgumentDefinition ( 
@@ -131,7 +131,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 				"A subclass of the internal class " + RdfUriGenerator.class.getCanonicalName () + ", which is used to generate" +
 				"URIs from relations. Must be the Java FQN of a class available from the classpath. Must accept ONDEXRelation as input (see the code).", 
 				false, // required
-				this.relationUriGenerator.getClass ().getCanonicalName (), // default
+				this.relationUriGenerator.getClass ().getName (), // default
 				false // canBeMultiple
 	    ),
 	    new BooleanArgumentDefinition ( 
@@ -151,8 +151,20 @@ public class URIAdditionPlugin extends ONDEXTransformer
 		for ( ArgumentDefinition<?> argDef: this.getArgumentDefinitions () )
 		{
 			String argName = argDef.getName ();
-			Object aval = args.getUniqueValue ( argName );
-			if ( aval != null ) butil.setProperty ( this, argName, args.getUniqueValue ( argName ) );
+			
+			// Empty strings means take the default. Apparently the wf engine passes empty strings when a parameter 
+			// is not set at all (not the defaults!)
+			//
+			Object aval = Optional.ofNullable ( args.getUniqueValue ( argName ) )
+				.map ( v -> v instanceof String ? StringUtils.trimToNull ( (String) v ) : v )
+				.orElse ( null );
+			
+			if ( aval == null ) continue;
+			
+			// we cannot use butil for overloaded setters (it takes the one with class parameter only)
+			if ( "conceptUriGenerator".equals ( argName ) ) this.setConceptUriGenerator ( (String) aval );
+			else if ( "relationUriGenerator".equals ( argName ) ) this.setRelationUriGenerator ( (String) aval );
+			else butil.setProperty ( this, argName, aval );
 		}	
 		
 		run ();
@@ -301,14 +313,18 @@ public class URIAdditionPlugin extends ONDEXTransformer
 
 	/**
 	 * This is used by the public setters, to setup an {@link RdfUriGenerator} from the FQN of its Java class.
+	 * 
+	 * We create the generator dynamically and also initialise it with necessary stuff, eg, 
+	 * {@link RdfUriGenerator#setMapperFactory(uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory)}.
+	 * 
 	 */
-	@SuppressWarnings ( { "null", "unchecked" } )
+	@SuppressWarnings ( { "null", "unchecked", "static-access" } )
 	private <E extends ONDEXEntity> RdfUriGenerator<E> getUriGenerator ( String fqn )
 	{
 		Class<?> clazz = null;
-		
+				
 		try {
-			clazz = Class.forName ( fqn );
+			clazz = this.getClass ().forName ( fqn );
 		}
 		catch ( ClassNotFoundException ex ) 
 		{
@@ -325,8 +341,9 @@ public class URIAdditionPlugin extends ONDEXTransformer
 			RdfUriGenerator.class.getSimpleName () 
 		);
 		
+		RdfUriGenerator<E> result;
 		try {
-			return (RdfUriGenerator<E>) clazz.getConstructor ().newInstance ();
+			result = (RdfUriGenerator<E>) clazz.getConstructor ().newInstance ();
 		}
 		catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException ex )
@@ -335,6 +352,11 @@ public class URIAdditionPlugin extends ONDEXTransformer
 				IllegalArgumentException.class, ex, "Error while trying to create URI generator '%s': %s", fqn, ex.getMessage () 
 			);
 		}
+		
+		/* This is used internally by our URI generators. The model is used by this factory, but here it will be left empty */
+		result.setMapperFactory ( new RDFXFactory ( ModelFactory.createDefaultModel () ) );
+		
+		return result;
 	}
 	
 	/**

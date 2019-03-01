@@ -111,6 +111,11 @@ public class URIAdditionPluginTest
 	}
 	
 	
+	/**
+	 * Tests that URIs were created for the {@link #graph test graph}.
+	 *  
+	 * @param instanceNamespace the namespace used for the instances, which were passed to the plugin as parameter.
+	 */
 	private void testTemplate ( String instanceNamespace )
 	{
 		URIAdditionPlugin uriAdder = new URIAdditionPlugin ();
