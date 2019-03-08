@@ -2,7 +2,6 @@ package net.sourceforge.ondex.transformer;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -151,6 +150,10 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 	 */
 	private void deleteEntities ( Set<? extends ONDEXEntity> entities, double relativeSize, Consumer<Integer> eraser )
 	{
+		String etype = entities.iterator ().next () instanceof ONDEXConcept 
+			? "concept" 
+			: "relation";
+		
 		final List<Integer> entityIds = entities
 			.parallelStream ()
 			.map ( ONDEXEntity::getId )
@@ -161,9 +164,11 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 		// Then consider a quota of them (hence, a random quota)
 		IntStream
 			.range ( 0, (int) Math.round ( entityIds.size () * ( 1 - relativeSize ) ) )
-			.boxed ()
-			.map ( entityIds::get ) // from the loop index to the ID
-			.forEach ( eraser ); // ID passed to the eraser
+			.forEach ( i ->  
+			{
+				eraser.accept ( entityIds.get ( i ) );
+				if ( ( i + 1 ) % 10000 == 0 ) log.info ( "Removed {} {}s", i + 1, etype );
+			}); 
 	}
 	
 	
