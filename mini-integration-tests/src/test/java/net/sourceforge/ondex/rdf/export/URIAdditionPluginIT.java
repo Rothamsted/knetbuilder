@@ -36,6 +36,9 @@ public class URIAdditionPluginIT
 		MiniInvoker invoker = new MiniInvoker ();
 		invoker.invoke ( wfPath + "uri-addition-test_wf.xml" );
 		
+		// TODO: this is a very simple graph with just two nodes and one relation, we need
+		// something with URI-related edge cases
+		//
 		ONDEXGraph graph = Parser.loadOXL ( mavenBuildPath + "uri-addition-test-result.oxl" );
 	
 		AttributeName iriAttribType = graph.getMetaData ().getAttributeName ( "iri" );
