@@ -85,7 +85,7 @@ public class FileExporterTest
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
 		
 		// ONDEXGraph g = Parser.loadOXL ( "/Users/brandizi/Documents/Work/RRes/ondex_data/knet_miner_data/WheatKNET.oxl" );
-		ONDEXGraph g = Parser.loadOXL ( "/Users/brandizi/Downloads/WheatKNET_v42.oxl" );
+		ONDEXGraph g = Parser.loadOXL ( "/Users/brandizi/Downloads/WheatKNET-sample.oxl" );
 		
 		RDFFileExporter fx = new RDFFileExporter ();
 		fx.export ( g, mavenBuildPath + "wheat.ttl", DEFAULT_X_LANG );
