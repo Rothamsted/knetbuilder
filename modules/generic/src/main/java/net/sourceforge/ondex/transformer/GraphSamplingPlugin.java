@@ -17,6 +17,8 @@ import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 
+import static java.lang.Math.round;
+
 /**
  * <h2>The Graph Sampler Plugin</h2>
  *
@@ -90,9 +92,9 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 	}
 
 
-	public void sample ( ONDEXGraph graph, double relativeSize )
+	public void sample ( ONDEXGraph inGraph, double relativeSize )
 	{
-		if ( graph != null ) this.setONDEXGraph ( graph );
+		if ( inGraph != null ) this.setONDEXGraph ( inGraph );
 		if ( this.graph == null ) throw new IllegalStateException ( "Input graph is null" );
 		
 		Set<ONDEXConcept> concepts = this.graph.getConcepts ();
@@ -107,13 +109,13 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 		
 		log.info ( 
 			"Reducing {} concepts to {}% => {}", 
-			originalConceptCount, relativeSize * 100, Math.round ( originalConceptCount * relativeSize ) 
+			originalConceptCount, relativeSize * 100, round ( originalConceptCount * relativeSize ) 
 		);
 
 		Set<ONDEXRelation> relations = this.graph.getRelations ();
 		int originalRelCount = relations.size ();
 
-		deleteEntities ( concepts, relativeSize, graph::deleteConcept );
+		deleteEntities ( concepts, relativeSize, this.graph::deleteConcept );
 		
 		log.info ( "{} concepts remaining", concepts.size () );
 
@@ -129,16 +131,23 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 		double relQuota = 1d * relations.size () / originalRelCount;
 		double excess = relQuota - relativeSize; 
 
-		log.info ( "Relations reduced from {} to {}, which is {}%", originalRelCount, relations.size (), relQuota * 100 );
-
+		log.info ( 
+			"Relations reduced from {} to {}, which is {}%", 
+			originalRelCount, relations.size (), pcent ( relQuota ) 
+		);
+		
 		if ( excess <= 0 ) {
 			log.info ( "So, all done" );
 			return;
 		}
 
 		// eg, we still need to cut 20% away, so remove anything under this threshold
-		log.info ( "Further reducing of {}% => -{} relations", excess * 100, relations.size () * excess );
-		deleteEntities ( relations, 1 - excess, graph::deleteRelation );
+		log.info ( 
+			"Further reducing of {}% => -{} relations", 
+			pcent ( excess ), 
+			round ( relations.size () * excess ) 
+		);
+		deleteEntities ( relations, 1 - excess, this.graph::deleteRelation );
 
 		log.info ( "{} relations remaining, all done", relations.size () );
 	}
@@ -163,7 +172,7 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 		
 		// Then consider a quota of them (hence, a random quota)
 		IntStream
-			.range ( 0, (int) Math.round ( entityIds.size () * ( 1 - relativeSize ) ) )
+			.range ( 0, (int) round ( entityIds.size () * ( 1 - relativeSize ) ) )
 			.forEach ( i ->  
 			{
 				eraser.accept ( entityIds.get ( i ) );
@@ -171,6 +180,9 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 			}); 
 	}
 	
+	private static String pcent ( double ratio ) {
+		return String.format ( "%.2f%%", ratio * 100 );
+	}
 	
 	@Override
 	public boolean requiresIndexedGraph () {
