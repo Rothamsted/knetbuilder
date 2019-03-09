@@ -147,4 +147,10 @@ public class AttributeNameImpl extends AbstractMetaData implements
 	public boolean isAssignableFrom(AttributeName possibleDescendant) {
 		return Hierarchy.Helper.transitiveParent(this, possibleDescendant);
 	}
+
+	@Override
+	public boolean equals ( Object o ) {
+		return super.equals ( AttributeName.class, o );
+	}
+	
 }

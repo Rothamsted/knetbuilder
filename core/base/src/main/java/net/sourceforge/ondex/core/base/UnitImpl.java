@@ -22,4 +22,9 @@ public class UnitImpl extends AbstractMetaData implements Unit {
 	protected UnitImpl(long sid, String id, String fullname, String description) {
 		super(sid, id, fullname, description);
 	}
+	
+	@Override
+	public boolean equals ( Object o ) {
+		return super.equals ( Unit.class, o );
+	}		
 }

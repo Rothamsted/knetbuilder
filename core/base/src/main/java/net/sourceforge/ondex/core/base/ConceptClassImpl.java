@@ -90,5 +90,10 @@ public class ConceptClassImpl extends AbstractMetaData implements ConceptClass {
 
 		this.specialisationOf = specialisationOf;
 	}
+	
+	@Override
+	public boolean equals ( Object o ) {
+		return super.equals ( ConceptClass.class, o );
+	}	
 
 }

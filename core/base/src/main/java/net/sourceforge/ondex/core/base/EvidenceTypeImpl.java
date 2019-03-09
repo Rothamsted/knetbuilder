@@ -25,4 +25,9 @@ public class EvidenceTypeImpl extends AbstractMetaData implements EvidenceType {
 			String description) {
 		super(sid, id, fullname, description);
 	}
+	
+	@Override
+	public boolean equals ( Object o ) {
+		return super.equals ( EvidenceType.class, o );
+	}	
 }

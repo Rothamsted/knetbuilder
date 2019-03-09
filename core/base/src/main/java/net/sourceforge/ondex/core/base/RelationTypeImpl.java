@@ -205,4 +205,9 @@ public class RelationTypeImpl extends AbstractMetaData implements RelationType {
 	public boolean isAssignableTo(RelationType rt) {
 		return rt.isAssignableFrom(this);
 	}
+	
+	@Override
+	public boolean equals ( Object o ) {
+		return super.equals ( RelationType.class, o );
+	}	
 }

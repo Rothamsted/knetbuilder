@@ -25,4 +25,9 @@ public class DataSourceImpl extends AbstractMetaData implements DataSource {
 			String description) {
 		super(sid, id, fullname, description);
 	}
+	
+	@Override
+	public boolean equals ( Object o ) {
+		return super.equals ( DataSource.class, o );
+	}	
 }

@@ -100,14 +100,21 @@ public abstract class AbstractMetaData extends AbstractONDEXEntity
 
 	@Override
 	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		if (o == this)
-			return true;
-		if (!(o instanceof MetaData))
-			return false;
-		MetaData data = (MetaData) o;
-		return this.id.equals(data.getId());
+		return equals ( this.getClass (), o );
+	}
+	
+	/**
+	 * Like {@link #equals(Object)}, but allows you to check that the object is an instance of a specific
+	 * class, rather than {@link MetaData}. This is necessary because, for instance, an attribute type and
+	 * a concept class can have the same ID.
+	 *  
+	 */
+	protected <MC extends MetaData> boolean equals ( Class<MC> refClass, Object o ) {
+		if (o == null) return false;
+		if (o == this) return true;
+		Class<?> oc = o.getClass ();
+		if ( !refClass.isAssignableFrom ( oc ) ) return false;
+		return this.id.equals ( ( (MetaData) o).getId() );
 	}
 
 	@Override
