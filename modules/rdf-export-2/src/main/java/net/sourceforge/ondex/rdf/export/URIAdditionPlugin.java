@@ -8,11 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.BeanUtilsBean2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -59,6 +62,8 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	private RdfUriGenerator<ONDEXConcept> conceptUriGenerator; 
 	private RdfUriGenerator<ONDEXRelation> relationUriGenerator; 
 	private boolean uriIndexingEnabled = false;
+	
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	{
 		// Initialising them this way forces the setup of necessary internal stuff (eg, mapper factory, see the setter)
@@ -178,6 +183,10 @@ public class URIAdditionPlugin extends ONDEXTransformer
 
 	public void run ()
 	{		
+		log.info ( 
+			"Adding URIs to {} concept(s) and {} relation(s)", 
+			graph.getConcepts ().size (), graph.getRelations ().size () 
+		);
 		this.processConcepts ();
 		this.processRelations ();		
 	}
@@ -203,6 +212,9 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	
 	private <E extends ONDEXEntity> void processEntities ( Set<E> odxEntities, RdfUriGenerator<E> uriGenerator )
 	{		
+		String typeStr = odxEntities.iterator ().next () instanceof ONDEXConcept ? "concept" : "relations";
+		log.info ( "Start processing {}s", typeStr );
+		
 		CachedGraphWrapper gwrap = CachedGraphWrapper.getInstance ( this.graph );		
 		AttributeName uriAttributeType = gwrap.getAttributeName ( 
 			this.uriAttributeId, this.uriAttributeFullName, this.uriAttributeDescription, String.class 
@@ -212,8 +224,10 @@ public class URIAdditionPlugin extends ONDEXTransformer
 		Map<String, Object> nsParam = new HashMap<> ();
 		nsParam.put ( "instanceNamespace", this.instanceNamespace );
 		
+		final AtomicInteger ctr = new AtomicInteger ( 0 );
 		odxEntities
-		.parallelStream ()
+		.stream ()
+		.sequential () // We've issues with the attr value setter.
 		.forEach ( entity -> 
 		{
 			Attribute uriAttr = entity.getAttribute ( uriAttributeType );
@@ -222,6 +236,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 			
 			String uri = uriGenerator.getUri ( entity, nsParam );
 			entity.createAttribute ( uriAttributeType, uri, this.uriIndexingEnabled );
+			if ( ctr.incrementAndGet () % 10000 == 0 ) log.info ( "{} {}s processed", ctr.get (), typeStr );
 		});
 	}
 
