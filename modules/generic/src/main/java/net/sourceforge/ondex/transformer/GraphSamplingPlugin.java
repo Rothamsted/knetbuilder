@@ -180,6 +180,9 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 			}); 
 	}
 	
+	/** 
+	 * Small utility to convert a 0-1 ratio into a percentage string value. Used during logging. 
+	 */
 	private static String pcent ( double ratio ) {
 		return String.format ( "%.2f%%", ratio * 100 );
 	}

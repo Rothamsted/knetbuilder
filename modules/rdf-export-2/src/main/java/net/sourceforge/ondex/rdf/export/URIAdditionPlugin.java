@@ -212,7 +212,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	
 	private <E extends ONDEXEntity> void processEntities ( Set<E> odxEntities, RdfUriGenerator<E> uriGenerator )
 	{		
-		String typeStr = odxEntities.iterator ().next () instanceof ONDEXConcept ? "concept" : "relations";
+		String typeStr = odxEntities.iterator ().next () instanceof ONDEXConcept ? "concept" : "relation";
 		log.info ( "Start processing {}s", typeStr );
 		
 		CachedGraphWrapper gwrap = CachedGraphWrapper.getInstance ( this.graph );		
@@ -227,7 +227,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 		final AtomicInteger ctr = new AtomicInteger ( 0 );
 		odxEntities
 		.stream ()
-		.sequential () // We've issues with the attr value setter.
+		.sequential () // The parallel stream gives issues with the attr value setter.
 		.forEach ( entity -> 
 		{
 			Attribute uriAttr = entity.getAttribute ( uriAttributeType );
