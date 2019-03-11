@@ -47,19 +47,25 @@ function get_last_release
   get_tag "$xml" latest
 }
 
-# Instantiates a template (sent in via stdin), replacing placeholders named by the $3/$4 parameters with version-related values 
-# about the given artifact's URI. Returns the result on the stdout.
+# Instantiates a template (sent in via stdin), replacing version-related placeholders with values regarding
+# the last version of Mini and Ondex, so that the result will point to the correct URLs on the repo.
+#
+# $1 is the project path to consider, which is appended to our repo URL url_prefix (see the function body).
+# 
+# $2 is the placeholder used in the template to refer the URL tail pointing to the last snapshot in the repo
+#    (eg, in http://nexus.url/.../installer-2.1.1-20190310.014031-104-packaged-distro.zip, it refers to
+#    20190310.014031-104).
+# 
+# See Downloads_template.md for details.
 #
 function make_doc
 {
   project_path="$1"
-  ver="$2"
-  snap_ver="$3"
-  snap_tail_var="$4"
+  snap_tail_var="$2"
 
-	url_prefix="http://ondex.rothamsted.ac.uk/nexus/content/groups"
-	stable_url_root="$url_prefix/public/$project_path"
-	snap_url_root="$url_prefix/public-snapshots/$project_path"
+  url_prefix="http://ondex.rothamsted.ac.uk/nexus/content/groups"
+  stable_url_root="$url_prefix/public/$project_path"
+  snap_url_root="$url_prefix/public-snapshots/$project_path"
 
   ver=$(get_last_release "$stable_url_root")
   snap_ver=$(get_last_release "$snap_url_root")
@@ -82,11 +88,7 @@ cd "$wdir"
 cat "$mydir/Downloads_template.md" \
 | make_doc \
 	'net/sourceforge/ondex/apps/installer' \
-	"$ver" \
-	"$snap_ver" \
 	snapTailOndex \
 | make_doc \
 	'net/sourceforge/ondex/apps/ondex-mini' \
-	"$ver" \
-	"$snap_ver" \
 	snapTailMini
