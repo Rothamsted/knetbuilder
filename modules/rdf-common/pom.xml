@@ -12,7 +12,7 @@
 	<artifactId>rdf-common</artifactId>
 
 	<name>ONDEX RDF Common</name>
-	<description></description>
+	<description>Some common definitions used in Ondex to deal with RDF (eg, Ondex-related namespaces).</description>
 
 	<developers>
 		<developer>
