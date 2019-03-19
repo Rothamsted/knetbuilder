@@ -1,14 +1,19 @@
 package net.sourceforge.ondex.parser.owl;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Paths;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.Model;
@@ -22,7 +27,9 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser.ConceptClassMapper;
 import net.sourceforge.ondex.parser.ExploringMapper;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
+import uk.ac.ebi.utils.io.IOUtils;
 
 /**
  * <p>This is the top level mapper/parser. Usually a class of this type is configured via 
@@ -109,11 +116,35 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 	
 	/**
 	 * Creates a Spring container from the XML configuration file and then invokes 
-	 * {@link #mapFrom(ONDEXGraph, ApplicationContext, String...)}
+	 * {@link #mapFrom(ONDEXGraph, ApplicationContext, String...)}.
+	 * 
+	 * springXmlPath can be an URI starting with {@code file://}.
 	 *  
 	 */
 	public static ONDEXGraph mapFrom ( ONDEXGraph graph, String springXmlPath, String... owlInputPaths )
 	{
+		try
+		{
+			// Convert to absolute URI, it's safer with Spring
+			if ( springXmlPath != null )
+			{
+				springXmlPath = springXmlPath.startsWith ( "file:" )
+					? Paths.get ( IOUtils.uri ( springXmlPath ) ).toAbsolutePath ().toString ()
+					: new File ( springXmlPath ).getCanonicalPath ();
+					
+				springXmlPath = "file://" + springXmlPath;
+			}
+		}
+		catch ( IOException ex ) 
+		{
+			ExceptionUtils.throwEx (
+				UncheckedIOException.class, 
+				"Error while loading config file '%s': %s",
+				springXmlPath,
+				ex.getMessage ()
+			);
+		}
+		
 		try ( FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext ( springXmlPath ) ) {
 			return mapFrom ( graph, ctx, owlInputPaths );
 		}
