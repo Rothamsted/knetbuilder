@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -21,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
@@ -130,25 +132,28 @@ public class MappersTest
 		ConceptClass cc = this.ccmap.map ( this.topCls, graph );
 		this.conceptMap.map ( this.ontCls, cc, graph );
 		
-		final ONDEXConcept[] ct = new ONDEXConcept [ 1 ];
+		ONDEXConcept ct = null;
 		
 		Assert.assertTrue ( 
 			"Test Concept not found!", 
-			graph
+			( ct = graph
 			.getConcepts ()
 			.stream ()
-			.anyMatch ( c -> "ClassA".equals ( c.getPID () ) && ( ct [ 0 ] = c ) != null )
+			.filter ( Objects::nonNull )
+			.filter ( c -> "ClassA".equals ( c.getPID () ) )
+			.findAny ()
+			.orElse ( null ) ) != null
 		);
 		
 		DataSource ds = graph.getMetaData ().createDataSource ( 
 			OWL_PARSER_DATA_SOURCE.getId (), OWL_PARSER_DATA_SOURCE.getFullName (), OWL_PARSER_DATA_SOURCE.getDescription () 
 		);
 
-		assertNotNull ( "Concept accession is wrong!", ct[ 0 ].getConceptAccession ( clsId, ds ) );
-		assertNotNull ( "Concept label is wrong!", ct[ 0 ].getConceptName ( ontCls.getLabel ( "en" ) ) );
-		assertEquals ( "Concept description is wrong!", ontCls.getComment ( "en" ), ct[ 0 ].getDescription () );
+		assertNotNull ( "Concept accession is wrong!", ct.getConceptAccession ( clsId, ds ) );
+		assertNotNull ( "Concept label is wrong!", ct.getConceptName ( ontCls.getLabel ( "en" ) ) );
+		assertEquals ( "Concept description is wrong!", ontCls.getComment ( "en" ), ct.getDescription () );
 		
-		ConceptClass cct = ct [ 0 ].getOfType ();
+		ConceptClass cct = ct.getOfType ();
 		assertEquals ( "Concept Class ID is wrong!", topClsId, cct.getId () );
 		assertEquals ( "Concept label is wrong!",  topCls.getLabel ( "en" ), cct.getFullname () );
 		assertEquals ( "Concept description is wrong!", topCls.getComment ( "en" ), cct.getDescription () );
@@ -183,57 +188,63 @@ public class MappersTest
 	@Test
 	public void testSpringBootstrap () throws IOException
 	{
-		ApplicationContext ctx = new ClassPathXmlApplicationContext ( "mappings_ex.xml" );
-		OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
-
-		ONDEXGraph graph = owlMap.map2Graph ( model );
-		checkAllGrah ( graph );
-		
-		( (Closeable) ctx ).close ();
+		try ( ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext ( "mappings_ex.xml" ); )
+		{
+			OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
+	
+			ONDEXGraph graph = owlMap.map2Graph ( model );
+			checkAllGrah ( graph );
+		}
 	}
 	
 	private void checkAllGrah ( ONDEXGraph graph )
 	{
 		assertEquals ( "Wrong no of concepts!", 2, graph.getConcepts ().size () );
 		
-		final ONDEXConcept[] cs = new ONDEXConcept [ 2 ];
+		ONDEXConcept c1 = null, c2 = null;
 
 		Assert.assertTrue ( 
 			"Test Concept A not found!", 
-			graph
+			( c1 = graph
 			.getConcepts ()
 			.stream ()
-			.anyMatch ( c -> "ClassA".equals ( c.getPID () ) && ( cs [ 0 ] = c ) != null )
+			.filter ( Objects::nonNull )
+			.filter ( c -> "ClassA".equals ( c.getPID () ) )
+			.findAny ()
+			.orElse ( null ) ) != null
 		);
 		Assert.assertTrue ( 
 			"Test Concept B not found!", 
-			graph
+			( c2 = graph
 			.getConcepts ()
 			.stream ()
-			.anyMatch ( c -> "ClassB".equals ( c.getPID () ) && ( cs [ 1 ] = c ) != null )
+			.filter ( Objects::nonNull )
+			.filter ( c -> "ClassB".equals ( c.getPID () ) )
+			.findAny ()
+			.orElse ( null ) ) != null
 		);
 				
 		DataSource ds = graph.getMetaData ().createDataSource ( "owlParser", "The OWL Parser", "" );
 
 		// Class A
-		assertNotNull ( "Concept accession is wrong!", cs[ 0 ].getConceptAccession ( clsId, ds ) );
-		assertNotNull ( "Concept label is wrong!", cs[ 0 ].getConceptName ( ontCls.getLabel ( "en" ) ) );
-		assertEquals ( "Concept description is wrong!", ontCls.getComment ( "en" ), cs[ 0 ].getDescription () );
+		assertNotNull ( "Concept accession is wrong!", c1.getConceptAccession ( clsId, ds ) );
+		assertNotNull ( "Concept label is wrong!", c1.getConceptName ( ontCls.getLabel ( "en" ) ) );
+		assertEquals ( "Concept description is wrong!", ontCls.getComment ( "en" ), c1.getDescription () );
 		
 		Set<ConceptClass> ccs = graph.getMetaData ().getConceptClasses ();
 		assertEquals ( "Wrong no of concepts!", 1, ccs.size () );
 		
-		ConceptClass cct = cs [ 0 ].getOfType ();
+		ConceptClass cct = c1.getOfType ();
 		assertEquals ( "Concept Class ID is wrong!", topClsId, cct.getId () );
 		assertEquals ( "Concept Class label is wrong!",  topCls.getLabel ( "en" ), cct.getFullname () );
 		assertEquals ( "Concept Class description is wrong!", topCls.getComment ( "en" ), cct.getDescription () );		
 		
 		// Class B
-		assertNotNull ( "Concept accession is wrong!", cs[ 1 ].getConceptAccession ( subClsId, ds ) );
-		assertNotNull ( "Concept label is wrong!", cs[ 1 ].getConceptName ( ontSubCls.getLabel ( "en" ) ) );
-		assertEquals ( "Concept description is wrong!", ontSubCls.getComment ( "en" ), cs[ 1 ].getDescription () );
+		assertNotNull ( "Concept accession is wrong!", c2.getConceptAccession ( subClsId, ds ) );
+		assertNotNull ( "Concept label is wrong!", c2.getConceptName ( ontSubCls.getLabel ( "en" ) ) );
+		assertEquals ( "Concept description is wrong!", ontSubCls.getComment ( "en" ), c2.getDescription () );
 		
-		cct = cs [ 1 ].getOfType ();
+		cct = c2.getOfType ();
 		assertEquals ( "Concept Class ID for B is wrong!", topClsId, cct.getId () );
 
 		// B subClassOf A
