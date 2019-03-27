@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition;
 import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition.EdgeTreatment;
@@ -58,6 +62,8 @@ public class StateMachineFlatFileParser2 {
 
     private StateMachine sm;
     private List<NumericalRank> ranks;
+    
+    private BiMap<Integer, State> stateIndex;
 
     public void parseString(String s, ONDEXGraph og) throws InvalidFileException, StateMachineInvalidException, IOException {
         BufferedReader br = new BufferedReader(new StringReader(s));
@@ -75,8 +81,13 @@ public class StateMachineFlatFileParser2 {
         parseReader(br, og);
     }
 
-    public void parseReader(BufferedReader br, ONDEXGraph og) throws InvalidFileException, IOException, StateMachineInvalidException {
-        sm = null;
+    public void parseReader(Reader reader, ONDEXGraph og) throws InvalidFileException, IOException, StateMachineInvalidException 
+    {
+    		BufferedReader br = reader instanceof BufferedReader 
+    			? (BufferedReader) reader
+    			: new BufferedReader ( reader ); 
+        	
+    		sm = null;
         ranks = new ArrayList<NumericalRank>();
 
         DataBlock block = DataBlock.NONE;
@@ -343,6 +354,10 @@ public class StateMachineFlatFileParser2 {
         for (State state : finishingStates) {
             sm.addFinalState(state);
         }
+        
+        // And finally, let's expose the state indexes
+    		stateIndex = HashBiMap.create ();
+    		statesConceptClass.forEach ( (id, state) -> stateIndex.put ( Integer.valueOf ( id ), state ) );
     }
 
     private ComparisonMethod getMethodType(String name) throws InvalidFileException {
@@ -367,5 +382,15 @@ public class StateMachineFlatFileParser2 {
     public List<NumericalRank> getRanks() {
         return ranks;
     }
+    
 
+  	/**
+  	 * Every ID is the index value given to the corresponding state in the original motif file.
+  	 * This is a {@link BiMap}, so you can get an index from a state by means of {@link BiMap#inverse()}.
+  	 * 
+  	 */
+  	public BiMap<Integer, State> getStateIndex () {
+  		return stateIndex;
+  	}
+    
 }
