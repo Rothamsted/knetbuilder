@@ -43,6 +43,15 @@ public class Transition implements StateMachineComponent<ONDEXRelation, Evidence
     }
 
     /**
+     * The max len admitted for a path that reaches this transition. For instance if this transition t
+     * is reached by a path of length 3, the complete path to a final node is valid only if this 
+     * field is > 3 (in particular, 4 will avoid chains of transitions like t)
+     */
+		public int getMaxLength () {
+			return maxLength;
+		}
+
+		/**
      * @param relation the relation to check
      * @return is it valid to traverse this relation at this point in the path
      */
