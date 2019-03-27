@@ -422,8 +422,10 @@ public class Parser extends ONDEXParser {
 			
 			Parser parser = new Parser ();
 			parser.setONDEXGraph ( graph );
+			
 			ONDEXPluginArguments args = new ONDEXPluginArguments ( parser.getArgumentDefinitions () );
 			args.setOption ( FileArgumentDefinition.INPUT_FILE, filePath );
+			
 			parser.setArguments ( args );
 			parser.start ();
 			return graph;
