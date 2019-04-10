@@ -13,13 +13,18 @@ import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.attribute.Label;
 import guru.nidi.graphviz.attribute.RankDir;
 import guru.nidi.graphviz.attribute.Shape;
 import guru.nidi.graphviz.model.Factory;
+import guru.nidi.graphviz.model.Link;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
 import net.sourceforge.ondex.algorithm.graphquery.State;
@@ -146,16 +151,34 @@ public class StateMachineDotExporter
 		
 		
 		// Edges
-		int [] ctr = new int [] { 0 }; // to colour them alternatively
-		this.stateMachine.getAllTransitions ().forEach ( t ->
-		{ 
+		//
+		
+		// Use this intermediate, to put loops together, in a single transition
+		Table<MutableNode, MutableNode, String> normalizedEdges = HashBasedTable.create ();
+		this.stateMachine.getAllTransitions ().forEach ( t -> 
+		{
 			MutableNode srcDot = this.states2DotNodes.get ( this.stateMachine.getTransitionSource ( t ) );
 			MutableNode dstDot = this.states2DotNodes.get ( this.stateMachine.getTransitionTarget ( t ) );
+		
+			// link-type (<=maxLen) (omitted if no maxLen is specified)  
+			String newLabel = t.getValidRelationType ().getId ();
+			if ( t.getMaxLength () != Integer.MAX_VALUE ) newLabel += "(<=" + t.getMaxLength () + ")";
+
+			String oldLabel = normalizedEdges.get ( srcDot, dstDot );
+			if ( oldLabel != null ) newLabel = oldLabel + "\n" + newLabel;
+			
+			normalizedEdges.put ( srcDot, dstDot, newLabel );
+		});
+		
+		int [] ctr = new int [] { 0 }; // to colour them alternatively
+		normalizedEdges.cellSet ().forEach ( tuple ->
+		{ 
+			MutableNode srcDot = tuple.getRowKey ();
+			MutableNode dstDot = tuple.getColumnKey ();
 			
 			// link-type (<=maxLen) (omitted if no maxLen is specified)  
-			String elabel = t.getValidRelationType ().getId ();
-			if ( t.getMaxLength () != Integer.MAX_VALUE ) elabel += "(<=" + t.getMaxLength () + ")";
-
+			String elabel = tuple.getValue ();
+			
 			srcDot.addLink ( 
 				Factory.to ( dstDot )
 					.add ( Label.of ( elabel ) )
