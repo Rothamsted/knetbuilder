@@ -45,8 +45,10 @@ public class KgmlParser {
 	public void parse(InputStream input) {
 
 		// configure XMLInputFactory2
-		XMLInputFactory2 inputFactory = (XMLInputFactory2) XMLInputFactory2
-				.newInstance();
+    System.setProperty( "ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory" );
+    XMLInputFactory2 inputFactory = (XMLInputFactory2) XMLInputFactory2.newFactory (
+    	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+    );
 		inputFactory.configureForSpeed();
 
 		// stop parser from looking up of DTD

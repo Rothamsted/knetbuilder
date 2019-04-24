@@ -30,9 +30,10 @@ public class ConfigReader {
 	private XMLStreamReader2 staxXmlReader;
 
 	public ConfigReader(String inputFile) {
-		System.setProperty("javax.xml.stream.XMLInputFactory",
-				"com.ctc.wstx.stax.WstxInputFactory");
-		factory = (WstxInputFactory) WstxInputFactory.newInstance();
+    System.setProperty ( "ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory" );
+		factory = (WstxInputFactory) WstxInputFactory.newFactory (
+	    "ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+		);
 		factory.setProperty(WstxInputFactory.IS_NAMESPACE_AWARE, false);
 
 		// this is for set configuration parameters
