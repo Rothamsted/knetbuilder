@@ -18,6 +18,7 @@ import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.DocErrorReporter;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
+import com.sun.xml.stream.ZephyrWriterFactory;
 
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.annotations.DataURL;
@@ -98,12 +99,12 @@ public class PluginDoclet {
 
 		try {
 			// Stand-alone version from http://sjsxp.dev.java.net:
-			System.setProperty("javax.xml.stream.XMLInputFactory",
-					"com.sun.xml.stream.ZephyrParserFactory");
-			System.setProperty("javax.xml.stream.XMLOutputFactory",
-					"com.sun.xml.stream.ZephyrWriterFactory");
-
-			XMLOutputFactory xof = XMLOutputFactory.newInstance();
+			// TODO: doesn't seem relevant here, remove
+			// System.setProperty("javax.xml.stream.XMLInputFactory", "com.sun.xml.stream.ZephyrParserFactory");
+			System.setProperty("ondex.zephyr.javax.xml.stream.XMLOutputFactory",	"com.sun.xml.stream.ZephyrWriterFactory" );
+			XMLOutputFactory xof = XMLOutputFactory.newFactory (
+				"ondex.zephyr.javax.xml.stream.XMLOutputFactory", PluginDoclet.class.getClassLoader () 
+			);
 			xof.setProperty("javax.xml.stream.isRepairingNamespaces",
 					new Boolean(true));
 			XMLStreamWriter xtw = xof.createXMLStreamWriter(

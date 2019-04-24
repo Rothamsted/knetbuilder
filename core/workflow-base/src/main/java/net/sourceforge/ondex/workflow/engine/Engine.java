@@ -800,7 +800,11 @@ public class Engine {
 
     public static String getVersion(String file) throws XMLStreamException, IOException {
         BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-        XMLInputFactory2 ifact = (XMLInputFactory2) XMLInputFactory.newInstance();
+        
+        System.setProperty ( "ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory" );
+        XMLInputFactory2 ifact = (XMLInputFactory2) XMLInputFactory2.newFactory (
+        	"ondex.javax.xml.stream.XMLInputFactory", Engine.class.getClassLoader ()
+        );
         ifact.configureForXmlConformance();
         XMLStreamReader2 staxXmlReader = (XMLStreamReader2) ifact.createXMLStreamReader(bis);
 

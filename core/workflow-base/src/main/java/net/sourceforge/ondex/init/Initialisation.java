@@ -81,10 +81,10 @@ public class Initialisation {
         //
         // Set the factory to the RI
         //
-        System.setProperty("javax.xml.stream.XMLInputFactory",
-                "com.ctc.wstx.stax.WstxInputFactory");
-
-        XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
+        System.setProperty( "ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory" );
+        XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newFactory (
+        	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+        );
         xmlif.configureForSpeed();
 
         PluginDescription oxlBean = PluginRegistry.getInstance().getPluginDescription(PluginType.PARSER, "oxl");
