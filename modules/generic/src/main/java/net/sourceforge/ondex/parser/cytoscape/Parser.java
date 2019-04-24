@@ -205,9 +205,13 @@ public class Parser extends ONDEXParser {
 	 */
 	private void parse(InputStream inStream) throws Exception {
 		fetchMetaData();
-		XMLInputFactory2 factory = (XMLInputFactory2) XMLInputFactory2
-				.newInstance();
-		r = factory.createXMLStreamReader(inStream);
+		
+    System.setProperty( "ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory" );
+    XMLInputFactory2 factory = (XMLInputFactory2) XMLInputFactory2.newFactory (
+    	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+    );
+
+    r = factory.createXMLStreamReader(inStream);
 		while (r.hasNext()) {
 			int event = r.next();
 			// find start element with name graph

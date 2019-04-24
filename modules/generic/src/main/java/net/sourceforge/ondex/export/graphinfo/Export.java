@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.stax2.XMLOutputFactory2;
@@ -33,6 +34,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.doclet.PluginDoclet;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
 
@@ -87,11 +89,10 @@ public class Export extends ONDEXExport implements FieldNames {
 	 */
 	protected WstxOutputFactory getXMLFactory() {
 		// initialise outputs
-		System.setProperty("javax.xml.stream.XMLOutputFactory",
-				"com.ctc.wstx.stax.WstxOutputFactory");
-
-		WstxOutputFactory xmlw = (WstxOutputFactory) WstxOutputFactory
-				.newInstance();
+		System.setProperty ( "ondex.javax.xml.stream.XMLOutputFactory",	"com.ctc.wstx.stax.WstxOutputFactory" );
+		WstxOutputFactory xmlw = (WstxOutputFactory) WstxOutputFactory.newFactory (
+			"ondex.javax.xml.stream.XMLOutputFactory", PluginDoclet.class.getClassLoader () 
+		);
 		xmlw.configureForRobustness();
 
 		// configure factory

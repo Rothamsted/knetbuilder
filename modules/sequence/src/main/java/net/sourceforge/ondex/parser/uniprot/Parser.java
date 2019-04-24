@@ -239,8 +239,10 @@ public class Parser extends ONDEXParser
      */
     public void start() throws InvalidPluginArgumentException {
 
-        WstxInputFactory factory = (WstxInputFactory) WstxInputFactory
-                .newInstance();
+        System.setProperty( "ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory" );
+        WstxInputFactory factory = (WstxInputFactory) WstxInputFactory.newFactory (
+        	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+        );
         factory.configureForSpeed();
 
         setupFilters(graph.getConceptsOfConceptClass(graph.getMetaData()

@@ -115,9 +115,10 @@ public class Parser extends ONDEXParser {
 		File xmlFile = new File((String) args.getUniqueValue(FileArgumentDefinition.INPUT_FILE));
 
 		// setup XMLStreamReader
-		System.setProperty("javax.xml.stream.XMLInputFactory",
-		"com.ctc.wstx.stax.WstxInputFactory");
-		XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
+    System.setProperty ( "ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory" );
+    XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newFactory (
+    	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+    );
 		xmlif.configureForSpeed();
 		FileInputStream in = new FileInputStream(xmlFile);
 		XMLStreamReader xmlr = xmlif.createXMLStreamReader(in, CharsetNames.CS_UTF8);

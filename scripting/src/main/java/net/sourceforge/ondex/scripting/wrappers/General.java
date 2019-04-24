@@ -220,65 +220,6 @@ public class General {
         }
     }
 
-    /*private static class OXLExportTest extends Export {
-
-         public OXLExportTest(ONDEXGraph aog, File file) {
-
-             XMLOutputFactory2 xmlOutput = (XMLOutputFactory2) XMLOutputFactory2
-                     .newInstance();
-             xmlOutput.configureForSpeed();
-             xmlOutput.setProperty(XMLOutputFactory2.IS_REPAIRING_NAMESPACES, false);
-
-             int detectedEnding = ZipEndings.getPostfix(file);
-
-             try {
-
-                 OutputStream outStream = null;
-
-                 switch (detectedEnding) {
-
-                 case ZipEndings.GZ:
-                     // use gzip compression
-                     outStream = new GZIPOutputStream(new FileOutputStream(file));
-                     System.out.println("Detected GZIP file");
-                     break;
-                 case ZipEndings.ZIP:
-                     System.err.println("ZIP file not supported");
-                     break;
-                 case ZipEndings.XML:
-                     // output file writer
-                     outStream = new FileOutputStream(file);
-                     System.out.println("Detected Uncompressed file");
-                     break;
-                 default:
-                     File f = new File(file.getAbsolutePath()+".xml.gz");
-                     outStream = new GZIPOutputStream(new FileOutputStream(f));
-                 }
-
-                 if (outStream != null) {
-
-                     XMLStreamWriter2 xmlWriteStream = (XMLStreamWriter2) xmlOutput
-                             .createXMLStreamWriter(outStream, CharsetNames.CS_UTF8);
-                     buildDocument(xmlWriteStream, aog);
-
-                     xmlWriteStream.flush();
-                     xmlWriteStream.close();
-
-                     outStream.flush();
-                     outStream.close();
-                 }
-
-             } catch (MalformedURLException e) {
-                 e.printStackTrace();
-             } catch (FileNotFoundException e) {
-                 e.printStackTrace();
-             } catch (XMLStreamException e) {
-                 e.printStackTrace();
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-         }
-     }*/
     
     /**
      * Clone a concept from one graph to another.

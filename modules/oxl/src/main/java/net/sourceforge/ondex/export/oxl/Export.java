@@ -2142,11 +2142,10 @@ public class Export extends ONDEXExport implements Monitorable {
 
 	protected WstxOutputFactory getXMLFactory() {
 		// initialize outputs
-		System.setProperty("javax.xml.stream.XMLOutputFactory",
-				"com.ctc.wstx.stax.WstxOutputFactory");
-
-		WstxOutputFactory xmlw = (WstxOutputFactory) WstxOutputFactory
-				.newInstance();
+		System.setProperty("ondex.javax.xml.stream.XMLOutputFactory", "com.ctc.wstx.stax.WstxOutputFactory");
+		WstxOutputFactory xmlw = (WstxOutputFactory) WstxOutputFactory.newFactory(
+			"ondex.javax.xml.stream.XMLOutputFactory", this.getClass ().getClassLoader ()
+		);
 		xmlw.configureForRobustness();
 
 		xmlw.setProperty(XMLOutputFactory2.IS_REPAIRING_NAMESPACES, false);
