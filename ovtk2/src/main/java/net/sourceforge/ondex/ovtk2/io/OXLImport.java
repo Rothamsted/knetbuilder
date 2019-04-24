@@ -237,8 +237,10 @@ public class OXLImport implements Monitorable {
 	 */
 	public void start() throws FileNotFoundException, IOException, XMLStreamException, ClassNotFoundException, JAXBException, InconsistencyException, InstantiationException, IllegalAccessException {
 		now();
-		System.setProperty("javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory");
-		XMLInputFactory2 xmlInput = (XMLInputFactory2) XMLInputFactory2.newInstance();
+		System.setProperty("ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory");
+    XMLInputFactory2 xmlInput = (XMLInputFactory2) XMLInputFactory2.newFactory (
+    	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+    );
 		xmlInput.configureForSpeed();
 
 		InputStream inStream = getInStream(filename);

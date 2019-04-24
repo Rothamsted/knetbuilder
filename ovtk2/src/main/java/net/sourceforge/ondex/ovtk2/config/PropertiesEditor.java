@@ -240,7 +240,8 @@ public class PropertiesEditor implements ActionListener {
 	 * 
 	 */
 	private void loadProperties() {
-		System.setProperty("org.xml.sax.driver", "org.apache.xerces.parsers.SAXParser");
+		// TODO: Removing all System.setProperty, let's hope this will still work
+		//System.setProperty("org.xml.sax.driver", "org.apache.xerces.parsers.SAXParser");
 
 		// create a file chooser
 		final JFileChooser fc = new JFileChooser(new File(System.getProperty("user.dir")));
@@ -284,7 +285,10 @@ public class PropertiesEditor implements ActionListener {
 			System.out.println("Saving: " + file.getName() + ".");
 
 			// configure XML output
-			XMLOutputFactory2 xmlOutput = (XMLOutputFactory2) XMLOutputFactory2.newInstance();
+			System.setProperty("ondex.javax.xml.stream.XMLOutputFactory", "com.ctc.wstx.stax.WstxOutputFactory");
+			XMLOutputFactory2 xmlOutput = (XMLOutputFactory2) XMLOutputFactory2.newFactory(
+				"ondex.javax.xml.stream.XMLOutputFactory", this.getClass ().getClassLoader ()
+			);
 			xmlOutput.configureForXmlConformance();
 			xmlOutput.setProperty(XMLOutputFactory2.IS_REPAIRING_NAMESPACES, false);
 			try {

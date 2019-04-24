@@ -150,8 +150,10 @@ public class DialogConceptLabel extends OVTK2Dialog {
 				return;
 
 			// configure XML input
-			System.setProperty("javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory");
-			XMLInputFactory2 xmlInput = (XMLInputFactory2) XMLInputFactory2.newInstance();
+			System.setProperty("ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory");
+      XMLInputFactory2 xmlInput = (XMLInputFactory2) XMLInputFactory2.newFactory (
+      	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+      );
 			xmlInput.configureForSpeed();
 
 			// parse from a String

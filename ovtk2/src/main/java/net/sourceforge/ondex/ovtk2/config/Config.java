@@ -305,9 +305,9 @@ public class Config {
 	 */
 	public static void loadConfig(boolean inApplet) {
 		// turn off validation
-		System.setProperty("http://xml.org/sax/features/validation", "false");
-
-		System.setProperty("org.xml.sax.driver", "org.apache.xerces.parsers.SAXParser");
+		// TODO: Removing all System.setProperty, let's hope this will still work
+		// System.setProperty("http://xml.org/sax/features/validation", "false");
+		// System.setProperty("org.xml.sax.driver", "org.apache.xerces.parsers.SAXParser");
 
 		// checking again
 		if (ovtkDir == null)

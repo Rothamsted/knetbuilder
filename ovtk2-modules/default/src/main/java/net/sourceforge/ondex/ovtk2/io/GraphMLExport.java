@@ -756,8 +756,10 @@ public class GraphMLExport implements OVTK2IO {
 	@Override
 	public void start(File file) {
 		// xml output
-		XMLOutputFactory2 xmlOutput = (XMLOutputFactory2) XMLOutputFactory2
-				.newInstance();
+		System.setProperty ( "ondex.javax.xml.stream.XMLOutputFactory", "com.ctc.wstx.stax.WstxOutputFactory" );
+		XMLOutputFactory2 xmlOutput = (XMLOutputFactory2) XMLOutputFactory2.newFactory(
+			"ondex.javax.xml.stream.XMLOutputFactory", this.getClass ().getClassLoader ()
+		);
 		xmlOutput.configureForSpeed();
 		xmlOutput.setProperty(XMLOutputFactory2.IS_REPAIRING_NAMESPACES, false);
 

@@ -483,8 +483,10 @@ public class OVTK2MetaGraph extends RegisteredJInternalFrame implements ActionLi
 				return;
 
 			// configure XML input
-			System.setProperty("javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory");
-			XMLInputFactory2 xmlInput = (XMLInputFactory2) XMLInputFactory2.newInstance();
+			System.setProperty("ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory");
+      XMLInputFactory2 xmlInput = (XMLInputFactory2) XMLInputFactory2.newFactory (
+      	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+      );
 			xmlInput.configureForSpeed();
 
 			// parse from a String
@@ -507,7 +509,10 @@ public class OVTK2MetaGraph extends RegisteredJInternalFrame implements ActionLi
 		else if (cmd.equals(SAVE)) {
 
 			// configure XML output
-			XMLOutputFactory2 xmlOutput = (XMLOutputFactory2) XMLOutputFactory2.newInstance();
+			System.setProperty("ondex.javax.xml.stream.XMLOutputFactory", "com.ctc.wstx.stax.WstxOutputFactory");
+			XMLOutputFactory2 xmlOutput = (XMLOutputFactory2) XMLOutputFactory2.newFactory(
+				"ondex.javax.xml.stream.XMLOutputFactory", this.getClass ().getClassLoader ()
+			);
 			xmlOutput.configureForSpeed();
 			xmlOutput.setProperty(XMLOutputFactory2.IS_REPAIRING_NAMESPACES, false);
 
