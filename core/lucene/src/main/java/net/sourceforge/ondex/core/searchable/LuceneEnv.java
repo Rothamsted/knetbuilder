@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -65,6 +66,7 @@ import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
+import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
  * This class is the entry point for the indexed ONDEX graph representation. It
@@ -1334,35 +1336,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				iw = new IndexWriter(directory, writerConfig);
 				indexWriterIsOpen = true;
 
-				// INDEX CONCEPTS
-				final Set<ONDEXConcept> it_c = graph.getConcepts();
-				Future<?> cF = EXECUTOR.submit(new Runnable() {
-					@Override
-					public void run() {
-						for (ONDEXConcept c : it_c) {
-							addConceptToIndex(c);
-						}
-					}
-				});
-
-				final Set<ONDEXRelation> it_r = graph.getRelations();
-				Future<?> rF = EXECUTOR.submit(new Runnable() {
-					@Override
-					public void run() {
-						for (ONDEXRelation r : it_r) {
-							addRelationToIndex(r);
-						}
-					}
-				});
-
-				try {
-					cF.get();
-					rF.get();
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				} catch (ExecutionException e) {
-					throw new RuntimeException(e);
-				}
+				indexingHelper ( graph.getConcepts (), "concept", this::addConceptToIndex );
+				indexingHelper ( graph.getRelations (), "relation", this::addRelationToIndex );
 
 				// last Document contains meta data lists
 				addMetadataToIndex();
@@ -1397,6 +1372,42 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		}
 	}
 
+	/**
+	 * Little helper used by {@link #indexONDEXGraph(ONDEXGraph, boolean)} to factorise the submission to the index of 
+	 * concepts and relations.
+	 * 
+	 * It indexes a set of concepts or relations, by means of {@link #addConceptToIndex(ONDEXConcept)} or
+	 * {@link #addRelationToIndex(ONDEXRelation)}. {@code label} should be "concept" or "relation" and is
+	 * used for logging.
+	 */
+	private <OE extends ONDEXEntity> void indexingHelper ( Set<OE> inputs, String label, Consumer<OE> indexSubmitter )
+	{		
+		final int sz = inputs.size ();
+		log.info ( "Start indexing the Ondex Graph, {} {}(s) sent to index", sz, label );
+			
+		PercentProgressLogger progressLogger = new PercentProgressLogger ( 
+			"{}% of " + label + "s submitted to index", sz 
+		);
+		
+		// TODO: the use of a parallel task manager comes from existing code, what's the point of it?!
+		Future<?> tasks = EXECUTOR.submit ( 
+			() -> {
+				for ( OE entity : inputs )
+				{
+					indexSubmitter.accept ( entity );
+					progressLogger.updateWithIncrement ();
+				}
+			}
+		);
+		
+		try {
+			tasks.get();
+		} 
+		catch ( InterruptedException|ExecutionException ex ) {
+			throw new RuntimeException ( "Error while indexing Ondex Graph:" + ex.getMessage (), ex );
+		}
+	}
+	
 	/**
 	 * Notify all listeners that have registered with this class.
 	 * 

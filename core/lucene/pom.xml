@@ -57,5 +57,11 @@
          <version>${project.version}</version>
          <scope>test</scope>
       </dependency>
+      
+      <dependency>
+      	<groupId>uk.ac.ebi</groupId>
+      	<artifactId>jutils</artifactId>
+      </dependency>
+   
    </dependencies>
 </project>
