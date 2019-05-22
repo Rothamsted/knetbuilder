@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -16,7 +17,11 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * TODO: comment me!
+ * An abstract graph traverser, for exploring all the relevant paths that link a concepts.
+ * 
+ * This class defines basic interfaces plus a configuration mechanism. It was written to abstract from 
+ * the traditional {@link GraphTraverser}, so that alternative implementations (eg, Neo4j-based) are 
+ * possible.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>28 Jan 2019</dd></dl>
@@ -52,8 +57,20 @@ public abstract class AbstractGraphTraverser
 		ONDEXGraph graph, Set<ONDEXConcept> concepts, FilterPaths<EvidencePathNode> filter
 	) 
 	{
+		int sz = concepts.size ();
+		AtomicInteger completed = new AtomicInteger ( 0 );
+		log.info ( "Graph Traverser, beginning parallel traversing of {} concept(s)", sz );
+		
 		return concepts.parallelStream ()
-			.collect ( Collectors.toMap ( concept -> concept, concept -> traverseGraph ( graph, concept, filter ) ) );
+			.collect ( Collectors.toMap ( 
+				concept -> concept, 
+				concept -> {
+					List<EvidencePathNode> result = traverseGraph ( graph, concept, filter );
+					int completedPercent = (int) Math.round ( 100d * completed.incrementAndGet () / sz );
+					if ( completedPercent % 10 == 0 ) log.info ( "Graph Traverser, {}% concepts traversed" );
+					return result;
+				}
+			));
 	}
 
 	
@@ -80,6 +97,11 @@ public abstract class AbstractGraphTraverser
 		return (V) this.options.get ( key );
 	}
 	
+	/**
+	 * This method gets the "GraphTraverserClass" key to setup the traverser you want. Then the options parameter is
+	 * passed (copied) to the created instance GT. The latter can use options in a specific way.
+	 *  
+	 */
 	public static <GT extends AbstractGraphTraverser> GT getInstance ( Map<String, Object> options )
 	{
 		GT result = null;
