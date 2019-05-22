@@ -20,4 +20,10 @@ public class GeneralOutputEvent extends EventType {
 		super(message, extension);
 		super.desc = "";
 	}
+
+	public GeneralOutputEvent(String message, String extension, Level level ) {
+		this (message, extension);
+		this.setLog4jLevel ( level );
+	}
+
 }

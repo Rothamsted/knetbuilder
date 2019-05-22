@@ -35,11 +35,11 @@ public abstract class EventType {
     public static enum Level 
     {
     	FATAL( (log, msg) -> log.fatal ( msg ) ), 
-    	ERROR( (log, msg) -> log.fatal ( msg ) ),
-    	WARN( (log, msg) -> log.fatal ( msg ) ),
-    	INFO( (log, msg) -> log.fatal ( msg ) ),
-    	DEBUG( (log, msg) -> log.fatal ( msg ) ),
-    	TRACE( (log, msg) -> log.fatal ( msg ) );
+    	ERROR( (log, msg) -> log.error ( msg ) ),
+    	WARN( (log, msg) -> log.warn ( msg ) ),
+    	INFO( (log, msg) -> log.info ( msg ) ),
+    	DEBUG( (log, msg) -> log.debug ( msg ) ),
+    	TRACE( (log, msg) -> log.trace ( msg ) );
     	
     	private BiConsumer<Logger, String> loggerConsumer;
     	  
