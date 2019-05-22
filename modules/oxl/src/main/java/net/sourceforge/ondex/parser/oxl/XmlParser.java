@@ -9,6 +9,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.export.oxl.Export;
@@ -111,20 +112,11 @@ public class XmlParser implements XmlComponentParser {
 					if (count.containsKey(element)) {
 						int current = count.get(element);
 
-						if (current % 5000 == 0) {
-							// System.out.println(element + " parsed " +
-							// ELEMENT_NUMBER_FORMAT.format(current) +
-							// " elements");
-							if (oxlparser != null) {
-								oxlparser
-										.fireEventOccurred(new GeneralOutputEvent(
-												element
-														+ " parsed "
-														+ ELEMENT_NUMBER_FORMAT
-																.format(current)
-														+ " elements", ""));
-							}
-						}
+						if (current % 5000 == 0 && oxlparser != null) 
+							oxlparser.fireEventOccurred( new GeneralOutputEvent(
+								element	+ " parsed " + ELEMENT_NUMBER_FORMAT.format(current)
+								+ " elements", "", Level.INFO
+						));
 
 						count.put(element, ++current);
 					} else {
