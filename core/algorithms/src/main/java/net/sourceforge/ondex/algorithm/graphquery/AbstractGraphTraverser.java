@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
  * An abstract graph traverser, for exploring all the relevant paths that link a concepts.
@@ -58,19 +59,20 @@ public abstract class AbstractGraphTraverser
 	) 
 	{
 		int sz = concepts.size ();
-		AtomicInteger completed = new AtomicInteger ( 0 );
 		log.info ( "Graph Traverser, beginning parallel traversing of {} concept(s)", sz );
+		PercentProgressLogger progressLogger = new PercentProgressLogger ( 
+			"Graph Traverser, {}% concepts traversed", sz 
+		);
 		
 		return concepts.parallelStream ()
 			.collect ( Collectors.toMap ( 
 				concept -> concept, 
 				concept -> {
 					List<EvidencePathNode> result = traverseGraph ( graph, concept, filter );
-					int completedPercent = (int) Math.round ( 100d * completed.incrementAndGet () / sz );
-					if ( completedPercent % 10 == 0 ) log.info ( "Graph Traverser, {}% concepts traversed" );
+					progressLogger.updateWithIncrement ();
 					return result;
 				}
-			));
+		));
 	}
 
 	
