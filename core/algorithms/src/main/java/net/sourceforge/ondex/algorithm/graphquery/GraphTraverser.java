@@ -26,6 +26,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationKey;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
+import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
  * A graph traverser to extract multiple paths based rules defined in a graph of states and transitions
@@ -41,8 +42,7 @@ public class GraphTraverser extends AbstractGraphTraverser {
     private StateMachine sm;
 
     private int maxLengthOfAnyRoute = -1;
-        
-    
+            
     /**
      * @param sm the state machine to traverse
      * @param maxLengthOfAnyStateDerivedRoute
@@ -187,17 +187,6 @@ public class GraphTraverser extends AbstractGraphTraverser {
 
     		init ();
     	
-//        for (Transition transition : sm.getAllTransitions()) {
-//            Set<ONDEXRelation> rv = BitSetFunctions.copy(aog.getRelations());
-//            for (ONDEXRelation r : rv) {
-//                if (!transition.isValid(r))
-//                    rv.remove(r.getId());
-//            }
-//            transitionViewCache.put(transition, rv);
-//        }
-    	
-    	//above code seems to be very slow and this code
-    	//seems to do the job much faster (passes all junit test)
         Set<Transition> transitions = sm.getAllTransitions();
         for (Transition transition : transitions) {
             transitionViewCache.put(transition,
@@ -215,25 +204,22 @@ public class GraphTraverser extends AbstractGraphTraverser {
             futures.put(concept, EXECUTOR.submit(traverser));
         }
 
-        System.out.println(futures.size() + " futures submitted");
+        log.info ( "{} traversal task(s) submitted", futures.size() );
 
-        int previouslyComplete = 0;
-        int futureNumber = 0;
         int totalFutureNumber = futures.keySet().size();
+
+        PercentProgressLogger progressLogger = new PercentProgressLogger (
+        	"{}% of traversal tasks completed", totalFutureNumber 
+        );
+        
         for (ONDEXConcept concept : futures.keySet()) {
             Future<List<EvidencePathNode>> future = futures.get(concept);
             try {
                 List<EvidencePathNode> results = future.get();
-                futureNumber++;
                 if (results.size() > 0) {
                     completeStateDerivedRoutes.put(concept, results);
                 }
-
-                int complete = Math.round(((float) futureNumber / (float) totalFutureNumber) * 100f);
-                if (complete > previouslyComplete) {
-                    System.out.println("Traversal done " + complete + "%");
-                    previouslyComplete = complete;
-                }
+                progressLogger.updateWithIncrement ();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -326,9 +312,7 @@ public class GraphTraverser extends AbstractGraphTraverser {
                             State targetState = sm.getTransitionTarget(transition);
                             if (!targetState.isValid(targetConcept, path))
                                 continue;
-
-                            //System.out.println("TO==> "+targetConcept.getPID()+" "+targetConcept.getOfType().getId());
-
+                          
                             EvidencePathNode newPathRE =
                                     new EvidencePathNode.EvidenceRelationNode(relation, transition, path);
                             EvidencePathNode newPathCE =
@@ -337,7 +321,6 @@ public class GraphTraverser extends AbstractGraphTraverser {
                             if (sm.isFinish(targetState)) {
                                 completeStateDerivedPaths.add(newPathCE);
                             } else if (newPathCE.getConceptLength() < maxLengthOfAnyRoute) {
-                                //System.out.println("part: "+newStateDerivedRoute.toString());
                                 incompleteStateDerivedPaths.add(newPathCE);
                             }
                         }

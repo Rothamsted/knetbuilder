@@ -853,7 +853,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		if ( size == 0 ) return null;
 		E result = results.iterator ().next ();
 		if ( size > 1 ) log.warn ( 
-			"I've found {} instances of {} for '{}'", size, result.getClass ().getSimpleName (), iri 
+			"I've found {} instances of {} for the URI '{}'", size, result.getClass ().getSimpleName (), iri 
 		);
 		return result; 
 	}
