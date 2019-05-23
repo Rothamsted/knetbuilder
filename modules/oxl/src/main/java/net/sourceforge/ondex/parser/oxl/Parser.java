@@ -46,6 +46,7 @@ import net.sourceforge.ondex.event.type.ParsingErrorEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.exception.type.ParsingFailedException;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
+import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
@@ -419,10 +420,14 @@ public class Parser extends ONDEXParser {
 	{
 		try
 		{
-			if ( graph == null ) graph = new MemoryONDEXGraph ( "default" );
+			ONDEXLogger odxLogger = new ONDEXLogger ();
+			
+			if ( graph == null )
+				graph = new MemoryONDEXGraph ( "default" );
 			
 			Parser parser = new Parser ();
 			parser.setONDEXGraph ( graph );
+			parser.addONDEXListener ( odxLogger );
 			
 			ONDEXPluginArguments args = new ONDEXPluginArguments ( parser.getArgumentDefinitions () );
 			args.setOption ( FileArgumentDefinition.INPUT_FILE, filePath );

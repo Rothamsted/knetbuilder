@@ -936,7 +936,7 @@ public class Export extends ONDEXExport implements Monitorable {
 				xmlw.writeCharacters(newline);
 			buildConcept(xmlw, concept);
 			i++;
-			if (i % 5000 == 0) {
+			if (i % 100000 == 0) {
 				System.out.println(format.format(i)
 						+ " concepts written ("
 						+ (formatter.format((double) i / (double) cit.size()
@@ -1520,7 +1520,7 @@ public class Export extends ONDEXExport implements Monitorable {
 				xmlw.writeCharacters(newline);
 			buildRelation(xmlw, relation);
 			i++;
-			if (i % 5000 == 0) {
+			if (i % 100000 == 0) {
 				System.out.println(format.format(i)
 						+ " relations written ("
 						+ (formatter.format((double) i / (double) rit.size()

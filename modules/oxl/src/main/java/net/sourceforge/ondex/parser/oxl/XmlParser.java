@@ -112,7 +112,7 @@ public class XmlParser implements XmlComponentParser {
 					if (count.containsKey(element)) {
 						int current = count.get(element);
 
-						if (current % 5000 == 0 && oxlparser != null) 
+						if (current % 100000 == 0 && oxlparser != null) 
 							oxlparser.fireEventOccurred( new GeneralOutputEvent(
 								element	+ " parsed " + ELEMENT_NUMBER_FORMAT.format(current)
 								+ " elements", "", Level.INFO
