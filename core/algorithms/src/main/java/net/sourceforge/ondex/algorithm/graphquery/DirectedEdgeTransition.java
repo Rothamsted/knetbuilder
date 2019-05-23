@@ -50,4 +50,9 @@ public class DirectedEdgeTransition extends Transition {
         return false;
     }
 
+
+		public EdgeTreatment getTreatment () {
+			return treatment;
+		}
+
 }

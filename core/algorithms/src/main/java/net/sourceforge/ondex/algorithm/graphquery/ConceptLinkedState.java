@@ -37,13 +37,13 @@ public class ConceptLinkedState extends State{
 	}
 
 	public boolean isValidConcept(ONDEXConcept c) {
-		System.out.println("ISVALID");
+		// System.out.println("ISVALID");
 		if (cidsSet == null|| cidsSet.size() == 0) {
-			System.out.println("finalf__"+(c.getId() == cid)+" "+c.getId());
+			// System.out.println("finalf__"+(c.getId() == cid)+" "+c.getId());
 			
 			return c.getId() == cid;
 		} else {
-			System.out.println("final__"+cidsSet.contains( c.getId() )+" "+c.getId());
+			//System.out.println("final__"+cidsSet.contains( c.getId() )+" "+c.getId());
 			return cidsSet.contains( c.getId() );
 		}
 	}

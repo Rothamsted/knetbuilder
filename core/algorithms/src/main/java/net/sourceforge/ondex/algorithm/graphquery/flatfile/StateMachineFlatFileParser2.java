@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -64,6 +67,9 @@ public class StateMachineFlatFileParser2 {
     private List<NumericalRank> ranks;
     
     private BiMap<Integer, State> stateIndex;
+    
+    private Logger log = LoggerFactory.getLogger ( this.getClass () );
+
 
     public void parseString(String s, ONDEXGraph og) throws InvalidFileException, StateMachineInvalidException, IOException {
         BufferedReader br = new BufferedReader(new StringReader(s));
@@ -143,9 +149,8 @@ public class StateMachineFlatFileParser2 {
                         ConceptClass conceptClass = og.getMetaData().getConceptClass(valuess[1].trim());
 
                         if (conceptClass == null) {
-                            System.err.println(
-                                    "Warning: ConceptClass " + valuess[1].trim() + " is not found on meta data");
-                            continue;
+                          log.warn ( "ConceptClass {} is not present in the metadata", valuess[1].trim() );  
+                          continue;
                         }
 
                         State statep = new State(conceptClass);

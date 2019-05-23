@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sourceforge.ondex.algorithm.graphquery.State;
 import net.sourceforge.ondex.algorithm.graphquery.StateMachine;
 import net.sourceforge.ondex.algorithm.graphquery.Transition;
@@ -56,6 +59,8 @@ public class StateMachineFlatFileParser {
 
     private StateMachine sm;
     private List<NumericalRank> ranks;
+    
+    private Logger log = LoggerFactory.getLogger ( this.getClass () );
 
     public void parseString(String s, ONDEXGraph og) throws InvalidFileException, StateMachineInvalidException, IOException {
         BufferedReader br = new BufferedReader(new StringReader(s));
@@ -130,8 +135,7 @@ public class StateMachineFlatFileParser {
                         ConceptClass conceptClass = og.getMetaData().getConceptClass(valuess[1].trim());
 
                         if (conceptClass == null) {
-                            System.err.println(
-                                    "Warning: ConceptClass " + valuess[1].trim() + " is not found on meta data");
+                            log.warn ( "ConceptClass {} is not found on metadata", valuess[1].trim() );
                             continue;
                         }
 
@@ -168,8 +172,7 @@ public class StateMachineFlatFileParser {
 
                         RelationType relationType = og.getMetaData().getRelationType(valuest[1].trim());
                         if (relationType == null) {
-                            System.err.println(
-                                    "Warning: RelationType " + valuest[1].trim() + " is not found in MetaData");
+                          	log.warn ( "RelationType {} is not found on metadata", valuest[1].trim() );
                             continue;
                         }
 
@@ -308,7 +311,11 @@ public class StateMachineFlatFileParser {
             State toState = statesConceptClass.get(stateto);
 
             if (fromState == null || toState == null) {
-                System.err.println("Undefined state referenced in transition: " + tid + ": this may be due to missing metadata and an uninitialized state");
+            	
+                log.warn ( 
+                	"Undefined state referenced in transition %d, this may be due to missing "
+                	+ "metadata and an uninitialized state", tid
+                );
                 continue;
             }
             sm.addStep(fromState, transition, toState);

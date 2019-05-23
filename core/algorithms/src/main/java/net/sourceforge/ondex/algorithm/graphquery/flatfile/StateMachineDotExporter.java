@@ -13,7 +13,6 @@ import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBasedTable;
@@ -24,14 +23,16 @@ import guru.nidi.graphviz.attribute.Label;
 import guru.nidi.graphviz.attribute.RankDir;
 import guru.nidi.graphviz.attribute.Shape;
 import guru.nidi.graphviz.model.Factory;
-import guru.nidi.graphviz.model.Link;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
+import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition;
+import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition.EdgeTreatment;
 import net.sourceforge.ondex.algorithm.graphquery.State;
 import net.sourceforge.ondex.algorithm.graphquery.StateMachine;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.InvalidFileException;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.StateMachineInvalidException;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
 import uk.ac.ebi.utils.exceptions.UnexpectedValueException;
 
@@ -135,16 +136,26 @@ public class StateMachineDotExporter
 		this.stateIndex = stateIndex;
 	}
 	
-	
 	public MutableGraph getGraph ()
 	{
+		MutableGraph graph = getGraph ( false );
+		MutableGraph digraph = getGraph ( true );
+		digraph.addTo ( graph );
+		return graph;
+	}
+	
+	/**
+	 * Yields one of the needed graphs, either the directed graph (getDirectedTransitions==true), or 
+	 * undirected. This is used by {@link #getGraph()}, to report both undirected and directed transitions.
+	 */
+	private MutableGraph getGraph ( boolean getDirectedTransitions )
+	{
 		MutableGraph graph = Factory.mutGraph ()
-			.setDirected ( true )
+			.setDirected ( getDirectedTransitions )
 			.graphAttrs ().add ( RankDir.LEFT_TO_RIGHT );
-		
+				
 		// All the nodes and then all the edges
 		//
-		
 		this.stateMachine.getAllStates ().forEach ( 
 			s -> graph.add ( getNode ( s ) )
 		);
@@ -157,6 +168,13 @@ public class StateMachineDotExporter
 		Table<MutableNode, MutableNode, String> normalizedEdges = HashBasedTable.create ();
 		this.stateMachine.getAllTransitions ().forEach ( t -> 
 		{
+			EdgeTreatment tdir = t instanceof DirectedEdgeTransition ? ((DirectedEdgeTransition) t).getTreatment () : null;
+			if ( tdir == EdgeTreatment.BACKWARD ) ExceptionUtils.throwEx (
+				UnsupportedOperationException.class, "The state machine dotter doesn't support backward transtions yet"
+			);
+			// The directionality of the transition must match the one desired
+			if ( getDirectedTransitions ^ tdir == EdgeTreatment.FORWARD ) return;
+						
 			MutableNode srcDot = this.states2DotNodes.get ( this.stateMachine.getTransitionSource ( t ) );
 			MutableNode dstDot = this.states2DotNodes.get ( this.stateMachine.getTransitionTarget ( t ) );
 		

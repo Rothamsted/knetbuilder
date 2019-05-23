@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  */
 @XmlJavaTypeAdapter(net.sourceforge.ondex.webservice.Adapters.AnyTypeAdapter.class)
-public interface ConceptClass extends MetaData, Hierarchy<ConceptClass> {
+public interface RelationType extends MetaData, Hierarchy<ConceptClass> {
 
 	/**
 	 * Returns whether this concept class is a transitive superclass of
