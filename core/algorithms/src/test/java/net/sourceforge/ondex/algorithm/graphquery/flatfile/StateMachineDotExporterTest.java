@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.algorithm.graphquery.flatfile;
 
+import static org.apache.commons.lang3.StringEscapeUtils.escapeJava;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,7 +42,7 @@ import uk.ac.ebi.utils.io.IOUtils;
  *
  */
 public class StateMachineDotExporterTest
-{
+{	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	@Test @Ignore
@@ -67,19 +69,39 @@ public class StateMachineDotExporterTest
 		);
 	}
 
-	@Test
-	public void testConstraints () throws IOException
+	@Test @Ignore
+	public void testLenConstraints () throws IOException
 	{
 		dotIt ( 
-			"directed-state-machine", "dotter-directed-test", 
-		  "Gene(1)", "enc", "BioProc(3)", false,
-		  "BioProc(3)", "part_of", "Path(5)", false,
-		  "BioProc(3)", "pub_in", "Publication(6)", false,
-		  "TO(7)", "asso_wi", "MolFunc(9)", true,
-		  "TO(7)", "asso_wi", "Enzyme(8)", true
+			"constrained-state-machine", "dotter-constrained-test",
+		  "Gene(1)", "pub_in(<=4)\nasso_wi(<=5)", "Publication(6)", false,
+		  "Publication(6)", "asso_wi", "TO(7)", false
 		);
 	}
 
+	@Test @Ignore
+	public void testLoop () throws IOException
+	{
+		dotIt ( 
+			"loop-state-machine", "dotter-loop-test",
+		  "BioProc(3)", "part_of(<=5)", "BioProc(3)", false,
+		  "BioProc(3)", "is_part_of(<=7)\npart_of(<=9)", "Path(5)", false
+		);
+	}
+	
+	@Test
+	public void testArabidopsis () throws IOException
+	{
+		dotItWithOndexDefs ( 
+			"ara-state-machine", "dotter-ara-test", "wheat-metadata.xml",
+			"Protein(10)", "ortho(<=4)\nxref(<=4)\nh_s_s(<=4)", "Protein(10)", false,
+			"Protein(10)", "physical(<=6)\ngenetic(<=6)", "Protein(10)", true,
+			"Protein(10)", "genetic(<=6)\nphysical(<=6)", "Protein(7)", true,
+			"Reaction(13)", "part_of", "Path(14)", false,
+			"Gene(1)", "has_variation", "SNP(15)", false
+		);
+	}
+	
 	
 	@Test @Ignore ( "Just a scrap try, not a real unit test" )
 	public void testHybridViz () throws FileNotFoundException, IOException
@@ -142,10 +164,13 @@ public class StateMachineDotExporterTest
 		try
 		{
 			// Some useful diagnostic output
-			String baseOut = "target/" + outName;
-			viz.render ( Format.PLAIN ).toOutputStream ( new FileOutputStream ( baseOut + ".dot" ) );
-			viz.render ( Format.PNG ).toOutputStream ( new FileOutputStream ( baseOut + ".png" ) );
-			viz.render ( Format.PLAIN ).toOutputStream ( new WriterOutputStream ( sw, "UTF-8" ) );
+			if ( log.isTraceEnabled () )
+			{
+				String baseOut = "target/" + outName;
+				viz.render ( Format.PLAIN ).toOutputStream ( new FileOutputStream ( baseOut + ".dot" ) );
+				viz.render ( Format.PNG ).toOutputStream ( new FileOutputStream ( baseOut + ".png" ) );
+				viz.render ( Format.PLAIN ).toOutputStream ( new WriterOutputStream ( sw, "UTF-8" ) );
+			}
 		}
 		catch ( IOException ex ) {
 			throw new UncheckedIOException ( "Internal error: " + ex.getMessage (), ex );
@@ -170,14 +195,15 @@ public class StateMachineDotExporterTest
 
 			// Filter edges compatible with current probe  
 			Link foundLink = links
-//				.peek ( link -> 
-//					log.info ( 
-//						"CURRENT LINK: {} -- {} -- {} -- {}",
-//						((Label) link.get ( "label" )).value (),
-//						link.get ( "arrowhead" ),
-//						((MutableNode) link.from () ).name ().value (),
-//						((MutableNode) link.to () ).name ().value ()
-//				))
+				.peek ( link -> 
+					log.trace ( 
+						"CURRENT LINK: {} -- {} -- {} -- {}",
+						((Label) link.get ( "label" )).value (),
+						link.get ( "arrowhead" ),
+						((MutableNode) link.from () ).name ().value (),
+						((MutableNode) link.to () ).name ().value ()
+					)
+				)
 				.filter ( link -> ! ( isDirected ^ "normal".equals ( link.get ( "arrowhead" ) ) ) )
 				.filter ( link -> edge.equals ( ((Label) link.get ( "label" )).value () ) )
 				.filter ( link -> src.equals ( ((MutableNode) link.from () ).name ().value () ) )
@@ -186,7 +212,10 @@ public class StateMachineDotExporterTest
 				.orElse ( null );
 			
 			Assert.assertNotNull (
-				String.format ( "edge <%s>( <%s> %s <%s> ) not found!", edge, src, isDirected ? "-" : "->", dst ),
+				String.format (
+					"edge <%s>( <%s> %s <%s> ) not found!", 
+					escapeJava ( edge ), src, isDirected ? "-" : "->", dst
+				),
 				foundLink
 			);
 		}
