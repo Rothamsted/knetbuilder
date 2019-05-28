@@ -138,10 +138,17 @@ public class StateMachineDotExporter
 	
 	public MutableGraph getGraph ()
 	{
-		MutableGraph graph = getGraph ( false );
+		MutableGraph containerGraph = Factory.mutGraph ()
+			.setDirected ( true )
+			.graphAttrs ().add ( RankDir.LEFT_TO_RIGHT );
+		
 		MutableGraph digraph = getGraph ( true );
-		digraph.addTo ( graph );
-		return graph;
+		MutableGraph graph = getGraph ( false );
+		
+		containerGraph.add ( digraph );
+		containerGraph.add ( graph );
+		
+		return containerGraph;
 	}
 	
 	/**
@@ -157,7 +164,7 @@ public class StateMachineDotExporter
 		// All the nodes and then all the edges
 		//
 		this.stateMachine.getAllStates ().forEach ( 
-			s -> graph.add ( getNode ( s ) )
+			s -> getNode ( s, graph )
 		);
 		
 		
@@ -169,12 +176,18 @@ public class StateMachineDotExporter
 		this.stateMachine.getAllTransitions ().forEach ( t -> 
 		{
 			EdgeTreatment tdir = t instanceof DirectedEdgeTransition ? ((DirectedEdgeTransition) t).getTreatment () : null;
-			if ( tdir == EdgeTreatment.BACKWARD ) ExceptionUtils.throwEx (
+			if ( EdgeTreatment.BACKWARD.equals ( tdir ) ) ExceptionUtils.throwEx (
 				UnsupportedOperationException.class, "The state machine dotter doesn't support backward transtions yet"
 			);
 			// The directionality of the transition must match the one desired
-			if ( getDirectedTransitions ^ tdir == EdgeTreatment.FORWARD ) return;
-						
+System.out.format ( "\t-----| getDirected: %b, tdir: %s, XOR: %b\n", 
+	getDirectedTransitions, tdir, getDirectedTransitions ^ EdgeTreatment.FORWARD.equals ( tdir )
+);
+			
+			if ( getDirectedTransitions ^ EdgeTreatment.FORWARD.equals ( tdir ) ) return;
+			
+System.out.println ( "\t-----| NOT SKIPPED" );
+			
 			MutableNode srcDot = this.states2DotNodes.get ( this.stateMachine.getTransitionSource ( t ) );
 			MutableNode dstDot = this.states2DotNodes.get ( this.stateMachine.getTransitionTarget ( t ) );
 		
@@ -210,7 +223,7 @@ public class StateMachineDotExporter
 	/**
 	 * Creates a new DOT node or get a tracked one (already created). 
 	 */
-	private MutableNode getNode ( State s )
+	private MutableNode getNode ( State s, MutableGraph dotGraph )
 	{
 		try
 		{
@@ -232,6 +245,7 @@ public class StateMachineDotExporter
 				node.add ( Shape.DOUBLE_OCTAGON ).add ( Color.DARKGREEN );
 			
 			this.states2DotNodes.put ( s, node );
+			dotGraph.add ( node );
 			return node;
 		}
 		catch ( StateMachineInvalidException ex )
