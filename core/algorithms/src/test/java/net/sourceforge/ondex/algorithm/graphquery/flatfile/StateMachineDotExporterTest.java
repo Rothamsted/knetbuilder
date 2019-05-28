@@ -45,7 +45,7 @@ public class StateMachineDotExporterTest
 {	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
-	@Test @Ignore
+	@Test
 	public void testBasics () throws IOException
 	{
 		dotIt ( 
@@ -56,7 +56,7 @@ public class StateMachineDotExporterTest
 		);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testDirected () throws IOException
 	{
 		dotIt ( 
@@ -69,7 +69,7 @@ public class StateMachineDotExporterTest
 		);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testLenConstraints () throws IOException
 	{
 		dotIt ( 
@@ -79,7 +79,7 @@ public class StateMachineDotExporterTest
 		);
 	}
 
-	@Test @Ignore
+	@Test
 	public void testLoop () throws IOException
 	{
 		dotIt ( 
