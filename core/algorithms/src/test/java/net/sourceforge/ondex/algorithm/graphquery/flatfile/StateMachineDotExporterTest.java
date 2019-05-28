@@ -6,9 +6,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.xmlgraphics.util.WriterOutputStream;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +22,7 @@ import guru.nidi.graphviz.attribute.RankDir;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.Factory;
+import guru.nidi.graphviz.model.Link;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -39,59 +43,46 @@ public class StateMachineDotExporterTest
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
-	@Test
+	@Test @Ignore
 	public void testBasics () throws IOException
 	{
-		Pair<MutableGraph,String> dot = dotIt ( "test-state-machine", "dotter-basic-test" );
-		log.info ( "Resulting graph:\n{}", dot.getRight () );
+		dotIt ( 
+			"test-state-machine", "dotter-basic-test", 
+		  "Gene(1)", "enc", "BioProc(3)", false,
+		  "TO(7)", "asso_wi", "MolFunc(9)", false,
+		  "TO(7)", "asso_wi", "Enzyme(8)", false
+		);
+	}
+
+	@Test @Ignore
+	public void testDirected () throws IOException
+	{
+		dotIt ( 
+			"directed-state-machine", "dotter-directed-test", 
+		  "Gene(1)", "enc", "BioProc(3)", false,
+		  "BioProc(3)", "part_of", "Path(5)", false,
+		  "BioProc(3)", "pub_in", "Publication(6)", false,
+		  "TO(7)", "asso_wi", "MolFunc(9)", true,
+		  "TO(7)", "asso_wi", "Enzyme(8)", true
+		);
 	}
 
 	@Test
-	public void testDirected () throws IOException
+	public void testConstraints () throws IOException
 	{
-		Pair<MutableGraph,String> dot = dotIt ( "directed-state-machine", "dotter-directed-test" );
-		log.info ( "Resulting graph:\n{}", dot.getRight () );
+		dotIt ( 
+			"directed-state-machine", "dotter-directed-test", 
+		  "Gene(1)", "enc", "BioProc(3)", false,
+		  "BioProc(3)", "part_of", "Path(5)", false,
+		  "BioProc(3)", "pub_in", "Publication(6)", false,
+		  "TO(7)", "asso_wi", "MolFunc(9)", true,
+		  "TO(7)", "asso_wi", "Enzyme(8)", true
+		);
 	}
 
 	
-	@Test
-	public void fooDotTest () throws FileNotFoundException, IOException
-	{
-		MutableGraph containerGraph = Factory
-			.mutGraph ()
-			.setStrict ( true )
-			.setDirected ( true )
-			.graphAttrs ()
-			.add ( RankDir.LEFT_TO_RIGHT );
-			
-		MutableGraph digraph = Factory
-			.mutGraph ( "directed" )
-			.setStrict ( true )
-			.setDirected ( true )
-			.graphAttrs ()
-			.add ( RankDir.LEFT_TO_RIGHT );
-		
-		digraph.add ( Factory.mutNode ( "A" ).addLink ( Factory.mutNode ( "B" ) ) );
-		
-		MutableGraph graph = Factory
-			.mutGraph ( "undirected" )
-			.setStrict ( true )
-			.setDirected ( false )
-			.graphAttrs ()
-			.add ( RankDir.LEFT_TO_RIGHT );
-		
-		graph.add ( Factory.mutNode ( "A" ).addLink ( Factory.mutNode ( "C" ) ) );
-		
-		containerGraph.add ( digraph );
-		containerGraph.add ( graph );
-		
-		Graphviz viz = Graphviz.fromGraph ( containerGraph );
-		viz.render ( Format.PLAIN ).toOutputStream ( new FileOutputStream ( "target/dot-merge-test.dot" ) );
-		viz.render ( Format.PNG ).toOutputStream ( new FileOutputStream ( "target/dot-merge-test.png" ) );
-	}
-
-	@Test
-	public void fooDotTest1 () throws FileNotFoundException, IOException
+	@Test @Ignore ( "Just a scrap try, not a real unit test" )
+	public void testHybridViz () throws FileNotFoundException, IOException
 	{
 		MutableGraph graph = Factory
 			.mutGraph ()
@@ -112,17 +103,25 @@ public class StateMachineDotExporterTest
 		viz.render ( Format.PNG ).toOutputStream ( new FileOutputStream ( "target/dot-merge-test-1.png" ) );
 	}
 	
-	private Pair<MutableGraph,String> dotIt ( String smName, String outName )
+	
+	private Pair<MutableGraph,String> dotIt ( String smName, String outName, Object... expectedEdges )
 	{
-		return dotIt ( smName, outName, "data/xml/ondex_metadata.xml" );
+		return dotItWithOndexDefs ( smName, outName, "data/xml/ondex_metadata.xml", expectedEdges );
 	}
 
 	
-	private Pair<MutableGraph,String> dotIt ( String smName, String outName, String metadataPath )
+	/**
+	 * @param expectedEdges every 4 elements one edge, see the code for details
+	 */
+	private Pair<MutableGraph,String> dotItWithOndexDefs ( 
+		String smName, String outName, String metadataPath,
+		Object... expectedEdges
+	)
 	{
 		ONDEXGraph metaGraph = null;
 		try
 		{
+			// The FF parser needs a source of metadata defs
 			metaGraph = new MemoryONDEXGraph ( "metadata" );
 			Reader reader = IOUtils.openResourceReader ( metadataPath );
 			Parser oxlParser = new Parser ();
@@ -139,9 +138,10 @@ public class StateMachineDotExporterTest
 		Graphviz viz = Graphviz.fromGraph ( dot );
 		
 		StringWriter sw = new StringWriter ();
-
+		
 		try
 		{
+			// Some useful diagnostic output
 			String baseOut = "target/" + outName;
 			viz.render ( Format.PLAIN ).toOutputStream ( new FileOutputStream ( baseOut + ".dot" ) );
 			viz.render ( Format.PNG ).toOutputStream ( new FileOutputStream ( baseOut + ".png" ) );
@@ -149,6 +149,46 @@ public class StateMachineDotExporterTest
 		}
 		catch ( IOException ex ) {
 			throw new UncheckedIOException ( "Internal error: " + ex.getMessage (), ex );
+		}
+		
+		// Verify if the expected edges are here
+		//
+		for ( int i = 0; i < expectedEdges.length; i++ )
+		{
+			String src = (String) expectedEdges [ i ];
+			String edge = (String) expectedEdges [ ++i ];
+			String dst = (String) expectedEdges [ ++i ];
+			boolean isDirected = (boolean) expectedEdges [ ++i ];
+			
+			// All the links taken from all the nodes. The guru model is quite weird and this seems the only way
+			//
+			Stream<Link> links = dot
+				.nodes ()
+				.stream ()
+				.map ( MutableNode::asLinkSource )
+				.flatMap ( node -> node.links ().stream () );
+
+			// Filter edges compatible with current probe  
+			Link foundLink = links
+//				.peek ( link -> 
+//					log.info ( 
+//						"CURRENT LINK: {} -- {} -- {} -- {}",
+//						((Label) link.get ( "label" )).value (),
+//						link.get ( "arrowhead" ),
+//						((MutableNode) link.from () ).name ().value (),
+//						((MutableNode) link.to () ).name ().value ()
+//				))
+				.filter ( link -> ! ( isDirected ^ "normal".equals ( link.get ( "arrowhead" ) ) ) )
+				.filter ( link -> edge.equals ( ((Label) link.get ( "label" )).value () ) )
+				.filter ( link -> src.equals ( ((MutableNode) link.from () ).name ().value () ) )
+				.filter ( link -> dst.equals ( ((MutableNode) link.to () ).name ().value () ) )
+				.findAny ()
+				.orElse ( null );
+			
+			Assert.assertNotNull (
+				String.format ( "edge <%s>( <%s> %s <%s> ) not found!", edge, src, isDirected ? "-" : "->", dst ),
+				foundLink
+			);
 		}
 		
 		return Pair.of ( dot, sw.toString () );

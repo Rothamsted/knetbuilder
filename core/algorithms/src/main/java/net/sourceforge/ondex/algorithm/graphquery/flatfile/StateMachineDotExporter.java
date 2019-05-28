@@ -18,6 +18,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import guru.nidi.graphviz.attribute.Arrow;
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.attribute.Label;
 import guru.nidi.graphviz.attribute.RankDir;
@@ -138,17 +139,12 @@ public class StateMachineDotExporter
 	
 	public MutableGraph getGraph ()
 	{
-		MutableGraph containerGraph = Factory.mutGraph ()
-			.setDirected ( true )
-			.graphAttrs ().add ( RankDir.LEFT_TO_RIGHT );
-		
-		MutableGraph digraph = getGraph ( true );
 		MutableGraph graph = getGraph ( false );
+		MutableGraph digraph = getGraph ( true );
 		
-		containerGraph.add ( digraph );
-		containerGraph.add ( graph );
+		digraph.add ( graph );
 		
-		return containerGraph;
+		return graph;
 	}
 	
 	/**
@@ -158,7 +154,8 @@ public class StateMachineDotExporter
 	private MutableGraph getGraph ( boolean getDirectedTransitions )
 	{
 		MutableGraph graph = Factory.mutGraph ()
-			.setDirected ( getDirectedTransitions )
+			// it needs to be directed even when the edge has no arrow, it's the only way to have a hybrid graph
+			.setDirected ( true ) 
 			.graphAttrs ().add ( RankDir.LEFT_TO_RIGHT );
 				
 		// All the nodes and then all the edges
@@ -179,14 +176,8 @@ public class StateMachineDotExporter
 			if ( EdgeTreatment.BACKWARD.equals ( tdir ) ) ExceptionUtils.throwEx (
 				UnsupportedOperationException.class, "The state machine dotter doesn't support backward transtions yet"
 			);
-			// The directionality of the transition must match the one desired
-System.out.format ( "\t-----| getDirected: %b, tdir: %s, XOR: %b\n", 
-	getDirectedTransitions, tdir, getDirectedTransitions ^ EdgeTreatment.FORWARD.equals ( tdir )
-);
-			
+			// The directionality of the transition must match the one currently being considered
 			if ( getDirectedTransitions ^ EdgeTreatment.FORWARD.equals ( tdir ) ) return;
-			
-System.out.println ( "\t-----| NOT SKIPPED" );
 			
 			MutableNode srcDot = this.states2DotNodes.get ( this.stateMachine.getTransitionSource ( t ) );
 			MutableNode dstDot = this.states2DotNodes.get ( this.stateMachine.getTransitionTarget ( t ) );
@@ -214,6 +205,8 @@ System.out.println ( "\t-----| NOT SKIPPED" );
 				Factory.to ( dstDot )
 					.add ( Label.of ( elabel ) )
 					.add ( ctr [ 0 ]++ % 2 == 0 ? Color.BLACK : Color.BLUE )
+					// We process directed and undirected edges separately
+					.add ( getDirectedTransitions ? Arrow.NORMAL : Arrow.NONE )
 			);
 		});
 		
