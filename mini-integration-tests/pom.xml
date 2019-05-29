@@ -10,7 +10,7 @@
   
   <description>
     Various integration tests of ONDEX Mini workflows.
-    TODO: maybe it will requires splitting into submodules in future. Keeping it simple for the moment.
+    TODO: maybe it will require splitting into submodules in future. Keeping it simple for the moment.
   </description>
  
   
@@ -113,6 +113,16 @@
 						</goals>
 						<configuration>
 							<artifactItems>
+			       		<!-- Used by state machine dotter tests -->
+		           	<artifactItem>
+						      <groupId>net.sourceforge.ondex</groupId>
+									<artifactId>datadir</artifactId>
+						      <version>${ondex.version}</version>
+						      <type>zip</type>
+						      <classifier>data</classifier>
+		             	<includes>data/xml/ondex_metadata.xml</includes>
+		             	<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+		           	</artifactItem>
 								<artifactItem>
 									<groupId>net.sourceforge.ondex.apps</groupId>
 									<artifactId>ondex-mini</artifactId>
@@ -139,9 +149,27 @@
 							</artifactItems>
 						</configuration>
 					</execution>
+					<execution>
+						<id>unpack-metadata</id>
+	 					<phase>generate-test-resources</phase>
+						<goals><goal>unpack</goal></goals>
+						<configuration>
+							<artifactItems>
+			       		<!-- Used by state machine dotter tests -->
+		           	<artifactItem>
+						      <groupId>net.sourceforge.ondex</groupId>
+									<artifactId>datadir</artifactId>
+						      <version>${ondex.version}</version>
+						      <type>zip</type>
+						      <classifier>data</classifier>
+		             	<includes>data/xml/ondex_metadata.xml</includes>
+		             	<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+		           	</artifactItem>
+		          </artifactItems>
+		        </configuration>
+		      </execution>
 				</executions>
 			</plugin>
-
 
 			<!-- Tests workflows, using the whole ONDEX-mini -->
 			<plugin>

@@ -179,7 +179,9 @@ public class StateMachineDotExporterTest
 			throw new RuntimeException ( "Internal error: " + ex.getMessage (), ex );
 		}
 		
-		StateMachineDotExporter dotter = new StateMachineDotExporter ( "target/test-classes/" + smName + ".txt", metaGraph );
+		StateMachineDotExporter dotter = new StateMachineDotExporter (
+			"target/test-classes/state-machine-dotter/" + smName + ".txt", metaGraph 
+		);
 
 		MutableGraph dot = dotter.getGraph ();
 		Graphviz viz = Graphviz.fromGraph ( dot );
