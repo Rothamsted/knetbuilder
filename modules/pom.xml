@@ -271,6 +271,11 @@
          <scope>provided</scope>
       </dependency>
       <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>algorithms</artifactId>
+         <version>${project.version}</version>
+      </dependency>      
+      <dependency>
          <groupId>net.sourceforge.ondex</groupId>
          <artifactId>datadir</artifactId>
          <version>${project.version}</version>
