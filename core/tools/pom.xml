@@ -17,10 +17,17 @@
 
 
 
-   <dependencies><!-- ONDEX deps -->
+   <dependencies>
+   		<!-- ONDEX deps -->
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>base</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>algorithms</artifactId>
          <version>${project.version}</version>
          <scope>compile</scope>
       </dependency>

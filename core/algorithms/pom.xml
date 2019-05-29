@@ -46,30 +46,7 @@
 				<groupId>uk.ac.ebi</groupId>
 				<artifactId>jutils</artifactId>
 			</dependency>
-	    <dependency>
-				<groupId>net.sourceforge.ondex.core</groupId>
-				<artifactId>workflow-api</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-	    </dependency>
-			<dependency>
-				<groupId>net.sourceforge.ondex.modules</groupId>
-				<artifactId>oxl</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
-	    <dependency>
-	      <groupId>net.sourceforge.ondex.core</groupId>
-	      <artifactId>tools</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-	    </dependency>
-			<dependency>
-				<groupId>uk.ac.ebi</groupId>
-				<artifactId>jutils-io</artifactId>
-				<scope>test</scope>
-			</dependency>
-			
+
    </dependencies>
    
    
