@@ -15,7 +15,8 @@
    <name>tab-tools</name>
    <packaging>jar</packaging>
 
-   <dependencies><!-- ONDEX deps -->
+   <dependencies>
+   		<!-- ONDEX deps -->
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>validator</artifactId>
@@ -36,5 +37,12 @@
          <version>${project.version}</version>
          <scope>provided</scope>
       </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>algorithms</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      
    </dependencies>
 </project>
