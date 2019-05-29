@@ -28,7 +28,8 @@
          <scope>provided</scope>
       </dependency>
 
-      <!-- ONDEX deps -->      <dependency>
+      <!-- ONDEX deps -->      
+      <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>tab-tools</artifactId>
          <version>${project.version}</version>
@@ -45,6 +46,11 @@
          <artifactId>oxl</artifactId>
          <version>${project.version}</version>
          <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>algorithms</artifactId>
+         <version>${project.version}</version>
       </dependency>
    </dependencies>
 </project>
