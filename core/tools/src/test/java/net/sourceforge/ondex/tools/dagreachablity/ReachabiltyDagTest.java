@@ -1,7 +1,7 @@
 /**
  *
  */
-package net.sourceforge.ondex.algorithm.dagreachablity;
+package net.sourceforge.ondex.tools.dagreachablity;
 
 
 import org.junit.After;
