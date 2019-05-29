@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.tools.dagreachablity;
+package net.sourceforge.ondex.algorithm.dagreachablity;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 

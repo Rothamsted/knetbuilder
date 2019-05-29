@@ -10,9 +10,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBasedTable;
@@ -30,6 +34,7 @@ import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition;
 import net.sourceforge.ondex.algorithm.graphquery.DirectedEdgeTransition.EdgeTreatment;
 import net.sourceforge.ondex.algorithm.graphquery.State;
 import net.sourceforge.ondex.algorithm.graphquery.StateMachine;
+import net.sourceforge.ondex.algorithm.graphquery.Transition;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.InvalidFileException;
 import net.sourceforge.ondex.algorithm.graphquery.exceptions.StateMachineInvalidException;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -170,7 +175,14 @@ public class StateMachineDotExporter
 		
 		// Use this intermediate, to put loops together, in a single transition
 		Table<MutableNode, MutableNode, String> normalizedEdges = HashBasedTable.create ();
-		this.stateMachine.getAllTransitions ().forEach ( t -> 
+		// Go through transitions in a given order, needed to keep test results predictable
+		List<Transition> transitions = new ArrayList<> ( this.stateMachine.getAllTransitions () );
+		Collections.sort ( 
+			transitions, 
+			(t1, t2) -> t1.getValidRelationType ().getId ().compareTo ( t2.getValidRelationType ().getId () ) 
+		);
+
+		transitions.forEach ( t -> 
 		{
 			EdgeTreatment tdir = t instanceof DirectedEdgeTransition ? ((DirectedEdgeTransition) t).getTreatment () : null;
 			if ( EdgeTreatment.BACKWARD.equals ( tdir ) ) ExceptionUtils.throwEx (

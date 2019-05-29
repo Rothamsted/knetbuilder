@@ -35,7 +35,6 @@ import uk.ac.ebi.utils.io.IOUtils;
 
 
 /**
- * TODO: comment me!
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>27 May 2019</dd></dl>
@@ -74,7 +73,7 @@ public class StateMachineDotExporterTest
 	{
 		dotIt ( 
 			"constrained-state-machine", "dotter-constrained-test",
-		  "Gene(1)", "pub_in(<=4)\nasso_wi(<=5)", "Publication(6)", false,
+		  "Gene(1)", "asso_wi(<=5)\npub_in(<=4)", "Publication(6)", false,
 		  "Publication(6)", "asso_wi", "TO(7)", false
 		);
 	}
@@ -94,8 +93,8 @@ public class StateMachineDotExporterTest
 	{
 		dotItWithOndexDefs ( 
 			"ara-state-machine", "dotter-ara-test", "wheat-metadata.xml",
-			"Protein(10)", "ortho(<=4)\nxref(<=4)\nh_s_s(<=4)", "Protein(10)", false,
-			"Protein(10)", "physical(<=6)\ngenetic(<=6)", "Protein(10)", true,
+			"Protein(10)", "h_s_s(<=4)\northo(<=4)\nxref(<=4)", "Protein(10)", false,
+			"Protein(10)", "genetic(<=6)\nphysical(<=6)", "Protein(10)", true,
 			"Protein(10)", "genetic(<=6)\nphysical(<=6)", "Protein(7)", true,
 			"Reaction(13)", "part_of", "Path(14)", false,
 			"Gene(1)", "has_variation", "SNP(15)", false
@@ -121,8 +120,31 @@ public class StateMachineDotExporterTest
 		a.addLink ( Factory.to ( c ).add ( Arrow.NORMAL ) );
 				
 		Graphviz viz = Graphviz.fromGraph ( graph );
-		viz.render ( Format.PLAIN ).toOutputStream ( new FileOutputStream ( "target/dot-merge-test-1.dot" ) );
-		viz.render ( Format.PNG ).toOutputStream ( new FileOutputStream ( "target/dot-merge-test-1.png" ) );
+		viz.render ( Format.PLAIN ).toOutputStream ( new FileOutputStream ( "target/dot-hyb-test.dot" ) );
+		viz.render ( Format.PNG ).toOutputStream ( new FileOutputStream ( "target/dot-hyb-test.png" ) );
+	}
+	
+	@Test @Ignore ( "Just a scrap try, not a real unit test" )
+	public void testHybridVizSubGraphs () throws FileNotFoundException, IOException
+	{
+		MutableGraph containerGraph = Factory.mutGraph ()
+				.setDirected ( true )
+				.graphAttrs ().add ( RankDir.LEFT_TO_RIGHT );
+
+			// Shoul yield A->B
+			MutableGraph digraph = Factory.mutGraph ().setDirected ( true ).graphAttrs ().add ( RankDir.LEFT_TO_RIGHT );
+			digraph.add ( Factory.mutNode ( "A" ).addLink ( Factory.mutNode ( "B" ) ) );
+
+			// Should yield A-C
+			MutableGraph graph = Factory.mutGraph ().setDirected ( false ).graphAttrs ().add ( RankDir.LEFT_TO_RIGHT );
+			graph.add ( Factory.mutNode ( "A" ).addLink ( Factory.mutNode ( "C" ) ) );
+
+			containerGraph.add ( digraph );
+			containerGraph.add ( graph );
+
+			Graphviz viz = Graphviz.fromGraph ( containerGraph );
+			viz.render ( Format.PLAIN ).toOutputStream ( new FileOutputStream ( "target/dot-hyb-subgraphs-test.dot" ) );
+			viz.render ( Format.PNG ).toOutputStream ( new FileOutputStream ( "target/dot-hyb-subgraphs-test.png" ) );		
 	}
 	
 	

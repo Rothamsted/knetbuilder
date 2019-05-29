@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.tools.dagreachablity;
+package net.sourceforge.ondex.algorithm.dagreachablity;
 
 import java.util.Arrays;
 import java.util.HashMap;

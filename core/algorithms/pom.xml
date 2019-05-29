@@ -40,7 +40,7 @@
 			<dependency>
 			  <groupId>guru.nidi</groupId>
 			  <artifactId>graphviz-java</artifactId>
-			  <version>0.8.3</version>
+			  <version>0.8.7</version>
 			</dependency>
 			<dependency>
 				<groupId>uk.ac.ebi</groupId>
