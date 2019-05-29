@@ -56,6 +56,10 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>log4j-over-slf4j</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
 			</exclusions>
 			<scope>test</scope>	
 		</dependency>
@@ -113,16 +117,6 @@
 						</goals>
 						<configuration>
 							<artifactItems>
-			       		<!-- Used by state machine dotter tests -->
-		           	<artifactItem>
-						      <groupId>net.sourceforge.ondex</groupId>
-									<artifactId>datadir</artifactId>
-						      <version>${ondex.version}</version>
-						      <type>zip</type>
-						      <classifier>data</classifier>
-		             	<includes>data/xml/ondex_metadata.xml</includes>
-		             	<outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-		           	</artifactItem>
 								<artifactItem>
 									<groupId>net.sourceforge.ondex.apps</groupId>
 									<artifactId>ondex-mini</artifactId>
@@ -149,13 +143,13 @@
 							</artifactItems>
 						</configuration>
 					</execution>
+					<!-- Used by state machine dotter tests -->
 					<execution>
 						<id>unpack-metadata</id>
 	 					<phase>generate-test-resources</phase>
 						<goals><goal>unpack</goal></goals>
 						<configuration>
 							<artifactItems>
-			       		<!-- Used by state machine dotter tests -->
 		           	<artifactItem>
 						      <groupId>net.sourceforge.ondex</groupId>
 									<artifactId>datadir</artifactId>
