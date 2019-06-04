@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<description><![CDATA[ONDEX OWL Parser configuration for importing the Experimental Factor Ontology.]]></description>
+
+	<import resource="obo_common_mappings.xml" />
+
+
+	<!-- 
+	  This is the entry point, it starts from top OWL classes and recurse on rdfs:subClassOf and other OWL relations like
+	  someValuesFrom 
+	-->		
+	<bean id = "owlMapper" parent = "defaultOwlMapper">
+
+		<!-- The top classes to start from -->
+
+		<property name = "rootsScanner">
+			<bean class = "net.sourceforge.ondex.parser.owl.IriBasedRootsScanner">
+				<property name = "topClassIri" value = "#{ns.iri ( 'efo:EFO_0000001' )}" />
+			</bean>
+		</property>
+		
+		<!-- The top OWL class maps to an ONDEX concept class and not to a concept -->
+		<property name = "doMapRootsToConcepts" value = "false" />
+		
+		<!-- The OWL class relations to follow -->
+		
+		<property name = "linkers">
+			<!-- These will be added to the existing is-a linker (in default-mappings.xml) -->
+			<list merge = "true">
+			  
+			  <!-- Follows intersections of classes of which the starting class is declared equivalent to  -->
+			  <ref bean = "eqIntersctLinker" />
+				
+				<!-- These Follow owl:someValuesFrom relations -->
+				<ref bean = "partOfLinker" />
+				<ref bean = "derivesFromLinker" />
+				
+			</list>
+
+		</property> <!-- /linkers -->
+		
+	</bean> <!-- /owlMapper -->
+
+  <bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.ConstantConceptClassMapper">
+		<property name = "value">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype">
+				<property name = "id" value = "EFO" />
+				<property name = "fullName" value = "Experimental Factor" />
+				<property name= "description" value = "The Experimental Factor Ontology (EFO) provides a systematic description of many experimental variables available in EBI databases, and for external projects (https://www.ebi.ac.uk/efo/)." />
+			</bean>
+		</property>
+	</bean>	
+
+
+
+	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.CompositeAccessionsMapper">
+		<property name = "mappers">
+			<set>
+				<ref bean = "idAccMapper" />
+				<ref bean = "altIdAccMapper" />
+				<ref bean = "wpXrefAccMapper" />
+				<ref bean = "pmedXrefAccMapper" />
+				<ref bean = "pmedXrefAccMapperHttps" />
+			</set>
+		</property>
+	</bean> <!-- /accessionsMapper -->
+
+
+  <!-- We need to convert IDs like 'biological_process' to 'Biological_Process' -->
+	<bean id = "nameMapper" class = "net.sourceforge.ondex.parser.owl.ChainingLiteralMapper">
+		<property name="baseMapper">
+			<bean class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
+			  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:label' )}" />
+			</bean>
+		</property>
+		<property name="postProcessor">
+			<bean class = "net.sourceforge.ondex.parser.utils.WordCapitalizer" />
+		</property>
+	</bean>
+	
+	<bean id = "dataSourcePrototype" class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+		<property name = "id" value = "EFO" />
+		<property name = "fullName" value = "Experimental Factor Ontology" />
+		<property name = "description">Provides a systematic description of many experimental variables available in EBI databases, and for external projects (https://www.ebi.ac.uk/efo/).</property>
+	</bean>
+
+</beans>
+	

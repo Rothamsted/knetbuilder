@@ -6,8 +6,8 @@ import net.sourceforge.ondex.parser.TextMapper;
 import net.sourceforge.ondex.parser.utils.ChainingMapper;
 
 /**
- * A {@link ChainingLiteralMapper} that uses {@link LiteralMapper} as base mapper and implements 
- * the {@link TextMapper} interface, so that you can use is where that's required.
+ * A {@link ChainingMapper} that uses {@link LiteralMapper} as base mapper and implements 
+ * the {@link TextMapper} interface, so that you can use it where that's required.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>22 May 2018</dd></dl>
