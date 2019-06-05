@@ -24,8 +24,8 @@
 	<bean id = "idAccMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
 		<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:id' )}" />
 		<!-- You might require these in your extension 
-		<property name = "dataSourcePrefix" value="GO:" /> # Takes only those values with this prefix
-		<property name = "addedPrefix" value="GO_" / --> # replaces the original prefix with this 
+		<property name = "dataSourcePrefix" value="GO:" /> <!- - Takes only those values with this prefix - ->
+		<property name = "addedPrefix" value="GO_" /> <!- - replaces the original prefix with this --> 
 		
 		<!-- Just override dataSourcePrototype to fit the default here -->
 		<property name = "dataSourcesMapper" ref = "dataSourcesMapper" />
@@ -33,8 +33,8 @@
 	
 	<bean id = "altIdAccMapper" class = "net.sourceforge.ondex.parser.owl.OBOWLAccessionsMapper">
 		<property name = "propertyIri" value = "#{ns.iri ( 'oboInOwl:hasAlternativeId' )}" />
-		<!-- dataSourcePrefix/addedPrefix apply here too
-		<!-- Just override dataSourcePrototype to fit the default here -->
+		<!-- dataSourcePrefix/addedPrefix apply here too -->
+		<!-- Just override dataSourcePrototype to fit the default hereby -->
 		<property name = "dataSourcesMapper" ref = "dataSourcesMapper" />
 	</bean>
 	
@@ -192,7 +192,7 @@
 	<bean id = "derivesFromLinker" class = "net.sourceforge.ondex.parser.ExploringMapper.LinkerConfiguration">
 		<property name = "scanner">
 			<bean class = "net.sourceforge.ondex.parser.owl.OWLSomeScanner">
-				<property name="propertyIri" value="#{ns.iri ( 'bfo:derives_from' )}" />
+				<property name="propertyIri" value="#{ns.iri ( 'ro:derives_from' )}" />
 			</bean>
 		</property>
 		<property name = "mapper" ref = "derivesFromMapper" />

@@ -15,6 +15,7 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.parser.owl.OWLMapper;
 
 /**
@@ -27,24 +28,30 @@ import net.sourceforge.ondex.parser.owl.OWLMapper;
 public class EfoTest
 {
 	@Test
-	public void testAccessions () throws Exception
+	public void testBasics () throws Exception
 	{
 		try ( ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext ( "efo_cfg.xml" ) )
 		{
 			OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
-			model.read ( Resources.getResource ( "efo_test.owl" ).toString (), "", "RDF/XML" );
+			model.read ( Resources.getResource ( "efo-test.owl" ).toString (), "", "RDF/XML" );
 
 			OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 			ONDEXGraph graph = owlMap.map2Graph ( model );
 			
-			assertEquals ( "Wrong no of concepts!", 1, graph.getConcepts ().size () );
-			
-			ONDEXConcept c = graph.getConcepts ().iterator ().next ();
+			assertEquals ( "Wrong no of concepts!", 3, graph.getConcepts ().size () );
+
 			DataSource efoDs = graph.getMetaData ().getDataSource ( "EFO" );
 			assertNotNull ( "EFO data source not found!", efoDs );
+
+			ONDEXConcept c = graph
+				.getConcepts ()
+				.stream ()
+				.filter ( ci -> ci.getConceptAccession ( "EFO:0002888", efoDs ) != null )
+				.findAny ()
+				.orElse ( null );
 			
-			assertNotNull ( "Concept accession is wrong!", c.getConceptAccession ( "EFO_0002888", efoDs ) );
-			assertNotNull ( "Concept label is wrong!", c.getConceptName ( "Homo sapiens cell line" ) );
+			assertNotNull ( "Test concept not found!", c );
+			assertNotNull ( "Concept label is wrong!", c.getConceptName ( "Homo Sapiens Cell Line" ) );
 	
 			ConceptClass cc = c.getOfType ();
 			assertEquals ( "Concept Class ID is wrong!", "EFO", cc.getId () );
@@ -57,4 +64,39 @@ public class EfoTest
 		}
 	}
 	
+	
+	@Test
+	public void testRelations () throws Exception
+	{
+		try ( ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext ( "efo_cfg.xml" ) )
+		{
+			OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
+			model.read ( Resources.getResource ( "efo-test.owl" ).toString (), "", "RDF/XML" );
+
+			OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
+			ONDEXGraph graph = owlMap.map2Graph ( model );
+						
+			DataSource efoDs = graph.getMetaData ().getDataSource ( "EFO" );
+			assertNotNull ( "EFO data source not found!", efoDs );
+
+			ONDEXConcept c = graph
+				.getConcepts ()
+				.stream ()
+				.filter ( ci -> "GO_0033273".equals ( ci.getPID () ) )
+				.findAny ()
+				.orElse ( null );
+
+			assertNotNull ( "Test concept not found!", c );
+			
+
+			ONDEXRelation about = graph.getRelationsOfConcept ( c )
+			.stream ()
+			.filter ( r -> "is_about".equals ( r.getOfType ().getId () ) )
+			.findAny ()
+			.orElse ( null );
+			
+			assertNotNull ( "is_about relation not found!", about );
+			assertEquals ( "Wrong target for is_about", "CHEBI_33229", about.getToConcept ().getPID () );
+		}
+	}
 }

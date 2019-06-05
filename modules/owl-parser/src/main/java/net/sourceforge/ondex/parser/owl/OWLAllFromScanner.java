@@ -9,7 +9,7 @@ public class OWLAllFromScanner extends OWLRestrictionScanner<AllValuesFromRestri
 	@Override
 	protected AllValuesFromRestriction asRestriction ( Restriction ontRestriction )
 	{
-		if ( ontRestriction.isAllValuesFromRestriction () ) return null;
+		if ( !ontRestriction.isAllValuesFromRestriction () ) return null;
 		return ontRestriction.asAllValuesFromRestriction ();
 	}
 
