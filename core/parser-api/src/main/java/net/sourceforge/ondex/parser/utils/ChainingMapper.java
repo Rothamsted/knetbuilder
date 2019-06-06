@@ -37,7 +37,12 @@ public abstract class ChainingMapper<S, O> extends DecoratingMapper<S, O>
 		this ( baseMapper, MapperUtils.fromFunction ( postProcessor ) );
 	}
 
-	
+	/**
+	 * Applies the {@link #getBaseMapper() base mapper to the input} and then passes its result to the 
+	 * {@link #getOuterMapper() outer mapper}, to return its result. The graph parameter is passed to both the
+	 * mappers.
+	 * 
+	 */
 	@Override
 	@SuppressWarnings ( "unchecked" )
 	public O map ( S source, ONDEXGraph graph ) {
@@ -67,6 +72,12 @@ public abstract class ChainingMapper<S, O> extends DecoratingMapper<S, O>
 		this.outerMapper = outerMapper;
 	}
 
+	/**
+	 * A wrapper of {@link MapperUtils#fromFunction(Function)} that ease the creation of the 
+	 * {@link #getOuterMapper() outer mapper} from a mapping function that doesn't need the {@code graph} parameter
+	 * usually accepted by {@link Mapper#map(Object, ONDEXGraph)}.
+	 *   
+	 */
 	public <O1> void setPostProcessor ( Function<O1, O> postProcessor )
 	{
 		this.outerMapper = MapperUtils.fromFunction ( postProcessor );
