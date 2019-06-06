@@ -6,7 +6,6 @@ import static net.sourceforge.ondex.parser.owl.Utils.OWL_PARSER_DATA_SOURCE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
