@@ -5,6 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sourceforge.ondex.annotations.Authors;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.parser.ONDEXParser;
@@ -18,6 +21,12 @@ import net.sourceforge.ondex.parser.owl.OWLMapper;
  * <dl><dt>Date:</dt><dd>19 May 2017</dd></dl>
  *
  */
+@Status(
+	description = "An ONDEX parser module and plug-in that parses OWL ontology files.\n" +
+								"See https://github.com/Rothamsted/ondex-knet-builder/tree/master/modules/owl-parser for details.",
+  status = StatusType.STABLE
+)
+@Authors( authors = { "Marco Brandizi" }, emails = "marco.brandizi@rothamsted.ac.uk" )
 public class OWLParser extends ONDEXParser
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
