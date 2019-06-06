@@ -420,14 +420,12 @@ public class Parser extends ONDEXParser {
 	{
 		try
 		{
-			ONDEXLogger odxLogger = new ONDEXLogger ();
-			
 			if ( graph == null )
 				graph = new MemoryONDEXGraph ( "default" );
 			
 			Parser parser = new Parser ();
 			parser.setONDEXGraph ( graph );
-			parser.addONDEXListener ( odxLogger );
+			parser.addONDEXListener ( new ONDEXLogger () );
 			
 			ONDEXPluginArguments args = new ONDEXPluginArguments ( parser.getArgumentDefinitions () );
 			args.setOption ( FileArgumentDefinition.INPUT_FILE, filePath );

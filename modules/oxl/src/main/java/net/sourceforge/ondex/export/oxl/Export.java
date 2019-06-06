@@ -63,6 +63,7 @@ import net.sourceforge.ondex.core.Unit;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.oxl.jaxb.CDATAWriterFilter;
 import net.sourceforge.ondex.oxl.jaxb.NewLineFixWriterFilter;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
@@ -2265,6 +2266,7 @@ public class Export extends ONDEXExport implements Monitorable {
 		{
 			File oxlf = new File ( path );
 			Export plugin = new Export();
+			plugin.addONDEXListener ( new ONDEXLogger () );
 
 			ONDEXPluginArguments args = new ONDEXPluginArguments ( plugin.getArgumentDefinitions() );
 			
