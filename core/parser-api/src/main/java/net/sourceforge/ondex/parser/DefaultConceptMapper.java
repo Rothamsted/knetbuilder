@@ -2,6 +2,8 @@ package net.sourceforge.ondex.parser;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
@@ -31,7 +33,7 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 	private TextMapper<S> preferredNameMapper;
 	private TextsMapper<S> altNamesMapper;
 	private AccessionsMapper<S> accessionsMapper;
-	private EvidenceTypeMapper<S> evidenceMapper = new ConstEvidenceTypeMapper<S> ( EvidenceTypePrototype.IMPD );
+	private EvidenceTypeMapper<S> evidenceMapper = new ConstEvidenceTypeMapper<> ( EvidenceTypePrototype.IMPD );
 	private DataSourceMapper<S> dataSourceMapper;
 	
 	@Override
@@ -51,13 +53,15 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 		Optional
 		.ofNullable ( this.getPreferredNameMapper () ) // if available,
 		.map ( mapper -> mapper.map ( src, graph ) ) // get a value from it
+		.filter ( name -> name.length () > 0 ) // Ondex doesn't accept empty names anyway, sometimes these appear in OBO ontos
 		.ifPresent ( prefName -> result.createConceptName ( prefName, true ) ); // and use it to build a new name, if it's non-null
 
 		// Same approach for names mapper, but this has multiple results.
 		Optional.ofNullable ( this.getAltNamesMapper () )
 		.map ( mapper -> mapper.map ( src, graph ) )
 		.ifPresent ( names -> 
-		  names.filter ( name -> name != null )
+		  names
+		  .filter ( name -> name.length () > 0 ) // empty names again
 		  .forEach ( name -> result.createConceptName ( name, false ) )
 		);
 
