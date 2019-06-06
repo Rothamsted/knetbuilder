@@ -80,7 +80,7 @@
 	</bean> <!-- /accessionsMapper -->
 
 	<!-- 
-		We need to map like biological_process => BioProc
+		We need to map like GO_0008150 => BioProc
 		TODO: Report examples about ChainingLiteralMapper, StringMapper, ChainingLiteralMapper
 	-->
 	<bean id = "idMapper" class = "net.sourceforge.ondex.parser.owl.ChainingLiteralMapper">
