@@ -17,8 +17,8 @@
  * 
  * <p>Another example is the <a href = "https://github.com/Rothamsted/ondex-knet-builder/tree/master/modules/owl-parser">OWL parser</a>.</p>
  * 
- * <p>The components defined here are designed to allow for the configuration of a parser by means of a Spring Bean configuration
- * file. The OWL parser is a good starting point to see that in action.</p> 
+ * <p>The components defined for the parser API are designed to allow for the configuration of a parser by means of a 
+ * Spring Bean configuration file. The OWL parser is a good starting point to see that in action.</p> 
  *
  * <p>TODO: we still need to define the skeleton component to realise a parser that scans pairs of concepts/relations, such 
  * as a CSV parser.</p>

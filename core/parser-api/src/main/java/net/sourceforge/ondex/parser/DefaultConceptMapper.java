@@ -2,8 +2,6 @@ package net.sourceforge.ondex.parser;
 
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
-
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
