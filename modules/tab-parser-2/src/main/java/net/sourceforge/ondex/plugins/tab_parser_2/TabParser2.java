@@ -19,7 +19,7 @@ import net.sourceforge.ondex.tools.subgraph.Subgraph;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
 
 /**
- * A plug-in for the Integrator, which uses a simple XML to map from a particular TSV/CSV file structure 
+ * A plug-in for the workflow/integrator, which uses a simple XML to map from a particular TSV/CSV file structure 
  * (i.e., list of headers) to ONDEX entities. See the [mapping XML Schema](src/main/resources/tab_parser.xsd) and
  * its [auto-generated documentation](doc/index.html) for details. 
  * the plug-in receives a parameter pointing to an XML instance of such schema, which defines how your particular tabular
