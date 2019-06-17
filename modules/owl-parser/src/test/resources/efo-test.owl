@@ -121,5 +121,19 @@
         <oboInOwl:hasExactSynonym rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vitaminum</oboInOwl:hasExactSynonym>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vitamin</rdfs:label>
     </owl:Class>
-            
+    
+
+    <owl:Class rdf:about="http://www.ebi.ac.uk/efo/EFO_1001870">
+        <rdfs:subClassOf rdf:resource="http://www.ebi.ac.uk/efo/EFO_0000001"/>
+        <obo:IAO_0000115 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This is the most common form of the disease, which happens to people age 65 and older. It may or may not run in families. So far, researchers haven’t found a particular gene that causes it. No one knows for sure why some people get it and others don’t.</obo:IAO_0000115>
+        <obo:IAO_0000117 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sirarat Sarntivijai</obo:IAO_0000117>
+        <efo:definition_citation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://www.webmd.com/alzheimers/guide/alzheimers-types</efo:definition_citation>
+        <oboInOwl:hasExactSynonym rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Alzheimer Senile Dementia</oboInOwl:hasExactSynonym>
+        <oboInOwl:hasExactSynonym rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Alzheimer Type Senile Dementia</oboInOwl:hasExactSynonym>
+        <oboInOwl:hasExactSynonym rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Senile Dementia, Alzheimer Type</oboInOwl:hasExactSynonym>
+        <oboInOwl:hasExactSynonym rdf:datatype="http://www.w3.org/2001/XMLSchema#string">late-onset Alzheimer&apos;s</oboInOwl:hasExactSynonym>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">late-onset Alzheimers disease</rdfs:label>
+        <skos:prefLabel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">late-onset Alzheimer&apos;s disease</skos:prefLabel>
+    </owl:Class>
+                
 </rdf:RDF>

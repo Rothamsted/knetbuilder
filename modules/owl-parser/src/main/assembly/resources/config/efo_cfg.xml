@@ -107,6 +107,7 @@
 	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.CompositeAccessionsMapper">
 		<property name = "mappers">
 			<set>
+				<ref bean = "iriBasedAccessionsMapper" />
 				<ref bean = "idAccMapper" />
 				<ref bean = "altIdAccMapper" />
 				<ref bean = "wpXrefAccMapper" />
@@ -115,6 +116,29 @@
 			</set>
 		</property>
 	</bean> <!-- /accessionsMapper -->
+
+	<!-- 
+		This is used in iriBasedAccessionsMapper.
+		
+		We need default accessions generated from the term IRIs
+		We also remove 'EFO_', in order to get the correct Ondex-style accession (eg, EFO:1234).
+	-->
+	<bean id = "idMapperAdapter" class ="net.sourceforge.ondex.parser.utils.Single2TextsMapper">
+		<property name ="baseMapper">
+			<bean class = "net.sourceforge.ondex.parser.utils.ChainingTextMapper">
+				<property name = "baseMapper" ref = "idMapper" />
+				<property name = "postProcessor" >
+					<bean class = "net.sourceforge.ondex.parser.utils.StringReplacer">
+						<property name = "map">
+							<map>
+								<entry key = "_" value = ":" />
+							</map>
+						</property>
+					</bean>
+				</property>			
+			</bean>
+		</property>		
+	</bean>
 
 
   <!-- We need to convert IDs like 'biological_process' to 'Biological_Process' -->

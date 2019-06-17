@@ -111,6 +111,21 @@
 
 
 	<bean id = "idMapper" class = "net.sourceforge.ondex.parser.owl.IRIBasedIdMapper" />
+	<!-- Useful in cases like iriBasedAccessionsMapper -->
+	<bean id = "idMapperAdapter" class = "net.sourceforge.ondex.parser.utils.Single2TextsMapper">
+		<property name = "baseMapper" ref = "idMapper" />
+	</bean>
+	
+	<bean id = "iriBasedAccessionsMapper" class = "net.sourceforge.ondex.parser.DefaultAccessionsMapper" >
+		<property name = "accessionValuesMapper" ref = "idMapperAdapter" />
+		<property name = "dataSourcesMapper" ref = "dataSourcesMapper" />
+		<property name = "ambiguityMapper">
+			<bean class = "net.sourceforge.ondex.parser.ConstStreamMapper">
+				<!-- This forces the generic class to be acknowledged as a boolean container -->
+				<constructor-arg index = "0" value = "#{T(java.lang.Boolean).FALSE}" />
+			</bean>
+		</property>
+	</bean>
 	
 	<bean id = "nameMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
 	  <property name = "propertyIri" value = "#{ns.iri ( 'rdfs:label' )}" />

@@ -38,7 +38,7 @@ public class EfoTest
 			OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
 			ONDEXGraph graph = owlMap.map2Graph ( model );
 			
-			assertEquals ( "Wrong no of concepts!", 3, graph.getConcepts ().size () );
+			assertEquals ( "Wrong no of concepts!", 4, graph.getConcepts ().size () );
 
 			DataSource efoDs = graph.getMetaData ().getDataSource ( "EFO" );
 			assertNotNull ( "EFO data source not found!", efoDs );
@@ -99,4 +99,30 @@ public class EfoTest
 			assertEquals ( "Wrong target for is_about", "CHEBI_33229", about.getToConcept ().getPID () );
 		}
 	}
+	
+	@Test
+	public void testIriBasedAccession () throws Exception
+	{
+		try ( ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext ( "efo_cfg.xml" ) )
+		{
+			OntModel model = (OntModel) ctx.getBean ( "jenaOntModel" );
+			model.read ( Resources.getResource ( "efo-test.owl" ).toString (), "", "RDF/XML" );
+
+			OWLMapper owlMap = (OWLMapper) ctx.getBean ( "owlMapper" );
+			ONDEXGraph graph = owlMap.map2Graph ( model );
+			
+			DataSource efoDs = graph.getMetaData ().getDataSource ( "EFO" );
+			assertNotNull ( "EFO data source not found!", efoDs );
+
+			ONDEXConcept c = graph
+				.getConcepts ()
+				.stream ()
+				.filter ( ci -> ci.getConceptAccession ( "EFO:1001870", efoDs ) != null )
+				.findAny ()
+				.orElse ( null );
+			
+			assertNotNull ( "Test concept not found!", c );
+			assertNotNull ( "Concept label is wrong!", c.getConceptName ( "Alzheimer Senile Dementia" ) );
+		}
+	}	
 }
