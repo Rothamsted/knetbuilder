@@ -18,9 +18,9 @@ import net.sourceforge.ondex.core.util.CachedGraphWrapper;
  */
 public class DefaultAccessionMapper<S> implements AccessionMapper<S>
 {
-	TextMapper<S> accessionValueMapper;
-	DataSourceMapper<S> dataSourceMapper;
-	Mapper<S, Boolean> ambiguityMapper = new ConstMapper<S, Boolean, Boolean> ( true );
+	private TextMapper<S> accessionValueMapper;
+	private DataSourceMapper<S> dataSourceMapper;
+	private Mapper<S, Boolean> ambiguityMapper = new ConstMapper<S, Boolean, Boolean> ( true );
 	
 	@Override
 	public ConceptAccession map ( S src, ONDEXConcept concept, ONDEXGraph graph )

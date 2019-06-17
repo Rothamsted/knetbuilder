@@ -27,9 +27,9 @@ public class DefaultTextMapper<S> extends DecoratingMapper<S, String> implements
 		return this.getBaseMapper ().map ( source, graph ).findFirst ().orElse ( null );
 	}
 
-	@SuppressWarnings ( { "unchecked", "rawtypes" } )
+	@SuppressWarnings ( { "unchecked" } )
 	public TextsMapper<S> getBaseMapper () {
-		return (TextsMapper<S>) (Mapper) super.baseMapper;
+		return (TextsMapper<S>) super.baseMapper;
 	}
 
 	public void setBaseMapper ( TextsMapper<S> baseMapper )

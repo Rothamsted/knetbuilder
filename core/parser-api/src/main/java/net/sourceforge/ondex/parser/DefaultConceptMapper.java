@@ -48,6 +48,7 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 		ONDEXConcept result = graphw.getConcept ( id, ann, descr, dataSrc, conceptClass, evidence );
 		if ( this.isVisited ( src ) ) return result;
 
+		// Preferred name
 		Optional
 		.ofNullable ( this.getPreferredNameMapper () ) // if available,
 		.map ( mapper -> mapper.map ( src, graph ) ) // get a value from it
@@ -63,6 +64,7 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 		  .forEach ( name -> result.createConceptName ( name, false ) )
 		);
 
+		// Accessions
 		Optional.ofNullable ( this.getAccessionsMapper () )
 		.ifPresent ( mapper -> mapper.map ( src, result, graph ).count () );
 
