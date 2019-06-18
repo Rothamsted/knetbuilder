@@ -124,7 +124,7 @@ public class Parser extends ONDEXParser {
 						}
 					}
 				}
-				abs.addAll(xmlParser.parsePummedID(pmidSet));
+				abs.addAll(xmlParser.parsePMIDs(pmidSet));
 				in.close();
 				
 	            fireEventOccurred(new GeneralOutputEvent(
@@ -148,7 +148,7 @@ public class Parser extends ONDEXParser {
                     }
                 }
                 //System.out.println("pmidSet: " + pmidSet.iterator().next());
-                abs.addAll( xmlParser.parsePummedID ( pmidSet ) );
+                abs.addAll( xmlParser.parsePMIDs ( pmidSet ) );
 	            fireEventOccurred(new GeneralOutputEvent(
 	                    "Number of publications found: "+pmidSet.size(), Parser.getCurrentMethodName()));
             }
