@@ -12,30 +12,43 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipFile;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.collections15.ListUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ctc.wstx.stax.WstxInputFactory;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import net.sourceforge.ondex.parser.medline2.Parser;
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
 import uk.ac.ebi.utils.regex.RegEx;
 import uk.ac.ebi.utils.runcontrol.MultipleAttemptsExecutor;
+import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
+import uk.ac.ebi.utils.runcontrol.ProgressLogger;
 import uk.ac.ebi.utils.xml.XmlFilterUtils;
 
 /**
@@ -100,6 +113,8 @@ public class XMLParser {
 	private final static RegEx MEDLINE_YEAR_RE = new RegEx ( "^([0-9]{4}).*$" );
 	
 
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
 	/**
 	 * Reads one single PubMed/MEDLINE XML file.
 	 * 
@@ -147,62 +162,41 @@ public class XMLParser {
 	 * @param Set of PubMed IDs
 	 * @return List of publications (Abstract)
 	 */
-	public Set<Abstract> parsePMIDs ( HashSet<String> ids ) throws MalformedURLException, IOException, XMLStreamException 
+	public Set<Abstract> parsePMIDs ( Set<String> ids ) throws MalformedURLException, IOException, XMLStreamException 
 	{
 		// PubMED connections are hectic and need to be tried multiple times
     MultipleAttemptsExecutor attempter = new MultipleAttemptsExecutor ( 5, 500, 5000, IOException.class );
 
-		final Set<Abstract> allabstracts = new HashSet<>();
+		final Set<Abstract> allAbstracts = Collections.synchronizedSet ( new HashSet<>() );
 
 		HttpURLConnection.setFollowRedirects(false);
 		HttpURLConnection.setDefaultAllowUserInteraction(false);
 
-		String accession = "";
+		List<String> idList = new ArrayList<> ( ids );
+		
+		// e-fetch receives comma-separated lists of IDs
+		Stream<String> accessionGroups = Lists
+		.partition ( idList, 100 ) // groups of 100 IDs
+		.stream ()
+		.map ( idGroup -> String.join ( ",", idGroup ) ); // Joined together
 
-		String id;
-
-		int threshold = 100;
-		int limit = 1;
-		ArrayList<String> accessions = new ArrayList<>();
-		Iterator<String> idsIt = ids.iterator();
-
-		while (idsIt.hasNext())
+		
+		log.info ( "Retrieving {} PubMed entries", ids.size () );
+		
+		PercentProgressLogger progressTracker = new PercentProgressLogger ( 
+			"Retrieved {}% of PubMed entries", ids.size ()
+		);
+		
+		boolean hasErrors[] = { false };
+		int [] i = { 0 };
+		accessionGroups.forEach ( accessionGroup -> 
 		{
-			limit++;
+			try 
+			{
+				String efetchString = Parser.EFETCH_WS + accessionGroup;
+				URL efetch = new URL ( efetchString );
 
-			id = idsIt.next();
-			accession = accession + id.trim() + ",";
-
-			// create packages of 100 comma separeted PMIDs
-			if (limit == threshold) {
-
-				accession = accession.substring(0, accession.length() - 1);
-				accessions.add(accession);
-				accession = "";
-				limit = 1;
-			}
-		}
-
-		if (limit != 1) {
-			accession = accession.substring(0, accession.length() - 1);
-			accessions.add(accession);
-		}
-
-		Iterator<String> it = accessions.iterator();
-		int i = 0;
-
-		while (it.hasNext()) 
-		{
-			i++;
-			accession = it.next();
-
-			String efetchString = Parser.EFETCH_WS + accession;
-
-			URL efetch = new URL(efetchString);
-			final Set<Abstract> abstracts = new HashSet<> ();
-			
-			// As said above, this needs to be tried multiple times.
-			try {
+				// As said above, this needs to be tried multiple times.
 				attempter.executeChecked ( () -> 
 				{
 					HttpURLConnection httpConn = (HttpURLConnection) efetch.openConnection();
@@ -211,29 +205,26 @@ public class XMLParser {
 					// Wrap certain elements with CDATA			
 					InputStream xmlin = XmlFilterUtils.cdataWrapper ( httpConn.getInputStream(), CDATA_ELEMENTS );
 					XMLStreamReader2 staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( xmlin );
-					abstracts.clear ();
-					abstracts.addAll ( this.parseMedlineXML ( staxXmlReader ) );
+					Set<Abstract> thisResult = this.parseMedlineXML ( staxXmlReader );
+					allAbstracts.addAll ( thisResult );
+					progressTracker.updateWithIncrement ( thisResult.size () );
 				});
 			}
 			catch ( Exception ex ) 
 			{
-				// IOEx happens only all attempts above have failed
-				if ( ex instanceof IOException ) throw (IOException) ex;
-				if ( ex instanceof XMLStreamException ) throw (XMLStreamException) ex;
-				throw new Error ( 
-					"Internal error: for some weird reason, we got an exception of unexpected type, message: " + ex.getMessage (),
+				log.error ( 
+					"Exception while parsing PMIDs via e-fetch:" + ex.getMessage (),
 					ex
 				);
+				hasErrors [ 0 ] = true;
 			}
-				
-			allabstracts.addAll(abstracts);
-			
-			if(i % 10 == 0){
-				System.out.println("Retrieved "+ i * 100 + " out of "+ids.size()+" PMIDs.");
-			}
-		}
+		}); // PMID loop
+		
+		if ( hasErrors [ 0 ] ) throw new XMLStreamException (
+			"Errors while parsing multiple PMIDs, see the log file for details" 
+		);
 
-		return allabstracts;
+		return allAbstracts;
 	}
 
 	/**
@@ -260,7 +251,6 @@ public class XMLParser {
 			
 			Abstract medlineCit = parseMedlineCitation ( staxXmlReader );
 			medlineCitationSet.add ( medlineCit );
-					
 		}
 		staxXmlReader.close();
 		return medlineCitationSet;

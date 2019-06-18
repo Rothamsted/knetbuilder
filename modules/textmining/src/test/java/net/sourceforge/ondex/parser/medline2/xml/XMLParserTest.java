@@ -6,18 +6,22 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
+import uk.ac.ebi.utils.io.IOUtils;
 
 /**
- * TODO: comment me!
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>23 Mar 2018</dd></dl>
@@ -70,5 +74,24 @@ public class XMLParserTest
 		testAbs = abstracts.stream ().filter ( abs -> abs.getId () == 11706173 ).findAny ().orElse ( null );
 		assertNotNull ( "Test Article not found (MedlineDate case)!", testAbs );		
 		assertEquals ( "Wrong year for MedlineDate case!", 2000, testAbs.getYear () );
+	}
+	
+	@Test
+	public void testEFetch () throws IOException, XMLStreamException
+	{
+		String pmidsStr = IOUtils.readResource ( "test-pmids.txt" );
+		Set<String> pmids = new HashSet<> ( Arrays.asList ( pmidsStr.split ( "\n" ) ) );
+		
+		XMLParser pmParser = new XMLParser ();
+		Set<Abstract> abstracts = pmParser.parsePMIDs ( pmids );
+		
+		assertEquals ( "No. of returned abstracts is wrong!", pmids.size (), abstracts.size () );
+		
+		assertTrue ( "Test article 30426175 not found!",  abstracts
+			.stream ()
+			.anyMatch ( abs -> 
+				StringUtils.startsWith ( abs.getTitle (), "Identification of a major QTL on chromosome arm 2AL" )
+			)
+		);
 	}
 }

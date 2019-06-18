@@ -108,7 +108,7 @@ public class Parser extends ONDEXParser {
     		//Input: File with integer pmids
     		if(args.getUniqueValue(ArgumentNames.PMID_FILE_ARG) != null){
     			File idFile = new File((String) args.getUniqueValue(ArgumentNames.PMID_FILE_ARG));
-    			HashSet<String> pmidSet = new HashSet<String>();
+    			HashSet<String> pmidSet = new HashSet<>();
     			fireEventOccurred(new GeneralOutputEvent("Retrieving PMIDs from " +
     					"file: "+idFile.getAbsolutePath(), Parser.getCurrentMethodName()));
                 
