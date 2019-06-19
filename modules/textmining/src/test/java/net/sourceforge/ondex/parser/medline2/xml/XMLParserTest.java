@@ -12,7 +12,9 @@ import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +93,39 @@ public class XMLParserTest
 			.stream ()
 			.anyMatch ( abs -> 
 				StringUtils.startsWith ( abs.getTitle (), "Identification of a major QTL on chromosome arm 2AL" )
+			)
+		);
+	}
+	
+	/**
+	 * Testing #19, "String ']]>' not allowed in textual content, except as the end marker of CDATA section". 
+	 */
+	@Test
+	@Ignore ( "Not a real test, deals with #19 manually" )
+	public void testEFetchIssue19 () throws IOException, XMLStreamException
+	{
+		String pmidsStr; // = IOUtils.readResource ( "issue-19-pmids.txt" );
+		Set<String> pmids; // = new HashSet<> ( Arrays.asList ( pmidsStr.split ( "\n" ) ) );
+
+		pmids = new HashSet<> ();
+		pmids.add ( "30535180" );
+		
+		XMLParser pmParser = new XMLParser ();
+		Set<Abstract> abstracts = pmParser.parsePMIDs ( pmids );
+	}
+	
+	/**
+	 * Testing #19, "String ']]>' not allowed in textual content, except as the end marker of CDATA section". 
+	 */
+	@Test
+	@Ignore ( "Not a real test, deals with #19 manually" )
+	public void testFailingIssue19 () throws IOException, XMLStreamException
+	{
+		XMLParser pmParser = new XMLParser ();
+		Set<Abstract> abstracts = pmParser.parseMedlineXML (
+			new ReaderInputStream ( 
+				IOUtils.openResourceReader ( "issue-19-failing-pmed.xml" ),
+				"UTF-8"	
 			)
 		);
 	}

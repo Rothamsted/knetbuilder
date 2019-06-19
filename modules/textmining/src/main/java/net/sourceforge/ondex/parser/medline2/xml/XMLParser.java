@@ -14,15 +14,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipFile;
@@ -30,9 +27,7 @@ import java.util.zip.ZipFile;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.collections15.ListUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 import org.slf4j.Logger;
@@ -40,15 +35,14 @@ import org.slf4j.LoggerFactory;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import net.sourceforge.ondex.parser.medline2.Parser;
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
 import net.sourceforge.ondex.tools.ziptools.ZipEndings;
+import uk.ac.ebi.utils.exceptions.CausalNumberFormatException;
 import uk.ac.ebi.utils.regex.RegEx;
 import uk.ac.ebi.utils.runcontrol.MultipleAttemptsExecutor;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
-import uk.ac.ebi.utils.runcontrol.ProgressLogger;
 import uk.ac.ebi.utils.xml.XmlFilterUtils;
 
 /**
@@ -93,11 +87,9 @@ public class XMLParser {
 	
 	private final static String ABSTRACTTXT = "AbstractText";
 
-//	private final static String AUTHORLIST = "AuthorList";
-
 	private final static String AUTHOR = "Author";
 
-//	private final static String JOURNAL = "Journal";
+	private final static String JOURNAL = "Journal";
 
 	private final static String JOURNAL_TITLE = "Title";
 
@@ -115,18 +107,27 @@ public class XMLParser {
 
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
+	
 	/**
-	 * Reads one single PubMed/MEDLINE XML file.
-	 * 
-	 * @param file -
-	 *            PubMed XML file to be parsed
-	 * @return List of publications (Abstract)
+	 * Parses an {@link InputStream} that returns PUBMED XML. Note that this is wrapped with
+	 * {@link XmlFilterUtils#cdataWrapper(InputStream, String...)}
 	 */
-	public Set<Abstract> parseMedlineXML ( File file ) throws IOException, XMLStreamException {
+	public Set<Abstract> parseMedlineXML ( InputStream inputXML ) throws IOException, XMLStreamException
+	{
+		// Wrap these elements with CDATA
+		inputXML = XmlFilterUtils.cdataWrapper ( inputXML, CDATA_ELEMENTS );
+		XMLStreamReader2 staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( inputXML );
 
-		//		System.out.println("Parsing file: " + file);
-		Set<Abstract> abstracts = new HashSet<>();
+		return this.parseMedlineXML ( staxXmlReader );
+	}
 
+	
+	/**
+	 * Reads one single PubMed/MEDLINE XML file. This uses {@link #parseMedlineXML(InputStream)}
+	 * 
+	 */
+	public Set<Abstract> parseMedlineXML ( File file ) throws IOException, XMLStreamException
+	{
 		InputStream xmlin = null;
 
 		// detecting whether input file is zipped or not
@@ -148,12 +149,7 @@ public class XMLParser {
 			xmlin = new FileInputStream ( file );
 		}
 
-		// Wrap these elements with CDATA
-		xmlin = XmlFilterUtils.cdataWrapper ( xmlin, CDATA_ELEMENTS );
-		XMLStreamReader2 staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( xmlin );
-
-		abstracts = this.parseMedlineXML ( staxXmlReader );
-		return abstracts;
+		return this.parseMedlineXML ( xmlin );
 	}
 
 	/**
@@ -188,7 +184,6 @@ public class XMLParser {
 		);
 		
 		boolean hasErrors[] = { false };
-		int [] i = { 0 };
 		accessionGroups.forEach ( accessionGroup -> 
 		{
 			try 
@@ -213,7 +208,11 @@ public class XMLParser {
 			catch ( Exception ex ) 
 			{
 				log.error ( 
-					"Exception while parsing PMIDs via e-fetch:" + ex.getMessage (),
+					String.format ( 
+						"Exception while parsing PMIDs via e-fetch.\n  Error is: %s\n  PMIDs are: [%s]",
+						ex.getMessage (),
+						accessionGroup
+					),
 					ex
 				);
 				hasErrors [ 0 ] = true;
@@ -258,7 +257,7 @@ public class XMLParser {
 	
 	
 	public Abstract parseMedlineCitation ( XMLStreamReader2 staxXmlReader )
-		throws NumberFormatException, XMLStreamException
+		throws CausalNumberFormatException, XMLStreamException
 	{
 		Abstract medlineCitation = new Abstract();
 		
@@ -272,7 +271,10 @@ public class XMLParser {
 					return Integer.parseInt ( s );
 				}
 				catch ( NumberFormatException ex ) {
-					throw buildEx ( ex, "Cannot parse the XML \"%s\" to a PMID: %s", s, ex );
+					throw buildEx ( 
+						CausalNumberFormatException.class, ex,
+						"Cannot parse the XML \"%s\" to a PMID: %s", s, ex.getMessage () 
+					);
 				}
 		});
 		medlineCitation.setID ( pmid );
@@ -300,14 +302,14 @@ public class XMLParser {
 		catch ( XMLStreamException ex ) {
 			throwEx ( 
 				ex, 
-				"Error while parsing PMID:%s: %s", 
+				"Error while parsing PMID:%d: %s", 
 				medlineCitation.getId (), ex.getMessage () 
 			);
 		}
 		catch ( RuntimeException ex ) {
 			throwEx ( 
 				ex, 
-				"Error while parsing PMID:%s: %s", 
+				"Error while parsing PMID:%d: %s", 
 				medlineCitation.getId (), ex.getMessage () 
 			);
 		}
@@ -361,7 +363,7 @@ public class XMLParser {
 
 	private void parseJournalFrag ( XMLStreamReader2 staxXmlReader, Abstract medlineCitation ) throws XMLStreamException
 	{
-		if ( !matchXMLElem ( staxXmlReader, "Journal" ) ) return;
+		if ( !matchXMLElem ( staxXmlReader, JOURNAL ) ) return;
 
 		// Journal/JournalIssue/*		
 		
