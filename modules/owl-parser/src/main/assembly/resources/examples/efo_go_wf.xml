@@ -36,11 +36,12 @@
     </Transformer>
     <Transformer name="conceptcaster">
       <Arg name="graphId">default</Arg>
+      <Arg name="CCFrom_CCTo">EFO:BioProc,BioProc</Arg>
+      <Arg name="CCFrom_CCTo">EFO:CelComp,CelComp</Arg>
+      <Arg name="CCFrom_CCTo">EFO:MolFunc,MolFunc</Arg>
       <Arg name="CCFrom_CCTo">BioProc:EFO,BioProc</Arg>
-    </Transformer>
-    <Transformer name="conceptcaster">
-      <Arg name="graphId">default</Arg>
       <Arg name="CCFrom_CCTo">CelComp:EFO,CelComp</Arg>
+      <Arg name="CCFrom_CCTo">MolFunc:EFO,MolFunc</Arg>
     </Transformer>
     <Export name="oxl">
       <Arg name="pretty">true</Arg>

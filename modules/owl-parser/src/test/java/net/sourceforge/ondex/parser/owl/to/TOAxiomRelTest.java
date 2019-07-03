@@ -74,7 +74,7 @@ public class TOAxiomRelTest
 		
 		ds = graph.getMetaData ().createDataSource ( "Wikipedia", "Wikipedia", "" );
 		assertNotNull ( "Additional x-ref to Wikipedia is wrong!", c.getConceptAccession ( "Stomatal_conductance", ds ) );
-				
+						
 		// Inferred super-classes
 		ONDEXRelation relation = graph
 		.getRelations ()
