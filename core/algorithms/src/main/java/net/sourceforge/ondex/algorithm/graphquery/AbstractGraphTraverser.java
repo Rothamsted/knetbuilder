@@ -47,11 +47,35 @@ public abstract class AbstractGraphTraverser
 	}
 	
 
+	/**
+	 * Returns entities relevant to a concept (which is usually a gene), according to same criteria defined 
+	 * by the implementation of this class.
+	 * 
+	 * The result contains graph paths from the concept to found entities, in the form of {@link EvidencePathNode}. 
+	 * 
+	 * <p><b>The following is part of the Interface contract that is expected to be obeyed by implementations:</b>
+	 * 
+	 * <ul><li>The result might be refined using @FilterPaths to select a subset of paths from the ones returned by
+	 * this method.</li>
+	 * 
+	 * <li>{@code concept} cannot be null. The result is an empty list if no related entity is found (or in other 
+	 * cases like operation timeouts).</li></ul> 
+	 * </p>
+	 */
 	@SuppressWarnings ( "rawtypes" )
 	public abstract List<EvidencePathNode> traverseGraph ( 
 		ONDEXGraph graph, ONDEXConcept concept, FilterPaths<EvidencePathNode> filter 
 	);
 
+	/**
+	 * <p>Performs the same function of {@link #traverseGraph(ONDEXGraph, ONDEXConcept, FilterPaths)}, but 
+	 * working with multiple starting nodes (usually genes) and usually does it in parallel mode.</p>
+	 * 
+	 * <p>The resulting map will contain a list of paths per every concept. A concept will map to an empty 
+	 * list if no relevant path was found for that key. <b>This is part of the interface contract and implementations
+	 * are exptected to obey</b>.</p> 
+	 * 
+	 */
 	@SuppressWarnings ( "rawtypes" )
 	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraph (
 		ONDEXGraph graph, Set<ONDEXConcept> concepts, FilterPaths<EvidencePathNode> filter
