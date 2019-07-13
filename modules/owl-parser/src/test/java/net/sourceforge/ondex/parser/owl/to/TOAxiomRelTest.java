@@ -63,7 +63,7 @@ public class TOAxiomRelTest
 	//			cc.getDescription ().startsWith ( "A measurable or observable" ) 
 	//		);
 			assertEquals ( "Concept Class ID is wrong!", "Trait", cc.getId () );
-			assertEquals ( "Concept Class label is wrong!",  "Trait Ontology Term", cc.getFullname () );
+			assertEquals ( "Concept Class label is wrong!",  "Trait", cc.getFullname () );
 			Assert.assertTrue ( 
 				"Concept Class definition is wrong!", 
 				cc.getDescription ().startsWith ( "Term from the Trait Ontology (https://github.com/Planteome/plant-trait-ontology)" ) 
