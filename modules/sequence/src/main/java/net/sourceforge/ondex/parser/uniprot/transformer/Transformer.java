@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -98,6 +100,10 @@ public class Transformer {
     private HashMap<String, Integer> goToConcept = new HashMap<String, Integer>();
 
     public static HashSet<String> unknownCVs = new HashSet<String>();
+
+    // Experimental ECO IDs
+    private static List<String> ecoIDlist = Stream.of("ECO:0000269", "ECO:0000314", "ECO:0000353", "ECO:0000315", "ECO:0000316", "ECO:0000270", "ECO:0006056",
+            "ECO:0007005", "ECO:0007001", "ECO:0007003", "ECO:0007007").collect(Collectors.toList());
 
     private Set<String> umambigProtinMetaData;
 
@@ -453,7 +459,7 @@ public class Transformer {
      * @param dblink dblink
      * @param proteinConcept protein the accession is on
      */
-    private void lookforGOAccessions(DbLink dblink, ONDEXConcept proteinConcept) {
+    private void lookforGOAccessions(DbLink dblink, ONDEXConcept proteinConcept) throws InvalidPluginArgumentException {
         String value = dblink.getAccession().trim();
 
         if (go.matcher(value).find()) {
@@ -483,42 +489,74 @@ public class Transformer {
                 default:
                     break;
             }
+            /**
+             * Only create the concepts if the ECO matches the relevant
+             * experimental ECOs if the user sets to be the case - if the
+             * Boolean is false*
+             */
+            Set<String> evidences = dblink.getEvidence();
+            List<EvidenceType> v = new ArrayList<EvidenceType>(evidences.size());
 
-            ONDEXConcept goConcept;
-            /*            int prefix = value.indexOf(":");
+            // Obtain user argument for whether to use experimental ECO IDs only or not.
+            Boolean onlyExperimentalECOs = (Boolean) pa.getUniqueValue(ArgumentNames.USE_ALL_ECO_ID_ARG);
+
+            if (!onlyExperimentalECOs) {
+                for (String evidenceID : evidences) {
+                    if (ecoIDlist.stream().anyMatch(ecoID -> ecoID.trim().equals(evidenceID))) {
+                        addToGOconcepts(value, cc, evidences, proteinConcept, v, rt);
+                    }
+                }
+            } else {
+                addToGOconcepts(value, cc, evidences, proteinConcept, v, rt);
+            }
+        }
+    }
+
+    /**
+     * Adds the GO concepts using the relevant ECO IDs. Depends on what option
+     * is selected by the user
+     * <p/>
+     *
+     * @param String value
+     * @param ConceptClass cc
+     * @param Set<String> evidences
+     * @param ONDEXConcept proteinConcept
+     * @param List<EvidenceType> v
+     * @param RelationType rt
+     */
+    private void addToGOconcepts(String value, ConceptClass cc, Set<String> evidences, ONDEXConcept proteinConcept, List<EvidenceType> v, RelationType rt) {
+
+        ONDEXConcept goConcept;
+
+        /*            int prefix = value.indexOf(":");
             if (prefix > -1) { // remove GO: prefix
                 value = value.substring(prefix+1, value.length());
                }
 //            System.out.println("lookforGOAccessions()... id: "+ id +", value= "+ value);
-             */
-            //create GO concept
-            if (goToConcept.get(value) == null) {
-                goConcept = graph.getFactory().createConcept(value, dataSourceUniProt, cc, ev);
-                goConcept.createConceptAccession(value, dataSourceGO, false);
-                goToConcept.put(value, goConcept.getId());
-            } else {
-                goConcept = graph.getConcept(goToConcept.get(value));
-            }
+         */
+        //create GO concept
+        if (goToConcept.get(value) == null) {
+            goConcept = graph.getFactory().createConcept(value, dataSourceUniProt, cc, ev);
+            goConcept.createConceptAccession(value, dataSourceGO, false);
+            goToConcept.put(value, goConcept.getId());
+        } else {
+            goConcept = graph.getConcept(goToConcept.get(value));
+        }
 
-            Set<String> evidences = dblink.getEvidence();
-
-            List<EvidenceType> v = new ArrayList<EvidenceType>(evidences.size());
 //            v.add(ev);
-
-            for (String evidence : evidences) {
-                EvidenceType evi = graph.getMetaData().getEvidenceType(evidence);
-                if (evi == null) {
-                    evi = graph.getMetaData().getFactory().createEvidenceType(evidence);
-                }
-                v.add(evi);
+        for (String evidence : evidences) {
+            EvidenceType evi = graph.getMetaData().getEvidenceType(evidence);
+            if (evi == null) {
+                evi = graph.getMetaData().getFactory().createEvidenceType(evidence);
             }
-            ONDEXRelation relation = graph.getRelation(proteinConcept, goConcept, rt);
-            if (relation == null) {
-                graph.createRelation(proteinConcept, goConcept, rt, v);
-            } else {
-                for (EvidenceType evidencesR : v) {
-                    relation.addEvidenceType(evidencesR);
-                }
+            v.add(evi);
+        }
+        ONDEXRelation relation = graph.getRelation(proteinConcept, goConcept, rt);
+        if (relation == null) {
+            graph.createRelation(proteinConcept, goConcept, rt, v);
+        } else {
+            for (EvidenceType evidencesR : v) {
+                relation.addEvidenceType(evidencesR);
             }
         }
     }
