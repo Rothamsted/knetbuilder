@@ -69,11 +69,11 @@ import net.sourceforge.ondex.parser.uniprot.xml.filter.ValueFilter;
 @DataURL(name = "UniProt XML",
         description = "Any UniProt (Swiss-Prot or TrEMBL) XML file, avoid parsing everything if possible, select your species in UniProt and download a subset.",
         urls = {"ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz",
-                "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.xml.gz",
-                "http://www.uniprot.org/uniprot/?query=taxonomy%3A9606+AND+reviewed%3Ayes"})
+            "ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.xml.gz",
+            "http://www.uniprot.org/uniprot/?query=taxonomy%3A9606+AND+reviewed%3Ayes"})
 @Custodians(custodians = {"Keywan Hassani-Pak"}, emails = {"keywan at users.sourceforge.net"})
-public class Parser extends ONDEXParser
-{
+public class Parser extends ONDEXParser {
+
     private Transformer transformer;
 
     private int count;
@@ -89,11 +89,10 @@ public class Parser extends ONDEXParser
     public boolean inManuallyCuratedFile = false;
     // go tree parser removed
 
-	private int itemParsedCount = 0;
-	private int skippedCount = 0;
-	private int debugOutputSize = 10000;
-	private long time = System.currentTimeMillis();
-	
+    private int itemParsedCount = 0;
+    private int skippedCount = 0;
+    private int debugOutputSize = 10000;
+    private long time = System.currentTimeMillis();
 
     public Parser() {
         instance = this;
@@ -130,7 +129,7 @@ public class Parser extends ONDEXParser
      */
     private void init() throws InvalidPluginArgumentException {
 
-     /*   if (args.getUniqueValue(ArgumentNames.GO_OBO_FILE_ARG) != null) {
+        /*   if (args.getUniqueValue(ArgumentNames.GO_OBO_FILE_ARG) != null) {
             String goOboFile = (String) args
                     .getUniqueValue(ArgumentNames.GO_OBO_FILE_ARG);
             
@@ -173,7 +172,7 @@ public class Parser extends ONDEXParser
 
         if (args.getUniqueValue(ArgumentNames.ACCESSION_ARG) != null
                 && args.getUniqueValue(ArgumentNames.ACCESSION_ARG).toString()
-                .trim().length() > 0) {
+                        .trim().length() > 0) {
             String[] accessions = args
                     .getUniqueValue(ArgumentNames.ACCESSION_ARG).toString()
                     .split(",");
@@ -183,7 +182,7 @@ public class Parser extends ONDEXParser
 
         if (args.getUniqueValue(ArgumentNames.ACCESSION_FILE_ARG) != null
                 && args.getUniqueValue(ArgumentNames.ACCESSION_FILE_ARG)
-                .toString().trim().length() > 0) {
+                        .toString().trim().length() > 0) {
 
             String fileName = (String) args
                     .getUniqueValue(ArgumentNames.ACCESSION_FILE_ARG);
@@ -214,7 +213,7 @@ public class Parser extends ONDEXParser
 
         if (args.getUniqueValue(ArgumentNames.REFERENCE_ACCESSION_ARG) != null
                 && (Boolean) args
-                .getUniqueValue(ArgumentNames.REFERENCE_ACCESSION_ARG)) {
+                        .getUniqueValue(ArgumentNames.REFERENCE_ACCESSION_ARG)) {
             StringValueFilter reffilter = new StringValueFilter();
             for (ONDEXConcept concept : concepts) {
                 for (ConceptAccession accession : concept.getConceptAccessions()) {
@@ -239,9 +238,9 @@ public class Parser extends ONDEXParser
      */
     public void start() throws InvalidPluginArgumentException {
 
-        System.setProperty( "ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory" );
-        WstxInputFactory factory = (WstxInputFactory) WstxInputFactory.newFactory (
-        	"ondex.javax.xml.stream.XMLInputFactory", this.getClass ().getClassLoader ()
+        System.setProperty("ondex.javax.xml.stream.XMLInputFactory", "com.ctc.wstx.stax.WstxInputFactory");
+        WstxInputFactory factory = (WstxInputFactory) WstxInputFactory.newFactory(
+                "ondex.javax.xml.stream.XMLInputFactory", this.getClass().getClassLoader()
         );
         factory.configureForSpeed();
 
@@ -251,51 +250,48 @@ public class Parser extends ONDEXParser
             init();
             File file = new File((String) args
                     .getUniqueValue(FileArgumentDefinition.INPUT_FILE));
-            
+
             fireEventOccurred(
-            		new GeneralOutputEvent("Parsing uniprot file "
-            				+ file.getAbsolutePath(), Parser.class
-            				.toString()));
+                    new GeneralOutputEvent("Parsing uniprot file "
+                            + file.getAbsolutePath(), Parser.class
+                            .toString()));
 
             if (file.getName().contains(manuallyCuratedFileInfix)) {
-            	inManuallyCuratedFile = true;
+                inManuallyCuratedFile = true;
             } else {
-            	inManuallyCuratedFile = false;
+                inManuallyCuratedFile = false;
             }
             InputStream stream;
             if (file.toString().endsWith(".gz")) {
-            	stream = new BufferedInputStream(new GZIPInputStream(
-            			new FileInputStream(file), 512 * 5));
+                stream = new BufferedInputStream(new GZIPInputStream(
+                        new FileInputStream(file), 512 * 5));
             } else {
-            	stream = new BufferedInputStream(new FileInputStream(file));
+                stream = new BufferedInputStream(new FileInputStream(file));
             }
 
             XMLStreamReader staxXmlReader = (XMLStreamReader) factory
-            .createXMLStreamReader(stream);
+                    .createXMLStreamReader(stream);
 
             while (staxXmlReader.hasNext()) {
-            	int event = staxXmlReader.next();
-            	// parse one protein information and store in sink objects
-            	if (event == XMLStreamConstants.START_ELEMENT) {
-            		String element = staxXmlReader.getLocalName();
+                int event = staxXmlReader.next();
+                // parse one protein information and store in sink objects
+                if (event == XMLStreamConstants.START_ELEMENT) {
+                    String element = staxXmlReader.getLocalName();
 
-            		if (delegates.containsKey(element)) {
-            			ComponentParser parser = (ComponentParser) delegates
-            			.get(element);
-            			parser.parseElement(staxXmlReader);
-            		}
-            	}
-            	// transform one protein into Ondex datastructure
-            	else if (event == XMLStreamConstants.END_ELEMENT) {
-            		String element = staxXmlReader.getLocalName();
-            		if(element.equalsIgnoreCase("entry")){
-            			transformData();
-            		}
-            	}
+                    if (delegates.containsKey(element)) {
+                        ComponentParser parser = (ComponentParser) delegates
+                                .get(element);
+                        parser.parseElement(staxXmlReader);
+                    }
+                } // transform one protein into Ondex datastructure
+                else if (event == XMLStreamConstants.END_ELEMENT) {
+                    String element = staxXmlReader.getLocalName();
+                    if (element.equalsIgnoreCase("entry")) {
+                        transformData();
+                    }
+                }
             }
             staxXmlReader.close();
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,41 +302,42 @@ public class Parser extends ONDEXParser
     }
 
     /**
-     * transformation and filter step
-     * this method is called after each "entry" end element
-     * it transforms the information collected about one single protein
-     * 
+     * transformation and filter step this method is called after each "entry"
+     * end element it transforms the information collected about one single
+     * protein
+     *
      */
-    public void transformData()throws InvalidPluginArgumentException {
+    public void transformData() throws InvalidPluginArgumentException {
 
-    	boolean skip = false;
+        boolean skip = false;
 
-    	for (ValueFilter i : Parser.this.filter.values()) {
-    		if (i.getState() == false)
-    			skip = true;
-    		i.resetState();
-    	}
-    	if (skip == false) {
-    		transformer.transform(Protein.getInstance());
-    		count++;
+        for (ValueFilter i : Parser.this.filter.values()) {
+            if (i.getState() == false) {
+                skip = true;
+            }
+            i.resetState();
+        }
+        if (skip == false) {
+            transformer.transform(Protein.getInstance());
+            count++;
 
-    	} else
-    		skippedCount++;
-    	if (++itemParsedCount % debugOutputSize == 0) {
-    		GeneralOutputEvent ge = new GeneralOutputEvent("parsed "
-    				+ debugOutputSize + " entries, skipped " + skippedCount
-    				+ " " + "transformed proteins "
-    				+ (debugOutputSize - skippedCount) + " in "
-    				+ (System.currentTimeMillis() - time) + " ms ("
-    				+ itemParsedCount + ")", Parser.class.toString());
-    		fireEventOccurred(ge);
-    		time = System.currentTimeMillis();
-    		skippedCount = 0;
-    	}
-    	// create a new instance
-    	Protein.getInstance(true, Parser.this.inManuallyCuratedFile);
+        } else {
+            skippedCount++;
+        }
+        if (++itemParsedCount % debugOutputSize == 0) {
+            GeneralOutputEvent ge = new GeneralOutputEvent("parsed "
+                    + debugOutputSize + " entries, skipped " + skippedCount
+                    + " " + "transformed proteins "
+                    + (debugOutputSize - skippedCount) + " in "
+                    + (System.currentTimeMillis() - time) + " ms ("
+                    + itemParsedCount + ")", Parser.class.toString());
+            fireEventOccurred(ge);
+            time = System.currentTimeMillis();
+            skippedCount = 0;
+        }
+        // create a new instance
+        Protein.getInstance(true, Parser.this.inManuallyCuratedFile);
     }
-    
 
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
         StringArgumentDefinition taxId = new StringArgumentDefinition(
@@ -362,14 +359,18 @@ public class Parser extends ONDEXParser
                 ArgumentNames.HIDE_LARGE_SCALE_PUBLICATIONS_ARG,
                 ArgumentNames.HIDE_LARGE_SCALE_PUBLICATIONS_ARG_DESC, false,
                 true);
-      /*  FileArgumentDefinition goFile = new FileArgumentDefinition(
+        BooleanArgumentDefinition onlyExperimentalECOs = new BooleanArgumentDefinition(
+                ArgumentNames.USE_ALL_ECO_ID_ARG,
+                ArgumentNames.USE_ALL_ECO_ID_ARG_DESC, false,
+                true);
+        /*  FileArgumentDefinition goFile = new FileArgumentDefinition(
                 ArgumentNames.GO_OBO_FILE_ARG,
                 ArgumentNames.GO_OBO_FILE_ARG_DESC, false, true, false, false);*/
         FileArgumentDefinition inputDir = new FileArgumentDefinition(
                 FileArgumentDefinition.INPUT_FILE,
                 "UniProt XML file", true, true, false, false);
         return new ArgumentDefinition<?>[]{inputDir, taxId, /*goFile,*/ reference,
-                accessions, accessionFile, contexts, hideLargeScaleRefs};
+            accessions, accessionFile, contexts, hideLargeScaleRefs, onlyExperimentalECOs};
     }
 
     /**
@@ -378,6 +379,7 @@ public class Parser extends ONDEXParser
      * @author peschr
      */
     class XMLGzFileNameFilter implements FileFilter {
+
         public boolean accept(File file) {
             String name = file.getName().toLowerCase();
             return (name.endsWith("gz") || name.endsWith("xml"))
@@ -386,8 +388,9 @@ public class Parser extends ONDEXParser
     }
 
     public static void propagateEventOccurred(EventType et) {
-        if (instance != null)
+        if (instance != null) {
             instance.fireEventOccurred(et);
+        }
     }
 
     /**
