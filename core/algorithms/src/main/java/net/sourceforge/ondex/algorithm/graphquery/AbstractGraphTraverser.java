@@ -5,7 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -110,16 +112,34 @@ public abstract class AbstractGraphTraverser
 	public void setOption ( String key, Object value ) {
 		this.options.put ( key, value );
 	}
-
+		
+	/**
+	 * Options are often taken from Java properties, which means they're all of String type.
+	 * converter here can be used to translate a string value to a target type.
+	 */
 	@SuppressWarnings ( "unchecked" )
-	public <V> V getOption ( String key, V defaultValue ) {
-		return (V) this.options.getOrDefault ( key, defaultValue );
+	public <V> V getOption ( String key, V defaultValue, Function<String, V> converter ) 
+	{
+		Object v = this.options.get ( key );
+		if ( v == null ) return defaultValue;
+		if ( v instanceof String && converter != null ) return converter.apply ( (String) v );
+		return (V) v;
 	}
 
-	/** null as default value */
-	@SuppressWarnings ( "unchecked" )	
+	/** Default is null */
+	public <V> V getOption ( String key, Function<String, V> converter ) 
+	{
+		return getOption ( key, null, converter );
+	}
+	
+	/** No conversion, returned value type depends on what it was stored */
+	public <V> V getOption ( String key, V defaultValue ) {
+		return getOption ( key, defaultValue, null );
+	}
+
+	/** null as default value and no conversion */
 	public <V> V getOption ( String key ) {
-		return (V) this.options.get ( key );
+		return getOption ( key, null, null );
 	}
 	
 	/**
