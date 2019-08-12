@@ -91,4 +91,8 @@ cat "$mydir/Downloads_template.md" \
 	snapTailOndex \
 | make_doc \
 	'net/sourceforge/ondex/apps/ondex-mini' \
-	snapTailMini
+	snapTailMini \
+| make_doc \
+	'net/sourceforge/ondex/modules/rdf-export-2-cli' \
+	snapTailRDFexport
+	
