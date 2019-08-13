@@ -13,6 +13,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
+import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
  * The RDFExporter machinery. 
@@ -57,25 +58,32 @@ public class RDFExporter extends RDFLoader<ONDEXGraph>
 		xfact = this.handleNewXTask ( xfact, true );
 
 		Set<ONDEXConcept> concepts = graph.getConcepts ();
-		int ntotal = concepts.size ();
-		int ctr = 0;
 
+		log.info ( "Exporting {} concept(s)", concepts.size () );
+		PercentProgressLogger tracker = new PercentProgressLogger (
+			"{}% of concepts submitted for export", concepts.size ()		
+		);
+				
 		for ( ONDEXConcept concept: concepts )
 		{
 			xfact.map ( concept );
 			xfact = this.handleNewXTask ( xfact );
-			if ( ++ctr % 100000 == 0 ) log.info ( "{}/{} concepts submitted for export", ctr, ntotal );
+			tracker.updateWithIncrement ();
 		}
 
 		Set<ONDEXRelation> relations = graph.getRelations ();
-		ntotal = relations.size ();
-		ctr = 0;
-				
+
+		log.info ( "Exporting {} relation(s)", relations.size () );
+		tracker = new PercentProgressLogger (
+			"{}% of relations submitted for export", relations.size ()		
+		);
+		
+		
 		for ( ONDEXRelation relation: relations )
 		{
 			xfact.map ( relation );
 			xfact = this.handleNewXTask ( xfact );
-			if ( ++ctr % 100000 == 0 ) log.info ( "{}/{} relations submitted for export", ctr, ntotal );
+			tracker.updateWithIncrement ();
 		}
 		
 		this.handleNewXTask ( xfact, true );

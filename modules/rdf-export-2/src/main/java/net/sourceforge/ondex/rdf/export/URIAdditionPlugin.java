@@ -34,6 +34,7 @@ import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
 import net.sourceforge.ondex.rdf.export.mappers.RelationMapper;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
+import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
  * <h2>The URI Addition Plugin</h2>
@@ -62,7 +63,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	private RdfUriGenerator<ONDEXConcept> conceptUriGenerator; 
 	private RdfUriGenerator<ONDEXRelation> relationUriGenerator; 
 	private boolean uriIndexingEnabled = false;
-	
+		
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	{
@@ -125,7 +126,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	    ),
 	    new StringArgumentDefinition ( 
 		    "conceptUriGenerator", 
-				"A subclass of the internal class " + RdfUriGenerator.class.getCanonicalName () + ", which is used to generate" +
+				"A subclass of the internal class " + RdfUriGenerator.class.getCanonicalName () + ", which is used to generate " +
 				"URIs from concepts. Must be the Java FQN of a class available from the classpath. Must accept ONDEXConcept as input (see the code).", 
 				false, // required
 				this.conceptUriGenerator.getClass ().getName (), // default
@@ -133,7 +134,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	    ),
 	    new StringArgumentDefinition ( 
 		    "relationUriGenerator", 
-				"A subclass of the internal class " + RdfUriGenerator.class.getCanonicalName () + ", which is used to generate" +
+				"A subclass of the internal class " + RdfUriGenerator.class.getCanonicalName () + ", which is used to generate " +
 				"URIs from relations. Must be the Java FQN of a class available from the classpath. Must accept ONDEXRelation as input (see the code).", 
 				false, // required
 				this.relationUriGenerator.getClass ().getName (), // default
@@ -141,7 +142,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	    ),
 	    new BooleanArgumentDefinition ( 
 	    	"uriIndexingEnabled",
-	    	"Should the created URI attribute be indexed? Our Ondex index stores a special 'iri' field anyway for internal" +
+	    	"Should the created URI attribute be indexed? Our Ondex index stores a special 'iri' field anyway for internal " +
 	    	"purposes, this is needed only if you want to do things like enabling URI-based searches in KnetMiner (unlikely).",
 	    	false, false
 	    )
@@ -215,6 +216,10 @@ public class URIAdditionPlugin extends ONDEXTransformer
 		String typeStr = odxEntities.iterator ().next () instanceof ONDEXConcept ? "concept" : "relation";
 		log.info ( "Start processing {}s", typeStr );
 		
+		PercentProgressLogger progressLogger = new PercentProgressLogger (
+		  "{}% of " + typeStr + "s done", odxEntities.size ()		
+		);
+		
 		CachedGraphWrapper gwrap = CachedGraphWrapper.getInstance ( this.graph );		
 		AttributeName uriAttributeType = gwrap.getAttributeName ( 
 			this.uriAttributeId, this.uriAttributeFullName, this.uriAttributeDescription, String.class 
@@ -224,7 +229,6 @@ public class URIAdditionPlugin extends ONDEXTransformer
 		Map<String, Object> nsParam = new HashMap<> ();
 		nsParam.put ( "instanceNamespace", this.instanceNamespace );
 		
-		final AtomicInteger ctr = new AtomicInteger ( 0 );
 		odxEntities
 		.stream ()
 		.sequential () // The parallel stream gives issues with the attr value setter.
@@ -236,7 +240,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 			
 			String uri = uriGenerator.getUri ( entity, nsParam );
 			entity.createAttribute ( uriAttributeType, uri, this.uriIndexingEnabled );
-			if ( ctr.incrementAndGet () % 10000 == 0 ) log.info ( "{} {}s processed", ctr.get (), typeStr );
+			progressLogger.updateWithIncrement ();
 		});
 	}
 
