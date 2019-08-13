@@ -5,7 +5,7 @@
 
 # These are passed to the JVM. they're appended, so that you can predefine it from the shell
 # You need a lot of memory with big OXLs
-OPTS="$OPTS -Xms2G -Xmx4G"
+: ${OPTS:=-Xms2G -Xmx4G}
 
 # We always work with universal text encoding.
 OPTS="$OPTS -Dfile.encoding=UTF-8"
