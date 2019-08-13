@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -34,6 +36,7 @@ import net.sourceforge.ondex.tools.MetaDataUtil;
  * @author peschr
  */
 public class Transformer {
+
     private ONDEXGraph graph;
 
     private ONDEXPluginArguments pa;
@@ -63,7 +66,7 @@ public class Transformer {
     private AttributeName attJournal;
 
     private AttributeName attPubType;
-    
+
     private AttributeName attPhenotype;
 
     private HashMap<String, DataSource> dataSources = new HashMap<String, DataSource>();
@@ -89,7 +92,7 @@ public class Transformer {
     private RelationType rtLocIn;
 
     private boolean addContextInformation = false;
-  //  private GOTreeParser goTree;
+    //  private GOTreeParser goTree;
 
     private HashMap<String, Integer> ecToConcept = new HashMap<String, Integer>();
     private HashMap<String, Integer> omimToConcept = new HashMap<String, Integer>();
@@ -98,22 +101,27 @@ public class Transformer {
 
     public static HashSet<String> unknownCVs = new HashSet<String>();
 
+    // Experimental ECO IDs
+    private static List<String> ecoIDlist = Stream.of("ECO:0000269", "ECO:0000314", "ECO:0000353", "ECO:0000315", "ECO:0000316", "ECO:0000270", "ECO:0006056",
+            "ECO:0007005", "ECO:0007001", "ECO:0007003", "ECO:0007007").collect(Collectors.toList());
+
     private Set<String> umambigProtinMetaData;
 
     public Transformer(ONDEXGraph graph, ONDEXPluginArguments pa, boolean addContextInformation/*, GOTreeParser goTree*/) {
         this.graph = graph;
         this.pa = pa;
         this.addContextInformation = addContextInformation;
-    //    this.goTree = goTree;
-        
+        //    this.goTree = goTree;
+
         MetaDataUtil mdu = new MetaDataUtil(graph.getMetaData(), null);
         ConceptClass ccThing = graph.getMetaData().getConceptClass("Thing");
-        if (ccThing == null)
-        	graph.getMetaData().getFactory().createConceptClass("Thing");
+        if (ccThing == null) {
+            graph.getMetaData().getFactory().createConceptClass("Thing");
+        }
 
         etManuallyCurated = mdu.safeFetchEvidenceType(MetaData.IMPD_MANUALLY_CURATED);
         etAutomaticallyCurated = mdu.safeFetchEvidenceType(MetaData.IMPD_AUTOMATICALLY_CURATED);
-        
+
         dataSourceUniProt = mdu.safeFetchDataSource(MetaData.CV_UniProt);
         dataSourceUniProt_SwissProt = mdu.safeFetchDataSource(MetaData.CV_UniProt_SwissProt);
         dataSourceUniProt_TrEMBL = mdu.safeFetchDataSource(MetaData.CV_UniProt_TrEMBL);
@@ -122,7 +130,7 @@ public class Transformer {
         dataSourceGO = mdu.safeFetchDataSource(MetaData.CV_GO);
         dataSourceEC = mdu.safeFetchDataSource(MetaData.CV_EC);
         dataSourceOMIM = mdu.safeFetchDataSource(MetaData.CV_OMIM);
-        
+
         attTaxId = mdu.safeFetchAttributeName(MetaData.ATR_TAXID, String.class);
         attSequence = mdu.safeFetchAttributeName(MetaData.ATR_SEQUENCE, String.class);
         attTitle = mdu.safeFetchAttributeName(MetaData.ATR_TITLE, String.class);
@@ -130,7 +138,7 @@ public class Transformer {
         attJournal = mdu.safeFetchAttributeName(MetaData.ATR_JOURNAL, String.class);
         attPubType = mdu.safeFetchAttributeName(MetaData.ATR_PUBTYPE, String.class);
         attPhenotype = mdu.safeFetchAttributeName(MetaData.ATR_PHENOTYPE, String.class);
-        
+
         ccEC = mdu.safeFetchConceptClass(MetaData.CC_EC, "", ccThing);
         ccMolFunc = mdu.safeFetchConceptClass(MetaData.CC_MOLFUNC, "", ccThing);
         ccBioProc = mdu.safeFetchConceptClass(MetaData.CC_BIOPROC, "", ccThing);
@@ -138,14 +146,14 @@ public class Transformer {
         ccDisease = mdu.safeFetchConceptClass(MetaData.CC_DISEASE, "", ccThing);
         ccProtein = mdu.safeFetchConceptClass(MetaData.CC_Protein, "", ccThing);
         ccPublication = mdu.safeFetchConceptClass(MetaData.CC_Publication, "", ccThing);
-        
+
         rtPublishedIn = mdu.safeFetchRelationType(MetaData.RT_PUBLISHED_IN, "");
         rtCatC = mdu.safeFetchRelationType(MetaData.RT_CAT_CLASS, "");
         rtInvIn = mdu.safeFetchRelationType(MetaData.RT_INVOLVED_IN, "");
         rtHasFunc = mdu.safeFetchRelationType(MetaData.RT_HAS_FUNCTION, "");
         rtHasPart = mdu.safeFetchRelationType(MetaData.RT_PARTICIPATES_IN, "");
         rtLocIn = mdu.safeFetchRelationType(MetaData.RT_LOCATED_IN, "");
-        
+
         dataSources.put("INTERPRO", mdu.safeFetchDataSource(MetaData.CV_InterPro));
         dataSources.put("EMBL", mdu.safeFetchDataSource(MetaData.CV_EMBL));
         dataSources.put("PFAM", mdu.safeFetchDataSource(MetaData.CV_Pfam));
@@ -165,17 +173,16 @@ public class Transformer {
         dataSources.put("TAIR", mdu.safeFetchDataSource(MetaData.CV_TAIR));
         dataSources.put("MIM", mdu.safeFetchDataSource(MetaData.CV_OMIM));
         dataSources.put("ENSEMBLFUNGI", mdu.safeFetchDataSource(MetaData.CV_ENSEMBL));
-	dataSources.put("SGD", mdu.safeFetchDataSource(MetaData.CV_SGD));
+        dataSources.put("SGD", mdu.safeFetchDataSource(MetaData.CV_SGD));
 
         umambigProtinMetaData = new HashSet<String>();
         umambigProtinMetaData.add(MetaData.CV_UniProt);
         umambigProtinMetaData.add(MetaData.CV_ENSEMBL);
         umambigProtinMetaData.add(MetaData.CV_SGD);
-      //  umambigProtinMetaData.add(MetaData.CV_EMBL);
-      //  umambigProtinMetaData.add(MetaData.CV_RefSeq);
-      //  umambigProtinMetaData.add(MetaData.CV_PIR);
+        //  umambigProtinMetaData.add(MetaData.CV_EMBL);
+        //  umambigProtinMetaData.add(MetaData.CV_RefSeq);
+        //  umambigProtinMetaData.add(MetaData.CV_PIR);
     }
-
 
     /**
      * @param protein
@@ -187,22 +194,22 @@ public class Transformer {
         } else {
             ev = this.etAutomaticallyCurated;
         }
-        
+
         ONDEXConcept proteinConcept;
-        if(protein.getDataset().equalsIgnoreCase("Swiss-Prot")){
-        	proteinConcept = graph.getFactory().createConcept(protein.getPID(), dataSourceUniProt_SwissProt, ccProtein, ev);
-        }else if(protein.getDataset().equalsIgnoreCase("TrEMBL")){
-        	proteinConcept = graph.getFactory().createConcept(protein.getPID(), dataSourceUniProt_TrEMBL, ccProtein, ev);
-        }else{
-        	System.out.println("Protein has unknown dataset");
-        	proteinConcept = graph.getFactory().createConcept(protein.getPID(), dataSourceUniProt, ccProtein, ev);
+        if (protein.getDataset().equalsIgnoreCase("Swiss-Prot")) {
+            proteinConcept = graph.getFactory().createConcept(protein.getPID(), dataSourceUniProt_SwissProt, ccProtein, ev);
+        } else if (protein.getDataset().equalsIgnoreCase("TrEMBL")) {
+            proteinConcept = graph.getFactory().createConcept(protein.getPID(), dataSourceUniProt_TrEMBL, ccProtein, ev);
+        } else {
+            System.out.println("Protein has unknown dataset");
+            proteinConcept = graph.getFactory().createConcept(protein.getPID(), dataSourceUniProt, ccProtein, ev);
         }
 
         proteinConcept.setAnnotation(protein.getEntryStats());
-        
-        if(protein.getDisruptionPhenotype() != null){
+
+        if (protein.getDisruptionPhenotype() != null) {
 //        	proteinConcept.setDescription("Disruption Phenotype: "+protein.getDisruptionPhenotype());
-        	proteinConcept.createAttribute(attPhenotype, protein.getDisruptionPhenotype(), true);
+            proteinConcept.createAttribute(attPhenotype, protein.getDisruptionPhenotype(), true);
         }
 
         Iterator<String> cvIt = protein.getAccessions().keySet().iterator();
@@ -237,8 +244,8 @@ public class Transformer {
 //                            System.out.println("2: "+value);
                         }
                     } else if (umambigProtinMetaData.contains(dataSource.getId())) {
-                    	if(dataSource.getId().equals(MetaData.CV_UniProt)){
-                        	proteinConcept.createConceptAccession(value, dataSource, false);
+                        if (dataSource.getId().equals(MetaData.CV_UniProt)) {
+                            proteinConcept.createConceptAccession(value, dataSource, false);
 //                        	System.out.println("unambig: " + value);
                         }
 //                    	proteinConcept.createConceptAccession(value, dataSource, false);
@@ -250,15 +257,17 @@ public class Transformer {
             }
         }
 
-        if (addContextInformation) proteinConcept.addTag(proteinConcept);
-        if (protein.getTaxId() != null)
+        if (addContextInformation) {
+            proteinConcept.addTag(proteinConcept);
+        }
+        if (protein.getTaxId() != null) {
             proteinConcept.createAttribute(attTaxId, protein.getTaxId(), false);
+        }
         if (protein.getSequence() != null) {
             // proteinConcept.createAttribute(attSequence, protein.getSequence(), false);
         } else {
             System.err.println("unknown error, but protein has no sequence data " + protein.toString());
         }
-
 
         for (DbLink dbLink : protein.getDbReferences()) {
             DataSource dataSource = null;
@@ -266,17 +275,24 @@ public class Transformer {
             if ((dataSource = dataSources.get(dbLink.getDbName().toUpperCase())) != null) {
                 String value = dbLink.getAccession().trim();
 //                System.out.print("DbLink: value:"+ value +", ds:"+ dataSource.getId());
-                if (value.length() > 0 && proteinConcept.getConceptAccession(value, dataSource) == null)
-
+                if (value.length() > 0 && proteinConcept.getConceptAccession(value, dataSource) == null) {
                     if (dataSource.getId().equals(MetaData.CV_EC)) {
                         lookforECAccession(value, dataSource, proteinConcept);
                     } else if (dataSource.getId().equals(MetaData.CV_OMIM)) {
-                        lookforOMIMAccession(value, proteinConcept);
+                        int i = 0; //Obtain iterator index to get respective description & name components below for Omim
+                        for (Iterator<String> it = protein.getId().iterator(); it.hasNext(); i++) {
+                            String omimValue = it.next();
+                            String desc = protein.getDescription().get(i);
+                            String name = protein.getName().get(i);
+                            //System.out.println(i + ": " + omimValue + " Desc: " + desc + " Name: " + name);
+                            // Call method, add to OMIM cc!
+                            lookforOMIMAccession(omimValue, proteinConcept, desc, name);
+                        }
                     } else if (dataSource.getId().equals(MetaData.CV_GO) /*&& goTree != null*/) {
                         lookforGOAccessions(dbLink, proteinConcept);
                     } else if (umambigProtinMetaData.contains(dataSource.getId())) {
-                    	if(dataSource.getId().equals(MetaData.CV_UniProt)){
-                        	proteinConcept.createConceptAccession(value, dataSource, false);
+                        if (dataSource.getId().equals(MetaData.CV_UniProt)) {
+                            proteinConcept.createConceptAccession(value, dataSource, false);
 //                        	System.out.println("unambig2: " + value);
                         }
 //                    	else if(dataSource.getId().equals(MetaData.CV_ENSEMBL) && value.contains(".")){
@@ -289,10 +305,11 @@ public class Transformer {
 //                        }
 //                        System.out.print("value:"+ value);
                     } else { // for others like InterPro, PFAM
-                       // proteinConcept.createConceptAccession(value, dataSource, true);
+                        // proteinConcept.createConceptAccession(value, dataSource, true);
                     }
-             // ToDo: for others like InterPro, PFAM, create concepts & relations like in OMIM, GO above
-                
+                }
+                // ToDo: for others like InterPro, PFAM, create concepts & relations like in OMIM, GO above
+
                 //handle DBs that can have a locus as id (e.g. LOC_Os02g15760.1, AT1G12345.2)
 //                if(dataSource.getId().equals(MetaData.CV_TAIR) ||
 //                		dataSource.getId().equals(MetaData.CV_ENSEMBL)){
@@ -310,28 +327,31 @@ public class Transformer {
 ////                        System.out.println("4:" +locus);
 //                    }
 //                }
-
             } else {
                 unknownCVs.add(dbLink.getDbName());
             }
         }
 
         Iterator<String> preferedNames = protein.getPreferedNames().iterator();
+
         while (preferedNames.hasNext()) {
             String prefName = preferedNames.next().trim();
             proteinConcept.createConceptName(prefName, true);
         }
 
         Iterator<String> names = protein.getNames().iterator();
+
         while (names.hasNext()) {
             String name = names.next().trim();
             if (!lookForTAIRAccession(name, proteinConcept)) {
-                if (proteinConcept.getConceptName(name) == null)
+                if (proteinConcept.getConceptName(name) == null) {
                     proteinConcept.createConceptName(name, false);
+                }
             }
         }
         Boolean hideLargeScaleRefs = (Boolean) pa.getUniqueValue(ArgumentNames.HIDE_LARGE_SCALE_PUBLICATIONS_ARG);
-        for (Publication pub : protein.getPublication()) {
+        for (Publication pub
+                : protein.getPublication()) {
             for (DbLink dbLink : pub.getReferences()) {
                 if (dbLink.getDbName().equals("PubMed")) {
                     //ignore large scale publications
@@ -366,12 +386,10 @@ public class Transformer {
 //                            if (publicationConcept.getAttribute(attYear) == null)
 //                                publicationConcept.createAttribute(attYear, pub.getYear(), false);
 //                        }
-
 //                        if (pub.getJournalName() != null && !pub.getJournalName().equals("")) {
 //                            if (publicationConcept.getAttribute(attJournal) == null)
 //                                publicationConcept.createAttribute(attJournal, pub.getJournalName(), false);
 //                        }
-
                         if (pub.getScopes().size() > 0 && pub.getScopes().toString().length() > 0) {
                             publicationConcept.setAnnotation(pub.getScopes().toString());
                             publicationConcept.createAttribute(attPubType, pub.getScopes().toString(), false);
@@ -389,18 +407,17 @@ public class Transformer {
 
             }
         }
-        
+
         return proteinConcept;
     }
-
-    //matches EC concepts
+//matches EC concepts
     private static final Pattern ec = Pattern.compile("([0-9]){1,1}((((\\.[0-9]{1,3})|(\\.-)){0,2}(\\.-){1,1})|(((\\.[0-9]{1,3})|(-\\.)){1,2}((\\.[0-9]{1,3})|(\\.-)){1,1})){1,1}");
 
     /**
      * Evaluates if a value is an EC term and creates a proper concept if it is
      *
-     * @param value          potential EC value
-     * @param dataSource             the cv you think it is (can be null)
+     * @param value potential EC value
+     * @param dataSource the cv you think it is (can be null)
      * @param proteinConcept protein the accession is on
      */
     private void lookforECAccession(String value, DataSource dataSource, ONDEXConcept proteinConcept) {
@@ -423,10 +440,10 @@ public class Transformer {
             ONDEXRelation rel = graph.getFactory().createRelation(proteinConcept, ecConcept, rtCatC, ev);
 
             if (addContextInformation) {
-	            ecConcept.addTag(ecConcept);
-	            proteinConcept.addTag(ecConcept);
-	            rel.addTag(ecConcept);
-            }    
+                ecConcept.addTag(ecConcept);
+                proteinConcept.addTag(ecConcept);
+                rel.addTag(ecConcept);
+            }
 
         }
     }
@@ -439,10 +456,10 @@ public class Transformer {
      * relation between the protein and the GO term
      * <p/>
      *
-     * @param dblink         dblink
+     * @param dblink dblink
      * @param proteinConcept protein the accession is on
      */
-    private void lookforGOAccessions(DbLink dblink, ONDEXConcept proteinConcept) {
+    private void lookforGOAccessions(DbLink dblink, ONDEXConcept proteinConcept) throws InvalidPluginArgumentException {
         String value = dblink.getAccession().trim();
 
         if (go.matcher(value).find()) {
@@ -452,7 +469,8 @@ public class Transformer {
             RelationType rt = null;
 
             int id = Integer.parseInt(value.substring(3));
-            /*int*/String namespace = dblink.getNamespace();// goTree.getNamespaceOfTerm(id);
+            /*int*/
+            String namespace = dblink.getNamespace();// goTree.getNamespaceOfTerm(id);
             // namespace now retrieved as a dblink attribute instead of getting numeric codes from goTree via OBO file.
 
             switch (namespace) {
@@ -471,41 +489,74 @@ public class Transformer {
                 default:
                     break;
             }
+            /**
+             * Only create the concepts if the ECO matches the relevant
+             * experimental ECOs if the user sets to be the case - if the
+             * Boolean is false*
+             */
+            Set<String> evidences = dblink.getEvidence();
+            List<EvidenceType> v = new ArrayList<EvidenceType>(evidences.size());
 
-            ONDEXConcept goConcept;
-/*            int prefix = value.indexOf(":");
+            // Obtain user argument for whether to use experimental ECO IDs only or not.
+            Boolean onlyExperimentalECOs = (Boolean) pa.getUniqueValue(ArgumentNames.USE_ALL_ECO_ID_ARG);
+
+            if (!onlyExperimentalECOs) {
+                for (String evidenceID : evidences) {
+                    if (ecoIDlist.stream().anyMatch(ecoID -> ecoID.trim().equals(evidenceID))) {
+                        addToGOconcepts(value, cc, evidences, proteinConcept, v, rt);
+                    }
+                }
+            } else {
+                addToGOconcepts(value, cc, evidences, proteinConcept, v, rt);
+            }
+        }
+    }
+
+    /**
+     * Adds the GO concepts using the relevant ECO IDs. Depends on what option
+     * is selected by the user
+     * <p/>
+     *
+     * @param String value
+     * @param ConceptClass cc
+     * @param Set<String> evidences
+     * @param ONDEXConcept proteinConcept
+     * @param List<EvidenceType> v
+     * @param RelationType rt
+     */
+    private void addToGOconcepts(String value, ConceptClass cc, Set<String> evidences, ONDEXConcept proteinConcept, List<EvidenceType> v, RelationType rt) {
+
+        ONDEXConcept goConcept;
+
+        /*            int prefix = value.indexOf(":");
             if (prefix > -1) { // remove GO: prefix
                 value = value.substring(prefix+1, value.length());
                }
 //            System.out.println("lookforGOAccessions()... id: "+ id +", value= "+ value);
-*/
-            //create GO concept
-            if (goToConcept.get(value) == null) {
-                goConcept = graph.getFactory().createConcept(value, dataSourceUniProt, cc, ev);
-                goConcept.createConceptAccession(value, dataSourceGO, false);
-                goToConcept.put(value, goConcept.getId());
-            } else {
-                goConcept = graph.getConcept(goToConcept.get(value));
-            }
+         */
+        //create GO concept
+        if (goToConcept.get(value) == null) {
+            goConcept = graph.getFactory().createConcept(value, dataSourceUniProt, cc, ev);
+            goConcept.createConceptAccession(value, dataSourceGO, false);
+            goToConcept.put(value, goConcept.getId());
+        } else {
+            goConcept = graph.getConcept(goToConcept.get(value));
+        }
 
-            Set<String> evidences = dblink.getEvidence();
-
-            List<EvidenceType> v = new ArrayList<EvidenceType>(evidences.size());
 //            v.add(ev);
-
-            for (String evidence : evidences) {
-                EvidenceType evi = graph.getMetaData().getEvidenceType(evidence);
-                if (evi == null) {
-                    evi = graph.getMetaData().getFactory().createEvidenceType(evidence);
-                }
-                v.add(evi);
+        for (String evidence : evidences) {
+            EvidenceType evi = graph.getMetaData().getEvidenceType(evidence);
+            if (evi == null) {
+                evi = graph.getMetaData().getFactory().createEvidenceType(evidence);
             }
-            ONDEXRelation relation = graph.getRelation(proteinConcept, goConcept, rt);
-            if (relation == null) {
-                graph.createRelation(proteinConcept, goConcept, rt, v);
-            } else {
-                for (EvidenceType evidencesR : v)
-                    relation.addEvidenceType(evidencesR);
+            v.add(evi);
+        }
+        ONDEXRelation relation = graph.getRelation(proteinConcept, goConcept, rt);
+        if (relation == null) {
+            graph.createRelation(proteinConcept, goConcept, rt, v);
+        } else {
+            for (EvidenceType evidencesR : v) {
+                relation.addEvidenceType(evidencesR);
             }
         }
     }
@@ -514,31 +565,36 @@ public class Transformer {
     private static final Pattern omim = Pattern.compile("\\d{6}");
 
     /**
-     * Evaluates if a value is an OMIM term and creates a proper concept if it is
+     * Evaluates if a value is an OMIM term and creates a proper concept if it
+     * is
      *
-     * @param value          potential OMIM value
+     * @param value potential OMIM value
      * @param proteinConcept protein the accession is on
      */
-    private void lookforOMIMAccession(String value, ONDEXConcept proteinConcept) {
-        if (omim.matcher(value).find()) {
-            if (omimToConcept.get(value) == null) {
-                ONDEXConcept con = graph.getFactory().createConcept(value, dataSourceUniProt, ccDisease, ev);
-                con.createConceptAccession(value, dataSourceOMIM, false);
-                omimToConcept.put(value, con.getId());
-            }
-            ONDEXConcept omimConcept = graph.getConcept(omimToConcept.get(value));
+    private void lookforOMIMAccession(String omimValue, ONDEXConcept proteinConcept, String desc, String name) {
 
+        if (omim.matcher(omimValue).find()) {
+            if (omimToConcept.get(omimValue) == null) {
+                ONDEXConcept con = graph.getFactory().createConcept(omimValue, dataSourceUniProt, ccDisease, ev);
+                con.createConceptAccession(omimValue, dataSourceOMIM, false);
+                omimToConcept.put(omimValue, con.getId());
+            }
+            ONDEXConcept omimConcept = graph.getConcept(omimToConcept.get(omimValue));
+            // Adding description and Name
+            omimConcept.setDescription(desc);
+            omimConcept.createConceptName(name, true);
             graph.getFactory().createRelation(proteinConcept, omimConcept, rtInvIn, ev);
         }
     }
 
-    //matches atg (TAIR/TIGR) accessions
+//matches atg (TAIR/TIGR) accessions
     private static final Pattern atgPattern = Pattern.compile("(AT[CM1-5][G][0-9]+([.][0-9]+)?)", Pattern.CASE_INSENSITIVE);
 
     /**
-     * Looks for a tair accession on the given name and creates an appropriate accession if there is one
+     * Looks for a tair accession on the given name and creates an appropriate
+     * accession if there is one
      *
-     * @param name           the potential TAIR term
+     * @param name the potential TAIR term
      * @param proteinConcept the protein concept
      * @return if this was a tair accession
      */
@@ -558,7 +614,7 @@ public class Transformer {
 //                    proteinConcept.createConceptAccession(tairAcc, dataSource, true);
 //                } 
 //            }
-        
+
             return true;
         }
         return false;
