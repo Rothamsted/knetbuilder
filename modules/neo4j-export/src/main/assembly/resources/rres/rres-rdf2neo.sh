@@ -5,7 +5,8 @@ if [ "$1" == '--backup' ]; then
 fi
 
 cfg_name="$1"
-rdf_name_postfix="$2"
+release="$2"
+
 
 wdir=$(pwd)
 cd $(dirname $0)
@@ -16,7 +17,11 @@ sw_home=$(pwd)
 
 cd "$mydir/.."
 export RDF2NEO=$(pwd)
-dumps_dir=/var/lib/neo4j/data/db-dumps
+
+releases_dir=/var/lib/neo4j/data/db-dumps/releases
+my_release_dir="$releases_dir/$release/$cfg_name"
+
+mkdir --parents "$my_release_dir/neo4j"
 
 cfg_path="$mydir/${cfg_name}-cfg.sh"
 echo -e "\n\n\tRunning with the configuration at '$cfg_path'\n"
@@ -26,7 +31,7 @@ echo -e "\n\n\tRunning with the configuration at '$cfg_path'\n"
 #
 
 export JENA_HOME="$sw_home/jena"
-export RDF2NEO_TDB="$dumps_dir/rdf2neo-tdb"
+export RDF2NEO_TDB="$my_release_dir/rdf/rdf2neo-tdb"
 
 
 export OPTS="-Dneo4j.boltUrl=bolt://localhost:$CFG_NEO_PORT"
@@ -45,7 +50,7 @@ rm -Rf "$RDF2NEO_TDB"
 echo "--- Stopping Neo4j"
 sudo systemctl stop ${CFG_NEO_SERVICE_NAME}.service
 if [ "$is_backup" == 'true' ]; then
-	bkp_path="$dumps_dir/$CFG_NEO_RDF_BASENAME$rdf_name_postfix.db"
+	bkp_path="$my_release_dir/neo4j/graph-bkp.db"
 	echo "--- backing-up existing DB to '$bkp_path'"
 	rm -rf "$bkp_path"
 	mv --no-target-directory "$CFG_NEO_GRAPH_PATH" "$bkp_path"
@@ -62,10 +67,12 @@ if [ ! -e "data" ]; then
   ./get_ontologies.sh  
 fi
 
+rm -Rf "$my_release_dir/rdf/data"
+cp -R data "$my_release_dir/rdf"
 
-rdf_path="$dumps_dir/$CFG_NEO_RDF_BASENAME$rdf_name_postfix".ttl
+rdf_path="$my_release_dir/rdf/${cfg_name}.ttl"
 
 echo -e "\n\n\tRunning rdf2neo on '$rdf_path'"
-./ondex2neo.sh data/* "$rdf_path"
+./ondex2neo.sh "$my_release_dir/rdf/data/"* "$rdf_path"
 
 echo -e "\n\n\t$(basename $0), The end\n"
