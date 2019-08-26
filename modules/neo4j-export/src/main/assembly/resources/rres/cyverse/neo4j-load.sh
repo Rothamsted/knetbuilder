@@ -4,7 +4,7 @@ release="$2"
 
 echo -e "\n\n\tUpgrading $dataset $release\n"
 
-neo4j_home=/opt/software/neo4j-community-3.5.8
+neo4j_home=/opt/software/neo4j
 
 cd "$neo4j_home"
 echo -e "\n---- Stopping Neo4j"
