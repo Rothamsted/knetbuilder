@@ -13,7 +13,7 @@ echo -e "\n---- Stopping Neo4j"
 cd data/databases
 rm -Rf graph.db
 drive_path="brandizi_rres_onedrive:knetminer-pub-data/$release/$dataset/$dataset-neo4j.tar.bz2"
-echo -e "\n---- Getting new DB from '$one_path'"
+echo -e "\n---- Getting new DB from '$drive_path'"
 rclone cat "$drive_path" |tar xv --bzip2
 
 echo -e "\n---- Restarting Neo4j"
