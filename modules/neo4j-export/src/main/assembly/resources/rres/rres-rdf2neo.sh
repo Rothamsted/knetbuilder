@@ -1,8 +1,15 @@
-set -e
+# TODO: Comment me!
+#
+set -e # Stop upon error
 
-if [ "$1" == '--backup' ]; then
-	is_backup='true'; shift
-fi
+while true
+do
+	case "$1" in
+		--backup) is_backup='true'; shift;;
+		--tdb) is_tdb_mode='true'; shift;;
+		*) break;;
+	esac
+done
 
 cfg_name="$1"
 release="$2"
@@ -41,9 +48,10 @@ export OPTS="$OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$RDF2NEO/log
 
 export JAVA_TOOL_OPTIONS="-Xmx20G"
 
-
-echo "--- Deleting existing TDB '$RDF2NEO_TDB'"
-rm -Rf "$RDF2NEO_TDB"
+if [ "$is_tdb_mode" != 'true' ]; then
+	echo "--- Deleting existing TDB '$RDF2NEO_TDB'"
+	rm -Rf "$RDF2NEO_TDB"
+fi
 
 echo "--- Stopping Neo4j"
 sudo systemctl stop ${CFG_NEO_SERVICE_NAME}.service
@@ -60,17 +68,23 @@ echo "--- Restarting empty Neo4j DB"
 sudo systemctl start ${CFG_NEO_SERVICE_NAME}.service
 
 
-if [ ! -e "data" ]; then
+if [ "$is_tdb_mode" != 'true' ] && [ ! -e 'data' ]; then
   echo "--- Getting common ontologies"
   ./get_ontologies.sh  
 fi
 
-rm -Rf "$my_release_dir/rdf/data"
-cp -R data "$my_release_dir/rdf"
+if [ "$is_tdb_mode" != 'true' ]; then
+	rm -Rf "$my_release_dir/rdf/ontologies"
+	cp -R data "$my_release_dir/rdf/ontologies"
 
-rdf_path="$my_release_dir/rdf/${cfg_name}.ttl"
+	rdf_path="$my_release_dir/rdf/${cfg_name}.ttl"
 
-echo -e "\n\n\tRunning rdf2neo on '$rdf_path'"
-./ondex2neo.sh "$my_release_dir/rdf/data/"* "$rdf_path"
-
+	echo -e "\n\n\tRunning rdf2neo on '$rdf_path'"
+	./ondex2neo.sh "$my_release_dir/rdf/ontologies/"* "$rdf_path"
+else
+	sleep 10 # Neo4j needs time to restart
+	./tdb2neo.sh --config ondex_config/config.xml "$RDF2NEO_TDB"
+fi
+	
 echo -e "\n\n\t$(basename $0), The end\n"
+
