@@ -24,7 +24,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
-import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
@@ -1233,7 +1232,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		for (String name : listOfRelationAttrNames)
 			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, name,	FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
 		for (String elementOf : listOfConceptAccDataSources)
-			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf, StoredField.TYPE ));
+			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf, FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
 
 		// add last document
 		try {
