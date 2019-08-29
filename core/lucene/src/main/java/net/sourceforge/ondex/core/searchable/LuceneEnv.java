@@ -1124,10 +1124,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		doc.add ( new Field ( DataSource_FIELD, c.getElementOf ().getId (), StringField.TYPE_STORED ) );
 
 		if ( annotation.length () > 0 )
-			doc.add ( new Field ( ANNO_FIELD, LuceneEnv.stripText ( annotation ), TextField.TYPE_STORED ) );
+			doc.add ( new Field ( ANNO_FIELD, LuceneEnv.stripText ( annotation ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 
 		if ( description.length () > 0 )
-			doc.add ( new Field ( DESC_FIELD, LuceneEnv.stripText ( description ), TextField.TYPE_STORED ) );
+			doc.add ( new Field ( DESC_FIELD, LuceneEnv.stripText ( description ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 
 		// start concept accession handling
 		if ( it_ca != null )
