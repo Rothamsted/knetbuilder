@@ -28,6 +28,7 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -137,7 +138,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		public ScoreCollector ( IndexReader indexReader ) 
 		{
 			super ( indexReader );
-			docScores = new HashMap<Integer, Float> ( indexReader.maxDoc() );
+			docScores = new HashMap<> ( indexReader.maxDoc() );
 		}
 
 		@Override
@@ -193,7 +194,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	private final static BitSet EMPTYBITSET = new BitSet(0);
 
-	private final static Map<Integer, Float> EMPTYSCOREMAP = new HashMap<Integer, Float>( 0 );
+	private final static Map<Integer, Float> EMPTYSCOREMAP = new HashMap<>( 0 );
 
 	/* Options to reflect these names are set in the class initialising block, see below */
 	private final static FieldType FIELD_TYPE_STORED_INDEXED_NO_NORMS = new FieldType ( TextField.TYPE_STORED );
@@ -311,14 +312,23 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 	static
 	{
-		FIELD_TYPE_STORED_INDEXED_NO_NORMS.setOmitNorms ( true );
-		FIELD_TYPE_STORED_INDEXED_NO_NORMS.freeze ();
+		{ 
+			FieldType f =  FIELD_TYPE_STORED_INDEXED_NO_NORMS;
+			f.setOmitNorms ( true );
+			f.freeze ();
+		}
 		
-		FIELD_TYPE_STORED_INDEXED_VECT_STORE.setStoreTermVectors ( true );
-		FIELD_TYPE_STORED_INDEXED_VECT_STORE.freeze ();
-		
-		FIELD_TYPE_STORED_INDEXED_UNCHANGED.setOmitNorms ( true );
-		FIELD_TYPE_STORED_INDEXED_UNCHANGED.freeze ();
+		{
+			FieldType f = FIELD_TYPE_STORED_INDEXED_VECT_STORE;
+			f.setStoreTermVectors ( true );
+			f.freeze ();
+		}
+		{
+			FieldType f = FIELD_TYPE_STORED_INDEXED_UNCHANGED;
+			f.setIndexOptions ( IndexOptions.DOCS_AND_FREQS_AND_POSITIONS );
+			f.setOmitNorms ( true );
+			f.freeze ();
+		}
 				
 		EXECUTOR = Executors.newCachedThreadPool ();
 		Runtime.getRuntime ().addShutdownHook ( 
@@ -1120,8 +1130,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		doc.add ( new Field ( CONID_FIELD, conceptID, FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
 		doc.add ( new Field ( PID_FIELD, parserID, StringField.TYPE_STORED ) );
 		
-		doc.add ( new Field ( CC_FIELD, c.getOfType ().getId (), StringField.TYPE_STORED ) );
-		doc.add ( new Field ( DataSource_FIELD, c.getElementOf ().getId (), StringField.TYPE_STORED ) );
+		doc.add ( new Field ( CC_FIELD, c.getOfType ().getId (), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
+		doc.add ( new Field ( DataSource_FIELD, c.getElementOf ().getId (), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
 
 		if ( annotation.length () > 0 )
 			doc.add ( new Field ( ANNO_FIELD, LuceneEnv.stripText ( annotation ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
@@ -1149,7 +1159,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				}
 				// concept accessions should not be ANALYZED?
 				doc.add (
-					new Field ( id, LuceneEnv.stripText ( accession ), StringField.TYPE_STORED ) 
+					new Field ( id, LuceneEnv.stripText ( accession ), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) 
 				);
 			}
 		}
@@ -1169,7 +1179,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			// represented twice
 			for ( String aCacheSet : cacheSet )
 			{
-				doc.add ( new Field ( CONNAME_FIELD, aCacheSet, TextField.TYPE_STORED ) );
+				doc.add ( new Field ( CONNAME_FIELD, aCacheSet, FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
 			}
 			cacheSet.clear ();
 		}
@@ -1232,7 +1242,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		for (String name : listOfRelationAttrNames)
 			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, name,	FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
 		for (String elementOf : listOfConceptAccDataSources)
-			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf, FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
+			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf, FIELD_TYPE_STORED_INDEXED_UNCHANGED ));
 
 		// add last document
 		try {
