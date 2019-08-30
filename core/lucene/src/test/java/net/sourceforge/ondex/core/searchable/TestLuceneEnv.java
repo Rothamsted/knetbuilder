@@ -17,6 +17,7 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.tools.DirUtils;
 
 public class TestLuceneEnv extends TestCase {
@@ -49,7 +50,7 @@ public class TestLuceneEnv extends TestCase {
 	}
 
 	@Override
-	protected void setUp() {
+	protected void setUp() throws IOException {
 		og = new MemoryONDEXGraph(this.getClass().getName());
 
 		dataSource = og.getMetaData().getFactory().createDataSource("dataSource");
@@ -66,24 +67,18 @@ public class TestLuceneEnv extends TestCase {
 		
 		at = og.getMetaData().getFactory().createAttributeName("att", String.class);
 		
-		try {
-			file = new File(File.createTempFile("lucene", "test").getParentFile().getAbsolutePath()+File.separator+"LuceneTest");
-			System.out.println(file.getAbsolutePath());
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
+		file = new File(File.createTempFile("lucene", "test").getParentFile().getAbsolutePath()+File.separator+"LuceneTest");
+		System.out.println(file.getAbsolutePath());
+
 		lenv = new LuceneEnv(file.getAbsolutePath(), true);
+		lenv.addONDEXListener ( new ONDEXLogger () );
 	}
 
 	@Override
-	protected void tearDown() {
+	protected void tearDown() throws IOException {
 		lenv.cleanup();
 		lenv = null;
-		try {
-			DirUtils.deleteTree(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		DirUtils.deleteTree(file);
 	}
 
 	public void testSearchConceptByConceptAccessionExact() {

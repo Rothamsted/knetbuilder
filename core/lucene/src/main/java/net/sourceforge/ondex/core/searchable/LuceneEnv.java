@@ -294,7 +294,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * contains all registered listeners
 	 */
-	private final Set<ONDEXListener> listeners = new HashSet<ONDEXListener>();
+	private final Set<ONDEXListener> listeners = new HashSet<>();
 
 	/**
 	 * wrapped LUCENE ONDEX graph
@@ -302,7 +302,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	private LuceneONDEXGraph og = null;
 
 	// contains all used DataSources for concept accessions
-	protected Set<String> listOfConceptAccDataSources = new HashSet<String>();
+	protected Set<String> listOfConceptAccDataSources = new HashSet<>();
 
 	// contains all used attribute names for concepts
 	protected Set<String> listOfConceptAttrNames = new HashSet<String>();
@@ -356,9 +356,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		try {
 			// open a Directory for the index
 			directory = FSDirectory.open ( new File ( indexdir ).toPath () );
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - constructor]"));
+		} 
+		catch (IOException ex) 
+		{
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage(), "[LuceneEnv - constructor]" ) );
 		}
 	}
 
@@ -424,10 +425,14 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			ensureReaderAndSearcherOpen ();
 			collector = new DocIdCollector(is.getIndexReader());
 			is.search( new TermQuery(new Term(CONID_FIELD, String.valueOf(cid))), collector);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} 
+		catch (IOException e) {
+			log.error ( 
+				String.format ( "I/O error while doing conceptExistsInIndex(%s): %s", cid, e.getMessage () ),
+				e 
+			);
 		}
-		return (collector.getBits().length() > 0);
+		return ( collector == null ? false : collector.getBits().length() > 0);
 	}
 
 	/**
@@ -618,7 +623,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			is.search ( new TermQuery ( new Term ( RELID_FIELD, String.valueOf ( rid ) ) ), collector );
 		}
 		catch ( IOException e ) {
-			e.printStackTrace ();
+			log.error ( 
+				String.format ( "I/O error while doing relationExistsInIndex(%s): %s", rid, e.getMessage () ),
+				e 
+			);
 		}
 		return ( collector == null ? false : collector.getBits ().length () > 0 );
 	}
@@ -715,7 +723,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			is.search ( q, collector );
 			Set<E> view;
 			Map<Integer, Float> doc2Scores = collector.getScores ();
-			Map<Integer, Float> id2scores = new HashMap<Integer, Float> ();
+			Map<Integer, Float> id2scores = new HashMap<> ();
 			BitSet bs = collector.getBits ();
 			if ( bs.length () > 0 )
 			{
@@ -893,7 +901,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			this.ensureReaderAndSearcherOpen ();
 			final BitSet bits = new BitSet ();
 			TopDocs hits = is.search ( q, limit );
-			Map<Integer, Float> scores = new HashMap<Integer, Float> ();
+			Map<Integer, Float> scores = new HashMap<> ();
 			for ( int i = 0; i < hits.scoreDocs.length; i++ )
 			{
 				int docId = hits.scoreDocs[ i ].doc;
@@ -1092,7 +1100,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	private void addConceptToIndex(ONDEXConcept c) throws AccessDeniedException 
 	{
 		// ensures duplicates are not written to the Index
-		Set<String> cacheSet = new HashSet<String> ( 100 );
+		Set<String> cacheSet = new HashSet<> ( 100 );
 
 		// get textual properties
 		String conceptID = String.valueOf ( c.getId () );
@@ -1159,7 +1167,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				}
 				// concept accessions should not be ANALYZED?
 				doc.add (
-					new Field ( id, LuceneEnv.stripText ( accession ), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) 
+					new Field ( id, LuceneEnv.stripText ( accession ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) 
 				);
 			}
 		}
@@ -1179,7 +1187,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			// represented twice
 			for ( String aCacheSet : cacheSet )
 			{
-				doc.add ( new Field ( CONNAME_FIELD, aCacheSet, FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
+				doc.add ( new Field ( CONNAME_FIELD, aCacheSet, FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 			}
 			cacheSet.clear ();
 		}
@@ -1188,7 +1196,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		if ( it_attribute != null )
 		{
 			// mapping attribute name to gds value
-			Map<String, String> attrNames = new HashMap<String, String> ();
+			Map<String, String> attrNames = new HashMap<> ();
 
 			// add all concept gds for this concept
 			for ( Attribute attribute : it_attribute )
@@ -1242,7 +1250,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		for (String name : listOfRelationAttrNames)
 			doc.add(new Field(RELATTRIBUTE_FIELD + DELIM + name, name,	FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
 		for (String elementOf : listOfConceptAccDataSources)
-			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf, FIELD_TYPE_STORED_INDEXED_UNCHANGED ));
+			doc.add(new Field(CONACC_FIELD + DELIM + elementOf, elementOf, FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
 
 		// add last document
 		try {
@@ -1280,7 +1288,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		doc.add ( new Field ( OFTYPE_FIELD, r.getOfType ().getId (), StringField.TYPE_STORED ) );
 
 		// mapping attribute name to gds value
-		Map<String, String> attrNames = new HashMap<String, String> ();
+		Map<String, String> attrNames = new HashMap<> ();
 
 		// add all relation gds for this relation
 		for ( Attribute attribute : it_attribute )
