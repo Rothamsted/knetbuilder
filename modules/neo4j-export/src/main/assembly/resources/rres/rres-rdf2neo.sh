@@ -67,15 +67,11 @@ fi
 echo "--- Restarting empty Neo4j DB"
 sudo systemctl start ${CFG_NEO_SERVICE_NAME}.service
 
-
-if [ "$is_tdb_mode" != 'true' ] && [ ! -e 'data' ]; then
-  echo "--- Getting common ontologies"
-  ./get_ontologies.sh  
-fi
-
 if [ "$is_tdb_mode" != 'true' ]; then
+	
+	echo "--- Getting common ontologies"
 	rm -Rf "$my_release_dir/rdf/ontologies"
-	cp -R data "$my_release_dir/rdf/ontologies"
+  ./get_ontologies.sh "$my_release_dir/rdf/ontologies"  
 
 	rdf_path="$my_release_dir/rdf/${cfg_name}.ttl"
 
