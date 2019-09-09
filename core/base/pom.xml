@@ -49,10 +49,10 @@
          <artifactId>collections-generic</artifactId>
          <scope>compile</scope>
       </dependency>
+      
       <dependency>
          <groupId>com.google.guava</groupId>
          <artifactId>guava</artifactId>
-         <version>12.0</version>
       </dependency>
 			
 			<!-- Used in a couple of plug-ins, we cannot make it working as their local dependency only -->
