@@ -198,4 +198,13 @@
 	<bean id = "nullBeanFactory" class = "java.util.concurrent.atomic.AtomicReference" >
 		<constructor-arg><null/></constructor-arg>
 	</bean>
+	
+	<!-- Used in a few mappings, eg, to set accession ambiguity to a fixed value -->
+	<bean id = "trueMapper" class = "net.sourceforge.ondex.parser.ConstMapper">
+		<property name = "value" value = "#{true}"/>
+	</bean>
+	<bean id = "falseMapper" class = "net.sourceforge.ondex.parser.ConstMapper">
+		<property name = "value" value = "#{false}"/>
+	</bean>
+	
 </beans>
