@@ -2,6 +2,7 @@ package net.sourceforge.ondex.core.searchable;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +27,6 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexReader;
@@ -149,7 +149,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				docScores.put ( doc + docBase, scorer.score() );
 			}
 			catch ( IOException ex ) {
-				throw new RuntimeException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
+				throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 			}
 		}
 
@@ -360,6 +360,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		catch (IOException ex) 
 		{
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage(), "[LuceneEnv - constructor]" ) );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );	
 		}
 	}
 
@@ -381,9 +382,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			if (iw != null) iw.close();
 			if (ir != null) ir.close();
 			if (directory != null) directory.close();
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - cleanup]"));
+		} 
+		catch (IOException ex) {
+			fireEventOccurred(new DataFileErrorEvent(ex.getMessage(), "[LuceneEnv - cleanup]"));
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
 	}
 
@@ -405,12 +407,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			iw.close ();
 			indexWriterIsOpen = false;
 		} 
-		catch (CorruptIndexException cie) {
-			fireEventOccurred ( new DataFileErrorEvent ( cie.getMessage(), "[LucenceEnv - closeIndex]" ) );
+		catch (IOException ex) {
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage(), "[LucenceEnv - closeIndex]" ) );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		} 
-		catch (IOException ioe) {
-			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage(), "[LucenceEnv - closeIndex]" ) );
-		}
 	}
 
 	/**
@@ -426,13 +426,13 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			collector = new DocIdCollector(is.getIndexReader());
 			is.search( new TermQuery(new Term(CONID_FIELD, String.valueOf(cid))), collector);
 		} 
-		catch (IOException e) {
-			log.error ( 
-				String.format ( "I/O error while doing conceptExistsInIndex(%s): %s", cid, e.getMessage () ),
-				e 
+		catch (IOException ex) {
+			throw new UncheckedIOException ( 
+				String.format ( "I/O error while doing conceptExistsInIndex(%s): %s", cid, ex.getMessage () ), 
+				ex 
 			);
 		}
-		return ( collector == null ? false : collector.getBits().length() > 0);
+		return collector.getBits().length() > 0;
 	}
 
 	/**
@@ -453,12 +453,14 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		try {
 			this.ensureReaderAndSearcherOpen ();
 			return ir.docFreq( term );
-		} catch (IOException e) {
-			fireEventOccurred(new DataFileErrorEvent(e.getMessage(),
-					"[LuceneEnv - getFrequenceyOfWordInConceptAttribute]"));
+		} 
+		catch (IOException ex) 
+		{
+			fireEventOccurred(
+				new DataFileErrorEvent(ex.getMessage(), "[LuceneEnv - getFrequenceyOfWordInConceptAttribute]")
+			);
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
-		return 0;
-
 	}
 
 	/**
@@ -486,11 +488,14 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 			// Returns the number of documents containing the terms.
 			return freqs;
-		} catch (IOException e) {
-			fireEventOccurred(new DataFileErrorEvent(e.getMessage(),
-					"[LuceneEnv - getFrequenceyOfWordInConceptAttribute]"));
+		} 
+		catch (IOException ex) 
+		{
+			fireEventOccurred(
+				new DataFileErrorEvent(ex.getMessage(), "[LuceneEnv - getFrequenceyOfWordInConceptAttribute]")
+			);
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
-		return new int[0];
 	}
 
 	/**
@@ -510,12 +515,14 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			// Returns the number of documents containing the term.
 			this.ensureReaderAndSearcherOpen ();						
 			return ir.docFreq ( term );
-		} catch (IOException e) {
-			fireEventOccurred(new DataFileErrorEvent(e.getMessage(),
-					"[LuceneEnv - getFrequenceyOfWordInRelationAttribute]"));
+		} 
+		catch (IOException ex) {
+			fireEventOccurred ( 
+				new DataFileErrorEvent(ex.getMessage(), "[LuceneEnv - getFrequenceyOfWordInRelationAttribute]") 
+			);
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
+			
 		}
-		return 0;
-
 	}
 
 	/**
@@ -540,11 +547,13 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 			// Returns the number of documents containing the terms.
 			return freqs;
-		} catch (IOException e) {
-			fireEventOccurred(new DataFileErrorEvent(e.getMessage(),
-					"[LuceneEnv - getFrequenceyOfWordInRelationAttribute]"));
 		}
-		return new int[0];
+		catch (IOException ex) {
+			fireEventOccurred(
+				new DataFileErrorEvent(ex.getMessage(), "[LuceneEnv - getFrequenceyOfWordInRelationAttribute]")
+			);
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
+		}
 	}
 
 	public Set<String> getListOfConceptAccDataSources() {
@@ -602,9 +611,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			System.out.println ( "Lucene Metadata delete: " + iw.hasDeletions () );
 			iw.commit ();
 		}
-		catch ( IOException ioe )
-		{
-			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LucenceEnv - openIndex]" ) );
+		catch ( IOException ex ) {
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LucenceEnv - openIndex]" ) );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
 	}
 
@@ -622,13 +631,13 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			collector = new DocIdCollector ( is.getIndexReader () );
 			is.search ( new TermQuery ( new Term ( RELID_FIELD, String.valueOf ( rid ) ) ), collector );
 		}
-		catch ( IOException e ) {
-			log.error ( 
-				String.format ( "I/O error while doing relationExistsInIndex(%s): %s", rid, e.getMessage () ),
-				e 
+		catch ( IOException ex ) {
+			throw new UncheckedIOException ( 
+				String.format ( "I/O error while doing relationExistsInIndex(%s): %s", rid, ex.getMessage () ), 
+				ex 
 			);
 		}
-		return ( collector == null ? false : collector.getBits ().length () > 0 );
+		return ( collector.getBits ().length () > 0 );
 	}
 
 	/**
@@ -755,11 +764,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				return new ScoredHits<E> ( view, EMPTYSCOREMAP );
 			}
 		}
-		catch ( IOException ioe )
-		{
-			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LuceneEnv - searchInConcepts]" ) );
+		catch ( IOException ex ) {
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchInConcepts]" ) );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
-		return null;
 	}
 	
 	
@@ -826,12 +834,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			}
 			return BitSetFunctions.create ( og, returnValueClass, set );
 		}
-		catch ( IOException ioe )
-		{
-			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LuceneEnv - searchInConcepts]" ) );
+		catch ( IOException ex ) {
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchInConcepts]" ) );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );			
 		}
-		return null;
-		
 	}
 	
 	
@@ -929,11 +935,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			Set<E> view = BitSetFunctions.create ( og, returnedValueClass, bits );
 			return new ScoredHits<E> ( view, scores );
 		}
-		catch ( IOException ioe )
-		{
-			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LuceneEnv - searchTopConcepts]" ) );
+		catch ( IOException ex ) {
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchTopConcepts]" ) );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
-		return null;
 	}
 	
 	
@@ -1223,13 +1228,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		{
 			iw.addDocument ( doc );
 		}
-		catch ( CorruptIndexException cie )
-		{
-			fireEventOccurred ( new DataFileErrorEvent ( cie.getMessage (), "[LuceneEnv - addConceptToIndex]" ) );
-		}
-		catch ( IOException ioe )
-		{
-			fireEventOccurred ( new DataFileErrorEvent ( ioe.getMessage (), "[LuceneEnv - addConceptToIndex]" ) );
+		catch ( IOException ex ) {
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - addConceptToIndex]" ) );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
 	}
 
@@ -1255,12 +1256,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		// add last document
 		try {
 			iw.addDocument(doc);
-		} catch (CorruptIndexException cie) {
-			fireEventOccurred(new DataFileErrorEvent(cie.getMessage(),
-					"[LuceneEnv - addMetadataToIndex]"));
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LuceneEnv - addMetadataToIndex]"));
+		} 
+		catch (IOException ex) {
+			fireEventOccurred(new DataFileErrorEvent(ex.getMessage(), "[LuceneEnv - addMetadataToIndex]"));
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
 	}
 
@@ -1317,6 +1316,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		}
 		catch ( IOException ex ) {
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - addRelationToIndex]" ) );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
 	}
 
@@ -1329,12 +1329,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 *            boolean
 	 * @throws AccessDeniedException
 	 */
-	private void indexONDEXGraph(final ONDEXGraph graph, boolean create)
-			throws AccessDeniedException {
+	private void indexONDEXGraph(final ONDEXGraph graph, boolean create) throws AccessDeniedException {
 
-		fireEventOccurred(new GeneralOutputEvent(
-				"Starting the Lucene environment.",
-				"[LuceneEnv - indexONDEXGraph]"));
+		fireEventOccurred(
+			new GeneralOutputEvent(	"Starting the Lucene environment.", "[LuceneEnv - indexONDEXGraph]")
+		);
 
 		try {
 
@@ -1383,9 +1382,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 					}
 				}
 			}
-		} catch (IOException ioe) {
-			fireEventOccurred(new DataFileErrorEvent(ioe.getMessage(),
-					"[LucenceEnv - indexONDEXGraph]"));
+		} 
+		catch (IOException ex) {
+			fireEventOccurred(new DataFileErrorEvent(ex.getMessage(), "[LucenceEnv - indexONDEXGraph]"));
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
 	}
 
@@ -1428,6 +1428,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * Notify all listeners that have registered with this class.
 	 * 
+	 * TODO: In most cases, it should be replaced by exception wrapping/rethrowing and then there 
+	 * should be a top-level reporter, dealing with the GUI, as currently this does. 
+	 * 
 	 * @param e
 	 *            type of event
 	 */
@@ -1443,7 +1446,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			}
 		}
 	}
-
+	
 	/**
 	 * Utility that factorises an index updating operation, wrapping it into common pre/post processing, like opening the
 	 * index, reopening it at the end.
@@ -1464,7 +1467,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				this.ensureReaderAndSearcherOpen ();
 			} 
 			catch ( IOException ex ) {
-				throw new RuntimeException ( "Internal Error while updating Lucene data index: ", ex );
+				throw new UncheckedIOException ( "Internal Error while updating Lucene data index: ", ex );
 			}
 		}		
 	}
