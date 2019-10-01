@@ -66,6 +66,7 @@ import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
@@ -390,7 +391,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	}
 
 	/**
-	 * Close a potentially open index.
+	 * Flushes and commits a potentially open index writer.
 	 */
 	public void closeIndex() 
 	{
@@ -608,7 +609,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			// deletes the last record that has attribute names,
 			// that will have to be rebuilt
 			iw.deleteDocuments ( new Term ( LASTDOCUMENT, "true" ) );
-			System.out.println ( "Lucene Metadata delete: " + iw.hasDeletions () );
+			log.info ( "Lucene Metadata delete: ", iw.hasDeletions () );
 			iw.commit ();
 		}
 		catch ( IOException ex ) {
@@ -668,7 +669,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			for (int i = 0; i < terms.length; i++) {
 				terms[i] = new TermQuery(new Term(CONID_FIELD,
 						String.valueOf(cids[i])));
-				System.out.println(terms[i].toString());
+				log.trace ( "Term removed:", terms[i].toString());
 			}
 			Exceptions.sneak ().get (	() -> iw.deleteDocuments ( terms ) );
 			return iw.hasDeletions();			
@@ -756,12 +757,12 @@ public class LuceneEnv implements ONDEXLuceneFields {
 					set.set ( entityId );
 				}
 				view = BitSetFunctions.create ( og, returnValueClass, set );
-				return new ScoredHits<E> ( view, id2scores );
+				return new ScoredHits<> ( view, id2scores );
 			} 
 			else
 			{
 				view = BitSetFunctions.create ( og, returnValueClass, EMPTYBITSET );
-				return new ScoredHits<E> ( view, EMPTYSCOREMAP );
+				return new ScoredHits<> ( view, EMPTYSCOREMAP );
 			}
 		}
 		catch ( IOException ex ) {
@@ -869,16 +870,26 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	private <E extends ONDEXEntity> E getEntityByIRI ( String iri, Function<Query, Set<E>> searcher )
 	{
-		PhraseQuery q = new PhraseQuery ( "iri", iri );
-		Set<E> results = searcher.apply ( q );
-		if ( results == null ) return null;
-		int size = results.size ();
-		if ( size == 0 ) return null;
-		E result = results.iterator ().next ();
-		if ( size > 1 ) log.warn ( 
-			"I've found {} instances of {} for the URI '{}'", size, result.getClass ().getSimpleName (), iri 
-		);
-		return result; 
+		try
+		{
+			ensureReaderAndSearcherOpen ();
+			PhraseQuery q = new PhraseQuery ( "iri", iri );
+			Set<E> results = searcher.apply ( q );
+			if ( results == null ) return null;
+			int size = results.size ();
+			if ( size == 0 ) return null;
+			E result = results.iterator ().next ();
+			if ( size > 1 ) log.warn ( 
+				"I've found {} instances of {} for the URI '{}'", size, result.getClass ().getSimpleName (), iri 
+			);
+			return result;
+		}
+		catch ( IOException ex )
+		{
+			throw ExceptionUtils.buildEx ( 
+				UncheckedIOException.class, ex, "Error while using lucene to lookup for <%s>: %s", iri, ex.getMessage () 
+			);
+		} 
 	}
 	
 	/**
@@ -933,7 +944,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			}
 
 			Set<E> view = BitSetFunctions.create ( og, returnedValueClass, bits );
-			return new ScoredHits<E> ( view, scores );
+			return new ScoredHits<> ( view, scores );
 		}
 		catch ( IOException ex ) {
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchTopConcepts]" ) );
