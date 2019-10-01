@@ -766,7 +766,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			}
 		}
 		catch ( IOException ex ) {
-			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchInConcepts]" ) );
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchScoredEntity]" ) );
 			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
 	}
@@ -836,7 +836,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			return BitSetFunctions.create ( og, returnValueClass, set );
 		}
 		catch ( IOException ex ) {
-			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchInConcepts]" ) );
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchEntity]" ) );
 			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );			
 		}
 	}
@@ -947,7 +947,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			return new ScoredHits<> ( view, scores );
 		}
 		catch ( IOException ex ) {
-			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchTopConcepts]" ) );
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchScoredEntity]" ) );
 			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
 	}
@@ -990,10 +990,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	public void setONDEXGraph(ONDEXGraph aog) throws AccessDeniedException {
 
 		GeneralOutputEvent so = new GeneralOutputEvent(
-				"Using Lucene with index dir: " + this.indexdir,
-				"[LuceneEnv - setONDEXGraph]");
-		so.setLog4jLevel(Level.INFO); // todo: fix this - should be configured
-										// externally
+			"Using Lucene with index dir: " + this.indexdir,
+			"[LuceneEnv - setONDEXGraph]",
+			Level.INFO
+		);
 		fireEventOccurred(so);
 		
 		// store an immutable version of the graph
