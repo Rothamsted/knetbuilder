@@ -102,242 +102,248 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 		Set<Integer> conceptSeeds = new HashSet<Integer>();
 
 		LuceneEnv luceneEnv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
-
-		Object[] accessions = args.getObjectValueArray(CONCEPTACC_ARG);
-		Object ccArg = args.getUniqueValue(CONCEPTCLASS_ARG);
-		Object acc_cvArg = args.getUniqueValue(CONCEPTACC_CV_ARG);
-
-		DataSource acc_dataSourceO = null;
-		ConceptClass ccO = null;
-
-		if (ccArg != null) {
-			ccO = graph.getMetaData().getConceptClass((String) ccArg);
-			if (ccO == null) {
-				fireEventOccurred(new WrongParameterEvent(
-						"Invalid ConceptClass for Accession: " + ccArg,
-						getCurrentMethodName()));
-				return;
-			}
-		}
-
-		if (acc_cvArg != null) {
-			acc_dataSourceO = graph.getMetaData().getDataSource(
-					(String) acc_cvArg);
-			if (acc_dataSourceO == null) {
-				fireEventOccurred(new WrongParameterEvent(
-						"Invalid DataSource for Accession: " + acc_cvArg,
-						getCurrentMethodName()));
-				return;
-			}
-		}
-
-		if (accessions != null && accessions.length > 0) {
-			for (Object accession : accessions) {
-				Set<ONDEXConcept> conceptsToAdd = null;
-
-				if (acc_dataSourceO != null && ccO != null) {
-					Query query = LuceneQueryBuilder
-							.searchConceptByConceptAccessionExact(
-									acc_dataSourceO, (String) accession, ccO,
-									true);
-					conceptsToAdd = luceneEnv.searchInConcepts(query);
-				} else if (acc_dataSourceO != null) {
-					Query query = LuceneQueryBuilder
-							.searchConceptByConceptAccessionExact(
-									acc_dataSourceO, (String) accession, true);
-					conceptsToAdd = luceneEnv.searchInConcepts(query);
-				} else if (ccO != null) {
+		try 
+		{
+			Object[] accessions = args.getObjectValueArray(CONCEPTACC_ARG);
+			Object ccArg = args.getUniqueValue(CONCEPTCLASS_ARG);
+			Object acc_cvArg = args.getUniqueValue(CONCEPTACC_CV_ARG);
+	
+			DataSource acc_dataSourceO = null;
+			ConceptClass ccO = null;
+	
+			if (ccArg != null) {
+				ccO = graph.getMetaData().getConceptClass((String) ccArg);
+				if (ccO == null) {
 					fireEventOccurred(new WrongParameterEvent(
-							"A search for ConceptClass on Accession must include a Accession DataSource",
+							"Invalid ConceptClass for Accession: " + ccArg,
 							getCurrentMethodName()));
 					return;
-				} else {
-					Query query = LuceneQueryBuilder
-							.searchConceptByConceptAccessionExact(
-									(String) accession, true,
-									luceneEnv.getListOfConceptAccDataSources());
-					conceptsToAdd = luceneEnv.searchInConcepts(query);
 				}
-
-				if (conceptsToAdd != null) {
-					fireEventOccurred(new GeneralOutputEvent("Found "
-							+ conceptsToAdd.size() + " Concepts for accession "
-							+ accession, getCurrentMethodName()));
-					for (ONDEXConcept c : conceptsToAdd) {
-						conceptSeeds.add(c.getId());
+			}
+	
+			if (acc_cvArg != null) {
+				acc_dataSourceO = graph.getMetaData().getDataSource(
+						(String) acc_cvArg);
+				if (acc_dataSourceO == null) {
+					fireEventOccurred(new WrongParameterEvent(
+							"Invalid DataSource for Accession: " + acc_cvArg,
+							getCurrentMethodName()));
+					return;
+				}
+			}
+	
+			if (accessions != null && accessions.length > 0) {
+				for (Object accession : accessions) {
+					Set<ONDEXConcept> conceptsToAdd = null;
+	
+					if (acc_dataSourceO != null && ccO != null) {
+						Query query = LuceneQueryBuilder
+								.searchConceptByConceptAccessionExact(
+										acc_dataSourceO, (String) accession, ccO,
+										true);
+						conceptsToAdd = luceneEnv.searchInConcepts(query);
+					} else if (acc_dataSourceO != null) {
+						Query query = LuceneQueryBuilder
+								.searchConceptByConceptAccessionExact(
+										acc_dataSourceO, (String) accession, true);
+						conceptsToAdd = luceneEnv.searchInConcepts(query);
+					} else if (ccO != null) {
+						fireEventOccurred(new WrongParameterEvent(
+								"A search for ConceptClass on Accession must include a Accession DataSource",
+								getCurrentMethodName()));
+						return;
+					} else {
+						Query query = LuceneQueryBuilder
+								.searchConceptByConceptAccessionExact(
+										(String) accession, true,
+										luceneEnv.getListOfConceptAccDataSources());
+						conceptsToAdd = luceneEnv.searchInConcepts(query);
+					}
+	
+					if (conceptsToAdd != null) {
+						fireEventOccurred(new GeneralOutputEvent("Found "
+								+ conceptsToAdd.size() + " Concepts for accession "
+								+ accession, getCurrentMethodName()));
+						for (ONDEXConcept c : conceptsToAdd) {
+							conceptSeeds.add(c.getId());
+						}
 					}
 				}
 			}
-		}
-
-		Object[] names = args.getObjectValueArray(CONCEPTNAME_ARG);
-		if (names != null && names.length > 0) {
-			for (Object name : names) {
-				Set<ONDEXConcept> conceptsToAdd = null;
-
-				if (ccO != null) {
-					Query query = LuceneQueryBuilder
-							.searchConceptByConceptName((String) name, ccO,
-									LuceneEnv.DEFAULTANALYZER);
-					conceptsToAdd = luceneEnv.searchInConcepts(query);
-				} else {
-					Query query = LuceneQueryBuilder
-							.searchConceptByConceptName((String) name,
-									LuceneEnv.DEFAULTANALYZER);
-					conceptsToAdd = luceneEnv.searchInConcepts(query);
-				}
-
-				if (conceptsToAdd != null) {
-					fireEventOccurred(new GeneralOutputEvent("Found "
-							+ conceptsToAdd.size() + " Concepts for name "
-							+ name, getCurrentMethodName()));
-					for (ONDEXConcept c : conceptsToAdd) {
-						conceptSeeds.add(c.getId());
+	
+			Object[] names = args.getObjectValueArray(CONCEPTNAME_ARG);
+			if (names != null && names.length > 0) {
+				for (Object name : names) {
+					Set<ONDEXConcept> conceptsToAdd = null;
+	
+					if (ccO != null) {
+						Query query = LuceneQueryBuilder
+								.searchConceptByConceptName((String) name, ccO,
+										LuceneEnv.DEFAULTANALYZER);
+						conceptsToAdd = luceneEnv.searchInConcepts(query);
+					} else {
+						Query query = LuceneQueryBuilder
+								.searchConceptByConceptName((String) name,
+										LuceneEnv.DEFAULTANALYZER);
+						conceptsToAdd = luceneEnv.searchInConcepts(query);
+					}
+	
+					if (conceptsToAdd != null) {
+						fireEventOccurred(new GeneralOutputEvent("Found "
+								+ conceptsToAdd.size() + " Concepts for name "
+								+ name, getCurrentMethodName()));
+						for (ONDEXConcept c : conceptsToAdd) {
+							conceptSeeds.add(c.getId());
+						}
 					}
 				}
 			}
-		}
-
-		// parse in seed concepts
-		for (Object o : args.getObjectValueArray(SEEDCONCEPT_ARG)) {
-			try {
-				Integer cidSeed = Integer.parseInt(o.toString());
-				if (cidSeed != null) {
-					conceptSeeds.add(cidSeed);
+	
+			// parse in seed concepts
+			for (Object o : args.getObjectValueArray(SEEDCONCEPT_ARG)) {
+				try {
+					Integer cidSeed = Integer.parseInt(o.toString());
+					if (cidSeed != null) {
+						conceptSeeds.add(cidSeed);
+					}
+				} catch (NumberFormatException nfe) {
+					throw new WrongParameterException(
+							"Error in seed concepts specified: Aborting");
 				}
-			} catch (NumberFormatException nfe) {
+			}
+	
+			Integer depth = (Integer) args.getUniqueValue(DEPTH_ARG);
+	
+			if (conceptSeeds.size() > 0) {
+				fireEventOccurred(new GeneralOutputEvent("Seed Concepts = "
+						+ conceptSeeds.size(), getCurrentMethodName()));
+			} else {
 				throw new WrongParameterException(
-						"Error in seed concepts specified: Aborting");
+						"There are no seeds found or specified: Aborting");
 			}
-		}
-
-		Integer depth = (Integer) args.getUniqueValue(DEPTH_ARG);
-
-		if (conceptSeeds.size() > 0) {
-			fireEventOccurred(new GeneralOutputEvent("Seed Concepts = "
-					+ conceptSeeds.size(), getCurrentMethodName()));
-		} else {
-			throw new WrongParameterException(
-					"There are no seeds found or specified: Aborting");
-		}
-
-		System.out.println("depth " + depth);
-
-		Map<String, ArrayList<String>> ccRestrictions = null;
-		Map<String, ArrayList<String>> ccvRestrictions = null;
-		Map<String, ArrayList<String>> rtRestrictions = null;
-
-		try {
-			if (args.getObjectValueArray(CONCEPTCLASS_RESTRIC_ARG) != null)
-				ccRestrictions = splitArgs(args
-						.getObjectValueArray(CONCEPTCLASS_RESTRIC_ARG));
-
-			if (args.getObjectValueArray(CONCEPTCV_RESTRIC_ARG) != null)
-				ccvRestrictions = splitArgs(args
-						.getObjectValueArray(CONCEPTCV_RESTRIC_ARG));
-
-			if (args.getObjectValueArray(RELATIONTYPE_RESTRIC_ARG) != null)
-				rtRestrictions = splitArgs(args
-						.getObjectValueArray(RELATIONTYPE_RESTRIC_ARG));
-
-		} catch (InvalidObjectException e) {
-			fireEventOccurred(new WrongParameterEvent(e.getMessage(),
+	
+			System.out.println("depth " + depth);
+	
+			Map<String, ArrayList<String>> ccRestrictions = null;
+			Map<String, ArrayList<String>> ccvRestrictions = null;
+			Map<String, ArrayList<String>> rtRestrictions = null;
+	
+			try {
+				if (args.getObjectValueArray(CONCEPTCLASS_RESTRIC_ARG) != null)
+					ccRestrictions = splitArgs(args
+							.getObjectValueArray(CONCEPTCLASS_RESTRIC_ARG));
+	
+				if (args.getObjectValueArray(CONCEPTCV_RESTRIC_ARG) != null)
+					ccvRestrictions = splitArgs(args
+							.getObjectValueArray(CONCEPTCV_RESTRIC_ARG));
+	
+				if (args.getObjectValueArray(RELATIONTYPE_RESTRIC_ARG) != null)
+					rtRestrictions = splitArgs(args
+							.getObjectValueArray(RELATIONTYPE_RESTRIC_ARG));
+	
+			} catch (InvalidObjectException e) {
+				fireEventOccurred(new WrongParameterEvent(e.getMessage(),
+						getCurrentMethodName()));
+				return;
+			}
+	
+			LogicalRelationValidator val = null;
+	
+			if (ccRestrictions != null) {
+				for (String depthString : ccRestrictions.keySet()) {
+					int ccDepth = Integer.parseInt(depthString);
+					for (String ccId : ccRestrictions.get(depthString)) {
+						ConceptClass cc = graph.getMetaData().getConceptClass(ccId);
+						if (cc != null) {
+							if (val == null) {
+								val = new DepthSensitiveRTValidator();
+							}
+							((DepthSensitiveRTValidator) val)
+									.addConceptClassConstraint(ccDepth, cc);
+						} else {
+							System.err.println(this.getName()
+									+ ":Restrictions: Unknown Concept Class :"
+									+ ccId);
+						}
+					}
+				}
+			}
+			if (ccvRestrictions != null) {
+				for (String depthString : ccvRestrictions.keySet()) {
+					int ccvDepth = Integer.parseInt(depthString);
+					for (String cvId : ccvRestrictions.get(depthString)) {
+						DataSource dataSource = graph.getMetaData().getDataSource(
+								cvId);
+						if (dataSource != null) {
+							if (val == null) {
+								val = new DepthSensitiveRTValidator();
+							}
+							((DepthSensitiveRTValidator) val)
+									.addConceptDataSourceConstraint(ccvDepth,
+											dataSource);
+						} else {
+							System.err.println(this.getName()
+									+ ":Restrictions: Unknown DataSource Class :"
+									+ cvId);
+						}
+					}
+				}
+			}
+	
+			if (rtRestrictions != null) {
+				for (String depthString : rtRestrictions.keySet()) {
+					int rtDepth = Integer.parseInt(depthString);
+					for (String rtId : rtRestrictions.get(depthString)) {
+						RelationType rt = graph.getMetaData().getRelationType(rtId);
+						if (rt != null) {
+							if (val == null) {
+								val = new DepthSensitiveRTValidator();
+							}
+							((DepthSensitiveRTValidator) val)
+									.addRelationTypeConstraint(rtDepth, rt);
+						} else {
+							System.err.println(this.getName()
+									+ ":Restrictions: Unknown RelationType Class :"
+									+ rtId);
+						}
+					}
+				}
+			}
+	
+			RelationNeighboursSearch rn = new RelationNeighboursSearch(graph);
+			if (val != null)
+				rn.setValidator(val);
+	
+			visibleIntConcepts = new HashSet<Integer>();
+			visibleIntRelations = new HashSet<Integer>();
+	
+			for (Iterator<Integer> i = conceptSeeds.iterator(); i.hasNext();) {
+				int seed = i.next();
+				ONDEXConcept concept = graph.getConcept(seed);
+				if (concept == null) {
+					fireEventOccurred(new WrongParameterEvent("Concept " + seed
+							+ " does not exist ignoring", getCurrentMethodName()));
+					continue;
+				}
+				rn.search(concept, depth);
+	
+				visibleIntConcepts.add(seed);
+				for (ONDEXConcept c : rn.getFoundConcepts())
+					visibleIntConcepts.add(c.getId());
+				for (ONDEXRelation r : rn.getFoundRelations())
+					visibleIntRelations.add(r.getId());
+			}
+	
+			fireEventOccurred(new GeneralOutputEvent("Finished: Found "
+					+ visibleIntConcepts.size() + " Concepts and "
+					+ visibleIntRelations.size() + " Relations",
 					getCurrentMethodName()));
-			return;
+			rn.shutdown();
 		}
-
-		LogicalRelationValidator val = null;
-
-		if (ccRestrictions != null) {
-			for (String depthString : ccRestrictions.keySet()) {
-				int ccDepth = Integer.parseInt(depthString);
-				for (String ccId : ccRestrictions.get(depthString)) {
-					ConceptClass cc = graph.getMetaData().getConceptClass(ccId);
-					if (cc != null) {
-						if (val == null) {
-							val = new DepthSensitiveRTValidator();
-						}
-						((DepthSensitiveRTValidator) val)
-								.addConceptClassConstraint(ccDepth, cc);
-					} else {
-						System.err.println(this.getName()
-								+ ":Restrictions: Unknown Concept Class :"
-								+ ccId);
-					}
-				}
-			}
+		finally {
+			// Just in case
+			if ( luceneEnv != null ) luceneEnv.closeAll ();
 		}
-		if (ccvRestrictions != null) {
-			for (String depthString : ccvRestrictions.keySet()) {
-				int ccvDepth = Integer.parseInt(depthString);
-				for (String cvId : ccvRestrictions.get(depthString)) {
-					DataSource dataSource = graph.getMetaData().getDataSource(
-							cvId);
-					if (dataSource != null) {
-						if (val == null) {
-							val = new DepthSensitiveRTValidator();
-						}
-						((DepthSensitiveRTValidator) val)
-								.addConceptDataSourceConstraint(ccvDepth,
-										dataSource);
-					} else {
-						System.err.println(this.getName()
-								+ ":Restrictions: Unknown DataSource Class :"
-								+ cvId);
-					}
-				}
-			}
-		}
-
-		if (rtRestrictions != null) {
-			for (String depthString : rtRestrictions.keySet()) {
-				int rtDepth = Integer.parseInt(depthString);
-				for (String rtId : rtRestrictions.get(depthString)) {
-					RelationType rt = graph.getMetaData().getRelationType(rtId);
-					if (rt != null) {
-						if (val == null) {
-							val = new DepthSensitiveRTValidator();
-						}
-						((DepthSensitiveRTValidator) val)
-								.addRelationTypeConstraint(rtDepth, rt);
-					} else {
-						System.err.println(this.getName()
-								+ ":Restrictions: Unknown RelationType Class :"
-								+ rtId);
-					}
-				}
-			}
-		}
-
-		RelationNeighboursSearch rn = new RelationNeighboursSearch(graph);
-		if (val != null)
-			rn.setValidator(val);
-
-		visibleIntConcepts = new HashSet<Integer>();
-		visibleIntRelations = new HashSet<Integer>();
-
-		for (Iterator<Integer> i = conceptSeeds.iterator(); i.hasNext();) {
-			int seed = i.next();
-			ONDEXConcept concept = graph.getConcept(seed);
-			if (concept == null) {
-				fireEventOccurred(new WrongParameterEvent("Concept " + seed
-						+ " does not exist ignoring", getCurrentMethodName()));
-				continue;
-			}
-			rn.search(concept, depth);
-
-			visibleIntConcepts.add(seed);
-			for (ONDEXConcept c : rn.getFoundConcepts())
-				visibleIntConcepts.add(c.getId());
-			for (ONDEXRelation r : rn.getFoundRelations())
-				visibleIntRelations.add(r.getId());
-		}
-
-		fireEventOccurred(new GeneralOutputEvent("Finished: Found "
-				+ visibleIntConcepts.size() + " Concepts and "
-				+ visibleIntRelations.size() + " Relations",
-				getCurrentMethodName()));
-		rn.shutdown();
 	}
 
 	public Set<ONDEXRelation> getVisibleRelations() {

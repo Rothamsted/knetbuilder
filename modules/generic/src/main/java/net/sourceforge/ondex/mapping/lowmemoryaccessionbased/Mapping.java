@@ -216,52 +216,57 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 			}
 
 			// iterate over all accession of this concept
-			for (ConceptAccession conceptAcc : concept.getConceptAccessions()) {
-
-				if (exclusiveDataSources != null
-						&& !exclusiveDataSources.contains(conceptAcc
-								.getElementOf())) {
-					continue;
-				}
-
-				// accession must not be ambiguous or ignore ambiguous
-				if (ignoreAmbiguity || !conceptAcc.isAmbiguous()) {
-
-					Set<DataSource> dataSourceToMapTo = getDataSourceToMapTo(
-							graph, conceptAcc.getElementOf());
-					for (ConceptClass cc : getCCtoMapTo(graph,
-							concept.getOfType())) {
-						// possible DataSource for concept accessions
-						for (DataSource dataSource : dataSourceToMapTo) {
-							Query query = null;
-
-							if (mapWithInDataSource) {
-								query = LuceneQueryBuilder
-										.searchConceptByConceptAccessionExact(
-												dataSource, conceptAcc
-														.getAccession()
-														.toLowerCase(), null,
-												cc, ignoreAmbiguity);
-							} else {
-								query = LuceneQueryBuilder
-										.searchConceptByConceptAccessionExact(
-												dataSource, conceptAcc
-														.getAccession()
-														.toLowerCase(), concept
-														.getElementOf(), cc,
-												ignoreAmbiguity);
-							}
-
-							LuceneEnv lenv = LuceneRegistry.sid2luceneEnv
-									.get(graph.getSID());
-							Set<ONDEXConcept> itResults = lenv
-									.searchInConcepts(query);
-
-							// look for the whole concept acc
-							createRelationsOnResults(itResults, concept);
-						}
+			LuceneEnv lenv = null;
+			try
+			{
+				for (ConceptAccession conceptAcc : concept.getConceptAccessions()) {
+	
+					if (exclusiveDataSources != null
+							&& !exclusiveDataSources.contains(conceptAcc
+									.getElementOf())) {
+						continue;
 					}
-				}
+	
+					// accession must not be ambiguous or ignore ambiguous
+					if (ignoreAmbiguity || !conceptAcc.isAmbiguous()) {
+	
+						Set<DataSource> dataSourceToMapTo = getDataSourceToMapTo(
+								graph, conceptAcc.getElementOf());
+						for (ConceptClass cc : getCCtoMapTo(graph,
+								concept.getOfType())) {
+							// possible DataSource for concept accessions
+							for (DataSource dataSource : dataSourceToMapTo) {
+								Query query = null;
+	
+								if (mapWithInDataSource) {
+									query = LuceneQueryBuilder
+											.searchConceptByConceptAccessionExact(
+													dataSource, conceptAcc
+															.getAccession()
+															.toLowerCase(), null,
+													cc, ignoreAmbiguity);
+								} else {
+									query = LuceneQueryBuilder
+											.searchConceptByConceptAccessionExact(
+													dataSource, conceptAcc
+															.getAccession()
+															.toLowerCase(), concept
+															.getElementOf(), cc,
+													ignoreAmbiguity);
+								}
+	
+								lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
+								Set<ONDEXConcept> itResults = lenv.searchInConcepts(query);
+	
+								// look for the whole concept acc
+								createRelationsOnResults(itResults, concept);
+							}
+						}
+					} // if ignoreAmbiguity
+				} // for ConceptAccession
+			}
+			finally {
+				if ( lenv != null ) lenv.closeAll ();
 			}
 		}
 

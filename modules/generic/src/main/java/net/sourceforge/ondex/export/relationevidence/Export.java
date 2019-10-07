@@ -212,21 +212,6 @@ public class Export extends ONDEXExport {
 								toNames.add(name.getName());
 							}
 							writer.write(fromNames + "\t" + toNames + "\t");
-							// // stripped according to LuceneEnv
-							// ArrayList<String> fromNamesStripped = new
-							// ArrayList<String>();
-							// Iterator<String> itNames = fromNames.iterator();
-							// while (itNames.hasNext()) {
-							// fromNamesStripped.add(LuceneEnv.stripText(itNames.next()));
-							// }
-							// ArrayList<String> toNamesStripped = new
-							// ArrayList<String>();
-							// itNames = toNames.iterator();
-							// while (itNames.hasNext()) {
-							// toNamesStripped.add(LuceneEnv.stripText(itNames.next()));
-							// }
-							// writer.write(fromNamesStripped+"\t"+toNamesStripped+"\t");
-							// concept acc lists
 							ArrayList<String> fromAccs = new ArrayList<String>();
 							for (ConceptAccession acc : from
 									.getConceptAccessions()) {

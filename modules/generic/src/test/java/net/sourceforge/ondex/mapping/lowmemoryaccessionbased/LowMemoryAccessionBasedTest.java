@@ -170,42 +170,48 @@ public class LowMemoryAccessionBasedTest {
 
         // this have to be called after the relations and concepts are created
         LuceneEnv env = loadLuceneEnv(graph);
-        ONDEXPluginArguments arg = new ONDEXPluginArguments(lma_mapping.getArgumentDefinitions());
-        LuceneRegistry.sid2luceneEnv.put(graph.getSID(), env);
-        arg.addOption(ArgumentNames.RELATION_TYPE_ARG, "equ");
-        // arg.addOption(ArgumentNames.EQUIVALENT_CC_ARG, "Thing,Protein");
-        arg.addOption(ArgumentNames.IGNORE_AMBIGUOUS_ARG, false);
-        arg.addOption(ArgumentNames.WITHIN_DATASOURCE_ARG, false);
-
-        lma_mapping.setArguments(arg);
-        lma_mapping.setONDEXGraph(graph);
-        lma_mapping.start();
-
-        Boolean[][] results = new Boolean[7][7];
-        for (Boolean[] row : results)
-            Arrays.fill(row, Boolean.FALSE);
-
-        results[1][3] = true;
-        results[1][5] = true;
-        results[2][3] = true;
-        results[2][5] = true;
-        results[3][1] = true;
-        results[3][2] = true;
-        results[3][4] = true;
-        results[4][3] = true;
-        results[4][5] = true;
-        results[5][1] = true;
-        results[5][2] = true;
-        results[5][4] = true;
-
-        Set<ONDEXRelation> mappings = graph
-                .getRelationsOfRelationType(graph.getMetaData()
-                        .getRelationType("equ"));
-        for (ONDEXRelation relation : mappings) {
-            Integer from = relation.getKey().getFromID();
-            Integer to = relation.getKey().getToID();
-            Assert.assertTrue(from + "-" + to + " mapping invalid",
-                    results[from][to]);
+        try
+        {
+	        ONDEXPluginArguments arg = new ONDEXPluginArguments(lma_mapping.getArgumentDefinitions());
+	        LuceneRegistry.sid2luceneEnv.put(graph.getSID(), env);
+	        arg.addOption(ArgumentNames.RELATION_TYPE_ARG, "equ");
+	        // arg.addOption(ArgumentNames.EQUIVALENT_CC_ARG, "Thing,Protein");
+	        arg.addOption(ArgumentNames.IGNORE_AMBIGUOUS_ARG, false);
+	        arg.addOption(ArgumentNames.WITHIN_DATASOURCE_ARG, false);
+	
+	        lma_mapping.setArguments(arg);
+	        lma_mapping.setONDEXGraph(graph);
+	        lma_mapping.start();
+	
+	        Boolean[][] results = new Boolean[7][7];
+	        for (Boolean[] row : results)
+	            Arrays.fill(row, Boolean.FALSE);
+	
+	        results[1][3] = true;
+	        results[1][5] = true;
+	        results[2][3] = true;
+	        results[2][5] = true;
+	        results[3][1] = true;
+	        results[3][2] = true;
+	        results[3][4] = true;
+	        results[4][3] = true;
+	        results[4][5] = true;
+	        results[5][1] = true;
+	        results[5][2] = true;
+	        results[5][4] = true;
+	
+	        Set<ONDEXRelation> mappings = graph
+	                .getRelationsOfRelationType(graph.getMetaData()
+	                        .getRelationType("equ"));
+	        for (ONDEXRelation relation : mappings) {
+	            Integer from = relation.getKey().getFromID();
+	            Integer to = relation.getKey().getToID();
+	            Assert.assertTrue(from + "-" + to + " mapping invalid",
+	                    results[from][to]);
+	        }
+        }
+        finally {
+        	if ( env != null ) env.closeAll ();
         }
     }
 
