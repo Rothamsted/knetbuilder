@@ -148,53 +148,60 @@ public class Mapping extends ONDEXMapping
         Map<ONDEXConcept, Set<ONDEXConcept>> goslim2goMap = new HashMap<ONDEXConcept, Set<ONDEXConcept>>();
         Map<ONDEXConcept, Set<ONDEXConcept>> goslim2goslimMap = new HashMap<ONDEXConcept, Set<ONDEXConcept>>();
 
-        for (ONDEXConcept goSlimConcept : goSlimConcepts) {
-            List<String> goAccessions = new ArrayList<String>();
-
-            for (ConceptAccession accession : goSlimConcept.getConceptAccessions()) {
-                if (accession.getElementOf().equals(dataSourceGO)) {
-                    goAccessions.add(accession.getAccession());
-                }
-            }
-            for (String accession : goAccessions) {
-                Query q = LuceneQueryBuilder.searchConceptByConceptAccessionExact(dataSourceGO,
-                        accession, dataSourceGOSLIM, goOntologySubset, false);
-                LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
-                for (ONDEXConcept res : lenv.searchInConcepts(q)) {
-                    ONDEXConcept result = ((LuceneConcept) res).getParent();
-                    if (result.getElementOf().equals(dataSourceGO)) {
-
-                        Set<ONDEXConcept> goChildren = goslim2goMap.get(goSlimConcept);
-                        if (goChildren == null) {
-                            goChildren = new HashSet<ONDEXConcept>();
-                            goslim2goMap.put(goSlimConcept, goChildren);
-                        }
-                        //add direct ancester in GO
-                        goChildren.add(result);
-
-                        Set<ONDEXConcept> possibleChildTerms = collectChildrenOfGOTerm(
-                                result,
-                                internalRelationTypes,
-                                goOntologySubset,
-                                dataSourceGO);
-                        System.out.println("Poss:" + possibleChildTerms.size());
-                        goChildren.addAll(possibleChildTerms);
-                    }
-                }
-            }
-
-
-            Set<ONDEXConcept> possibleChildTerms = collectChildrenOfGOTerm(
-                    goSlimConcept,
-                    internalRelationTypes,
-                    goOntologySubset,
-                    dataSourceGOSLIM);
-            Set<ONDEXConcept> goSlimChildren = goslim2goslimMap.get(goSlimConcept);
-            if (goSlimChildren == null) {
-                goSlimChildren = new HashSet<ONDEXConcept>();
-                goslim2goslimMap.put(goSlimConcept, goSlimChildren);
-            }
-            goSlimChildren.addAll(possibleChildTerms);
+        LuceneEnv lenv = null;
+        try
+        {
+	        for (ONDEXConcept goSlimConcept : goSlimConcepts) {
+	            List<String> goAccessions = new ArrayList<String>();
+	
+	            for (ConceptAccession accession : goSlimConcept.getConceptAccessions()) {
+	                if (accession.getElementOf().equals(dataSourceGO)) {
+	                    goAccessions.add(accession.getAccession());
+	                }
+	            }
+	            for (String accession : goAccessions) {
+	                Query q = LuceneQueryBuilder.searchConceptByConceptAccessionExact(dataSourceGO,
+	                        accession, dataSourceGOSLIM, goOntologySubset, false);
+	                lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
+	                for (ONDEXConcept res : lenv.searchInConcepts(q)) {
+	                    ONDEXConcept result = ((LuceneConcept) res).getParent();
+	                    if (result.getElementOf().equals(dataSourceGO)) {
+	
+	                        Set<ONDEXConcept> goChildren = goslim2goMap.get(goSlimConcept);
+	                        if (goChildren == null) {
+	                            goChildren = new HashSet<ONDEXConcept>();
+	                            goslim2goMap.put(goSlimConcept, goChildren);
+	                        }
+	                        //add direct ancester in GO
+	                        goChildren.add(result);
+	
+	                        Set<ONDEXConcept> possibleChildTerms = collectChildrenOfGOTerm(
+	                                result,
+	                                internalRelationTypes,
+	                                goOntologySubset,
+	                                dataSourceGO);
+	                        System.out.println("Poss:" + possibleChildTerms.size());
+	                        goChildren.addAll(possibleChildTerms);
+	                    }
+	                }
+	            }
+	
+	
+	            Set<ONDEXConcept> possibleChildTerms = collectChildrenOfGOTerm(
+	                    goSlimConcept,
+	                    internalRelationTypes,
+	                    goOntologySubset,
+	                    dataSourceGOSLIM);
+	            Set<ONDEXConcept> goSlimChildren = goslim2goslimMap.get(goSlimConcept);
+	            if (goSlimChildren == null) {
+	                goSlimChildren = new HashSet<ONDEXConcept>();
+	                goslim2goslimMap.put(goSlimConcept, goSlimChildren);
+	            }
+	            goSlimChildren.addAll(possibleChildTerms);
+	        } // for goSlimConcept
+	      }
+        finally {
+        	if ( lenv != null ) lenv.closeAll ();
         }
 
         //adapt for subsumed children where S1-S2 where S1 and S2 are sets of GO children for GOSLIM terms t1 and t2 respectively and t2 is a child of t1

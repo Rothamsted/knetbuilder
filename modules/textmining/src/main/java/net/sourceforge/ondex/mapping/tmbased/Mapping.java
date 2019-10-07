@@ -133,121 +133,125 @@ public class Mapping extends ONDEXMapping
         	fields[1] = abstractAN;
         }
         
-        //concept class
-        for (String ccName : ccs) {
-            ConceptClass cc = graph.getMetaData().getConceptClass(ccName);
-            Set<ONDEXConcept> ccConcepts = graph.getConceptsOfConceptClass(cc);
-
-            if (ccConcepts == null) {
-                continue;
-            }
-            fireEventOccurred(new GeneralOutputEvent("look for " + ccConcepts.size() + " " + cc.getId() + " concepts", Mapping.getCurrentMethodName()));
-            int ignoredNames = 0;
-            //concepts
-            for (ONDEXConcept c : ccConcepts) {
-                //synonyms
-                for (ConceptName name : c.getConceptNames()) {
-                    if (useOnlyPreferredNames && !name.isPreferred()) {
-                        ignoredNames++;
-                        continue;
-                    }
-                    if (!validName(name.getName())) {
-                        ignoredNames++;
-                        continue;
-                    }
-
-                    String query = TextProcessing.stripText(name.getName());
-
-                    //search in all indexed pubs for pattern
-                    ScoredHits<ONDEXConcept> abstractsContainingTerm;
-
-                    //select search strategy
-                    LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
-                    if (searchStrategy.toLowerCase().equals(EXACT_SEARCH.toLowerCase())) {
-                        query = "\"" + query + "\"";
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
-                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
-                    } else if (searchStrategy.toLowerCase().equals(FUZZY_SEARCH.toLowerCase())) {
-                        //TODO: check NormValue
-                        float normValue = getFuzzyFactor(query, 13);
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeFuzzy(abstractAN, query, normValue);
-                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
-                    } else if (searchStrategy.toLowerCase().equals(AND_SEARCH.toLowerCase())) {
-                        query = query.replaceAll(" ", " AND ");
-                        if (query.equals("")) continue;
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
-                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
-                    } else if (searchStrategy.toLowerCase().equals(PROXIMITY_SEARCH.toLowerCase())) {
-                        query = "\"" + query + "\"~10";
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
-                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
-                    } else {
-                        // search exact if search method is unknown
-                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
-                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
-                    }
-
-                    if (abstractsContainingTerm.getOndexHits().size() == 0) {
-                        continue;
-                    }
-
-                    Map<Integer, Float> scores = abstractsContainingTerm.getScoresForHits();
-
-                    //frequencies of every each search word
-                    //int[] freqs = lenv.getFrequenceyOfWordInConceptGDS(abstractAN, query.split(" "));
-
-                    //iterate through all pubs that contain search pattern
-                    for (ONDEXConcept pub : abstractsContainingTerm.getOndexHits()) {
-                        if (pub instanceof LuceneConcept)
-                            pub = ((LuceneConcept) pub).getParent();
-
-                        PublicationMapping pubMap;
-                        if (!parsed.containsKey(pub.getId())) {
-                            pubMap = new PublicationMapping(pub.getId());
-                            parsed.put(pub.getId(), pubMap);
-                        }
-                        pubMap = parsed.get(pub.getId());
-
-                        Hit hit = pubMap.getHit(c.getOfType().getId(), c.getId());
-                        if (hit == null) {
-                            hit = new Hit(c.getId());
-                            pubMap.addHit(c.getOfType().getId(), hit);
-                        }
-
-                        Double score = (double) scores.get(pub.getId());
-                        
-                        String headerText = "";
-                        if(pub.getAttribute(headerAN) != null){
-	                        headerText = (String) pub.getAttribute(headerAN).getValue();
-	                        
-	                        if (!headerText.endsWith(".")) {
-	                            headerText = headerText + ".";
+        LuceneEnv lenv = null;
+        try
+        {
+	        //concept class
+	        for (String ccName : ccs) {
+	            ConceptClass cc = graph.getMetaData().getConceptClass(ccName);
+	            Set<ONDEXConcept> ccConcepts = graph.getConceptsOfConceptClass(cc);
+	
+	            if (ccConcepts == null) {
+	                continue;
+	            }
+	            fireEventOccurred(new GeneralOutputEvent("look for " + ccConcepts.size() + " " + cc.getId() + " concepts", Mapping.getCurrentMethodName()));
+	            int ignoredNames = 0;
+	            //concepts
+	            for (ONDEXConcept c : ccConcepts) {
+	                //synonyms
+	                for (ConceptName name : c.getConceptNames()) {
+	                    if (useOnlyPreferredNames && !name.isPreferred()) {
+	                        ignoredNames++;
+	                        continue;
+	                    }
+	                    if (!validName(name.getName())) {
+	                        ignoredNames++;
+	                        continue;
+	                    }
+	
+	                    String query = TextProcessing.stripText(name.getName());
+	
+	                    //search in all indexed pubs for pattern
+	                    ScoredHits<ONDEXConcept> abstractsContainingTerm;
+	
+	                    //select search strategy
+	                    lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
+	                    if (searchStrategy.toLowerCase().equals(EXACT_SEARCH.toLowerCase())) {
+	                        query = "\"" + query + "\"";
+	                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
+	                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
+	                    } else if (searchStrategy.toLowerCase().equals(FUZZY_SEARCH.toLowerCase())) {
+	                        //TODO: check NormValue
+	                        float normValue = getFuzzyFactor(query, 13);
+	                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeFuzzy(abstractAN, query, normValue);
+	                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
+	                    } else if (searchStrategy.toLowerCase().equals(AND_SEARCH.toLowerCase())) {
+	                        query = query.replaceAll(" ", " AND ");
+	                        if (query.equals("")) continue;
+	                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
+	                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
+	                    } else if (searchStrategy.toLowerCase().equals(PROXIMITY_SEARCH.toLowerCase())) {
+	                        query = "\"" + query + "\"~10";
+	                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
+	                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
+	                    } else {
+	                        // search exact if search method is unknown
+	                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
+	                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
+	                    }
+	
+	                    if (abstractsContainingTerm.getOndexHits().size() == 0) {
+	                        continue;
+	                    }
+	
+	                    Map<Integer, Float> scores = abstractsContainingTerm.getScoresForHits();
+		
+	                    //iterate through all pubs that contain search pattern
+	                    for (ONDEXConcept pub : abstractsContainingTerm.getOndexHits()) {
+	                        if (pub instanceof LuceneConcept)
+	                            pub = ((LuceneConcept) pub).getParent();
+	
+	                        PublicationMapping pubMap;
+	                        if (!parsed.containsKey(pub.getId())) {
+	                            pubMap = new PublicationMapping(pub.getId());
+	                            parsed.put(pub.getId(), pubMap);
 	                        }
-                        
-                        }
-                        String publicationText = "";
-                        if (pub.getAttribute(abstractAN) != null) {
-                            publicationText = (String) pub.getAttribute(abstractAN).getValue();
-                        }
-                        
-                        String fullText = "";
-                        if (pub.getAttribute(attFullText) != null) {
-                        	fullText = (String) pub.getAttribute(attFullText).getValue();
-                        }
-                        
-                        String text = headerText + " " + publicationText + " " + fullText;
-                        HashSet<String> evidence = TextProcessing.searchEvidenceSentence(text, query);
-
-                        Occurrence occ = new Occurrence(query, score);
-                        // occ.setEvidence(evidence);
-
-                        hit.addOccurrence(occ);
-                        hit.addEvidence(evidence);
-
-                    }
-                }
-            }
-//			System.out.println("Number of unvalid conceptnames: "+ignoredNames);
+	                        pubMap = parsed.get(pub.getId());
+	
+	                        Hit hit = pubMap.getHit(c.getOfType().getId(), c.getId());
+	                        if (hit == null) {
+	                            hit = new Hit(c.getId());
+	                            pubMap.addHit(c.getOfType().getId(), hit);
+	                        }
+	
+	                        Double score = (double) scores.get(pub.getId());
+	                        
+	                        String headerText = "";
+	                        if(pub.getAttribute(headerAN) != null){
+		                        headerText = (String) pub.getAttribute(headerAN).getValue();
+		                        
+		                        if (!headerText.endsWith(".")) {
+		                            headerText = headerText + ".";
+		                        }
+	                        
+	                        }
+	                        String publicationText = "";
+	                        if (pub.getAttribute(abstractAN) != null) {
+	                            publicationText = (String) pub.getAttribute(abstractAN).getValue();
+	                        }
+	                        
+	                        String fullText = "";
+	                        if (pub.getAttribute(attFullText) != null) {
+	                        	fullText = (String) pub.getAttribute(attFullText).getValue();
+	                        }
+	                        
+	                        String text = headerText + " " + publicationText + " " + fullText;
+	                        HashSet<String> evidence = TextProcessing.searchEvidenceSentence(text, query);
+	
+	                        Occurrence occ = new Occurrence(query, score);
+	                        // occ.setEvidence(evidence);
+	
+	                        hit.addOccurrence(occ);
+	                        hit.addEvidence(evidence);
+	
+	                    }
+	                }
+	            }
+	//			System.out.println("Number of unvalid conceptnames: "+ignoredNames);
+	        } // for ccName
+        }
+        finally {
+        	if ( lenv != null ) lenv.closeAll ();
         }
 
         createTextMiningMappings(graph);

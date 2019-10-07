@@ -102,8 +102,7 @@ public class MappingTest {
     @After
     public void tearDown() throws Exception {
         if (lenv != null) {
-            lenv.cleanup();
-            lenv.closeIndex();
+            lenv.closeAll();
         }
         lenv = null;
     }

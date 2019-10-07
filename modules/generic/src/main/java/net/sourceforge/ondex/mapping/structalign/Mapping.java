@@ -208,10 +208,11 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 									concept.getElementOf(), cc);
 
 					// iterator over search results
-					LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph
-							.getSID());
+					LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
+					Set<ONDEXConcept> hitConcepts = lenv.wrapIdxFunction ( () -> lenv.searchInConcepts ( query ) );
+
 					// iterate over hit concepts
-					for (ONDEXConcept hitConcept : lenv.searchInConcepts(query)) {
+					for (ONDEXConcept hitConcept : hitConcepts) {
 						DataSource hitConceptDataSource = hitConcept
 								.getElementOf();
 

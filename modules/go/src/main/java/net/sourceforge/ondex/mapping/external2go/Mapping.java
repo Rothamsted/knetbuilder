@@ -143,74 +143,81 @@ public class Mapping extends ONDEXMapping implements MetaData, ArgumentNames {
 
         int relations = 0;
 
-        for (String fromAccession : mapping.keySet()) {
-            Query query = LuceneQueryBuilder.searchConceptByConceptAccessionExact(dataSourceFrom, fromAccession, ccFrom, true);
-            LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
-            Set<ONDEXConcept> results = lenv.searchInConcepts(query);
-
-            List<String> goAccessions = mapping.get(fromAccession);
-
-            for (ONDEXConcept externalConcept : results) {
-                if (externalConcept instanceof LuceneConcept) {
-                    externalConcept = ((LuceneConcept) externalConcept).getParent();
-                }
-
-
-                for (String goAccession : goAccessions) {
-                    Query query2 = LuceneQueryBuilder.searchConceptByConceptAccessionExact(goDataSource, goAccession, true);
-                    Set<ONDEXConcept> results2 = lenv.searchInConcepts(query2);
-
-                    if (results2 == null || results2.size() == 0) {
-                        System.err.println("Accession: " + goAccession + " not found creating new one");
-                        ONDEXConcept concept = graph.getFactory().createConcept(goAccession, this.goDataSource, thing, etExternal2Go);
-                        concept.createConceptAccession(goAccession, this.goDataSource, false);
-
-                        BitSet sbs = new BitSet();
-                        sbs.set(concept.getId());
-                        results2 = BitSetFunctions.create(graph, ONDEXConcept.class, sbs);
-                    }
-
-                    for (ONDEXConcept goConcept : results2) {
-                        if (goConcept instanceof LuceneConcept) {
-                            goConcept = ((LuceneConcept) goConcept).getParent();
-                        }
-
-                        RelationType rt = null;
-                        String goCC = goConcept.getOfType().getId();
-
-                        //Define relation type, EC2GO should have EQU relations
-                        if (dataSourceFrom.getId().toUpperCase().equals("EC") &&
-                                (goCC.equals(CC_BioProc) || goCC.equals(CC_CelComp) ||
-                                        goCC.equals(CC_MolFunc))) {
-                            rt = rt_equ;
-                        } else if (goCC.equals(CC_BioProc)) {
-                            rt = rt_proc;
-                        } else if (goCC.equals(CC_CelComp)) {
-                            rt = rt_comp;
-                        } else if (goCC.equals(CC_MolFunc)) {
-                            rt = rt_func;
-                        } else if (goCC.equals(CC_Thing)) {
-                            rt = rt_m_isp;
-                        } else {
-                            continue; //prob. a protein or something with a GO accession ignore
-                        }
-
-                        ONDEXRelation relation = graph.getRelation(externalConcept,
-                                goConcept, rt);
-
-                        if (relation == null) {
-                            relation = graph.getFactory().createRelation(externalConcept, goConcept, rt, etExternal2Go);
-                        } else if (!relation.getEvidence().contains(etExternal2Go)) {
-                            relation.addEvidenceType(etExternal2Go);
-                        }
-                        relation.createAttribute(att, "external2go", false);
-                        relations++;
-                    }
-                }
-            }
-        }
-
-        ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new GeneralOutputEvent("Mapped " + relations + " relations", Mapping.class.toString()));
+        LuceneEnv lenv = null;
+        try
+        {
+	        for (String fromAccession : mapping.keySet()) {
+	            Query query = LuceneQueryBuilder.searchConceptByConceptAccessionExact(dataSourceFrom, fromAccession, ccFrom, true);
+	            lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
+	            
+	            Set<ONDEXConcept> results = lenv.searchInConcepts(query);
+	
+	            List<String> goAccessions = mapping.get(fromAccession);
+	
+	            for (ONDEXConcept externalConcept : results) {
+	                if (externalConcept instanceof LuceneConcept) {
+	                    externalConcept = ((LuceneConcept) externalConcept).getParent();
+	                }
+	
+	
+	                for (String goAccession : goAccessions) {
+	                    Query query2 = LuceneQueryBuilder.searchConceptByConceptAccessionExact(goDataSource, goAccession, true);
+	                    Set<ONDEXConcept> results2 = lenv.searchInConcepts(query2);
+	
+	                    if (results2 == null || results2.size() == 0) {
+	                        System.err.println("Accession: " + goAccession + " not found creating new one");
+	                        ONDEXConcept concept = graph.getFactory().createConcept(goAccession, this.goDataSource, thing, etExternal2Go);
+	                        concept.createConceptAccession(goAccession, this.goDataSource, false);
+	
+	                        BitSet sbs = new BitSet();
+	                        sbs.set(concept.getId());
+	                        results2 = BitSetFunctions.create(graph, ONDEXConcept.class, sbs);
+	                    }
+	
+	                    for (ONDEXConcept goConcept : results2) {
+	                        if (goConcept instanceof LuceneConcept) {
+	                            goConcept = ((LuceneConcept) goConcept).getParent();
+	                        }
+	
+	                        RelationType rt = null;
+	                        String goCC = goConcept.getOfType().getId();
+	
+	                        //Define relation type, EC2GO should have EQU relations
+	                        if (dataSourceFrom.getId().toUpperCase().equals("EC") &&
+	                                (goCC.equals(CC_BioProc) || goCC.equals(CC_CelComp) ||
+	                                        goCC.equals(CC_MolFunc))) {
+	                            rt = rt_equ;
+	                        } else if (goCC.equals(CC_BioProc)) {
+	                            rt = rt_proc;
+	                        } else if (goCC.equals(CC_CelComp)) {
+	                            rt = rt_comp;
+	                        } else if (goCC.equals(CC_MolFunc)) {
+	                            rt = rt_func;
+	                        } else if (goCC.equals(CC_Thing)) {
+	                            rt = rt_m_isp;
+	                        } else {
+	                            continue; //prob. a protein or something with a GO accession ignore
+	                        }
+	
+	                        ONDEXRelation relation = graph.getRelation(externalConcept,
+	                                goConcept, rt);
+	
+	                        if (relation == null) {
+	                            relation = graph.getFactory().createRelation(externalConcept, goConcept, rt, etExternal2Go);
+	                        } else if (!relation.getEvidence().contains(etExternal2Go)) {
+	                            relation.addEvidenceType(etExternal2Go);
+	                        }
+	                        relation.createAttribute(att, "external2go", false);
+	                        relations++;
+	                    }
+	                }
+	            }
+	        } // for fromAccession
+    	}
+      finally {
+      	if ( lenv != null ) lenv.closeAll ();
+      }
+      ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new GeneralOutputEvent("Mapped " + relations + " relations", Mapping.class.toString()));
     }
 
     /**

@@ -135,8 +135,8 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		return true;
 	}
 
-	public void start() throws InvalidPluginArgumentException {
-
+	public void start() throws InvalidPluginArgumentException 
+	{
 		if (args.getUniqueValue(WITHIN_DATASOURCE_ARG) != null) {
 			mapWithinCV = (Boolean) args.getUniqueValue(WITHIN_DATASOURCE_ARG);
 		}
@@ -184,227 +184,197 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 				+ total + " concepts", "[accessionbased.Mapping - start]"));
 
 		double current = 0;
-		for (ONDEXConcept concept : itConcepts) {
-
-			// get actual concept, cv and corresponding concept class
-			current++;
-
-			if ((current / total * 100 % 10) == 0) {
-				System.out.println("Mapping complete on "
-						+ formatter.format(current / total * 100d) + "% ("
-						+ format.format(current) + " Concepts)");
-				if (current % 200000 == 0) {
-					System.runFinalization();
+		LuceneEnv lenv = null;
+		try
+		{
+			for (ONDEXConcept concept : itConcepts) {
+	
+				// get actual concept, cv and corresponding concept class
+				current++;
+	
+				if ((current / total * 100 % 10) == 0) {
+					System.out.println("Mapping complete on "
+							+ formatter.format(current / total * 100d) + "% ("
+							+ format.format(current) + " Concepts)");
+					if (current % 200000 == 0) {
+						System.runFinalization();
+					}
 				}
-			}
-
-			DataSource conceptDataSource = concept.getElementOf();
-
-			// map contains hit concept id to occurrence mapping
-			Map<ONDEXConcept, Integer> occurrences = new HashMap<ONDEXConcept, Integer>();
-
-			// iterate over all accession of this concept
-			for (ConceptAccession conceptAcc : concept.getConceptAccessions()) {
-				// accession must not be ambiguous or ignore ambiguous
-				if (ignoreAmbiguous || !conceptAcc.isAmbiguous()) {
-					Set<DataSource> dataSourceToMapTo = getCVtoMapTo(graph,
-							conceptAcc.getElementOf());
-					for (ConceptClass cc : getCCtoMapTo(graph,
-							concept.getOfType())) {
-						// possible DataSource for concept accessions
-						for (DataSource dataSource : dataSourceToMapTo) {
-							Query query;
-
-							if (mapWithinCV) {
-								query = LuceneQueryBuilder
-										.searchConceptByConceptAccessionExact(
-												dataSource,
-												conceptAcc.getAccession(),
-												null, cc, !ignoreAmbiguous);
-							} else {
-								query = LuceneQueryBuilder
-										.searchConceptByConceptAccessionExact(
-												dataSource,
-												conceptAcc.getAccession(),
-												concept.getElementOf(), cc,
-												!ignoreAmbiguous);
-							}
-							LuceneEnv lenv = LuceneRegistry.sid2luceneEnv
-									.get(graph.getSID());
-							Set<ONDEXConcept> itResults = lenv
-									.searchInConcepts(query);
-
-							// look for the whole concept acc
-
-							// the next valid ConceptClass & DataSource
-							if (itResults != null) {
-								// search for this concept accession
-								for (ONDEXConcept hitConcept : itResults) {
-
-									// get hit concept and relavent attributes
-									// from
-									// results
-									if (hitConcept instanceof LuceneConcept) {
-										hitConcept = ((LuceneConcept) hitConcept)
-												.getParent();
-									}
-
-									DataSource hitConceptDataSource = hitConcept
-											.getElementOf();
-
-									// only map between different concept cvs or
-									// equal CVS
-									if (this.mapWithinCV
-											|| !conceptDataSource
-													.equals(hitConceptDataSource)) {
-										// concept accession has to be from same
-										// cv
-										for (ConceptAccession hitConceptAcc : hitConcept
-												.getConceptAccessions()) {
-
-											// case insensitive search
-											if (dataSourceToMapTo
-													.contains(hitConceptAcc
-															.getElementOf())
-													&& hitConceptAcc
-															.getAccession()
-															.equalsIgnoreCase(
-																	conceptAcc
-																			.getAccession())) {
-
-												if (this.evaluateMapping(graph,
-														hitConcept, concept)) {
-													// DataSource must be the
-													// same and
-													// accession must not be
-													// ambiguous or ignore
-													// ambigous
-													if (ignoreAmbiguous
-															|| !hitConceptAcc
-																	.isAmbiguous()) {
-														// get counts for hit
-														// concept
-                                                        //Untested bugfix August 2011
-                                                        Integer theCount = occurrences.get(hitConcept);                                                       
-														int count;
-                                                        if (theCount == null) {
-                                                            count = 1;
-                                                        } else {
-                                                            count = theCount.intValue() + 1;
-                                                        }
-														occurrences.put(
-																hitConcept,
-																count);
+	
+				DataSource conceptDataSource = concept.getElementOf();
+	
+				// map contains hit concept id to occurrence mapping
+				Map<ONDEXConcept, Integer> occurrences = new HashMap<ONDEXConcept, Integer>();
+	
+				// iterate over all accession of this concept
+				for (ConceptAccession conceptAcc : concept.getConceptAccessions()) {
+					// accession must not be ambiguous or ignore ambiguous
+					if (ignoreAmbiguous || !conceptAcc.isAmbiguous()) {
+						Set<DataSource> dataSourceToMapTo = getCVtoMapTo(graph,
+								conceptAcc.getElementOf());
+						for (ConceptClass cc : getCCtoMapTo(graph,
+								concept.getOfType())) {
+							// possible DataSource for concept accessions
+							for (DataSource dataSource : dataSourceToMapTo) {
+								Query query;
+	
+								if (mapWithinCV) {
+									query = LuceneQueryBuilder
+											.searchConceptByConceptAccessionExact(
+													dataSource,
+													conceptAcc.getAccession(),
+													null, cc, !ignoreAmbiguous);
+								} else {
+									query = LuceneQueryBuilder
+											.searchConceptByConceptAccessionExact(
+													dataSource,
+													conceptAcc.getAccession(),
+													concept.getElementOf(), cc,
+													!ignoreAmbiguous);
+								}
+								// look for the whole concept acc
+								lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
+								Set<ONDEXConcept> itResults = lenv.searchInConcepts(query);
+	
+								// the next valid ConceptClass & DataSource
+								if (itResults != null) 
+								{
+									// search for this concept accession
+									for (ONDEXConcept hitConcept : itResults)
+									{
+	
+										// get hit concept and relavent attributes
+										// from
+										// results
+										if (hitConcept instanceof LuceneConcept)
+											hitConcept = ((LuceneConcept) hitConcept).getParent();
+	
+										DataSource hitConceptDataSource = hitConcept.getElementOf();
+	
+										// only map between different concept cvs or
+										// equal CVS
+										if (this.mapWithinCV || !conceptDataSource.equals(hitConceptDataSource))
+										{
+											// concept accession has to be from same
+											// cv
+											for (ConceptAccession hitConceptAcc : hitConcept
+													.getConceptAccessions()) {
+	
+												// case insensitive search
+												if (dataSourceToMapTo.contains(hitConceptAcc.getElementOf())
+														&& hitConceptAcc.getAccession().equalsIgnoreCase(conceptAcc.getAccession()) ) 
+												{
+													if (this.evaluateMapping(graph, hitConcept, concept)) 
+													{
+														// DataSource must be the
+														// same and
+														// accession must not be
+														// ambiguous or ignore
+														// ambigous
+														if (ignoreAmbiguous || !hitConceptAcc.isAmbiguous()) 
+														{
+															// get counts for hit
+															// concept
+	                            //Untested bugfix August 2011
+	                            Integer theCount = occurrences.get(hitConcept);                                                       
+															int count = theCount == null ? 1 : theCount.intValue() + 1;
+															occurrences.put ( hitConcept, count );
+														}
 													}
-												} else {
-													if (DEBUG) {
+													else 
+													{
+														if (DEBUG)
+															fireEventOccurred(new GeneralOutputEvent(
+																	"Not matching Attribute: " + concept.getPID()	+ " and " + hitConcept.getPID(),
+																	"[Mapping - setONDEXGraph]"
+															));
+													}
+												} 
+												else 
+												{
+													if (DEBUG)
 														fireEventOccurred(new GeneralOutputEvent(
-																"Not matching Attribute: "
-																		+ concept
-																				.getPID()
-																		+ " and "
-																		+ hitConcept
-																				.getPID(),
-																"[Mapping - setONDEXGraph]"));
-													}
-												}
-											} else {
-												if (DEBUG) {
-													fireEventOccurred(new GeneralOutputEvent(
-															"Not matching Accessions: "
-																	+ conceptAcc.getAccession()
-																	+ " ("
-																	+ conceptAcc
-																			.getElementOf()
-																			.getId()
-																	+ ") and "
-																	+ hitConceptAcc.getAccession()
-																	+ " ("
-																	+ hitConceptAcc
-																			.getElementOf()
-																			.getId()
-																	+ ")",
-															"[Mapping - setONDEXGraph]"));
+															"Not matching Accessions: "	+ conceptAcc.getAccession()	+ " ("
+															+ conceptAcc.getElementOf().getId()	+ ") and " + hitConceptAcc.getAccession()
+															+ " (" + hitConceptAcc.getElementOf().getId()	+ ")",
+															"[Mapping - setONDEXGraph]"
+													));
 												}
 											}
-										}
-									} else {
-										if (DEBUG) {
-											fireEventOccurred(new GeneralOutputEvent(
-													"Not matching CVs between hitconcepts: "
-															+ concept.getPID()
-															+ " with "
-															+ concept
-																	.getElementOf()
-																	.getId()
-															+ " and "
-															+ hitConcept.getPID()
-															+ " with "
-															+ hitConcept
-																	.getElementOf()
-																	.getId(),
-													"[Mapping - setONDEXGraph]"));
+										} 
+										else
+										{
+											if (DEBUG)
+												fireEventOccurred(new GeneralOutputEvent(
+													"Not matching CVs between hitconcepts: " + concept.getPID() + " with "
+													+ concept.getElementOf().getId()
+													+ " and "	+ hitConcept.getPID() + " with " + hitConcept.getElementOf().getId(),
+													"[Mapping - setONDEXGraph]"
+											));
 										}
 									}
-								}
-							} else {
-								fireEventOccurred(new InconsistencyEvent(
+								} 
+								else
+									fireEventOccurred(new InconsistencyEvent(
 										"Error with ConceptAccession Query '"
-												+ conceptAcc.getAccession()
-												+ "' for Concept with PID "
-												+ concept.getPID() + ".",
-										"[Mapping - setONDEXGraph]"));
+										+ conceptAcc.getAccession() + "' for Concept with PID " + concept.getPID() + ".",
+										"[Mapping - setONDEXGraph]"
+									));
 							}
 						}
 					}
 				}
-			}
-
-			// look for occurrences
-
-			for (ONDEXConcept hitConcept : occurrences.keySet()) {
-				// try if relation was already created
-				ONDEXConcept fromConcept = concept;
-				if (concept instanceof LuceneConcept) {
-					fromConcept = ((LuceneConcept) concept).getParent();
-				}
-				ONDEXConcept toConcept = hitConcept;
-				if (hitConcept instanceof LuceneConcept) {
-					toConcept = ((LuceneConcept) hitConcept).getParent();
-				}
-
-				ONDEXRelation relation = graph.getRelation(fromConcept,
-						toConcept, rtSet);
-				if (relation == null) {
-					// create a new relation between the two concepts
-					relation = graph.getFactory().createRelation(fromConcept,
-							toConcept, rtSet, eviType);
-					relation.createAttribute(hitAttr,
-							occurrences.get(hitConcept), false);
-				} else {
-					Set<EvidenceType> etit = relation.getEvidence();
-					if (!etit.contains(eviType)) {
-						relation.addEvidenceType(eviType);
+	
+				// look for occurrences
+	
+				for (ONDEXConcept hitConcept : occurrences.keySet()) 
+				{
+					// try if relation was already created
+					ONDEXConcept fromConcept = concept;
+					if (concept instanceof LuceneConcept) {
+						fromConcept = ((LuceneConcept) concept).getParent();
 					}
-
-					// increase the number of acc hits
-					Attribute attribute = relation.getAttribute(hitAttr);
-					if (attribute == null) {
-						attribute = relation.createAttribute(hitAttr,
+					ONDEXConcept toConcept = hitConcept;
+					if (hitConcept instanceof LuceneConcept) {
+						toConcept = ((LuceneConcept) hitConcept).getParent();
+					}
+	
+					ONDEXRelation relation = graph.getRelation(fromConcept,
+							toConcept, rtSet);
+					if (relation == null) {
+						// create a new relation between the two concepts
+						relation = graph.getFactory().createRelation(fromConcept,
+								toConcept, rtSet, eviType);
+						relation.createAttribute(hitAttr,
 								occurrences.get(hitConcept), false);
 					} else {
-						int count = ((Integer) attribute.getValue())
-								+ occurrences.get(hitConcept);
-						attribute.setValue(count);
+						Set<EvidenceType> etit = relation.getEvidence();
+						if (!etit.contains(eviType)) {
+							relation.addEvidenceType(eviType);
+						}
+	
+						// increase the number of acc hits
+						Attribute attribute = relation.getAttribute(hitAttr);
+						if (attribute == null) {
+							attribute = relation.createAttribute(hitAttr,
+									occurrences.get(hitConcept), false);
+						} else {
+							int count = ((Integer) attribute.getValue())
+									+ occurrences.get(hitConcept);
+							attribute.setValue(count);
+						}
+	
 					}
-
+					mappedConceptsCount++;
 				}
-				mappedConceptsCount++;
 			}
+	
+			fireEventOccurred(new GeneralOutputEvent("Mapped accessions "
+					+ mappedConceptsCount + ".", "[Mapping - setONDEXGraph]"));
 		}
-
-		fireEventOccurred(new GeneralOutputEvent("Mapped accessions "
-				+ mappedConceptsCount + ".", "[Mapping - setONDEXGraph]"));
+		finally {
+			if ( lenv != null ) lenv.closeAll ();
+		}
 	}
 
 	/**
