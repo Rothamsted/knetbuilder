@@ -1,13 +1,20 @@
 package net.sourceforge.ondex.core.searchable;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.Set;
 
 import org.apache.lucene.search.Query;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import junit.framework.TestCase;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -20,7 +27,8 @@ import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.tools.DirUtils;
 
-public class TestLuceneEnv extends TestCase {
+public class LuceneEnvTest
+{
 
 	private MemoryONDEXGraph og;
 
@@ -45,12 +53,12 @@ public class TestLuceneEnv extends TestCase {
 
 	// private DataSource cv2;
 
-	public TestLuceneEnv() {
+	public LuceneEnvTest() {
 
 	}
 
-	@Override
-	protected void setUp() throws IOException {
+	@Before
+	public void setUp() throws IOException {
 		og = new MemoryONDEXGraph(this.getClass().getName());
 
 		dataSource = og.getMetaData().getFactory().createDataSource("dataSource");
@@ -74,13 +82,14 @@ public class TestLuceneEnv extends TestCase {
 		lenv.addONDEXListener ( new ONDEXLogger () );
 	}
 
-	@Override
-	protected void tearDown() throws IOException {
-		lenv.cleanup();
+	@After
+	public void tearDown() throws IOException {
+		lenv.closeAll();
 		lenv = null;
 		DirUtils.deleteTree(file);
 	}
 
+	@Test
 	public void testSearchConceptByConceptAccessionExact() {
 
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
@@ -105,7 +114,7 @@ public class TestLuceneEnv extends TestCase {
 		Set<ONDEXConcept> results = lenv.searchInConcepts(query);
 		assertEquals(1, results.size());
 		Set<ONDEXConcept> ids = results;
-		assertTrue(ids.contains(concept1));
+		assertTrue (ids.contains(concept1) );
 		
 		query = LuceneQueryBuilder.searchConceptByConceptAccessionExact(dataSource, "ABC", dataSource, cc, true);
 		results = lenv.searchInConcepts(query);
@@ -137,6 +146,7 @@ public class TestLuceneEnv extends TestCase {
 		assertEquals(2, results.size());
 	}
 	
+	@Test
 	public void testSearchConceptByConceptAttributeExact() {
 		
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc1, et);
@@ -158,7 +168,8 @@ public class TestLuceneEnv extends TestCase {
 		
 	}
 	
-	public void test_removeRelationFromIndex() {
+	@Test
+	public void testRemoveRelationFromIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
 		ONDEXConcept concept2 = og.getFactory().createConcept("B", dataSource, cc1, et);
@@ -190,12 +201,13 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue(lenv.conceptExistsInIndex(concept3.getId()));
 		
 		assertTrue("relation not in index", lenv.relationExistsInIndex(r1.getId()));
-		assertFalse("relation not in index", lenv.relationExistsInIndex(r2.getId()));
+		assertFalse ("relation not in index", lenv.relationExistsInIndex(r2.getId()));
 		assertTrue("relation not in index", lenv.relationExistsInIndex(r3.getId()));
 
 	}
 
-	public void test_removeRelationsFromIndex() {
+	@Test
+	public void testRemoveRelationsFromIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
 		ONDEXConcept concept2 = og.getFactory().createConcept("B", dataSource, cc1, et);
@@ -232,7 +244,8 @@ public class TestLuceneEnv extends TestCase {
 
 	}
 
-	public void test_removeConceptFromIndex() {
+	@Test
+	public void testRemoveConceptFromIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
 		ONDEXConcept concept2 = og.getFactory().createConcept("B", dataSource, cc1, et);
@@ -254,7 +267,8 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue(lenv.conceptExistsInIndex(concept3.getId()));
 	}
 	
-	public void test_removeConceptsFromIndex() {
+	@Test
+	public void testRemoveConceptsFromIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
 		ONDEXConcept concept2 = og.getFactory().createConcept("B", dataSource, cc1, et);
@@ -276,7 +290,8 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue(lenv.conceptExistsInIndex(concept3.getId()));
 	}
 	
-	public void test_updateConceptToIndex ()
+	@Test
+	public void testUpdateConceptToIndex ()
 	{
 		ONDEXConcept concept1 = og.getFactory ().createConcept ( "A", dataSource, cc, et );
 		concept1.createConceptAccession ( "ABC", dataSource, true );
@@ -303,7 +318,8 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept4.getId () ) );
 	}
 	
-	public void test_updateConceptsToIndex() {
+	@Test
+	public void testUpdateConceptsToIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
 		ONDEXConcept concept2 = og.getFactory().createConcept("B", dataSource, cc1, et);
@@ -340,7 +356,9 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept6.getId()));
 	}
 	
-	public void test_updateRelationToIndex() {
+	
+	@Test
+	public void testUpdateRelationToIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
 		ONDEXConcept concept2 = og.getFactory().createConcept("B", dataSource, cc1, et);
@@ -376,7 +394,8 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue("relation not in index", lenv.relationExistsInIndex(r4.getId()));
 	}
 	
-	public void test_updateRelationsToIndex() {
+	@Test
+	public void testUpdateRelationsToIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
 		ONDEXConcept concept2 = og.getFactory().createConcept("B", dataSource, cc1, et);
@@ -423,6 +442,7 @@ public class TestLuceneEnv extends TestCase {
 		assertTrue("relation not in index", lenv.relationExistsInIndex(r6.getId()));
 	}
 	
+	@Test
 	public void testIRISearch() 
 	{
 		String ns = "http://www.ondex.org/test/res/";

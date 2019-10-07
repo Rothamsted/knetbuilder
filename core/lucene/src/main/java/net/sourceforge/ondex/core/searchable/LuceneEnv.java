@@ -3,6 +3,7 @@ package net.sourceforge.ondex.core.searchable;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,12 +14,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -47,9 +49,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.machinezoo.noexception.Exceptions;
-
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -70,20 +70,19 @@ import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
- * This class is the entry point for the indexed ONDEX graph representation. It
+ * This class idxSearcher the entry point for the indexed ONDEX graph representation. It
  * initialises the LUCENE Index system.
  * 
- * @author taubertj, reviewed in 2017 by brandizi (mainly to migrate to Lucene 6.x)
+ * @author taubertj, reviewed in 2017, 2019 by brandizi (mainly to migrate to Lucene 6.x)
  */
-public class LuceneEnv implements ONDEXLuceneFields {
-
-	private static final String LASTDOCUMENT = "LASTDOCUMENT";
+public class LuceneEnv implements ONDEXLuceneFields 
+{
 
 	/**
 	 * Collects Bits from a given LUCENE field and adds them to a BitSet.
 	 * 
 	 * Marco Brandizi: these collectors were adapted from Lucene 3.6 to 6, maybe we don't need collectors and
-	 * simply search/check is enough.
+	 * simply search/check idxSearcher enough.
 	 * 
 	 * See Lucene docs for details.
 	 * 
@@ -91,7 +90,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	private class DocIdCollector extends SimpleCollector 
 	{
-		protected final BitSet bits;
+		private final BitSet bits;
 		protected int docBase;
 
 		public DocIdCollector ( IndexReader indexReader ) {
@@ -129,12 +128,12 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	private class ScoreCollector extends DocIdCollector 
 	{
-		protected Scorer scorer;
+		private Scorer scorer;
 
 		/**
 		 * Collects scores for each doc.
 		 */
-		protected final Map<Integer, Float> docScores;
+		private final Map<Integer, Float> docScores;
 
 		public ScoreCollector ( IndexReader indexReader ) 
 		{
@@ -155,19 +154,11 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		}
 
 		/**
-		 * @return the bits returned
-		 */
-		public BitSet getBits() {
-			return bits;
-		}
-
-		/**
 		 * @return a map going from do IDs to scores.
 		 */
 		public Map<Integer, Float> getScores() {
 			return docScores;
 		}
-
 
 		@Override
 		public void setScorer ( Scorer scorer ) {
@@ -179,11 +170,63 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			return true;
 		}		
 	}
+	
+	/**
+	 * true if the class was instantiated with the instruction to create/replace a new index.
+	 */
+	private boolean createNewIndex;
 
+	/**
+	 * The index directory handler required by Lucene 
+	 */
+	private Directory idxDirectory;
+
+	/**
+	 * Lucene index writer
+	 */
+	private IndexWriter idxWriter;
+
+	/**
+	 * The index directory location. This idxSearcher used for logging and alike.
+	 */
+	private String indexDirPath = "";
+
+	/**
+	 * index searcher
+	 */
+	private IndexSearcher idxSearcher;
+	
+	/**
+	 * index reader
+	 */
+	private IndexReader idxReader;
+
+	/**
+	 * contains all registered listeners
+	 */
+	private final Set<ONDEXListener> listeners = new HashSet<>();
+
+	/**
+	 * wrapped LUCENE ONDEX graph
+	 */
+	private LuceneONDEXGraph og = null;
+
+	// contains all used DataSources for concept accessions
+	private Set<String> listOfConceptAccDataSources = new HashSet<>();
+
+	// contains all used attribute names for concepts
+	private Set<String> listOfConceptAttrNames = new HashSet<>();
+
+	// contains all used attribute names for relations
+	private Set<String> listOfRelationAttrNames = new HashSet<>();
+	
 	/**
 	 * global analyser used for the index
 	 */
 	public final static Analyzer DEFAULTANALYZER = new StandardAnalyzer();
+
+	/** A marker used to mark a metadata document. */
+	private static final String LASTDOCUMENT_FIELD = "LASTDOCUMENT_FIELD";
 
 	/**
 	 * remove double spaces
@@ -211,106 +254,30 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * Allows only the id of a document to be loaded
 	 */
-	private static Set<String> idSelector = Stream.of ( CONID_FIELD, RELID_FIELD )
-		.collect ( Collectors.toSet () );
+	private static Set<String> ID_FIELDS = new HashSet<> ( Arrays.asList ( CONID_FIELD, RELID_FIELD ) ); 
 
 	// pre-compiled patterns for text stripping
 	private final static Pattern patternNonWordChars = Pattern.compile("\\W");
 
 	/**
-	 * This is the RAM allocated for Lucene buffering, during indexing operation. It is expressed as a fraction of
+	 * This idxSearcher the RAM allocated for Lucene buffering, during indexing operation. It idxSearcher expressed as a fraction of
 	 * Runtime.getRuntime ().maxMemory (). 
 	 * 
 	 */
 	private final static double RAM_BUFFER_QUOTA = 0.1;
+	
+	/** 
+	 * <p>Establishes a lock when opening/closing index objects. They are thread-safe per se, but we keep their
+	 * opening/closing consistent.</p>
+	 * 
+	 * <p>This is managed by openXXX/closeXXX methods, using the 
+	 * <a href = "https://www.geeksforgeeks.org/java-singleton-design-pattern-practices-examples">double-check lazy init</a>.</p> 
+	 *
+	 */
+	private ReentrantReadWriteLock indexDemarcationgLock = new ReentrantReadWriteLock ();
 
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
-	
-	/**
-	 * Optimises the RAM to be used for Lucene indexes, based on {@link #RAM_BUFFER_QUOTA} and
-	 * max memory available.
-	 */
-	private static long getOptimalRamBufferSize ()
-	{
-		return Math.round ( RAM_BUFFER_QUOTA * Runtime.getRuntime ().maxMemory () / ( 1 << 20 ) );		
-	}
-	
-	/**
-	 * Strips text to be inserted into the index.
-	 * 
-	 * @param text
-	 *            String
-	 * @return String
-	 */
-	public static String stripText(String text) {
-
-		// trim and lower case
-		text = text.trim().toLowerCase();
-
-		// replace all non-word characters with space
-		text = patternNonWordChars.matcher(text).replaceAll(SPACE);
-
-		// replace double spaces by single ones
-		text = DOUBLESPACECHARS.matcher(text).replaceAll(SPACE);
-
-		return text;
-	}
-
-	/**
-	 * whether or not to create new index
-	 */
-	private boolean create;
-
-	/**
-	 * directory containing index
-	 */
-	private Directory directory;
-
-	/**
-	 * LUCENE index writer
-	 */
-	private IndexWriter iw;
-
-	/**
-	 * directory for index
-	 */
-	private String indexdir = "";
-
-	/**
-	 * whether or not the index is still open
-	 */
-	private boolean indexWriterIsOpen = false;
-
-	/**
-	 * index searcher
-	 */
-	private IndexSearcher is;
-	
-	/**
-	 * index reader
-	 */
-	private IndexReader ir;
-
-	/**
-	 * contains all registered listeners
-	 */
-	private final Set<ONDEXListener> listeners = new HashSet<>();
-
-	/**
-	 * wrapped LUCENE ONDEX graph
-	 */
-	private LuceneONDEXGraph og = null;
-
-	// contains all used DataSources for concept accessions
-	protected Set<String> listOfConceptAccDataSources = new HashSet<>();
-
-	// contains all used attribute names for concepts
-	protected Set<String> listOfConceptAttrNames = new HashSet<String>();
-
-	// contains all used attribute names for relations
-	protected Set<String> listOfRelationAttrNames = new HashSet<String>();
-
 	static
 	{
 		{ 
@@ -338,31 +305,54 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			) 
 		); 
 	}
+		
 	
+	
+	/**
+	 * Optimises the RAM to be used for Lucene indexes, based on {@link #RAM_BUFFER_QUOTA} and
+	 * max memory available.
+	 */
+	private static long getOptimalRamBufferSize ()
+	{
+		return Math.round ( RAM_BUFFER_QUOTA * Runtime.getRuntime ().maxMemory () / ( 1 << 20 ) );		
+	}
+	
+	/**
+	 * Strips text to be inserted into the index.
+	 * 
+	 * @param text
+	 *            String
+	 * @return String
+	 */
+	public static String stripText(String text) 
+	{
+		// trim and lower case
+		text = text.trim().toLowerCase();
+
+		// replace all non-word characters with space
+		text = patternNonWordChars.matcher(text).replaceAll(SPACE);
+
+		// replace double spaces by single ones
+		text = DOUBLESPACECHARS.matcher(text).replaceAll(SPACE);
+
+		return text;
+	}
+
 	
 	/**
 	 * Constructor which initialises an empty LuceneEnv.
 	 * 
-	 * @param indexdir
+	 * @param indexDirPath
 	 *            String
-	 * @param create
+	 * @param createNewIndex
 	 *            boolean
 	 */
-	public LuceneEnv(String indexdir, boolean create) {
-		this.indexdir = indexdir;
-		this.create = create;
+	public LuceneEnv(String indexDirPath, boolean create) 
+	{
+		this.indexDirPath = indexDirPath;
+		this.createNewIndex = create;
 
-		if (create) new File(indexdir).mkdirs();
-
-		try {
-			// open a Directory for the index
-			directory = FSDirectory.open ( new File ( indexdir ).toPath () );
-		} 
-		catch (IOException ex) 
-		{
-			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage(), "[LuceneEnv - constructor]" ) );
-			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );	
-		}
+		if (create) new File(indexDirPath).mkdirs();
 	}
 
 	/**
@@ -378,40 +368,50 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * Close all open index handles.
 	 */
-	public void cleanup() {
+	public void closeAll () 
+	{
+		WriteLock writeLock = this.indexDemarcationgLock.writeLock ();
+		writeLock.lock ();
 		try {
-			if (iw != null) iw.close();
-			if (ir != null) ir.close();
-			if (directory != null) directory.close();
-		} 
-		catch (IOException ex) {
-			fireEventOccurred(new DataFileErrorEvent(ex.getMessage(), "[LuceneEnv - cleanup]"));
-			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
+			this.closeIdxWriter ();
+		}
+		finally {
+			writeLock.unlock ();
 		}
 	}
 
 	/**
 	 * Flushes and commits a potentially open index writer.
 	 */
-	public void closeIndex() 
+	public void closeIdxWriter () 
 	{
+		// Double-check lazy access
+		if ( this.idxWriter == null ) return;
+		
+		WriteLock writeLock = this.indexDemarcationgLock.writeLock ();
+		writeLock.lock ();
+		
 		try 
 		{
-			// check if index open for writing
-			if ( !indexWriterIsOpen ) return;
+			// Double-check lazy access
+			if ( this.idxWriter == null ) return;
 
 			// add last document to index
 			addMetadataToIndex ();
 
-			iw.prepareCommit ();
-			iw.commit ();
-			iw.close ();
-			indexWriterIsOpen = false;
+			this.idxWriter.commit ();
+			this.idxWriter.close ();
+			this.idxWriter = null;
+			
+			this.closeIdxReader (); // Just to be sure it's re-read
 		} 
 		catch (IOException ex) {
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage(), "[LucenceEnv - closeIndex]" ) );
 			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		} 
+		finally {
+			writeLock.unlock ();
+		}
 	}
 
 	/**
@@ -423,9 +423,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	{
 		DocIdCollector collector = null;
 		try {
-			ensureReaderAndSearcherOpen ();
-			collector = new DocIdCollector(is.getIndexReader());
-			is.search( new TermQuery(new Term(CONID_FIELD, String.valueOf(cid))), collector);
+			openIdxReader ();
+			collector = new DocIdCollector(idxSearcher.getIndexReader());
+			idxSearcher.search( new TermQuery(new Term(CONID_FIELD, String.valueOf(cid))), collector);
 		} 
 		catch (IOException ex) {
 			throw new UncheckedIOException ( 
@@ -452,8 +452,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		String fieldname = CONATTRIBUTE_FIELD + DELIM + an.getId();
 		Term term = new Term(fieldname, word);
 		try {
-			this.ensureReaderAndSearcherOpen ();
-			return ir.docFreq( term );
+			this.openIdxReader ();
+			return idxReader.docFreq( term );
 		} 
 		catch (IOException ex) 
 		{
@@ -481,10 +481,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		String fieldname = CONATTRIBUTE_FIELD + DELIM + an.getId();
 
 		try {
-			this.ensureReaderAndSearcherOpen ();			
+			this.openIdxReader ();			
 			int[] freqs = new int[word.length];
 			for (int i = 0; i < word.length; i++) {
-				freqs[i] = ir.docFreq ( new Term ( fieldname, word[i] ) );
+				freqs[i] = idxReader.docFreq ( new Term ( fieldname, word[i] ) );
 			}
 
 			// Returns the number of documents containing the terms.
@@ -514,8 +514,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		Term term = new Term(fieldname, word);
 		try {
 			// Returns the number of documents containing the term.
-			this.ensureReaderAndSearcherOpen ();						
-			return ir.docFreq ( term );
+			this.openIdxReader ();						
+			return idxReader.docFreq ( term );
 		} 
 		catch (IOException ex) {
 			fireEventOccurred ( 
@@ -540,10 +540,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		String fieldname = RELATTRIBUTE_FIELD + DELIM + an.getId();
 
 		try {
-			this.ensureReaderAndSearcherOpen ();
+			this.openIdxReader ();
 			int[] freqs = new int[word.length];
 			for (int i = 0; i < word.length; i++) {
-				freqs[i] = ir.docFreq ( new Term(fieldname, word[i]) );
+				freqs[i] = idxReader.docFreq ( new Term(fieldname, word[i]) );
 			}
 
 			// Returns the number of documents containing the terms.
@@ -590,34 +590,140 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	/**
 	 * Open index for writing.
 	 */
-	public void openIndex ()
+	public void openIdxWriter ()
 	{
-		// open index modifier to write to index
+		// Double-check lazy init, see above
+		if ( this.idxWriter != null ) return;
+
+		WriteLock writeLock = this.indexDemarcationgLock.writeLock ();
+		writeLock.lock ();
+		
 		try
 		{
-			if ( indexWriterIsOpen ) closeIndex ();
-			ir.close ();
-
+			// Double-check lazy init, see above
+			if ( this.idxWriter != null ) return;
+			
+			// Just in case it's not flushed
+			this.closeIdxReader ();
+			
+			
+			this.idxDirectory = FSDirectory.open ( new File ( indexDirPath ).toPath () );
+			
 			IndexWriterConfig writerConfig = new IndexWriterConfig ( DEFAULTANALYZER );
 			writerConfig.setOpenMode ( OpenMode.CREATE_OR_APPEND );
 			// set RAM buffer, hopefully speeds up things
 			writerConfig.setRAMBufferSizeMB ( getOptimalRamBufferSize () );
 
-			iw = new IndexWriter ( directory, writerConfig );
-			indexWriterIsOpen = true;
-
+			this.idxWriter = new IndexWriter ( idxDirectory, writerConfig );
+			
 			// deletes the last record that has attribute names,
 			// that will have to be rebuilt
-			iw.deleteDocuments ( new Term ( LASTDOCUMENT, "true" ) );
-			log.info ( "Lucene Metadata delete: ", iw.hasDeletions () );
-			iw.commit ();
+			idxWriter.deleteDocuments ( new Term ( LASTDOCUMENT_FIELD, "true" ) );
+			idxWriter.commit ();
+			log.info ( "Index opened, old metadata deletions: ", idxWriter.hasDeletions () );
 		}
 		catch ( IOException ex ) {
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LucenceEnv - openIndex]" ) );
 			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
+		finally {
+			writeLock.unlock ();
+		}
+	}
+	
+	
+	/**
+	 * This was added by brandizi in 2017, to ensure {@link #idxReader} and {@link #idxSearcher} are open, before starting using them
+	 * in an operation. 
+	 */
+	private void openIdxReader () throws IOException
+	{
+		ReadLock readLock = this.indexDemarcationgLock.readLock ();
+		readLock.lock ();
+		try
+		{
+			if ( this.idxDirectory == null )
+				this.idxDirectory = FSDirectory.open ( new File ( indexDirPath ).toPath () );
+	
+			DirectoryReader newReader = null;
+			
+			if ( this.idxReader == null )
+				newReader = DirectoryReader.open ( this.idxDirectory );
+			else
+			{
+				try {
+					newReader = DirectoryReader.openIfChanged ( (DirectoryReader) idxReader );
+				}
+				catch ( AlreadyClosedException ex ) {
+					// It seems there isn't a method to know if the reader was already closed, apart from a listener, which
+					// would be a bit more cumbersome here and not so useful
+					newReader = DirectoryReader.open ( idxDirectory );
+				}
+			}
+			if ( newReader != null )
+			{
+				if ( this.idxReader != null ) this.idxReader.close ();
+				this.idxReader = newReader;
+				this.idxSearcher = new IndexSearcher ( this.idxReader );
+			}
+		}
+		finally {
+			readLock.unlock ();
+		}		
+	}	
+	
+	/**
+	 * This is normally  not needed, except by {@link #openIdxWriter()}, which invokes it to invalidated the current
+	 * reader objects and ensure they're refreshed.
+	 */
+	private void closeIdxReader () throws IOException
+	{
+		ReadLock readLock = this.indexDemarcationgLock.readLock ();
+		readLock.lock ();
+		
+		try
+		{
+			if ( this.idxReader != null ) {
+				this.idxReader.close ();
+				this.idxReader = null;
+			}
+			this.idxSearcher = null;
+			if ( this.idxDirectory != null ) {
+				this.idxDirectory.close ();
+				this.idxDirectory = null;
+			}
+		}
+		finally {
+			readLock.unlock ();
+		}
+	}
+	
+	
+	/**
+	 * <p>Execute an action, which presumably will do something with the current {@link LuceneEnv}, and 
+	 * then invokes {@link #closeAll()}.</p>
+	 * 
+	 * <p>This is some syntactic sugar that avoids try/finally.</p>
+	 *  
+	 */
+	public <T> T wrapIdxFunction ( Supplier<T> operation )
+	{
+		try {
+			return operation.get ();
+		}
+		finally {
+			this.closeAll ();
+		}
 	}
 
+	/**
+	 * Variant of {@link #wrapIdxFunction(Supplier)}.
+	 */
+	public void wrapIdxOperation ( Runnable operation ) {
+		this.wrapIdxFunction ( () -> { operation.run (); return null; });
+	}
+
+	
 	/**
 	 * @param rid
 	 *            the relation id to check for
@@ -628,9 +734,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		DocIdCollector collector = null;
 		try 
 		{
-			this.ensureReaderAndSearcherOpen ();
-			collector = new DocIdCollector ( is.getIndexReader () );
-			is.search ( new TermQuery ( new Term ( RELID_FIELD, String.valueOf ( rid ) ) ), collector );
+			this.openIdxReader ();
+			collector = new DocIdCollector ( idxSearcher.getIndexReader () );
+			idxSearcher.search ( new TermQuery ( new Term ( RELID_FIELD, String.valueOf ( rid ) ) ), collector );
 		}
 		catch ( IOException ex ) {
 			throw new UncheckedIOException ( 
@@ -642,7 +748,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	}
 
 	/**
-	 * Removes the selected concept from the index NB this is an expensive
+	 * Removes the selected concept from the index NB this idxSearcher an expensive
 	 * operation where possible group deletes together and @see
 	 * removeConceptsFromIndex(int[] cids)
 	 * 
@@ -671,8 +777,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 						String.valueOf(cids[i])));
 				log.trace ( "Term removed:", terms[i].toString());
 			}
-			Exceptions.sneak ().get (	() -> iw.deleteDocuments ( terms ) );
-			return iw.hasDeletions();			
+			Exceptions.sneak ().get (	() -> idxWriter.deleteDocuments ( terms ) );
+			return idxWriter.hasDeletions();			
 		});
 	}
 
@@ -687,7 +793,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	}
 
 	/**
-	 * Removes the selected relation from the index NB this is an expensive
+	 * Removes the selected relation from the index NB this idxSearcher an expensive
 	 * operation where possible group deletes together and @see
 	 * removeRelationsFromIndex(int[] rids)
 	 * 
@@ -714,8 +820,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			for (int i = 0; i < terms.length; i++) {
 				terms[i] = new Term(RELID_FIELD, String.valueOf(rids[i]));
 			}
-			Exceptions.sneak ().get ( () -> iw.deleteDocuments(terms) );
-			return iw.hasDeletions();
+			Exceptions.sneak ().get ( () -> idxWriter.deleteDocuments(terms) );
+			return idxWriter.hasDeletions();
 		});		
 	}
 
@@ -728,9 +834,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	{
 		try
 		{
-			ensureReaderAndSearcherOpen ();
-			ScoreCollector collector = new ScoreCollector ( is.getIndexReader () );
-			is.search ( q, collector );
+			openIdxReader ();
+			ScoreCollector collector = new ScoreCollector ( idxSearcher.getIndexReader () );
+			idxSearcher.search ( q, collector );
 			Set<E> view;
 			Map<Integer, Float> doc2Scores = collector.getScores ();
 			Map<Integer, Float> id2scores = new HashMap<> ();
@@ -741,11 +847,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 				// iterator of document indices
 				for ( int i = bs.nextSetBit ( 0 ); i >= 0; i = bs.nextSetBit ( i + 1 ) )
 				{
-					Document document = is.doc ( i, idSelector );
+					Document document = idxSearcher.doc ( i, ID_FIELDS );
 					float score = doc2Scores.get ( i );
-					// TODO: remove
-					// Fieldable cid = document.getFieldable(CONID_FIELD);
-					// int conceptId = Integer.valueOf(cid.stringValue());
 					int entityId = Optional.ofNullable ( document.get ( field ) )
 						.map ( Integer::valueOf )
 						.orElseThrow ( () -> new NullPointerException ( String.format ( 
@@ -804,9 +907,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	{
 		try
 		{
-			this.ensureReaderAndSearcherOpen ();
-			DocIdCollector collector = new DocIdCollector ( is.getIndexReader () );
-			is.search ( q, collector );
+			this.openIdxReader ();
+			DocIdCollector collector = new DocIdCollector ( idxSearcher.getIndexReader () );
+			idxSearcher.search ( q, collector );
 
 			BitSet bs = collector.getBits ();
 			if ( bs.length () == 0 ) return BitSetFunctions.create ( og, returnValueClass, EMPTYBITSET );
@@ -816,12 +919,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			for ( int i = bs.nextSetBit ( 0 ); i >= 0; i = bs.nextSetBit ( i + 1 ) )
 			{
 				// retrieve associated document
-				Document document = is.doc ( i, idSelector );
+				Document document = idxSearcher.doc ( i, ID_FIELDS );
 				// get concept ID from document
-				
-				// TODO: remove
-				// Fieldable cid = document.getFieldable ( CONID_FIELD );
-				// set.set ( Integer.valueOf ( cid.stringValue () ) );
 				
 				int entityId = Optional.ofNullable ( document.get ( field ) )
 					.map ( Integer::valueOf )
@@ -837,6 +936,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		}
 		catch ( IOException ex ) {
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchEntity]" ) );
+			log.error ( "Error while searching: " + q + " over field " + field + ": " + ex.getMessage (), ex );
 			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );			
 		}
 	}
@@ -872,7 +972,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	{
 		try
 		{
-			ensureReaderAndSearcherOpen ();
+			openIdxReader ();
 			PhraseQuery q = new PhraseQuery ( "iri", iri );
 			Set<E> results = searcher.apply ( q );
 			if ( results == null ) return null;
@@ -915,24 +1015,16 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	{
 		try
 		{
-			this.ensureReaderAndSearcherOpen ();
+			this.openIdxReader ();
 			final BitSet bits = new BitSet ();
-			TopDocs hits = is.search ( q, limit );
+			TopDocs hits = idxSearcher.search ( q, limit );
 			Map<Integer, Float> scores = new HashMap<> ();
 			for ( int i = 0; i < hits.scoreDocs.length; i++ )
 			{
 				int docId = hits.scoreDocs[ i ].doc;
 				float score = hits.scoreDocs[ i ].score;
-				Document document = is.doc ( docId, idSelector );
-				
-//				Fieldable cid = document.getFieldable ( CONID_FIELD );
-//				if ( cid != null )
-//				{
-//					int id = Integer.parseInt ( cid.stringValue () );
-//					bits.set ( id );
-//					scores.put ( id, score );
-//				}
-				
+				Document document = idxSearcher.doc ( docId, ID_FIELDS );
+								
 				Integer entityId = Optional.ofNullable ( document.get ( field ) )
 					.map ( Integer::valueOf )
 					.orElse ( null );
@@ -990,7 +1082,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	public void setONDEXGraph(ONDEXGraph aog) throws AccessDeniedException {
 
 		GeneralOutputEvent so = new GeneralOutputEvent(
-			"Using Lucene with index dir: " + this.indexdir,
+			"Using Lucene with index dir: " + this.indexDirPath,
 			"[LuceneEnv - setONDEXGraph]",
 			Level.INFO
 		);
@@ -1000,7 +1092,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		this.og = new LuceneONDEXGraph(aog);
 
 		// start indexing
-		indexONDEXGraph(aog, create);
+		indexONDEXGraph( aog );
 	}
 
 	/**
@@ -1016,9 +1108,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		{
 			for ( ONDEXConcept concept : concepts )
 			{
-				// try a delete this is quicker than reopening the "is"
+				// try a delete this idxSearcher quicker than reopening the "idxSearcher"
 				Exceptions.sneak ().run ( 
-					() -> iw.deleteDocuments ( new Term ( CONID_FIELD, String.valueOf ( concept.getId () ) ) ) 
+					() -> idxWriter.deleteDocuments ( new Term ( CONID_FIELD, String.valueOf ( concept.getId () ) ) ) 
 				);
 				addConceptToIndex ( concept );
 			}
@@ -1026,7 +1118,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	}
 
 	/**
-	 * Update or add a concept to the index NB this is an expensive operations,
+	 * Update or add a concept to the index NB this idxSearcher an expensive operations,
 	 * so try to use the batch job @see updateConceptsToIndex(Set<ONDEXConcept>
 	 * concepts)
 	 * 
@@ -1040,7 +1132,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		{
 			boolean exists = conceptExistsInIndex ( concept.getId () );
 			if ( exists ) Exceptions.sneak ().run ( 
-				() -> iw.deleteDocuments ( new Term ( CONID_FIELD, String.valueOf ( concept.getId () ) ) ) 
+				() -> idxWriter.deleteDocuments ( new Term ( CONID_FIELD, String.valueOf ( concept.getId () ) ) ) 
 			);
 			addConceptToIndex ( concept );
 		});
@@ -1060,7 +1152,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			for ( ONDEXRelation relation : relations )
 			{
 				Exceptions.sneak ().run ( () -> 
-					iw.deleteDocuments ( new Term ( RELID_FIELD, String.valueOf ( relation.getId () ) ) )
+					idxWriter.deleteDocuments ( new Term ( RELID_FIELD, String.valueOf ( relation.getId () ) ) )
 				);
 				addRelationToIndex ( relation );
 			}
@@ -1068,7 +1160,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	}
 
 	/**
-	 * Updates or adds a relations to an Index NB this is an expensive
+	 * Updates or adds a relations to an Index NB this idxSearcher an expensive
 	 * operations, so try to use the batch job @see
 	 * updateRelationsToIndex(Set<ONDEXRelation> relations)
 	 * 
@@ -1083,7 +1175,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 			boolean exists = relationExistsInIndex ( relation.getId() );
 			if ( exists )
 				Exceptions.sneak ().run ( () ->
-					iw.deleteDocuments ( new Term ( RELID_FIELD, String.valueOf ( relation.getId () ) ) )				
+					idxWriter.deleteDocuments ( new Term ( RELID_FIELD, String.valueOf ( relation.getId () ) ) )				
 				);
 			addRelationToIndex ( relation );
 		});
@@ -1145,10 +1237,10 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		if ( it_ca == null && it_cn == null && it_attribute == null && annotation.length () == 0
 				&& description.length () == 0 )
 		{
-			return; // there is nothing to index, no document should be created!
+			return; // there idxSearcher nothing to index, no document should be created!
 		}
 
-		// create a new document for each concept and sets fields
+		// createNewIndex a new document for each concept and sets fields
 		Document doc = this.getCommonFields ( c );
 		
 		doc.add ( new Field ( CONID_FIELD, conceptID, FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
@@ -1237,7 +1329,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		// store document to index
 		try
 		{
-			iw.addDocument ( doc );
+			idxWriter.addDocument ( doc );
 		}
 		catch ( IOException ex ) {
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - addConceptToIndex]" ) );
@@ -1247,14 +1339,15 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 	/**
 	 * Adds sets of used meta data to the index.
+	 * WARNING: this assumes the index is already {@link #openIdxWriter() opened}. 
 	 */
 	private void addMetadataToIndex() {
 
 		// new document for fields
 		Document doc = new Document();
-		doc.add(new Field(LASTDOCUMENT, "true", StringField.TYPE_NOT_STORED ));
-		// Attribute fields about the last document were initially not stored. However, this is not good for Lucene 6,
-		// because it complaints that a field name having both docs where it is stored and not stored cannot be used to 
+		doc.add(new Field(LASTDOCUMENT_FIELD, "true", StringField.TYPE_NOT_STORED ));
+		// Attribute fields about the last document were initially not stored. However, this idxSearcher not good for Lucene 6,
+		// because it complaints that a field name having both docs where it idxSearcher stored and not stored cannot be used to 
 		// build certain searches (https://goo.gl/Ee1sfm)
 		//
 		for (String name : listOfConceptAttrNames)
@@ -1266,7 +1359,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 		// add last document
 		try {
-			iw.addDocument(doc);
+			this.idxWriter.addDocument(doc);
 		} 
 		catch (IOException ex) {
 			fireEventOccurred(new DataFileErrorEvent(ex.getMessage(), "[LuceneEnv - addMetadataToIndex]"));
@@ -1276,20 +1369,17 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 	/**
 	 * Add the given ONDEXRelation to the current index.
-	 * 
-	 * @param r
-	 *            ONDEXRelation to add to index
-	 * @throws AccessDeniedException
+	 * WARNING: this assumes the index is already {@link #openIdxWriter() opened}. 
 	 */
 	private void addRelationToIndex ( ONDEXRelation r ) throws AccessDeniedException
 	{
 		// get Relation and RelationAttributes
 		Set<Attribute> it_attribute = r.getAttributes ();
 
-		// leave if there is nothing to index
+		// leave if there idxSearcher nothing to index
 		if ( it_attribute.size () == 0 ) return;
 
-		// create a Document for each relation and store ids
+		// createNewIndex a Document for each relation and store ids
 		Document doc = this.getCommonFields ( r );
 
 		doc.add ( new Field ( RELID_FIELD, String.valueOf ( r.getId () ), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
@@ -1323,7 +1413,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 		// store document to index
 		try {
-			iw.addDocument ( doc );
+			idxWriter.addDocument ( doc );
 		}
 		catch ( IOException ex ) {
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - addRelationToIndex]" ) );
@@ -1333,55 +1423,45 @@ public class LuceneEnv implements ONDEXLuceneFields {
 
 	/**
 	 * Builds the index for a given ONDEXGraph.
-	 * 
-	 * @param graph
-	 *            ONDEXGraph
-	 * @param create
-	 *            boolean
-	 * @throws AccessDeniedException
 	 */
-	private void indexONDEXGraph(final ONDEXGraph graph, boolean create) throws AccessDeniedException {
+	private void indexONDEXGraph(final ONDEXGraph graph ) throws AccessDeniedException {
 
 		fireEventOccurred(
 			new GeneralOutputEvent(	"Starting the Lucene environment.", "[LuceneEnv - indexONDEXGraph]")
 		);
 
-		try {
-
-			// if index is new created, fill index
-			if (create) 
+		try 
+		{
+			// if index idxSearcher new created, fill index
+			if ( this.createNewIndex ) 
 			{
+				// Just in case
+				this.closeIdxWriter();
+				this.openIdxWriter ();
+				
+				try
+				{
+					indexingHelper ( graph.getConcepts (), "concept", this::addConceptToIndex );
+					indexingHelper ( graph.getRelations (), "relation", this::addRelationToIndex );
+	
+					// last Document contains meta data lists
+					addMetadataToIndex();
+					idxWriter.commit();
+				}
+				finally {
+					this.closeIdxWriter ();
+				}
+				return;
+			} // if ( createNewIndex )
 
-				// open index modifier to write to index
-				if (indexWriterIsOpen) closeIndex();
-
-				IndexWriterConfig writerConfig = new IndexWriterConfig( DEFAULTANALYZER );
-				writerConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
-				// set RAM buffer, hopefully speeds up things
-				writerConfig.setRAMBufferSizeMB( getOptimalRamBufferSize () );
-
-				iw = new IndexWriter(directory, writerConfig);
-				indexWriterIsOpen = true;
-
-				indexingHelper ( graph.getConcepts (), "concept", this::addConceptToIndex );
-				indexingHelper ( graph.getRelations (), "relation", this::addRelationToIndex );
-
-				// last Document contains meta data lists
-				addMetadataToIndex();
-
-				iw.prepareCommit();
-				iw.commit();
-				iw.close();
-				indexWriterIsOpen = false;
-			}
-			// if ( create )
-
-			this.ensureReaderAndSearcherOpen ();
-			
-			if (!create) {
+			// if !createNewIndex, read some general data from existing index
+			this.openIdxReader ();
+			try
+			{
 				// read in attribute names and accession DataSources
-				Document doc = ir.document ( ir.maxDoc() - 1 );
-				for (Object o : doc.getFields()) {
+				Document doc = idxReader.document ( idxReader.maxDoc() - 1 );
+				for (Object o : doc.getFields()) 
+				{
 					Field field = (Field) o;
 					String name = field.name();
 					if (name.startsWith(CONATTRIBUTE_FIELD + DELIM)) {
@@ -1393,6 +1473,9 @@ public class LuceneEnv implements ONDEXLuceneFields {
 					}
 				}
 			}
+			finally {
+				// this.closeIdxReader (); // TODO: Not sure it's needed, possibly remove (MB, 2019-10-07)
+			}
 		} 
 		catch (IOException ex) {
 			fireEventOccurred(new DataFileErrorEvent(ex.getMessage(), "[LucenceEnv - indexONDEXGraph]"));
@@ -1401,14 +1484,15 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	}
 
 	/**
-	 * Little helper used by {@link #indexONDEXGraph(ONDEXGraph, boolean)} to factorise the submission to the index of 
+	 * Little helper used by {@link #indexONDEXGraph(ONDEXGraph)} to factorise the submission to the index of 
 	 * concepts and relations.
 	 * 
 	 * It indexes a set of concepts or relations, by means of {@link #addConceptToIndex(ONDEXConcept)} or
-	 * {@link #addRelationToIndex(ONDEXRelation)}. {@code label} should be "concept" or "relation" and is
+	 * {@link #addRelationToIndex(ONDEXRelation)}. {@code label} should be "concept" or "relation" and idxSearcher
 	 * used for logging.
 	 */
 	private <OE extends ONDEXEntity> void indexingHelper ( Set<OE> inputs, String label, Consumer<OE> indexSubmitter )
+		throws IOException
 	{		
 		final int sz = inputs.size ();
 		log.info ( "Start indexing the Ondex Graph, {} {}(s) sent to index", sz, label );
@@ -1416,9 +1500,12 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		PercentProgressLogger progressLogger = new PercentProgressLogger ( 
 			"{}% of " + label + "s submitted to index", sz 
 		);
+		progressLogger.appendProgressReportAction ( 
+			Exceptions.sneak ().fromBiConsumer ( (oldp, newp) -> this.idxWriter.commit () )
+		);
 		
 		// TODO: the use of a parallel task manager comes from existing code, what's the point of it?!
-		Future<?> tasks = EXECUTOR.submit ( 
+		Future<?> task = EXECUTOR.submit ( 
 			() -> {
 				for ( OE entity : inputs )
 				{
@@ -1429,7 +1516,8 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		);
 		
 		try {
-			tasks.get();
+			task.get();
+			this.idxWriter.commit ();
 		} 
 		catch ( InterruptedException|ExecutionException ex ) {
 			throw new RuntimeException ( "Error while indexing Ondex Graph:" + ex.getMessage (), ex );
@@ -1445,7 +1533,7 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 * @param e
 	 *            type of event
 	 */
-	protected void fireEventOccurred(EventType e) 
+	private void fireEventOccurred(EventType e) 
 	{
 		if (listeners.size() > 0) {
 			// new ondex event
@@ -1466,20 +1554,13 @@ public class LuceneEnv implements ONDEXLuceneFields {
 	 */
 	private <R> R updadeIndex ( Supplier<R> action )
 	{
-		openIndex ();
+		openIdxWriter ();
 		
 		try {
 			return action.get ();
 		}	
-		finally 
-		{
-			closeIndex ();
-			try {
-				this.ensureReaderAndSearcherOpen ();
-			} 
-			catch ( IOException ex ) {
-				throw new UncheckedIOException ( "Internal Error while updating Lucene data index: ", ex );
-			}
+		finally {
+			closeIdxWriter ();
 		}		
 	}
 	
@@ -1491,33 +1572,4 @@ public class LuceneEnv implements ONDEXLuceneFields {
 		this.updadeIndex ( () -> { action.run (); return null; } );
 	}
 
-	/**
-	 * This was added by brandizi in 2017, to ensure {@link #ir} and {@link #is} are open, before starting using them
-	 * in an operation. TODO: this is a patch: we should actually review all the logic that this class uses, ensuring a 
-	 * clear and common flow of open/do/close, exception handling and alike.
-	 *   
-	 */
-	private void ensureReaderAndSearcherOpen () throws IOException
-	{
-		boolean irChanged = false;
-		if ( irChanged = ( ir == null ) ) 
-			ir = DirectoryReader.open ( directory ); 
-		else 
-		{
-			DirectoryReader newReader = null;
-			try {
-				newReader = DirectoryReader.openIfChanged ( (DirectoryReader) ir );
-			}
-			catch ( AlreadyClosedException ex ) {
-				// It seems there isn't a method to know if the reader was already closed, apart from a listener, which
-				// would be a bit more cumbersome here and not so useful
-				newReader = DirectoryReader.open ( directory );
-			}
-			if ( irChanged = ( newReader != null ) ) {
-				ir = newReader; 
-			}
-		}
-
-		if ( irChanged ) is = new IndexSearcher ( ir );
-	}
 }
