@@ -3,36 +3,30 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
+
    <parent>
       <artifactId>modules</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>2.1.1b-SNAPSHOT</version>
+      <version>2.1.1-SNAPSHOT</version>
    </parent>
 
    <groupId>net.sourceforge.ondex.modules</groupId>
-   <artifactId>sequence</artifactId>
+   <artifactId>go</artifactId>
+   <name>GeneOntology</name>
 
-   <name>sequence</name>
-
-   <description>dna and protein sequence parser for species independent data sources</description>
+   <description>Everything related to GO</description>
 
    <dependencies>
       <dependency>
-         <groupId>org.codehaus.woodstox</groupId>
-         <artifactId>woodstox-core-lgpl</artifactId>
-         <version>4.0.6</version>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.codehaus.woodstox</groupId>
-         <artifactId>stax2-api</artifactId>
-         <version>3.0.1</version>
-         <scope>provided</scope>
+         <groupId>commons-math</groupId>
+         <artifactId>commons-math</artifactId>
+         <version>1.2</version>
+         <scope>compile</scope>
       </dependency>
 
       <!-- ONDEX deps -->      <dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>tab-tools</artifactId>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>lucene</artifactId>
          <version>${project.version}</version>
          <scope>provided</scope>
       </dependency>
