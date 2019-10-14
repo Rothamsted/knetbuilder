@@ -3,6 +3,7 @@ package net.sourceforge.ondex.core.searchable;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -385,6 +386,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	public void closeIdxWriter () 
 	{
+		// TODO:Remove log.info ( "DOING closeIdxWriter()", new Throwable ( "NOT A REAL EX" ) );
+		
 		// Double-check lazy access
 		if ( this.idxWriter == null ) return;
 		
@@ -607,7 +610,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 			this.closeIdxReader ();
 			
 			
-			this.idxDirectory = FSDirectory.open ( new File ( indexDirPath ).toPath () );
+			this.idxDirectory = FSDirectory.open ( Paths.get ( indexDirPath ) );
 			
 			IndexWriterConfig writerConfig = new IndexWriterConfig ( DEFAULTANALYZER );
 			writerConfig.setOpenMode ( OpenMode.CREATE_OR_APPEND );
@@ -678,6 +681,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	private void closeIdxReader () throws IOException
 	{
+		//TODO:Remove log.info ( "DOING closeIdxReader()", new Throwable ( "NOT A REAL EX" ) );
+		
 		ReadLock readLock = this.indexDemarcationgLock.readLock ();
 		readLock.lock ();
 		
@@ -1450,6 +1455,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 				}
 				finally {
 					this.closeIdxWriter ();
+					this.openIdxReader (); // Cause they're going to read it next and threads want it open
 				}
 				return;
 			} // if ( createNewIndex )
@@ -1474,7 +1480,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 				}
 			}
 			finally {
-				// this.closeIdxReader (); // TODO: Not sure it's needed, possibly remove (MB, 2019-10-07)
+				this.openIdxReader (); // Again, because next step is likely threads opening it.
 			}
 		} 
 		catch (IOException ex) {
