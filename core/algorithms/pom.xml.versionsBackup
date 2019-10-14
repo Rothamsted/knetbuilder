@@ -5,17 +5,26 @@
    <modelVersion>4.0.0</modelVersion>
 
    <parent>
-      <artifactId>core</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>2.1.1b-SNAPSHOT</version>
+      <artifactId>core</artifactId>
+      <version>2.1.1-SNAPSHOT</version>
    </parent>
 
+
+
    <groupId>net.sourceforge.ondex.core</groupId>
-   <artifactId>memory</artifactId>
+   <artifactId>algorithms</artifactId>
    <packaging>jar</packaging>
 
-   <name>memory</name>
+   <name>algorithms</name>
+
    <dependencies><!-- ONDEX deps -->
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>api</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>base</artifactId>
@@ -24,10 +33,27 @@
       </dependency>
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>base</artifactId>
+         <artifactId>memory</artifactId>
          <version>${project.version}</version>
-         <classifier>tests</classifier>
          <scope>test</scope>
       </dependency>
+			<dependency>
+			  <groupId>guru.nidi</groupId>
+			  <artifactId>graphviz-java</artifactId>
+			  <version>0.8.7</version>
+			</dependency>
+			<dependency>
+				<groupId>uk.ac.ebi</groupId>
+				<artifactId>jutils</artifactId>
+			</dependency>
+
    </dependencies>
+   
+   
+   <build>
+   
+   	<plugins>
+   	</plugins>
+   
+   </build>
 </project>
