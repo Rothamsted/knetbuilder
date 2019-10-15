@@ -85,7 +85,7 @@ public abstract class AbstractGraphTraverser
 		int sz = concepts.size ();
 		log.info ( "Graph Traverser, beginning parallel traversing of {} concept(s)", sz );
 		PercentProgressLogger progressLogger = new PercentProgressLogger ( 
-			"Graph Traverser, {}% concepts traversed", sz 
+			"Graph Traverser, {}% of concepts traversed", sz 
 		);
 		
 		return concepts.parallelStream ()
