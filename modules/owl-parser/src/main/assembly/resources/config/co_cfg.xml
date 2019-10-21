@@ -59,7 +59,16 @@
 
 	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.CompositeAccessionsMapper">
 		<property name = "mappers">
-			<set>
+			<set>		
+				<bean parent = "idAccMapper">
+					<property name = "dataSourcePrefix" value="CO_321:" />
+					<property name = "addedPrefix" value="CO_321:" / >
+				</bean>
+				<bean parent = "altIdAccMapper">
+					<property name = "dataSourcePrefix" value="CO_321:" />
+					<property name = "addedPrefix" value="CO_321:" />
+				</bean>
+				
 				<bean class = "net.sourceforge.ondex.parser.utils.Single2AccessionsMapper">
 					<property name = "accessionMapper">
 						<bean class = "net.sourceforge.ondex.parser.DefaultAccessionMapper">
