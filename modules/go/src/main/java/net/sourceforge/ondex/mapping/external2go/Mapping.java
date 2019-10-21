@@ -215,7 +215,7 @@ public class Mapping extends ONDEXMapping implements MetaData, ArgumentNames {
 	        } // for fromAccession
     	}
       finally {
-      	if ( lenv != null ) lenv.closeAll ();
+      	// TODO: remove? if ( lenv != null ) lenv.closeAll ();
       }
       ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new GeneralOutputEvent("Mapped " + relations + " relations", Mapping.class.toString()));
     }

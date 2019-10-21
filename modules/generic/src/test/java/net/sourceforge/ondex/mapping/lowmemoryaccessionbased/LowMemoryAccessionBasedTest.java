@@ -211,7 +211,7 @@ public class LowMemoryAccessionBasedTest {
 	        }
         }
         finally {
-        	if ( env != null ) env.closeAll ();
+        	// TODO: remove? if ( env != null ) env.closeAll ();
         }
     }
 
