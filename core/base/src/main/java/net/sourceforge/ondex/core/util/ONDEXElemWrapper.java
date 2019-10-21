@@ -3,7 +3,7 @@ package net.sourceforge.ondex.core.util;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * Allows you to put together an ONDEX element (eg, concept, relation) with the graph it belongs to. This is usefult for
+ * Allows you to put together an ONDEX element (eg, concept, relation) with the graph it belongs to. This is useful for
  * those cases where you need to do some operation in the graph involving the elements (e.g., add relations to a concept).
  * 
  * Unfortunately ONDEX elements don't have something like getGraph() in their interfaces and for the moment we choose 
