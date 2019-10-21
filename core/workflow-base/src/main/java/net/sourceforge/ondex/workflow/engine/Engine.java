@@ -24,6 +24,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.io.IOUtils;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 
@@ -229,91 +230,97 @@ public class Engine {
         if (args == null) args = new ONDEXPluginArguments(filter.getArgumentDefinitions());
 
         LuceneEnv lenv = null;
-        if (filter.requiresIndexedGraph()) {
-            lenv = getIndex(graphInput, filter.getName());
-//			filterArgs.setIndexedEnv(lenv);
-        }
-
-        String name = filter.getName();
-        filter.setArguments(args);
-
-        long start = System.currentTimeMillis();
-        filter.addONDEXListener(pluginLogger);
-        filter.setONDEXGraph(graphInput);
-        filter.start();
-
-        fireEventOccurred(new GeneralOutputEvent("Filter returned " + filter.getVisibleConcepts().size() + " visible Concepts and " + filter.getVisibleRelations().size() + " visible relations", getCurrentMethodName()));
-
-        Set<ONDEXRelation> relationsVisible = filter.getVisibleRelations();
-        if (relationsVisible == null)
-            throw new RuntimeException("filter.getVisibleRelations() returns null after start");
-
-        Set<ONDEXConcept> conceptsVisible = filter.getVisibleConcepts();
-        if (conceptsVisible == null)
-            throw new RuntimeException("filter.getVisibleConcepts() returns null after start");
-
-
-        if (graphOutput != null && !graphInput.equals(graphOutput)) {
-            fireEventOccurred(new GeneralOutputEvent(filter.getName() + " filter complete cloning returned concept from " + graphInput.getName() + " to " + graphOutput.getName(), getCurrentMethodName()));
-            filter.copyResultsToNewGraph(graphOutput);
-        } else { // delete all not found concepts in the graph
-            fireEventOccurred(new GeneralOutputEvent(filter.getName() + " filter complete removing non matching concepts from original graph as GraphInput is the same as GraphOutput", getCurrentMethodName()));
-            fireEventOccurred(new GeneralOutputEvent("Identifying Tag dependencies on Relations ", getCurrentMethodName()));
-
-            Set<ONDEXRelation> relationsToDelete = BitSetFunctions.copy(graphInput.getRelations());
-            relationsToDelete.removeAll(relationsVisible);
-
-            int relationTagsRemoved = 0;
-
-            Iterator<ONDEXRelation> relIt = relationsVisible.iterator();
-            while (relIt.hasNext()) {
-                ONDEXRelation relation = relIt.next();
-                for (ONDEXConcept tag : relation.getTags().toArray(new ONDEXConcept[0])) {
-                    if (!conceptsVisible.contains(tag)) {
-                        relation.removeTag(tag);
-                        relationTagsRemoved++;
-                    }
-                }
-            }
-            
-            fireEventOccurred(new GeneralOutputEvent("Removing " + relationsToDelete.size() + " relations", getCurrentMethodName()));
-
-            for (ONDEXRelation relation : relationsToDelete) {
-                graphInput.deleteRelation(relation.getId());
-            }
-
-            Set<ONDEXConcept> invisibleConcepts = BitSetFunctions.copy(graphInput.getConcepts());
-            invisibleConcepts.removeAll(conceptsVisible);
-
-            int conceptsTagsRemoved = 0;
-            for (ONDEXConcept concept : conceptsVisible) {
-                for (ONDEXConcept tag : concept.getTags().toArray(new ONDEXConcept[0])) {
-                    if (!conceptsVisible.contains(tag)) {
-                        concept.removeTag(tag);
-                        conceptsTagsRemoved++;
-                    }
-                }
-            }
-
-            fireEventOccurred(new GeneralOutputEvent("Removed Tag on Concepts " + conceptsTagsRemoved + " and on Relations " + relationTagsRemoved, getCurrentMethodName()));
-
-            fireEventOccurred(new GeneralOutputEvent("Removing " + invisibleConcepts.size() + " Concepts", getCurrentMethodName()));
-
-            for (ONDEXConcept concept : invisibleConcepts) {
-//				explicitly delete relations on deleted concepts (for safety)
-                for (ONDEXRelation relation : graphInput.getRelationsOfConcept(concept).toArray(new ONDEXRelation[0])) {
-                    graphInput.deleteRelation(relation.getId());
-                }
-                graphInput.deleteConcept(concept.getId());
-            }
-        }
-
-        fireEventOccurred(new GeneralOutputEvent("Filter with " + name
-                + " took " + ((System.currentTimeMillis() - start) / 1000) + " seconds",
-                getCurrentMethodName()));
-
-        removeIndex(graphInput, lenv);
-        return graphOutput;
+        try
+        {
+	        if (filter.requiresIndexedGraph()) {
+	            lenv = getIndex(graphInput, filter.getName());
+	//			filterArgs.setIndexedEnv(lenv);
+	        }
+	
+	        String name = filter.getName();
+	        filter.setArguments(args);
+	
+	        long start = System.currentTimeMillis();
+	        filter.addONDEXListener(pluginLogger);
+	        filter.setONDEXGraph(graphInput);
+	        filter.start();
+	
+	        fireEventOccurred(new GeneralOutputEvent("Filter returned " + filter.getVisibleConcepts().size() + " visible Concepts and " + filter.getVisibleRelations().size() + " visible relations", getCurrentMethodName()));
+	
+	        Set<ONDEXRelation> relationsVisible = filter.getVisibleRelations();
+	        if (relationsVisible == null)
+	            throw new RuntimeException("filter.getVisibleRelations() returns null after start");
+	
+	        Set<ONDEXConcept> conceptsVisible = filter.getVisibleConcepts();
+	        if (conceptsVisible == null)
+	            throw new RuntimeException("filter.getVisibleConcepts() returns null after start");
+	
+	
+	        if (graphOutput != null && !graphInput.equals(graphOutput)) {
+	            fireEventOccurred(new GeneralOutputEvent(filter.getName() + " filter complete cloning returned concept from " + graphInput.getName() + " to " + graphOutput.getName(), getCurrentMethodName()));
+	            filter.copyResultsToNewGraph(graphOutput);
+	        } else { // delete all not found concepts in the graph
+	            fireEventOccurred(new GeneralOutputEvent(filter.getName() + " filter complete removing non matching concepts from original graph as GraphInput is the same as GraphOutput", getCurrentMethodName()));
+	            fireEventOccurred(new GeneralOutputEvent("Identifying Tag dependencies on Relations ", getCurrentMethodName()));
+	
+	            Set<ONDEXRelation> relationsToDelete = BitSetFunctions.copy(graphInput.getRelations());
+	            relationsToDelete.removeAll(relationsVisible);
+	
+	            int relationTagsRemoved = 0;
+	
+	            Iterator<ONDEXRelation> relIt = relationsVisible.iterator();
+	            while (relIt.hasNext()) {
+	                ONDEXRelation relation = relIt.next();
+	                for (ONDEXConcept tag : relation.getTags().toArray(new ONDEXConcept[0])) {
+	                    if (!conceptsVisible.contains(tag)) {
+	                        relation.removeTag(tag);
+	                        relationTagsRemoved++;
+	                    }
+	                }
+	            }
+	            
+	            fireEventOccurred(new GeneralOutputEvent("Removing " + relationsToDelete.size() + " relations", getCurrentMethodName()));
+	
+	            for (ONDEXRelation relation : relationsToDelete) {
+	                graphInput.deleteRelation(relation.getId());
+	            }
+	
+	            Set<ONDEXConcept> invisibleConcepts = BitSetFunctions.copy(graphInput.getConcepts());
+	            invisibleConcepts.removeAll(conceptsVisible);
+	
+	            int conceptsTagsRemoved = 0;
+	            for (ONDEXConcept concept : conceptsVisible) {
+	                for (ONDEXConcept tag : concept.getTags().toArray(new ONDEXConcept[0])) {
+	                    if (!conceptsVisible.contains(tag)) {
+	                        concept.removeTag(tag);
+	                        conceptsTagsRemoved++;
+	                    }
+	                }
+	            }
+	
+	            fireEventOccurred(new GeneralOutputEvent("Removed Tag on Concepts " + conceptsTagsRemoved + " and on Relations " + relationTagsRemoved, getCurrentMethodName()));
+	
+	            fireEventOccurred(new GeneralOutputEvent("Removing " + invisibleConcepts.size() + " Concepts", getCurrentMethodName()));
+	
+	            for (ONDEXConcept concept : invisibleConcepts) {
+	//				explicitly delete relations on deleted concepts (for safety)
+	                for (ONDEXRelation relation : graphInput.getRelationsOfConcept(concept).toArray(new ONDEXRelation[0])) {
+	                    graphInput.deleteRelation(relation.getId());
+	                }
+	                graphInput.deleteConcept(concept.getId());
+	            }
+	        }
+	
+	        fireEventOccurred(new GeneralOutputEvent("Filter with " + name
+	                + " took " + ((System.currentTimeMillis() - start) / 1000) + " seconds",
+	                getCurrentMethodName()));
+	
+	        removeIndex(graphInput, lenv);
+	        return graphOutput;
+    	}
+      finally {
+      	if ( lenv != null ) lenv.closeAll ();
+      }
     }
 
     /**
@@ -333,19 +340,24 @@ public class Engine {
             lenv = getIndex(graphInput, transformer.getName());
         }
 
-
-        String name = transformer.getName();
-
-        transformer.addONDEXListener(pluginLogger);
-        transformer.setArguments(args);
-
-        long start = System.currentTimeMillis();
-        transformer.setONDEXGraph(graphInput);
-        transformer.start();
-
-        fireEventOccurred(new GeneralOutputEvent(name + " took " + ((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
-        removeIndex(graphInput, lenv);
-        return graphInput;
+        try
+        {
+	        String name = transformer.getName();
+	
+	        transformer.addONDEXListener(pluginLogger);
+	        transformer.setArguments(args);
+	
+	        long start = System.currentTimeMillis();
+	        transformer.setONDEXGraph(graphInput);
+	        transformer.start();
+	
+	        fireEventOccurred(new GeneralOutputEvent(name + " took " + ((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
+	        removeIndex(graphInput, lenv);
+	        return graphInput;
+        }
+        finally {
+        	if ( lenv != null ) lenv.closeAll ();
+        }
     }
 
     /**
@@ -372,25 +384,31 @@ public class Engine {
             lenv = getIndex(graphInput, mapping.getName());
         }
 
-        String name = mapping.getName();
-
-        mapping.addONDEXListener(pluginLogger);
-        mapping.setArguments(args);
-
-        long start = System.currentTimeMillis();
-        mapping.setONDEXGraph(graphInput);
-        mapping.start();
-
-        fireEventOccurred(new GeneralOutputEvent(name + " took " + +((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
-
-        rit = graphInput.getRelations();
-        long relationsPost = rit.size() - relationsPre;
-
-        fireEventOccurred(new GeneralOutputEvent("New Relations: " + relationsPost, getCurrentMethodName()));
-        rit = null;
-        removeIndex(graphInput, lenv);
-        
-        return graphInput;
+        try
+        {
+	        String name = mapping.getName();
+	
+	        mapping.addONDEXListener(pluginLogger);
+	        mapping.setArguments(args);
+	
+	        long start = System.currentTimeMillis();
+	        mapping.setONDEXGraph(graphInput);
+	        mapping.start();
+	
+	        fireEventOccurred(new GeneralOutputEvent(name + " took " + +((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
+	
+	        rit = graphInput.getRelations();
+	        long relationsPost = rit.size() - relationsPre;
+	
+	        fireEventOccurred(new GeneralOutputEvent("New Relations: " + relationsPost, getCurrentMethodName()));
+	        rit = null;
+	        removeIndex(graphInput, lenv);
+	        
+	        return graphInput;
+        }
+        finally {
+        	if ( lenv != null ) lenv.closeAll ();
+        }
     }
 
     /**
@@ -410,24 +428,33 @@ public class Engine {
         if (parser.requiresIndexedGraph()) {
             lenv = getIndex(graphInput, parser.getName());
         }
-        parser.addONDEXListener(pluginLogger);
-        parser.setArguments(args);
-
-        if (parser.requiresValidators() != null && parser.requiresValidators().length > 0) {
-            initializeValidators(parser.requiresValidators(), graphInput);
+        
+        try
+        {
+	        parser.addONDEXListener(pluginLogger);
+	        parser.setArguments(args);
+	
+	        if (parser.requiresValidators() != null && parser.requiresValidators().length > 0) {
+	            initializeValidators(parser.requiresValidators(), graphInput);
+	        }
+	
+	        long start = System.currentTimeMillis();
+	        parser.setONDEXGraph(graphInput);
+	        parser.start();
+	
+	        fireEventOccurred(new GeneralOutputEvent(parser.getName() + " took " + +((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
+	        removeIndex(graphInput, lenv);
+	        return graphInput;
         }
-
-        long start = System.currentTimeMillis();
-        parser.setONDEXGraph(graphInput);
-        parser.start();
-
-        fireEventOccurred(new GeneralOutputEvent(parser.getName() + " took " + +((System.currentTimeMillis() - start) / 1000) + " seconds", getCurrentMethodName()));
-        removeIndex(graphInput, lenv);
-        return graphInput;
+        finally {
+        	if ( lenv != null ) lenv.closeAll ();
+        }
+    
     }
 
 
-    public LuceneEnv getIndex(ONDEXGraph graph, String name) {//pluginInit.makeSimplePlugin().getName()
+    public LuceneEnv getIndex(ONDEXGraph graph, String name) {
+    		//pluginInit.makeSimplePlugin().getName()
         long start = System.currentTimeMillis();
         fireEventOccurred(new GeneralOutputEvent("Index required by " + name + " starting index", getCurrentMethodName()));
         String dir = indexedGraphs.get(graph);
@@ -460,8 +487,7 @@ public class Engine {
     }
 
     public void removeIndex(ONDEXGraph graph, LuceneEnv lenv) {
-        if (lenv != null)
-            lenv.cleanup();
+        if (lenv != null) lenv.closeAll ();
         String dir = indexedGraphs.get(graph);
         indexedGraphs.remove(graph);
         if (dir == null || indeciesToRetain.contains(dir)) return;
@@ -489,10 +515,13 @@ public class Engine {
     public static void saveIndex(ONDEXGraph graph, String newDir) {
         if (newDir != null) {
             LuceneEnv lenv = new LuceneEnv(newDir, true);
-            lenv.addONDEXListener(engine.logger);
-            lenv.setONDEXGraph(graph);
-            engine.indexedGraphs.put(graph, newDir);
-            engine.indeciesToRetain.add(newDir);
+            lenv.wrapIdxOperation ( () ->
+            {
+	            lenv.addONDEXListener(engine.logger);
+	            lenv.setONDEXGraph(graph);
+	            engine.indexedGraphs.put(graph, newDir);
+	            engine.indeciesToRetain.add(newDir);
+            });
         }
     }
 
@@ -524,6 +553,7 @@ public class Engine {
             try {
                 DirUtils.deleteTree(graphDir);
             } catch (IOException e) {
+            	e.printStackTrace ();
             }
         }
     }
@@ -858,30 +888,11 @@ public class Engine {
      * @throws java.io.IOException
      */
     public static void copyFile(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0)
-            out.write(buf, 0, len);
-        in.close();
-        out.close();
+       try ( InputStream in = new FileInputStream(src);
+      		 	 OutputStream out = new FileOutputStream(dst) )
+       {
+      	 IOUtils.copy ( in, out );
+       }
     }
 
-    /**
-     * Converts a relative path to fully qualified path by prepending ondex dir
-     *
-     * @param fileOrDir - path to check
-     * @return - absolute path to file or folder
-     */
-//    private static String verifyPath(String fileOrDir) {
-//        if (!new File(fileOrDir).exists()) {
-//            if (fileOrDir.startsWith(File.separator) || fileOrDir.startsWith("\\") || fileOrDir.startsWith("/")) {
-//                fileOrDir = systemDataDirectory + fileOrDir;
-//            } else {
-//                fileOrDir = systemDataDirectory + File.separator + fileOrDir;
-//            }
-//        }
-//        return fileOrDir;
-//    }
 }

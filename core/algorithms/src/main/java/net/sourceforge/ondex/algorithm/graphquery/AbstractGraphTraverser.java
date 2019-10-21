@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -86,7 +85,7 @@ public abstract class AbstractGraphTraverser
 		int sz = concepts.size ();
 		log.info ( "Graph Traverser, beginning parallel traversing of {} concept(s)", sz );
 		PercentProgressLogger progressLogger = new PercentProgressLogger ( 
-			"Graph Traverser, {}% concepts traversed", sz 
+			"Graph Traverser, {}% of concepts traversed", sz 
 		);
 		
 		return concepts.parallelStream ()
