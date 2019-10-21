@@ -15,9 +15,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -71,8 +68,13 @@ import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
- * This class idxSearcher the entry point for the indexed ONDEX graph representation. It
- * initialises the LUCENE Index system.
+ * <p>This class idxSearcher the entry point for the indexed ONDEX graph representation. It
+ * initialises the LUCENE Index system.</p>
+ *
+ * <p><b>WARNING</b>: this class <b>is not completely thread-safe</b>. In particular, {@link #setONDEXGraph(ONDEXGraph)}, 
+ * which creates a new index or opens an existing one, should be run in a single-thread mode and then the 
+ * read-only operations (searches and alike) can proceed in multi-thread mode. TODO: review and tidy up the 
+ * multi-threading.</p> 
  * 
  * @author taubertj, reviewed in 2017, 2019 by brandizi (mainly to migrate to Lucene 6.x)
  */
@@ -267,16 +269,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	private final static double RAM_BUFFER_QUOTA = 0.1;
 	
-	/** 
-	 * <p>Establishes a lock when opening/closing index objects. They are thread-safe per se, but we keep their
-	 * opening/closing consistent.</p>
-	 * 
-	 * <p>This is managed by openXXX/closeXXX methods, using the 
-	 * <a href = "https://www.geeksforgeeks.org/java-singleton-design-pattern-practices-examples">double-check lazy init</a>.</p> 
-	 *
-	 */
-	private ReentrantReadWriteLock indexDemarcationgLock = new ReentrantReadWriteLock ();
-
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	static
@@ -371,14 +363,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	public void closeAll () 
 	{
-		WriteLock writeLock = this.indexDemarcationgLock.writeLock ();
-		writeLock.lock ();
-		try {
-			this.closeIdxWriter ();
-		}
-		finally {
-			writeLock.unlock ();
-		}
+		this.closeIdxWriter (); // contains reader's closing too
 	}
 
 	/**
@@ -388,17 +373,10 @@ public class LuceneEnv implements ONDEXLuceneFields
 	{
 		// TODO:Remove log.info ( "DOING closeIdxWriter()", new Throwable ( "NOT A REAL EX" ) );
 		
-		// Double-check lazy access
 		if ( this.idxWriter == null ) return;
-		
-		WriteLock writeLock = this.indexDemarcationgLock.writeLock ();
-		writeLock.lock ();
-		
+				
 		try 
 		{
-			// Double-check lazy access
-			if ( this.idxWriter == null ) return;
-
 			// add last document to index
 			addMetadataToIndex ();
 
@@ -412,9 +390,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage(), "[LucenceEnv - closeIndex]" ) );
 			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		} 
-		finally {
-			writeLock.unlock ();
-		}
 	}
 
 	/**
@@ -597,15 +572,9 @@ public class LuceneEnv implements ONDEXLuceneFields
 	{
 		// Double-check lazy init, see above
 		if ( this.idxWriter != null ) return;
-
-		WriteLock writeLock = this.indexDemarcationgLock.writeLock ();
-		writeLock.lock ();
 		
 		try
-		{
-			// Double-check lazy init, see above
-			if ( this.idxWriter != null ) return;
-			
+		{			
 			// Just in case it's not flushed
 			this.closeIdxReader ();
 			
@@ -629,9 +598,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LucenceEnv - openIndex]" ) );
 			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );
 		}
-		finally {
-			writeLock.unlock ();
-		}
 	}
 	
 	
@@ -641,15 +607,13 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	private void openIdxReader () throws IOException
 	{
-		ReadLock readLock = this.indexDemarcationgLock.readLock ();
-		readLock.lock ();
+		if ( this.idxDirectory == null )
+			this.idxDirectory = FSDirectory.open ( new File ( indexDirPath ).toPath () );
+
+		DirectoryReader newReader = null;
+		
 		try
 		{
-			if ( this.idxDirectory == null )
-				this.idxDirectory = FSDirectory.open ( new File ( indexDirPath ).toPath () );
-	
-			DirectoryReader newReader = null;
-			
 			if ( this.idxReader == null )
 				newReader = DirectoryReader.open ( this.idxDirectory );
 			else
@@ -663,6 +627,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 					newReader = DirectoryReader.open ( idxDirectory );
 				}
 			}
+		}
+		finally {
 			if ( newReader != null )
 			{
 				if ( this.idxReader != null ) this.idxReader.close ();
@@ -670,9 +636,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 				this.idxSearcher = new IndexSearcher ( this.idxReader );
 			}
 		}
-		finally {
-			readLock.unlock ();
-		}		
 	}	
 	
 	/**
@@ -683,23 +646,14 @@ public class LuceneEnv implements ONDEXLuceneFields
 	{
 		//TODO:Remove log.info ( "DOING closeIdxReader()", new Throwable ( "NOT A REAL EX" ) );
 		
-		ReadLock readLock = this.indexDemarcationgLock.readLock ();
-		readLock.lock ();
-		
-		try
-		{
-			if ( this.idxReader != null ) {
-				this.idxReader.close ();
-				this.idxReader = null;
-			}
-			this.idxSearcher = null;
-			if ( this.idxDirectory != null ) {
-				this.idxDirectory.close ();
-				this.idxDirectory = null;
-			}
+		if ( this.idxReader != null ) {
+			this.idxReader.close ();
+			this.idxReader = null;
 		}
-		finally {
-			readLock.unlock ();
+		this.idxSearcher = null;
+		if ( this.idxDirectory != null ) {
+			this.idxDirectory.close ();
+			this.idxDirectory = null;
 		}
 	}
 	
