@@ -342,7 +342,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 		}
 		finally {
 			// Just in case
-			if ( luceneEnv != null ) luceneEnv.closeAll ();
+			// TODO: remove? if ( luceneEnv != null ) luceneEnv.closeAll ();
 		}
 	}
 

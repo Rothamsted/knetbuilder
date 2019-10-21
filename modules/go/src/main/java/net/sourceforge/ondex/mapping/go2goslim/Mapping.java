@@ -201,7 +201,7 @@ public class Mapping extends ONDEXMapping
 	        } // for goSlimConcept
 	      }
         finally {
-        	if ( lenv != null ) lenv.closeAll ();
+        	// TODO: remove? if ( lenv != null ) lenv.closeAll ();
         }
 
         //adapt for subsumed children where S1-S2 where S1 and S2 are sets of GO children for GOSLIM terms t1 and t2 respectively and t2 is a child of t1

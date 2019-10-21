@@ -266,7 +266,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 				} // for ConceptAccession
 			}
 			finally {
-				if ( lenv != null ) lenv.closeAll ();
+				// TODO: remove? if ( lenv != null ) lenv.closeAll ();
 			}
 		}
 

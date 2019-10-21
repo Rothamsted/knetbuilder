@@ -373,7 +373,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 					+ mappedConceptsCount + ".", "[Mapping - setONDEXGraph]"));
 		}
 		finally {
-			if ( lenv != null ) lenv.closeAll ();
+			// TODO: remove? if ( lenv != null ) lenv.closeAll ();
 		}
 	}
 
