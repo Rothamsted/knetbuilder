@@ -52,17 +52,18 @@ import net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype;
  */
 public class CachedGraphWrapper
 {
-	private ONDEXGraph graph; 
-	private Table<Class<Object>, String, Object> cache = HashBasedTable.create ();
+	protected final ONDEXGraph graph; 
+	
+	/**
+	 * The indexed and cached objects that we maintain for the current graph. Essentially it is a dynamic table of
+	 * object type (identified by its class), object key as string =&gt; object.
+	 *    
+	 */
+	private final Table<Class<Object>, String, Object> cache = HashBasedTable.create ();
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	private static Map<ONDEXGraph, CachedGraphWrapper> instances = new HashMap<> ();
 	
-	public CachedGraphWrapper ( ONDEXGraph graph )
-	{
-		this.graph = graph;
-	}
-
 	/**
 	 * We recommend to use this to get a wrapper that caches this graph.
 	 *  
@@ -72,8 +73,14 @@ public class CachedGraphWrapper
 	{
 		return instances.computeIfAbsent ( graph, g -> new CachedGraphWrapper ( g ) );
 	}
+
 	
-	
+	public CachedGraphWrapper ( ONDEXGraph graph )
+	{
+		this.graph = graph;
+	}
+
+		
 	public synchronized ConceptClass getConceptClass ( String id, String fullName, String description, ConceptClass specialisationOf )
 	{
 		return this.cacheGet ( 

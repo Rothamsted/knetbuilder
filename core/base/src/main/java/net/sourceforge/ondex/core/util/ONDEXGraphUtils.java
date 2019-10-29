@@ -1,5 +1,8 @@
 package net.sourceforge.ondex.core.util;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -82,6 +85,46 @@ public class ONDEXGraphUtils
 	public static Attribute getAttribute ( ONDEXGraph graph, ONDEXEntity entity, String nameId )
 	{
 		return getAttribute ( graph, entity, nameId, true );
+	}
+
+	
+	/**
+	 * Simple utility to infer the type of an {@link ONDEXEntity} collection as a string.
+	 * 
+	 * @return "concept" or "relation" if the paramter is non-null and not empty (first element is needed to try to guess),
+	 * else returns null.
+	 *  
+	 * @throws IllegalArgumentException if the first element in the collection is unlikely neither a concept nor a relation.
+	 */
+	public static <OE extends ONDEXEntity> String getEntityType ( Collection<OE> ondexEntities )
+	{
+		if ( ondexEntities == null ) return null;
+		Iterator<OE> oeitr = ondexEntities.iterator ();
+		if ( !oeitr.hasNext () ) return null;
+		return getEntityType ( oeitr.next () );
+	}
+
+	/**
+	 * Variant of {@link #getEntityType(Collection)}
+	 */
+	public static <OE extends ONDEXEntity> String getEntityType ( OE ondexEntity )
+	{
+		if ( ondexEntity == null ) return null;
+		return ( getEntityType ( ondexEntity.getClass () ));
+	}
+
+
+	/**
+	 * Variant of {@link #getEntityType(Collection)}
+	 */
+	public static <OE extends ONDEXEntity> String getEntityType ( Class<OE> ondexEntityType )
+	{
+		if ( ondexEntityType == null ) return null;
+		if ( ONDEXConcept.class.isAssignableFrom ( ondexEntityType ) ) return "concept";
+		if ( ONDEXRelation.class.isAssignableFrom ( ondexEntityType ) ) return "relation";
+		throw new IllegalArgumentException ( 
+			ONDEXGraphUtils.class.getSimpleName () + ".getEntityType() has a value of unkknown type: " + ondexEntityType.getName () 
+		);
 	}
 
 }

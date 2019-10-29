@@ -29,7 +29,12 @@ import net.sourceforge.ondex.core.util.BitSetFunctions;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
- * A graph traverser to extract multiple paths based rules defined in a graph of states and transitions
+ * A graph traverser to extract multiple paths based rules defined in a graph of states and transitions.
+ * 
+ * <p>This traverser requires the {@code "ONDEXGraph"} {@link #getOptions() option}, but that's used by the 
+ * {@link StateMachine} {@link #loadSemanticMotifs(String) loader}, to know the metadata to be used to validate 
+ * the state machine being loaded. So that could be an empty graph, though typically it will be the same graph you use 
+ * for the traverse methods</p>.
  *
  * @author hindlem
  */
