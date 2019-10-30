@@ -14,11 +14,11 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.DocErrorReporter;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
-import com.sun.xml.stream.ZephyrWriterFactory;
 
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.annotations.DataURL;
@@ -75,7 +75,7 @@ public class PluginDoclet {
 			return true;
 		}
 
-		Set<URL> jarRegisterBuilder = new HashSet<URL>();
+		Set<URL> jarRegisterBuilder = new HashSet<>();
 		File rootDir = new File(classDir);
 
 		addFiles(new File(libsDir), jarRegisterBuilder);
@@ -102,6 +102,7 @@ public class PluginDoclet {
 			// TODO: doesn't seem relevant here, remove
 			// System.setProperty("javax.xml.stream.XMLInputFactory", "com.sun.xml.stream.ZephyrParserFactory");
 			System.setProperty("ondex.zephyr.javax.xml.stream.XMLOutputFactory",	"com.sun.xml.stream.ZephyrWriterFactory" );
+
 			XMLOutputFactory xof = XMLOutputFactory.newFactory (
 				"ondex.zephyr.javax.xml.stream.XMLOutputFactory", PluginDoclet.class.getClassLoader () 
 			);
@@ -115,7 +116,7 @@ public class PluginDoclet {
 			ClassDoc validatorClass = root
 					.classNamed(AbstractONDEXValidator.class.getCanonicalName());
 
-			Set<ClassDoc> pluginTypes = new HashSet<ClassDoc>();
+			Set<ClassDoc> pluginTypes = new HashSet<>();
 			for (PluginType pt : PluginType.values()) {
 				ClassDoc ptd = root.classNamed(pt.getPluginClass()
 						.getCanonicalName());
