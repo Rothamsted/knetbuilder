@@ -214,8 +214,8 @@ public class GraphMemIndex
 
 		log.info ( 
 			"indexing {} {}(s) against the field/attribute: \"{}\"/\"{}\"",
-			type,
 			odxEntities.size (),
+			type,
 			fieldName,
 			attribName
 		);
