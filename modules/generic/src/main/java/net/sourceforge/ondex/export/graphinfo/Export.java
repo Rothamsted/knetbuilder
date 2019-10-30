@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.stax2.XMLOutputFactory2;
@@ -23,6 +22,7 @@ import com.ctc.wstx.io.CharsetNames;
 import com.ctc.wstx.stax.WstxOutputFactory;
 
 import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -34,7 +34,6 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
-import net.sourceforge.ondex.doclet.PluginDoclet;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
 
@@ -90,8 +89,13 @@ public class Export extends ONDEXExport implements FieldNames {
 	protected WstxOutputFactory getXMLFactory() {
 		// initialise outputs
 		System.setProperty ( "ondex.javax.xml.stream.XMLOutputFactory",	"com.ctc.wstx.stax.WstxOutputFactory" );
+		
+		// TODO: It had the class loader of net.sourceforge.ondex.doclet.PluginDoclet, which is disabled, cause
+		// it depends on com.sun.doclet, which was removed from recent Java. No idea why the hell this class 
+		// was used here, trying to use a class in the same Jar.
+		//
 		WstxOutputFactory xmlw = (WstxOutputFactory) WstxOutputFactory.newFactory (
-			"ondex.javax.xml.stream.XMLOutputFactory", PluginDoclet.class.getClassLoader () 
+			"ondex.javax.xml.stream.XMLOutputFactory", ONDEXPlugin.class.getClassLoader () 
 		);
 		xmlw.configureForRobustness();
 
