@@ -17,46 +17,21 @@
 
    <name>workflow-api</name>
 
-   <profiles>
-      <profile>
-         <id>sun</id>
-         <activation>
-            <property>
-               <name>java.vendor</name>
-               <value>Sun Microsystems Inc.</value>
-            </property>
-         </activation>
-         <dependencies>
-            <dependency>
-               <groupId>com.sun</groupId>
-               <artifactId>tools</artifactId>
-               <version>1.6.0</version>
-               <scope>system</scope>
-               <systemPath>${java.home}/../lib/tools.jar</systemPath>
-            </dependency>
-         </dependencies>
-      </profile>
-      <profile>
-         <id>oracle</id>
-         <activation>
-            <property>
-               <name>java.vendor</name>
-               <value>Oracle Corporation</value>
-            </property>
-         </activation>
-         <dependencies>
-            <dependency>
-               <groupId>com.sun</groupId>
-               <artifactId>tools</artifactId>
-               <version>1.7.0</version>
-               <scope>system</scope>
-               <systemPath>${java.home}/../lib/tools.jar</systemPath>
-            </dependency>
-         </dependencies>
-      </profile>
-   </profiles>
-
    <dependencies>
+
+			 <!-- 
+			 		This trick is needed cause the standard Java doesn't pick tools.jar (at list from certain versions onwards. 
+			 		We currently need that jar for com.sun.javadoc.* TODO: J9 has a replacement for this, migrate.
+			 -->
+       <dependency>
+	       <groupId>com.sun</groupId>
+	       <artifactId>tools</artifactId>
+	       <!-- It's irrelevant, the point is to get the jar -->
+	       <version>${java.version}</version>
+	       <scope>system</scope>
+	       <systemPath>${java.home}/../lib/tools.jar</systemPath>
+       </dependency>
+   
       <dependency>
          <groupId>com.sun.xml.stream</groupId>
          <artifactId>sjsxp</artifactId>
@@ -105,7 +80,8 @@
          <scope>compile</scope>
       </dependency>
 
-      <!-- ONDEX deps -->      <dependency>
+      <!-- ONDEX deps -->      
+      <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>
          <artifactId>base</artifactId>
          <version>${project.version}</version>
