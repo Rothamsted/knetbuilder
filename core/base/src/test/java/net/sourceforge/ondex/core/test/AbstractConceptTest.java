@@ -11,15 +11,8 @@ import java.util.List;
 /**
  * @author hindlem
  */
-public abstract class AbstractConceptTest extends TestCase {
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+public abstract class AbstractConceptTest extends TestCase 
+{
 
 	private AttributeName att_bitscore;
 
@@ -125,9 +118,6 @@ public abstract class AbstractConceptTest extends TestCase {
 		et_me = og.getMetaData().getFactory().createEvidenceType("ME");
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
 
 	@Test
 	public void testAddEvidenceType() {
