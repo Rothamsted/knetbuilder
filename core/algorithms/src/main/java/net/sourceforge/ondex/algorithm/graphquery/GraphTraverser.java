@@ -87,8 +87,8 @@ public class GraphTraverser extends AbstractGraphTraverser {
     {
     	if ( EXECUTOR == null )
     	{
-				// EXECUTOR = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-				EXECUTOR = Executors.newFixedThreadPool ( 1 );
+				EXECUTOR = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+				//EXECUTOR = Executors.newFixedThreadPool ( 1 );
 				Runtime.getRuntime ().addShutdownHook ( new Thread () {
 					public void run () {
 						EXECUTOR.shutdownNow ();
