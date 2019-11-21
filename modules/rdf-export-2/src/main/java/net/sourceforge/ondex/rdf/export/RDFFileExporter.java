@@ -44,9 +44,9 @@ public class RDFFileExporter
 			// is too complicated) making the true processing single-thread anyway
 			//
 			xport.setExecutorFactory ( () -> HackedBlockingQueue.createExecutor ( 1, 1 ) );
-			xport.setDestinationMaxSize ( 50000 );
+			xport.setBatchMaxSize ( 50000 );
 			
-			xport.setConsumer ( m -> 
+			xport.setBatchJob ( m -> 
 			{ 
 				log.trace ( "BEGIN RDF writing thread {}", Thread.currentThread ().getName () );
 				

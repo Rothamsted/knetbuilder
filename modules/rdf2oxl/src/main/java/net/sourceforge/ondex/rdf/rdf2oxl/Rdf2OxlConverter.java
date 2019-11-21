@@ -110,7 +110,7 @@ public class Rdf2OxlConverter
 					QuerySolutionHandler handler = itemCfg.getQuerySolutionHandler ();
 					if ( handler == null ) handler = this.defaultQuerySolutionHandler;
 						
-					processor.setConsumer ( handler );				
+					processor.setBatchJob ( handler );				
 					handler.setOutWriter ( oxlOut );
 	
 					String itemName = itemCfg.getName (); // for logging and debugging

@@ -58,7 +58,7 @@ public class OxlTemplatesTest
 			handler.setOutWriter ( writer );
 						
 			QueryProcessor proc = (QueryProcessor) ctx.getBean ( "resourceProcessor" );
-			proc.setConsumer ( handler );
+			proc.setBatchJob ( handler );
 			proc.setHeader ( "<conceptclasses>\n" );
 			proc.setTrailer ( "</conceptclasses>\n" );
 			

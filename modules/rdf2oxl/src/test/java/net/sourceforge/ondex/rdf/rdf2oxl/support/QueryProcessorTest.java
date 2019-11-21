@@ -63,7 +63,7 @@ public class QueryProcessorTest
 			handler.setOutWriter ( new OutputStreamWriter ( out ) );
 			
 			QueryProcessor proc = new QueryProcessor ();						
-			proc.setConsumer ( handler );
+			proc.setBatchJob ( handler );
 			proc.setSparqlHelper ( sparqlHelper );
 			
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
@@ -103,7 +103,7 @@ public class QueryProcessorTest
 			handler.setOutWriter ( new OutputStreamWriter ( out ) );
 						
 			QueryProcessor proc = (QueryProcessor) ctx.getBean ( "resourceProcessor" );
-			proc.setConsumer ( handler );
+			proc.setBatchJob ( handler );
 			proc.process ( IOUtils.readFile ( "target/test-classes/support_test/resources.sparql" ) );
 			
 			out.flush ();

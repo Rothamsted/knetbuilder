@@ -66,7 +66,7 @@ public class PrefNameTest
 		Model model = ModelFactory.createDefaultModel ();
 		
 		RDFExporter xport = new RDFExporter ();
-		xport.setConsumer ( m -> model.add ( m ) );
+		xport.setBatchJob ( m -> model.add ( m ) );
 		xport.export ( g );			
 
 		StringWriter sw = new StringWriter ();

@@ -29,7 +29,7 @@ import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
  * 
  * See the [package description](package-summary.html) for details.  
  *
- * The {@link #setConsumer(Consumer) consumer} for this processor is set by {@link Rdf2OxlConverter}, which has its own
+ * The {@link #setBatchJob(Consumer) consumer} for this processor is set by {@link Rdf2OxlConverter}, which has its own
  * Spring-coming defaults and also values taken from {@link ItemConfiguration}.  
  * 
  * @author brandizi
@@ -54,13 +54,13 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 	public QueryProcessor ()
 	{
 		super ();
-		this.setDestinationMaxSize ( 1000 );
-		this.setDestinationSupplier ( () -> new LinkedList<> () );
+		this.setBatchMaxSize ( 1000 );
+		this.setBatchFactory ( () -> new LinkedList<> () );
 	}	
 	
 	@Override
-	protected long getDestinationSize ( List<QuerySolution> dest ) {
-		return dest.size ();
+	protected long getCurrentBatchSize ( List<QuerySolution> batch ) {
+		return batch.size ();
 	}
 
 	@Override
@@ -70,24 +70,24 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 		{
 			log.info ( "{}: starting Reading RDF", logPrefix );
 						
-			QuerySolutionHandler handler = (QuerySolutionHandler) getConsumer ();
+			QuerySolutionHandler handler = (QuerySolutionHandler) getBatchJob ();
 
 			Writer outWriter = handler.getOutWriter ();
 			if ( this.header != null ) outWriter.write ( this.header );
 			
 			@SuppressWarnings ( "unchecked" )
-			List<QuerySolution> chunk[] = new List[] { this.getDestinationSupplier ().get () };
+			List<QuerySolution> batch[] = new List[] { this.getBatchFactory ().get () };
 			
 			lastExecutionCount = sparqlHelper.processSelect ( logPrefix, resourcesQuery, sol -> 
 			{
-				chunk [ 0 ].add ( sol );
+				batch [ 0 ].add ( sol );
 
 				// As usually, this triggers a new chunk-processing task when we have enough items to process.
-				chunk [ 0 ] = handleNewTask ( chunk [ 0 ] );
+				batch [ 0 ] = handleNewBatch ( batch [ 0 ] );
 			});
 				
 			// Process last chunk
-			handleNewTask ( chunk [ 0 ], true );			
+			handleNewBatch ( batch [ 0 ], true );			
 			this.waitExecutor ( logPrefix + ": waiting for RDF resource processing tasks to finish" );
 
 			// Did everything go fine?
@@ -112,7 +112,7 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 
 
 	@Override
-	protected List<QuerySolution> handleNewTask ( List<QuerySolution> currentDest, boolean forceFlush )
+	protected List<QuerySolution> handleNewBatch ( List<QuerySolution> currentBatch, boolean forceFlush )
 	{
 		Exception lastEx = this.getExecutionException ();
 		if ( lastEx != null ) throw new UncheckedExecutionException ( 
@@ -120,7 +120,7 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 			lastEx 
 		);
 		
-		return super.handleNewTask ( currentDest, forceFlush );
+		return super.handleNewBatch ( currentBatch, forceFlush );
 	}
 	
 	
@@ -131,7 +131,7 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 	}
 	
 	/**
-	 * This is used by the {@link QueryProcessor#handleNewTask(List, boolean) processor}, to stop further processing
+	 * This is used by the {@link QueryProcessor#handleNewBatch(List, boolean) processor}, to stop further processing
 	 * when any running thread terminates with an exception.
 	 */
 	public synchronized Exception getExecutionException () {
@@ -194,9 +194,9 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 
 	
 	@Override
-	protected Runnable wrapTask ( Runnable task )
+	protected Runnable wrapBatchJob ( Runnable task )
 	{
-		return super.wrapTask ( () -> 
+		return super.wrapBatchJob ( () -> 
 		{
 			try {
 				task.run ();

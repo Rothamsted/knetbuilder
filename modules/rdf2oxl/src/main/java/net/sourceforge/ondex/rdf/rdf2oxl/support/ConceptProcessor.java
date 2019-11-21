@@ -63,13 +63,13 @@ public class ConceptProcessor extends QueryProcessor
 				conceptsCount, conceptIds.size ()
 			);
 						
-			QuerySolutionHandler handler = (QuerySolutionHandler) getConsumer ();
+			QuerySolutionHandler handler = (QuerySolutionHandler) getBatchJob ();
 			Writer outWriter = handler.getOutWriter ();
 			
 			if ( this.getHeader () != null ) outWriter.write ( this.getHeader () );
 			
 			@SuppressWarnings ( "unchecked" )
-			List<QuerySolution> chunk[] = new List[] { this.getDestinationSupplier ().get () };
+			List<QuerySolution> batch[] = new List[] { this.getBatchFactory ().get () };
 
 			Model model = ModelFactory.createDefaultModel ();
 			
@@ -77,14 +77,14 @@ public class ConceptProcessor extends QueryProcessor
 			{
 				QuerySolutionMap sol = new QuerySolutionMap ();
 				sol.add ( "resourceIri", model.createResource ( iri ) );
-				chunk [ 0 ].add ( sol );
+				batch [ 0 ].add ( sol );
 			
 				// As usually, this triggers a new chunk-processing task when we have enough items to process.
-				chunk [ 0 ] = handleNewTask ( chunk [ 0 ] );
+				batch [ 0 ] = handleNewBatch ( batch [ 0 ] );
 			});
 			
 			// Process last chunk
-			handleNewTask ( chunk [ 0 ], true );		
+			handleNewBatch ( batch [ 0 ], true );		
 			this.waitExecutor ( this.getLogPrefix () + ": waiting for RDF resource processing tasks to finish" );
 	
 			if ( this.getTrailer () != null ) outWriter.write ( this.getTrailer () );
