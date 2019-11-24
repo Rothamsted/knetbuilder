@@ -27,7 +27,7 @@ import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
  * Note that every new chunks generated in 
  * {@link RDFExporter#export(net.sourceforge.ondex.core.ONDEXGraph)} uses a new {@link RDFXFactory}, 
  * so possible state information stored here doesn't last for the whole lifetime of the exporter (the 
- * {@link RdfMapperFactory} tracking of already-visited objects isn't very relevan here, since ONDEX 
+ * {@link RdfMapperFactory} tracking of already-visited objects isn't very relevant here, since ONDEX 
  * objects are visited once only).
  *
  * @author brandizi
@@ -36,18 +36,10 @@ import uk.ac.ebi.fg.java2rdf.mapping.RdfMapperFactory;
  */
 public class RDFXFactory extends RdfMapperFactory
 {
-	private long triplesCountTracker = 0;
-	
+
 	public RDFXFactory ( Model model )
 	{
-		this ( model, 0 );
-	}
-
-	public RDFXFactory ( Model model, long triplesCountTracker )
-	{
 		super ( null );
-		
-		this.triplesCountTracker = triplesCountTracker;
 
 		JenaRDF rdf = (JenaRDF) CommonsRDFUtils.COMMUTILS.getRDF ();
 		this.setGraphModel ( rdf.asGraph ( model ) );
@@ -66,11 +58,6 @@ public class RDFXFactory extends RdfMapperFactory
 	public Model getJenaModel ()
 	{
 		return ( (JenaGraph) this.getGraphModel () ).asJenaModel ();
-	}
-
-	public long getTriplesCountTracker ()
-	{
-		return triplesCountTracker;
 	}
 	
 }

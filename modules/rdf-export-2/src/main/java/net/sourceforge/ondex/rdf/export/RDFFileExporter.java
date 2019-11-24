@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.rdf.api.Graph;
+import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
@@ -44,11 +46,13 @@ public class RDFFileExporter
 			// is too complicated) making the true processing single-thread anyway
 			//
 			xport.setExecutorFactory ( () -> HackedBlockingQueue.createExecutor ( 1, 1 ) );
-			xport.setBatchMaxSize ( 50000 );
+			xport.getBatchCollector ().setMaxBatchSize ( 50000l );
 			
-			xport.setBatchJob ( m -> 
+			xport.setBatchJob ( xfact -> 
 			{ 
 				log.trace ( "BEGIN RDF writing thread {}", Thread.currentThread ().getName () );
+				
+				 Model m = xfact.getJenaModel ();
 				
 				// This should be the way to ensure output streaming in Jena.
 				// However, this recognises a few languages/formats only (those registered by StreamRDFWriter)

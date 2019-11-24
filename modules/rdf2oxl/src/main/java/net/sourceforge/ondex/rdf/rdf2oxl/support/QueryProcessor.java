@@ -19,7 +19,8 @@ import com.google.common.util.concurrent.UncheckedExecutionException;
 import info.marcobrandizi.rdfutils.jena.SparqlEndPointHelper;
 import net.sourceforge.ondex.rdf.rdf2oxl.Rdf2OxlConverter;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
-import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
+import uk.ac.ebi.utils.threading.batchproc.collectors.ListBatchCollector;
+import uk.ac.ebi.utils.threading.batchproc.processors.ListBasedBatchProcessor;
 
 /**
  * # The SPARQL query processor
@@ -37,7 +38,7 @@ import uk.ac.ebi.utils.threading.SizeBasedBatchProcessor;
  *
  */
 @Component ( "resourceProcessor" )
-public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySolution>>
+public class QueryProcessor extends ListBasedBatchProcessor<QuerySolution, QuerySolutionHandler>
 {
 	private String header, trailer;
 	
@@ -54,41 +55,24 @@ public class QueryProcessor extends SizeBasedBatchProcessor<String, List<QuerySo
 	public QueryProcessor ()
 	{
 		super ();
-		this.setBatchMaxSize ( 1000 );
-		this.setBatchFactory ( () -> new LinkedList<> () );
+		this.setBatchCollector ( new ListBatchCollector<> ( LinkedList::new, 1000 ) );
 	}	
 	
-	@Override
-	protected long getCurrentBatchSize ( List<QuerySolution> batch ) {
-		return batch.size ();
-	}
 
-	@Override
 	public void process ( String resourcesQuery, Object... opts )
 	{		
 		try
 		{
 			log.info ( "{}: starting Reading RDF", logPrefix );
 						
-			QuerySolutionHandler handler = (QuerySolutionHandler) getBatchJob ();
-
+			QuerySolutionHandler handler = getBatchJob ();
 			Writer outWriter = handler.getOutWriter ();
 			if ( this.header != null ) outWriter.write ( this.header );
 			
-			@SuppressWarnings ( "unchecked" )
-			List<QuerySolution> batch[] = new List[] { this.getBatchFactory ().get () };
-			
-			lastExecutionCount = sparqlHelper.processSelect ( logPrefix, resourcesQuery, sol -> 
-			{
-				batch [ 0 ].add ( sol );
-
-				// As usually, this triggers a new chunk-processing task when we have enough items to process.
-				batch [ 0 ] = handleNewBatch ( batch [ 0 ] );
-			});
+			Consumer<Consumer<QuerySolution>> qsolProc = 
+				qsol -> sparqlHelper.processSelect ( logPrefix, resourcesQuery, qsol );
 				
-			// Process last chunk
-			handleNewBatch ( batch [ 0 ], true );			
-			this.waitExecutor ( logPrefix + ": waiting for RDF resource processing tasks to finish" );
+			super.process ( qsolProc, opts );
 
 			// Did everything go fine?
 			Exception lastEx = getExecutionException ();

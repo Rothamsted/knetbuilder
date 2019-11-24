@@ -66,7 +66,7 @@ public class PrefNameTest
 		Model model = ModelFactory.createDefaultModel ();
 		
 		RDFExporter xport = new RDFExporter ();
-		xport.setBatchJob ( m -> model.add ( m ) );
+		xport.setBatchJob ( xfact -> model.add ( xfact.getJenaModel () ) );
 		xport.export ( g );			
 
 		StringWriter sw = new StringWriter ();

@@ -5,8 +5,8 @@ import static java.lang.String.format;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
@@ -68,27 +68,20 @@ public class ConceptProcessor extends QueryProcessor
 			
 			if ( this.getHeader () != null ) outWriter.write ( this.getHeader () );
 			
-			@SuppressWarnings ( "unchecked" )
-			List<QuerySolution> batch[] = new List[] { this.getBatchFactory ().get () };
-
+			// We need the old QuerySolution(s), cause of compatibility with this.process()
 			Model model = ModelFactory.createDefaultModel ();
-			
-			this.conceptIds.forEach ( (iri, id) -> 
-			{
-				QuerySolutionMap sol = new QuerySolutionMap ();
-				sol.add ( "resourceIri", model.createResource ( iri ) );
-				batch [ 0 ].add ( sol );
-			
-				// As usually, this triggers a new chunk-processing task when we have enough items to process.
-				batch [ 0 ] = handleNewBatch ( batch [ 0 ] );
+			Stream<QuerySolution> conceptIrisStrm = this.conceptIds
+				.entrySet ()
+				.stream ()
+				.map ( entry -> {
+					QuerySolutionMap sol = new QuerySolutionMap ();
+					sol.add ( "resourceIri", model.createResource ( entry.getKey () ) );
+					return sol;
 			});
 			
-			// Process last chunk
-			handleNewBatch ( batch [ 0 ], true );		
-			this.waitExecutor ( this.getLogPrefix () + ": waiting for RDF resource processing tasks to finish" );
+			super.process ( conceptIrisStrm::forEach, opts );
 	
 			if ( this.getTrailer () != null ) outWriter.write ( this.getTrailer () );
-			
 			log.info ( "{}: all RDF resources processed", logPrefix );
 		}
 		catch ( IOException ex )
