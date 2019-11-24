@@ -6,7 +6,7 @@ if [ "$branch" == "" ]; then
 fi
 
 printf "\n\n\tSwitching to '$branch' in each module\n"
-for repo in ondex-base ondex-desktop ondex-opt ondex-base	ondex-doc	ondex-knet-builder ondex-old-components
+for repo in ondex-base ondex-desktop ondex-opt ondex-doc ondex-knet-builder ondex-old-components
 do
   echo -e "\n\n$repo"
   cd "$repo"
