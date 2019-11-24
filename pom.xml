@@ -298,7 +298,7 @@
 		<jexcelapi.jxl.version>2.6.10</jexcelapi.jxl.version>
 		<junit.version>4.7</junit.version>
 		<mysql.connector.java.version>5.1.6</mysql.connector.java.version>
-		<!-- TODO: remove org.apache.lucene.core.version>3.6.1</org.apache.lucene.core.version -->
+		<jutils.version>8.0.1-SNAPSHOT</jutils.version>
 		<lucene.version>6.6.0</lucene.version>
 		<spring.version>4.3.6.RELEASE</spring.version>
 		
@@ -594,12 +594,12 @@
 			<dependency>
 		  		<groupId>uk.ac.ebi</groupId>
 		  		<artifactId>jutils</artifactId>
-		  		<version>7.0.1-SNAPSHOT</version>
+		  		<version>${jutils.version}</version>
 			</dependency>
 			<dependency>
 		  		<groupId>uk.ac.ebi</groupId>
 		  		<artifactId>jutils-io</artifactId>
-		  		<version>7.0.1-SNAPSHOT</version>
+		  		<version>${jutils.version}</version>
 			</dependency>
 				
 			<!-- Utilities for the Jena RDF framework -->
