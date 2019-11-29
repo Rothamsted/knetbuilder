@@ -192,6 +192,8 @@ public class GraphTraverser extends AbstractGraphTraverser {
 
     		init ();
     	
+    		log.info ( "Graph Traverser, beginning parallel traversing of {} concept(s)", concepts.size () );
+    		
         Set<Transition> transitions = sm.getAllTransitions();
         for (Transition transition : transitions) {
             transitionViewCache.put(transition,
