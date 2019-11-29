@@ -103,7 +103,7 @@ public class GraphMemIndex
 	 * <p>Deletes the index, useful to free the memory.</p>
 	 * 
 	 * <p><b>WARNING</b>: You'll get errors after having invoked this method, unless you call {@link #updateIndex()} 
-	 * (in which case you typically won't need to clear me explicitly since the update implies that).</p>
+	 * (in which case you typically won't need to clear me explicitly, since, the update implies that).</p>
 	 * 
 	 */
 	public void clear ()

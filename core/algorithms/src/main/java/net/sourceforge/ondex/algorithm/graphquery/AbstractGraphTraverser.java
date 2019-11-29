@@ -2,6 +2,7 @@ package net.sourceforge.ondex.algorithm.graphquery;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,13 +100,18 @@ public abstract class AbstractGraphTraverser
 		));
 	}
 
-	
+	/**
+	 * Returns an unmodifiable view of this traverser options.
+	 */
 	public Map<String, Object> getOptions () {
-		return options;
+		return Collections.unmodifiableMap ( options );
 	}
 
+	/**
+	 * Invokes {@link #setOption(String, Object)} for each entry in the parameter. 
+	 */
 	public void setOptions ( Map<String, Object> options ) {
-		this.options = options;
+		options.forEach ( this::setOption );
 	}
 	
 	public void setOption ( String key, Object value ) {
