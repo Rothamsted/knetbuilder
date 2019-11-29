@@ -72,7 +72,7 @@ public class QueryProcessor extends ListBasedBatchProcessor<QuerySolution, Query
 			Consumer<Consumer<QuerySolution>> qsolProc = 
 				qsol -> sparqlHelper.processSelect ( logPrefix, resourcesQuery, qsol );
 				
-			super.process ( qsolProc, opts );
+			super.process ( qsolProc );
 
 			// Did everything go fine?
 			Exception lastEx = getExecutionException ();

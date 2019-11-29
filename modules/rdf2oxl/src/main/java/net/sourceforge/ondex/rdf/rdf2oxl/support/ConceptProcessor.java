@@ -79,7 +79,7 @@ public class ConceptProcessor extends QueryProcessor
 					return sol;
 			});
 			
-			super.process ( conceptIrisStrm::forEach, opts );
+			super.process ( conceptIrisStrm::forEach );
 	
 			if ( this.getTrailer () != null ) outWriter.write ( this.getTrailer () );
 			log.info ( "{}: all RDF resources processed", logPrefix );

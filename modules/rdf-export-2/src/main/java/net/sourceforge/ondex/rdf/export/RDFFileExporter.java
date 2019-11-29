@@ -45,7 +45,7 @@ public class RDFFileExporter
 			// in a thread-safe way, so it would need synchronisation at model level (going more fine-grained
 			// is too complicated) making the true processing single-thread anyway
 			//
-			xport.setExecutorFactory ( () -> HackedBlockingQueue.createExecutor ( 1, 1 ) );
+			xport.setExecutor ( HackedBlockingQueue.createExecutor ( 1, 1 ) );
 			xport.getBatchCollector ().setMaxBatchSize ( 50000l );
 			
 			xport.setBatchJob ( xfact -> 
