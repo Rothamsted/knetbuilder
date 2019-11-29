@@ -211,8 +211,6 @@ public class GraphTraverser extends AbstractGraphTraverser {
             futures.put(concept, EXECUTOR.submit(traverser));
         }
 
-        log.info ( "{} traversal task(s) submitted", futures.size() );
-
         int totalFutureNumber = futures.keySet().size();
 
         PercentProgressLogger progressLogger = new PercentProgressLogger (
