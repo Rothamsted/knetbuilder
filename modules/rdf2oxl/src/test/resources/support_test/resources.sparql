@@ -1,4 +1,4 @@
-prefix bk:  <http://www.ondex.org/bioknet/terms/>
+prefix bk:  <http://knetminer.org/data/rdf/terms/biokno/>
 
 SELECT ?resourceIri
 {

@@ -1,11 +1,11 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
-@prefix bkr:  <http://www.ondex.org/bioknet/resources/> .
+@prefix bkr:  <http://knetminer.org/data/rdf/resources/> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix bk:  <http://www.ondex.org/bioknet/terms/> .
-@prefix bka:  <http://www.ondex.org/bioknet/terms/attributes/> .
-@prefix bkev: <http://www.ondex.org/bioknet/terms/evidences/>.
-@prefix bkds: <http://www.ondex.org/bioknet/terms/dataSources/>.
+@prefix bk:  <http://knetminer.org/data/rdf/terms/biokno/> .
+@prefix bka:  <http://knetminer.org/data/rdf/terms/biokno/attributes/> .
+@prefix bkev: <http://knetminer.org/data/rdf/terms/biokno/evidences/>.
+@prefix bkds: <http://knetminer.org/data/rdf/terms/biokno/dataSources/>.
 @prefix dcterms:  <http://purl.org/dc/terms/> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .

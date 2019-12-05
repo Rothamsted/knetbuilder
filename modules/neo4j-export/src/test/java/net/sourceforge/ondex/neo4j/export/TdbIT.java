@@ -64,7 +64,7 @@ public class TdbIT
 							)
 						);
 						if ( !cyCursor.hasNext () ) {
-							String bk = "http://www.ondex.org/bioknet/";
+							String bk = "http://knetminer.org/data/rdf/terms/biokno/";
 							out.format ( "(%s, %s, %s, %s)\n", 
 								type.replace ( bk, "bk:" ), 
 								from.replace ( bk, "bk:" ), 

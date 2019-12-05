@@ -20,11 +20,11 @@ public class OndexNamespaces implements Namespaces
 	{
 		return new HashMap<String, String> ()
 		{{
-			put ( "bk", "http://www.ondex.org/bioknet/terms/" );
-			put ( "bkr", "http://www.ondex.org/bioknet/resources/" );
-			put ( "bka", "http://www.ondex.org/bioknet/terms/attributes/" );
-			put ( "bkds", "http://www.ondex.org/bioknet/terms/dataSources/" );
-			put ( "bkev", "http://www.ondex.org/bioknet/terms/evidences/" );			
+			put ( "bk", "http://knetminer.org/data/rdf/terms/biokno/" );
+			put ( "bkr", "http://knetminer.org/data/rdf/resources/" );
+			put ( "bka", "http://knetminer.org/data/rdf/terms/biokno/attributes/" );
+			put ( "bkds", "http://knetminer.org/data/rdf/terms/biokno/dataSources/" );
+			put ( "bkev", "http://knetminer.org/data/rdf/terms/biokno/evidences/" );			
 		}};
 	}
 }

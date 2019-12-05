@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://www.ondex.org/bioknet/terms/"
-     xml:base="http://www.ondex.org/bioknet/terms/"
-     xmlns:bk="http://www.ondex.org/bioknet/terms/"
+<rdf:RDF xmlns="http://knetminer.org/data/rdf/terms/biokno/"
+     xml:base="http://knetminer.org/data/rdf/terms/biokno/"
+     xmlns:bk="http://knetminer.org/data/rdf/terms/biokno/"
      xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:bka="http://www.ondex.org/bioknet/terms/attributes/"
-     xmlns:bkr="http://www.ondex.org/bioknet/resources/"
+     xmlns:bka="http://knetminer.org/data/rdf/terms/biokno/attributes/"
+     xmlns:bkr="http://knetminer.org/data/rdf/resources/biokno/"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -13,7 +13,7 @@
      xmlns:skos="http://www.w3.org/2004/02/skos/core#"
      xmlns:schema="http://schema.org/"
      xmlns:dcterms="http://purl.org/dc/terms/">
-    <owl:Ontology rdf:about="http://www.ondex.org/bioknet/terms/"/>
+    <owl:Ontology rdf:about="http://knetminer.org/data/rdf/terms/biokno/"/>
     
 
 
@@ -52,17 +52,17 @@
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/constraints -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/constraints -->
 
-    <owl:AnnotationProperty rdf:about="http://www.ondex.org/bioknet/terms/constraints">
+    <owl:AnnotationProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/constraints">
         <dcterms:description xml:lang="en">TODO: description.</dcterms:description>
     </owl:AnnotationProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/isIndexed -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/isIndexed -->
 
-    <owl:AnnotationProperty rdf:about="http://www.ondex.org/bioknet/terms/isIndexed">
+    <owl:AnnotationProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/isIndexed">
         <dcterms:description xml:lang="en">This is used in the ONDEX project to tell that entities like attributes have to be indexed in systems like Lucene.</dcterms:description>
         <rdfs:label xml:lang="en">is indexed</rdfs:label>
         <skos:editorialNote xml:lang="en">This should be done at type level, eg, bk:attribte subproperty and not the single attribute value, as it is done in ONDEX. We simplify things this way (compared to ONDEX), since it doesn&apos;t make much sense to specifiy the indexing at value level (and it&apos;s not being done in the current indexing components).</skos:editorialNote>
@@ -71,9 +71,9 @@
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/isOndexPreferred -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/isOndexPreferred -->
 
-    <owl:AnnotationProperty rdf:about="http://www.ondex.org/bioknet/terms/isOndexPreferred">
+    <owl:AnnotationProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/isOndexPreferred">
         <dcterms:description xml:lang="en">A class or property marked with this flag tells that, if there are equivalent classes or individuals with multiple inheritance, this entity should be used as the preferred one for the internals of the ONDEX and kNetMiner projects.
 
 This is particularly useful for managing mappings to standard ontologies.
@@ -85,9 +85,9 @@ Note that we mark certain top-level entities with this flag (e.g., bk:Concept, b
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/ondexRange -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/ondexRange -->
 
-    <owl:AnnotationProperty rdf:about="http://www.ondex.org/bioknet/terms/ondexRange">
+    <owl:AnnotationProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/ondexRange">
         <dcterms:description xml:lang="en">This is internal to the ONDEX project, used to track the original ONDEX datatype or range for an attribute or relation. We transform some of these types during translation of original ONDEX metadata into OWL (e.g., &apos;character&apos; =&gt; &apos;string&apos;), so this property is used to retrofit datatypes after editing of OWL ontologies.</dcterms:description>
         <rdfs:label xml:lang="en">ONDEX range or datatype</rdfs:label>
         <skos:editorialNote xml:lang="en">This is extracted from ondex_metadata.xml, usually attributes only defines their datatype ranges.</skos:editorialNote>
@@ -112,98 +112,98 @@ Note that we mark certain top-level entities with this flag (e.g., bk:Concept, b
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/attributeUnit -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/attributeUnit -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/attributeUnit">
-        <rdfs:range rdf:resource="http://www.ondex.org/bioknet/terms/Unit"/>
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/attributeUnit">
+        <rdfs:range rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Unit"/>
         <dcterms:description xml:lang="en">When a bk:attribute property is associated to a unit by means of this property, literal values of that property are measure values expressed in the associated unit.</dcterms:description>
-        <schema:domainIncludes rdf:resource="http://www.ondex.org/bioknet/terms/attribute"/>
+        <schema:domainIncludes rdf:resource="http://knetminer.org/data/rdf/terms/biokno/attribute"/>
         <rdfs:label xml:lang="en">attribute unit</rdfs:label>
         <skos:editorialNote xml:lang="en">Note that the domain of this property is a subclass of bk:attribute. This is specified by means of schema:domainIncludes, in order to keep OWL correctness.</skos:editorialNote>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/conceptsRelation -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/conceptsRelation -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/conceptsRelation">
-        <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/relatedConcept"/>
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
-        <rdfs:range rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/conceptsRelation">
+        <rdfs:subPropertyOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/relatedConcept"/>
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
+        <rdfs:range rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
         <dcterms:description xml:lang="en">This is a top-level container, which is used to define specific relations of interest between between bk:Concept instances. See bk:Relation for a detailed description of how concept relations are model in BioKNet.
 
 This property should never be used directly, a concept/concept relation of interest should always be instance of some specific subproperty of this one (TODO: closure axiom).</dcterms:description>
         <dcterms:identifier>conceptsRelation</dcterms:identifier>
         <isOndexPreferred rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isOndexPreferred>
         <rdfs:label xml:lang="en">concept relation</rdfs:label>
-        <rdfs:seeAlso rdf:resource="http://www.ondex.org/bioknet/terms/Relation"/>
+        <rdfs:seeAlso rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Relation"/>
         <skos:editorialNote xml:lang="en">All ONDEX/kNetMiner relations should go under this property.</skos:editorialNote>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/dataSource -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/dataSource -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/dataSource">
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/dataSource">
         <rdfs:domain>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.ondex.org/bioknet/terms/Accession"/>
-                    <rdf:Description rdf:about="http://www.ondex.org/bioknet/terms/RelationElement"/>
+                    <rdf:Description rdf:about="http://knetminer.org/data/rdf/terms/biokno/Accession"/>
+                    <rdf:Description rdf:about="http://knetminer.org/data/rdf/terms/biokno/RelationElement"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
-        <rdfs:range rdf:resource="http://www.ondex.org/bioknet/terms/DataSource"/>
+        <rdfs:range rdf:resource="http://knetminer.org/data/rdf/terms/biokno/DataSource"/>
         <dcterms:description xml:lang="en">The source from which an entity comes from, or was imported or alike.</dcterms:description>
         <skos:editorialNote xml:lang="en">[TODO] Align to PAV and alike.</skos:editorialNote>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/evidence -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/evidence -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/evidence">
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/RelationElement"/>
-        <rdfs:range rdf:resource="http://www.ondex.org/bioknet/terms/EvidenceType"/>
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/evidence">
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/RelationElement"/>
+        <rdfs:range rdf:resource="http://knetminer.org/data/rdf/terms/biokno/EvidenceType"/>
         <dcterms:description xml:lang="en">Links an entity, such as a concept or a relation, to the type of evidence that prove it exists, such as &apos;imported from database&apos;, evidence codes, &apos;inferred from literature&apos;.</dcterms:description>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/relFrom -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/relFrom -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/relFrom">
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/Relation"/>
-        <rdfs:range rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/relFrom">
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Relation"/>
+        <rdfs:range rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/relTo -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/relTo -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/relTo">
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/Relation"/>
-        <rdfs:range rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/relTo">
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Relation"/>
+        <rdfs:range rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/relTypeRef -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/relTypeRef -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/relTypeRef">
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/Relation"/>
-        <schema:rangeIncludes rdf:resource="http://www.ondex.org/bioknet/terms/relatedConcept"/>
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/relTypeRef">
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Relation"/>
+        <schema:rangeIncludes rdf:resource="http://knetminer.org/data/rdf/terms/biokno/relatedConcept"/>
         <rdfs:label xml:lang="en">is instance of relation type</rdfs:label>
         <skos:editorialNote xml:lang="en">The fact that the values of this should be subclasses of bk:relationType is documented by means of schema:rangeIncludes. We don&apos;t use rdfs:range bk:relationType, because this tends to confuse ontology editors and libraries (i.e., Protege and OWL-API), which infer bk:relationType is also a clsass. It shouldn&apos;t be a big deal to link to bk:relationType using an owl:objectProperty like this, since OWL-2 should deal with this through punning (TODO: check).</skos:editorialNote>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/relatedConcept -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/relatedConcept -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/relatedConcept">
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/RelationElement"/>
-        <rdfs:range rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/relatedConcept">
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/RelationElement"/>
+        <rdfs:range rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
         <dcterms:description xml:lang="en">A generic reference to a concept
 
 This is used to attach a cross-reference of type bk:Concept to another concept or a bk:Relation.
@@ -216,10 +216,10 @@ This is used to relate a relation element with a non better-specified relation (
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/testProp -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/testProp -->
 
-    <owl:ObjectProperty rdf:about="http://www.ondex.org/bioknet/terms/testProp">
-        <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/conceptsRelation"/>
+    <owl:ObjectProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/testProp">
+        <rdfs:subPropertyOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/conceptsRelation"/>
     </owl:ObjectProperty>
     
 
@@ -235,19 +235,19 @@ This is used to relate a relation element with a non better-specified relation (
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/altName -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/altName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/altName">
-        <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/name"/>
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/altName">
+        <rdfs:subPropertyOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/name"/>
         <rdfs:label xml:lang="en">has alternative name</rdfs:label>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/attribute -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/attribute -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/attribute">
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/RelationElement"/>
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/attribute">
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/RelationElement"/>
         <dcterms:description xml:lang="en">An attribute is a literal property associated to a concept or a relation.
 
 Specific attribute types (e.g., pValue, geneBegin) should be defined as subproperty of this one and proper annotations (rdfs:label, dcterms:description) attached. The new properties should also specify their range via rdfs:range and preferrably using an XSD type. Hierarchical attribute type relations should be defined via rdfs:subPropertyOf.
@@ -256,47 +256,47 @@ Note that attributes can refer to measure values, in which case you should assoc
 
 Note that bk:attribute is considered an abstract property container: rather than using it directly, you should always define a specific attribute subproperty to represent attributes properly.</dcterms:description>
         <rdfs:label xml:lang="en">attribute</rdfs:label>
-        <skos:editorialNote xml:lang="en">Due to possible clashes with other identifiers, you should use the namespace bka: &lt;http://www.ondex.org/bioknet/terms/attributes/&gt; to define new attributes.</skos:editorialNote>
+        <skos:editorialNote xml:lang="en">Due to possible clashes with other identifiers, you should use the namespace bka: &lt;http://knetminer.org/data/rdf/terms/biokno/attributes/&gt; to define new attributes.</skos:editorialNote>
         <skos:editorialNote xml:lang="en">Note that the way units are modelled is different than other structured value models (e.g., schema.org, good relations), where units can be specified for each value. Here, units are linked to an attribute property, to specify once for all the unit to which all that property values refer to.</skos:editorialNote>
         <skos:editorialNote xml:lang="en">This property is conceptually equivalent to AttributeName in ONDEX. It doesn&apos;t look correct to call it name.</skos:editorialNote>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/graphConceptsCount -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/graphConceptsCount -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/graphConceptsCount">
-        <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/graphSummaryFigure"/>
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/graphConceptsCount">
+        <rdfs:subPropertyOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/graphSummaryFigure"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
         <rdfs:label xml:lang="en">graph concepts count</rdfs:label>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/graphRelationsCount -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/graphRelationsCount -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/graphRelationsCount">
-        <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/graphSummaryFigure"/>
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/graphRelationsCount">
+        <rdfs:subPropertyOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/graphSummaryFigure"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
         <rdfs:label xml:lang="en">graph relations count</rdfs:label>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/graphSummaryFigure -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/graphSummaryFigure -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/graphSummaryFigure">
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/Graph"/>
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/graphSummaryFigure">
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Graph"/>
         <dcterms:description xml:lang="en">a property of this type provides summary figures for the contents of a graph, such as the number of concepts or relations.</dcterms:description>
         <rdfs:label xml:lang="en">graph summary figure</rdfs:label>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/isAmbiguousAccession -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/isAmbiguousAccession -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/isAmbiguousAccession">
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/Accession"/>
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/isAmbiguousAccession">
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Accession"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
         <rdfs:label xml:lang="en">is ambiguous accession</rdfs:label>
         <skos:editorialNote xml:lang="en">TODO: we need to clarify what this is exactly. How can an accession be ambiguous? Examples?</skos:editorialNote>
@@ -304,11 +304,11 @@ Note that bk:attribute is considered an abstract property container: rather than
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/isOndexID -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/isOndexID -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/isOndexID">
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/isOndexID">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.ondex.org/bioknet/terms/RelationElement"/>
+        <rdfs:domain rdf:resource="http://knetminer.org/data/rdf/terms/biokno/RelationElement"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
         <dcterms:description xml:lang="en">This is an internal property, used within the KnetMiner and Ondex projects. It contains the numerical ID that is generated by Ondex and stored in the XML format. This is necessary in legacy applications, where both Ondex structures and RDF/Property Graph databases are used, wit the latter providing a query engine that returns this ID and the Ondex interfaces (fetched by ID) providing many other details.
 
@@ -318,9 +318,9 @@ PLEASE NOTE: usually these IDs are unique only within a given Ondex/KnetMiner da
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/name -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/name -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/name">
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/name">
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
         <dcterms:description xml:lang="en">In bio-databases a name is often meant as something more specific than a title or a label (being more official and often shorter) and not as unique as accessions.</dcterms:description>
         <rdfs:label xml:lang="en">name</rdfs:label>
@@ -329,19 +329,19 @@ PLEASE NOTE: usually these IDs are unique only within a given Ondex/KnetMiner da
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/prefName -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/prefName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/prefName">
-        <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/name"/>
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/prefName">
+        <rdfs:subPropertyOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/name"/>
         <rdfs:label xml:lang="en">has preferred name</rdfs:label>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/attributes/testAttribute -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/attributes/testAttribute -->
 
-    <owl:DatatypeProperty rdf:about="http://www.ondex.org/bioknet/terms/attributes/testAttribute">
-        <rdfs:subPropertyOf rdf:resource="http://www.ondex.org/bioknet/terms/attribute"/>
+    <owl:DatatypeProperty rdf:about="http://knetminer.org/data/rdf/terms/biokno/attributes/testAttribute">
+        <rdfs:subPropertyOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/attribute"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
     </owl:DatatypeProperty>
     
@@ -358,13 +358,13 @@ PLEASE NOTE: usually these IDs are unique only within a given Ondex/KnetMiner da
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/Accession -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/Accession -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/Accession">
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/Accession">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.ondex.org/bioknet/terms/dataSource"/>
-                <owl:someValuesFrom rdf:resource="http://www.ondex.org/bioknet/terms/DataSource"/>
+                <owl:onProperty rdf:resource="http://knetminer.org/data/rdf/terms/biokno/dataSource"/>
+                <owl:someValuesFrom rdf:resource="http://knetminer.org/data/rdf/terms/biokno/DataSource"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <dcterms:description xml:lang="en">An accession is a string value, assigned with dcterms:identifier and at least one data source in which the accession value is usually unique. Set bk:isAccessionAmbiguous to false to specify the accession is not necessarily unique.
@@ -375,11 +375,11 @@ bk:Concept instances are associated to bk:Accession instances via dc:identifier 
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/Concept -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/Concept -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/Concept">
-        <rdfs:subClassOf rdf:resource="http://www.ondex.org/bioknet/terms/Describeable"/>
-        <rdfs:subClassOf rdf:resource="http://www.ondex.org/bioknet/terms/RelationElement"/>
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/Concept">
+        <rdfs:subClassOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Describeable"/>
+        <rdfs:subClassOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/RelationElement"/>
         <dcterms:description xml:lang="en">A Concept is the a basic unit of information in the Bio Knowledge Network Ontology. The main type of knowledge in BioKNet consists of relations (either RDF triples based on bk:relationType, or bk:Relation instances) between bk:Concept instances.
 
 The recommended way to use bk:Concept is:
@@ -394,19 +394,19 @@ The recommended way to use bk:Concept is:
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/DataSource -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/DataSource -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/DataSource">
-        <rdfs:subClassOf rdf:resource="http://www.ondex.org/bioknet/terms/Describeable"/>
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/DataSource">
+        <rdfs:subClassOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Describeable"/>
         <rdfs:label xml:lang="en">Data Source</rdfs:label>
-        <skos:editorialNote xml:lang="en">Due to possible clashes with other identifiers, you should use the namespace bkds: &lt;http://www.ondex.org/bioknet/terms/dataSources/&gt; to define new data source.</skos:editorialNote>
+        <skos:editorialNote xml:lang="en">Due to possible clashes with other identifiers, you should use the namespace bkds: &lt;http://knetminer.org/data/rdf/terms/biokno/dataSources/&gt; to define new data source.</skos:editorialNote>
     </owl:Class>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/Describeable -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/Describeable -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/Describeable">
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/Describeable">
         <dcterms:description xml:lang="en">This is an abstract container to factorise those individuals for which a minimum of description attributes can be defined.
 
 These are:
@@ -422,19 +422,19 @@ These are:
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/EvidenceType -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/EvidenceType -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/EvidenceType">
-        <rdfs:subClassOf rdf:resource="http://www.ondex.org/bioknet/terms/Describeable"/>
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/EvidenceType">
+        <rdfs:subClassOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Describeable"/>
         <rdfs:label xml:lang="en">Evidence Type</rdfs:label>
-        <skos:editorialNote xml:lang="en">Due to possible clashes with other identifiers, you should use the namespace bkev: &lt;http://www.ondex.org/bioknet/terms/evidences/&gt; to define new evidence types.</skos:editorialNote>
+        <skos:editorialNote xml:lang="en">Due to possible clashes with other identifiers, you should use the namespace bkev: &lt;http://knetminer.org/data/rdf/terms/biokno/evidences/&gt; to define new evidence types.</skos:editorialNote>
     </owl:Class>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/Graph -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/Graph -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/Graph">
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/Graph">
         <dcterms:description xml:lang="en">A biological knowledge network can be grouped together into a graph. This is typically a named graph as well and used in triple stores like Virtuoso to identify networks/subsets.</dcterms:description>
         <rdfs:label xml:lang="en">Graph</rdfs:label>
         <skos:editorialNote xml:lang="en">[TODO] to be completed, using VoID, pav, etc.</skos:editorialNote>
@@ -442,22 +442,22 @@ These are:
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/Relation -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/Relation -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/Relation">
-        <rdfs:subClassOf rdf:resource="http://www.ondex.org/bioknet/terms/RelationElement"/>
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/Relation">
+        <rdfs:subClassOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/RelationElement"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.ondex.org/bioknet/terms/relFrom"/>
+                <owl:onProperty rdf:resource="http://knetminer.org/data/rdf/terms/biokno/relFrom"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="http://www.ondex.org/bioknet/terms/RelationElement"/>
+                <owl:onClass rdf:resource="http://knetminer.org/data/rdf/terms/biokno/RelationElement"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.ondex.org/bioknet/terms/relTo"/>
+                <owl:onProperty rdf:resource="http://knetminer.org/data/rdf/terms/biokno/relTo"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
+                <owl:onClass rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <dcterms:description xml:lang="en">Relations in BioKNet are created in two ways:
@@ -489,21 +489,21 @@ We suggest to base the identifiers of reified relations on the IDs (or URIs) of 
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/RelationElement -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/RelationElement -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/RelationElement">
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/RelationElement">
         <dcterms:description xml:lang="en">A bk:Relation, or the corresponding BioKNet triple, is composed mainly of two bk:Concept instances and a relation type. The bk:RelationElement is a convenience common container for such components.</dcterms:description>
         <rdfs:label xml:lang="en">Relation Element</rdfs:label>
-        <rdfs:seeAlso rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
-        <rdfs:seeAlso rdf:resource="http://www.ondex.org/bioknet/terms/Relation"/>
+        <rdfs:seeAlso rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
+        <rdfs:seeAlso rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Relation"/>
     </owl:Class>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/Unit -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/Unit -->
 
-    <owl:Class rdf:about="http://www.ondex.org/bioknet/terms/Unit">
-        <rdfs:subClassOf rdf:resource="http://www.ondex.org/bioknet/terms/Describeable"/>
+    <owl:Class rdf:about="http://knetminer.org/data/rdf/terms/biokno/Unit">
+        <rdfs:subClassOf rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Describeable"/>
         <rdfs:label xml:lang="en">Unit</rdfs:label>
     </owl:Class>
     
@@ -520,55 +520,55 @@ We suggest to base the identifiers of reified relations on the IDs (or URIs) of 
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/testConcept0_1 -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/testConcept0_1 -->
 
-    <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/testConcept0_1">
-        <rdf:type rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
+    <owl:NamedIndividual rdf:about="http://knetminer.org/data/rdf/terms/biokno/testConcept0_1">
+        <rdf:type rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
         <bka:testAttribute rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1.2</bka:testAttribute>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/testConcept0_2 -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/testConcept0_2 -->
 
-    <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/testConcept0_2">
-        <rdf:type rdf:resource="http://www.ondex.org/bioknet/terms/Concept"/>
+    <owl:NamedIndividual rdf:about="http://knetminer.org/data/rdf/terms/biokno/testConcept0_2">
+        <rdf:type rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Concept"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/testProp -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/testProp -->
 
-    <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/testProp"/>
+    <owl:NamedIndividual rdf:about="http://knetminer.org/data/rdf/terms/biokno/testProp"/>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/testStmt0 -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/testStmt0 -->
 
-    <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/testStmt0">
-        <rdf:type rdf:resource="http://www.ondex.org/bioknet/terms/Relation"/>
-        <relFrom rdf:resource="http://www.ondex.org/bioknet/terms/testConcept0_1"/>
-        <relTo rdf:resource="http://www.ondex.org/bioknet/terms/testConcept0_2"/>
-        <relTypeRef rdf:resource="http://www.ondex.org/bioknet/terms/testProp"/>
+    <owl:NamedIndividual rdf:about="http://knetminer.org/data/rdf/terms/biokno/testStmt0">
+        <rdf:type rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Relation"/>
+        <relFrom rdf:resource="http://knetminer.org/data/rdf/terms/biokno/testConcept0_1"/>
+        <relTo rdf:resource="http://knetminer.org/data/rdf/terms/biokno/testConcept0_2"/>
+        <relTypeRef rdf:resource="http://knetminer.org/data/rdf/terms/biokno/testProp"/>
         <bka:testAttribute rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2.5</bka:testAttribute>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/testUnit -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/testUnit -->
 
-    <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/testUnit">
-        <rdf:type rdf:resource="http://www.ondex.org/bioknet/terms/Unit"/>
+    <owl:NamedIndividual rdf:about="http://knetminer.org/data/rdf/terms/biokno/testUnit">
+        <rdf:type rdf:resource="http://knetminer.org/data/rdf/terms/biokno/Unit"/>
         <dcterms:description xml:lang="en">This is a test unit, which shows how attributes and their units are modelled in BioKNet.</dcterms:description>
         <rdfs:label xml:lang="en">test unit</rdfs:label>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.ondex.org/bioknet/terms/attributes/testAttribute -->
+    <!-- http://knetminer.org/data/rdf/terms/biokno/attributes/testAttribute -->
 
-    <owl:NamedIndividual rdf:about="http://www.ondex.org/bioknet/terms/attributes/testAttribute">
-        <attributeUnit rdf:resource="http://www.ondex.org/bioknet/terms/testUnit"/>
+    <owl:NamedIndividual rdf:about="http://knetminer.org/data/rdf/terms/biokno/attributes/testAttribute">
+        <attributeUnit rdf:resource="http://knetminer.org/data/rdf/terms/biokno/testUnit"/>
     </owl:NamedIndividual>
     
 
@@ -581,10 +581,10 @@ We suggest to base the identifiers of reified relations on the IDs (or URIs) of 
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <rdf:Description rdf:about="http://www.ondex.org/bioknet/terms/testProp">
+    <rdf:Description rdf:about="http://knetminer.org/data/rdf/terms/biokno/testProp">
         <dcterms:description xml:lang="en">Just a test relation.</dcterms:description>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.ondex.org/bioknet/terms/attributes/testAttribute">
+    <rdf:Description rdf:about="http://knetminer.org/data/rdf/terms/biokno/attributes/testAttribute">
         <rdfs:label xml:lang="en">test attribute</rdfs:label>
         <dcterms:description xml:lang="en">Just a test attribute. created to show how attribute properties should be used in BioKNet.</dcterms:description>
     </rdf:Description>

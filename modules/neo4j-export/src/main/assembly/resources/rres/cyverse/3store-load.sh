@@ -6,7 +6,7 @@ datasets=${@:=arabidopsis wheat}
 
 vutils_home=/opt/software/virtuoso-utils
 data_dir=/opt/data
-graph_uribase=http://www.ondex.org/bioknet/graphs/
+graph_uribase=http://knetminer.org/data/rdf/resources/graphs/
 
 is_first='true'
 for dataset in $datasets

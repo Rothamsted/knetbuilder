@@ -3,9 +3,9 @@
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-@prefix bkr:   <http://www.ondex.org/bioknet/resources/> .
+@prefix bkr:   <http://knetminer.org/data/rdf/resources/biokno/> .
 @prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
-@prefix bk:    <http://www.ondex.org/bioknet/terms/> .
+@prefix bk:    <http://knetminer.org/data/rdf/terms/biokno/> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix bp:    <http://www.biopax.org/release/biopax-level3.owl#> .
 @prefix protCore: <http://purl.uniprot.org/core/> .
@@ -13,7 +13,7 @@
 @prefix prot:  <http://purl.uniprot.org/uniprot/> .
 @prefix dct:   <http://purl.org/dc/terms/> .
 @prefix xsp:   <http://www.owl-ontologies.com/2005/08/07/xsp.owl#> .
-@prefix bkev:  <http://www.ondex.org/bioknet/terms/evidences/> .
+@prefix bkev:  <http://knetminer.org/data/rdf/terms/biokno/evidences/> .
 @prefix terms: <http://www.geneontology.org/formats/oboInOwl#http://purl.org/dc/terms/> .
 @prefix faldo: <http://biohackathon.org/resource/faldo#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -25,8 +25,8 @@
 @prefix go:    <http://purl.obolibrary.org/obo/go#> .
 @prefix protCit: <http://purl.uniprot.org/citations/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix bkds:  <http://www.ondex.org/bioknet/terms/dataSources/> .
-@prefix bka:   <http://www.ondex.org/bioknet/terms/attributes/> .
+@prefix bkds:  <http://knetminer.org/data/rdf/terms/biokno/dataSources/> .
+@prefix bka:   <http://knetminer.org/data/rdf/terms/biokno/attributes/> .
 @prefix bibo:  <http://purl.org/ontology/bibo/> .
 @prefix obo:   <http://purl.obolibrary.org/obo/> .
 @prefix dc:    <http://purl.org/dc/elements/1.1/> .
@@ -115,7 +115,7 @@ bkev:GOA  a                  owl:NamedIndividual , bk:EvidenceType ;
         bp:organism  <http://www.wikipathways.org/id2> ;
         bp:xref      <http://www.wikipathways.org/id20> .
 
-<http://www.ondex.org/bioknet/terms/is_3'_neighbour_of>
+<http://knetminer.org/data/rdf/terms/biokno/is_3'_neighbour_of>
         a                   owl:ObjectProperty ;
         rdfs:subPropertyOf  bk:conceptsRelation .
 
@@ -627,7 +627,7 @@ bk:subfeature_of  a          owl:ObjectProperty ;
 bk:DataSource  a            owl:Class ;
         rdfs:label          "Data Source"@en ;
         rdfs:subClassOf     bk:Describeable ;
-        skos:editorialNote  "Due to possible clashes with other identifiers, you should use the namespace bkds: <http://www.ondex.org/bioknet/terms/dataSources/> to define new data source."@en .
+        skos:editorialNote  "Due to possible clashes with other identifiers, you should use the namespace bkds: <http://knetminer.org/data/rdf/terms/biokno/dataSources/> to define new data source."@en .
 
 <http://www.wikipathways.org/id35>
         a         bp:BiochemicalReaction ;
@@ -720,7 +720,7 @@ bk:5pNeighbour  a            owl:AsymmetricProperty , owl:ObjectProperty ;
         rdfs:subPropertyOf   bk:rel_seq_pos ;
         dcterms:identifier   "5pNeighbour" ;
         bk:isOndexPreferred  true ;
-        owl:inverseOf        <http://www.ondex.org/bioknet/terms/is_3'_neighbour_of> .
+        owl:inverseOf        <http://knetminer.org/data/rdf/terms/biokno/is_3'_neighbour_of> .
 
 <http://purl.uniprot.org/uniprot/P50616#attribution-F9975AA136F3F2AC30B81CDFAECA0B0F>
         protCore:evidence  obo:ECO_0000244 ;
@@ -1587,7 +1587,7 @@ bk:KI   a                    owl:ObjectProperty ;
 bk:precedes  a              owl:ObjectProperty ;
         rdfs:subPropertyOf  bk:conceptsRelation .
 
-<http://www.ondex.org/bioknet/terms/overlaps_3'_of>
+<http://knetminer.org/data/rdf/terms/biokno/overlaps_3'_of>
         a                   owl:ObjectProperty ;
         rdfs:subPropertyOf  bk:conceptsRelation .
 
@@ -2971,7 +2971,7 @@ bk:Scaffold  a               owl:Class ;
         dcterms:identifier   "Scaffold" ;
         bk:isOndexPreferred  true .
 
-<http://www.ondex.org/bioknet/bk-onto-sample-extension/>
+<http://knetminer.org/data/rdf/terms/biokno/bk-onto-sample-extension/>
         a            owl:Ontology ;
         owl:imports  bk: .
 
@@ -4428,7 +4428,7 @@ bk:attribute  a              owl:DatatypeProperty ;
         rdfs:domain          bk:RelationElement ;
         rdfs:label           "attribute"@en ;
         dcterms:description  "An attribute is a literal property associated to a concept or a relation.\n\nSpecific attribute types (e.g., pValue, geneBegin) should be defined as subproperty of this one and proper annotations (rdfs:label, dcterms:description) attached. The new properties should also specify their range via rdfs:range and preferrably using an XSD type. Hierarchical attribute type relations should be defined via rdfs:subPropertyOf.\n\nNote that attributes can refer to measure values, in which case you should associate a unit to the corresponding bk:attribute subproperty.\n\nNote that bk:attribute is considered an abstract property container: rather than using it directly, you should always define a specific attribute subproperty to represent attributes properly."@en ;
-        skos:editorialNote   "This property is conceptually equivalent to AttributeName in ONDEX. It doesn't look correct to call it name."@en , "Note that the way units are modelled is different than other structured value models (e.g., schema.org, good relations), where units can be specified for each value. Here, units are linked to an attribute property, to specify once for all the unit to which all that property values refer to."@en , "Due to possible clashes with other identifiers, you should use the namespace bka: <http://www.ondex.org/bioknet/terms/attributes/> to define new attributes."@en .
+        skos:editorialNote   "This property is conceptually equivalent to AttributeName in ONDEX. It doesn't look correct to call it name."@en , "Note that the way units are modelled is different than other structured value models (e.g., schema.org, good relations), where units can be specified for each value. Here, units are linked to an attribute property, to specify once for all the unit to which all that property values refer to."@en , "Due to possible clashes with other identifiers, you should use the namespace bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/> to define new attributes."@en .
 
 bp:Gene  a                owl:Class ;
         rdfs:comment      "Definition: A continuant that encodes information that can be inherited through replication. \nRationale: Gene is an abstract continuant that can be best described as a \"schema\", a common conception commonly used by biologists to demark a component within genome. In BioPAX, Gene is considered a generalization over eukaryotic and prokaryotic genes and is used only in genetic interactions.  Gene is often confused with DNA and RNA fragments, however, these are considered the physical encoding of a gene.  N.B. Gene expression regulation makes use of DNA and RNA physical entities and not this class.\nUsage: Gene should only be used for describing GeneticInteractions." ;
@@ -4476,7 +4476,7 @@ bk:5pOverlap  a              owl:AsymmetricProperty , owl:ObjectProperty ;
         rdfs:subPropertyOf   bk:5pNeighbour ;
         dcterms:identifier   "5pOverlap" ;
         bk:isOndexPreferred  true ;
-        owl:inverseOf        <http://www.ondex.org/bioknet/terms/overlaps_3'_of> .
+        owl:inverseOf        <http://knetminer.org/data/rdf/terms/biokno/overlaps_3'_of> .
 
 bk:CHEM  a                   owl:Class ;
         rdfs:label           "Chemical"@en ;
@@ -5406,7 +5406,7 @@ bp:organism  a        owl:FunctionalProperty , owl:ObjectProperty ;
 bk:EvidenceType  a          owl:Class ;
         rdfs:label          "Evidence Type"@en ;
         rdfs:subClassOf     bk:Describeable ;
-        skos:editorialNote  "Due to possible clashes with other identifiers, you should use the namespace bkev: <http://www.ondex.org/bioknet/terms/evidences/> to define new evidence types."@en .
+        skos:editorialNote  "Due to possible clashes with other identifiers, you should use the namespace bkev: <http://knetminer.org/data/rdf/terms/biokno/evidences/> to define new evidence types."@en .
 
 bkds:LIGANDBOX  a            owl:NamedIndividual , bk:DataSource ;
         rdfs:label           "LIGANds Data Base Open and eXtensible"@en ;
@@ -6793,7 +6793,7 @@ bka:BEGIN  a                 owl:DatatypeProperty ;
         bk:isOndexPreferred  true ;
         bk:ondexRange        "java.lang.Integer" .
 
-<http://www.ondex.org/bioknet/kNetMiner_extensions/>
+<http://knetminer.org/data/rdf/terms/biokno/kNetMiner_extensions/>
         a            owl:Ontology ;
         owl:imports  bk: .
 
@@ -7098,7 +7098,7 @@ bk:5pAdjacent  a             owl:AsymmetricProperty , owl:ObjectProperty ;
         rdfs:subPropertyOf   bk:upstream ;
         dcterms:identifier   "5pAdjacent" ;
         bk:isOndexPreferred  true ;
-        owl:inverseOf        <http://www.ondex.org/bioknet/terms/is_3'_adjacent_to> .
+        owl:inverseOf        <http://knetminer.org/data/rdf/terms/biokno/is_3'_adjacent_to> .
 
 <http://purl.uniprot.org/bgee/ENSG00000141232>
         a                  protCore:Resource ;
@@ -8065,7 +8065,7 @@ bk:GISGD  a                  owl:Class ;
         a             bp:Complex ;
         bp:component  <http://www.wikipathways.org/a052c> , <http://www.wikipathways.org/e45fb> .
 
-<http://www.ondex.org/bioknet/terms/is_3'_adjacent_to>
+<http://knetminer.org/data/rdf/terms/biokno/is_3'_adjacent_to>
         a                   owl:ObjectProperty ;
         rdfs:subPropertyOf  bk:conceptsRelation .
 

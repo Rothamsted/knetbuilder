@@ -1,9 +1,9 @@
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX dcterms: <http://purl.org/dc/terms/>
-PREFIX bk: <http://www.ondex.org/bioknet/terms/>
-PREFIX bkr: <http://www.ondex.org/bioknet/resources/>
-PREFIX bka: <http://www.ondex.org/bioknet/attributes/>
+PREFIX bk: <http://knetminer.org/data/rdf/terms/biokno/>
+PREFIX bkr: <http://knetminer.org/data/rdf/resources/>
+PREFIX bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/>
 
 SELECT ?label ?propertyName
 {

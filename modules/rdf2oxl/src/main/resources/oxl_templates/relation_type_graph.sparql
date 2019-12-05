@@ -1,5 +1,5 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX bk: <http://www.ondex.org/bioknet/terms/>
+PREFIX bk: <http://knetminer.org/data/rdf/terms/biokno/>
 PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
