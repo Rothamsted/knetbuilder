@@ -142,7 +142,7 @@ public class URIAdditionPlugin extends ONDEXTransformer
 	    new BooleanArgumentDefinition ( 
 	    	"uriIndexingEnabled",
 	    	"Should the created URI attribute be indexed? Our Ondex index stores a special 'iri' field anyway for internal " +
-	    	"purposes, this is needed only if you want to do things like enabling URI-based searches in KnetMiner (unlikely).",
+	    	"purposes, so this is needed only if you want to do things like enabling URI-based searches in KnetMiner (unlikely).",
 	    	false, false
 	    )
 		};

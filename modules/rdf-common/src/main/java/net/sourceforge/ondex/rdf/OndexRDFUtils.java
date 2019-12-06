@@ -94,7 +94,7 @@ public class OndexRDFUtils
 	 * 
 	 * <p>The method always reduces the initial collection to a single {@code prefName}, even if {@code prefNameFilter} 
 	 * returns more than one name. This can be useful where you want to decide for one name only, even in presence of 
-	 * ambiguity/wrong data modelling. {@code prefNameFilter} is only applied when searching for the a unique name, 
+	 * ambiguity/wrong data modelling. {@code prefNameFilter} is only applied when searching for a unique name, and
 	 * when this is found, everything else is considered alternative, independently on this filter. 
 	 * No matter which parameters you pass here, we always do some basic filtering, i.e., at the moment anything that is 
 	 * {@link StringUtils#isEmpty(CharSequence) empty} is ignored (the string considered is the one returned by
@@ -129,7 +129,7 @@ public class OndexRDFUtils
 		.filter ( prefNameFilter )
 		.map ( nameMapper )
 		.filter ( name -> !StringUtils.isEmpty ( name ) )
-		// And then the preferred
+		// And then the "most preferable"
 		.min ( (name1, name2) -> 
 		{
 			// Shortest wins
