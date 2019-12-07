@@ -67,7 +67,7 @@ public class RDFExporter
 		.flatMap ( Collection::stream )
 		.forEach ( meta -> accumulator.accept ( xfactBatch, (Object) meta ) );
 		
-		this.handleNewXBatch ( xfactBatch, true );
+		this.handleNewBatch ( xfactBatch, true );
 
 		
 		// And now the rest, following the usual facilities from the BatchProcessor class.
@@ -94,16 +94,17 @@ public class RDFExporter
 	 * is the destination to which {@link #export(ONDEXGraph)} sends mappings instructions.
 	 *  
 	 */
-	private RDFXFactory handleNewXBatch ( RDFXFactory xfact, boolean forceFlush )
+	@Override
+	protected RDFXFactory handleNewBatch ( RDFXFactory currentBatch, boolean forceFlush )
 	{
-		RDFXFactory xfactNew = super.handleNewBatch ( xfact, forceFlush );
-		if ( xfactNew == xfact ) return xfact;
+		RDFXFactory newBatch = super.handleNewBatch ( currentBatch, forceFlush );
+		if ( newBatch == currentBatch ) return currentBatch;
 		
-		Model currentModel = xfact.getJenaModel ();
+		Model currentModel = currentBatch.getJenaModel ();
 		triplesCount += currentModel.size ();
 		log.debug ( "{} RDF triples submitted for export", triplesCount );
 		
-		return xfactNew;
+		return newBatch;
 	}
-		
+			
 }
