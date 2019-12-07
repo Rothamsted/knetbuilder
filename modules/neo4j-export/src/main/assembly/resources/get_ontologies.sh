@@ -20,11 +20,12 @@ get_onto 'BioKNO main file' \
 get_onto 'BioKNO Ondex mappings' \
   https://raw.githubusercontent.com/Rothamsted/bioknet-onto/master/bk_ondex.owl bk_ondex.owl
 get_onto 'Mappings to external ontologies' \
-	https://raw.githubusercontent.com/Rothamsted/bioknet-onto/master/bk_mappings.ttl data/bk_mappings.ttl
+	https://raw.githubusercontent.com/Rothamsted/bioknet-onto/master/bk_mappings.ttl bk_mappings.ttl
+
 
 echo -e "\n---- Additional ontologies, to be used for the triple store"
 
-mkdir --parents "$target_dir/ext"
+mkdir -p "$target_dir/ext"
 
 get_onto "schema.org" http://schema.org/version/latest/schema.ttl ext/schema.ttl
 

@@ -12,7 +12,7 @@ do
 done
 
 cfg_name="$1"
-release="$2"
+release="v$2"
 
 
 wdir=$(pwd)
@@ -43,8 +43,8 @@ export OPTS="-Dneo4j.boltUrl=bolt://localhost:$CFG_NEO_PORT"
 export OPTS="$OPTS -Dneo4j.user=rouser -Dneo4j.password=rouser"
 
 # Enables JMX monitoring (visualvm, etc)
-export OPTS="$OPTS -Dcom.sun.management.jmxremote.port=5010 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
-export OPTS="$OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$RDF2NEO/logs/jvm.dump"
+#export OPTS="$OPTS -Dcom.sun.management.jmxremote.port=5010 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+#export OPTS="$OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$RDF2NEO/logs/jvm.dump"
 
 export JAVA_TOOL_OPTIONS="-Xmx20G"
 
@@ -70,13 +70,19 @@ sudo systemctl start ${CFG_NEO_SERVICE_NAME}.service
 if [ "$is_tdb_mode" != 'true' ]; then
 	
 	echo "--- Getting common ontologies"
+	
 	rm -Rf "$my_release_dir/rdf/ontologies"
+	mkdir "$my_release_dir/rdf/ontologies"
   ./get_ontologies.sh "$my_release_dir/rdf/ontologies"  
+
 
 	rdf_path="$my_release_dir/rdf/${cfg_name}.ttl"
 
 	echo -e "\n\n\tRunning rdf2neo on '$rdf_path'"
-	./ondex2neo.sh "$my_release_dir/rdf/ontologies/"* "$rdf_path"
+	./ondex2neo.sh \
+		"$my_release_dir/rdf/ontologies/"*.* \
+		"$my_release_dir/rdf/ontologies/ext/"*.* \
+		"$rdf_path"
 else
 	sleep 10 # Neo4j needs time to restart
 	./tdb2neo.sh --config ondex_config/config.xml "$RDF2NEO_TDB"

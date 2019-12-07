@@ -1,7 +1,7 @@
 # TODO: comment me!
 # TODO: Move these scripts to the backend repo
 
-release="$1"; shift
+release="v$1"; shift
 datasets=${@:=arabidopsis wheat}
 
 vutils_home=/opt/software/virtuoso-utils

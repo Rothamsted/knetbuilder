@@ -1,7 +1,7 @@
 # TODO: comment me!
 
 dataset="$1"
-release="$2"
+release="v$2"
 
 echo -e "\n\n\tUpgrading $dataset $release\n"
 

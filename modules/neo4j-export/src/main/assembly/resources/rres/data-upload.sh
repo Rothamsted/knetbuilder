@@ -1,7 +1,7 @@
 set -e # Stop upon error
 
 cfg_name="$1"
-release="$2"
+release="v$2"
 
 cd $(dirname $0)
 mydir=$(pwd)
