@@ -1,8 +1,11 @@
 # TODO: comment me!
 # TODO: Move these scripts to the backend repo
 
+set -e
+
 release="v$1"; shift
-datasets=${@:=arabidopsis wheat}
+datasets=$@
+[[ "$datasets" == '' ]] && datasets="arabidopsis wheat"
 
 vutils_home=/opt/software/virtuoso-utils
 data_dir=/opt/data
@@ -15,13 +18,12 @@ do
 	cd "$data_dir"
 
   echo -e "\n--- Downloading RDF files\n"
-  rm -f "tmp/${dataset}-rdf.tar.bz2"
-  rclone rclone copy "brandizi_rres_onedrive:knetminer-pub-data/$release/$dataset/${dataset}-rdf.tar.bz2" tmp
+  rclone copy "brandizi_rres_onedrive:knetminer-pub-data/$release/$dataset/${dataset}-rdf.tar.bz2" tmp
 
   echo -e "\n--- Extracting RDF files\n"
   # This assumes all the tarballs have the same ontologies. 
   # TODO: more ontologies
-	[ "$is_first" == "true" ] || rm -f rdf/ontologies 
+	[ "$is_first" == "true" ] || rm -Rf rdf/ontologies 
   tar x --bzip2 -f "tmp/${dataset}-rdf.tar.bz2" rdf/ontologies
 
   # Virtuoso can load from .gz, because we don't have much space on the server, let's convert the original ttl
@@ -29,6 +31,8 @@ do
   rm -f "rdf/$dataset/${dataset}.ttl.gz"
   tar x --to-stdout --bzip2 -f "tmp/${dataset}-rdf.tar.bz2" "rdf/${dataset}.ttl" \
     | gzip --stdout >"rdf/$dataset/${dataset}.ttl.gz"
+
+  rm -f "tmp/${dataset}-rdf.tar.bz2"
 
   echo -e "\n--- Loading on Virtuoso\n"
   cd "$vutils_home"
