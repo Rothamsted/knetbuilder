@@ -45,7 +45,7 @@ public abstract class AbstractGraphTraverser
 	public AbstractGraphTraverser ( Map<String, Object> options )
 	{
 		super ();
-		if ( options != null ) this.options = options;
+		if ( options != null ) this.setOptions ( options );
 	}
 	
 
