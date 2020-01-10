@@ -25,7 +25,8 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
- * TODO: comment me!
+ * A simple in-memory index for {@link ONDEXGraph} elements. This is faster (though more limited)
+ * than Lucene and we use it for certain functions (eg, to search by URIs in the Cypher graph traverser).
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>Oct 25, 2019</dd></dl>
