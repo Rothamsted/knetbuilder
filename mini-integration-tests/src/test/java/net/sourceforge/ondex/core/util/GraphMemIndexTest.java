@@ -22,7 +22,6 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 
 /**
- * TODO: comment me!
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>Oct 25, 2019</dd></dl>
