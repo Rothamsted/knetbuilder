@@ -75,7 +75,7 @@ public class RDFExporter
 		
 		Set<ONDEXConcept> concepts = graph.getConcepts ();
 		log.info ( "Exporting {} concept(s)", concepts.size () );
-		super.process ( concepts.stream() ::forEach );
+		super.process ( concepts.stream()::forEach );
 		
 
 		Set<ONDEXRelation> relations = graph.getRelations ();
