@@ -1,4 +1,9 @@
-# TODO: comment me!
+#
+# We use this to populate the Neo4j instances on our Cyverse servers, starting from dump files uploaded on line 
+# (currently, on OneDrive).
+#
+# TODO: comment the code
+#
 
 dataset="$1"
 release="v$2"

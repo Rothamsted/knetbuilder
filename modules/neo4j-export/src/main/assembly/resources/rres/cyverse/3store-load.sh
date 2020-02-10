@@ -1,4 +1,8 @@
-# TODO: comment me!
+#
+# We use this to populate the Triple store on our Cyverse server, from files uploaded on line 
+# (currently, on OneDrive).
+#
+# TODO: comment the code
 # TODO: Move these scripts to the backend repo
 
 set -e
