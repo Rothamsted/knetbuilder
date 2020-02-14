@@ -78,7 +78,7 @@
             <configuration>
                <forkMode>always</forkMode>
                <forkedProcessTimeoutInSeconds>700</forkedProcessTimeoutInSeconds>
-               <argLine>-Xms1G -Xmx1G -Dondex.dir=${basedir}/data</argLine>
+               <argLine>-XX:MaxRAM=4g -Dondex.dir=${basedir}/data</argLine>
                <excludes>
                   <exclude>net/sourceforge/ondex/apps/*</exclude>
                </excludes>
@@ -118,13 +118,13 @@
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-compiler-plugin</artifactId>
-               <version>${maven.compiler.plugin.version}</version>
+               <version>3.8.1</version>
                <configuration>
                   <source>${java.version}</source>
                   <target>${java.version}</target>
                   <showWarnings>true</showWarnings>
                   <showDeprecation>true</showDeprecation>
-                  <maxmem>1024m</maxmem>
+                  <maxmem>4096m</maxmem>
                   <encoding>UTF-8</encoding>
                   <fork>true</fork>
                </configuration>
@@ -259,7 +259,7 @@
    </build>
 
 	 <properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<ondex.version>${project.version}</ondex.version>
 		<target.dir>target</target.dir>
 		<nexus.repro>http://ondex.rothamsted.ac.uk/nexus</nexus.repro>
@@ -271,7 +271,6 @@
 		  permissions. 
 		 -->
 		<maven.assembly.plugin.version>2.2-beta-5</maven.assembly.plugin.version>
-		<maven.compiler.plugin.version>2.1</maven.compiler.plugin.version>
 		<maven.dependency.plugin.version>3.0.0</maven.dependency.plugin.version>
 		<maven.failsafe.plugin.version>2.6</maven.failsafe.plugin.version>
 		<maven.jar.plugin.version>2.3</maven.jar.plugin.version>
@@ -293,12 +292,11 @@
 		<org.biopax.paxtools.version>20101113</org.biopax.paxtools.version>
 		<org.biojava.version>1.7.1</org.biojava.version>
 		<com.hp.hpl.jena.version>2.5.7</com.hp.hpl.jena.version>
-		<com.thoughtworks.xstream.version>1.3.1</com.thoughtworks.xstream.version>
 		<javax.management.jmxri>1.2.1</javax.management.jmxri>
 		<jexcelapi.jxl.version>2.6.10</jexcelapi.jxl.version>
 		<junit.version>4.7</junit.version>
 		<mysql.connector.java.version>5.1.6</mysql.connector.java.version>
-		<jutils.version>8.0.1-SNAPSHOT</jutils.version>
+		<jutils.version>10.0-SNAPSHOT</jutils.version>
 		<lucene.version>6.6.0</lucene.version>
 		<spring.version>4.3.6.RELEASE</spring.version>
 		
@@ -306,7 +304,7 @@
 		<neo4j.server.version>3.5.12</neo4j.server.version>
 		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
 		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
-		<rdf2neo.version>0.0.1-SNAPSHOT</rdf2neo.version>  
+		<rdf2neo.version>3.0-SNAPSHOT</rdf2neo.version>  
 
    </properties>
 
@@ -500,23 +498,28 @@
         <version>1.2.3</version>
       </dependency>
 			
-			<dependency>
-			  <groupId>com.sun.xml.bind</groupId>
-			  <artifactId>jaxb-impl</artifactId>
-			  <version>2.3.0</version>
-			</dependency>         
-
-			<dependency>
-				<groupId>org.glassfish.jaxb</groupId>
-				<artifactId>jaxb-core</artifactId>
-				<version>2.3.0</version>
-			</dependency>
-
+			<!-- Since JDK 11, we need this as a separate lib -->
+      <dependency>
+      	<groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.jaxb</groupId>
+        <artifactId>jaxb-runtime</artifactId>
+        <version>2.3.2</version>
+      </dependency>
+                
+      <dependency>
+        <groupId>com.thoughtworks.xstream</groupId>
+        <artifactId>xstream</artifactId>
+        <version>1.4.11.1</version>
+      </dependency>
+                
       <dependency>
         <groupId>com.hp.hpl.jena</groupId>
         <artifactId>jena</artifactId>
         <version>2.5.7</version>
-        <scope>compile</scope>
       </dependency>
 
       <dependency>
@@ -606,7 +609,7 @@
 			<dependency>
 			  <groupId>info.marcobrandizi</groupId>
 			  <artifactId>rdfutils-jena</artifactId>
-			  <version>2.0.1-SNAPSHOT</version>
+			  <version>3.0-SNAPSHOT</version>
 			</dependency>
 
       <dependency>
