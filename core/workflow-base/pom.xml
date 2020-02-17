@@ -36,15 +36,11 @@
       </dependency>
       <dependency>
          <groupId>org.codehaus.woodstox</groupId>
-         <artifactId>stax2-api</artifactId>
-         <version>3.0.1</version>
-         <scope>compile</scope>
+         <artifactId>woodstox-core-lgpl</artifactId>
       </dependency>
       <dependency>
-         <groupId>org.codehaus.woodstox</groupId>
-         <artifactId>woodstox-core-lgpl</artifactId>
-         <version>4.0.6</version>
-         <scope>compile</scope>
+        <groupId>org.codehaus.woodstox</groupId>
+        <artifactId>stax2-api</artifactId>
       </dependency>
       <dependency>
          <groupId>org.jmock</groupId>

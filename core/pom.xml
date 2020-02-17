@@ -47,19 +47,17 @@
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>taglist-maven-plugin</artifactId>
-            <version>${mojo.taglist.maven.plugin.version}</version>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-report-plugin</artifactId>
-            <version>${maven.surefire.report.plugin.version}</version>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>${maven.project.info.reports.plugin.version}</version>
          </plugin>
-         <plugin>
+<!-- TODO: We're already using FindBugs and this needs to be updated anyway -->         
+<!--          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
             <version>${maven.pmd.plugin.version}</version>
@@ -70,18 +68,9 @@
                <targetJdk>${java.version}</targetJdk>
             </configuration>
          </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${maven.javadoc.plugin.version}</version>
-            <configuration>
-               <stylesheet>maven</stylesheet>
-               <additionalparam>
-						-link http://java.sun.com/javase/6/docs/api/
-						-link http://www.oracle.com/technology/documentation/berkeley-db/je/java
-						-link http://junit.sourceforge.net/javadoc/
-                    </additionalparam>
-            </configuration>
+ -->         <plugin>
+	         <groupId>org.apache.maven.plugins</groupId>
+	         <artifactId>maven-javadoc-plugin</artifactId>
          </plugin>
       </plugins>
    </reporting>

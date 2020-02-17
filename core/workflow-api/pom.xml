@@ -11,7 +11,6 @@
    </parent>
 
 
-
    <groupId>net.sourceforge.ondex.core</groupId>
    <artifactId>workflow-api</artifactId>
 
@@ -22,21 +21,31 @@
 			 <!-- 
 			 		This trick is needed cause the standard Java doesn't pick tools.jar (at list from certain versions onwards. 
 			 		We currently need that jar for com.sun.javadoc.* TODO: J9 has a replacement for this, migrate.
-			 -->
-       <dependency>
+       <dependency >
 	       <groupId>com.sun</groupId>
 	       <artifactId>tools</artifactId>
-	       <!-- It's irrelevant, the point is to get the jar -->
+	       < !- - It's irrelevant, the point is to get the jar - - >
 	       <version>${java.version}</version>
 	       <scope>system</scope>
 	       <systemPath>${java.home}/../lib/tools.jar</systemPath>
        </dependency>
+			 -->
+
+			<dependency>
+			  <groupId>org.apache.commons</groupId>
+			  <artifactId>commons-lang3</artifactId>
+			</dependency>
    
       <dependency>
-         <groupId>com.sun.xml.stream</groupId>
-         <artifactId>sjsxp</artifactId>
-         <version>1.0.1</version>
+         <groupId>org.codehaus.woodstox</groupId>
+         <artifactId>woodstox-core-lgpl</artifactId>
       </dependency>
+   
+<!--       <dependency> -->
+<!--          <groupId>com.sun.xml.stream</groupId> -->
+<!--          <artifactId>sjsxp</artifactId> -->
+<!--          <version>1.0.1</version> -->
+<!--       </dependency> -->
       <dependency>
          <groupId>org.jdom</groupId>
          <artifactId>jdom</artifactId>
