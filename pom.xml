@@ -224,6 +224,14 @@
 		            </filesets>
 		          </configuration>
 		        </plugin>
+		        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-javadoc-plugin</artifactId>
+	            <version>3.1.1</version>
+	            <configuration>
+	               <stylesheet>maven</stylesheet>
+	            </configuration>
+		        </plugin>
 		        
 					  <!-- 
 							A small plug-in that starts Neo4j. 
@@ -275,15 +283,11 @@
 		<maven.failsafe.plugin.version>2.6</maven.failsafe.plugin.version>
 		<maven.jar.plugin.version>2.3</maven.jar.plugin.version>
 		<maven.javadoc.plugin.version>2.6.1</maven.javadoc.plugin.version>
-		<maven.pmd.plugin.version>2.4</maven.pmd.plugin.version>
-		<maven.project.info.reports.plugin.version>2.1.2</maven.project.info.reports.plugin.version>
 		<maven.scm.plugin.version>1.2</maven.scm.plugin.version>
 		<maven.source.plugin.version>2.1.2</maven.source.plugin.version>
 		<maven.surefire.plugin.version>2.4.3</maven.surefire.plugin.version>
-		<maven.surefire.report.plugin.version>2.4</maven.surefire.report.plugin.version>
 		<mojo.axistools.maven.plugin.version>1.3</mojo.axistools.maven.plugin.version>
 		<mojo.cobertura.maven.plugin.version>2.4</mojo.cobertura.maven.plugin.version>
-		<mojo.taglist.maven.plugin.version>2.4</mojo.taglist.maven.plugin.version>
 		<mojo.jaxb2.maven.plugin.version>1.3</mojo.jaxb2.maven.plugin.version>
 		<mojo.nsis.maven.plugin.version>1.0-ONDEX</mojo.nsis.maven.plugin.version>
 		<!-- Dependecies not yet used but ready -->
@@ -641,17 +645,30 @@
          <groupId>org.codehaus.woodstox</groupId>
          <artifactId>woodstox-core-lgpl</artifactId>
          <version>4.0.11</version>
+         <exclusions>
+         	<!-- They shouldn't be necessary and cause problems to Eclipse 
+         			(javax.xml.stream referred by two modules) -->
+         	<exclusion>
+         		<groupId>javax.xml.stream</groupId>
+         		<artifactId>stax-api</artifactId>
+         	</exclusion>
+         	<exclusion>
+         		<groupId>org.codehaus.woodstox</groupId>
+         		<artifactId>stax2-api</artifactId>
+         	</exclusion>
+         </exclusions>
       </dependency>
       <dependency>
         <groupId>org.codehaus.woodstox</groupId>
         <artifactId>stax2-api</artifactId>
-        <version>3.0.4</version>
+        <version>4.2</version>
       </dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
 			  <artifactId>cxf-wstx-msv-validation</artifactId>
 			  <version>2.2</version>
 			</dependency>
+			
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-math3</artifactId>
