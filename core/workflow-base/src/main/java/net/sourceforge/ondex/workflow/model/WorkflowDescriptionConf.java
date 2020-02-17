@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.workflow.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +60,17 @@ public class WorkflowDescriptionConf
     {
         Class<? extends ArgumentParser> amc = typeToAM.get(ab.getParser());
         if(amc == null) amc = WorkflowDescriptionConf.StandardArgMaker.class;
-        return amc.newInstance();
+        try {
+					return amc.getDeclaredConstructor().newInstance();
+				}
+				catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+						| NoSuchMethodException | SecurityException ex )
+				{
+					throw new IllegalArgumentException (
+						"Error while getting an instance of '" + amc.getName() + "', : " + ex.getMessage (),
+						ex
+					);
+				}
     }
 
     /**
@@ -67,34 +78,8 @@ public class WorkflowDescriptionConf
      * @return values for arguments
      * @throws Exception 
      */
-    public Object[] parseArgumentsForChecking(WorkflowTask pc) throws Exception{
-    	/**
-     	    for (ArgDefValuePair at : t.getArgs()) {
-            ArgumentDescription ab = at.getArg();
-            TaskDescriptionConf.ArgumentParser argParser = ams.get(ab.getInputId());
-            LOG.debug("Processing argument #" + ab.getInputId() + ": " + at.getArg().getName());
-            if(ab.isInputObject()){
-                if (argParser == null) {
-                    try {
-                        argParser = tdc.argParserForArgumentDescription(ab);
-                        ams.put(ab.getInputId(), argParser);
-                    } catch (Exception e) {
-                        LOG.warn("Problem initialising parser. Skipping", e);
-                    }
-                    if(DEBUG){
-                        debugInputMap.put(ab.getInputId(), at);
-                    }
-                }
-                argParser.addArgument(at);
-            }
-            if (ab.isOutputObject()) {
-                outputs.put(ab.getOutputId(), at);
-                if(DEBUG){
-                    debugOutputMap.put(ab.getOutputId(), at);
-                }
-            }
-        }
-    	*/
+    public Object[] parseArgumentsForChecking(WorkflowTask pc) throws Exception
+    {
         Map<Integer, ArgumentParser> ams = new HashMap<Integer, ArgumentParser>();
         for (BoundArgumentValue at : pc.getArgs()) {
             ArgumentDescription ab = at.getArg();
@@ -105,8 +90,8 @@ public class WorkflowDescriptionConf
                 if (argParser == null) {
                     try {
                         argParser = (typeToAM.get(ab.getParser()) == null
-                                ? StandardArgMaker.class.newInstance()
-                                : typeToAM.get(ab.getParser()).newInstance());
+                                ? StandardArgMaker.class.getDeclaredConstructor().newInstance()
+                                : typeToAM.get( ab.getParser() ).getDeclaredConstructor().newInstance());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
