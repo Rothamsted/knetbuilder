@@ -19,11 +19,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.codehaus.woodstox</groupId>
-			<artifactId>stax2-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>woodstox-core-lgpl</artifactId>
 		</dependency>
 		<dependency>
