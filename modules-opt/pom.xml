@@ -166,7 +166,7 @@
 						-groupId ${project.groupId}
 						-version ${project.version}
 						-classdir ${project.build.directory}/classes
-						${project.build.directory}/libs4javadoc
+						-libsdir ${project.build.directory}/libs4javadoc
             </additionalparam>
             </configuration>
          </plugin>
