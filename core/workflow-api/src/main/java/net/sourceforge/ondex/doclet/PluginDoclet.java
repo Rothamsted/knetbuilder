@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -26,6 +27,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.source.doctree.DocCommentTree;
 import com.sun.source.doctree.DocTree;
@@ -63,6 +66,7 @@ public class PluginDoclet implements Doclet
 	
 	private Reporter reporter;
 	
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	@Override
 	public void init ( Locale locale, Reporter reporter ) {
@@ -111,7 +115,7 @@ public class PluginDoclet implements Doclet
 			reporter.print ( Diagnostic.Kind.ERROR, "-classdir not specified" );
 			return false;
 		}
-		if ( options.get ( "-libs" ) != null ) libsDir = options.get ( "-libsdir" );
+		if ( options.get ( "-libsdir" ) != null ) libsDir = options.get ( "-libsdir" );
 		// TODO: libsDir wasn't originally checked, is it optional?
 		
 		
@@ -122,15 +126,14 @@ public class PluginDoclet implements Doclet
 
 		addFiles ( new File ( libsDir ), jarRegisterBuilder );
 		
-		URLClassLoader ucl = null;
 		try
 		{
 			URL[] urls = jarRegisterBuilder.toArray ( new URL[ jarRegisterBuilder.size () + 1 ] );
 			urls[ urls.length - 1 ] = rootDir.toURI ().toURL ();
 
-			// NB you must extend the ContextClass loader as JavaDoc uses its
+			// NB you must extend the context class loader as JavaDoc uses its
 			// own URLClassLoader
-			ucl = URLClassLoader.newInstance ( urls, Thread.currentThread ().getContextClassLoader () );
+			URLClassLoader ucl = URLClassLoader.newInstance ( urls, Thread.currentThread ().getContextClassLoader () );
 			Thread.currentThread ().setContextClassLoader ( ucl );
 		}
 		catch ( MalformedURLException ex )
@@ -221,12 +224,12 @@ public class PluginDoclet implements Doclet
 				//
 				Class<?> classPlugin;
 				try {
-					classPlugin = ucl.loadClass ( classDoc.getQualifiedName ().toString () );
+					classPlugin = Thread.currentThread ().getContextClassLoader ().loadClass ( classDoc.getQualifiedName ().toString () );
 				}
-				catch ( ClassNotFoundException ex ) 
+				catch ( ClassNotFoundException|NoClassDefFoundError ex ) 
 				{
 					throw new IllegalArgumentException ( 
-						"Cannot find the plugin class '" + classDoc.getQualifiedName ().toString () + "'" +
+						"Cannot load the plugin class '" + classDoc.getQualifiedName () + "'" +
 						", error: " + ex.getMessage (),
 						ex
 					);
@@ -520,10 +523,16 @@ public class PluginDoclet implements Doclet
 				@Override
 				public boolean process ( String opt, List<String> vals )
 				{
-					if ( vals == null || vals.size() != 1 ) {
-						reporter.print ( Diagnostic.Kind.ERROR, "Option '" + opt + "' requires exactly one argument" );
+					// It seems that vals contains all the option list here?!
+					if ( vals == null ) {
+						reporter.print ( Diagnostic.Kind.ERROR, "Null args for the option '" + opt + "'" );
 						return false;
 					}
+					if ( vals.size () < 1 ) {
+						reporter.print ( Diagnostic.Kind.ERROR, "Zero args for the option '" + opt + "'" );
+						return false;
+					}
+					
 					options.put ( opt, vals.get ( 0 ) );
 					return true;
 				}

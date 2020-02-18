@@ -41,11 +41,11 @@
          <artifactId>woodstox-core-lgpl</artifactId>
       </dependency>
    
-<!--       <dependency> -->
-<!--          <groupId>com.sun.xml.stream</groupId> -->
-<!--          <artifactId>sjsxp</artifactId> -->
-<!--          <version>1.0.1</version> -->
-<!--       </dependency> -->
+      <dependency>
+         <groupId>com.sun.xml.stream</groupId>
+         <artifactId>sjsxp</artifactId>
+         <version>1.0.2</version>
+      </dependency>
       <dependency>
          <groupId>org.jdom</groupId>
          <artifactId>jdom</artifactId>
