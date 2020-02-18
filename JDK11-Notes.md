@@ -7,8 +7,9 @@
  
   * OK the entire core
 
-  * ondex-knet-builder/modules/oxl
-    * Now we have test errors about com.sun.*
+  * OK ondex-knet-builder/modules/oxl
+    * to check what's next
+
 
 
 
