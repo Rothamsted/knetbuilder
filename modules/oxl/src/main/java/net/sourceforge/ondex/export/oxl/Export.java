@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collection;
@@ -692,7 +693,7 @@ public class Export extends ONDEXExport implements Monitorable {
 		try {
 			Set classes = new HashSet();
 			List list = listH.getValue();
-			List added = list.getClass().newInstance();
+			List added = list.getClass().getDeclaredConstructor ().newInstance();
 			Iterator<?> it = list.iterator();
 			while (it.hasNext()) {
 				Object value = it.next();
@@ -716,11 +717,12 @@ public class Export extends ONDEXExport implements Monitorable {
 			list.addAll(added); // add back the holders
 			listH.setValue(list);
 			return classes;
-		} catch (InstantiationException e) {
+		} 
+		catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException 
+        	 | IllegalArgumentException | InvocationTargetException e) 
+		{
 			throw new JAXBException(e); // TODO make a nicer exception here
-		} catch (IllegalAccessException e) {
-			throw new JAXBException(e); // TODO make a nicer exception here
-		}
+		} 
 	}
 
 	/**
@@ -738,7 +740,7 @@ public class Export extends ONDEXExport implements Monitorable {
 		try {
 			Set classes = new HashSet();
 			Collection collection = collectionH.getValue();
-			Collection added = collection.getClass().newInstance();
+			Collection added = collection.getClass().getDeclaredConstructor ().newInstance();
 			Iterator<?> it = collection.iterator();
 			while (it.hasNext()) {
 				Object value = it.next();
@@ -762,9 +764,10 @@ public class Export extends ONDEXExport implements Monitorable {
 			collection.addAll(added); // add back the holders
 			collectionH.setValue(collection);
 			return classes;
-		} catch (InstantiationException e) {
-			throw new JAXBException(e); // TODO make a nicer exception here
-		} catch (IllegalAccessException e) {
+		} 
+		catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException 
+     	 | IllegalArgumentException | InvocationTargetException e) 
+		{
 			throw new JAXBException(e); // TODO make a nicer exception here
 		}
 	}
@@ -783,7 +786,7 @@ public class Export extends ONDEXExport implements Monitorable {
 		try {
 			Set classes = new HashSet();
 			Map map = mapH.getValue();
-			Map mapAdded = map.getClass().newInstance();
+			Map mapAdded = map.getClass().getDeclaredConstructor ().newInstance();
 			Iterator<? extends Map.Entry> it = map.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry entry = it.next();
@@ -822,9 +825,10 @@ public class Export extends ONDEXExport implements Monitorable {
 			map.putAll(mapAdded); // add back the holders
 			mapH.setValue(map);
 			return classes;
-		} catch (InstantiationException e) {
-			throw new JAXBException(e); // TODO make a nicer exception here
-		} catch (IllegalAccessException e) {
+		}
+		catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException 
+	     	 	 | IllegalArgumentException | InvocationTargetException e) 
+		{
 			throw new JAXBException(e); // TODO make a nicer exception here
 		}
 	}

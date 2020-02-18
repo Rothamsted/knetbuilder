@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.parser.oxl;
 
 import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -386,7 +387,15 @@ public abstract class AbstractEntityParser implements XmlComponentParser {
 	 */
 	protected void processMap2Holder(Map<?, ?> map) throws JAXBException,
 			InstantiationException, IllegalAccessException {
-		Map mapAdded = map.getClass().newInstance();
+		Map mapAdded;
+		try {
+			mapAdded = map.getClass().getDeclaredConstructor ().newInstance();
+		}
+		catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException ex )
+		{
+			throw new JAXBException ( ex );
+		}
 		Iterator<? extends Map.Entry> it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry entry = it.next();

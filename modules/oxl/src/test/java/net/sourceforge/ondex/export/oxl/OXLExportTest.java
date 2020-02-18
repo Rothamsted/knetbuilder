@@ -405,7 +405,7 @@ public class OXLExportTest
         ONDEXConcept c = g.getFactory().createConcept("concept", dataSource, cc, et);
 
         AttributeName an = g.getMetaData().getFactory().createAttributeName("an", Double.class);
-        Double doubleI = new Double(6546546543.4545);
+        Double doubleI = 6546546543.4545d;
         c.createAttribute(an, doubleI, false);
         AttributeName an2 = g.getMetaData().getFactory().createAttributeName("an2", String.class);
         c.createAttribute(an2, "my String", false);
