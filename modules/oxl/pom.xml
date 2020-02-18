@@ -21,9 +21,7 @@
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>woodstox-core-lgpl</artifactId>
 		</dependency>
-
-
-		<!-- ONDEX deps -->
+		
 		<dependency>
 			<groupId>net.sourceforge.ondex.core</groupId>
 			<artifactId>memory</artifactId>
