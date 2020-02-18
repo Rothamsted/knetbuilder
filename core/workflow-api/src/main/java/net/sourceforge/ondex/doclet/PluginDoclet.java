@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -25,6 +26,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +50,7 @@ import net.sourceforge.ondex.annotations.metadata.RelationTypeRequired;
 import net.sourceforge.ondex.init.PluginType;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
+import uk.ac.ebi.utils.regex.RegEx;
 
 /**
  * @author hindlem
@@ -64,7 +67,7 @@ public class PluginDoclet implements Doclet
 	private Map<String, String> options = new HashMap<>();
 	
 	private Reporter reporter;
-	
+		
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
 	@Override
@@ -337,18 +340,23 @@ public class PluginDoclet implements Doclet
 
 				xtw.writeEndElement (); // end ondex-metadata
 				
-				writeXmlElem ( xtw, "comment", elemUtils.getDocComment ( classDoc ) );
-
-				xtw.writeStartElement ( NAMESPACE, "authors" );
+				// Description (the Javadoc comment)
+				//
+				String commentTxt = elemUtils.getDocComment ( classDoc );
+				commentTxt = commentTxt == null ? "" : cleanCommentText ( commentTxt );
+				writeXmlElem ( xtw, "comment", commentTxt  );
 
 				// Authors
 				//
+				xtw.writeStartElement ( NAMESPACE, "authors" );
 				DocCommentTree docTree = docTreeUtils.getDocCommentTree ( classDoc );
 				List<? extends DocTree> docTags = docTree.getBlockTags ();
 				for ( DocTree tag: docTags )
 				{
 					if ( !tag.getKind ().equals ( DocTree.Kind.AUTHOR ) ) continue;
 					String authorsTxt = tag.toString ();
+					if ( authorsTxt == null ) continue;
+					authorsTxt = authorsTxt.replaceFirst ( "^@author\\s", "" );
 					String [] authors = authorsTxt.split ( "," );
 					for ( String authorName : authors )
 						writeXmlElem ( xtw, "author", authorName.trim () );
@@ -369,6 +377,39 @@ public class PluginDoclet implements Doclet
 		
 	} // runWithExceptions()
 	
+	/**
+	 * Cleans up a javadoc comment.
+	 * 
+	 * First removes authors and initial space in each line, then removes tail lines which are empty.
+	 */
+	private String cleanCommentText ( String commentTxt )
+	{
+		String[] commentLines = commentTxt.split ( "\n" );
+		
+		// Filter the author lines, clean the initial space
+		//
+		for ( int i = 0; i < commentLines.length; i++ )
+		{
+			String commentLine = commentLines [ i ];
+			if ( commentLine.matches ( "^\\s*@author\\s+.*" )) commentLines [ i ] = null;
+			else commentLines [ i ] = commentLine.replaceFirst ( "^ ", "" );
+		}
+		
+		// Next, remove the tail lines left null or which were already blank
+		int ncut = commentLines.length - 1;
+		for ( ; 
+						ncut >= 0 && ( commentLines [ ncut ] == null 
+												 	 || commentLines [ ncut ].isEmpty () )
+					; ncut-- );
+
+		// Finally, rebuild the cleaned string
+		StringBuilder newComment = new StringBuilder ();
+		for ( int i = 0; i <= ncut; i++ )
+			if ( commentLines [ i ] != null )
+				newComment.append ( commentLines [ i ] ).append ( "\n" );
+		
+		return newComment.toString (); 
+	}
 
 	private static void _writeXmlElem ( 
 		XMLStreamWriter xtw, String name, String value, boolean doCDATA, @SuppressWarnings ( "unchecked" ) Pair<String, String> ...attributes 
@@ -421,8 +462,9 @@ public class PluginDoclet implements Doclet
 			reporter.print ( Diagnostic.Kind.WARNING, "Option '" + optName + "' not specified" );
 			return;
 		}
-		
-		writeXmlElem ( xtw, optName, val );				
+
+		// Skip the first '-'
+		writeXmlElem ( xtw, optName.substring ( 1 ), val );				
 	}
 	
 
