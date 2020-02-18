@@ -10,6 +10,8 @@
   * OK ondex-knet-builder/modules/oxl
     * to check what's next
 
+  * OK Doclet: the fetch of tags like @author gets the whole '@author someone',
+    remove the tag.
 
 
 
