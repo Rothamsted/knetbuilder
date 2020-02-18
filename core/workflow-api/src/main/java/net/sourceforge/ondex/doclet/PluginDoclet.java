@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -123,11 +122,11 @@ public class PluginDoclet implements Doclet
 		// 
 		Set<URL> jarRegisterBuilder = new HashSet<> ();
 		File rootDir = new File ( classDir );
-
-		addFiles ( new File ( libsDir ), jarRegisterBuilder );
 		
 		try
 		{
+			addFiles ( new File ( libsDir ), jarRegisterBuilder );
+
 			URL[] urls = jarRegisterBuilder.toArray ( new URL[ jarRegisterBuilder.size () + 1 ] );
 			urls[ urls.length - 1 ] = rootDir.toURI ().toURL ();
 
@@ -139,7 +138,8 @@ public class PluginDoclet implements Doclet
 		catch ( MalformedURLException ex )
 		{
 			throw new IllegalArgumentException ( 
-				"For some reason, '" + classDir + "' cannot be converted to an URL", ex 
+				"Cannot set the new class path, got the error: " + ex.getMessage (),
+				ex 
 			);
 		}
 
@@ -449,38 +449,27 @@ public class PluginDoclet implements Doclet
 		xtw.writeEndElement (); // comment
 	}
 
-	private static void addFiles ( File classDir, Set<URL> classRegisterBuilder )
+	private void addFiles ( File classDir, Set<URL> classRegisterBuilder )
+		throws MalformedURLException
 	{
-		if ( classDir.listFiles () == null )
-		{
-			if ( !classDir.exists () )
-			{
-				throw new RuntimeException ( "The file: " + classDir + " does not exist" );
-			} else if ( !classDir.isDirectory () )
-			{
-				throw new RuntimeException ( "The file: " + classDir + " is not a directory" );
-			} else
-			{
-				throw new NullPointerException ( "File.listFiles() returned null for an unknown reason" );
-			}
-		}
+		if ( !classDir.exists () )
+			throw new RuntimeException ( "The file: " + classDir + " does not exist" );
+		if ( !classDir.isDirectory () )
+			throw new RuntimeException ( "The file: " + classDir + " is not a directory" );
+		
+		File[] files = classDir.listFiles ();
+		if ( files == null )
+			throw new NullPointerException ( "File.listFiles() returned null for an unknown reason" );
+		
 		for ( File file : classDir.listFiles () )
 		{
-			if ( file.isDirectory () )
+			if ( file.isDirectory () ) addFiles ( file, classRegisterBuilder );
+			// TODO: doesn't work in new version, is it needed?! 
+			// && !file.getName ().startsWith ( "workflow-api" ) )
+			else if ( file.isFile () && file.getName ().endsWith ( ".jar" ) )
 			{
-				addFiles ( file, classRegisterBuilder );
-			} else if ( file.isFile () && file.getName ().endsWith ( ".jar" )
-					&& !file.getName ().startsWith ( "workflow-api" ) )
-			{
-				try
-				{
-					classRegisterBuilder.add ( file.toURI ().toURL () );
-					System.out.println ( file.toURI ().toURL ().toString () );
-				}
-				catch ( MalformedURLException e )
-				{
-					e.printStackTrace ();
-				}
+				classRegisterBuilder.add ( file.toURI ().toURL () );
+				log.info ( "PlugInDoclet, adding classpath: '{}'", file.toURI ().toURL ().toString () );
 			}
 		}
 	}
