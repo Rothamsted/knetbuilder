@@ -20,7 +20,6 @@
       <plugins>
          <plugin>
             <artifactId>maven-jar-plugin</artifactId>
-            <version>2.2</version>
             <configuration>
                <archive>
                   <index>true</index>
@@ -81,7 +80,6 @@
 
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>${maven.assembly.plugin.version}</version>
             <configuration>
                <descriptors>
                   <descriptor>${basedir}/zip_distro.xml</descriptor>
@@ -112,14 +110,13 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-report-plugin</artifactId>
-            <version>${maven.surefire.plugin.version}</version>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>${maven.project.info.reports.plugin.version}</version>
          </plugin>
-         <plugin>
+	 			 <!-- TODO: We're already using FindBugs and this needs to be updated anyway -->
+         <!-- plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
             <version>${maven.pmd.plugin.version}</version>
@@ -129,33 +126,11 @@
                <minimumTokens>100</minimumTokens>
                <targetJdk>${java.version}</targetJdk>
             </configuration>
-         </plugin>
+         </plugin-->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${maven.javadoc.plugin.version}</version>
-            <configuration>
-               <stylesheet>maven</stylesheet>
-               <additionalparam>
-						-link http://java.sun.com/javase/6/docs/api/
-						-link
-						http://www.oracle.com/technology/documentation/berkeley-db/je/java
-						-link http://junit.sourceforge.net/javadoc/
-						-link
-						http://ondex.rothamsted.ac.uk/ondex/core/apidocs/
-						-link
-						http://ondex.rothamsted.ac.uk/ondex/modules/apidocs/
-					</additionalparam>
-            </configuration>
          </plugin>
-         <!-- <producer> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-producer</artifactId> 
-				<configuration> <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet> <docletArtifact> 
-				<groupId>gr.spinellis</groupId> <artifactId>UmlGraph</artifactId> <version>5.0</version> 
-				</docletArtifact> <additionalparam> -inferrel -inferdep -hide java.* -collpackages 
-				java.util.* -qualify -postfixpackage -nodefontsize 9 -nodefontpackagesize 
-				7 -link http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec -link 
-				http://java.sun.com/j2se/1.5/docs/api -inferdepvis </additionalparam> <encoding>ISO-8859-1</encoding> 
-				</configuration> </producer> -->
       </plugins>
    </reporting>
 
@@ -362,6 +337,7 @@
       <dependency>
          <groupId>org.apache.axis</groupId>
          <artifactId>axis</artifactId>
+         <!-- TODO: try to align everything to 1.4, as per main POM -->
          <version>1.4</version>
       </dependency>
 
