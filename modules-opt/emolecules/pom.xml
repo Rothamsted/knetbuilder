@@ -16,7 +16,6 @@
    <packaging>jar</packaging>
    <name>eMolecules parser</name>
    <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <cdk.version>1.4.11</cdk.version>
    </properties>
    <dependencies>
