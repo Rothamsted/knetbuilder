@@ -1,6 +1,10 @@
 package net.sourceforge.ondex.parser;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -66,7 +70,10 @@ public class DefaultConceptMapper<S> implements ConceptMapper<S>
 
 		// Accessions
 		Optional.ofNullable ( this.getAccessionsMapper () )
-		.ifPresent ( mapper -> mapper.map ( src, result, graph ).count () );
+		.ifPresent ( mapper -> 
+			mapper.map ( src, result, graph )
+			.forEach ( acc -> { /* To force stream consumption (count() doesn't work) */} ) 
+		);
 
 		return result;
 	}
