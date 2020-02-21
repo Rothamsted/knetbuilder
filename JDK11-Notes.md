@@ -25,6 +25,8 @@
     * then continue from modules/js-plugin
     * later, we need to check ondex-desktop/scripting-commandline, which depends on scripting
 	
-	* owl-parser: see why the tests fail
-	 
+	* OK owl-parser: see why the tests fail
+	
+	* REBUILD 3rd-parties after fix about Stream.count() 
+	
     
