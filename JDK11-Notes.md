@@ -13,6 +13,15 @@
   * OK Doclet: the fetch of tags like @author gets the whole '@author someone',
     remove the tag.
 
-
-
-   
+  * OK modules/json, cyjs-json
+    * Have dependencies with specified versions
+    * Continue with dependency cleaning, from top-pom/maven-source-plugin
+    * Go to the modules done so far and check artifact deps, if they need to be under
+      depMgmt etc.
+  
+  * modules/scripting is probably to be removed
+    * check knet-builder/scripting
+    	* Old Jena?
+    * then continue from modules/js-plugin
+    * later, we need to check ondex-desktop/scripting-commandline, which depends on scripting
+    

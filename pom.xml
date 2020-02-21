@@ -19,6 +19,23 @@
       <module>ondex-knet-builder</module>
    </modules>
 
+	 <properties>
+		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<jutils.version>10.0-SNAPSHOT</jutils.version>
+		<lucene.version>6.6.0</lucene.version>
+		<spring.version>4.3.6.RELEASE</spring.version>
+		
+		<!-- Used by neo4j-related components -->
+		<neo4j.server.version>3.5.12</neo4j.server.version>
+		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
+		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
+		<rdf2neo.version>3.0-SNAPSHOT</rdf2neo.version>  
+
+   </properties>
+
+
    <licenses>
       <license>
          <name>GNU GPL</name>
@@ -34,13 +51,13 @@
    <url>http://www.ondex.org/</url>
 
    <ciManagement>
-      <system>hudson</system>
-      <url>http://ondex.rothamsted.ac.uk/hudson</url>
+      <system>jenkins</system>
+      <url>http://ondex.rothamsted.ac.uk/build</url>
    </ciManagement>
 
    <organization>
       <name>ONDEX</name>
-      <url>http://www.ondex.org</url>
+      <url>https://github.com/Rothamsted/ondex-knet-builder</url>
    </organization>
 
    <scm>
@@ -74,42 +91,23 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>${maven.surefire.plugin.version}</version>
-            <configuration>
-               <forkMode>always</forkMode>
-               <forkedProcessTimeoutInSeconds>700</forkedProcessTimeoutInSeconds>
-               <argLine>-XX:MaxRAM=4g -Dondex.dir=${basedir}/data</argLine>
-               <excludes>
-                  <exclude>net/sourceforge/ondex/apps/*</exclude>
-               </excludes>
-               <failIfNoTests>false</failIfNoTests>
-               <enableAssertions>true</enableAssertions>
-               <redirectTestOutputToFile>false</redirectTestOutputToFile>
-               <!--testFailureIgnore>true</testFailureIgnore -->
-               <useFile>false</useFile>
-            </configuration>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>${maven.source.plugin.version}</version>
-            <executions>
-               <execution>
-                  <id>attach-sources</id>
-                  <phase>verify</phase>
-                  <goals>
-                     <goal>jar-no-fork</goal>
-                  </goals>
-               </execution>
-            </executions>
          </plugin>
-         <plugin>
+         
+         <!-- 
+         	TODO: Remove: release plug-in is unreliable and inflexible: https://dzone.com/articles/why-i-never-use-maven-release
+         	Due to issues mentioned in that post, we too release thorough a Jenkins job that has the steps we want.
+         -->
+         <!--  plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-release-plugin</artifactId>
             <configuration>
                <preparationGoals>clean verify install</preparationGoals>
             </configuration>
-         </plugin>
+         </plugin -->
       </plugins>
 
       <pluginManagement>
@@ -118,7 +116,7 @@
 			       	<groupId>org.apache.maven.plugins</groupId>
 			       	<artifactId>maven-dependency-plugin</artifactId>
 			       	<version>3.1.1</version>
-         		</plugin>         
+         		</plugin>
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-compiler-plugin</artifactId>
@@ -133,10 +131,25 @@
                   <fork>true</fork>
                </configuration>
             </plugin>
-            <plugin>
+						<plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-source-plugin</artifactId>
+						  <version>2.1.2</version>
+						  <executions>
+						     <execution>
+						        <id>attach-sources</id>
+						        <phase>verify</phase>
+						        <goals><goal>jar-no-fork</goal></goals>
+						     </execution>
+						  </executions>
+						</plugin>
+            
+            <!-- TODO: remove. Likely, it's not used and if it is, it needs upgrade and
+                 tests. -->
+            <!-- plugin>
                <groupId>org.codehaus.mojo</groupId>
                <artifactId>jaxb2-maven-plugin</artifactId>
-               <version>${mojo.jaxb2.maven.plugin.version}</version>
+               <version>1.3</version>
                <executions>
                   <execution>
                      <id>jaxb2-xjc</id>
@@ -146,8 +159,162 @@
                      </goals>
                   </execution>
                </executions>
-            </plugin>
-            <!-- Need for newer Eclipse versions with m2e integrated -->
+            </plugin -->
+
+            <!-- Cleans up things that are usualy left around on the main module folder, not in target/ -->
+		        <plugin>
+		          <artifactId>maven-clean-plugin</artifactId>
+		          <configuration>
+		            <filesets>
+		              <fileset>
+		                <directory>${basedir}</directory>
+		                <includes>
+		                  <include>ondex.log</include>
+		                  <include>velocity.log</include>
+		                  <include>uninstall.log</include>
+		                </includes>
+		              </fileset>
+		            </filesets>
+		          </configuration>
+		        </plugin>
+		        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-javadoc-plugin</artifactId>
+	            <version>3.1.1</version>
+	            <configuration>
+	               <stylesheet>maven</stylesheet>
+	            </configuration>
+		        </plugin>
+		        <plugin>
+		        	<artifactId>maven-assembly-plugin</artifactId>
+							<!-- 
+							  TODO: this is the last version known to work, except for the fact it creates directories with the wrong
+							  permissions. 
+							 -->
+							<version>2.2-beta-5</version>
+						</plugin>
+						
+						<plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-surefire-plugin</artifactId>
+						  <version>2.4.3</version>
+						  <configuration>
+						     <forkMode>always</forkMode>
+						     <forkedProcessTimeoutInSeconds>700</forkedProcessTimeoutInSeconds>
+						     <argLine>-XX:MaxRAM=4g -Dondex.dir=${basedir}/data</argLine>
+						     <excludes>
+						        <exclude>net/sourceforge/ondex/apps/*</exclude>
+						     </excludes>
+						     <failIfNoTests>false</failIfNoTests>
+						     <enableAssertions>true</enableAssertions>
+						     <redirectTestOutputToFile>false</redirectTestOutputToFile>
+						     <useFile>false</useFile>
+             		 <trimStackTrace>false</trimStackTrace>        
+								 <properties>
+								   <property>
+									   <!-- Prints out spaces and test name before/after every test method and automatically -->
+										 <name>listener</name>
+										 <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
+									 </property>
+								 </properties>
+						  </configuration>
+						  <dependencies>
+								<dependency>
+						  		<groupId>uk.ac.ebi</groupId>
+						  		<artifactId>jutils</artifactId>
+		  						<version>${jutils.version}</version>
+								</dependency>
+						  </dependencies>
+						</plugin>
+						
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-failsafe-plugin</artifactId>
+							<version>3.0.0-M4</version>
+							<configuration>
+								<trimStackTrace>false</trimStackTrace>							
+							</configuration>
+						</plugin>
+						
+						<plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-surefire-report-plugin</artifactId>
+						  <version>2.4</version>
+						</plugin>
+						
+					  <!-- 
+							A small plug-in that starts Neo4j. 
+							
+							1.0.1 is the official version that integrated our improvements at
+							at https://github.com/Rothamsted/neo4j-server-maven-plugin 
+					  -->
+		        <plugin>
+					    <groupId>com.github.harti2006</groupId>
+						  <artifactId>neo4j-server-maven-plugin</artifactId>
+						  <version>1.1</version>
+							<configuration>
+								<version>${neo4j.server.version}</version>
+								<port>${neo4j.server.httpPort}</port>
+								<boltPort>${neo4j.server.boltPort}</boltPort>
+								<deleteDb>true</deleteDb>
+								<serverReadyAttempts>120</serverReadyAttempts>
+							</configuration>
+							<executions>
+								<execution>
+									<id>start-neo4j-server</id>
+									<goals><goal>start</goal></goals>
+								</execution>
+								<execution>
+									<id>stop-neo4j-server</id>
+									<goals><goal>stop</goal></goals>
+								</execution>
+							</executions>		        
+		        </plugin>
+		        
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.1.2</version>
+						</plugin>
+						
+						<plugin>
+						  <groupId>org.codehaus.mojo</groupId>
+						  <artifactId>taglist-maven-plugin</artifactId>
+						  <version>2.4</version>
+						</plugin>
+		        
+		        <!-- TODO: Remove. It's only used in old-components/dashboard. -->
+						<!-- plugin>
+						  <groupId>org.codehaus.mojo</groupId>
+						  <artifactId>axistools-maven-plugin</artifactId>
+						  <version>1.3</version>
+						  <dependencies>
+						     <dependency>
+						        <groupId>axis</groupId>
+						        <artifactId>axis</artifactId>
+						     </dependency>
+						  </dependencies>
+						  <configuration>
+						     <wsdlFiles>
+						        <wsdlFile>jirasoapservice-v2.wsdl</wsdlFile>
+						     </wsdlFiles>
+						     <packageSpace>com.atlassian.jira.rpc.soap.client</packageSpace>
+						  </configuration>
+						  <executions>
+						     <execution>
+						        <id>wsdl2java-generation</id>
+						        <phase>generate-sources</phase>
+						        <goals>
+						           <goal>wsdl2java</goal>
+						        </goals>
+						     </execution>
+						  </executions>
+						</plugin -->
+						
+            <!-- 
+            	This is needed by Eclipse, to in which build life cycle phase a plug-in is
+            	triggered. It won't hurt you if you don't use Eclipse.
+            -->
             <plugin>
                <groupId>org.eclipse.m2e</groupId>
                <artifactId>lifecycle-mapping</artifactId>
@@ -211,154 +378,16 @@
                      </pluginExecutions>
                   </lifecycleMappingMetadata>
                </configuration>
-            </plugin>
-            <!-- Cleans up things that are usualy left around on the main module folder, not in target/ -->
-		        <plugin>
-		          <artifactId>maven-clean-plugin</artifactId>
-		          <configuration>
-		            <filesets>
-		              <fileset>
-		                <directory>${basedir}</directory>
-		                <includes>
-		                  <include>ondex.log</include>
-		                  <include>velocity.log</include>
-		                  <include>uninstall.log</include>
-		                </includes>
-		              </fileset>
-		            </filesets>
-		          </configuration>
-		        </plugin>
-		        <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-javadoc-plugin</artifactId>
-	            <version>3.1.1</version>
-	            <configuration>
-	               <stylesheet>maven</stylesheet>
-	            </configuration>
-		        </plugin>
-		        
-					  <!-- 
-							A small plug-in that starts Neo4j. 
-							
-							1.0.1 is the official version that integrated our improvements at
-							at https://github.com/Rothamsted/neo4j-server-maven-plugin 
-					  -->
-		        <plugin>
-					    <groupId>com.github.harti2006</groupId>
-						  <artifactId>neo4j-server-maven-plugin</artifactId>
-						  <version>1.1</version>
-							<configuration>
-								<version>${neo4j.server.version}</version>
-								<port>${neo4j.server.httpPort}</port>
-								<boltPort>${neo4j.server.boltPort}</boltPort>
-								<deleteDb>true</deleteDb>
-								<serverReadyAttempts>120</serverReadyAttempts>
-							</configuration>
-							<executions>
-								<execution>
-									<id>start-neo4j-server</id>
-									<goals><goal>start</goal></goals>
-								</execution>
-								<execution>
-									<id>stop-neo4j-server</id>
-									<goals><goal>stop</goal></goals>
-								</execution>
-							</executions>		        
-		        </plugin>
+            </plugin>						
          </plugins>
       </pluginManagement>
       
    </build>
 
-	 <properties>
-		<java.version>11</java.version>
-		<ondex.version>${project.version}</ondex.version>
-		<target.dir>target</target.dir>
-		<nexus.repro>http://ondex.rothamsted.ac.uk/nexus</nexus.repro>
-		<!--Plugin Properties -->
-		<!-- was 2.2.6 First that works is 2.2.11 -->
-		<cxf.version>2.2.11</cxf.version>
-		<!-- 
-		  TODO: this is the last version known to work, except for the fact it creates directories with the wrong
-		  permissions. 
-		 -->
-		<maven.assembly.plugin.version>2.2-beta-5</maven.assembly.plugin.version>
-		<maven.failsafe.plugin.version>2.6</maven.failsafe.plugin.version>
-		<maven.jar.plugin.version>2.3</maven.jar.plugin.version>
-		<maven.scm.plugin.version>1.2</maven.scm.plugin.version>
-		<maven.source.plugin.version>2.1.2</maven.source.plugin.version>
-		<maven.surefire.plugin.version>2.4.3</maven.surefire.plugin.version>
-		<mojo.axistools.maven.plugin.version>1.3</mojo.axistools.maven.plugin.version>
-		<mojo.cobertura.maven.plugin.version>2.4</mojo.cobertura.maven.plugin.version>
-		<mojo.jaxb2.maven.plugin.version>1.3</mojo.jaxb2.maven.plugin.version>
-		<mojo.nsis.maven.plugin.version>1.0-ONDEX</mojo.nsis.maven.plugin.version>
-		<!-- Dependecies not yet used but ready -->
-		<apache.log4j.version>1.2.15</apache.log4j.version>
-		<collections.generic.version>4.01</collections.generic.version>
-		<org.biopax.paxtools.version>20101113</org.biopax.paxtools.version>
-		<org.biojava.version>1.7.1</org.biojava.version>
-		<com.hp.hpl.jena.version>2.5.7</com.hp.hpl.jena.version>
-		<javax.management.jmxri>1.2.1</javax.management.jmxri>
-		<jexcelapi.jxl.version>2.6.10</jexcelapi.jxl.version>
-		<junit.version>4.7</junit.version>
-		<mysql.connector.java.version>5.1.6</mysql.connector.java.version>
-		<jutils.version>10.0-SNAPSHOT</jutils.version>
-		<lucene.version>6.6.0</lucene.version>
-		<spring.version>4.3.6.RELEASE</spring.version>
-		
-		<!-- Used by neo4j-related components -->
-		<neo4j.server.version>3.5.12</neo4j.server.version>
-		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
-		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
-		<rdf2neo.version>3.0-SNAPSHOT</rdf2neo.version>  
-
-   </properties>
-
-
    <profiles>
-      <profile>
-         <id>eclipse-folders</id>
-         <properties>
-            <target.dir>target-eclipse</target.dir>
-         </properties>
-      </profile>
-      <profile>
-         <id>with-report</id>
-         <build>
-            <plugins><!-- test code coverage -->
-               <plugin>
-                  <groupId>org.codehaus.mojo</groupId>
-                  <artifactId>cobertura-maven-plugin</artifactId>
-                  <version>2.4</version>
-                  <configuration>
-                     <formats>
-                        <format>xml</format>
-                        <format>html</format>
-                     </formats>
-                  </configuration>
-                  <executions>
-                     <execution>
-                        <id>cobertura-copertura</id>
-                        <phase>package</phase>
-                        <goals>
-                           <goal>cobertura</goal>
-                        </goals>
-                     </execution>
-                     <execution>
-                        <id>cobertura-clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                           <goal>clean</goal>
-                        </goals>
-                     </execution>
-                  </executions>
-               </plugin>
-            </plugins>
-         </build>
-      </profile>
       
 			<profile>
-				<id>deploy-brandizi</id>
+				<id>brandizi-repo</id>
 				<activation><activeByDefault>false</activeByDefault></activation>
 				
 				<distributionManagement>
@@ -377,24 +406,24 @@
 			
 			</profile>
 			
-		<!-- TODO: testing the new repo, needs to be moved into the defaults -->
-		<profile>
-			<id>knetminer-repo</id>
-			<activation><activeByDefault>false</activeByDefault></activation>
-			
-			<distributionManagement>
-			  <repository>
-					<id>knetminer-releases</id>
-					<name>Internal Releases</name>
-					<url>http://babvs58.rothamsted.ac.uk:8081/nexus/repository/maven-releases/</url>
-			  </repository>
-			  <snapshotRepository>
-					<id>knetminer-snapshots</id>
-					<name>Internal Snapshots</name>
-					<url>http://babvs58.rothamsted.ac.uk:8081/nexus/repository/maven-snapshots/</url>
-			  </snapshotRepository>
-			</distributionManagement>				
-		</profile>
+			<!-- TODO: testing the new repo, needs to be moved into the defaults -->
+			<profile>
+				<id>knetminer-repo</id>
+				<activation><activeByDefault>false</activeByDefault></activation>
+				
+				<distributionManagement>
+				  <repository>
+						<id>knetminer-releases</id>
+						<name>Internal Releases</name>
+						<url>http://babvs58.rothamsted.ac.uk:8081/nexus/repository/maven-releases/</url>
+				  </repository>
+				  <snapshotRepository>
+						<id>knetminer-snapshots</id>
+						<name>Internal Snapshots</name>
+						<url>http://babvs58.rothamsted.ac.uk:8081/nexus/repository/maven-snapshots/</url>
+				  </snapshotRepository>
+				</distributionManagement>				
+			</profile>
 					     
    </profiles>
 
@@ -482,7 +511,7 @@
           <groupId>log4j</groupId>
           <artifactId>log4j</artifactId>
           <version>1.2.17</version>
-          <type>jar</type>
+          <scope>provided</scope>
        </dependency>
         
 			<dependency>
@@ -648,7 +677,7 @@
          <artifactId>woodstox-core-lgpl</artifactId>
          <version>4.0.11</version>
          <exclusions>
-         	 <!-- It shouldn't be necessary and cause problems to Eclipse 
+         	 <!-- It shouldn't be necessary and causes problems to Eclipse 
          			 (javax.xml.stream referred by two modules) -->
          	 <exclusion>
          		 <groupId>javax.xml.stream</groupId>
@@ -664,6 +693,7 @@
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
 			  <artifactId>cxf-wstx-msv-validation</artifactId>
+				<!-- was 2.2.6 First that works is 2.2.11 -->
 			  <version>2.2</version>
 			</dependency>
 			
@@ -672,6 +702,32 @@
 				<artifactId>commons-math3</artifactId>
 				<version>3.6.1</version>
 			</dependency>
+
+			<dependency>
+			  <groupId>axis</groupId>
+			  <artifactId>axis</artifactId>
+			  <version>1.3</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>xerces</groupId>
+				<artifactId>xercesImpl</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+			
+      <dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>1.1.1</version>
+      </dependency>
+      
+      <dependency>
+				<groupId>org.jsoup</groupId>
+				<artifactId>jsoup</artifactId>
+				<version>1.8.3</version>
+      </dependency>
+      
+			
     </dependencies>
 	</dependencyManagement>
 </project>
