@@ -44,34 +44,7 @@
 			<artifactId>noexception</artifactId>
 			<scope>test</scope>
 		</dependency>      
-		
-		<!-- Since JDK 11, we need this as a separate lib 
-    <dependency>
-    	<groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jaxb</groupId>
-      <artifactId>jaxb-runtime</artifactId>
-    </dependency> -->
-		
+				
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<properties>
-						<property>
-							<!-- Prints out spaces and test name before/after every test method and automatically -->
-							<name>listener</name>
-							<value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
-						</property>
-					</properties>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

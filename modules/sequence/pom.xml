@@ -20,11 +20,11 @@
       <dependency>
          <groupId>org.codehaus.woodstox</groupId>
          <artifactId>woodstox-core-lgpl</artifactId>
-         <version>4.0.6</version>
          <scope>provided</scope>
       </dependency>
 
-      <!-- ONDEX deps -->      <dependency>
+      <!-- ONDEX deps -->      
+      <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>tab-tools</artifactId>
          <version>${project.version}</version>

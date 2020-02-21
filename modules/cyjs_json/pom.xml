@@ -10,27 +10,26 @@
    </parent>
    <groupId>net.sourceforge.ondex.modules</groupId>
    <artifactId>cyjs_json</artifactId>
-   <packaging>jar</packaging>
+
    <name>cyjs_json</name>
-   <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-   </properties>
+
+   <description>An ONDEX Exporter plugin that exports Ondex Graph data to a JSON file ideal for cytoscapeJS, containing JSON objects 
+        which contain data related to concepts (nodes), relations (edges) and other Item Info. (metadata) 
+        including Data Sources, Types, Concept Classes, Relation Types, Evidences, Units and more.</description>
+
    <dependencies>
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
-         <version>4.11</version>
          <scope>test</scope>
       </dependency>
       <dependency>
          <groupId>com.googlecode.json-simple</groupId>
          <artifactId>json-simple</artifactId>
-         <version>1.1.1</version>
       </dependency>
       <dependency>
          <groupId>org.jsoup</groupId>
          <artifactId>jsoup</artifactId>
-         <version>1.8.3</version>
       </dependency>
       <!-- ONDEX deps -->
       <dependency>
@@ -78,27 +77,18 @@
       <dependency>
          <groupId>log4j</groupId>
          <artifactId>log4j</artifactId>
-         <version>1.2.17</version>
-         <scope>provided</scope>
-         <type>jar</type>
       </dependency>
-      <dependency>
+      <!-- TODO: remove -->
+      <!--  dependency>
          <groupId>stax</groupId>
          <artifactId>stax-api</artifactId>
          <version>1.0.1</version>
          <type>jar</type>
-      </dependency>
+      </dependency -->
       <dependency>
          <groupId>org.codehaus.woodstox</groupId>
          <artifactId>woodstox-core-lgpl</artifactId>
-         <version>4.0.6</version>
-         <type>jar</type>
       </dependency>
    </dependencies>
-   <description>An ONDEX Exporter plugin that exports Ondex Graph data to a JSON file ideal for cytoscapeJS, containing JSON objects 
-        which contain data related to concepts (nodes), relations (edges) and other Item Info. (metadata) 
-        including Data Sources, Types, Concept Classes, Relation Types, Evidences, Units and more.</description>
-   <build>
-      <plugins/>
-   </build>
+   
 </project>

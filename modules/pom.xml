@@ -126,7 +126,6 @@
 	         	<goals><goal>javadoc</goal></goals>
 	      	</execution>
        	</executions>
-       	
        	<configuration>
 	      	<doclet>net.sourceforge.ondex.doclet.PluginDoclet</doclet>
 	      	<useStandardDocletOptions>false</useStandardDocletOptions>
@@ -161,13 +160,11 @@
 						<additionalOption>${project.build.directory}/libs4javadoc</additionalOption>
 	
 	      	</additionalOptions>
-
        	</configuration>
     	</plugin>
 	    	
     	<plugin>
        	<artifactId>maven-assembly-plugin</artifactId>
-       	<version>${maven.assembly.plugin.version}</version>
        	<executions>
 	      	<execution>
 	         	<id>make-assembly-packaged_with_jars</id>

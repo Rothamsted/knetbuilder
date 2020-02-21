@@ -579,7 +579,7 @@
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>js-plugin</artifactId>
-                           <version>${ondex.version}</version>
+                           <version>${project.version}</version>
                            <classifier>jar-with-dependencies</classifier>
                            <type>jar</type>
                            <overWrite>true</overWrite>
@@ -646,7 +646,6 @@
          
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>${maven.assembly.plugin.version}</version>
             <configuration>
                <descriptors>
                   <descriptor>${basedir}/zip_distro.xml</descriptor>

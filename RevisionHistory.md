@@ -1,5 +1,10 @@
 # Revision History
 
+## 4.0-SNAPSHOT
+  * Big changes to migrate to Java 11
+  * Code changes:
+  	* POMs cleaning/refactoring
+  	* Some code cleaning/refactoring
 
 ## 2.1.1-SNAPSHOT
   * Next dev release.

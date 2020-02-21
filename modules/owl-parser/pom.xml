@@ -97,20 +97,13 @@
 			  <plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-surefire-plugin</artifactId>
+			    <!-- TODO: see if we can upgrade the top POM -->
 			    <version>2.20</version>			    
 			    <configuration>
-			      <properties>
-			        <property>
-			        	<!-- Prints out spaces and test name before/after every test method and automatically -->
-			          <name>listener</name>
-			          <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>			          
-			        </property>
-			       </properties>
-             <forkMode>always</forkMode>
              <forkCount>1</forkCount>
              <!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
              <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
-             <argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>
+             <argLine>-XX:MaxRAM=4g -Dondex.dir=/tmp</argLine>
              <trimStackTrace>false</trimStackTrace>        
 			    </configuration>
 			  </plugin>
@@ -118,7 +111,6 @@
       
         <plugin>
 	        <artifactId>maven-assembly-plugin</artifactId>
-	        <version>${maven.assembly.plugin.version}</version>
 	        <executions>
 	        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
 						<execution>
