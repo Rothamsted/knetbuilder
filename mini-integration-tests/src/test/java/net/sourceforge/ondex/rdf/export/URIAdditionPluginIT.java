@@ -53,10 +53,9 @@ public class URIAdditionPluginIT
 			}
 		)
 	  .map ( odx -> (String) odx.getAttribute ( iriAttribType ).getValue () )
-		.peek ( iri -> 
+		.forEach ( iri -> 
 			assertTrue ( "iri <" + iri + "> is wrong!", iri.startsWith ( "http://knetminer.org/data/rdf/resources/" ) ) 
-		)
-		.count ();
+		);
 		 
 		checkIris.accept ( graph.getConcepts () );
 		checkIris.accept ( graph.getRelations () );

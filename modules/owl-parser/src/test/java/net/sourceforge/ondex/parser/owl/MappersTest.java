@@ -6,6 +6,7 @@ import static net.sourceforge.ondex.parser.owl.Utils.OWL_PARSER_DATA_SOURCE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
@@ -20,7 +21,8 @@ import org.apache.jena.vocabulary.RDFS;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -65,9 +67,11 @@ public class MappersTest
 	
 	private ONDEXGraph graph;
 	
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );	
+	
 	
 	@Before
-	public void initTestData ()
+	public void initTestData () throws IOException
 	{
 		model = ModelFactory.createOntologyModel ( OntModelSpec.OWL_MEM );
 		
@@ -121,6 +125,7 @@ public class MappersTest
 		conceptMap.setDataSourceMapper ( new ConstDataSourceMapper<OntClass> ( Utils.OWL_PARSER_DATA_SOURCE ) );
 		
 		graph = new MemoryONDEXGraph ( "test" );
+		model.write ( new FileWriter ( "target/mappersTest.ttl" ) );
 	}
 	
 	@Test
@@ -143,7 +148,7 @@ public class MappersTest
 			.findAny ()
 			.orElse ( null ) ) != null
 		);
-		
+				
 		DataSource ds = graph.getMetaData ().createDataSource ( 
 			OWL_PARSER_DATA_SOURCE.getId (), OWL_PARSER_DATA_SOURCE.getFullName (), OWL_PARSER_DATA_SOURCE.getDescription () 
 		);
@@ -175,7 +180,7 @@ public class MappersTest
 		ConceptBasedRelMapper relMapInv = new InvertingConceptRelMapper ( relMap );
 		
 		mapper.setLinkers ( Arrays.asList ( 
-			new LinkerConfiguration<OntClass> ( new OWLSubClassScanner (), relMapInv ) 
+			new LinkerConfiguration<> ( new OWLSubClassScanner (), relMapInv ) 
 		));
 						
 		ONDEXGraph graph = mapper.map2Graph ( this.model );
