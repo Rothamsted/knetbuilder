@@ -17,27 +17,6 @@
  
    <modules>
       <module>core</module>
-      <!-- module>modules</module -->
       <module>datadir</module>
-      <!-- module>doc</module -->
-      <!--module>apps</module -->
-      <!-- module>integration</module --> 
    </modules>
-
-	 <repositories>
-      <repository>
-         <id>ondex-releases</id>
-         <name>Internal Releases</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
-         <releases><enabled>true</enabled></releases>
-         <snapshots><enabled>false</enabled></snapshots>
-      </repository>
-      <repository>
-         <id>ondex-snapshots</id>
-         <name>Internal Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
-         <releases><enabled>false</enabled></releases>
-         <snapshots><enabled>true</enabled></snapshots>
-      </repository>
-	 </repositories>
 </project>

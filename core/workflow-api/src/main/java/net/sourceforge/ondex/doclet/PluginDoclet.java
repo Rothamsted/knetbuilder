@@ -3,6 +3,7 @@ package net.sourceforge.ondex.doclet;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,8 +29,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sun.source.doctree.DocCommentTree;
 import com.sun.source.doctree.DocTree;
@@ -67,9 +66,7 @@ public class PluginDoclet implements Doclet
 	private Map<String, String> options = new HashMap<>();
 	
 	private Reporter reporter;
-		
-	private Logger log = LoggerFactory.getLogger ( this.getClass () );
-	
+			
 	@Override
 	public void init ( Locale locale, Reporter reporter ) {
 		this.reporter = reporter;
@@ -313,11 +310,10 @@ public class PluginDoclet implements Doclet
 				);
 				
 				
-				// More details
+				// More details in the metadata section
 				//
-				
 				xtw.writeStartElement ( NAMESPACE, "ondex-metadata" );
-
+				
 				DataSourceRequired cvAnnotation = classPlugin.getAnnotation ( DataSourceRequired.class );
 				if ( cvAnnotation != null )
 					writeMetaData ( xtw, "data_source", cvAnnotation.ids () );
@@ -334,11 +330,12 @@ public class PluginDoclet implements Doclet
 				if ( relationtypeAnnotation != null )
 					writeMetaData ( xtw, "relation_type", relationtypeAnnotation.ids () );
 
-				EvidenceTypeRequired evidencetypeAnnotatio = classPlugin.getAnnotation ( EvidenceTypeRequired.class );
-				if ( evidencetypeAnnotatio != null )
-					writeMetaData ( xtw, "evidence_type", evidencetypeAnnotatio.ids () );
+				EvidenceTypeRequired evidencetypeAnnotation = classPlugin.getAnnotation ( EvidenceTypeRequired.class );
+				if ( evidencetypeAnnotation != null )
+					writeMetaData ( xtw, "evidence_type", evidencetypeAnnotation.ids () );
 
-				xtw.writeEndElement (); // end ondex-metadata
+				xtw.writeEndElement (); // /ondex-metadata
+				
 				
 				// Description (the Javadoc comment)
 				//
@@ -350,18 +347,20 @@ public class PluginDoclet implements Doclet
 				//
 				xtw.writeStartElement ( NAMESPACE, "authors" );
 				DocCommentTree docTree = docTreeUtils.getDocCommentTree ( classDoc );
-				List<? extends DocTree> docTags = docTree.getBlockTags ();
-				for ( DocTree tag: docTags )
+				if ( docTree != null ) // null when the class isn't javadoc-commented
 				{
-					if ( !tag.getKind ().equals ( DocTree.Kind.AUTHOR ) ) continue;
-					String authorsTxt = tag.toString ();
-					if ( authorsTxt == null ) continue;
-					authorsTxt = authorsTxt.replaceFirst ( "^@author\\s", "" );
-					String [] authors = authorsTxt.split ( "," );
-					for ( String authorName : authors )
-						writeXmlElem ( xtw, "author", authorName.trim () );
+					List<? extends DocTree> docTags = docTree.getBlockTags ();
+					for ( DocTree tag: docTags )
+					{
+						if ( !tag.getKind ().equals ( DocTree.Kind.AUTHOR ) ) continue;
+						String authorsTxt = tag.toString ();
+						if ( authorsTxt == null ) continue;
+						authorsTxt = authorsTxt.replaceFirst ( "^@author\\s", "" );
+						String [] authors = authorsTxt.split ( "," );
+						for ( String authorName : authors )
+							writeXmlElem ( xtw, "author", authorName.trim () );
+					}
 				}
-				
 				xtw.writeEndElement (); // authors
 				xtw.writeEndElement (); // plugin				
 				
@@ -511,7 +510,9 @@ public class PluginDoclet implements Doclet
 			else if ( file.isFile () && file.getName ().endsWith ( ".jar" ) )
 			{
 				classRegisterBuilder.add ( file.toURI ().toURL () );
-				log.info ( "PlugInDoclet, adding classpath: '{}'", file.toURI ().toURL ().toString () );
+				reporter.print (
+					Diagnostic.Kind.NOTE, "Adding to PluginDoclet CP: '" + file.toURI ().toURL () + "'"
+				);
 			}
 		}
 	}

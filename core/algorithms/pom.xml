@@ -11,7 +11,6 @@
    </parent>
 
 
-
    <groupId>net.sourceforge.ondex.core</groupId>
    <artifactId>algorithms</artifactId>
    <packaging>jar</packaging>
