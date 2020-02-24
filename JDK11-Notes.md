@@ -26,7 +26,5 @@
     * later, we need to check ondex-desktop/scripting-commandline, which depends on scripting
 	
 	* OK owl-parser: see why the tests fail
-	
-	* REBUILD 3rd-parties after fix about Stream.count() 
-	
+		
     
