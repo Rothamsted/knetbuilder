@@ -205,11 +205,6 @@
          <artifactId>carbs</artifactId>
          <version>${project.version}</version>
       </dependency>
-<!--       <dependency> -->
-<!--          <groupId>net.sourceforge.ondex.modules</groupId> -->
-<!--          <artifactId>chemical</artifactId> -->
-<!--          <version>${project.version}</version> -->
-<!--       </dependency> -->
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>relevance</artifactId>
