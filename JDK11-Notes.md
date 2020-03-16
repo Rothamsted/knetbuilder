@@ -20,9 +20,9 @@
       depMgmt etc.
   
   * modules/scripting is probably to be removed
-    * check knet-builder/scripting
-    	* Old Jena?
-    * then continue from modules/js-plugin
+    * OK check knet-builder/scripting
+    	* OK Old Jena?
+    * ~~then continue from modules/js-plugin~~ Depends on `net.sourceforge.ondex.apps:ovtk2`.
     * later, we need to check ondex-desktop/scripting-commandline, which depends on scripting
 	
 	* OK owl-parser: see why the tests fail
