@@ -550,13 +550,7 @@
         <artifactId>xstream</artifactId>
         <version>1.4.11.1</version>
       </dependency>
-                
-      <dependency>
-        <groupId>com.hp.hpl.jena</groupId>
-        <artifactId>jena</artifactId>
-        <version>2.5.7</version>
-      </dependency>
-
+       
       <dependency>
        <groupId>net.sourceforge.collections</groupId>
        <artifactId>collections-generic</artifactId>
@@ -645,6 +639,21 @@
 			  <groupId>info.marcobrandizi</groupId>
 			  <artifactId>rdfutils-jena</artifactId>
 			  <version>3.0-SNAPSHOT</version>
+			</dependency>
+
+      <!-- TODO: This is prehistoric, needs to be removed -->         
+      <dependency>
+        <groupId>com.hp.hpl.jena</groupId>
+        <artifactId>jena</artifactId>
+        <version>2.5.7</version>
+      </dependency>
+
+			<!-- The lib with main components in one bundle only -->
+			<dependency>
+    		<groupId>org.apache.jena</groupId>
+				<artifactId>apache-jena-libs</artifactId>
+		    <version>3.10.0</version>
+				<type>pom</type>		    
 			</dependency>
 
       <dependency>
