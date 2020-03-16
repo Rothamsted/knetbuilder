@@ -18,26 +18,29 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
+
+import org.apache.commons.codec.Charsets;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections15.MultiMap;
 import org.apache.commons.collections15.multimap.MultiHashMap;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.Syntax;
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.Syntax;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
@@ -466,7 +469,7 @@ public class SPARQLInterpreter implements CommandInterpreter {
 
                                     //TODO expand code goes here
                                     Model resultModel = null;
-                                    com.hp.hpl.jena.util.iterator.ExtendedIterator<Triple> it = resultModel.getGraph().find(Node.ANY, Node.ANY, Node.ANY);
+                                    ExtendedIterator<Triple> it = resultModel.getGraph().find(Node.ANY, Node.ANY, Node.ANY);
                                     while (it.hasNext()) {
                                         Triple t = it.next();
                                         Node s = t.getSubject();
@@ -575,7 +578,8 @@ public class SPARQLInterpreter implements CommandInterpreter {
                                 }
                             } else {
                                 //TODO should replace.
-                                String queryURL = myEndPoint + "?query=" + java.net.URLEncoder.encode(finalCommand); //it's a hack anyway...
+                              	//it's a hack anyway...
+                                String queryURL = myEndPoint + "?query=" + java.net.URLEncoder.encode(finalCommand, Charsets.UTF_8); 
                                 System.out.println(queryURL);
                                 resultModel = ModelFactory.createDefaultModel();
                                 resultModel.read(queryURL);
@@ -738,7 +742,7 @@ public class SPARQLInterpreter implements CommandInterpreter {
 
         Model resultModel = statementQueryExecution.execConstruct();
 
-        com.hp.hpl.jena.util.iterator.ExtendedIterator<Triple> it = resultModel.getGraph().find(Node.ANY, Node.ANY, Node.ANY);
+        ExtendedIterator<Triple> it = resultModel.getGraph().find(Node.ANY, Node.ANY, Node.ANY);
         // Note: we don't really iterate as only one result is expected.
         if (!it.hasNext()) {
             return r;
@@ -875,7 +879,7 @@ public class SPARQLInterpreter implements CommandInterpreter {
     }
 
     private void construct(Model resultModel) throws InvocationTargetException, IllegalAccessException {
-        com.hp.hpl.jena.util.iterator.ExtendedIterator<Triple> it = resultModel.getGraph().find(Node.ANY, Node.ANY, Node.ANY);
+        ExtendedIterator<Triple> it = resultModel.getGraph().find(Node.ANY, Node.ANY, Node.ANY);
         while (it.hasNext()) {
             System.out.print("checking triple... ");
             Triple t = it.next();
