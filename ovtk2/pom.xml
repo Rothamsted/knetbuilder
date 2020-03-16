@@ -291,13 +291,6 @@
          <scope>compile</scope>
       </dependency>
 
-<!--       <dependency> -->
-<!--          <groupId>net.sourceforge.ondex.modules</groupId> -->
-<!--          <artifactId>chemical</artifactId> -->
-<!--          <version>${project.version}</version> -->
-<!--          <scope>compile</scope> -->
-<!--       </dependency> -->
-
       <dependency>
          <groupId>net.sourceforge.ondex.apps</groupId>
          <artifactId>launcher</artifactId>
@@ -316,7 +309,8 @@
          <version>1.6.1</version>
       </dependency>
 
-      <!-- Popup deps -->      <dependency>
+      <!-- Popup deps -->      
+      <dependency>
          <groupId>uk.ac.ebi</groupId>
          <artifactId>IPRScan</artifactId>
          <version>May2011</version>
