@@ -19,12 +19,19 @@
     * Go to the modules done so far and check artifact deps, if they need to be under
       depMgmt etc.
   
-  * modules/scripting is probably to be removed
+  * scripting is probably to be removed
     * OK check knet-builder/scripting
     	* OK Old Jena?
-    * ~~then continue from modules/js-plugin~~ Depends on `net.sourceforge.ondex.apps:ovtk2`.
+    * ~~then continue from modules/js-plugin~~ 
+    	* Depends on `net.sourceforge.ondex.apps:ovtk2`. Do it later
     * later, we need to check ondex-desktop/scripting-commandline, which depends on scripting
 	
 	* OK owl-parser: see why the tests fail
 		
+	* launcher
+	* integrator
+	* ondex-mini	
+	* installer
+	* mini-integration-tests
+	
     
