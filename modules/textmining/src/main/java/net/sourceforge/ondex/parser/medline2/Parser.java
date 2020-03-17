@@ -158,7 +158,7 @@ public class Parser extends ONDEXParser {
             writer.writeConcepts(abs);
             
             xmlParser = null;
-            writer.finalize();
+            writer.finalize ();
             writer = null;
             
             fireEventOccurred(new GeneralOutputEvent("Finished PubMed/MEDLINE parsing" +

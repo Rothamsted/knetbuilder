@@ -101,7 +101,6 @@
 	            	<artifactItem>
 							    <groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
 									<artifactId>rdf2neo-cli</artifactId>
-							    <version>0.0.1-SNAPSHOT</version>
 	               	<type>zip</type>
 	               	<excludes>**/examples/</excludes>
 	             	</artifactItem>

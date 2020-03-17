@@ -254,7 +254,7 @@ public class Transformer {
 	}
 	
 	
-	public void finalize() {
+	public void finalize () {
 		pubmeds = null;
 		dataSourceNLM = null;
 		et = null;
