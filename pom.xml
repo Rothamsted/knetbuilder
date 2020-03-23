@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
+	<parent>
+	  <groupId>uk.ac.rothamsted.knetminer</groupId>
+	  <artifactId>knetminer-common</artifactId>
+	  <version>1.0-SNAPSHOT</version>
+	</parent>  
+
    <groupId>net.sourceforge.ondex</groupId>
    <artifactId>ondex-full</artifactId>
    <version>2.1.2-SNAPSHOT</version>
@@ -49,16 +55,6 @@
    </scm>
 
    <distributionManagement>
-      <repository>
-         <id>ondex-releases</id>
-         <name>Internal Releases</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
-      </repository>
-      <snapshotRepository>
-         <id>ondex-snapshots</id>
-         <name>Internal Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
-      </snapshotRepository>
       <site>
          <id>Ondex_site</id>
          <url>file:///var/www/html/ondex</url>
@@ -262,7 +258,6 @@
 		<java.version>1.8</java.version>
 		<ondex.version>${project.version}</ondex.version>
 		<target.dir>target</target.dir>
-		<nexus.repro>http://ondex.rothamsted.ac.uk/nexus</nexus.repro>
 		<!--Plugin Properties -->
 		<!-- was 2.2.6 First that works is 2.2.11 -->
 		<cxf.version>2.2.11</cxf.version>
@@ -395,7 +390,14 @@
    </profiles>
 
 	 <repositories>
-	 		<!-- Includes releases and a couple of others -->	 
+			<repository>
+				<id>knetminer-repo</id>
+				<name>Rothamsted Maven Repo</name>
+				<url>https://knetminer.org/artifactory/repository/maven-public/</url>
+			  <snapshots><enabled>true</enabled></snapshots>
+			</repository>
+	 
+	 		<!-- TODO: remove Includes releases and a couple of others 	 
       <repository>
          <id>ondex-repo</id>
          <name>Ondex Repository</name>
@@ -422,13 +424,13 @@
 			  <id>EBIBioSamples-GH-repo</id>
 			  <url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
 			  <snapshots><enabled>true</enabled></snapshots>
-			</repository>
+			</repository -->
 			                 
 	 </repositories>
 
    <pluginRepositories>
 
-			<!-- Includes releases and a couple of others -->
+			<!-- TODO: Remove Includes releases and a couple of others 
       <pluginRepository>
          <id>ondex-repo</id>
          <name>Ondex Repository</name>
@@ -442,12 +444,12 @@
          <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
          <releases><enabled>false</enabled></releases>
          <snapshots><enabled>true</enabled></snapshots>
-      </pluginRepository>
+      </pluginRepository -->
 
-      <pluginRepository>
+      <!-- TODO:remove? pluginRepository>
       	<id>sonatype-releases</id>
       	<url>https://oss.sonatype.org/content/repositories/releases</url>
-      </pluginRepository>
+      </pluginRepository -->
         
    </pluginRepositories>
 
