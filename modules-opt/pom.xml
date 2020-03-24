@@ -24,7 +24,7 @@
       <module>decypher</module>
       <module>enzymatics</module>
       <module>experimental</module>
-      <module>expression</module>
+      <!--  module>expression</module -->
       <module>grain</module>
       <module>graphalgo</module>
       <module>graph-query</module>
@@ -38,10 +38,10 @@
       <module>poplar</module>
       <module>prolog</module>
       <module>protein-structure</module>
-      <module>psimi25</module>
+      <!--  module>psimi25</module -->
       <module>rdf</module>
       <module>relevance</module>
-      <module>sbml</module>
+      <!--  module>sbml</module -->
       <module>taxonomy</module>
    </modules>
 
@@ -262,4 +262,5 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
+   
 </project>

@@ -19,7 +19,11 @@
       <dependency>
          <groupId>org.biojava</groupId>
          <artifactId>biojava3-core</artifactId>
-         <version>3.0.3</version>
+         <!-- 
+         	BEWARE that in 2020 we had to downgrade from 3.0.3, cause it cannot be found
+          anywhere anymore 
+         -->
+         <version>3.0</version>
          <scope>compile</scope>
          <exclusions>
             <exclusion>
