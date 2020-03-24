@@ -141,11 +141,11 @@
 				<version>${project.version}</version>
 			</dependency>
 
-      <dependency>
+      <!--  dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>sbml</artifactId>
          <version>${project.version}</version>
-      </dependency>
+      </dependency -->
 
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>

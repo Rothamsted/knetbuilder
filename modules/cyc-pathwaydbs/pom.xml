@@ -16,10 +16,15 @@
    <description>plugins related to the cyc pathway databases</description>
 
    <dependencies>
-      <dependency>
-         <groupId>org.biopax.paxtools</groupId>
-         <artifactId>paxtools</artifactId>
-         <version>20101113</version>
-      </dependency>
+		<dependency>
+			<groupId>org.biopax.paxtools</groupId>
+			<artifactId>paxtools-core</artifactId>
+			<version>4.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.biopax.paxtools</groupId>
+			<artifactId>paxtools-jena-io</artifactId>
+			<version>4.3.1</version>
+		</dependency>
    </dependencies>
 </project>
