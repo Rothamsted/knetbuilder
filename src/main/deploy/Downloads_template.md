@@ -9,7 +9,7 @@
   * [Latest Dev Release](https://knetminer.org/artifactory/repository/maven-snapshots/net/sourceforge/ondex/apps/installer/%snapVersionNo%-SNAPSHOT/installer-%snapVersionNo%-%snapTailOndex%-packaged-distro.zip)
   * [Older Releases](https://knetminer.org/artifactory/service/rest/repository/browse/maven-public/net/sourceforge/ondex/apps/installer/)
 
-  * [Very Old Releases](http://ondex.rothamsted.ac.uk/nexus/content/groups/public/net/sourceforge/ondex/apps/installer)(**due to be dismissed*)
+  * [Very Old Releases](http://ondex.rothamsted.ac.uk/nexus/content/groups/public/net/sourceforge/ondex/apps/installer)(**due to be dismissed**)
 
 
 ## ONDEX Mini (i.e., command line application)
