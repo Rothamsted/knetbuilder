@@ -77,7 +77,7 @@
          <scope>compile</scope>
       </dependency>
       <dependency>
-         <groupId>org.clapper.util</groupId>
+         <groupId>uk.org.mygrid.resources.clapper</groupId>
          <artifactId>ocutil</artifactId>
          <version>2.5.1</version>
          <scope>compile</scope>
@@ -97,4 +97,12 @@
          <scope>compile</scope>
       </dependency>
    </dependencies>
+   
+   <repositories>
+   	<!-- Used for clapper ocutils -->
+   	<repository>
+   		<id>mygrid</id>
+   		<url>http://www.mygrid.org.uk/maven/repository/</url>
+   	</repository>
+   </repositories>
 </project>

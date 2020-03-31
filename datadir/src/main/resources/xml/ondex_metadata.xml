@@ -2562,13 +2562,32 @@
 			<cc>
 				<id>MicroArrayExperiment</id>
 				<fullname>MicroArrayExperiment</fullname>
-				<description>Microarray experiment
-				</description>
+				<description>Microarray experiment</description>
 				<specialisationOf>
 					<id>Experiment</id>
 					<fullname>Experiment</fullname>
 					<description>Scientific experiment
 					</description>
+				</specialisationOf>
+			</cc>
+			<cc>
+				<id>CoExpStudy</id>
+				<fullname>Co-Expression Study</fullname>
+				<description>A co-expression study, like identification of co-expressed genes under certain conditions, eg, PMID:30115782.</description>
+				<specialisationOf>
+					<id>MicroArrayExperiment</id>
+					<fullname>MicroArrayExperiment</fullname>
+					<description>Microarray experiment</description>
+				</specialisationOf>
+			</cc>
+			<cc>
+				<id>CoExpCluster</id>
+				<fullname>Co-Expression Cluster</fullname>
+				<description>A cluster of entities (eg, genes, proteins) that are co-expressed unser some condition and possibly reported by some study, eg, PMID:30115782.</description>
+				<specialisationOf>
+					<id>Thing</id>
+					<fullname>Thing</fullname>
+					<description>Thing</description>
 				</specialisationOf>
 			</cc>
 			<cc>
@@ -2589,8 +2608,7 @@
 				<specialisationOf>
 					<id>Thing</id>
 					<fullname>Thing</fullname>
-					<description>Thing
-					</description>
+					<description>Thing</description>
 				</specialisationOf>
 			</cc>
 			<cc>
