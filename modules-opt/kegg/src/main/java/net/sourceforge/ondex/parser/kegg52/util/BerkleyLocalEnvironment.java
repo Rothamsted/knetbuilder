@@ -2,6 +2,7 @@ package net.sourceforge.ondex.parser.kegg52.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.Cleaner;
 
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.Environment;
@@ -12,7 +13,7 @@ import com.sleepycat.persist.StoreConfig;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.tools.DirUtils;
 
-public class BerkleyLocalEnvironment {
+public class BerkleyLocalEnvironment implements AutoCloseable {
 
     private Environment envmnt;
 
@@ -23,7 +24,12 @@ public class BerkleyLocalEnvironment {
     // 128MB default cache
     public static final int DEFAULT_CACHSIZE = 134217728;
 
-
+    {
+    	// This is how to implement finalisation in J9+
+    	Cleaner.create ().register ( this, this::close );
+    }
+    
+    
     public BerkleyLocalEnvironment(ONDEXGraph og) {
         String ondexDir = System.getProperties().getProperty("ondex.dir");
 
@@ -68,7 +74,7 @@ public class BerkleyLocalEnvironment {
     }
 
     @Override
-    public void finalize() {
+    public void close () {
         try {
             store.close();
             envmnt.close();

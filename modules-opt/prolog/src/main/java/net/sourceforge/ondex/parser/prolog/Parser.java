@@ -504,7 +504,7 @@ public class Parser extends ONDEXParser implements ArgumentNames {
 
 	private Object decomposeDouble(String s) {
 		try {
-			return new Double(Double.parseDouble(s));
+			return Double.parseDouble(s);
 		} catch (NumberFormatException nfe) {
 			errorReport.append("\n");
 			errorReport.append("decomposeDouble: Wrong NumberFormat for: " + s);
@@ -514,7 +514,7 @@ public class Parser extends ONDEXParser implements ArgumentNames {
 
 	private Object decomposeFloat(String s) {
 		try {
-			return new Float(Float.parseFloat(s));
+			return Float.parseFloat(s);
 		} catch (NumberFormatException nfe) {
 			errorReport.append("\n");
 			errorReport.append("decomposeFloat: Wrong NumberFormat for: " + s);
@@ -524,7 +524,7 @@ public class Parser extends ONDEXParser implements ArgumentNames {
 
 	private Object decomposeInteger(String s) {
 		try {
-			return new Integer(Integer.parseInt(s));
+			return Integer.parseInt(s);
 		} catch (NumberFormatException nfe) {
 			errorReport.append("\n");
 			errorReport

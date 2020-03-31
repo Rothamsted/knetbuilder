@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.parser.kegg52.util;
 
+import java.lang.ref.Cleaner;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,13 +11,19 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.PrimaryIndex;
 
-public class DPLPersistantSet<T> {
+public class DPLPersistantSet<T> implements AutoCloseable {
 
     private static HashSet<Class<?>> classes = new HashSet<Class<?>>();
 
     private Class<T> c;
 
     private PrimaryIndex<String, T> pIdx;
+    
+    {
+    	// This is how finalisation works in J9+
+    	Cleaner cleaner = Cleaner.create ();
+    	cleaner.register ( this, this::close );
+    }
 
     public DPLPersistantSet(BerkleyLocalEnvironment env, Class<T> c)
             throws DatabaseException {
@@ -114,7 +121,7 @@ public class DPLPersistantSet<T> {
     }
 
     @Override
-    public void finalize() {
+    public void close () {
         classes.remove(c);
     }
 }

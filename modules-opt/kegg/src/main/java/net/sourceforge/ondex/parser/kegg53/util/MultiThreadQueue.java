@@ -10,10 +10,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import uk.ac.ebi.utils.memory.CleaningObject;
+
 /**
  * @author hindlem
  */
-public class MultiThreadQueue {
+public class MultiThreadQueue extends CleaningObject {
 
     private static final long serialVersionUID = 8059211122995538242L;
 
@@ -136,7 +138,7 @@ public class MultiThreadQueue {
     }
 
     @Override
-    public void finalize() {
+    public void close () {
 
         waitToFinish("Termination for " + this.getClass().getName());
 

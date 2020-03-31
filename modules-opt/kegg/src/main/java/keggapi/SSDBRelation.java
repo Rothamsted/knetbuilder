@@ -437,8 +437,8 @@ public class SSDBRelation  implements java.io.Serializable {
             _hashCode += getGenes_id2().hashCode();
         }
         _hashCode += getSw_score();
-        _hashCode += new Float(getBit_score()).hashCode();
-        _hashCode += new Float(getIdentity()).hashCode();
+        _hashCode += Float.valueOf(getBit_score()).hashCode();
+        _hashCode += Float.valueOf(getIdentity()).hashCode();
         _hashCode += getOverlap();
         _hashCode += getStart_position1();
         _hashCode += getEnd_position1();

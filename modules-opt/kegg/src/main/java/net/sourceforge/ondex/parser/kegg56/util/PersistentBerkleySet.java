@@ -6,7 +6,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class PersistentBerkleySet<V> implements Set<V> {
+import uk.ac.ebi.utils.memory.CleaningObject;
+
+public class PersistentBerkleySet<V> 
+	extends CleaningObject implements Set<V> 
+{
 
     public interface Deserialiser<V> {
         public abstract V deserialise(byte[] array);
@@ -128,7 +132,7 @@ public class PersistentBerkleySet<V> implements Set<V> {
 
 
     @Override
-    public void finalize() {
+    public void close () {
         berkStore.closeDatabase(classType);
     }
 

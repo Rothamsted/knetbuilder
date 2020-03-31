@@ -20,32 +20,13 @@
       <dependency>
          <groupId>org.codehaus.woodstox</groupId>
          <artifactId>woodstox-core-lgpl</artifactId>
-         <version>4.0.6</version>
          <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>owlapi</groupId>
-         <artifactId>api</artifactId>
-         <version>2.2.0</version>
-         <scope>compile</scope>
-      </dependency>
-      <dependency>
-         <groupId>owlapi</groupId>
-         <artifactId>apibinding</artifactId>
-         <version>2.2.0</version>
-         <scope>compile</scope>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.jexcelapi</groupId>
          <artifactId>jxl</artifactId>
          <scope>compile</scope>
       </dependency>
-
-			<dependency>
-    		<groupId>org.apache.jena</groupId>
-				<artifactId>apache-jena-libs</artifactId>
-				<type>pom</type>	
-			</dependency>
 			
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>

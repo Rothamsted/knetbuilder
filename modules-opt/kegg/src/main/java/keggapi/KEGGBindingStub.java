@@ -1306,7 +1306,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {entry_id, db, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {entry_id, db, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -1334,7 +1334,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {genes_id, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {genes_id, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -1362,7 +1362,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {genes_id, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {genes_id, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -1390,7 +1390,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {genes_id, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {genes_id, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -1418,7 +1418,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {genes_id, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {genes_id, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -1474,7 +1474,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {motif_id_list, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {motif_id_list, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -1586,7 +1586,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {class_id, org, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {class_id, org, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2146,7 +2146,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {org, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {org, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2706,7 +2706,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {new java.lang.Float(mass), new java.lang.Float(range)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {mass, range});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2734,7 +2734,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {new java.lang.Float(mass), new java.lang.Float(range)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {mass, range});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2790,7 +2790,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {mol, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {mol, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2818,7 +2818,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {kcf, program, option, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {kcf, program, option, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2846,7 +2846,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {from_db, to_db, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {from_db, to_db, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2930,7 +2930,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {new java.lang.Float(mass), new java.lang.Float(range)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {mass, range});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2958,7 +2958,7 @@ public class KEGGBindingStub extends org.apache.axis.client.Stub implements kegg
 
         setRequestHeaders(_call);
         setAttachments(_call);
-        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {mol, new java.lang.Integer(offset), new java.lang.Integer(limit)});
+        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {mol, offset, limit});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

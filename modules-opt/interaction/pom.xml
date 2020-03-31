@@ -16,10 +16,16 @@
 
    <dependencies>
       <dependency>
-         <groupId>psi</groupId>
+			<groupId>psidev.psi.mi</groupId>
          <artifactId>psi25-xml</artifactId>
-         <version>1.0-beta4</version>
-         <scope>compile</scope>
+			<version>1.0-beta2</version>
       </dependency>
    </dependencies>
+   
+   <repositories>
+   	<repository>
+	   	<id>EBI-IntAct</id>
+	   	<url>https://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
+		</repository>   	
+   </repositories>
 </project>

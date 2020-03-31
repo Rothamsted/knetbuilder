@@ -24,7 +24,7 @@
       <module>decypher</module>
       <module>enzymatics</module>
       <module>experimental</module>
-      <module>expression</module>
+      <!--  module>expression</module -->
       <module>grain</module>
       <module>graphalgo</module>
       <module>graph-query</module>
@@ -38,10 +38,10 @@
       <module>poplar</module>
       <module>prolog</module>
       <module>protein-structure</module>
-      <module>psimi25</module>
-      <module>rdf</module>
+      <!--  module>psimi25</module -->
+      <!-- module>rdf</module -->
       <module>relevance</module>
-      <module>sbml</module>
+      <!--  module>sbml</module -->
       <module>taxonomy</module>
    </modules>
 
@@ -167,10 +167,8 @@
                   <id>make-assembly-packaged_with_jars</id>
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
-                  <!-- append to the packaging phase. -->
                   <goals>
                      <goal>attached</goal>
-                     <!-- goals == mojos -->
                   </goals>
                   <configuration>
                      <descriptors>
@@ -182,10 +180,8 @@
                   <id>make-assembly-wf-descriptor</id>
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
-                  <!-- append to the packaging phase. -->
                   <goals>
                      <goal>attached</goal>
-                     <!-- goals == mojos -->
                   </goals>
                   <configuration>
                      <descriptors>
@@ -197,15 +193,12 @@
                   <id>jar-with-module-descriptor</id>
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
-                  <!-- append to the packaging phase. -->
                   <goals>
                      <goal>attached</goal>
-                     <!-- goals == mojos -->
                   </goals>
                   <configuration>
                      <descriptors>
-                        <descriptor>${project.build.directory}/assemblies/default_package.xml
-                                </descriptor>
+                        <descriptor>${project.build.directory}/assemblies/default_package.xml</descriptor>
                      </descriptors>
                   </configuration>
                </execution>
