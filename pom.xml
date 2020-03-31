@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
+	<parent>
+	  <groupId>uk.ac.rothamsted.knetminer</groupId>
+	  <artifactId>knetminer-common</artifactId>
+	  <version>1.0-SNAPSHOT</version>
+	</parent>  
+
    <groupId>net.sourceforge.ondex</groupId>
    <artifactId>ondex-full</artifactId>
    <version>4.0-SNAPSHOT</version>
@@ -18,22 +24,6 @@
       <module>ondex-doc</module>
       <module>ondex-knet-builder</module>
    </modules>
-
-	 <properties>
-		<java.version>11</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
-		<jutils.version>10.0-SNAPSHOT</jutils.version>
-		<lucene.version>6.6.0</lucene.version>
-		<spring.version>4.3.6.RELEASE</spring.version>
-		
-		<!-- Used by neo4j-related components -->
-		<neo4j.server.version>3.5.12</neo4j.server.version>
-		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
-		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
-		<rdf2neo.version>3.0-SNAPSHOT</rdf2neo.version>  
-
-   </properties>
 
 
    <licenses>
@@ -66,16 +56,6 @@
    </scm>
 
    <distributionManagement>
-      <repository>
-         <id>ondex-releases</id>
-         <name>Internal Releases</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
-      </repository>
-      <snapshotRepository>
-         <id>ondex-snapshots</id>
-         <name>Internal Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
-      </snapshotRepository>
       <site>
          <id>Ondex_site</id>
          <url>file:///var/www/html/ondex</url>
@@ -384,6 +364,27 @@
       
    </build>
 
+   <!-- TODO: move this up, we're keeping it here temporarily, in order to ease
+   			the merges from/to master -->
+	 <properties>
+		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<jutils.version>10.0-SNAPSHOT</jutils.version>
+		<rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
+		
+		<lucene.version>6.6.0</lucene.version>
+		<spring.version>4.3.6.RELEASE</spring.version>
+		
+		<!-- Used by neo4j-related components -->
+		<neo4j.server.version>3.5.12</neo4j.server.version>
+		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
+		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
+		<rdf2neo.version>3.0-SNAPSHOT</rdf2neo.version>  
+
+   </properties>   
+   
+   
    <profiles>
       
 			<profile>
@@ -428,7 +429,14 @@
    </profiles>
 
 	 <repositories>
-	 		<!-- Includes releases and a couple of others -->	 
+			<repository>
+				<id>knetminer-repo</id>
+				<name>Rothamsted Maven Repo</name>
+				<url>https://knetminer.org/artifactory/repository/maven-public/</url>
+			  <snapshots><enabled>true</enabled></snapshots>
+			</repository>
+
+	 		<!-- TODO: remove Includes releases and a couple of others 
       <repository>
          <id>ondex-repo</id>
          <name>Ondex Repository</name>
@@ -455,13 +463,18 @@
 			  <id>EBIBioSamples-GH-repo</id>
 			  <url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
 			  <snapshots><enabled>true</enabled></snapshots>
-			</repository>
+			</repository -->
+			          
+			<repository>
+				<id>spring-plugins</id>
+				<url>https://repo.spring.io/plugins-release/</url>
+			</repository>       
 			                 
 	 </repositories>
 
    <pluginRepositories>
 
-			<!-- Includes releases and a couple of others -->
+			<!-- TODO: Remove Includes releases and a couple of others 
       <pluginRepository>
          <id>ondex-repo</id>
          <name>Ondex Repository</name>
@@ -475,12 +488,12 @@
          <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
          <releases><enabled>false</enabled></releases>
          <snapshots><enabled>true</enabled></snapshots>
-      </pluginRepository>
+      </pluginRepository -->
 
-      <pluginRepository>
+      <!-- TODO:remove? pluginRepository>
       	<id>sonatype-releases</id>
       	<url>https://oss.sonatype.org/content/repositories/releases</url>
-      </pluginRepository>
+      </pluginRepository -->
         
    </pluginRepositories>
 
@@ -646,11 +659,16 @@
 		  		<version>${jutils.version}</version>
 			</dependency>
 				
-			<!-- Utilities for the Jena RDF framework -->
+			<!-- Utilities for RDF and the Jena RDF framework -->
+	    <dependency>
+	      <groupId>info.marcobrandizi</groupId>
+	      <artifactId>rdfutils-core</artifactId>
+	      <version>${rdfutils.version}</version>
+	    </dependency>
 			<dependency>
 			  <groupId>info.marcobrandizi</groupId>
 			  <artifactId>rdfutils-jena</artifactId>
-			  <version>3.0-SNAPSHOT</version>
+	      <version>${rdfutils.version}</version>
 			</dependency>
 
       <!-- TODO: This is prehistoric, needs to be removed -->         
@@ -664,14 +682,14 @@
 			<dependency>
     		<groupId>org.apache.jena</groupId>
 				<artifactId>apache-jena-libs</artifactId>
-		    <version>3.10.0</version>
+		    <version>3.14.0</version>
 				<type>pom</type>		    
 			</dependency>
 
       <dependency>
          <groupId>com.sleepycat</groupId>
          <artifactId>je</artifactId>
-         <version>4.0.71</version>
+         <version>4.0.92</version>
       </dependency>
         
 			<dependency>
