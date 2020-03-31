@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# WARNING: We're not using this anymore!
+
 # Hazelcast node launcher script for use with the distributed memory
 # implementation of an ONDEX graph. You can use this script to start
 # Hazelcast data nodes on different machines in order to spread large

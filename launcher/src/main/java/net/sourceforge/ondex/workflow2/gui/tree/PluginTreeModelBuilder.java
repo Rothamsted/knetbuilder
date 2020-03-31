@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 import net.sourceforge.ondex.init.ArrayKey;
 import net.sourceforge.ondex.init.PluginDescription;
@@ -93,7 +94,8 @@ public class PluginTreeModelBuilder {
     @SuppressWarnings("unchecked")
 	private static int findIndex(final DefaultMutableTreeNode parent, final String name){
     	int result = 0;
-    	Enumeration<DocumentedTreeNode> enu = parent.children();
+    	Enumeration<?> genericEnum = parent.children();
+    	Enumeration<DocumentedTreeNode> enu = (Enumeration<DocumentedTreeNode>) genericEnum;
     	while(enu.hasMoreElements()){
     		DocumentedTreeNode node = enu.nextElement();
     		if(node.getName().compareToIgnoreCase(name) >= 0){

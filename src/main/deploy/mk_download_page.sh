@@ -63,9 +63,9 @@ function make_doc
   project_path="$1"
   snap_tail_var="$2"
 
-  url_prefix="http://ondex.rothamsted.ac.uk/nexus/content/groups"
-  stable_url_root="$url_prefix/public/$project_path"
-  snap_url_root="$url_prefix/public-snapshots/$project_path"
+  url_prefix="https://knetminer.org/artifactory/repository"
+  stable_url_root="$url_prefix/maven-releases/$project_path"
+  snap_url_root="$url_prefix/maven-snapshots/$project_path"
 
   ver=$(get_last_release "$stable_url_root")
   snap_ver=$(get_last_release "$snap_url_root")

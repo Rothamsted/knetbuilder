@@ -13,7 +13,7 @@
    <groupId>net.sourceforge.ondex.apps</groupId>
    <artifactId>ondex-integrator</artifactId>
 
-   <name>ONDEX + Integrator/Worflow Tool</name>
+   <name>ondex-integrator, Visual Workflow</name>
 
    <dependencies>
 
@@ -141,11 +141,11 @@
 				<version>${project.version}</version>
 			</dependency>
 
-      <dependency>
+      <!--  dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>sbml</artifactId>
          <version>${project.version}</version>
-      </dependency>
+      </dependency -->
 
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>

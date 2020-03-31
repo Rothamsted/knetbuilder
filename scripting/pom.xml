@@ -21,7 +21,7 @@
       <dependency>
          <groupId>javassist</groupId>
          <artifactId>javassist</artifactId>
-         <version>3.7.0.GA</version>
+         <version>3.7.1.GA</version>
          <scope>compile</scope>
       </dependency>
       <dependency>

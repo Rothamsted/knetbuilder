@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -159,9 +160,13 @@ public class ListPanel extends JPanel implements MouseListener {
         if (positions.contains(c)) {
             JPanel panelInFocus = (JPanel) e.getSource();
             boolean isSelected = isSelected(panelInFocus);
-            if (e.getModifiers() != 17) {
-                clearFocus();
-            }
+            // TODO: getModifiers() is now (2020) deprecated and I hope I got the damn hard-wired rubbish right
+            // (from the codes in InputEvent). Remove if it works
+//            if (e.getModifiers() != 17) {
+//                clearFocus();
+//            }
+            final int keyCombo = InputEvent.BUTTON1_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK;
+            if ( ( e.getModifiersEx () &  keyCombo ) != keyCombo ) clearFocus ();
             if (!isSelected) {
                 setFocus(panelInFocus);
             }

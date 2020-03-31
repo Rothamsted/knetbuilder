@@ -528,7 +528,7 @@
                            <destFileName>relevance-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
                         
-                        <artifactItem>
+                        <!-- artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>sbml</artifactId>
                            <version>${project.version}</version>
@@ -538,7 +538,7 @@
                            <outputDirectory>${project.build.directory}/plugins</outputDirectory>
                            <includes>**/*</includes>
                            <destFileName>sbml-jar-with-dependencies.jar</destFileName>
-                        </artifactItem>
+                        </artifactItem -->
                         
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
@@ -624,7 +624,7 @@
                            <destFileName>validator-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
                         
-                        <artifactItem>
+                        <!-- artifactItem>
                            <groupId>uk.ac.ncl.cs</groupId>
                            <artifactId>psimi2ondex</artifactId>
                            <version>${project.version}</version>
@@ -634,7 +634,7 @@
                            <outputDirectory>${project.build.directory}/plugins</outputDirectory>
                            <includes>**/*</includes>
                            <destFileName>psimi2ondex-jar-with-dependencies.jar</destFileName>
-                        </artifactItem>
+                        </artifactItem -->
                         
                      </artifactItems>
                      <overWriteReleases>false</overWriteReleases>

@@ -14,6 +14,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,7 @@ import net.sourceforge.ondex.workflow2.gui.components.highlighting.HighlightMana
 /**
  * @author lysenkoa
  */
-public class ListPanelContainer extends JPanel implements JobProgressObserver {
+public class ListPanelContainer extends JPanel implements JobProgressObserver, AutoCloseable {
     private final Logger LOG = Logger.getLogger(ListPanelContainer.class);
 
     private static final long serialVersionUID = 1L;
@@ -66,6 +67,12 @@ public class ListPanelContainer extends JPanel implements JobProgressObserver {
     private boolean isDefault = false;
     private final JLabel namingComponent = new JLabel();
 
+    {
+    	// J9+ manage finalisation this way (https://www.enyo.de/fw/notes/java-finalization-revisited.html)
+    	Cleaner cleaner = Cleaner.create ();
+    	cleaner.register ( this, this::close );
+    }
+    
 	public void setSaved(boolean b){
 		if(b){
 			namingComponent.setText(namingComponent.getText().replaceAll("\\*", ""));
@@ -349,15 +356,26 @@ public class ListPanelContainer extends JPanel implements JobProgressObserver {
         }
     }
 
-    public void finalize() throws Throwable {
-        super.finalize();
-        if (runningTread != null && runningTread.isAlive()) {
-            try {
-                job.terminate();
-            }
-            catch (Exception e) {
-            }
-        }
+    /**
+     * This is the old finalize(), which is deprecated in J9+. It is invoked by the 
+     * object initializer above.
+     * 
+     */
+    @Override
+    public void close () 
+    {
+    	try
+			{
+				if ( runningTread != null && runningTread.isAlive() )
+					job.terminate();
+			}
+			catch ( Exception ex )
+			{
+				// Initially, it has the damn catch without any error reporting, I'm still catching
+				// it, just in case popping up causes problems.
+				System.err.println ( "Error while closing " + this.getClass ().getSimpleName () );
+				ex.printStackTrace ( System.err );
+			}
     }
     
     public boolean isDefault() {
