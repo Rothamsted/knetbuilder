@@ -11,7 +11,7 @@
     * to check what's next
 
   * OK Doclet: the fetch of tags like @author gets the whole '@author someone',
-    remove the tag.
+    * remove the tag.
 
   * OK modules/json, cyjs-json
     * Have dependencies with specified versions
@@ -29,13 +29,19 @@
 	* OK owl-parser: see why the tests fail
 		
 	* OK launcher
-	* integrator
-	* ondex-mini	
-	* installer
-	* mini-integration-tests
+	* OK opt modules
+	* OK integrator
+	* OK ondex-mini
+	* OK installer
+	* OK mini-integration-tests
 	
 	
-	
+## Still pending
+  * `net.sourceforge.ondex.ovtk2.ui.toolbars.MenuGraphSearchBox.fireActionPerformed()`, needs 
+  `getModifiersEx()`, keeping the deprecated method until tests.
+  	* The same for some Jung-dependant classes, search for `BUTTON1_MASK` or `BUTTON3_MASK`
+   
+   
 ## Package Order
 ```
 [INFO] Reactor Summary for ONDEX POM for Full Build 4.0-SNAPSHOT:
