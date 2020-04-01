@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
@@ -50,6 +52,7 @@ import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
  * <dl><dt>Date:</dt><dd>11 Jan 2019</dd></dl>
  *
  */
+@Status ( status = StatusType.STABLE )
 public class URIAdditionPlugin extends ONDEXTransformer
 {
 	private String uriAttributeId = "iri";

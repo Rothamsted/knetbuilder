@@ -171,7 +171,6 @@
 	         	<id>make-assembly-packaged_with_jars</id>
 	         	<!-- this is used for inheritance merges -->
 	         	<phase>package</phase>
-	         	<!-- append to the packaging phase. -->
 	         	<goals>
 	          	<goal>attached</goal>
 	          	<!-- goals == mojos -->

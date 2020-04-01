@@ -30,28 +30,6 @@ public class PluginTreeModelBuilder {
     }
     
     
-    
-/**
-    private static void addPlugin(PluginDescription pb, Map<ArrayKey<String>, DefaultMutableTreeNode> index, DocumentedTreeNode root) {
-        String path[] = pb.getPath().split("/");
-        DefaultMutableTreeNode n = new PluginTreeNode(pb);
-        for (int i = path.length - 1; i >= 0; i--) {
-            ArrayKey<String> key = new ArrayKey<String>(Arrays.copyOf(path, i + 1));
-            DefaultMutableTreeNode parent = index.get(key);
-            if (parent == null) {
-                DefaultMutableTreeNode temp = new DocumentedTreeNode(path[i]);
-                index.put(key, temp);
-                temp.add(n);
-                n = temp;
-            } else {
-                parent.add(n);
-                return;
-            }
-        }
-        root.add(n);
-    }
- */
-
     private static void addPlugin(PluginDescription pb, Map<ArrayKey<String>, DefaultMutableTreeNode> index, DocumentedTreeNode root, boolean showStableOnly) {
         String path[] = pb.getPath().split("/");
         try{
