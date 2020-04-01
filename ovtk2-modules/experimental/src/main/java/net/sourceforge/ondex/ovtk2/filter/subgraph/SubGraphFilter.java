@@ -475,7 +475,7 @@ public class SubGraphFilter extends OVTK2Filter implements ComponentListener,
 		PickedState<ONDEXMetaRelation> rtPI = visviewer.getPickedEdgeState();
 
 		// seed nodes from viewer start subgraph at each of them
-		for (Object o : nodeSelection.getSelectedValues()) {
+		for (Object o : nodeSelection.getSelectedValuesList ()) {
 			ONDEXConcept root = ((ONDEXNodeWrapper) o).node;
 			ConceptClass rootCC = root.getOfType();
 
@@ -669,7 +669,7 @@ public class SubGraphFilter extends OVTK2Filter implements ComponentListener,
 				goButton.setEnabled(true);
 
 				// propagate list selection to meta-graph
-				for (Object value : nodeSelection.getSelectedValues()) {
+				for (Object value : nodeSelection.getSelectedValuesList ()) {
 					ConceptClass cc = ((ONDEXNodeWrapper) value).node
 							.getOfType();
 					for (ONDEXMetaConcept mc : meta.getVertices()) {

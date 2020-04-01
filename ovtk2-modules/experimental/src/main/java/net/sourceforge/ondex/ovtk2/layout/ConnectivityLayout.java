@@ -52,7 +52,7 @@ public class ConnectivityLayout extends OVTK2Layouter {
 	@Override
 	public JPanel getOptionPanel() {
 		rowSpinner = new JSpinner();
-		rowSpinner.setValue(new Integer(1));
+		rowSpinner.setValue(Integer.valueOf(1));
 
 		JPanel rowPanel = new JPanel();
 		rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.LINE_AXIS));

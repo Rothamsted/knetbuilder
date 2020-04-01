@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -655,10 +656,12 @@ public class OVTK2Menu extends JMenuBar implements IFileHistory, OVTK2MenuBar {
 				JMenuItem item = new JMenuItem("Import network as flat file");
 				file.add(item);
 				item.addActionListener(new ActionListener() {
+					@SuppressWarnings ( "unchecked" )
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						try {
-							Object obj = cls.newInstance();
+						try 
+						{
+							Object obj = cls.getDeclaredConstructor().newInstance();
 							JInternalFrame frame = (JInternalFrame) obj;
 							Rectangle visible = OVTK2Desktop.getInstance().getDesktopPane().getVisibleRect();
 							Dimension size = frame.getSize();
@@ -671,25 +674,18 @@ public class OVTK2Menu extends JMenuBar implements IFileHistory, OVTK2MenuBar {
 							try {
 								frame.setSelected(true);
 							} catch (PropertyVetoException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-						} catch (InstantiationException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (IllegalAccessException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (SecurityException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (IllegalArgumentException e1) {
-							// TODO Auto-generated catch block
+						} 
+						catch (	InstantiationException|IllegalAccessException|SecurityException|IllegalArgumentException|
+										InvocationTargetException | NoSuchMethodException e1 )
+						{
 							e1.printStackTrace();
 						}
 					}
 				});
-				Object o = cls.newInstance();
+				// TODO: WTH?! Remove?!
+				// Object o = cls.newInstance();
 			}
 
 		} catch (RuntimeException e) {

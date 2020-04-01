@@ -523,10 +523,8 @@ public class PrologExport implements ActionListener, OVTK2IO {
 						export.getArgumentDefinitions());
 				args.setOption(FileArgumentDefinition.EXPORT_FILE,
 						file.getAbsolutePath());
-				args.addOption(Export.CONCAT_ARG,
-						new Boolean(concatNames.isSelected()));
-				args.addOption(Export.RESTRICTLENGTH_ARG, new Boolean(
-						restrictLength.isSelected()));
+				args.addOption(Export.CONCAT_ARG, concatNames.isSelected());
+				args.addOption(Export.RESTRICTLENGTH_ARG, restrictLength.isSelected());
 
 				// fill arguments of export
 				Iterator<String> it = fieldsFirstStep.keySet().iterator();

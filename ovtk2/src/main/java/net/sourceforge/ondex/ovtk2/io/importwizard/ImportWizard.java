@@ -171,9 +171,10 @@ public class ImportWizard extends JInternalFrame implements ActionListener {
 				createDescription(null);
 		}
 
+		@SuppressWarnings ( "rawtypes" )
 		public MyJTable(Vector<?> rowData, Vector<?> columnNames, boolean choose) {
 			// build a normal JTable
-			super(rowData, columnNames);
+			super((Vector<Vector>)rowData, columnNames);
 			this.choose = choose;
 			if (choose)
 				createDescription(columnNames);
@@ -707,7 +708,7 @@ public class ImportWizard extends JInternalFrame implements ActionListener {
 				String[] temp = ((String) options.get("required")).split("\\s");
 
 				for (int i = 0; i < temp.length; i++) {
-					required.put(temp[i], new Boolean(false));
+					required.put(temp[i], (false));
 					message = message + temp[i];
 					if (i < temp.length - 2)
 						message = message + ", ";
@@ -729,7 +730,7 @@ public class ImportWizard extends JInternalFrame implements ActionListener {
 				// if it is set yet count up
 				if (nb != null)
 					nbs = nb + 1;
-				useDesc.put(data.getValueAt(0, i), new Integer(nbs));
+				useDesc.put(data.getValueAt(0, i), nbs);
 			}
 
 			// check for duplications and conditions
@@ -745,7 +746,7 @@ public class ImportWizard extends JInternalFrame implements ActionListener {
 				String strkey = (String) key;
 				if (required.get(strkey) != null) {
 					required.remove(strkey);
-					required.put(strkey, new Boolean(true));
+					required.put(strkey, true);
 				}
 
 				// check here for duplication, exception for value
@@ -987,7 +988,7 @@ public class ImportWizard extends JInternalFrame implements ActionListener {
 							ArrayList<Object> temp = new ArrayList<Object>();
 							// add column to vector
 							if (!preViewEnabled)
-								temp.add(new Boolean(true));
+								temp.add(true);
 							temp.addAll(new ArrayList<Object>(Arrays.asList(splitedline)));
 							// get the maximum of columns
 							if (splitedline.length + 1 > imax)
@@ -1048,7 +1049,7 @@ public class ImportWizard extends JInternalFrame implements ActionListener {
 			ArrayList<Object> selection = new ArrayList<Object>();
 			selection.add(null); // first row, first column keep empty
 			for (int i = 1; i < imax; i++) {
-				selection.add(new Boolean(true));
+				selection.add(true);
 			}
 			precontent.add(0, selection); // add it as first row
 		}

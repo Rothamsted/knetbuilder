@@ -11,6 +11,9 @@ import java.util.HashMap;
  * OVTK2 applet stub. Can be used to run java applets within Ondex. Based on
  * http://java.sun.com/developer/technicalArticles/Programming/TurningAnApplet/
  * 
+ * TODO: Doesn't seem to be used at the moment (2020) and it's due to be retired by 
+ * future JDKs, so probably it has to be removed.
+ * 
  * @author peschr
  * 
  */
@@ -20,14 +23,6 @@ public class OVTK2AppletStub implements AppletStub {
 	// executed java applet
 	private Applet applet;
 
-	/**
-	 * Creates a new OVTK2AppletStub instance and initializes their parameters.
-	 * 
-	 * @param applet
-	 *            Applet instance
-	 * @param properties
-	 *            Hashtable with stored properties
-	 */
 	public OVTK2AppletStub(Applet applet, HashMap<String, String> properties) {
 		this.applet = applet;
 		System.out.println(properties);
@@ -35,7 +30,6 @@ public class OVTK2AppletStub implements AppletStub {
 	}
 
 	/**
-	 * Calls the applet's resize
 	 * 
 	 * @param width
 	 * @param height

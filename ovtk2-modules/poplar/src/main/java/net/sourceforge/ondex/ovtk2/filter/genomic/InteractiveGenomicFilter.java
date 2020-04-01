@@ -1038,10 +1038,10 @@ public class InteractiveGenomicFilter extends OVTK2Filter implements
 			Object[] row = new Object[5];
 			IntegerStringWrapper ch = (IntegerStringWrapper) chromosomeBox
 					.getItemAt(i);
-			row[0] = new Boolean(true);
+			row[0] = Boolean.valueOf ( true );
 			row[1] = ch;
-			row[2] = new Integer(1);
-			row[3] = new Integer(100000);
+			row[2] = Integer.valueOf(1);
+			row[3] = Integer.valueOf(100000);
 
 			JComboBox qtlJBox = chromosome2qtl.get(ch.getValue());
 			if (qtlJBox != null)
@@ -1153,7 +1153,7 @@ public class InteractiveGenomicFilter extends OVTK2Filter implements
 			Arrays.sort(genes, new GDSComparator(anBegin));
 			for (ONDEXConcept c : genes) {
 				Object[] row = new Object[5];
-				row[0] = new Boolean(true);
+				row[0] = Boolean.valueOf ( true );
 				row[1] = key;
 				row[2] = c.getAttribute(anBegin).getValue();
 				row[3] = c.getAttribute(anEnd).getValue();
@@ -1182,10 +1182,10 @@ public class InteractiveGenomicFilter extends OVTK2Filter implements
 	private void insertRow() {
 		DefaultTableModel model = (DefaultTableModel) searchTable.getModel();
 		Object[] row = new Object[5];
-		row[0] = new Boolean(true);
+		row[0] = Boolean.valueOf ( true );
 		row[1] = chromosomeBox.getItemAt(0);
-		row[2] = new Integer(1);
-		row[3] = new Integer(100000);
+		row[2] = Integer.valueOf(1);
+		row[3] = Integer.valueOf(100000);
 
 		JComboBox qtlJBox = chromosome2qtl
 				.get(((IntegerStringWrapper) chromosomeBox.getItemAt(0))
@@ -1246,7 +1246,8 @@ public class InteractiveGenomicFilter extends OVTK2Filter implements
 		// browse table data
 		DefaultTableModel tableModel = (DefaultTableModel) searchTable
 				.getModel();
-		Vector<Vector<Object>> data = tableModel.getDataVector();
+		@SuppressWarnings ( "rawtypes" )
+		Vector<Vector<Object>> data = (Vector) tableModel.getDataVector();
 		for (Vector<Object> row : data) {
 			Boolean use = (Boolean) row.get(0);
 			IntegerStringWrapper chr = (IntegerStringWrapper) row.get(1);

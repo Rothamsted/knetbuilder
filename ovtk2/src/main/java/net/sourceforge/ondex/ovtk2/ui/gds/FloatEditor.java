@@ -101,7 +101,7 @@ public class FloatEditor extends JTable implements GDSEditor {
 	}
 
 	public Object getDefaultValue() {
-		return new Float(0);
+		return Float.valueOf (0);
 	}
 
 	public void flushChanges() {

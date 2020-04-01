@@ -249,7 +249,7 @@ public class ColorSeriesAnnotator extends OVTK2Annotator implements
 		} else {
 			selection.clear();
 			// Find out which indexes are selected.
-			for (Object o : list.getSelectedValues()) {
+			for (Object o : list.getSelectedValuesList ()) {
 				selection.add((AttributeName) o);
 			}
 		}
