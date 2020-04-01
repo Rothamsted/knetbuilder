@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -109,11 +110,14 @@ public class PluginDoclet implements Doclet
 			reporter.print ( Diagnostic.Kind.ERROR, "-classdir not specified" );
 			return false;
 		}
-		if ( options.get ( "-classdir" ) != null ) classDir = options.get ( "-classdir" );
-		if ( classDir == null ) {
-			reporter.print ( Diagnostic.Kind.ERROR, "-classdir not specified" );
+		
+		if ( options.get ( "-filename" ) != null ) 
+			fileName = options.get ( "-filename" );
+		else {
+			reporter.print ( Diagnostic.Kind.NOTE, "-filename not specified, using default '" + fileName + "'" );
 			return false;
 		}
+		
 		if ( options.get ( "-libsdir" ) != null ) libsDir = options.get ( "-libsdir" );
 		// TODO: libsDir wasn't originally checked, is it optional?
 		
@@ -122,7 +126,7 @@ public class PluginDoclet implements Doclet
 		// 
 		Set<URL> jarRegisterBuilder = new HashSet<> ();
 		File rootDir = new File ( classDir );
-		
+				
 		try
 		{
 			addFiles ( new File ( libsDir ), jarRegisterBuilder );
@@ -132,8 +136,8 @@ public class PluginDoclet implements Doclet
 
 			// NB you must extend the context class loader as JavaDoc uses its
 			// own URLClassLoader
-			URLClassLoader ucl = URLClassLoader.newInstance ( urls, Thread.currentThread ().getContextClassLoader () );
-			Thread.currentThread ().setContextClassLoader ( ucl );
+			URLClassLoader xClsLoader = URLClassLoader.newInstance ( urls, Thread.currentThread ().getContextClassLoader () );
+			Thread.currentThread ().setContextClassLoader ( xClsLoader );
 		}
 		catch ( MalformedURLException ex )
 		{
@@ -258,7 +262,7 @@ public class PluginDoclet implements Doclet
 				else
 					reporter.print ( 
 						Diagnostic.Kind.WARNING, 
-						classDoc.getQualifiedName () + " is missing annotation tag " + Status.class.getName () 
+						classDoc.getQualifiedName () + " is missing annotation tag " + Status.class.getSimpleName () 
 				);
 
 
@@ -280,7 +284,7 @@ public class PluginDoclet implements Doclet
 				else if ( pluginType.getQualifiedName ().equals ( ONDEXParser.class.getCanonicalName () ) )
 					reporter.print ( 
 						Diagnostic.Kind.WARNING, 
-						classDoc.getQualifiedName () + " is missing annotation tag " + DatabaseTarget.class.getName () 
+						classDoc.getQualifiedName () + " is missing annotation tag " + DatabaseTarget.class.getSimpleName () 
 				);
 
 				
@@ -306,7 +310,7 @@ public class PluginDoclet implements Doclet
 				else if ( pluginType.getQualifiedName ().equals ( ONDEXParser.class.getCanonicalName () ) )
 					reporter.print ( 
 						Diagnostic.Kind.WARNING, 
-						classDoc.getQualifiedName () + " is missing annotation tag " + DataURL.class.getName () 
+						classDoc.getQualifiedName () + " is missing annotation tag " + DataURL.class.getSimpleName () 
 				);
 				
 				
@@ -505,15 +509,18 @@ public class PluginDoclet implements Doclet
 		for ( File file : classDir.listFiles () )
 		{
 			if ( file.isDirectory () ) addFiles ( file, classRegisterBuilder );
-			// TODO: doesn't work in new version, is it needed?! 
-			// && !file.getName ().startsWith ( "workflow-api" ) )
-			else if ( file.isFile () && file.getName ().endsWith ( ".jar" ) )
-			{
-				classRegisterBuilder.add ( file.toURI ().toURL () );
-				reporter.print (
-					Diagnostic.Kind.NOTE, "Adding to PluginDoclet CP: '" + file.toURI ().toURL () + "'"
-				);
-			}
+
+			String fname = file.getName ();
+			
+			if ( !fname.endsWith ( ".jar" ) ) continue;
+
+			// This is already in the classpath and reloading it causes problems with J11
+			// if ( fname.startsWith ( "workflow-api" ) ) continue;
+			
+			classRegisterBuilder.add ( file.toURI ().toURL () );
+			reporter.print (
+				Diagnostic.Kind.NOTE, "Adding to PluginDoclet classpath: '" + file.toURI ().toURL () + "'"
+			);
 		}
 	}
 

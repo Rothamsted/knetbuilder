@@ -578,7 +578,6 @@ public class PluginRegistry {
      */
     public void save(String file) {
         try {
-            //"D:/Test.xml"
             FileOutputStream out = new FileOutputStream(file);
             XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(out));
             for (PluginDescription pb : internalIdToPluginDescription.values()) {
