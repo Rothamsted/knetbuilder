@@ -36,12 +36,14 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 	private static final int COMPRESS_THRESHOLD = 100;
 
 	/**
-	 * Run compression in thread
+	 * Run compression in thread.
 	 * 
-	 * ATTENTION: Need to be able to shutdown this Executor in Applet destroy
-	 * method! Otherwise reloading applet is not going to work.
+	 * This is public due to bad tests elsewhere, please DO NOT USE IT.
+	 * 
+	 * (Old comment, probably doesn't apply anymore, MB 2020) ATTENTION: Need to be able to shutdown this Executor in 
+	 * Applet destroy method! Otherwise reloading applet is not going to work.
 	 */
-	public static ExecutorService COMPRESSOR;
+	public static final ExecutorService COMPRESSOR;
 
 	/**
 	 * id of owning entity.
@@ -73,6 +75,17 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 	 */
 	protected int hashCode;
 
+	static {
+		COMPRESSOR = Executors.newCachedThreadPool();
+		Runtime.getRuntime().addShutdownHook ( 
+			new Thread ( () -> {
+				COMPRESSOR.shutdownNow ();
+				System.err.println ( "OXL attribute compressor shut down" );
+			})
+		);
+	}
+	
+	
 	/**
 	 * Constructor
 	 * 
@@ -84,16 +97,6 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 	 */
 	protected AbstractAttribute(long sid, int conceptID,
 			AttributeName attributeName, Object value, boolean doIndex) {
-		// make sure only one COMPRESSOR is started
-		if (COMPRESSOR == null) {
-			COMPRESSOR = Executors.newCachedThreadPool();
-			Runtime.getRuntime().addShutdownHook(new Thread() {
-				public void run() {
-					if (COMPRESSOR != null)
-						COMPRESSOR.shutdownNow();
-				}
-			});
-		}
 		this.sid = sid;
 		this.ownerID = conceptID;
 		this.attrname = attributeName;
@@ -151,11 +154,13 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 			// compress value
 			final String strVal = (String) value;
 			if (strVal.length() >= COMPRESS_THRESHOLD) {
-				compressed = COMPRESSOR.submit(new Callable<byte[]>() {
-					@Override
-					public byte[] call() throws Exception {
-						return compress(strVal);
-					}
+				compressed = COMPRESSOR.submit( () ->
+				{
+					Thread myThread = Thread.currentThread ();
+					String myName = myThread.getName ();
+					if ( ! myName.startsWith ( "[attrComressor] " ) )
+						myThread.setName ( "[compressor]" + myThread.getName () );
+					return compress ( strVal ); 
 				});
 			} else {
 				this.value = value;
