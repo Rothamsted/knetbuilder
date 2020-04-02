@@ -80,7 +80,7 @@ public class RDFExporter
 
 		Set<ONDEXRelation> relations = graph.getRelations ();
 		log.info ( "Exporting {} relation(s)", relations.size () );
-		super.process ( relations.stream() ::forEach );
+		super.process ( relations.stream()::forEach );
 
 		log.info ( 
 			"RDF export finished, a total of {} concepts+relations exported, {} triples created",
