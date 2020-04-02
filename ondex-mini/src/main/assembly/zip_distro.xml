@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<assembly>
+<assembly 
+	xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
 	<id>packaged-distro</id>
 	<formats>
 		<format>zip</format>
@@ -13,12 +16,24 @@
         <!-- TODO: remove outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping -->
         <useTransitiveDependencies>true</useTransitiveDependencies>
         <scope>compile</scope>
+        <excludes>
+        	<!-- These are already in the plugin/ dir and having them twice cause problems to the
+        	     WF engine -->
+        	<exclude>net.sourceforge.ondex.modules:rdf-export-2</exclude>
+        	<exclude>net.sourceforge.ondex.modules:neo4j-export</exclude>
+        </excludes>
     </dependencySet>
     <dependencySet>
         <outputDirectory>/lib</outputDirectory>
         <!-- TODO: remove outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping -->
         <useTransitiveDependencies>true</useTransitiveDependencies>
         <scope>runtime</scope>
+        <excludes>
+        	<!-- These are already in the plugin/ dir and having them twice cause problems to the
+        	     WF engine -->
+        	<exclude>net.sourceforge.ondex.modules:rdf-export-2</exclude>
+        	<exclude>net.sourceforge.ondex.modules:neo4j-export</exclude>
+        </excludes>
     </dependencySet>
 		<dependencySet>
 			<outputDirectory>/plugins</outputDirectory>
