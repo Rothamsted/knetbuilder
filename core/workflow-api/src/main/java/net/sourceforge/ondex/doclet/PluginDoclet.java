@@ -1,9 +1,13 @@
 package net.sourceforge.ondex.doclet;
 
+import static java.lang.String.format;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
@@ -14,7 +18,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import javax.lang.model.SourceVersion;
@@ -42,6 +48,7 @@ import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
+import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.annotations.metadata.AttributeNameRequired;
 import net.sourceforge.ondex.annotations.metadata.ConceptClassRequired;
 import net.sourceforge.ondex.annotations.metadata.DataSourceRequired;
@@ -53,6 +60,10 @@ import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
 import uk.ac.ebi.utils.regex.RegEx;
 
 /**
+ * A doclet used together with the Maven Javadoc plugin, to produce XML descriptors for the 
+ * plugins. Those descriptors are then packaged (see the module `ondex-knetminer-builder/modules/pom.xml`)
+ * into the plugin jar, and they are the basis for the integrator to fetch plugin info.
+ * 
  * @author hindlem
  * @author Marco Brandizi, I rewrote this in 2020, to comply with the new JavaDoc APIs
  */
@@ -126,7 +137,7 @@ public class PluginDoclet implements Doclet
 		// 
 		Set<URL> jarRegisterBuilder = new HashSet<> ();
 		File rootDir = new File ( classDir );
-				
+			
 		try
 		{
 			addFiles ( new File ( libsDir ), jarRegisterBuilder );
@@ -248,11 +259,14 @@ public class PluginDoclet implements Doclet
 					continue;
 				}				
 
-				Status statusAnnotation = classPlugin.getAnnotation ( Status.class );
-				if ( statusAnnotation != null )
+				String status = getLoadedAnnotation ( classPlugin, Status.class, "status.getValue" );
+				if ( status != null )
 				{
-					String status = statusAnnotation.status ().getValue ().trim ();
-					String description = statusAnnotation.description ().trim ();
+					status = status.trim ();
+					String description = 
+						Optional.ofNullable ( (String) getLoadedAnnotation ( classPlugin, Status.class, "description" ) )
+						.map ( String::trim )
+						.orElse ( "" );
 
 					xtw.writeStartElement ( NAMESPACE, "status" );
 					xtw.writeAttribute ( "type", status );
@@ -265,16 +279,18 @@ public class PluginDoclet implements Doclet
 						classDoc.getQualifiedName () + " is missing annotation tag " + Status.class.getSimpleName () 
 				);
 
-
-				DatabaseTarget dbAnnotation = classPlugin.getAnnotation ( DatabaseTarget.class );
-				if ( dbAnnotation != null )
+				String dbname = getLoadedAnnotation ( classPlugin, DatabaseTarget.class, "name" );
+				if ( dbname != null )
 				{
-					String name = dbAnnotation.name ().trim ();
-					String description = dbAnnotation.description ().trim ();
-					String url = dbAnnotation.url ().trim ();
+					dbname = dbname.trim ();
+					String description = getLoadedAnnotation ( classPlugin, DatabaseTarget.class, "name" );
+					description = description.trim ();
+					
+					String url = getLoadedAnnotation ( classPlugin, DatabaseTarget.class, "url" );
+					url = url.trim ();
 
 					xtw.writeStartElement ( NAMESPACE, "database" );
-					xtw.writeAttribute ( "name", name );
+					xtw.writeAttribute ( "name", dbname );
 
 					writeXmlElemCDATA ( xtw, "url", url );
 					writeXmlElemCDATA ( xtw, "description", description );
@@ -287,16 +303,16 @@ public class PluginDoclet implements Doclet
 						classDoc.getQualifiedName () + " is missing annotation tag " + DatabaseTarget.class.getSimpleName () 
 				);
 
-				
-				DataURL dburlAnnotation = classPlugin.getAnnotation ( DataURL.class );
-				if ( dburlAnnotation != null )
+				String dburl = getLoadedAnnotation ( classPlugin, DataURL.class, "name" );
+				if ( dburl != null )
 				{
-					String name = dburlAnnotation.name ().trim ();
-					String description = dburlAnnotation.description ().trim ();
-					String[] urls = dburlAnnotation.urls ();
+					dburl = dburl.trim ();
+					String description = getLoadedAnnotation ( classPlugin, DataURL.class, "description" );
+					description = description.trim ();
+					String[] urls = getLoadedAnnotation ( classPlugin, DataURL.class, "urls" );
 
 					xtw.writeStartElement ( NAMESPACE, "data_files" );
-					xtw.writeAttribute ( "name", name );
+					xtw.writeAttribute ( "name", dburl );
 
 					xtw.writeStartElement ( NAMESPACE, "urls" );
 					for ( String url : urls )
@@ -317,29 +333,12 @@ public class PluginDoclet implements Doclet
 				// More details in the metadata section
 				//
 				xtw.writeStartElement ( NAMESPACE, "ondex-metadata" );
-				
-				DataSourceRequired cvAnnotation = classPlugin.getAnnotation ( DataSourceRequired.class );
-				if ( cvAnnotation != null )
-					writeMetaData ( xtw, "data_source", cvAnnotation.ids () );
-
-				ConceptClassRequired conceptclassAnnotation = classPlugin.getAnnotation ( ConceptClassRequired.class );
-				if ( conceptclassAnnotation != null )
-					writeMetaData ( xtw, "concept_class", conceptclassAnnotation.ids () );
-
-				AttributeNameRequired attributeAnnotation = classPlugin.getAnnotation ( AttributeNameRequired.class );
-				if ( attributeAnnotation != null )
-					writeMetaData ( xtw, "attribute_name", attributeAnnotation.ids () );
-
-				RelationTypeRequired relationtypeAnnotation = classPlugin.getAnnotation ( RelationTypeRequired.class );
-				if ( relationtypeAnnotation != null )
-					writeMetaData ( xtw, "relation_type", relationtypeAnnotation.ids () );
-
-				EvidenceTypeRequired evidencetypeAnnotation = classPlugin.getAnnotation ( EvidenceTypeRequired.class );
-				if ( evidencetypeAnnotation != null )
-					writeMetaData ( xtw, "evidence_type", evidencetypeAnnotation.ids () );
-
+				annotation2Meta ( xtw, classPlugin, DataSourceRequired.class, "data_source" );
+				annotation2Meta ( xtw, classPlugin, ConceptClassRequired.class, "concept_class" );
+				annotation2Meta ( xtw, classPlugin, AttributeNameRequired.class, "attribute_name" );
+				annotation2Meta ( xtw, classPlugin, RelationTypeRequired.class, "relation_type" );
+				annotation2Meta ( xtw, classPlugin, EvidenceTypeRequired.class, "evidence_type" );
 				xtw.writeEndElement (); // /ondex-metadata
-				
 				
 				// Description (the Javadoc comment)
 				//
@@ -493,7 +492,23 @@ public class PluginDoclet implements Doclet
 
 		xtw.writeEndElement (); // comment
 	}
+	
+	/**
+	 * Writes a metadata description block taking its ids from an annotation
+	 * 
+	 */
+	private <T, A extends Annotation> void annotation2Meta ( 
+		XMLStreamWriter xtw, Class<T> target, Class <A> ann, String tag 
+	) throws XMLStreamException
+	{
+		String[] ids = getLoadedAnnotation ( target, ann, "ids" );
+		if ( ids != null )
+			writeMetaData ( xtw, tag, ids );
+	}
 
+	/**
+	 * Adds jar files in classDir to the classpath used to fetch plugins.
+	 */
 	private void addFiles ( File classDir, Set<URL> classRegisterBuilder )
 		throws MalformedURLException
 	{
@@ -590,5 +605,48 @@ public class PluginDoclet implements Doclet
 	public SourceVersion getSupportedSourceVersion ()
 	{
 		return SourceVersion.latestSupported();
-	}	
+	}
+	
+	/**
+	 * <p>This is needed in Java >=9, since the annotations seen via the loaded .jars are considered different
+	 * than the ones we see hereby, due to the fact the doclet and those loaded jars use different class loaders.</p>
+	 * 
+	 * <p>TODO: couldn't find a way to overcome this damn Java modules limit, let's see if some help arrive in 
+	 * future (<a href = 'https://stackoverflow.com/questions/60978933'>see here</a>).</p>
+	 * 
+	 * @param propertyPath the dot-based chain of methods to be invoked from the annotation to get 
+	 * a final value, eg, {@code "status.getValue" } and annCls = {@link Status}, will get the {@link Status#status()}
+	 * property from the class annotation, and then its {@link StatusType#getValue() string representation} will be the
+	 * final result. If such a chain is null at some point, the final result will be null, else the final result must 
+	 * be compatibile with AV.
+	 */
+	@SuppressWarnings ( "unchecked" )
+	private static <T, A, AV> AV getLoadedAnnotation ( Class<T> cls, Class<A> annCls, String propertyPath )
+	{
+		try
+		{
+			Class<Annotation> trueAnnCls = 
+				(Class<Annotation>) Thread.currentThread ().getContextClassLoader ().loadClass ( annCls.getName () );
+			Annotation trueAnn = cls.getAnnotation ( trueAnnCls );
+			if ( trueAnn == null ) return null;
+
+			Object result = trueAnn;
+			for ( String prop: propertyPath.split ( "\\." ) )
+			{
+				Method propMethod = result.getClass ().getMethod ( prop );
+				result = propMethod.invoke ( result );
+				if ( result == null ) return null;
+			}
+			return (AV) result;
+		}
+		catch ( ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException
+						| IllegalArgumentException | InvocationTargetException ex )
+		{
+			throw new IllegalArgumentException ( 
+				format ( "Error while fetching annotation %s.%s() for %s: %s", 
+						annCls.getName (), propertyPath, cls, ex.getMessage () ), 
+				ex 
+			);
+		}
+	}
 }
