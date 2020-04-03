@@ -19,6 +19,14 @@
       <Arg name="graphId">default</Arg>
     </Transformer>
     
+    <Export name="oxl">
+      <Arg name="pretty">false</Arg>
+      <Arg name="ExportIsolatedConcepts">true</Arg>
+      <Arg name="GZip">true</Arg>
+      <Arg name="ExportFile">data/examples/rdf-export-2/text_mining_uris.oxl</Arg>
+      <Arg name="graphId">default</Arg>
+    </Export>    
+    
     <Export name="RDF-Exporter-2">
       <Arg name="ExportFile">data/examples/rdf-export-2/text_mining.ttl</Arg>
       <Arg name="rdfLang">TURTLE_BLOCKS</Arg>
