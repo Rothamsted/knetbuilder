@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.net.URL;
+import java.util.function.BiFunction;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -33,8 +34,19 @@ public class HelpMenuAction implements ActionListener {
 		OVTK2Desktop desktop = OVTK2Desktop.getInstance();
 
 		// simple about message
-		if (cmd.equals("about")) {
-			JOptionPane.showInternalMessageDialog(desktop.getDesktopPane(), Config.language.getProperty("Dialog.About.Text"), Config.language.getProperty("Dialog.About.Title"), JOptionPane.PLAIN_MESSAGE, new ImageIcon("config/toolbarButtonGraphics/general/About24.gif"));
+		if (cmd.equals("about")) 
+		{
+			// Add some sys info
+			BiFunction<String, String, String> displayProp = (title, prop) ->
+			title + ": " + System.getProperty ( prop );
+			
+			String msg = Config.language.getProperty("Dialog.About.Text") + "\n\n" 
+				+ displayProp.apply ( "Java Environment", "java.vm.name" )
+				+ ", "  + displayProp.apply ( "Version", "java.vm.version" ) + "\n"
+				+ displayProp.apply ( "OS", "os.name" )
+				+ ", " + displayProp.apply ( "Version", "os.version" );
+			
+			JOptionPane.showInternalMessageDialog(desktop.getDesktopPane(), msg, Config.language.getProperty("Dialog.About.Title"), JOptionPane.PLAIN_MESSAGE, new ImageIcon("config/toolbarButtonGraphics/general/About24.gif"));
 		}
 
 		// version information
