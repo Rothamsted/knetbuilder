@@ -1,21 +1,43 @@
 package net.sourceforge.ondex.algorithm.graphquery;
 
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Table;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
@@ -100,6 +122,113 @@ public abstract class AbstractGraphTraverser
 		));
 	}
 
+	@SuppressWarnings ( "rawtypes" )
+	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraphFromIds (
+		ONDEXGraph graph, Set<Pair<String, String>> geneAccessions, FilterPaths<EvidencePathNode> filter
+	) 
+	{
+		// src||acc
+		Set<String> rawAccs = geneAccessions
+			.parallelStream ()
+			.filter ( pair -> StringUtils.trimToNull ( pair.getRight () ) != null )
+			.map ( pair -> pair.getRight ().trim () + "||" + pair.getLeft () )
+			.collect ( Collectors.toSet () );
+
+		Set<String> noSrcAccs = geneAccessions
+			.parallelStream ()
+			.filter ( pair -> StringUtils.trimToNull ( pair.getRight () ) == null )
+			.map ( Pair::getLeft )
+			.collect ( Collectors.toSet () );
+
+		ConceptClass geneCC = graph.getMetaData ().getConceptClass ( "Gene" );
+		
+		Set<ONDEXConcept> seedGenes = graph.getConceptsOfConceptClass ( geneCC )
+		.parallelStream ()
+		.filter ( gene ->
+			gene.getConceptAccessions ()
+			.stream ()
+			.anyMatch ( acc ->
+			{
+				String accStr = acc.getAccession ();
+				if ( noSrcAccs.contains ( accStr ) ) return true;
+				if ( rawAccs.contains ( acc.getElementOf ().getId () + "||" + accStr ) ) return true;
+				return false;
+			})
+		).collect ( Collectors.toSet () );
+		
+		return this.traverseGraph ( graph, seedGenes, filter );
+	}
+	
+	
+	@SuppressWarnings ( "rawtypes" )
+	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraphFromIds (
+		ONDEXGraph graph, Reader geneIdsReader, FilterPaths<EvidencePathNode> filter
+	) 
+	{
+		Set<Pair<String, String>> geneIds = new HashSet<> ();
+		
+		try ( 
+			CSVReader csvr = new CSVReaderBuilder ( geneIdsReader )
+				.withCSVParser (
+					new CSVParserBuilder ()
+					.withSeparator ( '\t' )
+					.build ()
+				).build ()
+		)
+		{
+			for ( String[] row: csvr ) 
+			{
+				String geneId = row [ 0 ];
+				String srcId = row.length > 1 ? StringUtils.trimToNull ( row [ 1 ] ) : null;
+				geneIds.add ( Pair.of ( geneId, srcId ) );
+			}
+		}
+		catch ( IOException ex )
+		{
+			throw new UncheckedIOException ( 
+				"Error while reading seed genes file: " + ex.getMessage (), 
+				ex 
+			);
+		}
+		return this.traverseGraphFromIds ( graph, geneIds, filter );
+	}
+	
+	@SuppressWarnings ( "rawtypes" )
+	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraphFromIds (
+		ONDEXGraph graph, File geneIdsFile, FilterPaths<EvidencePathNode> filter
+	) 
+	{
+		try
+		{
+			return this.traverseGraphFromIds ( graph, new FileReader ( geneIdsFile ), filter );
+		}
+		catch ( FileNotFoundException ex )
+		{
+			throw new UncheckedFileNotFoundException ( 
+				format ( "Error while reading seed genes file '%s': %s", geneIdsFile.getAbsolutePath (), ex.getMessage () ), 
+				ex 
+			);
+		}
+		catch ( UncheckedIOException ex )
+		{
+			IOException ioex = new IOException ( 
+				format ( "Error while reading seed genes file '%s': %s", geneIdsFile.getAbsolutePath (), ex.getMessage () ), 
+				ex
+			);
+			throw new UncheckedIOException ( ioex );
+		}
+	}
+
+	
+	@SuppressWarnings ( "rawtypes" )
+	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraphFromIds (
+		ONDEXGraph graph, String geneIdsPath, FilterPaths<EvidencePathNode> filter
+	) 
+	{
+		return this.traverseGraphFromIds ( graph, new File ( geneIdsPath ), filter );
+	}
+	
+	
 	/**
 	 * Returns an unmodifiable view of this traverser options.
 	 */
@@ -179,6 +308,5 @@ public abstract class AbstractGraphTraverser
 		// Options coming from the main config.xml files are passed through
 		result.setOptions ( options );
 		return result;
-	}
-	
+	}	
 }

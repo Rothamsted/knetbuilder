@@ -107,8 +107,8 @@ public class StateMachineFlatFileParser2 {
         boolean transitionsDeclared = false;
         boolean statesDeclared = false;
 
-        while (br.ready()) {
-            String line = br.readLine();
+        for ( String line = null; ( line = br.readLine () ) != null; )
+        {
             if (line.trim().length() == 0) {
                 continue;
             }

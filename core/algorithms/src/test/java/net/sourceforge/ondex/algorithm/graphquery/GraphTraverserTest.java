@@ -27,390 +27,361 @@ import net.sourceforge.ondex.core.util.BitSetFunctions;
  *
  * @author hindlem
  */
-public class GraphTraverserTest extends TestCase {
+public class GraphTraverserTest extends TestCase
+{
 
-    private MemoryONDEXGraph aog;
+	private MemoryONDEXGraph aog;
 
-    private ConceptClass ccProtein;
-//	private ConceptClass ccTF;
-//	private ConceptClass ccGene;
-    private ConceptClass ccEnzyme;
-    private ConceptClass ccReaction;
-//	private ConceptClass ccPathway;
+	private ConceptClass ccProtein;
+	private ConceptClass ccEnzyme;
+	private ConceptClass ccReaction;
 
-//	private ONDEXRelationTypeSet rts_Encodes;
-    private RelationType rts_is_a;
-//	private ONDEXRelationTypeSet rts_m_isp;
-    private RelationType rts_interacts;
-//	private ONDEXRelationTypeSet rts_regulates;
-    private RelationType rts_cats;
+	private RelationType rts_is_a;
+	private RelationType rts_interacts;
+	private RelationType rts_cats;
 
-    private EvidenceType et;
-    private DataSource dataSource;
+	private EvidenceType et;
+	private DataSource dataSource;
 
-    @Before
-    public void setUp() {
+	@Before
+	public void setUp ()
+	{
 
-        aog = new MemoryONDEXGraph("testGraph");
+		aog = new MemoryONDEXGraph ( "testGraph" );
 
+		ccProtein = aog.getMetaData ().getFactory ().createConceptClass ( "Protein" );
+		ccEnzyme = aog.getMetaData ().getFactory ().createConceptClass ( "Enzyme" );
+		ccReaction = aog.getMetaData ().getFactory ().createConceptClass ( "Reaction" );
 
-        ccProtein = aog.getMetaData().getFactory().createConceptClass("Protein");
-        //ccTF = aog.getMemoryONDEXGraphData().createConceptClass("TF");
-        //ccGene = aog.getMemoryONDEXGraphData().createConceptClass("Gene");
-        ccEnzyme = aog.getMetaData().getFactory().createConceptClass("Enzyme");
-        ccReaction = aog.getMetaData().getFactory().createConceptClass("Reaction");
-        //ccPathway = aog.getMemoryONDEXGraphData().createConceptClass("Pathway");
-        //
-        //RelationType rtEncode = aog.getMemoryONDEXGraphData().createRelationType("Encodes");
-        //rts_Encodes = aog.getMemoryONDEXGraphData().createRelationTypeSet("Encodes", rtEncode);
+		rts_is_a = aog.getMetaData ().getFactory ().createRelationType ( "is_a" );
 
-        rts_is_a = aog.getMetaData().getFactory().createRelationType("is_a");
+		rts_interacts = aog.getMetaData ().getFactory ().createRelationType ( "interacts" );
 
-        //RelationType rtm_isp = aog.getMemoryONDEXGraphData().createRelationType("m_isp");
-        //rts_m_isp = aog.getMemoryONDEXGraphData().createRelationTypeSet("m_isp", rtm_isp);
-
-        rts_interacts = aog.getMetaData().getFactory().createRelationType("interacts");
-
-        //RelationType rtm_regulates = aog.getMemoryONDEXGraphData().createRelationType("regulates");
-        //rts_regulates = aog.getMemoryONDEXGraphData().createRelationTypeSet("regulates", rtm_interacts);
-
-        //RelationType rtm_cats = aog.getMemoryONDEXGraphData().createRelationType("cats");
-        rts_cats = aog.getMetaData().getFactory().createRelationType("cats");
-
-        et = aog.getMetaData().getFactory().createEvidenceType("I_made_it_up");
-        dataSource = aog.getMetaData().getFactory().createDataSource("matts_db");
+		rts_cats = aog.getMetaData ().getFactory ().createRelationType ( "cats" );
 
-    }
-
-    @After
-    public void tearDown() {
-        aog = null;
-    }
-
-    @Test
-    public void testSimpleGraphTraversal() throws StateMachineInvalidException {
-
-        StateMachine sm = new StateMachine();
+		et = aog.getMetaData ().getFactory ().createEvidenceType ( "I_made_it_up" );
+		dataSource = aog.getMetaData ().getFactory ().createDataSource ( "matts_db" );
 
-        State p = new State(ccProtein);
-        assertEquals(ccProtein.getId(), p.getValidConceptClass().getId());
-        State e = new State(ccEnzyme);
-        assertEquals(ccEnzyme.getId(), e.getValidConceptClass().getId());
-        State r = new State(ccReaction);
-        assertEquals(ccReaction.getId(), r.getValidConceptClass().getId());
+	}
 
-        Transition t = new Transition(rts_is_a);
-        assertEquals(rts_is_a.getId(), t.getValidRelationType().getId());
-        Transition c = new Transition(rts_cats);
-        assertEquals(rts_cats.getId(), c.getValidRelationType().getId());
+	@After
+	public void tearDown ()
+	{
+		aog = null;
+	}
 
-        sm.setStartingState(p);
-        assertEquals(p, sm.getStart());
-        sm.addFinalState(r);
-        assertEquals(r, sm.getFinishes().iterator().next());
+	@Test
+	public void testSimpleGraphTraversal () throws StateMachineInvalidException
+	{
 
-        sm.addStep(p, t, e);
-        assertEquals(p, sm.getTransitionSource(t));
-        assertEquals(e, sm.getTransitionTarget(t));
-        assertEquals(t, sm.getOutgoingTransitions(p).iterator().next());
+		StateMachine sm = new StateMachine ();
 
-        sm.addStep(e, c, r);
-        assertEquals(e, sm.getTransitionSource(c));
-        assertEquals(r, sm.getTransitionTarget(c));
-        assertEquals(c, sm.getOutgoingTransitions(e).iterator().next());
+		State p = new State ( ccProtein );
+		assertEquals ( ccProtein.getId (), p.getValidConceptClass ().getId () );
+		State e = new State ( ccEnzyme );
+		assertEquals ( ccEnzyme.getId (), e.getValidConceptClass ().getId () );
+		State r = new State ( ccReaction );
+		assertEquals ( ccReaction.getId (), r.getValidConceptClass ().getId () );
 
-        GraphTraverser gt = new GraphTraverser(sm);
+		Transition t = new Transition ( rts_is_a );
+		assertEquals ( rts_is_a.getId (), t.getValidRelationType ().getId () );
+		Transition c = new Transition ( rts_cats );
+		assertEquals ( rts_cats.getId (), c.getValidRelationType ().getId () );
 
-        ONDEXConcept protein1 = aog.getFactory().createConcept("Protein 1", dataSource, ccProtein, et);
+		sm.setStartingState ( p );
+		assertEquals ( p, sm.getStart () );
+		sm.addFinalState ( r );
+		assertEquals ( r, sm.getFinishes ().iterator ().next () );
 
-        System.out.println("ii" + aog.getConcept(protein1.getId()));
-       
-        ONDEXConcept protein2 = aog.getFactory().createConcept("Protein 2", dataSource, ccProtein, et);
+		sm.addStep ( p, t, e );
+		assertEquals ( p, sm.getTransitionSource ( t ) );
+		assertEquals ( e, sm.getTransitionTarget ( t ) );
+		assertEquals ( t, sm.getOutgoingTransitions ( p ).iterator ().next () );
 
+		sm.addStep ( e, c, r );
+		assertEquals ( e, sm.getTransitionSource ( c ) );
+		assertEquals ( r, sm.getTransitionTarget ( c ) );
+		assertEquals ( c, sm.getOutgoingTransitions ( e ).iterator ().next () );
 
-        ONDEXConcept enzyme1 = aog.getFactory().createConcept("Enzyme 1", dataSource, ccEnzyme, et);
-
-        ONDEXConcept reaction1 = aog.getFactory().createConcept("Reaction 1", dataSource, ccReaction, et);
+		GraphTraverser gt = new GraphTraverser ( sm );
 
-        ONDEXRelation is_a1 = aog.getFactory().createRelation(protein1, enzyme1, rts_is_a, et);
-        ONDEXRelation is_a2 = aog.getFactory().createRelation(protein2, enzyme1, rts_is_a, et);
+		ONDEXConcept protein1 = aog.getFactory ().createConcept ( "Protein 1", dataSource, ccProtein, et );
 
-        ONDEXRelation e_to_r = aog.getFactory().createRelation(enzyme1, reaction1, rts_cats, et);
-
-        EvidencePathNode newPaths1 =
-                new EvidencePathNode.FirstEvidenceConceptNode(protein1, p);
-        EvidencePathNode newPaths2 =
-                new EvidencePathNode.EvidenceRelationNode(is_a1, t, newPaths1);
-        EvidencePathNode newPaths3 =
-                new EvidencePathNode.EvidenceConceptNode(enzyme1, e, newPaths2);
-        EvidencePathNode newPaths4 =
-                new EvidencePathNode.EvidenceRelationNode(e_to_r, c, newPaths3);
-        EvidencePathNode path1 =
-                new EvidencePathNode.EvidenceConceptNode(reaction1, r, newPaths4);
+		System.out.println ( "ii" + aog.getConcept ( protein1.getId () ) );
 
-        EvidencePathNode new2Paths1 =
-                new EvidencePathNode.FirstEvidenceConceptNode(protein2, p);
-        EvidencePathNode new2Paths2 =
-                new EvidencePathNode.EvidenceRelationNode(is_a2, t, new2Paths1);
-        EvidencePathNode new2Paths3 =
-                new EvidencePathNode.EvidenceConceptNode(enzyme1, e, new2Paths2);
-        EvidencePathNode new2Paths4 =
-                new EvidencePathNode.EvidenceRelationNode(e_to_r, c, new2Paths3);
-        EvidencePathNode path2 =
-                new EvidencePathNode.EvidenceConceptNode(reaction1, r, new2Paths4);
+		ONDEXConcept protein2 = aog.getFactory ().createConcept ( "Protein 2", dataSource, ccProtein, et );
 
-        Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph(aog, aog.getConcepts(), null);
-        assertEquals(2, paths.size());
+		ONDEXConcept enzyme1 = aog.getFactory ().createConcept ( "Enzyme 1", dataSource, ccEnzyme, et );
 
-        for (ONDEXConcept concept : paths.keySet()) {
-            List<EvidencePathNode> path = paths.get(concept);
-            assertEquals(1, path.size());
-            if (concept.equals(protein1)) {
-                assertEquals(path1, path.get(0));
-            } else if (concept.equals(protein2)) {
-                assertEquals(path2, path.get(0));
-            } else
-                fail();
-        }
+		ONDEXConcept reaction1 = aog.getFactory ().createConcept ( "Reaction 1", dataSource, ccReaction, et );
 
-    }
+		ONDEXRelation is_a1 = aog.getFactory ().createRelation ( protein1, enzyme1, rts_is_a, et );
+		ONDEXRelation is_a2 = aog.getFactory ().createRelation ( protein2, enzyme1, rts_is_a, et );
 
-    @Test
-    public void testNPathLengthGraph() throws StateMachineInvalidException {
-        StateMachine sm = new StateMachine();
+		ONDEXRelation e_to_r = aog.getFactory ().createRelation ( enzyme1, reaction1, rts_cats, et );
 
-        State p = new State(ccProtein);
-        State e = new State(ccEnzyme);
-        State r = new State(ccReaction);
+		EvidencePathNode newPaths1 = new EvidencePathNode.FirstEvidenceConceptNode ( protein1, p );
+		EvidencePathNode newPaths2 = new EvidencePathNode.EvidenceRelationNode ( is_a1, t, newPaths1 );
+		EvidencePathNode newPaths3 = new EvidencePathNode.EvidenceConceptNode ( enzyme1, e, newPaths2 );
+		EvidencePathNode newPaths4 = new EvidencePathNode.EvidenceRelationNode ( e_to_r, c, newPaths3 );
+		EvidencePathNode path1 = new EvidencePathNode.EvidenceConceptNode ( reaction1, r, newPaths4 );
 
-        Transition t = new Transition(rts_interacts);
-        Transition i = new Transition(rts_is_a);
-        Transition c = new Transition(rts_cats);
+		EvidencePathNode new2Paths1 = new EvidencePathNode.FirstEvidenceConceptNode ( protein2, p );
+		EvidencePathNode new2Paths2 = new EvidencePathNode.EvidenceRelationNode ( is_a2, t, new2Paths1 );
+		EvidencePathNode new2Paths3 = new EvidencePathNode.EvidenceConceptNode ( enzyme1, e, new2Paths2 );
+		EvidencePathNode new2Paths4 = new EvidencePathNode.EvidenceRelationNode ( e_to_r, c, new2Paths3 );
+		EvidencePathNode path2 = new EvidencePathNode.EvidenceConceptNode ( reaction1, r, new2Paths4 );
 
-        sm.setStartingState(p);
-        sm.addFinalState(r);
+		Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph ( aog, aog.getConcepts (), null );
+		assertEquals ( 2, paths.size () );
 
-        sm.addStep(p, t, p);
-        sm.addStep(p, i, e);
-        sm.addStep(e, c, r);
+		for ( ONDEXConcept concept : paths.keySet () )
+		{
+			List<EvidencePathNode> path = paths.get ( concept );
+			assertEquals ( 1, path.size () );
+			if ( concept.equals ( protein1 ) )
+			{
+				assertEquals ( path1, path.get ( 0 ) );
+			} else if ( concept.equals ( protein2 ) )
+			{
+				assertEquals ( path2, path.get ( 0 ) );
+			} else
+				fail ();
+		}
 
-        GraphTraverser gt = new GraphTraverser(sm);
+	}
 
-        ONDEXConcept protein1 = aog.getFactory().createConcept("Protein 1a", dataSource, ccProtein, et);
-        ONDEXConcept protein2 = aog.getFactory().createConcept("Protein 2a", dataSource, ccProtein, et);
-        ONDEXConcept protein3 = aog.getFactory().createConcept("Protein 3a", dataSource, ccProtein, et);
-        ONDEXConcept protein4 = aog.getFactory().createConcept("Protein 4a", dataSource, ccProtein, et);
+	@Test
+	public void testNPathLengthGraph () throws StateMachineInvalidException
+	{
+		StateMachine sm = new StateMachine ();
 
-        ONDEXConcept enzyme1 = aog.getFactory().createConcept("Enzyme 1", dataSource, ccEnzyme, et);
+		State p = new State ( ccProtein );
+		State e = new State ( ccEnzyme );
+		State r = new State ( ccReaction );
 
-        ONDEXConcept reaction1 = aog.getFactory().createConcept("Reaction 1", dataSource, ccReaction, et);
+		Transition t = new Transition ( rts_interacts );
+		Transition i = new Transition ( rts_is_a );
+		Transition c = new Transition ( rts_cats );
 
-        aog.getFactory().createRelation(protein1, protein2, rts_interacts, et);
-        aog.getFactory().createRelation(protein2, protein3, rts_interacts, et);
-        aog.getFactory().createRelation(protein3, protein4, rts_interacts, et);
+		sm.setStartingState ( p );
+		sm.addFinalState ( r );
 
-        aog.getFactory().createRelation(protein4, enzyme1, rts_is_a, et);
+		sm.addStep ( p, t, p );
+		sm.addStep ( p, i, e );
+		sm.addStep ( e, c, r );
 
-        aog.getFactory().createRelation(enzyme1, reaction1, rts_cats, et);
+		GraphTraverser gt = new GraphTraverser ( sm );
 
-        Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph(aog, aog.getConcepts(), null);
-        assertEquals(4, paths.size());
+		ONDEXConcept protein1 = aog.getFactory ().createConcept ( "Protein 1a", dataSource, ccProtein, et );
+		ONDEXConcept protein2 = aog.getFactory ().createConcept ( "Protein 2a", dataSource, ccProtein, et );
+		ONDEXConcept protein3 = aog.getFactory ().createConcept ( "Protein 3a", dataSource, ccProtein, et );
+		ONDEXConcept protein4 = aog.getFactory ().createConcept ( "Protein 4a", dataSource, ccProtein, et );
 
-        assertTrue(paths.containsKey(protein1));
-        assertTrue(paths.containsKey(protein2));
-        assertTrue(paths.containsKey(protein3));
-        assertTrue(paths.containsKey(protein4));
+		ONDEXConcept enzyme1 = aog.getFactory ().createConcept ( "Enzyme 1", dataSource, ccEnzyme, et );
 
-        for (List<EvidencePathNode> path : paths.values()) {
-            assertEquals(1, path.size());
-        }
-    }
+		ONDEXConcept reaction1 = aog.getFactory ().createConcept ( "Reaction 1", dataSource, ccReaction, et );
 
-    @Test
-    public void testLoopedGraphTraversal() throws StateMachineInvalidException {
-        StateMachine sm = new StateMachine();
+		aog.getFactory ().createRelation ( protein1, protein2, rts_interacts, et );
+		aog.getFactory ().createRelation ( protein2, protein3, rts_interacts, et );
+		aog.getFactory ().createRelation ( protein3, protein4, rts_interacts, et );
 
-        State p = new State(ccProtein);
-        State e = new State(ccEnzyme);
-        State r = new State(ccReaction);
+		aog.getFactory ().createRelation ( protein4, enzyme1, rts_is_a, et );
 
-        Transition t = new Transition(rts_interacts);
-        Transition i = new Transition(rts_is_a);
-        Transition c = new Transition(rts_cats);
+		aog.getFactory ().createRelation ( enzyme1, reaction1, rts_cats, et );
 
-        sm.setStartingState(p);
-        sm.addFinalState(r);
+		Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph ( aog, aog.getConcepts (), null );
+		assertEquals ( 4, paths.size () );
 
-        sm.addStep(p, t, p);
-        sm.addStep(p, i, e);
-        sm.addStep(e, c, r);
+		assertTrue ( paths.containsKey ( protein1 ) );
+		assertTrue ( paths.containsKey ( protein2 ) );
+		assertTrue ( paths.containsKey ( protein3 ) );
+		assertTrue ( paths.containsKey ( protein4 ) );
 
-        GraphTraverser gt = new GraphTraverser(sm);
+		for ( List<EvidencePathNode> path : paths.values () )
+		{
+			assertEquals ( 1, path.size () );
+		}
+	}
 
-        ONDEXConcept protein1 = aog.getFactory().createConcept("Protein 1a", dataSource, ccProtein, et);
-        ONDEXConcept protein2 = aog.getFactory().createConcept("Protein 2a", dataSource, ccProtein, et);
-        ONDEXConcept protein3 = aog.getFactory().createConcept("Protein 3a", dataSource, ccProtein, et);
-        ONDEXConcept protein4 = aog.getFactory().createConcept("Protein 4a", dataSource, ccProtein, et);
+	@Test
+	public void testLoopedGraphTraversal () throws StateMachineInvalidException
+	{
+		StateMachine sm = new StateMachine ();
 
-        ONDEXConcept enzyme1 = aog.getFactory().createConcept("Enzyme 1", dataSource, ccEnzyme, et);
+		State p = new State ( ccProtein );
+		State e = new State ( ccEnzyme );
+		State r = new State ( ccReaction );
 
-        ONDEXConcept reaction1 = aog.getFactory().createConcept("Reaction 1", dataSource, ccReaction, et);
+		Transition t = new Transition ( rts_interacts );
+		Transition i = new Transition ( rts_is_a );
+		Transition c = new Transition ( rts_cats );
 
-        aog.getFactory().createRelation(protein1, protein1, rts_interacts, et);
-        aog.getFactory().createRelation(protein1, protein2, rts_interacts, et);
-        aog.getFactory().createRelation(protein2, protein3, rts_interacts, et);
-        aog.getFactory().createRelation(protein3, protein4, rts_interacts, et);
+		sm.setStartingState ( p );
+		sm.addFinalState ( r );
 
-        aog.getFactory().createRelation(protein4, protein1, rts_interacts, et);// a loop or backward
+		sm.addStep ( p, t, p );
+		sm.addStep ( p, i, e );
+		sm.addStep ( e, c, r );
 
-        aog.getFactory().createRelation(protein4, enzyme1, rts_is_a, et);
+		GraphTraverser gt = new GraphTraverser ( sm );
 
-        aog.getFactory().createRelation(enzyme1, reaction1, rts_cats, et);
+		ONDEXConcept protein1 = aog.getFactory ().createConcept ( "Protein 1a", dataSource, ccProtein, et );
+		ONDEXConcept protein2 = aog.getFactory ().createConcept ( "Protein 2a", dataSource, ccProtein, et );
+		ONDEXConcept protein3 = aog.getFactory ().createConcept ( "Protein 3a", dataSource, ccProtein, et );
+		ONDEXConcept protein4 = aog.getFactory ().createConcept ( "Protein 4a", dataSource, ccProtein, et );
 
-        BitSet sbs = new BitSet();
-        sbs.set(protein1.getId());//start only from the first concept
+		ONDEXConcept enzyme1 = aog.getFactory ().createConcept ( "Enzyme 1", dataSource, ccEnzyme, et );
 
-        Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph(aog, BitSetFunctions.create(aog, ONDEXConcept.class, sbs), null);
-        assertEquals(1, paths.size());
+		ONDEXConcept reaction1 = aog.getFactory ().createConcept ( "Reaction 1", dataSource, ccReaction, et );
 
-        for (List<EvidencePathNode> path : paths.values()) {
-            assertEquals(2, path.size());
-        }
-    }
+		aog.getFactory ().createRelation ( protein1, protein1, rts_interacts, et );
+		aog.getFactory ().createRelation ( protein1, protein2, rts_interacts, et );
+		aog.getFactory ().createRelation ( protein2, protein3, rts_interacts, et );
+		aog.getFactory ().createRelation ( protein3, protein4, rts_interacts, et );
 
-    @Test
-    public void testLengthRestrictedTraversal() throws StateMachineInvalidException {
+		aog.getFactory ().createRelation ( protein4, protein1, rts_interacts, et );// a loop or backward
 
-        System.out.println("length");
+		aog.getFactory ().createRelation ( protein4, enzyme1, rts_is_a, et );
 
-        StateMachine sm = new StateMachine();
+		aog.getFactory ().createRelation ( enzyme1, reaction1, rts_cats, et );
 
-        State p = new State(ccProtein);
-        State e = new State(ccEnzyme);
-        State r = new State(ccReaction);
+		BitSet sbs = new BitSet ();
+		sbs.set ( protein1.getId () );// start only from the first concept
 
-        Transition t = new Transition(rts_interacts, 1);
-        Transition i = new Transition(rts_is_a);
-        Transition c = new Transition(rts_cats);
+		Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph ( aog,
+				BitSetFunctions.create ( aog, ONDEXConcept.class, sbs ), null );
+		assertEquals ( 1, paths.size () );
 
-        sm.setStartingState(p);
-        sm.addFinalState(r);
+		for ( List<EvidencePathNode> path : paths.values () )
+		{
+			assertEquals ( 2, path.size () );
+		}
+	}
 
-        sm.addStep(p, t, p);
-        sm.addStep(p, i, e);
-        sm.addStep(e, c, r);
+	@Test
+	public void testLengthRestrictedTraversal () throws StateMachineInvalidException
+	{
 
-        GraphTraverser gt = new GraphTraverser(sm);
+		System.out.println ( "length" );
 
-        ONDEXConcept protein1 = aog.getFactory().createConcept("Protein 1a", dataSource, ccProtein, et);
-        ONDEXConcept protein2 = aog.getFactory().createConcept("Protein 2a", dataSource, ccProtein, et);
-        ONDEXConcept protein3 = aog.getFactory().createConcept("Protein 3a", dataSource, ccProtein, et);
-        ONDEXConcept protein4 = aog.getFactory().createConcept("Protein 4a", dataSource, ccProtein, et);
+		StateMachine sm = new StateMachine ();
 
-        ONDEXConcept enzyme1 = aog.getFactory().createConcept("Enzyme 1", dataSource, ccEnzyme, et);
+		State p = new State ( ccProtein );
+		State e = new State ( ccEnzyme );
+		State r = new State ( ccReaction );
 
-        ONDEXConcept reaction1 = aog.getFactory().createConcept("Reaction 1", dataSource, ccReaction, et);
+		Transition t = new Transition ( rts_interacts, 1 );
+		Transition i = new Transition ( rts_is_a );
+		Transition c = new Transition ( rts_cats );
 
-        aog.getFactory().createRelation(protein1, protein2, rts_interacts, et);
-        aog.getFactory().createRelation(protein2, protein3, rts_interacts, et);
-        aog.getFactory().createRelation(protein3, protein4, rts_interacts, et);
-        aog.getFactory().createRelation(protein3, protein4, rts_interacts, et);
+		sm.setStartingState ( p );
+		sm.addFinalState ( r );
 
-        aog.getFactory().createRelation(protein3, protein1, rts_interacts, et);
+		sm.addStep ( p, t, p );
+		sm.addStep ( p, i, e );
+		sm.addStep ( e, c, r );
 
-        aog.getFactory().createRelation(protein4, enzyme1, rts_is_a, et);// a loop
-        aog.getFactory().createRelation(protein1, enzyme1, rts_is_a, et);// a loop
+		GraphTraverser gt = new GraphTraverser ( sm );
 
-        aog.getFactory().createRelation(enzyme1, reaction1, rts_cats, et);
+		ONDEXConcept protein1 = aog.getFactory ().createConcept ( "Protein 1a", dataSource, ccProtein, et );
+		ONDEXConcept protein2 = aog.getFactory ().createConcept ( "Protein 2a", dataSource, ccProtein, et );
+		ONDEXConcept protein3 = aog.getFactory ().createConcept ( "Protein 3a", dataSource, ccProtein, et );
+		ONDEXConcept protein4 = aog.getFactory ().createConcept ( "Protein 4a", dataSource, ccProtein, et );
 
-        BitSet sbs = new BitSet();
-        sbs.set(protein1.getId());//start only from the first concept
+		ONDEXConcept enzyme1 = aog.getFactory ().createConcept ( "Enzyme 1", dataSource, ccEnzyme, et );
 
-        Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph(aog, BitSetFunctions.create(aog, ONDEXConcept.class, sbs), null);
-        assertEquals(1, paths.size());
+		ONDEXConcept reaction1 = aog.getFactory ().createConcept ( "Reaction 1", dataSource, ccReaction, et );
 
-        for (List<EvidencePathNode> path : paths.values()) {
-            assertEquals(1, path.size());
-        }
-    }
+		aog.getFactory ().createRelation ( protein1, protein2, rts_interacts, et );
+		aog.getFactory ().createRelation ( protein2, protein3, rts_interacts, et );
+		aog.getFactory ().createRelation ( protein3, protein4, rts_interacts, et );
+		aog.getFactory ().createRelation ( protein3, protein4, rts_interacts, et );
 
-    @Test
-    public void testLargeGraph() throws StateMachineInvalidException {
-        StateMachine sm = new StateMachine();
+		aog.getFactory ().createRelation ( protein3, protein1, rts_interacts, et );
 
-        State p = new State(ccProtein);
-        State e = new State(ccEnzyme);
-        State r = new State(ccReaction);
+		aog.getFactory ().createRelation ( protein4, enzyme1, rts_is_a, et );// a loop
+		aog.getFactory ().createRelation ( protein1, enzyme1, rts_is_a, et );// a loop
 
-        Transition t = new Transition(rts_interacts);
-        Transition i = new Transition(rts_is_a);
-        Transition c = new Transition(rts_cats);
+		aog.getFactory ().createRelation ( enzyme1, reaction1, rts_cats, et );
 
-        sm.setStartingState(p);
-        sm.addFinalState(r);
+		BitSet sbs = new BitSet ();
+		sbs.set ( protein1.getId () );// start only from the first concept
 
-        sm.addStep(p, t, p);
-        sm.addStep(p, i, e);
-        sm.addStep(e, c, r);
+		Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph ( aog,
+				BitSetFunctions.create ( aog, ONDEXConcept.class, sbs ), null );
+		assertEquals ( 1, paths.size () );
 
-        GraphTraverser gt = new GraphTraverser(sm);
+		for ( List<EvidencePathNode> path : paths.values () )
+		{
+			assertEquals ( 1, path.size () );
+		}
+	}
 
-        ArrayList<Integer> protiens = new ArrayList<Integer>();
+	@Test
+	public void testLargeGraph () throws StateMachineInvalidException
+	{
+		StateMachine sm = new StateMachine ();
 
-        for (int j = 0; j < 5; j++) {
-            ONDEXConcept protein = aog.getFactory().createConcept("Protein " + i, dataSource, ccProtein, et);
-            ONDEXConcept enzyme = aog.getFactory().createConcept("Enzyme " + i, dataSource, ccEnzyme, et);
-            ONDEXConcept reaction = aog.getFactory().createConcept("Reaction " + i, dataSource, ccReaction, et);
-            aog.getFactory().createRelation(protein,
-                    enzyme, rts_is_a, et);
-            aog.getFactory().createRelation(enzyme,
-                    reaction, rts_cats, et);
-            protiens.add(protein.getId());
-        }
+		State p = new State ( ccProtein );
+		State e = new State ( ccEnzyme );
+		State r = new State ( ccReaction );
 
-        for (int j = 0; j < protiens.size(); j++) {
-            for (int k = 0; k < protiens.size(); k++) {
-                if (j != k)
-                    aog.getFactory().createRelation(aog.getConcept(protiens.get(j)),
-                            aog.getConcept(protiens.get(k)), rts_interacts, et);
-            }
-        }
-        System.out.println("starting graph traversal");
-        Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph(aog, aog.getConceptsOfConceptClass(ccProtein), null);
+		Transition t = new Transition ( rts_interacts );
+		Transition i = new Transition ( rts_is_a );
+		Transition c = new Transition ( rts_cats );
 
-        int pathsExp = 0;
-        for (int j = 0; j < 4; j++) {
-            pathsExp = pathsExp + factorial(5 - j);
-        }
+		sm.setStartingState ( p );
+		sm.addFinalState ( r );
 
-        // System.out.println(factorial(5)+" "+factorial(4)+" "+pathsExp);
+		sm.addStep ( p, t, p );
+		sm.addStep ( p, i, e );
+		sm.addStep ( e, c, r );
 
-        //check for uniqueness
-        for (List<EvidencePathNode> path : paths.values()) {
-            //System.out.println("start "+path.size());
-            assertEquals(633, path.size());
-            for (EvidencePathNode pathI : path) {
-                //System.out.println(pathI.toString());
+		GraphTraverser gt = new GraphTraverser ( sm );
 
-                Set<ONDEXConcept> concepts = pathI.getAllConcepts();
-                //System.out.println(concepts.size()+" path");
-                assertTrue(concepts.size() == pathI.getConceptLength());
-                assertTrue(concepts.size() == pathI.getAllConcepts().size());
+		ArrayList<Integer> protiens = new ArrayList<Integer> ();
 
-                Set<ONDEXRelation> relations = pathI.getAllRelations();
+		for ( int j = 0; j < 5; j++ )
+		{
+			ONDEXConcept protein = aog.getFactory ().createConcept ( "Protein " + i, dataSource, ccProtein, et );
+			ONDEXConcept enzyme = aog.getFactory ().createConcept ( "Enzyme " + i, dataSource, ccEnzyme, et );
+			ONDEXConcept reaction = aog.getFactory ().createConcept ( "Reaction " + i, dataSource, ccReaction, et );
+			aog.getFactory ().createRelation ( protein, enzyme, rts_is_a, et );
+			aog.getFactory ().createRelation ( enzyme, reaction, rts_cats, et );
+			protiens.add ( protein.getId () );
+		}
 
-                assertTrue(relations.size() == pathI.getRelationLength());
-                assertTrue(relations.size() == pathI.getAllRelations().size());
-            }
-        }
-        assertEquals(5, paths.size());  //starting concepts
+		for ( int j = 0; j < protiens.size (); j++ )
+		{
+			for ( int k = 0; k < protiens.size (); k++ )
+			{
+				if ( j != k )
+					aog.getFactory ().createRelation ( aog.getConcept ( protiens.get ( j ) ),
+							aog.getConcept ( protiens.get ( k ) ), rts_interacts, et );
+			}
+		}
+		System.out.println ( "starting graph traversal" );
+		Map<ONDEXConcept, List<EvidencePathNode>> paths = gt.traverseGraph ( aog,
+				aog.getConceptsOfConceptClass ( ccProtein ), null );
 
-    }
+		for ( List<EvidencePathNode> path : paths.values () )
+		{
+			assertEquals ( 633, path.size () );
+			for ( EvidencePathNode pathI : path )
+			{
 
-    public static int factorial(int n) {
-        if (n <= 1)     // base case
-            return 1;
-        else
-            return n * factorial(n - 1);
-    }
+				Set<ONDEXConcept> concepts = pathI.getAllConcepts ();
+				assertTrue ( concepts.size () == pathI.getConceptLength () );
+				assertTrue ( concepts.size () == pathI.getAllConcepts ().size () );
+
+				Set<ONDEXRelation> relations = pathI.getAllRelations ();
+
+				assertTrue ( relations.size () == pathI.getRelationLength () );
+				assertTrue ( relations.size () == pathI.getAllRelations ().size () );
+			}
+		}
+		assertEquals ( 5, paths.size () ); // starting concepts
+
+	}
 }
