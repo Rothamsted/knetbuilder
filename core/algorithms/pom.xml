@@ -45,7 +45,10 @@
 				<groupId>uk.ac.ebi</groupId>
 				<artifactId>jutils</artifactId>
 			</dependency>
-
+			<dependency>
+				<groupId>com.opencsv</groupId>
+				<artifactId>opencsv</artifactId>
+			</dependency>
    </dependencies>
    
    

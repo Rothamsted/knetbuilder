@@ -55,34 +55,7 @@ public class StateMachineTest extends TestCase {
             //intentional
         }
     }
-    /*
-     public void testAddingTransitionsToFinish() throws StateMachineInvalidException {
-         StateMachine sm = new StateMachine();
 
-         State ss = new State(cc);
-         State fs = new State(cc);
-
-         sm.addStep(ss, new Transition(rt), fs);
-         sm.setStartingState(ss);
-
-         sm.addFinalState(fs);
-
-
-         try {
-             sm.addStep(fs, new Transition(rt), ss);
-             fail("Expected Exception StateMachineInvalidException not thrown when transitions on finish specifed");
-         } catch (StateMachineInvalidException e) {
-             //intentional
-         }
-
-         try {
-             sm.addFinalState(ss);
-             fail("Expected Exception StateMachineInvalidException not thrown when finish specified on state with outgoing transitions");
-         } catch (StateMachineInvalidException e) {
-             //intentional
-         }
-     }
-     *///feature removed
 
     public void testTransitionsAddedOk() throws StateMachineInvalidException {
         StateMachine sm = new StateMachine();

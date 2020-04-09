@@ -1,21 +1,44 @@
 package net.sourceforge.ondex.algorithm.graphquery;
 
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Table;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
+import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
@@ -101,6 +124,140 @@ public abstract class AbstractGraphTraverser
 	}
 
 	/**
+	 * Helpers to start the {@link #traverseGraph(ONDEXGraph, Set, FilterPaths) graph traversal} from 
+	 * a list of given gene identifiers. Every seed gene must be given as a pair of accession/source-ID,
+	 * where the source ID is the {@link ConceptAccession#getElementOf() accession's source} and must match 
+	 * the {@link DataSource#getId() ID} used in Ondex. If it's omitted, this method tries to match 
+	 * the accession against any source (but it's slightly slower in this case, and potentially ambiguous). 
+	 * 
+	 * It never returns null.
+	 * 
+	 */
+	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, Set<Pair<String, String>> geneAccessions ) 
+	{
+		// src||acc
+		Set<String> rawAccs = geneAccessions
+			.parallelStream ()
+			.filter ( pair -> StringUtils.trimToNull ( pair.getRight () ) != null )
+			.map ( pair -> pair.getRight ().trim () + "||" + pair.getLeft () )
+			.collect ( Collectors.toSet () );
+
+		Set<String> noSrcAccs = geneAccessions
+			.parallelStream ()
+			.filter ( pair -> StringUtils.trimToNull ( pair.getRight () ) == null )
+			.map ( Pair::getLeft )
+			.collect ( Collectors.toSet () );
+
+		ConceptClass geneCC = graph.getMetaData ().getConceptClass ( "Gene" );
+		
+		Set<ONDEXConcept> seedGenes = graph.getConceptsOfConceptClass ( geneCC )
+		.parallelStream ()
+		.filter ( gene ->
+			gene.getConceptAccessions ()
+			.stream ()
+			.anyMatch ( acc ->
+			{
+				String accStr = acc.getAccession ();
+				if ( noSrcAccs.contains ( accStr ) ) return true;
+				if ( rawAccs.contains ( acc.getElementOf ().getId () + "||" + accStr ) ) return true;
+				return false;
+			})
+		).collect ( Collectors.toSet () );
+		
+		return seedGenes;
+	}
+	
+	
+	/**
+	 * A wrapper for {@link #ids2Genes(ONDEXGraph, Set)} that reads entries from a simple
+	 * TSV stream. See the tests for details. The format is like:
+	 * 
+	 * <ul>
+	 *   <li>Tab as separator (double quotes are optional), one gene per row</li>
+	 *   <li>gene accession in the first col, source ID in the second (possibly empty), all other columns are ignored</li>
+	 *   <li>Empty rows or rows beginning with {@code #} are ignored.</li>
+	 *   <li>Unix newlines are expected, it might work with \r\n (Windows), but we didn't tested it</li>
+	 * </ul>
+	 * 
+	 * @throws UncheckedIOException
+	 */
+	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, Reader geneIdsReader ) 
+	{
+		Set<Pair<String, String>> geneIds = new HashSet<> ();
+		
+		try ( 
+			CSVReader csvr = new CSVReaderBuilder ( geneIdsReader )
+				.withCSVParser (
+					new CSVParserBuilder ()
+					.withSeparator ( '\t' )
+					.build ()
+				).build ()
+		)
+		{
+			for ( String[] row: csvr ) 
+			{
+				if ( row.length == 0 ) continue;
+				
+				String geneId = row [ 0 ];
+				if ( geneId != null && geneId.startsWith ( "#" ) ) continue;
+				
+				String srcId = row.length > 1 ? StringUtils.trimToNull ( row [ 1 ] ) : null;
+				geneIds.add ( Pair.of ( geneId, srcId ) );
+			}
+		}
+		catch ( IOException ex )
+		{
+			throw new UncheckedIOException ( 
+				"Error while reading seed genes file: " + ex.getMessage (), 
+				ex 
+			);
+		}
+		return ids2Genes ( graph, geneIds );
+	}
+	
+	/**
+	 * A wrapper for {@link #ids2Genes(ONDEXGraph, Reader)}.
+	 * 
+	 * @throws UncheckedIOException
+	 * @throws UncheckedFileNotFoundException
+	 */
+	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, File geneIdsFile ) 
+	{
+		try
+		{
+			return ids2Genes ( graph, new FileReader ( geneIdsFile ) );
+		}
+		catch ( FileNotFoundException ex )
+		{
+			throw new UncheckedFileNotFoundException ( 
+				format ( "Error while reading seed genes file '%s': %s", geneIdsFile.getAbsolutePath (), ex.getMessage () ), 
+				ex 
+			);
+		}
+		catch ( UncheckedIOException ex )
+		{
+			IOException ioex = new IOException ( 
+				format ( "Error while reading seed genes file '%s': %s", geneIdsFile.getAbsolutePath (), ex.getMessage () ), 
+				ex
+			);
+			throw new UncheckedIOException ( ioex );
+		}
+	}
+	
+	/**
+	 * A wrapper for {@link #ids2Genes(ONDEXGraph, File)}
+	 * 
+	 * @throws UncheckedIOException
+	 * @throws UncheckedFileNotFoundException
+	 * 
+	 */
+	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, String geneIdsPath ) 
+	{
+		return ids2Genes ( graph, new File ( geneIdsPath ) );
+	}
+	
+	
+	/**
 	 * Returns an unmodifiable view of this traverser options.
 	 */
 	public Map<String, Object> getOptions () {
@@ -179,6 +336,5 @@ public abstract class AbstractGraphTraverser
 		// Options coming from the main config.xml files are passed through
 		result.setOptions ( options );
 		return result;
-	}
-	
+	}	
 }
