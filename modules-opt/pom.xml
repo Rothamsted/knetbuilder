@@ -39,7 +39,7 @@
       <module>prolog</module>
       <module>protein-structure</module>
       <!--  module>psimi25</module -->
-      <module>rdf</module>
+      <!--  module>rdf</module -->
       <module>relevance</module>
       <!--  module>sbml</module -->
       <module>taxonomy</module>
