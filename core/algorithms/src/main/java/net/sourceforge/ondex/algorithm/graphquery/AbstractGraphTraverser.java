@@ -33,6 +33,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
+import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -122,10 +123,17 @@ public abstract class AbstractGraphTraverser
 		));
 	}
 
-	@SuppressWarnings ( "rawtypes" )
-	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraphFromIds (
-		ONDEXGraph graph, Set<Pair<String, String>> geneAccessions, FilterPaths<EvidencePathNode> filter
-	) 
+	/**
+	 * Helpers to start the {@link #traverseGraph(ONDEXGraph, Set, FilterPaths) graph traversal} from 
+	 * a list of given gene identifiers. Every seed gene must be given as a pair of accession/source-ID,
+	 * where the source ID is the {@link ConceptAccession#getElementOf() accession's source} and must match 
+	 * the {@link DataSource#getId() ID} used in Ondex. If it's omitted, this method tries to match 
+	 * the accession against any source (but it's slightly slower in this case, and potentially ambiguous). 
+	 * 
+	 * It never returns null.
+	 * 
+	 */
+	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, Set<Pair<String, String>> geneAccessions ) 
 	{
 		// src||acc
 		Set<String> rawAccs = geneAccessions
@@ -156,14 +164,24 @@ public abstract class AbstractGraphTraverser
 			})
 		).collect ( Collectors.toSet () );
 		
-		return this.traverseGraph ( graph, seedGenes, filter );
+		return seedGenes;
 	}
 	
 	
-	@SuppressWarnings ( "rawtypes" )
-	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraphFromIds (
-		ONDEXGraph graph, Reader geneIdsReader, FilterPaths<EvidencePathNode> filter
-	) 
+	/**
+	 * A wrapper for {@link #ids2Genes(ONDEXGraph, Set)} that reads entries from a simple
+	 * TSV stream. See the tests for details. The format is like:
+	 * 
+	 * <ul>
+	 *   <li>Tab as separator (double quotes are optional), one gene per row</li>
+	 *   <li>gene accession in the first col, source ID in the second (possibly empty), all other columns are ignored</li>
+	 *   <li>Empty rows or rows beginning with {@code #} are ignored.</li>
+	 *   <li>Unix newlines are expected, it might work with \r\n (Windows), but we didn't tested it</li>
+	 * </ul>
+	 * 
+	 * @throws UncheckedIOException
+	 */
+	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, Reader geneIdsReader ) 
 	{
 		Set<Pair<String, String>> geneIds = new HashSet<> ();
 		
@@ -178,7 +196,11 @@ public abstract class AbstractGraphTraverser
 		{
 			for ( String[] row: csvr ) 
 			{
+				if ( row.length == 0 ) continue;
+				
 				String geneId = row [ 0 ];
+				if ( geneId != null && geneId.startsWith ( "#" ) ) continue;
+				
 				String srcId = row.length > 1 ? StringUtils.trimToNull ( row [ 1 ] ) : null;
 				geneIds.add ( Pair.of ( geneId, srcId ) );
 			}
@@ -190,17 +212,20 @@ public abstract class AbstractGraphTraverser
 				ex 
 			);
 		}
-		return this.traverseGraphFromIds ( graph, geneIds, filter );
+		return ids2Genes ( graph, geneIds );
 	}
 	
-	@SuppressWarnings ( "rawtypes" )
-	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraphFromIds (
-		ONDEXGraph graph, File geneIdsFile, FilterPaths<EvidencePathNode> filter
-	) 
+	/**
+	 * A wrapper for {@link #ids2Genes(ONDEXGraph, Reader)}.
+	 * 
+	 * @throws UncheckedIOException
+	 * @throws UncheckedFileNotFoundException
+	 */
+	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, File geneIdsFile ) 
 	{
 		try
 		{
-			return this.traverseGraphFromIds ( graph, new FileReader ( geneIdsFile ), filter );
+			return ids2Genes ( graph, new FileReader ( geneIdsFile ) );
 		}
 		catch ( FileNotFoundException ex )
 		{
@@ -218,14 +243,17 @@ public abstract class AbstractGraphTraverser
 			throw new UncheckedIOException ( ioex );
 		}
 	}
-
 	
-	@SuppressWarnings ( "rawtypes" )
-	public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraphFromIds (
-		ONDEXGraph graph, String geneIdsPath, FilterPaths<EvidencePathNode> filter
-	) 
+	/**
+	 * A wrapper for {@link #ids2Genes(ONDEXGraph, File)}
+	 * 
+	 * @throws UncheckedIOException
+	 * @throws UncheckedFileNotFoundException
+	 * 
+	 */
+	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, String geneIdsPath ) 
 	{
-		return this.traverseGraphFromIds ( graph, new File ( geneIdsPath ), filter );
+		return ids2Genes ( graph, new File ( geneIdsPath ) );
 	}
 	
 	

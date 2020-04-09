@@ -5,14 +5,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,8 +16,6 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -99,9 +93,9 @@ public class SeedGenesTraverserTest
 	}
 	
 	@SuppressWarnings ( "rawtypes" )
-	private void testBasics ( Reader reader )
+	private void testBasics ( Set<ONDEXConcept> seeds )
 	{
-		Map<ONDEXConcept, List<EvidencePathNode>> paths = traverser.traverseGraphFromIds ( graph, reader, null );
+		Map<ONDEXConcept, List<EvidencePathNode>> paths = traverser.traverseGraph ( graph, seeds, null );
 		assertEquals ( "Wrong no. of returned paths!", 3, paths.size () );
 		
 		Predicate<String> geneFinder = 
@@ -122,17 +116,17 @@ public class SeedGenesTraverserTest
 	@Test
 	public void testStringReader ()
 	{
-		testBasics ( new StringReader ( TEST_GENE_LIST ) );
+		testBasics ( AbstractGraphTraverser.ids2Genes ( graph, new StringReader ( TEST_GENE_LIST ) ) );
 	}
 
 	@Test
 	public void testStringFile () throws IOException
 	{
-		String geneListPath = "target/test-gene-list.txt";
+		String geneListPath = "target/test-gene-list.tsv";
 		try ( FileWriter fw = new FileWriter ( geneListPath ) )
 		{
 			fw.write ( TEST_GENE_LIST );
 		}
-		testBasics ( new FileReader ( geneListPath ) );
+		testBasics ( AbstractGraphTraverser.ids2Genes ( graph, geneListPath ) );
 	}
 }
