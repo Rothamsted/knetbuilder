@@ -40,8 +40,8 @@ do
 
   echo -e "\n--- Loading on Virtuoso\n"
   cd "$vutils_home"
-  [ "$is_first" == "true" ] || ./virt_load.sh -r "$data_dir/ontologies" "${graph_uribase}ontologies"
-  ./virt_load.sh "$data_dir/$dataset" "$graph_uribase$dataset" &
+  [ "$is_first" == "true" ] || ./virt_load.sh -r "$data_dir/rdf/ontologies" "${graph_uribase}ontologies"
+  ./virt_load.sh "$data_dir/rdf/$dataset" "$graph_uribase$dataset" &
   
 	is_first='false'
 done
