@@ -99,7 +99,7 @@ public class RDFFileExporter
 	public void export ( ONDEXGraph g, File file, String langOrFormat )
 	{
 		try ( OutputStream out = new BufferedOutputStream ( new FileOutputStream ( file ) ) ) {
-			log.info ( "Exportint to '{}'", file.getAbsolutePath () );
+			log.info ( "Exporting to '{}'", file.getAbsolutePath () );
 			export ( g, out, langOrFormat );
 		}
 		catch ( FileNotFoundException ex ) {
