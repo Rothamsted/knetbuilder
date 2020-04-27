@@ -42,10 +42,14 @@ public class AddConceptNodeInfo {
      conceptType= con.getOfType().getId();
     }
 
-  // For concept Type: "SNP".
-  if(conceptType.equalsIgnoreCase(ConceptType.Compound.toString())) {
-     conceptType= ConceptType.SNP.toString();
+  if(conceptType.equalsIgnoreCase("Comp")) { // added:27-04-2020
+     conceptType= ConceptType.Compound.toString();
     }
+
+  // For conceptType "Compound", change to "SNP" (added:15-10-15), (disabled:27-04-20).
+/*  if(conceptType.equalsIgnoreCase(ConceptType.Compound.toString())) {
+     conceptType= ConceptType.SNP.toString();
+    } */
 
 //  System.out.println("Current "+ conceptType +" Name: "+ conceptName);
   /* Fetch the Set of all concept names and retain only the preferred ones, to later choose the 
