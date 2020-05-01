@@ -1,5 +1,5 @@
 #
-# We use this to populate the Neo4j instances on our Cyverse servers, starting from dump files uploaded on line 
+# We use this to populate the Neo4j instances on our Cyverse servers, starting from dump files uploaded on line
 # (currently, on OneDrive).
 #
 # TODO: comment the code
