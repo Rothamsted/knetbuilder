@@ -18,6 +18,6 @@ for file in $files update-scripts.sh
 do
 	echo "-- $file"
 	# We need options to disable any caching
-	wget --no-cache "$gh_url_base/$file?x=$(date)" -O $file
+	wget --no-cache "$gh_url_base/$file?x=$(date |tr ' ' '_')" -O $file
 	[[ "$file" =~ \.sh ]] && chmod +x $file
 done
