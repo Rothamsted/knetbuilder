@@ -17,6 +17,7 @@ files="$files update-scripts.sh"
 for file in $files update-scripts.sh
 do
 	echo "-- $file"
-	wget "$gh_url_base/$file" -O $file
+	# We need options to disable any caching
+	wget --no-cache "$gh_url_base/$file?x=$(date)" -O $file
 	[[ "$file" =~ \.sh ]] && chmod +x $file
 done
