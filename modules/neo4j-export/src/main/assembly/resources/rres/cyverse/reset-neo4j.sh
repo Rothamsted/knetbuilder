@@ -3,6 +3,8 @@ set -e
 cd "$(dirname $0)"
 . ./last-version.sh
 
+set -e
+host="$(hostname)"
 [[ "$host" == 'brandizim-1' ]] && dataset='arabidopsis'
 [[ "$host" == 'brandizim-2' ]] && dataset='wheat'
 

@@ -5,7 +5,7 @@ gh_url_base='https://raw.githubusercontent.com/Rothamsted/ondex-knet-builder/mas
 host="$(hostname)"
 
 base_neo4j_files='neo4j-load.sh reset-neo4j.sh'
-[[ "$host" == 'brandizim-1' ]] && files="$files covid19-load.sh"
+[[ "$host" == 'brandizim-1' ]] && files="$base_neo4j_files covid19-load.sh"
 [[ "$host" == 'brandizim-2' ]] && files="$base_neo4j_files"
 [[ "$host" == 'brandizim-3' ]] && files='3store-load.sh'
 
