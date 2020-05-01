@@ -1,7 +1,7 @@
 set -e
 
 cd "$(dirname $0)"
-. ./last-versions.sh
+. ./last-version.sh
 
 [[ "$host" == 'brandizim-1' ]] && dataset='arabidopsis'
 [[ "$host" == 'brandizim-2' ]] && dataset='wheat'

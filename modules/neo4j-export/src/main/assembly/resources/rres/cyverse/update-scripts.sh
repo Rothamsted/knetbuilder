@@ -12,5 +12,5 @@ for file in $files update-scripts.sh
 do
 	echo "-- $file"
 	wget "$gh_url_base/$file" -O $file
-	[[ "$file" =~ '\.sh' ]] && chmod +x $file
+	[[ "$file" =~ \.sh ]] && chmod +x $file
 done
