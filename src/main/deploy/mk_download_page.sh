@@ -13,6 +13,13 @@ EOT
   exit 1
 fi
 
+#IS_DEBUG=true
+function debug
+{
+  [[ -z "$IS_DEBUG" ]] && return
+  echo "$1" >&2	
+}
+
 # A simple client to the Nexus API to search info about a Maven artifact 
 # This returns API JSON and might contain multiple results per query (eg, multiple versions),
 # which are sorted by version number (Nexus applies a sensible order relation like 3.2.1 > 3.2) 
@@ -37,7 +44,9 @@ function nexus_asset_search
 	url="$url&maven.classifier=$classifier"
 	url="$url&maven.extension=$ext"
 	[[ -z "$version" ]] || url="$url&maven.baseVersion=$version"
-		
+	
+  debug "--- URL: $url" 		
+
 	curl -X GET "$url" -H "accept: application/json"
 }
 
@@ -70,8 +79,10 @@ function make_doc
   placeholder="%$6%" 
   version="$7" # Optional, as above
 
+	debug "--- make_doc '$repo' '$group' '$artifact' '$classifier' '$ext' '$placeholder' '$version'"
+
 	download_url=$(nexus_asset_search \
-  	$repo $group $artifact "$classifier" "$ext" "$ver" |js_2_download_url)
+  	$repo $group $artifact "$classifier" "$ext" "$version" |js_2_download_url)
   cat | sed -E s"|$placeholder|$download_url|g"
 }
 
