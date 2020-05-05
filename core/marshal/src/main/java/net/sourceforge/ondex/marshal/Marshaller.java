@@ -21,8 +21,8 @@ public class Marshaller
 	
 	// A possible workaround in a comment to the issue cited above:
 	//
-	// My workaround was to override the setupConverters() method and omit the "broken" converters 
-	// (ExternalizableConverter, TreeMapConverter, TreeSetConverter, PropertiesConverter, DynamicProxyConverter).
+	// "My workaround was to override the setupConverters() method and omit the "broken" converters 
+	// (ExternalizableConverter, TreeMapConverter, TreeSetConverter, PropertiesConverter, DynamicProxyConverter)."
 	//
 	private static XStream xstream = new XStream ();
 

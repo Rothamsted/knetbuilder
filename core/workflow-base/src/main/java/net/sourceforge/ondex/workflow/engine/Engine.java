@@ -493,15 +493,18 @@ public class Engine {
         if (dir == null || indeciesToRetain.contains(dir)) return;
         try {
             DirUtils.deleteTree(dir);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException e1) {
+            }
+            catch (InterruptedException e1) {
+              System.err.println("Warning: unexpected thread interruption while trying to delete: " + dir );
             }
             try {
                 DirUtils.deleteTree(dir);
             } catch (IOException e1) {
-                System.err.println("Warning: could not delete " + dir + " - directory is locked by Windows.");
+                System.err.println("Warning: could not delete " + dir );
             }
         }
     }

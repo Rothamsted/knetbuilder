@@ -60,6 +60,7 @@ public abstract class DirUtils {
         int i = 0;
         while (!path.delete()){
             if (i == 20) {
+            	throw new IOException("Unable to delete File (after 20 tries) " + path.getAbsolutePath());
             } else {
                 i++;
                 wait10(i, "Unable to make delete " + path.getAbsolutePath());
