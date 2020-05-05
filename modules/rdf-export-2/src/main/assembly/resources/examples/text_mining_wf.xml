@@ -15,18 +15,10 @@
       <Arg name="graphId">default</Arg>
     </Parser>
 
-    <Transformer name="URIAdditionPlugin">
-      <Arg name="graphId">default</Arg>
-    </Transformer>
-    
-    <Export name="oxl">
-      <Arg name="pretty">false</Arg>
-      <Arg name="ExportIsolatedConcepts">true</Arg>
-      <Arg name="GZip">true</Arg>
-      <Arg name="ExportFile">data/examples/rdf-export-2/text_mining_uris.oxl</Arg>
-      <Arg name="graphId">default</Arg>
-    </Export>    
-    
+		<!-- 
+			The RDF format to produce. Accepts values from either Jena RDFFormat (https://goo.gl/XVQBHi)
+			or Jena Lang (https://goo.gl/gbp6bL). The default TURTLE_BLOCKS writes Turtle in an efficient way.
+		-->    
     <Export name="RDF-Exporter-2">
       <Arg name="ExportFile">data/examples/rdf-export-2/text_mining.ttl</Arg>
       <Arg name="rdfLang">TURTLE_BLOCKS</Arg>

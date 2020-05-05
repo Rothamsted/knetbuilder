@@ -13,6 +13,12 @@ EOT
   exit 1
 fi
 
+# A simple client to the Nexus API to search info about a Maven artifact 
+# This returns API JSON and might contain multiple results per query (eg, multiple versions),
+# which are sorted by version number (Nexus applies a sensible order relation like 3.2.1 > 3.2) 
+# 
+# See the list of parameter below
+#
 function nexus_asset_search
 {
 	repo="$1"
@@ -20,7 +26,7 @@ function nexus_asset_search
 	artifact="$3"
 	classifier="$4"
 	ext="$5"
-	version="$6"
+	version="$6" # This is the only one that is optional, last versions are fetched if omitted
 	
 	url="https://knetminer.org/artifactory"
 	url="$url/service/rest/v1/search/assets?sort=version&direction=desc"
@@ -35,20 +41,34 @@ function nexus_asset_search
 	curl -X GET "$url" -H "accept: application/json"
 }
 
+# Expects the Nexus search result coming from nexus_asset_search and extracts the first 'downloadUrl' field
+# that is in that JSON, so the last version requested.
+# 
+# It has no parameters, since it processes its standard input and returns a result through the
+# stdout.
+#
 function js_2_download_url
 {
 	egrep --max-count 1 '"downloadUrl" :' | sed -E s/'.*"downloadUrl" : "([^"]+)".*'/'\1'/
 }
 
+# Expects an .md template in the standard input and replaces placeholders for Maven module links, resolving
+# them through the functions above. Returns the result through stdout, multiple invocations (one per module/placeholder)
+# can be piped. See below the param details. See further below for usage examples. 
+# 
 function make_doc
 {
+	# Artifact coordinates for the Nexus API, same as nexus_asset_search()
 	repo="$1"
 	group="$2"
 	artifact="$3"
 	classifier="$4"
 	ext="$5"
-  placeholder="%$6%"
-  version="$7"
+  # eg, 'ondexSnapUrl', will replace '%ondexSnapUrl%' with the URL found by Nexus to download
+  # Ondex (as long as you passed the right artifact coordinates).
+  #  
+  placeholder="%$6%" 
+  version="$7" # Optional, as above
 
 	download_url=$(nexus_asset_search \
   	$repo $group $artifact "$classifier" "$ext" "$ver" |js_2_download_url)
@@ -61,8 +81,13 @@ cd "$(dirname "$0")"
 mydir="$(pwd)"
 cd "$wdir"
 
+
+# Gets all the download links by chaining multiple invocations of make_doc()/Nexus-API
+#
+
 # TODO: For now, we report both 4-* version (JDK11) and 2-* version (JDK8)
 # Later, we will omit the version param and fetch the last snapshot only
+
 cat "$mydir/Downloads_template.md" \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.apps installer \

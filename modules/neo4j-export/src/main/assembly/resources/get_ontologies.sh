@@ -32,8 +32,8 @@ get_onto "schema.org" http://schema.org/version/latest/schema.ttl ext/schema.ttl
 # TODO: bioschemas!
 get_onto "BioPAX" http://www.biopax.org/release/biopax-level3.owl ext/biopax-level3.owl
 get_onto "SIO" http://semanticscience.org/ontology/sio.owl ext/sio.owl
-get_onto "dcterms:" http://dublincore.org/2012/06/14/dcterms.rdf ext/dcterms.rdf
-get_onto "dc:" http://dublincore.org/2012/06/14/dcelements.rdf ext/dcelements.rdf
+get_onto "dcterms:" http://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_terms.ttl ext/dcterms.ttl
+get_onto "dc:" http://www.dublincore.org/specifications/dublin-core/dcmi-terms/dublin_core_elements.ttl ext/dcelements.ttl
 get_onto "SKOS" http://www.w3.org/TR/skos-reference/skos.rdf ext/skos.rdf
   
 
