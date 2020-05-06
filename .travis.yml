@@ -23,8 +23,9 @@ install: echo "Skipping default installation step"
 script:
 # We need to reduce Maven verbosity, Travis has an out limit
   - log_opt=-Dorg.slf4j.simpleLogger.defaultLogLevel=INFO
-  - mvn deploy -D$log_opt=info --no-transfer-progress --batch-mode --settings settings.xml
-
+  - |
+  mvn deploy -D$log_opt=info --no-transfer-progress --batch-mode --settings settings.xml \
+    egrep --ignore-case --invert-match '\[DEBUG\]|already added\, skipping|Copying|Adding'
 cache:
   directories:
     - $HOME/.m2
