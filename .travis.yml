@@ -15,7 +15,7 @@ before_script:
   - echo "export MAVEN_OPTS='-Xms1G -Xmx4G -Dsun.net.client.defaultConnectTimeout=600000 -Dsun.net.client.defaultReadTimeout=600000'" >~/.mavenrc
 # Headless Java
   - "export DISPLAY=:99.0"
-  - wget https://raw.githubusercontent.com/Rothamsted/knetminer-common/master/settings.xml
+  - wget --no-verbose https://raw.githubusercontent.com/Rothamsted/knetminer-common/master/settings.xml
     
 
 install: echo "Skipping default installation step"
@@ -23,7 +23,7 @@ install: echo "Skipping default installation step"
 script:
 # We need to reduce Maven verbosity, Travis has an out limit
   - log_opt=org.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener
-  - mvn deploy -D$log_opt=info --batch-mode --quiet --settings settings.xml
+  - mvn deploy -D$log_opt=info --batch-mode --settings settings.xml
 
 cache:
   directories:
