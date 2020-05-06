@@ -1,7 +1,7 @@
 language: java
 
 jdk:
-  - oraclejdk8
+  - openjdk11
 
 sudo: required
 
@@ -13,9 +13,12 @@ before_script:
 # Headless start
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start  
+  - sleep 3 # give xvfb some time to start
+  # Common settings defining Knetminer server passwords and the like.
+  - wget https://raw.githubusercontent.com/Rothamsted/knetminer-common/master/settings.xml
+    
 
-install: true
+install: echo "Skipping default installation step"
 
 script:
   - mvn deploy --settings settings.xml
