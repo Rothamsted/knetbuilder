@@ -3,8 +3,6 @@ language: java
 jdk:
   - openjdk11
 
-sudo: required
-
 services:
   - xvfb # To manage Headless Java
 
@@ -14,7 +12,7 @@ before_script:
   - sudo apt-get install libc6:i386 libstdc++6:i386
   - echo "export MAVEN_OPTS='-Xms1G -Xmx4G -Dsun.net.client.defaultConnectTimeout=600000 -Dsun.net.client.defaultReadTimeout=600000'" >~/.mavenrc
 # We need to reduce Maven verbosity, Travis has an out limit
-  - echo "export MAVEN_OPTS="$MAVEN_OPTS -Dorg.slf4j.simpleLogger.defaultLogLevel=INFO" >~/.mavenrc
+  - echo 'export MAVEN_OPTS="$MAVEN_OPTS -Dorg.slf4j.simpleLogger.defaultLogLevel=INFO"' >>~/.mavenrc
 # Headless Java
   - "export DISPLAY=:99.0"
   - wget --no-verbose https://raw.githubusercontent.com/Rothamsted/knetminer-common/master/settings.xml
@@ -30,4 +28,3 @@ script:
 cache:
   directories:
     - $HOME/.m2
-
