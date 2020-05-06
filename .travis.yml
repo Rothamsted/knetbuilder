@@ -21,7 +21,9 @@ before_script:
 install: echo "Skipping default installation step"
 
 script:
-  - mvn deploy --settings settings.xml
+# We need to reduce Maven verbosity, Travis has an out limit
+  - log_opt=org.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener
+  - mvn deploy -D$log_opt=warn --batch-mode --quiet --settings settings.xml
 
 cache:
   directories:
