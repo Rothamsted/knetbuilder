@@ -23,3 +23,7 @@ install: echo "Skipping default installation step"
 script:
   - mvn deploy --settings settings.xml
 
+cache:
+  directories:
+    - $HOME/.m2
+
