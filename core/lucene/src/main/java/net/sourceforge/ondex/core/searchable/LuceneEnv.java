@@ -20,6 +20,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -1174,6 +1175,11 @@ public class LuceneEnv implements ONDEXLuceneFields
 		String parserID = c.getPID ();
 		String annotation = c.getAnnotation ();
 		String description = c.getDescription ();
+		
+		if ( StringUtils.length ( parserID ) > 32766 ) throw new IllegalArgumentException ( 
+			"Lucene cannot index a concept with PID length > 32766, PID is:\n" +
+			"'" + StringUtils.truncate ( parserID, 120 ) + "...'"
+		);
 
 		// get all properties iterators
 		Set<ConceptAccession> it_ca = c.getConceptAccessions ();
