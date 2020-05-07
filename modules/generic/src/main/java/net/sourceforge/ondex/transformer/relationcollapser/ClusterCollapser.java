@@ -34,7 +34,7 @@ public class ClusterCollapser {
 	/**
 	 * See {@link #toString(Set)}
 	 */
-	public static int MAX_PID_LEN = 120;
+	public static final int MAX_PID_LEN = 120;
 			
 	/**
 	 * String manipulation
