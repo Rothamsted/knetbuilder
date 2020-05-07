@@ -21,6 +21,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
+import uk.ac.ebi.utils.ids.IdUtils;
 
 /**
  * Collapses clusters of concepts and relations. Transfers attributes and other
@@ -30,6 +31,11 @@ import net.sourceforge.ondex.exception.type.InconsistencyException;
  */
 public class ClusterCollapser {
 
+	/**
+	 * See {@link #toString(Set)}
+	 */
+	public static int MAX_PID_LEN = 120;
+			
 	/**
 	 * String manipulation
 	 */
@@ -627,14 +633,29 @@ public class ClusterCollapser {
 		}
 	}
 
-	private String toString(Set<String> pids) {
+	/**
+	 * Returns the new PID to assign to a new concept made of collapsed PIDs.
+	 * 
+	 * This is usually <PID1;PID2;...> <b>BUT</b>, if the final length of PIDs chained 
+	 * this way is more than {@link #MAX_PID_LEN}, the result is shortened and a tail made of 
+	 * {@link IdUtils#hashUriSignature(String) a hash} of the original value.
+	 * 
+	 * We need such a shortening, since too big PIDs create problems (eg, with Lucene, when
+	 * creating RDF URIs). This feature was added by M. Brandizi in 2020.
+	 *
+	 */
+	private String toString(Set<String> pids) 
+	{
 		StringBuffer sb = new StringBuffer();
-		for (String pid : pids) {
-			if (sb.length() > 0)
-				sb.append(';');
+		for (String pid : pids) 
+		{
+			if (sb.length() > 0) sb.append(';');
 			sb.append(pid);
 		}
-		return sb.toString();
+		if ( sb.length () == 0 || sb.length () <= MAX_PID_LEN ) return sb.toString ();
+		
+		String hashTail = "_" + IdUtils.hashUriSignature ( sb.toString () );
+		return sb.substring ( 0, MAX_PID_LEN - hashTail.length () ) + hashTail;
 	}
 
 	/**
