@@ -21,9 +21,11 @@ before_script:
 install: echo "Skipping default installation step"
 
 script:
+# Again, let's filter some output, to avoid it becomes too big
+  - ignore_re='(\[DEBUG\]| DEBUG |already added\, skipping|Copying|Adding|Loading|Installing)'
   - >
       mvn deploy --no-transfer-progress --batch-mode --settings settings.xml |
-      egrep --ignore-case --invert-match '(\[DEBUG\]|already added\, skipping|Copying|Adding)'
+      egrep --ignore-case --invert-match "$ignore_re"
 
 cache:
   directories:
