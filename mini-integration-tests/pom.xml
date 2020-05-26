@@ -3,7 +3,7 @@
   <parent>
     <groupId>net.sourceforge.ondex</groupId>
     <artifactId>knet-builder</artifactId>
-    <version>v3.0-RC3</version>
+    <version>3.0.1-SNAPSHOT</version>
   </parent>
   
   <artifactId>mini-integration-tests</artifactId>
