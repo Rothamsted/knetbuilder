@@ -3,7 +3,7 @@
   <parent>
     <groupId>net.sourceforge.ondex</groupId>
     <artifactId>core</artifactId>
-    <version>2.1.2-SNAPSHOT</version>
+    <version>3.0-RC</version>
   </parent>
   <artifactId>parser-api</artifactId>
   <developers>
