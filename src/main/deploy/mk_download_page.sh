@@ -111,13 +111,13 @@ cat "$mydir/Downloads_template.md" \
     '' zip rdfExporterJ11Url 4.0-SNAPSHOT \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.apps installer \
-  	packaged-distro zip ondexSnapUrl 2.1.2-SNAPSHOT \
+  	packaged-distro zip ondexSnapUrl 3.0.1-SNAPSHOT \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.apps ondex-mini \
-    packaged-distro zip miniSnapUrl 2.1.2-SNAPSHOT \
+    packaged-distro zip miniSnapUrl 3.0.1-SNAPSHOT \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.modules rdf-export-2-cli \
-    '' zip rdfExporterSnapUrl 2.1.2-SNAPSHOT \
+    '' zip rdfExporterSnapUrl 3.0.1-SNAPSHOT \
 | make_doc \
     maven-releases net.sourceforge.ondex.apps installer \
   	packaged-distro zip ondexRelUrl \
