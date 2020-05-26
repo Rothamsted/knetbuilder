@@ -14,5 +14,5 @@ do
 done
 
 # Not clear how the heck it works on submodules, so let's redo it, just in case 
-git push --all --recurse-submodules=on-demand
-git push --tag --recurse-submodules=on-demand
+#git push --all --recurse-submodules=on-demand
+#git push --tag --recurse-submodules=on-demand
