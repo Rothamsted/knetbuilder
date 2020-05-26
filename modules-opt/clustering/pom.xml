@@ -7,7 +7,7 @@
    <parent>
       <artifactId>modules-opt</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>v3.0-RC3</version>
+      <version>3.0.1-SNAPSHOT</version>
    </parent>
    <groupId>net.sourceforge.ondex.modules</groupId>
    <artifactId>clustering</artifactId>
