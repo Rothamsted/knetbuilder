@@ -7,7 +7,7 @@
    <parent>
       <artifactId>ovtk2-modules</artifactId>
       <groupId>net.sourceforge.ondex.apps</groupId>
-      <version>v3.0-RC3</version>
+      <version>3.0.1-SNAPSHOT</version>
    </parent>
 
    <groupId>net.sourceforge.ondex.apps</groupId>
