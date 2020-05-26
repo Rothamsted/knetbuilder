@@ -117,6 +117,14 @@ cat "$mydir/Downloads_template.md" \
     packaged-distro zip miniSnapUrl 2.1.2-SNAPSHOT \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.modules rdf-export-2-cli \
-    '' zip rdfExporterSnapUrl 2.1.2-SNAPSHOT
-# TODO: Releases not available yet, to be added
+    '' zip rdfExporterSnapUrl 2.1.2-SNAPSHOT \
+| make_doc \
+    maven-releases net.sourceforge.ondex.apps installer \
+  	packaged-distro zip ondexRelUrl \
+| make_doc \
+    maven-releases net.sourceforge.ondex.apps ondex-mini \
+    packaged-distro zip miniRelUrl \
+| make_doc \
+    maven-releases net.sourceforge.ondex.modules rdf-export-2-cli \
+    '' zip rdfExporterRelUrl
     
