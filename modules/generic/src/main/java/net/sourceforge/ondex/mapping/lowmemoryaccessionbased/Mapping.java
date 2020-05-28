@@ -190,35 +190,35 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		}
 
 		// define concepts to map from
-		Set<ONDEXConcept> itConcepts = getBaseConcepts();
-		int total = itConcepts.size();
+		Set<ONDEXConcept> hitConcepts = getBaseConcepts();
+		int total = hitConcepts.size();
 
 		fireEventOccurred(new GeneralOutputEvent("Accession based mapping on "
 				+ total + " concepts", getCurrentMethodName()));
 
 		long timeStart = System.currentTimeMillis();
 
+		// iterate over all accession of this concept
+		LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
+		lenv.setReadOnlyMode ( true );
 		int current = 0;
-		for (ONDEXConcept concept : itConcepts) {
-
-			// get actual concept, data source and corresponding concept class
-			current++;
-
-			if ((current % 50000d) == 0) {
-				fireEventOccurred(new GeneralOutputEvent("Mapping complete on "
-						+ decimalFormat.format(((double) current)
-								/ ((double) total) * 100d) + "% ("
-						+ numberFormat.format(current) + " Concepts)",
-						getCurrentMethodName()));
-				if (current % 200000 == 0) {
-					System.runFinalization();
-				}
-			}
-
-			// iterate over all accession of this concept
-			LuceneEnv lenv = null;
-			try
+		try
+		{
+			for (ONDEXConcept concept : hitConcepts)
 			{
+				// get actual concept, data source and corresponding concept class
+				current++;
+	
+				if ((current % 50000d) == 0) {
+					fireEventOccurred(new GeneralOutputEvent("Mapping complete on "
+							+ decimalFormat.format(((double) current)
+									/ ((double) total) * 100d) + "% ("
+							+ numberFormat.format(current) + " Concepts)",
+							getCurrentMethodName()));
+					// TODO: remove? In general, this is bad practice, we aren't smarter than the GC.
+					// if (current % 200000 == 0) System.runFinalization();
+				}
+	
 				for (ConceptAccession conceptAcc : concept.getConceptAccessions()) {
 	
 					if (exclusiveDataSources != null
@@ -255,7 +255,6 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 													ignoreAmbiguity);
 								}
 	
-								lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
 								Set<ONDEXConcept> itResults = lenv.searchInConcepts(query);
 	
 								// look for the whole concept acc
@@ -264,17 +263,19 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 						}
 					} // if ignoreAmbiguity
 				} // for ConceptAccession
-			}
-			finally {
-				// TODO: remove? if ( lenv != null ) lenv.closeAll ();
-			}
+			} // for hitConcepts
+		} // try over lenv
+		finally {
+			// TODO: Probably to remove if ( lenv != null ) lenv.closeAll ();
+			lenv.setReadOnlyMode ( false ); // just in case
 		}
+
 
 		fireEventOccurred(new GeneralOutputEvent("All took "
 				+ (System.currentTimeMillis() - timeStart) + " created "
 				+ relations.size() + " relations", getCurrentMethodName()));
 
-		itConcepts = null;
+		hitConcepts = null;
 		relations = null;
 	}
 

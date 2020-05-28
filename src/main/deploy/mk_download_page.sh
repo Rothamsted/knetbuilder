@@ -96,7 +96,7 @@ cd "$wdir"
 # Gets all the download links by chaining multiple invocations of make_doc()/Nexus-API
 #
 
-# TODO: For now, we report both 4-* version (JDK11) and 2-* version (JDK8)
+# TODO: For now, we report both 4-* version (JDK11) and 3-* version (JDK8)
 # Later, we will omit the version param and fetch the last snapshot only
 
 cat "$mydir/Downloads_template.md" \
