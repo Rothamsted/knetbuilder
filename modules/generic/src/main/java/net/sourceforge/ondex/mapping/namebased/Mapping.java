@@ -475,7 +475,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames
 							// create not existing relation
 							relation = graph.getFactory ().createRelation ( fromConcept, toConcept, rtSet, eviType );
 							// set confidence value
-							relation.createAttribute ( hitAttr, new Integer ( score ), false );
+							relation.createAttribute ( hitAttr, score, false );
 						} else
 						{
 							Set<EvidenceType> etit = relation.getEvidence ();
@@ -484,7 +484,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames
 								// existing relations, add evi type
 								relation.addEvidenceType ( eviType );
 								// set confidence value
-								relation.createAttribute ( hitAttr, new Integer ( score ), false );
+								relation.createAttribute ( hitAttr, score, false );
 							}
 							etit = null;
 						}
@@ -496,7 +496,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames
 							// create not existing relation
 							relation = graph.getFactory ().createRelation ( toConcept, fromConcept, rtSet, eviType );
 							// set confidence value
-							relation.createAttribute ( hitAttr, new Integer ( score ), false );
+							relation.createAttribute ( hitAttr, score, false );
 						} else
 						{
 							Set<EvidenceType> etit = relation.getEvidence ();
@@ -505,7 +505,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames
 								// existing relations, add evi type
 								relation.addEvidenceType ( eviType );
 								// set confidence value
-								relation.createAttribute ( hitAttr, new Integer ( score ), false );
+								relation.createAttribute ( hitAttr, score, false );
 							}
 							etit = null;
 						}
