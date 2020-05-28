@@ -23,7 +23,7 @@ install: echo "Skipping default installation step"
 script:
 # Again, let's filter some output, to avoid it becomes too big
   - ignore_re='\[DEBUG\]| DEBUG |already added\, skipping|Copying|Adding|Loading|Installing'
-  - ignore_re="$ignore_re|Visibility index|javadoc: warning"
+  - ignore_re="$ignore_re|Visibility index built on|javadoc: warning"
   - ignore_re="($ignore_re)"
   - >
       mvn deploy --no-transfer-progress --batch-mode --settings settings.xml |
