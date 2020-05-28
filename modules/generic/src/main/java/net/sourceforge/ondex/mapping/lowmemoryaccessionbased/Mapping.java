@@ -190,8 +190,8 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		}
 
 		// define concepts to map from
-		Set<ONDEXConcept> itConcepts = getBaseConcepts();
-		int total = itConcepts.size();
+		Set<ONDEXConcept> hitConcepts = getBaseConcepts();
+		int total = hitConcepts.size();
 
 		fireEventOccurred(new GeneralOutputEvent("Accession based mapping on "
 				+ total + " concepts", getCurrentMethodName()));
