@@ -96,7 +96,7 @@ cd "$wdir"
 # Gets all the download links by chaining multiple invocations of make_doc()/Nexus-API
 #
 
-# TODO: For now, we report both 4-* version (JDK11) and 2-* version (JDK8)
+# TODO: For now, we report both 4-* version (JDK11) and 3-* version (JDK8)
 # Later, we will omit the version param and fetch the last snapshot only
 
 cat "$mydir/Downloads_template.md" \
@@ -111,12 +111,20 @@ cat "$mydir/Downloads_template.md" \
     '' zip rdfExporterJ11Url 4.0-SNAPSHOT \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.apps installer \
-  	packaged-distro zip ondexSnapUrl 2.1.2-SNAPSHOT \
+  	packaged-distro zip ondexSnapUrl 3.0.1-SNAPSHOT \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.apps ondex-mini \
-    packaged-distro zip miniSnapUrl 2.1.2-SNAPSHOT \
+    packaged-distro zip miniSnapUrl 3.0.1-SNAPSHOT \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.modules rdf-export-2-cli \
-    '' zip rdfExporterSnapUrl 2.1.2-SNAPSHOT
-# TODO: Releases not available yet, to be added
+    '' zip rdfExporterSnapUrl 3.0.1-SNAPSHOT \
+| make_doc \
+    maven-releases net.sourceforge.ondex.apps installer \
+  	packaged-distro zip ondexRelUrl \
+| make_doc \
+    maven-releases net.sourceforge.ondex.apps ondex-mini \
+    packaged-distro zip miniRelUrl \
+| make_doc \
+    maven-releases net.sourceforge.ondex.modules rdf-export-2-cli \
+    '' zip rdfExporterRelUrl
     

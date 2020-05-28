@@ -7,7 +7,7 @@
 
   * **NEW!** [Java 11 Test Release](%ondexJ11Url%)
   
-  * [Latest Stable Release](%ondexRelUrl)
+  * [Latest Stable Release](%ondexRelUrl%)
   * [Latest Dev Release](%ondexSnapUrl%)
   
   * [Older Releases](https://knetminer.org/artifactory/service/rest/repository/browse/maven-public/net/sourceforge/ondex/apps/installer/)
@@ -18,7 +18,7 @@
 
   * **NEW!** [Java 11 Test Release](%miniJ11Url%)
 
-  * [Latest Stable Release](%miniRelUrl)
+  * [Latest Stable Release](%miniRelUrl%)
   * [Latest Dev Release](%miniSnapUrl%)
 
   * [Older Releases](https://knetminer.org/artifactory/service/rest/repository/browse/maven-public/net/sourceforge/ondex/apps/ondex-mini)
@@ -39,7 +39,7 @@ as a plugin.
  
   * **NEW!** [Java 11 Test Release](%rdfExporterJ11Url%)
 
-  * [Latest Stable Release](%rdfExporterRelUrl)
+  * [Latest Stable Release](%rdfExporterRelUrl%)
   * [Latest Dev Release](%rdfExporterSnapUrl%)
  
   * [Older Releases](https://knetminer.org/artifactory/service/rest/repository/browse/maven-public/net/sourceforge/ondex/modules/rdf-export-2-cli)

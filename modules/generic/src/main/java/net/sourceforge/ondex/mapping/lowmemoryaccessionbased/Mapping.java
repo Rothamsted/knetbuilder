@@ -198,9 +198,13 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 
 		long timeStart = System.currentTimeMillis();
 
+		// iterate over all accession of this concept
+		LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
 		int current = 0;
-		for (ONDEXConcept concept : itConcepts) {
-
+		try
+		{
+			for (ONDEXConcept concept : hitConcepts)
+			{
 			// get actual concept, data source and corresponding concept class
 			current++;
 
@@ -210,15 +214,10 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 								/ ((double) total) * 100d) + "% ("
 						+ numberFormat.format(current) + " Concepts)",
 						getCurrentMethodName()));
-				if (current % 200000 == 0) {
-					System.runFinalization();
+					// TODO: remove? In general, this is bad practice, we aren't smarter than the GC.
+					// if (current % 200000 == 0) System.runFinalization();
 				}
-			}
 
-			// iterate over all accession of this concept
-			LuceneEnv lenv = null;
-			try
-			{
 				for (ConceptAccession conceptAcc : concept.getConceptAccessions()) {
 	
 					if (exclusiveDataSources != null
@@ -255,7 +254,6 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 													ignoreAmbiguity);
 								}
 	
-								lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
 								Set<ONDEXConcept> itResults = lenv.searchInConcepts(query);
 	
 								// look for the whole concept acc
@@ -264,17 +262,17 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 						}
 					} // if ignoreAmbiguity
 				} // for ConceptAccession
-			}
+			} // for hitConcepts
+		} // try over lenv
 			finally {
-				// TODO: remove? if ( lenv != null ) lenv.closeAll ();
+			// TODO: Probably to remove if ( lenv != null ) lenv.closeAll ();
 			}
-		}
 
 		fireEventOccurred(new GeneralOutputEvent("All took "
 				+ (System.currentTimeMillis() - timeStart) + " created "
 				+ relations.size() + " relations", getCurrentMethodName()));
 
-		itConcepts = null;
+		hitConcepts = null;
 		relations = null;
 	}
 
