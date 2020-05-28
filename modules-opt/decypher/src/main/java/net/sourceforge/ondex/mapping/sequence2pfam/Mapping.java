@@ -294,6 +294,7 @@ public class Mapping extends ONDEXMapping
                 return;
             }
         }
+        LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
         try {
 
             // get the machtes
@@ -303,7 +304,6 @@ public class Mapping extends ONDEXMapping
                     .toString()));
             // create relations between protein and family
             for (HMMMatch result : results) {
-                LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
                 Set<ONDEXConcept> itResults = method
                         .searchMatchingConceptsInLuceneEnvironment(lenv, result); // lenv.searchConceptByConceptAccessionExact(s,result.getTargetAccession());
                 if (itResults == null || itResults.size() == 0) {
