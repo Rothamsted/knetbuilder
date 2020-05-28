@@ -462,6 +462,7 @@ public class Engine {
             LuceneEnv lenv = new LuceneEnv(dir, false);
             lenv.addONDEXListener(logger);
             lenv.setONDEXGraph(graph);
+            lenv.setReadOnlyMode ( true );
             return lenv;
         }
         String graphdir = null;
@@ -480,6 +481,7 @@ public class Engine {
         LuceneEnv lenv = new LuceneEnv(dir, true);
         lenv.addONDEXListener(logger);
         lenv.setONDEXGraph(graph);
+        lenv.setReadOnlyMode ( true );
         LuceneRegistry.sid2luceneEnv.put(graph.getSID(), lenv);
         indexedGraphs.put(graph, dir);
         fireEventOccurred(new GeneralOutputEvent("Lucene took " + (System.currentTimeMillis() - start) + " msec.", getCurrentMethodName()));

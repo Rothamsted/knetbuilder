@@ -180,6 +180,9 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	private boolean createNewIndex;
 
+	private boolean isReadOnlyMode = false;
+	
+	
 	/**
 	 * The index directory handler required by Lucene 
 	 */
@@ -372,8 +375,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	public void closeIdxWriter () 
 	{
-		// TODO:Remove log.info ( "DOING closeIdxWriter()", new Throwable ( "NOT A REAL EX" ) );
-		
 		if ( this.idxWriter == null ) return;
 				
 		try 
@@ -565,12 +566,44 @@ public class LuceneEnv implements ONDEXLuceneFields
 	public ONDEXListener[] getONDEXListeners() {
 		return listeners.toArray(new ONDEXListener[listeners.size()]);
 	}
+	
+	
+	public boolean isReadOnlyMode () {
+		return isReadOnlyMode;
+	}
 
+	/**
+	 * This can be set to true when you know that you're not going to write to the index anymore and you 
+	 * want to speedup search-only operations.
+	 * 
+	 * Components like the workflow engine or the desktop filters set this to true by default, assuming that
+	 * their created index will be used in read-only mode. Clients like plug-ins need to set it back to false
+	 * if they want to write to the index.
+	 * 
+	 * <b>WARNING</b>: be careful when using this flag. If you set this to true and then invoke some
+	 * writing operation, you'll get an exception. Moreover, if the index directory that this {@link LuceneEnv}
+	 * is based on is changed from some other component, this flag will probably cause problems like non-updated
+	 * or inconsistent lucene search results.
+	 * 
+	 */
+	public void setReadOnlyMode ( boolean isReadOnlyMode ) {
+		this.isReadOnlyMode = isReadOnlyMode;
+	}
+
+	private void checkReadOnlyMode ()
+	{
+		if ( this.isReadOnlyMode ) 
+			throw new IllegalStateException ( "Can't do writing operations while LuceneEnv is in read-only mode" );
+	}
+	
+	
 	/**
 	 * Open index for writing.
 	 */
 	public void openIdxWriter ()
 	{
+		checkReadOnlyMode ();		
+		
 		// Double-check lazy init, see above
 		if ( this.idxWriter != null ) return;
 		
@@ -603,14 +636,16 @@ public class LuceneEnv implements ONDEXLuceneFields
 	
 	
 	/**
-	 * This was added by brandizi in 2017, to ensure {@link #idxReader} and {@link #idxSearcher} are open, before starting using them
-	 * in an operation. 
+	 * This was added by brandizi in 2017, to ensure {@link #idxReader} and {@link #idxSearcher} are open 
+	 * before starting using them in an operation. 
 	 */
 	private void openIdxReader () throws IOException
 	{
 		if ( this.idxDirectory == null )
 			this.idxDirectory = FSDirectory.open ( new File ( indexDirPath ).toPath () );
 
+		if ( this.isReadOnlyMode ) return;
+		
 		DirectoryReader newReader = null;
 		
 		try
@@ -645,8 +680,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	private void closeIdxReader () throws IOException
 	{
-		//TODO:Remove log.info ( "DOING closeIdxReader()", new Throwable ( "NOT A REAL EX" ) );
-		
 		if ( this.idxReader != null ) {
 			this.idxReader.close ();
 			this.idxReader = null;
@@ -729,7 +762,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	public boolean removeConceptsFromIndex(int[] cids) 
 	{
-		return updadeIndex ( () -> 
+		return updateIndex ( () -> 
 		{
 			Query[] terms = new Query[cids.length];
 			for (int i = 0; i < terms.length; i++) {
@@ -774,7 +807,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	public boolean removeRelationsFromIndex(int[] rids) 
 	{
-		return updadeIndex ( () -> 
+		return updateIndex ( () -> 
 		{
 			Term[] terms = new Term[rids.length];
 			for (int i = 0; i < terms.length; i++) {
@@ -1167,6 +1200,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	private void addConceptToIndex(ONDEXConcept c) throws AccessDeniedException 
 	{
+		checkReadOnlyMode ();		
+
 		// ensures duplicates are not written to the Index
 		Set<String> cacheSet = new HashSet<> ( 100 );
 
@@ -1306,7 +1341,9 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * Adds sets of used meta data to the index.
 	 * WARNING: this assumes the index is already {@link #openIdxWriter() opened}. 
 	 */
-	private void addMetadataToIndex() {
+	private void addMetadataToIndex() 
+	{
+		checkReadOnlyMode ();		
 
 		// new document for fields
 		Document doc = new Document();
@@ -1338,6 +1375,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 */
 	private void addRelationToIndex ( ONDEXRelation r ) throws AccessDeniedException
 	{
+		checkReadOnlyMode ();		
+		
 		// get Relation and RelationAttributes
 		Set<Attribute> it_attribute = r.getAttributes ();
 
@@ -1389,7 +1428,9 @@ public class LuceneEnv implements ONDEXLuceneFields
 	/**
 	 * Builds the index for a given ONDEXGraph.
 	 */
-	private void indexONDEXGraph(final ONDEXGraph graph ) throws AccessDeniedException {
+	private void indexONDEXGraph(final ONDEXGraph graph ) throws AccessDeniedException
+	{
+		checkReadOnlyMode ();		
 
 		fireEventOccurred(
 			new GeneralOutputEvent(	"Starting the Lucene environment.", "[LuceneEnv - indexONDEXGraph]")
@@ -1518,7 +1559,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 *  
 	 * @param action what to do, assuming it will return a result.
 	 */
-	private <R> R updadeIndex ( Supplier<R> action )
+	private <R> R updateIndex ( Supplier<R> action )
 	{
 		openIdxWriter ();
 		
@@ -1531,11 +1572,11 @@ public class LuceneEnv implements ONDEXLuceneFields
 	}
 	
 	/**
-	 * Like {@link #updadeIndex(Supplier)}, but doesn't return anything, so it's easier to use this in those lambdas that
+	 * Like {@link #updateIndex(Supplier)}, but doesn't return anything, so it's easier to use this in those lambdas that
 	 * don't have anything to return.
 	 */
 	private void updateIndexVoid ( Runnable action ) {
-		this.updadeIndex ( () -> { action.run (); return null; } );
+		this.updateIndex ( () -> { action.run (); return null; } );
 	}
 
 }
