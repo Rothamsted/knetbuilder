@@ -574,7 +574,11 @@ public class LuceneEnv implements ONDEXLuceneFields
 
 	/**
 	 * This can be set to true when you know that you're not going to write to the index anymore and you 
-	 * want to speedup search-only operations. 
+	 * want to speedup search-only operations.
+	 * 
+	 * Components like the workflow engine or the desktop filters set this to true by default, assuming that
+	 * their created index will be used in read-only mode. Clients like plug-ins need to set it back to false
+	 * if they want to write to the index.
 	 * 
 	 * <b>WARNING</b>: be careful when using this flag. If you set this to true and then invoke some
 	 * writing operation, you'll get an exception. Moreover, if the index directory that this {@link LuceneEnv}
