@@ -200,7 +200,6 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 
 		// iterate over all accession of this concept
 		LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
-		lenv.setReadOnlyMode ( true );
 		int current = 0;
 		try
 		{
@@ -267,7 +266,6 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		} // try over lenv
 		finally {
 			// TODO: Probably to remove if ( lenv != null ) lenv.closeAll ();
-			lenv.setReadOnlyMode ( false ); // just in case
 		}
 
 
