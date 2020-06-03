@@ -455,31 +455,32 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	 * 
 	 * @param term
 	 *            Term to search in concept accession
-	 * @param ambiguous
+	 * @param ignoreAmbiguity
 	 *            Include Ambiguous accessions in results
 	 * @param listOfConceptAccDataSources
 	 *            cv fields
 	 * @return Query a query object to be submitted to the LuceneEnv
 	 */
-	public static Query searchConceptByConceptAccessionExact ( String term, boolean ambiguous,
+	public static Query searchConceptByConceptAccessionExact ( String term, boolean ignoreAmbiguity,
 			Set<String> listOfConceptAccDataSources )
 	{
+		QueryParser qparser = new QueryParser ( CONACC_FIELD, LuceneEnv.DEFAULTANALYZER );
 		BooleanQuery.Builder boolQb = new BooleanQuery.Builder ();
 		boolQb.setMinimumNumberShouldMatch ( 1 );
 
 		for ( String cv: listOfConceptAccDataSources )
 		{
-			// TODO: fix with RAW
-			Term t = new Term ( CONACC_FIELD + DELIM + cv, LuceneEnv.stripText( term ) );
-			TermQuery termQuery = new TermQuery ( t );
+			String accFldPrefx = CONACC_FIELD + DELIM + cv + DELIM;
+			
+			// see rawAccession() for details about why we search these fields 
+			String accFld = accFldPrefx + RAW;
+			
+			term = LuceneEnv.rawAccession ( term );
+			boolQb.add ( qparser.createPhraseQuery ( accFld, term ), BooleanClause.Occur.SHOULD );
 
-			boolQb.add ( termQuery, BooleanClause.Occur.SHOULD );
-
-			if ( ambiguous )
-			{
-				t = new Term ( CONACC_FIELD + DELIM + cv + DELIM + AMBIGUOUS, LuceneEnv.stripText( term ) );
-				termQuery = new TermQuery ( t );
-				boolQb.add ( termQuery, BooleanClause.Occur.SHOULD );
+			if ( !ignoreAmbiguity ) {
+				String accAmbiguousFld = accFldPrefx + AMBIGUOUS + DELIM + RAW;
+				boolQb.add ( qparser.createPhraseQuery ( accAmbiguousFld, term ), BooleanClause.Occur.SHOULD );
 			}
 		}
 		return boolQb.build ();
@@ -594,20 +595,18 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		if ( cc != null ) boolQb.add ( qparser.createPhraseQuery ( CC_FIELD, cc.getId () ), MUST ); 
 
 		BooleanQuery.Builder termsOrQb = new BooleanQuery.Builder ();
-		String accFldPrefx = CONACC_FIELD + DELIM + dataSource.getId ();
-		String accAmbiguousFldPrefx = accFldPrefx + DELIM + AMBIGUOUS;
+		String accFldPrefx = CONACC_FIELD + DELIM + dataSource.getId () + DELIM;
+		// see rawAccession() for details about why we search these fields 
+		String accFld = accFldPrefx + RAW;
+		String accAmbiguousFld = accFldPrefx + AMBIGUOUS + DELIM + RAW;
 		
 		for ( String term : terms )
 		{
-			// TODO: we should be searching case-sensitive and in truly "exact" way. This is not
-			// possible now, cause the standard analyzer is used for accessions. 
-			// It should be turned into keyword analyzer, but then this doesn't support multi-value fields, so
-			// we should also have multiple docs per accession.
 			term = LuceneEnv.rawAccession ( term );
-			termsOrQb.add ( qparser.createPhraseQuery ( accFldPrefx + DELIM + RAW, term ), SHOULD );
+			termsOrQb.add ( qparser.createPhraseQuery ( accFld, term ), SHOULD );
 			
 			if ( ignoreAmbiguity )
-				termsOrQb.add ( qparser.createPhraseQuery ( accAmbiguousFldPrefx + DELIM + RAW, term ), SHOULD );
+				termsOrQb.add ( qparser.createPhraseQuery ( accAmbiguousFld, term ), SHOULD );
 		}
 		boolQb.add ( termsOrQb.build (), MUST );
 		

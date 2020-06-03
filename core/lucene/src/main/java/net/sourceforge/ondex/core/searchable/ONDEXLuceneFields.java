@@ -12,6 +12,7 @@ public interface ONDEXLuceneFields {
 	
 	static final char AMBIGUOUS = 'a';
 	
+	// Used by rawAccession() and query builders.
 	static final String RAW = "Raw";
 
 		
