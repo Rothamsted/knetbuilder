@@ -167,7 +167,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 					.getUniqueValue(WITHIN_DATASOURCE_ARG);
 		}
 
-		relations = new HashSet<String>();
+		relations = new HashSet<>();
 
 		initArgs();
 
@@ -231,42 +231,32 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 	
 						Set<DataSource> dataSourceToMapTo = getDataSourceToMapTo(
 								graph, conceptAcc.getElementOf());
-						for (ConceptClass cc : getCCtoMapTo(graph,
-								concept.getOfType())) {
+						for (ConceptClass cc : getCCtoMapTo(graph, concept.getOfType()))
+						{
 							// possible DataSource for concept accessions
-							for (DataSource dataSource : dataSourceToMapTo) {
-								Query query = null;
-	
-								if (mapWithInDataSource) {
-									query = LuceneQueryBuilder
-											.searchConceptByConceptAccessionExact(
-													dataSource, conceptAcc
-															.getAccession()
-															.toLowerCase(), null,
-													cc, ignoreAmbiguity);
-								} else {
-									query = LuceneQueryBuilder
-											.searchConceptByConceptAccessionExact(
-													dataSource, conceptAcc
-															.getAccession()
-															.toLowerCase(), concept
-															.getElementOf(), cc,
-													ignoreAmbiguity);
-								}
-	
-								Set<ONDEXConcept> itResults = lenv.searchInConcepts(query);
+							for (DataSource dataSource : dataSourceToMapTo)
+							{
+								Query query = LuceneQueryBuilder.searchConceptByConceptAccessionExact (
+									dataSource,
+									conceptAcc.getAccession(),
+									mapWithInDataSource ? null : concept.getElementOf(),
+									cc, 
+									ignoreAmbiguity
+								);
+								
+								Set<ONDEXConcept> hitResults = lenv.searchInConcepts(query);
 	
 								// look for the whole concept acc
-								createRelationsOnResults(itResults, concept);
+								createRelationsOnResults(hitResults, concept);
 							}
 						}
 					} // if ignoreAmbiguity
 				} // for ConceptAccession
 			} // for hitConcepts
 		} // try over lenv
-			finally {
-			// TODO: Probably to remove if ( lenv != null ) lenv.closeAll ();
-			}
+		finally {
+		// TODO: Probably to remove if ( lenv != null ) lenv.closeAll ();
+		}
 
 		fireEventOccurred(new GeneralOutputEvent("All took "
 				+ (System.currentTimeMillis() - timeStart) + " created "
@@ -340,14 +330,14 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		return itConcepts;
 	}
 
-	public void createRelationsOnResults(Set<ONDEXConcept> itResults,
+	public void createRelationsOnResults(Set<ONDEXConcept> hitResults,
 			ONDEXConcept concept) throws InvalidPluginArgumentException {
 
 		DataSource conceptDataSource = concept.getElementOf();
 		ConceptClass conceptOfType = concept.getOfType();
 
 		// search for this concept accession
-		for (ONDEXConcept hitConcept : itResults) {
+		for (ONDEXConcept hitConcept : hitResults) {
 
 			// get hit concept and relevant attributes from results
 			if (hitConcept instanceof LuceneConcept) {

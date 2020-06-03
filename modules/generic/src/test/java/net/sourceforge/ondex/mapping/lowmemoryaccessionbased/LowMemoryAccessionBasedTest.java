@@ -8,13 +8,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.config.LuceneRegistry;
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
@@ -31,7 +31,7 @@ import net.sourceforge.ondex.tools.DirUtils;
  */
 public class LowMemoryAccessionBasedTest {
 
-    protected String ondexDir = "data";
+    private static final String LUCENE_DIR = "target/index";
     private MemoryONDEXGraph graph;
     private ONDEXLogger coreLogger = new ONDEXLogger();
 
@@ -41,19 +41,11 @@ public class LowMemoryAccessionBasedTest {
     @Before
     public void setUp() throws Exception {
 
-        Assert.assertNotNull(ondexDir);
+        Assert.assertNotNull(LUCENE_DIR);
         graph = new MemoryONDEXGraph("test");
 
         ONDEXEventHandler.getEventHandlerForSID(graph.getSID())
                 .addONDEXONDEXListener(coreLogger);
-
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
 
     }
 
@@ -161,7 +153,7 @@ public class LowMemoryAccessionBasedTest {
      * </table>
      */
     @Test
-    public void testApplication() throws PluginConfigurationException
+    public void testApplication() throws Exception
     {
 
         parseOXLFile();
@@ -169,66 +161,54 @@ public class LowMemoryAccessionBasedTest {
         Mapping lma_mapping = new Mapping();
 
         // this have to be called after the relations and concepts are created
-        LuceneEnv env = loadLuceneEnv(graph);
-        try
-        {
-	        ONDEXPluginArguments arg = new ONDEXPluginArguments(lma_mapping.getArgumentDefinitions());
-	        LuceneRegistry.sid2luceneEnv.put(graph.getSID(), env);
-	        arg.addOption(ArgumentNames.RELATION_TYPE_ARG, "equ");
-	        // arg.addOption(ArgumentNames.EQUIVALENT_CC_ARG, "Thing,Protein");
-	        arg.addOption(ArgumentNames.IGNORE_AMBIGUOUS_ARG, false);
-	        arg.addOption(ArgumentNames.WITHIN_DATASOURCE_ARG, false);
-	
-	        lma_mapping.setArguments(arg);
-	        lma_mapping.setONDEXGraph(graph);
-	        lma_mapping.start();
-	
-	        Boolean[][] results = new Boolean[7][7];
-	        for (Boolean[] row : results)
-	            Arrays.fill(row, Boolean.FALSE);
-	
-	        results[1][3] = true;
-	        results[1][5] = true;
-	        results[2][3] = true;
-	        results[2][5] = true;
-	        results[3][1] = true;
-	        results[3][2] = true;
-	        results[3][4] = true;
-	        results[4][3] = true;
-	        results[4][5] = true;
-	        results[5][1] = true;
-	        results[5][2] = true;
-	        results[5][4] = true;
-	
-	        Set<ONDEXRelation> mappings = graph
-	                .getRelationsOfRelationType(graph.getMetaData()
-	                        .getRelationType("equ"));
-	        for (ONDEXRelation relation : mappings) {
-	            Integer from = relation.getKey().getFromID();
-	            Integer to = relation.getKey().getToID();
-	            Assert.assertTrue(from + "-" + to + " mapping invalid",
-	                    results[from][to]);
-	        }
-        }
-        finally {
-        	// TODO: remove? if ( env != null ) env.closeAll ();
+        loadLuceneEnv(graph);
+        ONDEXPluginArguments arg = new ONDEXPluginArguments(lma_mapping.getArgumentDefinitions());
+        arg.addOption(ArgumentNames.RELATION_TYPE_ARG, "equ");
+        // arg.addOption(ArgumentNames.EQUIVALENT_CC_ARG, "Thing,Protein");
+        arg.addOption(ArgumentNames.IGNORE_AMBIGUOUS_ARG, false);
+        arg.addOption(ArgumentNames.WITHIN_DATASOURCE_ARG, false);
+
+        lma_mapping.setArguments(arg);
+        lma_mapping.setONDEXGraph(graph);
+        lma_mapping.start();
+
+        Boolean[][] results = new Boolean[7][7];
+        for (Boolean[] row : results)
+            Arrays.fill(row, Boolean.FALSE);
+
+        results[1][3] = true;
+        results[1][5] = true;
+        results[2][3] = true;
+        results[2][5] = true;
+        results[3][1] = true;
+        results[3][2] = true;
+        results[3][4] = true;
+        results[4][3] = true;
+        results[4][5] = true;
+        results[5][1] = true;
+        results[5][2] = true;
+        results[5][4] = true;
+
+        Set<ONDEXRelation> mappings = graph
+                .getRelationsOfRelationType(graph.getMetaData()
+                        .getRelationType("equ"));
+        for (ONDEXRelation relation : mappings) {
+            Integer from = relation.getKey().getFromID();
+            Integer to = relation.getKey().getToID();
+            Assert.assertTrue(from + "-" + to + " mapping invalid",
+                    results[from][to]);
         }
     }
 
-    private LuceneEnv loadLuceneEnv(MemoryONDEXGraph graph) {
+    public static LuceneEnv loadLuceneEnv(ONDEXGraph graph) throws IOException 
+    {
+        DirUtils.deleteTree(LUCENE_DIR);
 
-        String dir = ondexDir + File.separator + "index" + File.separator
-                + System.currentTimeMillis();
-
-        try {
-            DirUtils.deleteTree(dir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        LuceneEnv lenv = new LuceneEnv(dir, true);
+        LuceneEnv lenv = new LuceneEnv(LUCENE_DIR, true);
         lenv.setONDEXGraph(graph);
 
+        LuceneRegistry.sid2luceneEnv.put(graph.getSID(), lenv );
+        
         return lenv;
     }
 
