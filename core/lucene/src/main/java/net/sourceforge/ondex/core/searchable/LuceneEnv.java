@@ -19,9 +19,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.KeywordAnalyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -48,11 +51,14 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.machinezoo.noexception.Exceptions;
+
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -230,7 +236,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	/**
 	 * global analyser used for the index
 	 */
-	public final static Analyzer DEFAULTANALYZER = new StandardAnalyzer();
+	public final static Analyzer DEFAULTANALYZER;
 
 	/** A marker used to mark a metadata document. */
 	private static final String LASTDOCUMENT_FIELD = "LASTDOCUMENT_FIELD";
@@ -264,7 +270,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	private static Set<String> ID_FIELDS = new HashSet<> ( Arrays.asList ( CONID_FIELD, RELID_FIELD ) ); 
 
 	// pre-compiled patterns for text stripping
-	private final static Pattern patternNonWordChars = Pattern.compile("\\W");
+	private final static Pattern NON_WORD_RE = Pattern.compile("\\W");
 
 	/**
 	 * This idxSearcher the RAM allocated for Lucene buffering, during indexing operation. It idxSearcher expressed as a fraction of
@@ -295,6 +301,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 			f.freeze ();
 		}
 				
+		DEFAULTANALYZER = createDefaultAnalyzer ();
+		
 		EXECUTOR = Executors.newCachedThreadPool ();
 		Runtime.getRuntime ().addShutdownHook ( 
 			new Thread ( 
@@ -303,7 +311,27 @@ public class LuceneEnv implements ONDEXLuceneFields
 		); 
 	}
 		
-	
+	/**
+	 * The default analyser uses {@link PerFieldAnalyzerWrapper} to set up {@link KeywordAnalyzer}
+	 * for certain fields (eg, Concept Class ) and {@link StandardAnalyzer} as default.
+	 * 
+	 * This is necessary to fix problems like mixed-case searches, see 
+	 * <a href = "https://stackoverflow.com/questions/62119328">here</a>. 
+	 * 
+	 */
+	private static Analyzer createDefaultAnalyzer ()
+	{
+		Map<String,Analyzer> fa = new HashMap<> ();
+		// TODO: can we use one analyser only for each field?
+		
+		Stream.of ( 
+			CONID_FIELD, PID_FIELD, CC_FIELD, DataSource_FIELD, 
+			RELID_FIELD, FROM_FIELD, TO_FIELD, OFTYPE_FIELD, 
+			"iri"
+		).forEach ( f -> fa.put ( f, new KeywordAnalyzer () ) );
+		
+		return new PerFieldAnalyzerWrapper ( new StandardAnalyzer (), fa );
+	}
 	
 	/**
 	 * Optimises the RAM to be used for Lucene indexes, based on {@link #RAM_BUFFER_QUOTA} and
@@ -327,12 +355,20 @@ public class LuceneEnv implements ONDEXLuceneFields
 		text = text.trim().toLowerCase();
 
 		// replace all non-word characters with space
-		text = patternNonWordChars.matcher(text).replaceAll(SPACE);
+		text = NON_WORD_RE.matcher(text).replaceAll(SPACE);
 
 		// replace double spaces by single ones
 		text = DOUBLESPACECHARS.matcher(text).replaceAll(SPACE);
 
 		return text;
+	}
+	
+	/**
+	 * TODO: comment me
+	 */
+	public static String rawAccession ( String accStr )
+	{
+		return '|' + accStr.toLowerCase () + '|';		
 	}
 
 	
@@ -1217,28 +1253,19 @@ public class LuceneEnv implements ONDEXLuceneFields
 		);
 
 		// get all properties iterators
-		Set<ConceptAccession> it_ca = c.getConceptAccessions ();
-		if ( it_ca.size () == 0 )
-		{
-			it_ca = null;
-		}
-		Set<ConceptName> it_cn = c.getConceptNames ();
-		if ( it_cn.size () == 0 )
-		{
-			it_cn = null;
-		}
-		Set<Attribute> it_attribute = c.getAttributes ();
-		if ( it_attribute.size () == 0 )
-		{
-			it_attribute = null;
-		}
+		Set<ConceptAccession> caccs = c.getConceptAccessions ();
+		if ( caccs.isEmpty () ) caccs = null;
+		
+		Set<ConceptName> cnames = c.getConceptNames ();
+		if ( cnames.size () == 0 ) cnames = null;
+		
+		Set<Attribute> cattrs = c.getAttributes ();
+		if ( cattrs.size () == 0 ) cattrs = null;
 
 		// leave if there are no properties
-		if ( it_ca == null && it_cn == null && it_attribute == null && annotation.length () == 0
+		if ( caccs == null && cnames == null && cattrs == null && annotation.length () == 0
 				&& description.length () == 0 )
-		{
 			return; // there idxSearcher nothing to index, no document should be created!
-		}
 
 		// createNewIndex a new document for each concept and sets fields
 		Document doc = this.getCommonFields ( c );
@@ -1255,37 +1282,39 @@ public class LuceneEnv implements ONDEXLuceneFields
 		if ( description.length () > 0 )
 			doc.add ( new Field ( DESC_FIELD, LuceneEnv.stripText ( description ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 
+				
 		// start concept accession handling
-		if ( it_ca != null )
+		if ( caccs != null )
 		{
-
 			// add all concept accessions for this concept
-			for ( ConceptAccession ca : it_ca )
+			for ( ConceptAccession ca : caccs )
 			{
 				String accession = ca.getAccession ();
 				String elementOf = ca.getElementOf ().getId ();
 				Boolean isAmbiguous = ca.isAmbiguous ();
 				listOfConceptAccDataSources.add ( elementOf );
-
+				
 				String id = CONACC_FIELD + DELIM + elementOf;
+				if ( isAmbiguous ) id += "" + DELIM + AMBIGUOUS;
 
-				if ( isAmbiguous )
-				{
-					id = id + DELIM + AMBIGUOUS;
-				}
-				// concept accessions should not be ANALYZED?
-				doc.add (
-					new Field ( id, LuceneEnv.stripText ( accession ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) 
-				);
+				FieldType ftype = FIELD_TYPE_STORED_INDEXED_VECT_STORE;
+				doc.add ( new Field ( id, stripText ( accession ), ftype ));
+
+				// This version allows for truly exact search. Without this, 
+				// '123' matches 'go 123' too. Moreover, we are retaining the original string, by
+				// converting to lower-case, since the standard analyzer don't work with stored upper case values
+				// TODO: this is a quick hack, the real solution would be gettig rid of this source-name in 
+				// the field name and having separated Lucene documents with fields conceptID, dataSourceId, accId 
+				doc.add ( new Field ( id + DELIM + RAW, rawAccession ( accession ), ftype ));
 			}
 		}
 
 		// start concept name handling
-		if ( it_cn != null )
+		if ( cnames != null )
 		{
 
 			// add all concept names for this concept
-			for ( ConceptName cn : it_cn )
+			for ( ConceptName cn : cnames )
 			{
 				String name = cn.getName ();
 				cacheSet.add ( LuceneEnv.stripText ( name ) );
@@ -1301,32 +1330,31 @@ public class LuceneEnv implements ONDEXLuceneFields
 		}
 
 		// start concept gds processing
-		if ( it_attribute != null )
+		if ( cattrs != null )
 		{
 			// mapping attribute name to gds value
-			Map<String, String> attrNames = new HashMap<> ();
+			Map<String, String> attrsRaw = new HashMap<> ();
 
 			// add all concept gds for this concept
-			for ( Attribute attribute : it_attribute )
+			for ( Attribute attribute : cattrs )
 			{
 				if ( attribute.isDoIndex () )
 				{
 					String name = attribute.getOfType ().getId ();
 					listOfConceptAttrNames.add ( name );
 					String value = attribute.getValue ().toString ();
-					attrNames.put ( name, LuceneEnv.stripText ( value ) );
+					attrsRaw.put ( name, LuceneEnv.stripText ( value ) );
 				}
 			}
 
 			// write attribute name specific Attribute fields
-			attrNames.forEach ( ( name, value ) -> 
+			attrsRaw.forEach ( ( name, value ) -> 
 				doc.add ( new Field ( CONATTRIBUTE_FIELD + DELIM + name, value, FIELD_TYPE_STORED_INDEXED_VECT_STORE ) )
 			);
 			
-			attrNames.clear ();
+			attrsRaw = null; // clear() was here, maybe to cut memory?
 		}
-
-		// store document to index
+		
 		try
 		{
 			idxWriter.addDocument ( doc );
@@ -1337,6 +1365,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 		}
 	}
 
+
+	
 	/**
 	 * Adds sets of used meta data to the index.
 	 * WARNING: this assumes the index is already {@link #openIdxWriter() opened}. 
@@ -1378,10 +1408,10 @@ public class LuceneEnv implements ONDEXLuceneFields
 		checkReadOnlyMode ();		
 		
 		// get Relation and RelationAttributes
-		Set<Attribute> it_attribute = r.getAttributes ();
+		Set<Attribute> attrs = r.getAttributes ();
 
-		// leave if there idxSearcher nothing to index
-		if ( it_attribute.size () == 0 ) return;
+		// If it hasn't attributes, everything is already in Ondex
+		if ( attrs.size () == 0 ) return;
 
 		// createNewIndex a Document for each relation and store ids
 		Document doc = this.getCommonFields ( r );
@@ -1392,28 +1422,28 @@ public class LuceneEnv implements ONDEXLuceneFields
 		doc.add ( new Field ( OFTYPE_FIELD, r.getOfType ().getId (), StringField.TYPE_STORED ) );
 
 		// mapping attribute name to gds value
-		Map<String, String> attrNames = new HashMap<> ();
+		Map<String, String> attrsRaw = new HashMap<> ();
 
 		// add all relation gds for this relation
-		for ( Attribute attribute : it_attribute )
+		for ( Attribute attribute : attrs )
 		{
 			if ( attribute.isDoIndex () )
 			{
 				String name = attribute.getOfType ().getId ();
 				listOfRelationAttrNames.add ( name );
 				String value = attribute.getValue ().toString ();
-				attrNames.put ( name, LuceneEnv.stripText ( value ) );
+				attrsRaw.put ( name, LuceneEnv.stripText ( value ) );
 			}
 		}
 
 		// write attribute name specific Attribute fields
-		for ( String name : attrNames.keySet () )
+		for ( String name : attrsRaw.keySet () )
 		{
-			String value = attrNames.get ( name );
+			String value = attrsRaw.get ( name );
 			doc.add ( new Field ( RELATTRIBUTE_FIELD + DELIM + name, value, FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 		}
 		
-		attrNames.clear ();
+		attrsRaw = null; // clear() was initially here, maybe it's useful for memory consumption
 
 		// store document to index
 		try {

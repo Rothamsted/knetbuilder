@@ -12,6 +12,9 @@ public interface ONDEXLuceneFields {
 	
 	static final char AMBIGUOUS = 'a';
 	
+	static final String RAW = "Raw";
+
+		
 	static final String SPACE = " ";
 	
 	// definition of all constants used

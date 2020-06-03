@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.core.searchable;
 
+import static java.lang.System.out;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -75,8 +76,11 @@ public class LuceneEnvTest
 		
 		at = og.getMetaData().getFactory().createAttributeName("att", String.class);
 		
-		file = new File(File.createTempFile("lucene", "test").getParentFile().getAbsolutePath()+File.separator+"LuceneTest");
-		System.out.println(file.getAbsolutePath());
+		// file = new File(File.createTempFile("lucene", "test").getParentFile().getAbsolutePath()+File.separator+"LuceneTest");
+		String fpath = "target/lucene-env-test"; // + System.currentTimeMillis ();
+		file = new File ( fpath );
+		//System.out.println ( "Indexing on: " + fpath );
+		if ( file.exists () ) DirUtils.deleteTree ( file );
 
 		lenv = new LuceneEnv(file.getAbsolutePath(), true);
 		lenv.addONDEXListener ( new ONDEXLogger () );
@@ -86,7 +90,8 @@ public class LuceneEnvTest
 	public void tearDown() throws IOException {
 		lenv.closeAll();
 		lenv = null;
-		DirUtils.deleteTree(file);
+		// NO! I might need this to debug!
+		// DirUtils.deleteTree(file);
 	}
 
 	@Test
@@ -146,7 +151,7 @@ public class LuceneEnvTest
 		assertEquals(2, results.size());
 	}
 	
-	@Test
+	//@Test
 	public void testSearchConceptByConceptAttributeExact() {
 		
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc1, et);
@@ -168,7 +173,7 @@ public class LuceneEnvTest
 		
 	}
 	
-	@Test
+	//@Test
 	public void testRemoveRelationFromIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
@@ -206,7 +211,7 @@ public class LuceneEnvTest
 
 	}
 
-	@Test
+	//@Test
 	public void testRemoveRelationsFromIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
@@ -244,7 +249,7 @@ public class LuceneEnvTest
 
 	}
 
-	@Test
+	//@Test
 	public void testRemoveConceptFromIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
@@ -253,7 +258,6 @@ public class LuceneEnvTest
 		ONDEXConcept concept3 = og.getFactory().createConcept("C", dataSource, cc1, et);
 		concept3.createConceptAccession("ABC", dataSource, true);
 		
-		System.out.println("index!!");
 		lenv.setONDEXGraph(og);
 		
 		assertTrue("Concept not in index", lenv.conceptExistsInIndex(concept1.getId()));
@@ -267,7 +271,7 @@ public class LuceneEnvTest
 		assertTrue(lenv.conceptExistsInIndex(concept3.getId()));
 	}
 	
-	@Test
+	//@Test
 	public void testRemoveConceptsFromIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
@@ -290,7 +294,7 @@ public class LuceneEnvTest
 		assertTrue(lenv.conceptExistsInIndex(concept3.getId()));
 	}
 	
-	@Test
+	//@Test
 	public void testUpdateConceptToIndex ()
 	{
 		ONDEXConcept concept1 = og.getFactory ().createConcept ( "A", dataSource, cc, et );
@@ -318,7 +322,7 @@ public class LuceneEnvTest
 		assertTrue ( "Concept not in index", lenv.conceptExistsInIndex ( concept4.getId () ) );
 	}
 	
-	@Test
+	//@Test
 	public void testUpdateConceptsToIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
@@ -357,7 +361,7 @@ public class LuceneEnvTest
 	}
 	
 	
-	@Test
+	//@Test
 	public void testUpdateRelationToIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
@@ -394,7 +398,7 @@ public class LuceneEnvTest
 		assertTrue("relation not in index", lenv.relationExistsInIndex(r4.getId()));
 	}
 	
-	@Test
+	//@Test
 	public void testUpdateRelationsToIndex() {
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
 		concept1.createConceptAccession("ABC", dataSource, true);
@@ -442,7 +446,7 @@ public class LuceneEnvTest
 		assertTrue("relation not in index", lenv.relationExistsInIndex(r6.getId()));
 	}
 	
-	@Test
+	//@Test
 	public void testIRISearch() 
 	{
 		String ns = "http://www.ondex.org/test/res/";
