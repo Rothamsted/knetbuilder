@@ -167,7 +167,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 					.getUniqueValue(WITHIN_DATASOURCE_ARG);
 		}
 
-		relations = new HashSet<String>();
+		relations = new HashSet<>();
 
 		initArgs();
 
@@ -205,19 +205,19 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		{
 			for (ONDEXConcept concept : hitConcepts)
 			{
-				// get actual concept, data source and corresponding concept class
-				current++;
-	
-				if ((current % 50000d) == 0) {
-					fireEventOccurred(new GeneralOutputEvent("Mapping complete on "
-							+ decimalFormat.format(((double) current)
-									/ ((double) total) * 100d) + "% ("
-							+ numberFormat.format(current) + " Concepts)",
-							getCurrentMethodName()));
+			// get actual concept, data source and corresponding concept class
+			current++;
+
+			if ((current % 50000d) == 0) {
+				fireEventOccurred(new GeneralOutputEvent("Mapping complete on "
+						+ decimalFormat.format(((double) current)
+								/ ((double) total) * 100d) + "% ("
+						+ numberFormat.format(current) + " Concepts)",
+						getCurrentMethodName()));
 					// TODO: remove? In general, this is bad practice, we aren't smarter than the GC.
 					// if (current % 200000 == 0) System.runFinalization();
 				}
-	
+
 				for (ConceptAccession conceptAcc : concept.getConceptAccessions()) {
 	
 					if (exclusiveDataSources != null
@@ -231,33 +231,23 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 	
 						Set<DataSource> dataSourceToMapTo = getDataSourceToMapTo(
 								graph, conceptAcc.getElementOf());
-						for (ConceptClass cc : getCCtoMapTo(graph,
-								concept.getOfType())) {
+						for (ConceptClass cc : getCCtoMapTo(graph, concept.getOfType()))
+						{
 							// possible DataSource for concept accessions
-							for (DataSource dataSource : dataSourceToMapTo) {
-								Query query = null;
-	
-								if (mapWithInDataSource) {
-									query = LuceneQueryBuilder
-											.searchConceptByConceptAccessionExact(
-													dataSource, conceptAcc
-															.getAccession()
-															.toLowerCase(), null,
-													cc, ignoreAmbiguity);
-								} else {
-									query = LuceneQueryBuilder
-											.searchConceptByConceptAccessionExact(
-													dataSource, conceptAcc
-															.getAccession()
-															.toLowerCase(), concept
-															.getElementOf(), cc,
-													ignoreAmbiguity);
-								}
-	
-								Set<ONDEXConcept> itResults = lenv.searchInConcepts(query);
+							for (DataSource dataSource : dataSourceToMapTo)
+							{
+								Query query = LuceneQueryBuilder.searchConceptByConceptAccessionExact (
+									dataSource,
+									conceptAcc.getAccession(),
+									mapWithInDataSource ? null : concept.getElementOf(),
+									cc, 
+									ignoreAmbiguity
+								);
+								
+								Set<ONDEXConcept> hitResults = lenv.searchInConcepts(query);
 	
 								// look for the whole concept acc
-								createRelationsOnResults(itResults, concept);
+								createRelationsOnResults(hitResults, concept);
 							}
 						}
 					} // if ignoreAmbiguity
@@ -265,9 +255,8 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 			} // for hitConcepts
 		} // try over lenv
 		finally {
-			// TODO: Probably to remove if ( lenv != null ) lenv.closeAll ();
+		// TODO: Probably to remove if ( lenv != null ) lenv.closeAll ();
 		}
-
 
 		fireEventOccurred(new GeneralOutputEvent("All took "
 				+ (System.currentTimeMillis() - timeStart) + " created "
@@ -341,14 +330,14 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		return itConcepts;
 	}
 
-	public void createRelationsOnResults(Set<ONDEXConcept> itResults,
+	public void createRelationsOnResults(Set<ONDEXConcept> hitResults,
 			ONDEXConcept concept) throws InvalidPluginArgumentException {
 
 		DataSource conceptDataSource = concept.getElementOf();
 		ConceptClass conceptOfType = concept.getOfType();
 
 		// search for this concept accession
-		for (ONDEXConcept hitConcept : itResults) {
+		for (ONDEXConcept hitConcept : hitResults) {
 
 			// get hit concept and relevant attributes from results
 			if (hitConcept instanceof LuceneConcept) {

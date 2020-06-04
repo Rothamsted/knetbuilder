@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.rdf.api.Graph;
@@ -36,9 +38,10 @@ public class RDFFileExporter
 	
 	public void export ( ONDEXGraph g, final OutputStream out, final String langOrFormat )
 	{
+		RDFExporter xport = null;
 		try
 		{
-			RDFExporter xport = new RDFExporter (); 			
+			xport = new RDFExporter (); 			
 			final Pair<RDFFormat, Lang> jlang = JenaIoUtils.getLangOrFormat ( langOrFormat );
 						
 			// There's no point in true parallelism here, because the output stream below is not written
@@ -86,11 +89,17 @@ public class RDFFileExporter
 		catch ( Exception ex ) {
 			throw new RuntimeException ( "Internal error while closing the RDFExporter: " + ex.getMessage (), ex );
 		}
+		finally {
+			Optional.ofNullable ( xport )
+				.map ( RDFExporter::getExecutor )
+				.ifPresent ( ExecutorService::shutdownNow );
+		}
 	}
 	
 	public void export ( ONDEXGraph g, File file, String langOrFormat )
 	{
 		try ( OutputStream out = new BufferedOutputStream ( new FileOutputStream ( file ) ) ) {
+			log.info ( "Exporting to '{}'", file.getAbsolutePath () );
 			export ( g, out, langOrFormat );
 		}
 		catch ( FileNotFoundException ex ) {

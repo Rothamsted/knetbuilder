@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -139,9 +137,6 @@ public class Export extends ONDEXExport {
 	/**
 	 * Builds a Document according to specifications in the ExportArguments
 	 * 
-	 * @throws IOException
-	 * @throws XMLStreamException
-	 *             if xml writing fails
 	 */
 	private void setOptionalArguments() throws IOException, InvalidPluginArgumentException {
 

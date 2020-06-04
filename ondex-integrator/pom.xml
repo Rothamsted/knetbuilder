@@ -13,7 +13,7 @@
    <groupId>net.sourceforge.ondex.apps</groupId>
    <artifactId>ondex-integrator</artifactId>
 
-   <name>ONDEX + Integrator/Worflow Tool</name>
+   <name>ondex-integrator, Visual Workflow</name>
 
    <dependencies>
 

@@ -10,11 +10,11 @@
    </parent>
    <groupId>net.sourceforge.ondex.modules</groupId>
    <artifactId>json</artifactId>
-   <packaging>jar</packaging>
-   <name>jsonIO</name>
-   <properties><!-- TODO: move to parent project -->
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-   </properties>
+   <name>json exporter</name>
+   <description>An ONDEX Exporter plugin that exports Ondex Graph data to a JSON file containing JSON objects 
+        which contain data related to concepts (nodes), relations (edges) and other Item Info. (metadata) 
+        including Data Sources, Types, Concept Classes, Relation Types, Evidences, Units and more.</description>
+
    <dependencies>
       <dependency>
          <groupId>junit</groupId>
@@ -101,10 +101,4 @@
          <type>jar</type>
       </dependency>
    </dependencies>
-   <description>An ONDEX Exporter plugin that exports Ondex Graph data to a JSON file containing JSON objects 
-        which contain data related to concepts (nodes), relations (edges) and other Item Info. (metadata) 
-        including Data Sources, Types, Concept Classes, Relation Types, Evidences, Units and more.</description>
-   <build>
-      <plugins/>
-   </build>
 </project>
