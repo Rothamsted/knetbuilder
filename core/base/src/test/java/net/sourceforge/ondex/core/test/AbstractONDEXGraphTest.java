@@ -1,5 +1,10 @@
 package net.sourceforge.ondex.core.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,7 +13,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -33,8 +37,8 @@ import org.junit.Test;
  * 
  * @author taubertj
  */
-public abstract class AbstractONDEXGraphTest extends TestCase {
-
+public abstract class AbstractONDEXGraphTest 
+{
 	public class FailOnErrorLogger implements ONDEXListener {
 
 		@Override
@@ -115,11 +119,6 @@ public abstract class AbstractONDEXGraphTest extends TestCase {
 		}
 	}
 
-	/**
-	 * Make sure that ONDEXGraph instance is teared down well.
-	 */
-	protected abstract void finalize() throws IOException;
-
 	private ONDEXConcept getFromConcept(int i) {
 		ONDEXConcept from = og.getFactory().createConcept("from" + i,
 				dataSource, cc, et);
@@ -173,7 +172,6 @@ public abstract class AbstractONDEXGraphTest extends TestCase {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		finalize();
 		og = null;
 	}
 

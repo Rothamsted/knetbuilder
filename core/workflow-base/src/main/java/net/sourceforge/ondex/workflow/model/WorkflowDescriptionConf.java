@@ -67,34 +67,8 @@ public class WorkflowDescriptionConf
      * @return values for arguments
      * @throws Exception 
      */
-    public Object[] parseArgumentsForChecking(WorkflowTask pc) throws Exception{
-    	/**
-     	    for (ArgDefValuePair at : t.getArgs()) {
-            ArgumentDescription ab = at.getArg();
-            TaskDescriptionConf.ArgumentParser argParser = ams.get(ab.getInputId());
-            LOG.debug("Processing argument #" + ab.getInputId() + ": " + at.getArg().getName());
-            if(ab.isInputObject()){
-                if (argParser == null) {
-                    try {
-                        argParser = tdc.argParserForArgumentDescription(ab);
-                        ams.put(ab.getInputId(), argParser);
-                    } catch (Exception e) {
-                        LOG.warn("Problem initialising parser. Skipping", e);
-                    }
-                    if(DEBUG){
-                        debugInputMap.put(ab.getInputId(), at);
-                    }
-                }
-                argParser.addArgument(at);
-            }
-            if (ab.isOutputObject()) {
-                outputs.put(ab.getOutputId(), at);
-                if(DEBUG){
-                    debugOutputMap.put(ab.getOutputId(), at);
-                }
-            }
-        }
-    	*/
+    public Object[] parseArgumentsForChecking(WorkflowTask pc) throws Exception
+    {
         Map<Integer, ArgumentParser> ams = new HashMap<Integer, ArgumentParser>();
         for (BoundArgumentValue at : pc.getArgs()) {
             ArgumentDescription ab = at.getArg();

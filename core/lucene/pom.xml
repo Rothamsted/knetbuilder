@@ -12,7 +12,6 @@
 
    <groupId>net.sourceforge.ondex.core</groupId>
    <artifactId>lucene</artifactId>
-   <packaging>jar</packaging>
 
    <name>lucene</name>
 
@@ -26,6 +25,12 @@
 				<groupId>org.apache.lucene</groupId>
 				<artifactId>lucene-queryparser</artifactId>
 			</dependency>
+
+      <dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-analyzers-common</artifactId>
+			</dependency>
+			
 
       <dependency>
          <groupId>org.apache.commons</groupId>

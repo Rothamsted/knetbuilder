@@ -16,6 +16,9 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
+import static org.apache.lucene.search.BooleanClause.Occur.MUST;
+import static org.apache.lucene.search.BooleanClause.Occur.MUST_NOT;
+import static org.apache.lucene.search.BooleanClause.Occur.SHOULD;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.PhraseQuery;
@@ -452,33 +455,32 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	 * 
 	 * @param term
 	 *            Term to search in concept accession
-	 * @param ambiguous
+	 * @param ignoreAmbiguity
 	 *            Include Ambiguous accessions in results
 	 * @param listOfConceptAccDataSources
 	 *            cv fields
 	 * @return Query a query object to be submitted to the LuceneEnv
 	 */
-	public static Query searchConceptByConceptAccessionExact ( String term, boolean ambiguous,
+	public static Query searchConceptByConceptAccessionExact ( String term, boolean ignoreAmbiguity,
 			Set<String> listOfConceptAccDataSources )
 	{
+		QueryParser qparser = new QueryParser ( CONACC_FIELD, LuceneEnv.DEFAULTANALYZER );
 		BooleanQuery.Builder boolQb = new BooleanQuery.Builder ();
 		boolQb.setMinimumNumberShouldMatch ( 1 );
 
-		Iterator<String> it_cvs = listOfConceptAccDataSources.iterator ();
-		while ( it_cvs.hasNext () )
+		for ( String cv: listOfConceptAccDataSources )
 		{
-			String cv = it_cvs.next ();
+			String accFldPrefx = CONACC_FIELD + DELIM + cv + DELIM;
+			
+			// see rawAccession() for details about why we search these fields 
+			String accFld = accFldPrefx + RAW;
+			
+			term = LuceneEnv.rawAccession ( term );
+			boolQb.add ( qparser.createPhraseQuery ( accFld, term ), BooleanClause.Occur.SHOULD );
 
-			Term t = new Term ( CONACC_FIELD + DELIM + cv, LuceneEnv.stripText ( term ) );
-			TermQuery termQuery = new TermQuery ( t );
-
-			boolQb.add ( termQuery, BooleanClause.Occur.SHOULD );
-
-			if ( ambiguous )
-			{
-				t = new Term ( CONACC_FIELD + DELIM + cv + DELIM + AMBIGUOUS, LuceneEnv.stripText ( term ) );
-				termQuery = new TermQuery ( t );
-				boolQb.add ( termQuery, BooleanClause.Occur.SHOULD );
+			if ( !ignoreAmbiguity ) {
+				String accAmbiguousFld = accFldPrefx + AMBIGUOUS + DELIM + RAW;
+				boolQb.add ( qparser.createPhraseQuery ( accAmbiguousFld, term ), BooleanClause.Occur.SHOULD );
 			}
 		}
 		return boolQb.build ();
@@ -572,51 +574,46 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	 *            not DataSource of AbstractConcept
 	 * @param cc
 	 *            ConceptClass of AbstractConcept
-	 * @param ambiguous
+	 * @param ignoreAmbiguity
 	 *            Include Ambiguous accessions in results
 	 * @return Query a query object to be submitted to the LuceneEnv
 	 */
 	public static Query searchConceptByConceptAccessionExact ( 
-		DataSource dataSource, String[] terms, DataSource notDataSource, ConceptClass cc, boolean ambiguous 
+		DataSource dataSource, String[] terms, DataSource notDataSource, ConceptClass cc, boolean ignoreAmbiguity 
 	)
 	{
+		QueryParser qparser = new QueryParser ( CONID_FIELD, LuceneEnv.DEFAULTANALYZER );
 
-		BooleanQuery.Builder boolQb = new BooleanQuery.Builder ()
-		.setDisableCoord ( true )
-		.setMinimumNumberShouldMatch ( 1 );
-
+		BooleanQuery.Builder boolQb = new BooleanQuery.Builder ();
+		// .setDisableCoord ( true )
+		// .setMinimumNumberShouldMatch ( 1 );
+		
 		if ( notDataSource != null )
-		{
-			String notcvID = notDataSource.getId ();
 			// Data source exclusion
-			boolQb.add ( new TermQuery ( new Term ( DataSource_FIELD, notcvID ) ), BooleanClause.Occur.MUST_NOT ); 
-		}
+			boolQb.add ( qparser.createPhraseQuery ( DataSource_FIELD, notDataSource.getId () ), MUST_NOT ); 
 
-		if ( cc != null )
-		{
-			String ccID = cc.getId ();
-			boolQb.add ( new TermQuery ( new Term ( CC_FIELD, ccID ) ), BooleanClause.Occur.MUST ); // query for CC
-		}
+		if ( cc != null ) boolQb.add ( qparser.createPhraseQuery ( CC_FIELD, cc.getId () ), MUST ); 
 
+		BooleanQuery.Builder termsOrQb = new BooleanQuery.Builder ();
+		String accFldPrefx = CONACC_FIELD + DELIM + dataSource.getId () + DELIM;
+		// see rawAccession() for details about why we search these fields 
+		String accFld = accFldPrefx + RAW;
+		String accAmbiguousFld = accFldPrefx + AMBIGUOUS + DELIM + RAW;
+		
 		for ( String term : terms )
 		{
-			TermQuery termQuery = new TermQuery (
-				new Term ( CONACC_FIELD + DELIM + dataSource.getId (), LuceneEnv.stripText ( term ) ) 
-			);
-			boolQb.add ( termQuery, BooleanClause.Occur.SHOULD );
-
-			if ( ambiguous )
-			{
-				termQuery = new TermQuery (
-					new Term ( CONACC_FIELD + DELIM + dataSource.getId () + DELIM + AMBIGUOUS, LuceneEnv.stripText ( term ) ) 
-				);
-
-				boolQb.add ( termQuery, BooleanClause.Occur.SHOULD );
-			}
+			term = LuceneEnv.rawAccession ( term );
+			termsOrQb.add ( qparser.createPhraseQuery ( accFld, term ), SHOULD );
+			
+			if ( ignoreAmbiguity )
+				termsOrQb.add ( qparser.createPhraseQuery ( accAmbiguousFld, term ), SHOULD );
 		}
-
+		boolQb.add ( termsOrQb.build (), MUST );
+		
 		return boolQb.build ();
 	}
+	
+		
 
 	/**
 	 * Builds a {@link BooleanQuery} (with {@link BooleanClause.Occur#SHOULD}) where each clause
