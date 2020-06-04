@@ -40,13 +40,13 @@
    <url>http://www.ondex.org/</url>
 
    <ciManagement>
-      <system>hudson</system>
-      <url>http://ondex.rothamsted.ac.uk/hudson</url>
+      <system>jenkins</system>
+      <url>http://ondex.rothamsted.ac.uk/build</url>
    </ciManagement>
 
    <organization>
       <name>ONDEX</name>
-      <url>http://www.ondex.org</url>
+      <url>https://github.com/Rothamsted/ondex-knet-builder</url>
    </organization>
 
    <scm>
@@ -120,7 +120,7 @@
                   <target>${java.version}</target>
                   <showWarnings>true</showWarnings>
                   <showDeprecation>true</showDeprecation>
-                  <maxmem>1024m</maxmem>
+                  <maxmem>4096m</maxmem>
                   <encoding>UTF-8</encoding>
                   <fork>true</fork>
                </configuration>
@@ -139,7 +139,7 @@
                   </execution>
                </executions>
             </plugin>
-            <!-- Need for newer Eclipse versions with m2e integrated -->
+            <!-- Needed for newer Eclipse versions with m2e integrated -->
             <plugin>
                <groupId>org.eclipse.m2e</groupId>
                <artifactId>lifecycle-mapping</artifactId>
@@ -559,6 +559,12 @@
 			  <groupId>org.apache.lucene</groupId>
 			 <artifactId>lucene-queryparser</artifactId>
 			 <version>${lucene.version}</version>
+			</dependency>
+				 
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-analyzers-common</artifactId>
+				<version>${lucene.version}</version>
 			</dependency>
 				 
 			<dependency>
