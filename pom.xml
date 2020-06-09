@@ -7,7 +7,7 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>1.0-SNAPSHOT</version>
+	  <version>1.0</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
@@ -292,8 +292,8 @@
 		<jexcelapi.jxl.version>2.6.10</jexcelapi.jxl.version>
 		<junit.version>4.7</junit.version>
 		<mysql.connector.java.version>5.1.6</mysql.connector.java.version>
-		<jutils.version>9.0.1-SNAPSHOT</jutils.version>
-		<rdfutils.version>2.1.1-SNAPSHOT</rdfutils.version>		
+		<jutils.version>9.1</jutils.version>
+		<rdfutils.version>2.1.1</rdfutils.version>		
 		<lucene.version>6.6.0</lucene.version>
 		<spring.version>4.3.6.RELEASE</spring.version>
 		
@@ -301,7 +301,7 @@
 		<neo4j.server.version>3.5.12</neo4j.server.version>
 		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
 		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
-		<rdf2neo.version>0.0.1-SNAPSHOT</rdf2neo.version>  
+		<rdf2neo.version>1.0.1</rdf2neo.version>  
 
    </properties>
 
