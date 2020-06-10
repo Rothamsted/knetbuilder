@@ -7,7 +7,7 @@
    <parent>
       <artifactId>modules</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>3.0.1-SNAPSHOT</version>
+      <version>3.0</version>
    </parent>
    <groupId>net.sourceforge.ondex.modules</groupId>
    <artifactId>cyc-pathwaydbs</artifactId>
