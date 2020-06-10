@@ -4,12 +4,24 @@
 * Next dev release.
  
 ## 3.0
+* New RDF->OXL converter added.
+* More types from Knetminer added to the Ondex metadata file
+* DOT rendering added to the semantic motif state machine package. We use it in the [Cypher traverser component][3.0-10], 
+to generate [Knetminer views of searched motifs][3.0-20].
 * Various bugfixes in the components:
   * Neo4j-export
-* Internal changes
+  * OWL-parser
+  * Lucene adapter (in particular, exact searches of accessions fixed, impact on component like the concept mapper)
+* Internal changes:
   * Maven artifactory migrated to [our new Nexus](https://knetminer.org/artifactory/).
-  * Maven POM linked to 
-  * Cleaning and improvement of both code and Maven files
+  * Maven POM linked to [our common POM][3.0-30].
+  * Cleaning and improvement of both code and Maven files.
+  * In-memory URI-based index component (used for the Cypher Traverser).
+  * Abstracting the semantic motif traverser, and [Cypher-based traverser created as an extension][3.0-10].
+
+[3.0-10]: https://github.com/Rothamsted/knetminer-backend
+[3.0-20]: https://github.com/Rothamsted/knetminer/tree/master/species
+[3.0-30]: https://github.com/Rothamsted/knetminer-common
 
 ## 2.1
 * Improvements to OWL/Ondex mappings ([example](https://github.com/Rothamsted/ondex-knet-builder/commit/eff609d09550cc96f2ed877a91b45764aa6528e6)). 
