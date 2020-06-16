@@ -6,9 +6,16 @@
   	* POMs cleaning/refactoring
   	* Some code cleaning/refactoring
 
-## 2.1.1-SNAPSHOT
-  * Next dev release.
-
+## 3.0.1-SNAPSHOT
+* Next dev release.
+ 
+## 3.0
+* Various bugfixes in the components:
+  * Neo4j-export
+* Internal changes
+  * Maven artifactory migrated to [our new Nexus](https://knetminer.org/artifactory/).
+  * Maven POM linked to 
+  * Cleaning and improvement of both code and Maven files
 
 ## 2.1
   * Improvements to OWL/Ondex mappings ([example](https://github.com/Rothamsted/ondex-knet-builder/commit/eff609d09550cc96f2ed877a91b45764aa6528e6)). 

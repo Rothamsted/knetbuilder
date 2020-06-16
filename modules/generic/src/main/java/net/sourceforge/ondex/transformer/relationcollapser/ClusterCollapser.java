@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -32,7 +33,7 @@ import uk.ac.ebi.utils.ids.IdUtils;
 public class ClusterCollapser {
 
 	/**
-	 * See {@link #toString(Set)}
+	 * See {@link #joinPIDs(Set)}
 	 */
 	public static final int MAX_PID_LEN = 120;
 			
@@ -302,8 +303,8 @@ public class ClusterCollapser {
 
 		// System.out.println("Create new Concept ");
 		ONDEXConcept newConcept = graph.createConcept(
-				toString(sortedPIDsConcat), toString(annotations),
-				toString(descriptions), newDataSource, newConceptClass,
+				joinPIDs(sortedPIDsConcat), joinStrings(annotations),
+				joinStrings(descriptions), newDataSource, newConceptClass,
 				conceptEvidences);
 
 		// System.out.println("Adding context ");
@@ -634,28 +635,37 @@ public class ClusterCollapser {
 	}
 
 	/**
+	 * Simply joins a set of strings using a semicolon character.
+	 * 
+	 * Brandizi (2020): this was initially written in reinvented-wheel style, I have replaced it with
+	 * standard JDK functions.
+	 * 
+	 */
+	private String joinStrings(Set<String> values) 
+	{
+		return values.stream ().collect ( Collectors.joining ( ";" ) );
+	}
+	
+	
+	/**
 	 * Returns the new PID to assign to a new concept made of collapsed PIDs.
 	 * 
-	 * This is usually <PID1;PID2;...> <b>BUT</b>, if the final length of PIDs chained 
-	 * this way is more than {@link #MAX_PID_LEN}, the result is shortened and a tail made of 
-	 * {@link IdUtils#hashUriSignature(String) a hash} of the original value.
+	 * This is usually based on {@link #joinStrings(Set)}, ie, the result is like <PID1;PID2;...>.
+	 * <b>However</b>, if the final length of PIDs chained this way is more than {@link #MAX_PID_LEN}, the result is 
+	 * cut to accommodate that limit and a tail made of {@link IdUtils#hashUriSignature(String) a hash} of the original 
+	 * value is added.
 	 * 
-	 * We need such a shortening, since too big PIDs create problems (eg, with Lucene, when
+	 * We need such transformation, since too big PIDs create problems (eg, with Lucene, or when
 	 * creating RDF URIs). This feature was added by M. Brandizi in 2020.
-	 *
+	 * 
 	 */
-	private String toString(Set<String> pids) 
+	private String joinPIDs ( Set<String> pids )
 	{
-		StringBuffer sb = new StringBuffer();
-		for (String pid : pids) 
-		{
-			if (sb.length() > 0) sb.append(';');
-			sb.append(pid);
-		}
-		if ( sb.length () == 0 || sb.length () <= MAX_PID_LEN ) return sb.toString ();
+		String result = joinStrings ( pids );
+		if ( result.length () <= MAX_PID_LEN ) return result;
 		
-		String hashTail = "_" + IdUtils.hashUriSignature ( sb.toString () );
-		return sb.substring ( 0, MAX_PID_LEN - hashTail.length () ) + hashTail;
+		String hashTail = "_" + IdUtils.hashUriSignature ( result );
+		return result.substring ( 0, MAX_PID_LEN - hashTail.length () ) + hashTail;
 	}
 
 	/**
