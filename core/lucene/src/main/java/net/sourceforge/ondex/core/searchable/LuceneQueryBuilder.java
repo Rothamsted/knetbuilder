@@ -438,6 +438,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		while ( it_cvs.hasNext () )
 		{
 			String cv = it_cvs.next ();
+			// TODO: too slow, requires qp to be defined only once
 			QueryParser qp = new QueryParser ( CONACC_FIELD + DELIM + cv, analyzer );
 			boolQb.add ( qp.parse ( query.toLowerCase () ), BooleanClause.Occur.SHOULD );
 
