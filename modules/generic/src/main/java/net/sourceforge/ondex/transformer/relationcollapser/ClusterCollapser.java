@@ -5,8 +5,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -640,10 +642,16 @@ public class ClusterCollapser {
 	 * Brandizi (2020): this was initially written in reinvented-wheel style, I have replaced it with
 	 * standard JDK functions.
 	 * 
+	 * Beware that null or empty values are ignored.
+	 * 
 	 */
-	private String joinStrings(Set<String> values) 
+	private String joinStrings( Set<String> values ) 
 	{
-		return values.stream ().collect ( Collectors.joining ( ";" ) );
+		return values
+			.stream ()
+			.filter ( v -> v != null )
+			.filter ( v -> !v.isEmpty () )
+			.collect ( Collectors.joining ( ";" ) );
 	}
 	
 	
