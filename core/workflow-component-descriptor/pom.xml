@@ -7,7 +7,7 @@
    <parent>
       <artifactId>core</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>3.0</version>
+      <version>3.0.1-SNAPSHOT</version>
    </parent>
    <groupId>net.sourceforge.ondex.core</groupId>
    <artifactId>workflow-component-descriptor</artifactId>
