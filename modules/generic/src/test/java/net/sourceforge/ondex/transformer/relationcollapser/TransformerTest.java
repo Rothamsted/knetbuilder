@@ -25,21 +25,21 @@ import net.sourceforge.ondex.logging.ONDEXLogger;
 
 public class TransformerTest extends TestCase {
 
-    ONDEXLogger coreLogger = new ONDEXLogger();
+    private ONDEXLogger coreLogger = new ONDEXLogger();
 
-    ONDEXLogger pluginLogger = new ONDEXLogger();
+    private ONDEXLogger pluginLogger = new ONDEXLogger();
 
-    ONDEXGraph og = null;
+    private ONDEXGraph og = null;
 
-    RelationType rt = null;
+    private RelationType rt = null;
 
-    DataSource dataSource1 = null;
+    private DataSource dataSource1 = null;
 
-    DataSource dataSource2 = null;
+    private DataSource dataSource2 = null;
 
-    ConceptClass cc1 = null;
+    private ConceptClass cc1 = null;
 
-    ConceptClass cc2 = null;
+    private ConceptClass cc2 = null;
 
     @Test
     public void testStart() throws Throwable {
@@ -224,11 +224,5 @@ public class TransformerTest extends TestCase {
         oxlParser.setONDEXGraph(og);
         oxlParser.start();
     }
-
-    @Override
-    protected void tearDown() throws Exception {
-        og = null;
-    }
-
 
 }
