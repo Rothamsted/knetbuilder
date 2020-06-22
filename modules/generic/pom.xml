@@ -12,7 +12,7 @@
    <groupId>net.sourceforge.ondex.modules</groupId>
    <artifactId>generic</artifactId>
 
-   <name>generic, plugins/components</name>
+   <name>generic - basic plug-ins and components</name>
 
    <dependencies><!-- ONDEX deps -->
       <dependency>
