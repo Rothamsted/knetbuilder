@@ -6,5 +6,5 @@ echo -e "\n\n\tWARNING: run this command only after you have committed changes i
 
 cd "`dirname $0`"/..
 
-git submodule foreach --recursive git push --force --tags origin HEAD
-git push --force --tags origin HEAD
+git submodule foreach --recursive git push --tags origin HEAD
+git push --tags origin HEAD
