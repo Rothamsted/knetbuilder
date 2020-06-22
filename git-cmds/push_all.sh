@@ -4,14 +4,7 @@ cd "$(dirname $0)/.."
 #
 echo -e "\n\n\tWARNING: run this command only after you have committed changes in ondex-full.\n"
 
-for repo in ondex-base ondex-desktop ondex-opt ondex-doc ondex-knet-builder ondex-old-components
-do
-  echo -e "\n\n$repo"
-  cd "$repo"
-  git push --all
-  git push --tag
-  cd ..
-done
+cd "`dirname $0`"/..
 
-git push --all # --recurse-submodules=on-demand
-git push --tag # --recurse-submodules=on-demand
+git submodule foreach --recursive git push --force --tags origin HEAD
+git push --force --tags origin HEAD
