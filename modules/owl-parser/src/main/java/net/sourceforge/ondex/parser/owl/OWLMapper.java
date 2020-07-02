@@ -131,7 +131,7 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 					? Paths.get ( IOUtils.uri ( springXmlPath ) ).toAbsolutePath ().toString ()
 					: new File ( springXmlPath ).getCanonicalPath ();
 					
-				springXmlPath = "file://" + springXmlPath;
+				springXmlPath = "file:///" + springXmlPath;
 			}
 		}
 		catch ( IOException ex ) 

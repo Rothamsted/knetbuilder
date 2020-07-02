@@ -15,7 +15,8 @@
 
    <name>launcher</name>
    <description>Tool for the creation and execution of Ondex workflows</description>
-
+	 <!-- TODO: Remove? We now use ovtk2, installer, ondex-mini -->
+	
    <build>
       <plugins>
          <plugin>

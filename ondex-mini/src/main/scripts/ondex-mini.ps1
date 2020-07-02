@@ -13,6 +13,7 @@ while ( $args.count -gt 0 )
 }
 
 $jar_path = Get-ChildItem $MYDIR/lib -Filter 'ondex-mini-*.jar'
+$jar_path = "lib\$jar_path"
 
 if ( "$JAVA_TOOL_OPTIONS" -eq "" ) {
   # So, let's set default JVM options here, unless you already have them from the outside
@@ -34,4 +35,5 @@ if ( "$JAVA_TOOL_OPTIONS" -eq "" ) {
 #$env:JAVA_TOOL_OPTIONS = "env:$JAVA_TOOL_OPTIONS -Dcom.sun.management.jmxremote.local.only=false"
 
 $jcmd = "-Dondex.dir=$MYDIR/data -jar $jar_path -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS"
-Start-Process -FilePath java -ArgumentList $jcmd
+#echo $jcmd
+Start-Process -FilePath java -NoNewWindow -Wait -ArgumentList $jcmd

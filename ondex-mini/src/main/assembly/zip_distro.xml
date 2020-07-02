@@ -102,6 +102,21 @@
 			<directoryMode>0755</directoryMode>			
 			<filtered>true</filtered>			
 		</fileSet>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<outputDirectory></outputDirectory>
+			<excludes>
+				<!-- Cause they're already copied above, with the -x permission -->
+				<exclude>*.sh</exclude>
+			</excludes>
+			<includes>
+        <include>**/*</include>
+        <include>**/*</include>
+			</includes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
+			<filtered>true</filtered>			
+		</fileSet>
 
 		<!-- OWL Parser Stuff -->
 		<fileSet>

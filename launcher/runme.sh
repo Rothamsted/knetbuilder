@@ -1,4 +1,6 @@
 #!/bin/bash
+# TODO: remove, we use the scripts in ovtk2 instead
+#
 DATA=data/
 echo "Running OVTK on top of '$DATA'"
 
