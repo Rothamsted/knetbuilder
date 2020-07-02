@@ -37,5 +37,5 @@ if ( "$JAVA_TOOL_OPTIONS" -eq "" ) {
 #$env:JAVA_TOOL_OPTIONS = "env:$JAVA_TOOL_OPTIONS -Dcom.sun.management.jmxremote.local.only=false"
 
 $jcmd = "-Dondex.dir=$DATA -Dovtk.dir=$OVTK_DATA -Dplugin.scan.lib=false --class-path $CLASSPATH net.sourceforge.ondex.ovtk2.Main"
-
+#echo $jcmd
 Start-Process -FilePath java -ArgumentList $jcmd
