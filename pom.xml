@@ -24,19 +24,15 @@
    </modules>
    
 	 <repositories>
-      <repository>
-         <id>ondex-releases</id>
-         <name>Internal Releases</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
-         <releases><enabled>true</enabled></releases>
-         <snapshots><enabled>false</enabled></snapshots>
-      </repository>
-      <repository>
-         <id>ondex-snapshots</id>
-         <name>Internal Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
-         <releases><enabled>false</enabled></releases>
-         <snapshots><enabled>true</enabled></snapshots>
-      </repository>
+	  <!-- 
+	  	This needs to be mentioned here too, since sometimes you want to build
+	  	from this subtree only. 
+	  -->
+		<repository>
+			<id>knetminer-repo</id>
+			<name>Rothamsted Maven Repo</name>
+			<url>https://knetminer.org/artifactory/repository/maven-public/</url>
+		  <snapshots><enabled>true</enabled></snapshots>
+		</repository>
 	 </repositories>   
 </project>
