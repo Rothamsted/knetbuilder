@@ -1,0 +1,26 @@
+#CONCEPT_CLASS
+Dosage Growth Defect	GIDGD
+Dosage Lethality	GIDL
+Dosage Rescue	GIDR
+Phenotypic Enhancement	GIPE
+Phenotypic Suppression	GIPS
+Synthetic Growth Defect	GISGD
+Synthetic Haploinsufficiency	GISHI
+Synthetic Lethality	GISL
+Synthetic Rescue	GISR
+Affinity Capture-Luminescence	PhysInt
+Affinity Capture-MS	PhysInt
+Affinity Capture-RNA	PhysInt
+Affinity Capture-Western	PhysInt
+Biochemical Activity	PhysInt
+Co-crystal Structure	PhysInt
+Co-fractionation	PhysInt
+Co-localization	PhysInt
+Co-purification	PhysInt
+Far Western	PhysInt
+FRET	PhysInt
+PCA	PhysInt
+Protein-peptide	PhysInt
+Protein-RNA	PhysInt
+Reconstituted Complex	PhysInt
+Two-hybrid	PhysInt
