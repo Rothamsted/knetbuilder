@@ -1,0 +1,24 @@
+language: java
+
+jdk:
+  - openjdk11
+
+services:
+  - xvfb # To manage Headless Java
+
+before_script:
+  - sudo apt-get update
+# We need this due to: https://github.com/lukaszlenart/launch4j-maven-plugin/issues/29
+  - sudo apt-get install libc6:i386 libstdc++6:i386
+# Headless Java
+  - "export DISPLAY=:99.0"
+  - wget --no-verbose https://raw.githubusercontent.com/Rothamsted/knetminer-common/master/travis/maven-settings.xml
+    
+install: echo "Skipping default installation step"
+
+script:
+  ./travis.sh
+
+cache:
+  directories:
+    - $HOME/.m2

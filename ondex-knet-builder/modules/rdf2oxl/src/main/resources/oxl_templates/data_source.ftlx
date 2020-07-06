@@ -1,7 +1,0 @@
-<#include "graph_header.ftlx">
-<#include "utils.ftlx">
-<#list js as data_source>
-			<cv>
-				<@render_metadata data_source />
-			</cv>
-</#list>

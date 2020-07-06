@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+   
+	<parent>
+	  <groupId>uk.ac.rothamsted.knetminer</groupId>
+	  <artifactId>knetminer-common</artifactId>
+	  <version>1.0.1-SNAPSHOT</version>
+	</parent>  
+
+   <groupId>net.sourceforge.ondex</groupId>
+   <artifactId>ondex-full</artifactId>
+   <version>4.0-SNAPSHOT</version>
+   <packaging>pom</packaging>
+
+   <name>ONDEX POM for Full Build</name>
+
+   <modules>
+      <module>ondex-base</module>
+      <module>ondex-opt</module>
+      <module>ondex-desktop</module>
+      <module>ondex-doc</module>
+      <module>ondex-knet-builder</module>
+   </modules>
+
+
+   <licenses>
+      <license>
+         <name>GNU GPL</name>
+         <url>http://www.gnu.org/licenses/gpl.html</url>
+      </license>
+   </licenses>
+   <description>
+     ONDEX enables data from diverse biological data sets to be linked, integrated and visualised through
+     graph analysis techniques.
+
+     This is a super-pom that... TODO
+    </description>
+   <url>http://www.ondex.org/</url>
+
+   <ciManagement>
+      <system>jenkins</system>
+      <url>http://ondex.rothamsted.ac.uk/build</url>
+   </ciManagement>
+
+   <organization>
+      <name>ONDEX</name>
+      <url>https://github.com/Rothamsted/ondex-knet-builder</url>
+   </organization>
+
+   <scm>
+      <connection>scm:git:https://github.com/Rothamsted/ondex-full.git</connection>
+      <url>https://github.com/Rothamsted/ondex-full</url>
+   </scm>
+
+   <distributionManagement>
+      <site>
+         <id>Ondex_site</id>
+         <url>file:///var/www/html/ondex</url>
+      </site>
+   </distributionManagement>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+         </plugin>
+         
+         <!-- 
+         	TODO: Remove: release plug-in is unreliable and inflexible: https://dzone.com/articles/why-i-never-use-maven-release
+         	Due to issues mentioned in that post, we too release thorough a Jenkins job that has the steps we want.
+         -->
+         <!--  plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <configuration>
+               <preparationGoals>clean verify install</preparationGoals>
+            </configuration>
+         </plugin -->
+      </plugins>
+
+      <pluginManagement>
+         <plugins>
+         		<plugin>
+			       	<groupId>org.apache.maven.plugins</groupId>
+			       	<artifactId>maven-dependency-plugin</artifactId>
+			       	<version>3.1.1</version>
+         		</plugin>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-compiler-plugin</artifactId>
+               <version>3.8.1</version>
+               <configuration>
+                  <source>${java.version}</source>
+                  <target>${java.version}</target>
+                  <showWarnings>true</showWarnings>
+                  <showDeprecation>true</showDeprecation>
+                  <maxmem>4096m</maxmem>
+                  <encoding>UTF-8</encoding>
+                  <fork>true</fork>
+               </configuration>
+            </plugin>
+						<plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-source-plugin</artifactId>
+						  <version>2.1.2</version>
+						  <executions>
+						     <execution>
+						        <id>attach-sources</id>
+						        <phase>verify</phase>
+						        <goals><goal>jar-no-fork</goal></goals>
+						     </execution>
+						  </executions>
+						</plugin>
+            
+            <!-- TODO: remove. Likely, it's not used and if it is, it needs upgrade and
+                 tests. -->
+            <!-- plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>jaxb2-maven-plugin</artifactId>
+               <version>1.3</version>
+               <executions>
+                  <execution>
+                     <id>jaxb2-xjc</id>
+                     <phase>generate-sources</phase>
+                     <goals>
+                        <goal>xjc</goal>
+                     </goals>
+                  </execution>
+               </executions>
+            </plugin -->
+
+            <!-- Cleans up things that are usualy left around on the main module folder, not in target/ -->
+		        <plugin>
+		          <artifactId>maven-clean-plugin</artifactId>
+		          <configuration>
+		            <filesets>
+		              <fileset>
+		                <directory>${basedir}</directory>
+		                <includes>
+		                  <include>ondex.log</include>
+		                  <include>velocity.log</include>
+		                  <include>uninstall.log</include>
+		                </includes>
+		              </fileset>
+		            </filesets>
+		          </configuration>
+		        </plugin>
+		        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-javadoc-plugin</artifactId>
+	            <version>3.1.1</version>
+	            <configuration>
+	               <stylesheet>maven</stylesheet>
+	            </configuration>
+		        </plugin>
+		        <plugin>
+		        	<artifactId>maven-assembly-plugin</artifactId>
+							<!-- 
+							  TODO: this is the last version known to work, except for the fact it creates directories with the wrong
+							  permissions. 
+							 -->
+							<version>2.2-beta-5</version>
+						</plugin>
+						
+						<plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-surefire-plugin</artifactId>
+						  <version>2.4.3</version>
+						  <configuration>
+						     <forkMode>always</forkMode>
+						     <forkedProcessTimeoutInSeconds>700</forkedProcessTimeoutInSeconds>
+						     <argLine>-XX:MaxRAM=4g -Dondex.dir=${basedir}/data</argLine>
+						     <excludes>
+						        <exclude>net/sourceforge/ondex/apps/*</exclude>
+						     </excludes>
+						     <failIfNoTests>false</failIfNoTests>
+						     <enableAssertions>true</enableAssertions>
+						     <redirectTestOutputToFile>false</redirectTestOutputToFile>
+						     <useFile>false</useFile>
+             		 <trimStackTrace>false</trimStackTrace>        
+								 <properties>
+								   <property>
+									   <!-- Prints out spaces and test name before/after every test method and automatically -->
+										 <name>listener</name>
+										 <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
+									 </property>
+								 </properties>
+						  </configuration>
+						  <dependencies>
+								<dependency>
+						  		<groupId>uk.ac.ebi</groupId>
+						  		<artifactId>jutils</artifactId>
+		  						<version>${jutils.version}</version>
+								</dependency>
+						  </dependencies>
+						</plugin>
+						
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-failsafe-plugin</artifactId>
+							<version>3.0.0-M4</version>
+							<configuration>
+								<trimStackTrace>false</trimStackTrace>							
+							</configuration>
+						</plugin>
+						
+						
+					  <!-- 
+							A small plug-in that starts Neo4j. 
+							
+							1.0.1 is the official version that integrated our improvements at
+							at https://github.com/Rothamsted/neo4j-server-maven-plugin 
+					  -->
+		        <plugin>
+					    <groupId>com.github.harti2006</groupId>
+						  <artifactId>neo4j-server-maven-plugin</artifactId>
+						  <version>1.2</version>
+							<configuration>
+								<version>${neo4j.server.version}</version>
+								<port>${neo4j.server.httpPort}</port>
+								<boltPort>${neo4j.server.boltPort}</boltPort>
+								<deleteDb>true</deleteDb>
+								<serverReadyAttempts>120</serverReadyAttempts>
+							</configuration>
+							<executions>
+								<execution>
+									<id>start-neo4j-server</id>
+									<goals><goal>start</goal></goals>
+								</execution>
+								<execution>
+									<id>stop-neo4j-server</id>
+									<goals><goal>stop</goal></goals>
+								</execution>
+							</executions>		        
+		        </plugin>
+		        
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.1.2</version>
+						</plugin>
+						
+						<plugin>
+						  <groupId>org.codehaus.mojo</groupId>
+						  <artifactId>taglist-maven-plugin</artifactId>
+						  <version>2.4</version>
+						</plugin>
+		        
+		        <!-- TODO: Remove. It's only used in old-components/dashboard. -->
+						<!-- plugin>
+						  <groupId>org.codehaus.mojo</groupId>
+						  <artifactId>axistools-maven-plugin</artifactId>
+						  <version>1.3</version>
+						  <dependencies>
+						     <dependency>
+						        <groupId>axis</groupId>
+						        <artifactId>axis</artifactId>
+						     </dependency>
+						  </dependencies>
+						  <configuration>
+						     <wsdlFiles>
+						        <wsdlFile>jirasoapservice-v2.wsdl</wsdlFile>
+						     </wsdlFiles>
+						     <packageSpace>com.atlassian.jira.rpc.soap.client</packageSpace>
+						  </configuration>
+						  <executions>
+						     <execution>
+						        <id>wsdl2java-generation</id>
+						        <phase>generate-sources</phase>
+						        <goals>
+						           <goal>wsdl2java</goal>
+						        </goals>
+						     </execution>
+						  </executions>
+						</plugin -->
+						
+            <!-- 
+            	This is needed by Eclipse, to in which build life cycle phase a plug-in is
+            	triggered. It won't hurt you if you don't use Eclipse.
+            -->
+            <plugin>
+               <groupId>org.eclipse.m2e</groupId>
+               <artifactId>lifecycle-mapping</artifactId>
+               <version>1.0.0</version>
+               <configuration>
+                  <lifecycleMappingMetadata>
+                     <pluginExecutions>
+                        <pluginExecution>
+                           <pluginExecutionFilter>
+                              <groupId>org.apache.maven.plugins</groupId>
+                              <artifactId>maven-dependency-plugin</artifactId>
+                              <versionRange>[2.0,)</versionRange>
+                              <goals>
+                                 <goal>copy-dependencies</goal>
+                                 <goal>unpack</goal>
+                              </goals>
+                           </pluginExecutionFilter>
+                           <action>
+                              <ignore/>
+                           </action>
+                        </pluginExecution>
+                        <pluginExecution>
+                           <pluginExecutionFilter>
+                              <groupId>org.apache.maven.plugins</groupId>
+                              <artifactId>maven-javadoc-plugin</artifactId>
+                              <versionRange>[2.6,)</versionRange>
+                              <goals>
+                                 <goal>javadoc</goal>
+                              </goals>
+                           </pluginExecutionFilter>
+                           <action>
+                              <ignore/>
+                           </action>
+                        </pluginExecution>
+                        <pluginExecution>
+                           <pluginExecutionFilter>
+                              <groupId>org.apache.cxf</groupId>
+                              <artifactId>cxf-java2ws-plugin</artifactId>
+                              <versionRange>[2.2,)</versionRange>
+                              <goals>
+                                 <goal>java2ws</goal>
+                              </goals>
+                           </pluginExecutionFilter>
+                           <action>
+                              <ignore/>
+                           </action>
+                        </pluginExecution>
+                        <pluginExecution>
+                           <pluginExecutionFilter>
+                              <groupId>org.apache.cxf</groupId>
+                              <artifactId>cxf-codegen-plugin</artifactId>
+                              <versionRange>[2.2,)</versionRange>
+                              <goals>
+                                 <goal>generate-sources</goal>
+                              </goals>
+                           </pluginExecutionFilter>
+                           <action>
+                              <ignore/>
+                           </action>
+                        </pluginExecution>
+                     </pluginExecutions>
+                  </lifecycleMappingMetadata>
+               </configuration>
+            </plugin>						
+         </plugins>
+      </pluginManagement>
+      
+   </build>
+
+   <!-- TODO: move this up, we're keeping it here temporarily, in order to ease
+   			the merges from/to master -->
+	 <properties>
+		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<jutils.version>10.0-SNAPSHOT</jutils.version>
+		<rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
+		
+		<lucene.version>6.6.0</lucene.version>
+		<spring.version>4.3.6.RELEASE</spring.version>
+		
+		<!-- Used by neo4j-related components -->
+		<neo4j.server.version>3.5.12</neo4j.server.version>
+		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
+		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
+		<rdf2neo.version>3.0-SNAPSHOT</rdf2neo.version>  
+
+   </properties>   
+   
+   
+   <profiles>
+      
+			<profile>
+				<id>brandizi-repo</id>
+				<activation><activeByDefault>false</activeByDefault></activation>
+				
+				<distributionManagement>
+			
+			    <snapshotRepository>
+			    	<id>marcobrandizi.info</id>
+						<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+			    </snapshotRepository>
+			
+			    <repository>
+			    	<id>marcobrandizi.info</id>
+						<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+			    </repository>
+					
+				</distributionManagement>	
+			
+			</profile>
+			
+			<!-- TODO: testing the new repo, needs to be moved into the defaults -->
+			<profile>
+				<id>knetminer-repo</id>
+				<activation><activeByDefault>false</activeByDefault></activation>
+				
+				<distributionManagement>
+				  <repository>
+						<id>knetminer-releases</id>
+						<name>Internal Releases</name>
+						<url>http://babvs58.rothamsted.ac.uk:8081/nexus/repository/maven-releases/</url>
+				  </repository>
+				  <snapshotRepository>
+						<id>knetminer-snapshots</id>
+						<name>Internal Snapshots</name>
+						<url>http://babvs58.rothamsted.ac.uk:8081/nexus/repository/maven-snapshots/</url>
+				  </snapshotRepository>
+				</distributionManagement>				
+			</profile>
+					     
+   </profiles>
+
+	 <repositories>
+			<repository>
+				<id>knetminer-repo</id>
+				<name>Rothamsted Maven Repo</name>
+				<url>https://knetminer.org/artifactory/repository/maven-public/</url>
+			  <snapshots><enabled>true</enabled></snapshots>
+			</repository>
+
+	 		<!-- TODO: remove Includes releases and a couple of others 
+      <repository>
+         <id>ondex-repo</id>
+         <name>Ondex Repository</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
+         <releases><enabled>true</enabled></releases>
+         <snapshots><enabled>false</enabled></snapshots>
+      </repository>
+      <repository>
+         <id>ondex-snapshots</id>
+         <name>Ondex Repository for Snapshots</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+      </repository>
+
+			<repository>
+				<id>marcobrandizi.info</id>
+				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+				<releases><enabled>true</enabled></releases>
+				<snapshots><enabled>true</enabled></snapshots>
+			</repository>
+			
+			<repository>
+			  <id>EBIBioSamples-GH-repo</id>
+			  <url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
+			  <snapshots><enabled>true</enabled></snapshots>
+			</repository -->
+			          
+			<repository>
+				<id>spring-plugins</id>
+				<url>https://repo.spring.io/plugins-release/</url>
+			</repository>       
+			                 
+	 </repositories>
+
+   <pluginRepositories>
+
+			<!-- TODO: Remove Includes releases and a couple of others 
+      <pluginRepository>
+         <id>ondex-repo</id>
+         <name>Ondex Repository</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
+         <releases><enabled>true</enabled></releases>
+         <snapshots><enabled>false</enabled></snapshots>
+      </pluginRepository>
+      <pluginRepository>
+         <id>ondex-snapshots</id>
+         <name>Ondex Repository for Snapshots</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+      </pluginRepository -->
+
+      <!-- TODO:remove? pluginRepository>
+      	<id>sonatype-releases</id>
+      	<url>https://oss.sonatype.org/content/repositories/releases</url>
+      </pluginRepository -->
+        
+   </pluginRepositories>
+
+   <dependencies>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+         <scope>provided</scope>
+      </dependency>
+   </dependencies>
+
+   <dependencyManagement>
+     <dependencies>
+
+	     <dependency>
+	        <groupId>junit</groupId>
+	        <artifactId>junit</artifactId>
+	        <version>4.11</version>
+	        <scope>test</scope>
+	     </dependency>
+
+       <dependency>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+          <version>1.2.17</version>
+          <scope>provided</scope>
+       </dependency>
+        
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.25</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>log4j-over-slf4j</artifactId>
+				<version>1.7.25</version>
+			</dependency>
+			
+			<!-- Newer modules that are stand-alone command lines use this logger -->
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.2.3</version>
+      </dependency>
+			
+			<!-- Since JDK 11, we need this as a separate lib -->
+      <dependency>
+      	<groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.jaxb</groupId>
+        <artifactId>jaxb-runtime</artifactId>
+        <version>2.3.2</version>
+      </dependency>
+
+			<!-- Spring annotations that were supported JDK<11 -->
+			<dependency>             
+        <groupId>javax.annotation</groupId>
+        <artifactId>javax.annotation-api</artifactId>
+        <version>1.3.2</version>
+			</dependency>  
+			<dependency>             
+        <groupId>javax.annotation</groupId>
+        <artifactId>jsr250-api</artifactId>
+        <version>1.0</version>
+			</dependency>  
+                
+      <dependency>
+        <groupId>com.thoughtworks.xstream</groupId>
+        <artifactId>xstream</artifactId>
+        <version>1.4.11.1</version>
+      </dependency>
+       
+      <dependency>
+       <groupId>net.sourceforge.collections</groupId>
+       <artifactId>collections-generic</artifactId>
+       <version>4.01</version>
+      </dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+			  <artifactId>commons-collections4</artifactId>
+			  <version>4.1</version>
+			</dependency>
+				
+			<dependency>
+			  <groupId>com.google.guava</groupId>
+			  <artifactId>guava</artifactId>
+			  <version>20.0</version>
+			</dependency>
+			
+      <dependency>
+       <groupId>net.sourceforge.jexcelapi</groupId>
+       <artifactId>jxl</artifactId>
+       <version>2.6.10</version>
+      </dependency>
+         
+			<dependency>
+			  <groupId>org.apache.lucene</groupId>
+			 <artifactId>lucene-core</artifactId>
+			 <version>${lucene.version}</version>
+			</dependency>
+				 
+			<dependency>
+			  <groupId>org.apache.lucene</groupId>
+			 <artifactId>lucene-queryparser</artifactId>
+			 <version>${lucene.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-analyzers-common</artifactId>
+				<version>${lucene.version}</version>
+			</dependency>
+				 
+			<dependency>
+				<!-- Cute utility that allows for quick handling of exceptions (eg, checked/unchecked wrapping) -->
+				<groupId>com.machinezoo.noexception</groupId>
+				<artifactId>noexception</artifactId>
+				<version>1.3.2</version>
+			</dependency>      
+				
+			<dependency>
+			  <groupId>org.apache.commons</groupId>
+			  <artifactId>commons-lang3</artifactId>
+			  <version>3.5</version>
+			</dependency>
+			
+			<dependency>
+			  <groupId>commons-io</groupId>
+			  <artifactId>commons-io</artifactId>
+			  <version>2.5</version>
+			</dependency>				
+			     
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+         
+			<!-- Marco Brandizi: my personal toolset -->
+			<dependency>
+		  		<groupId>uk.ac.ebi</groupId>
+		  		<artifactId>jutils</artifactId>
+		  		<version>${jutils.version}</version>
+			</dependency>
+			<dependency>
+		  		<groupId>uk.ac.ebi</groupId>
+		  		<artifactId>jutils-io</artifactId>
+		  		<version>${jutils.version}</version>
+			</dependency>
+				
+			<!-- Utilities for RDF and the Jena RDF framework -->
+	    <dependency>
+	      <groupId>info.marcobrandizi</groupId>
+	      <artifactId>rdfutils-core</artifactId>
+	      <version>${rdfutils.version}</version>
+	    </dependency>
+			<dependency>
+			  <groupId>info.marcobrandizi</groupId>
+			  <artifactId>rdfutils-jena</artifactId>
+	      <version>${rdfutils.version}</version>
+			</dependency>
+
+      <!-- TODO: This is prehistoric, needs to be removed -->         
+      <dependency>
+        <groupId>com.hp.hpl.jena</groupId>
+        <artifactId>jena</artifactId>
+        <version>2.5.7</version>
+      </dependency>
+
+			<!-- The lib with main components in one bundle only -->
+			<dependency>
+    		<groupId>org.apache.jena</groupId>
+				<artifactId>apache-jena-libs</artifactId>
+		    <version>3.14.0</version>
+				<type>pom</type>		    
+			</dependency>
+
+      <dependency>
+         <groupId>com.sleepycat</groupId>
+         <artifactId>je</artifactId>
+         <version>4.0.92</version>
+      </dependency>
+        
+			<dependency>
+				<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+				<artifactId>rdf2neo</artifactId>
+				<version>${rdf2neo.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+				<artifactId>rdf2neo-cli</artifactId>
+				<version>${rdf2neo.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>uk.ac.rothamsted.neo4j</groupId>
+				<artifactId>neo4j-utils</artifactId>
+				<version>${rdf2neo.version}</version>
+			</dependency>
+
+			<!-- Stream parser, used by OXL and other big XML parsers -->
+      <dependency>
+         <groupId>org.codehaus.woodstox</groupId>
+         <artifactId>woodstox-core-lgpl</artifactId>
+         <version>4.0.11</version>
+         <exclusions>
+         	 <!-- It shouldn't be necessary and causes problems to Eclipse 
+         			 (javax.xml.stream referred by two modules) -->
+         	 <exclusion>
+         		 <groupId>javax.xml.stream</groupId>
+         		 <artifactId>stax-api</artifactId>
+         	 </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.woodstox</groupId>
+        <artifactId>stax2-api</artifactId>
+        <version>4.2</version>
+      </dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+			  <artifactId>cxf-wstx-msv-validation</artifactId>
+				<!-- was 2.2.6 First that works is 2.2.11 -->
+			  <version>2.2</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-math3</artifactId>
+				<version>3.6.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.opencsv</groupId>
+				<artifactId>opencsv</artifactId>
+				<version>5.1</version>
+			</dependency>
+
+			<dependency>
+			  <groupId>axis</groupId>
+			  <artifactId>axis</artifactId>
+			  <version>1.3</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>xerces</groupId>
+				<artifactId>xercesImpl</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+			
+      <dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>1.1.1</version>
+      </dependency>
+      
+      <dependency>
+				<groupId>org.jsoup</groupId>
+				<artifactId>jsoup</artifactId>
+				<version>1.8.3</version>
+      </dependency>
+      
+			
+    </dependencies>
+	</dependencyManagement>
+</project>
