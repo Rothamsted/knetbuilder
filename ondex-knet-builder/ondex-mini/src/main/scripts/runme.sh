@@ -14,6 +14,7 @@ do
   shift
 done
 
+
 if [ "$JAVA_TOOL_OPTIONS" == "" ]; then
   # So, let's set default JVM options here, unless you already have them from the outside
   # Note that this variable is part of standard Java (https://goo.gl/rrmXEX), so we don't need
@@ -33,5 +34,14 @@ fi
 #                    -Djava.rmi.server.hostname=localhost
 #                    -Dcom.sun.management.jmxremote.local.only=false"
 
-java -Dondex.dir="$MYDIR/data" -jar "$MYDIR"/lib/ondex-mini-*.jar \
+# Note: the JARS loaded by the plugin engine don't work anymore in J11
+# TODO: that loading should be removed
+#
+for jar in lib/*jar
+do
+  [[ -z "$clspath" ]] || clspath="$clspath:"
+  clspath="$clspath$jar"
+done
+
+java -Dondex.dir="$MYDIR/data" -classpath "$clspath" net.sourceforge.ondex.OndexMiniMain \
      -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS
