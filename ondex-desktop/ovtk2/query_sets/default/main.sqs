@@ -1,0 +1,44 @@
+#COMMAND
+reified_type
+#VALUE
+http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement
+#END
+
+#COMMAND
+reified_query
+#VALUE
+construct {?s ?p ?o} where { GRAPH ?g {
+"<~~URI~~> <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> ?s.
+"<~~URI~~> <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> ?p.
+"<~~URI~~> <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> ?o. }}
+#END
+
+#COMMAND
+reified_attribute_query
+#VALUE
+select ?p ?o where { graph ?g {" +"<~~URI~~> ?p ?o . }}
+#END
+
+#COMMAND
+types_query
+#VALUE
+select distinct ?x where { GRAPH ?g { <~~URI~~> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?x}} LIMIT 5
+#END
+
+#VARIABLE_LIST
+classes_preference_list
+#VALUE
+asdf
+hsfd
+#END
+
+#VARIABLE_LIST
+prefixes
+#VALUE
+#END
+
+#COMMAND
+concept_attribute_querry
+#VALUE
+select ?p ?o where {graph ?g {<~~URI~~> ?p ?o}} limit 20
+#END

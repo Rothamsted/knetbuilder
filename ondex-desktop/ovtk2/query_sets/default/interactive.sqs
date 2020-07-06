@@ -1,0 +1,140 @@
+#COMMAND_LIST
+Fill attributes
+#VALUE
+CONSTRUCT {<~~URI~~> ?p ?o}
+WHERE {graph ?g{<~~URI~~> ?p ?o.
+FILTER isLiteral(?o)}}
+LIMIT 30
+#END
+#COMMAND_LIST*
+Find objects of
+#VALUE
+construct { <~~URI~~> ?p ?o}
+where { graph ?g {<~~URI~~> ?p ?o .
+FILTER (str(?p) != "~~URI~~") .
+FILTER (str(?p) != "~~URI~~") .
+FILTER (str(?p) != "~~URI~~") 
+}}
+limit 30
+#END
+#COMMAND_LIST*
+Find subjects of
+#VALUE
+CONSTRUCT {?s ?p <~~URI~~>}
+WHERE {graph ?g{?s ?p  <~~URI~~>.
+FILTER (?p != <~~URI~~>) .
+FILTER (?p != <~~URI~~>) .
+FILTER (?p != <~~URI~~>) 
+}}
+LIMIT 50
+#END
+#COMMAND_LIST
+Find relations subjects of
+#VALUE
+select ?p
+where { graph ?g {
+?p <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <~~URI~~> }
+}
+limit 30
+#END
+#COMMAND_LIST
+Find relations objects of
+#VALUE
+select ?p
+where { graph ?g {
+?p <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <~~URI~~> }
+}
+limit 30
+#END
+construct { <~~URI~~> ?p ?o}
+where { graph ?g {<~~URI~~> ?p ?o .
+FILTER (?p != <http://www.w3.org/1999/02/22-rdf-syntax-ns#object>) .
+FILTER (?p != <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject>) .
+FILTER (?p != <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>) 
+}}
+limit 30
+#END
+#COMMAND_LIST*
+Find subjects of
+#VALUE
+CONSTRUCT {?s ?p <~~URI~~>}
+WHERE {graph ?g{?s ?p  <~~URI~~>.
+FILTER (?p != <http://www.w3.org/1999/02/22-rdf-syntax-ns#object>) .
+FILTER (?p != <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject>) .
+FILTER (?p != <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>) 
+}}
+LIMIT 50
+#END
+#COMMAND_LIST*
+Find relations subjects of
+#VALUE
+select ?p
+where { graph ?g {
+?p <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <~~URI~~> }
+}
+limit 30
+#END
+#COMMAND_LIST*
+Find relations objects of
+#VALUE
+select ?p
+where { graph ?g {
+?p <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> <~~URI~~> }
+}
+limit 30
+#END
+#COMMAND_LIST*
+Get relation attributes
+#VALUE
+SELECT ?stat 
+WHERE {graph ?g {
+?stat <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <~~FROM_URI~~> .
+?stat <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <~~TYPE~~> .
+?stat <http://www.w3.org/1999/02/22-rdf-syntax-ns#object>  <~~TO_URI~~>
+}}
+#END
+#COMMAND_LIST*
+Map Tair to UniProt
+#VALUE
+prefix : <http://purl.uniprot.org/core/>
+construct {?protein rdfs:seeAlso <~~URI~~>}
+ where {
+?protein rdfs:seeAlso <~~URI~~>
+}
+#END
+#COMMAND_LIST*
+Map UniProt to Bio2RDF
+#VALUE
+prefix : <http://purl.uniprot.org/core/>
+construct {<~~URI~~> owl:sameAs ?bio2rdf
+}
+where {
+<~~URI~~> rdf:type :Protein .
+bind (uri(replace(str(<~~URI~~>), "http://purl.uniprot.org/uniprot/", "http://bio2rdf.org/uniprot:")) as ?bio2rdf)
+}
+#END
+#COMMAND_LIST*
+Get InterPro domains
+#VALUE
+prefix : <http://purl.uniprot.org/core/>
+construct {
+<~~URI~~> owl:hasValue ?resource
+}
+where {
+<~~URI~~> rdf:type :Protein ;
+rdfs:seeAlso ?resource .
+filter regex (str(?resource), "interpro", "i")
+}
+#END
+#COMMAND_LIST*
+Get protein-protein interaction data
+#VALUE
+prefix ire: <http://bio2rdf.org/irefindex_vocabulary:>
+prefix : <urn:default#>
+construct {<~~URI~~> :participates_in ?s . ?b :participates_in ?s 
+}
+from <http://bio2rdf.org/irefindex-all> where {
+?s ire:interactor_a <~~URI~~> .
+?s ire:interactor_b ?b}
+#END
+

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_20" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>function main() {
+	logFCCutoff = parseFloat(prompt(&quot;Keep visible if |logFC| &gt; x  (default:1)&quot;))
+	if (isNaN(logFCCutoff)){
+		logFCCutoff=1
+	}
+	pValCutoff = parseFloat(prompt(&quot;Keep visible if adjusted pValue &lt; x  (default:0.05)&quot;))
+	if (isNaN(pValCutoff)){
+		pValCutoff=0.05
+	}
+
+	
+	makeUndefinedInvisible = confirm(&quot;If a concept has no logFC or Std, should it be filtered?&quot;)
+
+	var i = getPickedConcepts().iterator()
+	while(i.hasNext()) {
+
+		var concept = i.next()
+		var logFC = concept.getAttribute(&quot;logFC-&quot;+contrast)
+		var pVal = concept.getAttribute(&quot;adjpVal-&quot;+contrast)
+		// if logFC und Std are available for the given concept, apply cut off function
+		if(logFC.unwrap()!=null &amp;&amp; pVal.unwrap()!=null) {
+			if (Math.abs(logFC.getValue()) &lt; logFCCutoff || pVal.getValue() &gt; pValCutoff)
+				setVisibility(concept,false)
+		}
+		else if (makeUndefinedInvisible) {
+			setVisibility(concept,false)
+		}
+	}
+}
+
+
+contrast = prompt(&quot;Which contrast should be filtered? (V14,V20,S48,A48)  (default:A48)&quot;)
+if(contrast == &apos;&apos;){
+	contrast = &apos;A48&apos;
+}
+
+
+if(getActiveGraph().getMetaData().getAttributeName(&quot;logFC-&quot;+contrast).unwrap()==null) { 
+	alert(&quot;There is no logFC data in this graph. Applied contrast:&quot;+contrast)
+} else if (getActiveGraph().getMetaData().getAttributeName(&quot;adjpVal-&quot;+contrast).unwrap()==null) {
+	alert(&quot;There is no adjpVal or logFC data in this graph. Applied contrast:&quot;+contrast)
+} else {
+	main()
+}
+
+</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Gene</string>
+  </void>
+  <void property="name">
+   <string>filter/filter by expression</string>
+  </void>
+ </object>
+</java>

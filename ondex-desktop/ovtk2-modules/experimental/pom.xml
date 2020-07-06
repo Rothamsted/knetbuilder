@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>ovtk2-modules</artifactId>
+      <groupId>net.sourceforge.ondex.apps</groupId>
+      <version>4.0-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>ovtk2-experimental</artifactId>
+   <packaging>jar</packaging>
+
+   <name>ovtk2-experimental</name>
+   <description>Experimental plugins for OVTK2, untested.</description>
+
+   <dependencies>
+      <dependency>
+         <groupId>net.sourceforge.ondex.apps</groupId>
+         <artifactId>ovtk2-default</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.apps</groupId>
+         <artifactId>ovtk2</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>graphalgo</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>protein-structure</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+			
+      <dependency>
+         <groupId>org.codehaus.castor</groupId>
+         <artifactId>castor</artifactId>
+         <version>1.1</version>
+      </dependency>
+      <dependency>
+         <groupId>javax.xml</groupId>
+         <artifactId>jaxrpc-api</artifactId>
+         <version>1.1</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.commons</groupId>
+         <artifactId>com.springsource.org.apache.commons.discovery</artifactId>
+         <version>0.4.0</version>
+      </dependency>
+      <dependency>
+         <groupId>wsdl4j</groupId>
+         <artifactId>wsdl4j</artifactId>
+         <version>1.4</version>
+      </dependency>
+   </dependencies>
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+               <descriptors>
+                  <descriptor>distribution.xml</descriptor>
+               </descriptors>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>make-assembly</id>
+                  <!-- this is used for inheritance merges -->
+                  <phase>package</phase>
+                  <!-- append to the packaging phase. -->
+                  <goals>
+                     <goal>attached</goal>
+                     <!-- goals == mojos -->
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+</project>

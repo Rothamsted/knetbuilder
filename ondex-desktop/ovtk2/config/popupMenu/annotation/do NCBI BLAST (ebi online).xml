@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_22" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>MAX_HITS = 5	// override script&apos;s value
+
+try {
+
+	mainDoNcbiBlast(getPickedConcepts())
+
+} catch (e) {
+	monitorComplete()
+	alert(e.name + &quot;\n&quot; + e.message)
+	delete email
+}</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Protein</string>
+  </void>
+  <void property="libraries">
+   <string>toolbox.js, monitor.js, xml.js, ebi.js, orthologous.js</string>
+  </void>
+  <void property="name">
+   <string>do NCBI BLAST (ebi online)</string>
+  </void>
+ </object>
+</java>

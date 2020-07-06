@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_20" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>function main() {
+	logFCCutoff = parseFloat(prompt(&quot;Keep visible if |logFC| &gt; x  (default:1)&quot;))
+	if (isNaN(logFCCutoff)){
+		logFCCutoff=1
+	}
+	pValCutoff = parseFloat(prompt(&quot;Keep visible if adjusted pValue &lt; x  (default:0.05)&quot;))
+	if (isNaN(pValCutoff)){
+		pValCutoff=0.05
+	}
+
+	
+	makeUndefinedInvisible = confirm(&quot;If a concept has no logFC or Std, should it be filtered?&quot;)
+
+	var i = getPickedConcepts().iterator()
+	while(i.hasNext()) {
+		var concept = i.next()
+		for (var j = 0; j&lt;unionContrasts.length; j=j+1){
+			var logFC = concept.getAttribute(&quot;logFC-&quot;+unionContrasts[j])
+			var pVal = concept.getAttribute(&quot;adjpVal-&quot;+unionContrasts[j])
+			// if logFC und Std are available for the given concept, apply cut off function
+			if(logFC.unwrap()!=null &amp;&amp; pVal.unwrap()!=null) {
+				if (Math.abs(logFC.getValue()) &lt; logFCCutoff || pVal.getValue() &gt; pValCutoff)
+					setVisibility(concept,false)
+			}
+			else if (makeUndefinedInvisible) {
+				setVisibility(concept,false)
+			}
+		}
+	}
+}
+
+
+contrast = prompt(&quot;Which contrast should be filtered? (V14,V20,S48,A48)  (default:A48+S48)&quot;)
+if(contrast == &apos;&apos;){
+	contrast = &quot;A48\\+S48&quot;
+}
+var unionContrasts = contrast.split(&quot;\\+&quot;)
+noError = 1;
+
+if (unionContrasts.length &lt; 2){
+	alert(&quot;Select at least 2 contrasts. Contrasts should be seperated by \&quot;+\&quot;.&quot;)
+	noError = 0
+}
+
+for (var i = 0; i&lt;unionContrasts.length; i=i+1){
+	if(getActiveGraph().getMetaData().getAttributeName(&quot;logFC-&quot;+unionContrasts[i]).unwrap()==null) { 
+		alert(&quot;There is no logFC data in this graph. Applied contrast:&quot;+unionContrasts[i])
+		noError = 0
+	} else if (getActiveGraph().getMetaData().getAttributeName(&quot;adjpVal-&quot;+unionContrasts[i]).unwrap()==null) {
+		alert(&quot;There is no adjpVal or logFC data in this graph. Applied contrast:&quot;+unionContrasts[i])
+		noError = 0
+	}
+}
+if (noError){
+	main()
+}
+
+</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Gene</string>
+  </void>
+  <void property="name">
+   <string>filter/get union of contrasts</string>
+  </void>
+ </object>
+</java>

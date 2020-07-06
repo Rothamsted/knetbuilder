@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>ovtk2-modules</artifactId>
+      <groupId>net.sourceforge.ondex.apps</groupId>
+      <version>0.6.0-SNAPSHOT</version>
+   </parent>
+
+   <groupId>uk.ac.ncl.cs</groupId>
+   <artifactId>CollapserPlugin</artifactId>
+   <packaging>jar</packaging>
+
+   <name>CollapserPlugin</name>
+
+   <url>http://maven.apache.org</url>
+
+   <dependencies>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>3.8.1</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.apps</groupId>
+         <artifactId>ovtk2</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>uk.ac.ncl.cs</groupId>
+         <artifactId>nclondexexpression</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>experimental</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+   </dependencies>
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+               <descriptors>
+                  <descriptor>distribution.xml</descriptor>
+               </descriptors>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>make-assembly</id>
+                  <!-- this is used for inheritance merges -->
+                  <phase>package</phase>
+                  <!-- append to the packaging phase. -->
+                  <goals>
+                     <goal>attached</goal>
+                     <!-- goals == mojos -->
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+</project>
