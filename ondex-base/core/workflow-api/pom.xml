@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>core</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>4.0-SNAPSHOT</version>
+   </parent>
+
+
+   <groupId>net.sourceforge.ondex.core</groupId>
+   <artifactId>workflow-api</artifactId>
+
+   <name>workflow-api</name>
+
+   <dependencies>
+
+			 <!-- 
+			 		This trick is needed cause the standard Java doesn't pick tools.jar (at list from certain versions onwards. 
+			 		We currently need that jar for com.sun.javadoc.* TODO: J9 has a replacement for this, migrate.
+       <dependency >
+	       <groupId>com.sun</groupId>
+	       <artifactId>tools</artifactId>
+	       < !- - It's irrelevant, the point is to get the jar - - >
+	       <version>${java.version}</version>
+	       <scope>system</scope>
+	       <systemPath>${java.home}/../lib/tools.jar</systemPath>
+       </dependency>
+			 -->
+
+			<dependency>
+			  <groupId>org.apache.commons</groupId>
+			  <artifactId>commons-lang3</artifactId>
+			</dependency>
+   
+      <dependency>
+         <groupId>org.codehaus.woodstox</groupId>
+         <artifactId>woodstox-core-lgpl</artifactId>
+      </dependency>
+   
+      <dependency>
+         <groupId>com.sun.xml.stream</groupId>
+         <artifactId>sjsxp</artifactId>
+         <version>1.0.2</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jdom</groupId>
+         <artifactId>jdom</artifactId>
+         <version>1.1</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>asm</groupId>
+         <artifactId>asm-commons</artifactId>
+         <version>3.2</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>asm</groupId>
+         <artifactId>asm</artifactId>
+         <version>3.2</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>asm</groupId>
+         <artifactId>asm-util</artifactId>
+         <version>3.2</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>javax.activation</groupId>
+         <artifactId>activation</artifactId>
+         <version>1.1</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>uk.org.mygrid.resources.clapper</groupId>
+         <artifactId>ocutil</artifactId>
+         <version>2.5.1</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>javax.mail</groupId>
+         <artifactId>mail</artifactId>
+         <version>1.4.2</version>
+         <scope>compile</scope>
+      </dependency>
+
+      <!-- ONDEX deps -->      
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>base</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+   </dependencies>
+   
+   <repositories>
+   	<!-- Used for clapper ocutils -->
+   	<repository>
+   		<id>mygrid</id>
+   		<url>http://www.mygrid.org.uk/maven/repository/</url>
+   	</repository>
+   </repositories>
+</project>

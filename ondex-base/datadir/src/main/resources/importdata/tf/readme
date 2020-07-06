@@ -1,0 +1,12 @@
+### Needed files ###
+factor.dat
+gene.dat
+matrix.dat
+site.dat
+
+the files are usually in
+<APACHE_DIR>/cgi-bin/biobase/transfac/<VERSION>/data
+
+### Question and Bugs ###
+Report to:
+sabr.technical@lists.ondex.org
