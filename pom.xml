@@ -21,7 +21,6 @@
       <module>ondex-base</module>
       <module>ondex-opt</module>
       <module>ondex-desktop</module>
-      <module>ondex-doc</module>
       <module>ondex-knet-builder</module>
    </modules>
 
