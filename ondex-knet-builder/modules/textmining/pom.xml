@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>modules</artifactId>
+		<groupId>net.sourceforge.ondex</groupId>
+		<version>4.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>net.sourceforge.ondex.modules</groupId>
+	<artifactId>textmining</artifactId>
+
+	<name>textmining</name>
+
+	<description>A collection of parsers, mapping and transformers to do textmining</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>woodstox-core-lgpl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-wstx-msv-validation</artifactId>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.codehaus.woodstox</groupId>
+					<artifactId>woodstox-core-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.woodstox</groupId>
+					<artifactId>wstx-asl</artifactId>
+				</exclusion>
+				<!-- We need the same version of Spring throughout all ONDEX -->
+				<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-context</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!-- We need the same version of Spring throughout all ONDEX -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		
+    <dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+    </dependency>
+
+
+		<!-- Utilities to pre-process the PubMed XML -->
+		<dependency>
+	  		<groupId>uk.ac.ebi</groupId>
+	  		<artifactId>jutils-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.unix4j</groupId>
+			<artifactId>unix4j-command</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jsignature.io-tools</groupId>
+			<artifactId>easystream</artifactId>
+			<version>1.2.15</version>
+		</dependency>
+
+		<!-- ONDEX deps -->
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>tools</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>lucene</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+	</dependencies>
+
+	<repositories>
+	</repositories>
+</project>

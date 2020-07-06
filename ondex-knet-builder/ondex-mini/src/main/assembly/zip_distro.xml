@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly 
+	xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+	<id>packaged-distro</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<baseDirectory>ondex-mini</baseDirectory>
+	
+	<dependencySets>
+    <dependencySet>
+        <outputDirectory>/lib</outputDirectory>
+        <!-- TODO: remove outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping -->
+        <useTransitiveDependencies>true</useTransitiveDependencies>
+        <scope>compile</scope>
+        <excludes>
+        	<!-- These are already in the plugin/ dir and having them twice cause problems to the
+        	     WF engine -->
+        	<exclude>net.sourceforge.ondex.modules:rdf-export-2</exclude>
+        	<exclude>net.sourceforge.ondex.modules:neo4j-export</exclude>
+        </excludes>
+    </dependencySet>
+    <dependencySet>
+        <outputDirectory>/lib</outputDirectory>
+        <!-- TODO: remove outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping -->
+        <useTransitiveDependencies>true</useTransitiveDependencies>
+        <scope>runtime</scope>
+        <excludes>
+        	<!-- These are already in the plugin/ dir and having them twice cause problems to the
+        	     WF engine -->
+        	<exclude>net.sourceforge.ondex.modules:rdf-export-2</exclude>
+        	<exclude>net.sourceforge.ondex.modules:neo4j-export</exclude>
+        </excludes>
+    </dependencySet>
+		<dependencySet>
+			<outputDirectory>/plugins</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<useTransitiveDependencies>true</useTransitiveDependencies>
+			<scope>test</scope>
+			<includes>
+				<include>net.sourceforge.ondex.modules:*:*</include>
+			</includes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory></outputDirectory>
+			<scope>runtime</scope>			
+			<includes>
+				<include>net.sourceforge.ondex:datadir:*</include>
+			</includes>
+			<unpack>true</unpack>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<!-- Plugins that need *-with-dependencies.jar -->
+			<outputDirectory>/plugins</outputDirectory>
+			<directory>${project.build.directory}/plugins</directory>
+			<includes>
+				<include>**/*.*</include>
+				<include>**/*</include>
+			</includes>
+			<excludes>
+			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
+		</fileSet>	
+		<fileSet>
+			<directory>${basedir}/data</directory>
+			<outputDirectory>/data</outputDirectory>
+			<includes>
+				<include>**/*.*</include>
+				<include>**/*</include>
+			</includes>
+			<excludes>
+   		 		<exclude>dbs/**</exclude>
+   				<exclude>seqs/**</exclude>
+			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>LICENSE*.*</include>
+				<include>README*.*</include>
+			</includes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
+		</fileSet>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+        <include>**/*.sh</include>
+        <include>**/*.bat</include>
+			</includes>
+      <fileMode>0755</fileMode>
+			<directoryMode>0755</directoryMode>			
+			<filtered>true</filtered>			
+		</fileSet>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<outputDirectory></outputDirectory>
+			<excludes>
+				<!-- Cause they're already copied above, with the -x permission -->
+				<exclude>*.sh</exclude>
+			</excludes>
+			<includes>
+        <include>**/*</include>
+        <include>**/*</include>
+			</includes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>			
+			<filtered>true</filtered>			
+		</fileSet>
+
+		<!-- OWL Parser Stuff -->
+		<fileSet>
+			<directory>target/owl-parser-plugin/lib</directory>
+			<outputDirectory>/plugins</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/owl-parser-plugin/config</directory>
+			<outputDirectory>/config/owl-parser</outputDirectory>
+		</fileSet>		
+		<fileSet>
+			<directory>target/owl-parser-plugin/examples</directory>
+			<outputDirectory>/data/examples/owl-parser</outputDirectory>
+		</fileSet>
+		
+		<!-- RDF exporter -->
+		<fileSet>
+			<directory>target/rdf-export-2-plugin/lib</directory>
+			<outputDirectory>/plugins</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/rdf-export-2-plugin/examples</directory>
+			<outputDirectory>/data/examples/rdf-export-2</outputDirectory>
+		</fileSet>
+		
+		
+		<!-- Neo4J Export plug-in -->
+		<fileSet>
+			<directory>target/neo4j-exporter</directory>
+			<outputDirectory>/tools/neo4j-exporter</outputDirectory>
+      <excludes>
+        <!-- Defined below, with x permissions, non-executables only here -->
+        <exclude>**/*.sh</exclude>
+      </excludes>  
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>
+		</fileSet>
+		<fileSet>
+			<directory>target/neo4j-exporter</directory>
+			<outputDirectory>/tools/neo4j-exporter</outputDirectory>
+      <includes>
+        <include>**/*.sh</include>
+      </includes>  
+      <fileMode>0755</fileMode>
+			<directoryMode>0755</directoryMode>
+		</fileSet>				
+	</fileSets>
+</assembly>

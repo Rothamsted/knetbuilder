@@ -1,0 +1,42 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<parser 
+	xmlns = "http://www.ondex.org/xml/schema/tab_parser"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<delimiter>\t</delimiter>
+	<quote>"</quote>
+	<encoding>UTF-8</encoding>
+	<start-line>1</start-line>
+	
+	<concept id = "prot">
+		<class>Protein</class>
+		<data-source>ENSEMBL</data-source>
+		<accession data-source="ENSEMBL">
+			<column index='1' />
+		</accession>
+	</concept>
+	
+	<concept id = "protDomain">
+		<class>ProtDomain</class>
+		<data-source>ENSEMBL</data-source>
+		<name preferred="true">
+			<column index='4' />
+		</name>
+		<name>
+			<column index='2' />
+		</name>
+		<accession data-source="IPRO">
+			<column index='3' />
+		</accession>
+		<attribute name="Description" type="TEXT"> 
+			<column index='5' />
+		</attribute>
+	</concept>
+
+	
+	<relation source-ref="prot" target-ref="protDomain">
+		<type>has_domain</type>
+	</relation>
+
+</parser>
+	

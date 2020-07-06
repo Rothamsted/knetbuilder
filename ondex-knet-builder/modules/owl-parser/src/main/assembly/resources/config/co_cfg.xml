@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<description><![CDATA[ONDEX OWL Parser configuration for importing the Wheat Crop Ontology (http://www.cropontology.org/ontology/CO_321/Wheat).]]></description>
+
+	<import resource="default_mappings.xml" />
+
+
+	<bean id = "owlMapper" parent = "defaultOwlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
+
+		<!-- The top classes to start from -->
+		<property name = "rootsScanner">
+			<bean class = "net.sourceforge.ondex.parser.CompositeScanner">
+				<property name = "scanners">
+					<set>
+						<bean class = "net.sourceforge.ondex.parser.owl.IriBasedRootsScanner">
+							<property name = "topClassIri" value = "#{ns.iri ( 'co_321:ROOT' )}" />
+						</bean>
+					</set>					
+				</property>
+			</bean>
+		</property>
+		
+		<property name="doMapRootsToConcepts" value ="true" />
+						
+	</bean>
+
+
+	<bean id = "conceptClassMapper" class = "net.sourceforge.ondex.parser.ConstantConceptClassMapper">
+		<property name = "value">
+			<bean class = "net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype">
+				<property name = "id" value = "Trait" />
+				<property name = "fullName" value = "Trait" />
+				<property name= "description" value = "Term from the Wheat Crop Ontology (http://www.cropontology.org/ontology/CO_321/Wheat)" />
+			</bean>
+		</property>
+	</bean>
+
+	
+	<bean id = "idMapper" class = "net.sourceforge.ondex.parser.owl.ChainingLiteralMapper">
+		<property name="baseMapper">
+			<bean id = "iriMapper" class = "net.sourceforge.ondex.parser.owl.IRIBasedIdMapper">
+				<!-- Their URI format is like http://www.cropontology.org/rdf/CO_321:ROOT -->
+				<property name = "splitRegEx" value = "[\:]" />
+			</bean>
+		</property>
+		<property name="postProcessor">
+			<bean class = "net.sourceforge.ondex.parser.utils.StringMapper">
+				<property name="map">
+					<map>
+						<entry key="ROOT" value="CO_Root" />
+					</map>
+				</property>
+			</bean>
+		</property>
+	</bean>	
+
+	<bean id = "accessionsMapper" class = "net.sourceforge.ondex.parser.CompositeAccessionsMapper">
+		<property name = "mappers">
+			<set>		
+				<bean parent = "idAccMapper">
+					<property name = "dataSourcePrefix" value="CO_321:" />
+					<property name = "addedPrefix" value="CO_321:" / >
+				</bean>
+				<bean parent = "altIdAccMapper">
+					<property name = "dataSourcePrefix" value="CO_321:" />
+					<property name = "addedPrefix" value="CO_321:" />
+				</bean>
+				
+				<bean class = "net.sourceforge.ondex.parser.utils.Single2AccessionsMapper">
+					<property name = "accessionMapper">
+						<bean class = "net.sourceforge.ondex.parser.DefaultAccessionMapper">
+							<!--  IRI-based -->
+							<property name = "accessionValueMapper" ref = "idMapper" />
+							<property name = "dataSourceMapper" ref = "dataSourceMapper" />
+							<property name = "ambiguityMapper" ref = "falseMapper" />
+						</bean>
+					</property>
+				</bean>
+				<bean class = "net.sourceforge.ondex.parser.utils.Single2AccessionsMapper">
+					<property name = "accessionMapper">
+						<bean class = "net.sourceforge.ondex.parser.DefaultAccessionMapper">
+							<!--  based on the rdf1:acronym property -->
+							<property name = "accessionValueMapper">
+								<bean class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
+								  <property name = "propertyIri" value = "http://www.cropontology.org/rdf/acronym" />
+								</bean>
+							</property>
+							<property name = "dataSourceMapper" ref = "dataSourceMapper" />
+							<property name = "ambiguityMapper" ref = "falseMapper" />
+						</bean>
+					</property>
+				</bean>
+			</set>
+		</property>
+	</bean> <!-- /accessionsMapper -->
+
+
+	<bean id = "altNamesMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextsMapper">
+		<property name="propertyIri" value="#{ns.iri ( 'skos:altLabel' )}" />
+	</bean>
+
+	<bean id = "descriptionMapper" class = "net.sourceforge.ondex.parser.owl.OWLTextMapper">
+	  <property name = "propertyIri" value = "#{ns.iri ( 'skos:definition' )}" />
+	</bean>
+
+
+	<bean id = "dataSourcePrototype" class = "net.sourceforge.ondex.core.util.prototypes.DataSourcePrototype">
+		<property name = "id" value = "CO" />
+		<property name = "fullName" value = "Wheat Crop Ontology" />
+		<property name = "description" value="The Wheat Crop Ontology (http://www.cropontology.org/ontology/CO_321/Wheat)" />				
+	</bean>
+
+</beans>

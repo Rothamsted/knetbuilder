@@ -1,0 +1,22 @@
+<!--
+<?xml version="1.0" ?><?xml-stylesheet type='text/xsl' href='workflow-component-description.xsl'?>
+<plugins xmlns:wfc="http://ondex.sourceforge.net/workflow_element">
+<wfc:artifactId>ExportJson</wfc:artifactId>
+<wfc:groupId>com.json</wfc:groupId>
+<wfc:version>0.6.0-SNAPSHOT</wfc:version>
+<wfc:plugin type="net.sourceforge.ondex.export.ONDEXExport">
+<wfc:entryClass>com.json.ExportJson</wfc:entryClass>
+<wfc:status type="Experimental">
+<wfc:description><![CDATA[Under development]]></wfc:description>
+</wfc:status>
+<wfc:ondex-metadata></wfc:ondex-metadata>
+<wfc:comment><![CDATA[An ONDEX Exporter plugin that exports Ondex Graph data to a JSON file containing JSON objects 
+        which contain data related to concepts (nodes), relations (edges) and other Item Info. (metadata) 
+        including Data Sources, Types, Concept Classes, Relation Types, Evidences, Units and more.]]>
+</wfc:comment>
+<wfc:authors>
+<wfc:author>Ajit Singh</wfc:author>
+</wfc:authors>
+</wfc:plugin>
+</plugins>
+-->

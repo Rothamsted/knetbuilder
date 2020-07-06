@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <artifactId>knet-builder</artifactId>
+   <packaging>pom</packaging>
+   <name>K-Net Builder</name>
+
+   <parent>
+      <artifactId>ondex-full</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>4.0-SNAPSHOT</version>
+   </parent>
+
+   <modules>
+    <module>scripting</module>     
+    <module>modules</module>
+    <module>ondex-integrator</module>
+    <module>ondex-mini</module>
+    <module>launcher</module>
+    <module>installer</module>
+    <module>mini-integration-tests</module>
+   </modules>
+   
+	 <repositories>
+	  <!-- 
+	  	This needs to be mentioned here too, since sometimes you want to build
+	  	from this subtree only. 
+	  -->
+		<repository>
+			<id>knetminer-repo</id>
+			<name>Rothamsted Maven Repo</name>
+			<url>https://knetminer.org/artifactory/repository/maven-public/</url>
+		  <snapshots><enabled>true</enabled></snapshots>
+		</repository>
+	 </repositories>   
+</project>

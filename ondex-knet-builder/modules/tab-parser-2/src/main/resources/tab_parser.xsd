@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		targetNamespace="http://www.ondex.org/xml/schema/tab_parser"
+		xmlns:tab="http://www.ondex.org/xml/schema/tab_parser" 
+		elementFormDefault="qualified" xmlns:Q1="http://www.ondex.org/xml/schema/tab_parser">
+
+    <complexType name="Parser">
+        <annotation>
+        		<documentation><![CDATA[The root element <parser>, which contains a few parser-directives (e.g., delimiter) and then child elements that map the tabular file type to parse to ONDEX
+entities (concept and relations).
+]]></documentation>
+        </annotation>
+        <sequence>
+    				<element name="delimiter" type="string" minOccurs="0"></element>
+    				<element name="start-line" type="integer" minOccurs="0">
+    						<annotation>
+    								<documentation>The line where actual data starts. Default is 0. Set to 1 if the file has an header line.</documentation>
+    						</annotation>
+    				</element>
+    				<element name="quote" type="string" minOccurs="0">
+    						<annotation>
+    								<documentation>TODO: not yet supported.</documentation>
+    						</annotation>    				
+    				</element>
+    				<element name="encoding" type="string" minOccurs="0">
+    						<annotation>
+    								<documentation>TODO: not yet supported.</documentation>
+    						</annotation></element>
+    				<choice maxOccurs="unbounded" minOccurs="0">
+    						<element name="concept" type="tab:Concept" >
+    								<annotation>
+    										<documentation>See the Concept XML type.</documentation>
+    								</annotation></element>
+    						<element name="relation" type="tab:Relation" >
+    								<annotation>
+    										<documentation>See the Relation XML type.</documentation>
+    								</annotation></element>
+    				</choice>
+    		</sequence>
+    </complexType>
+
+    <element name="parser" type="tab:Parser">
+    		<annotation>
+    				<documentation>This is the root element, see the Parser XML type.</documentation>
+    		</annotation></element>
+
+    <complexType name="Concept">
+    		<annotation>
+    				<documentation><![CDATA[Defines how a tabular file is mapped to an ONDEX concept. 
+    				  A concept must be identified via the attribute 'id', so that it's possibile to refer it in
+    				  the relation element. The child elements reflects the parameters mentioned in the ONDEX user guide.]]>
+    				</documentation>
+    		</annotation>
+    		<sequence>
+    				<element name="class" type="tab:ColumnOrValue" maxOccurs="1" minOccurs="0" />
+    				<element name="accession" type="tab:Accession" maxOccurs="unbounded" minOccurs="0" />
+    				<element name="name" type="tab:Name" maxOccurs="unbounded" minOccurs="0" />
+    				<element name="data-source" type="tab:ColumnOrValue" maxOccurs="1" minOccurs="0" />
+    				<element name="parser-id" type="tab:ColumnOrValue" maxOccurs="1" minOccurs="0" />
+    				<element name="evidence" type="tab:ColumnOrValue" maxOccurs="unbounded" minOccurs="0" />
+    				<element name="attribute" type="tab:Attribute" maxOccurs="unbounded" minOccurs="0" />
+    		</sequence>
+    		<attribute name = "id" type = "ID" />
+    </complexType>
+
+    <complexType name="Column">
+        <annotation>
+        		<documentation><![CDATA[Elements of type Column might have either the index attribute (pointing to a file column via a 0-n integer), 
+or the header attribute (reporting the header to be found in the file).
+
+the optional match element might contain a Java regular expression, which of first group that matches from the column rows in the file will be used as final
+value, e.g.  
+
+<accession data-source = 'UNIPROT'>
+  <column header = 'Interactor A'>
+    <match>ID:(.+)</match>
+  </column>
+</accession>
+]]></documentation>
+        </annotation>
+        <sequence>
+	    	<element name="match" type="ID" maxOccurs="1" minOccurs="0"></element>
+			</sequence>
+    	<attribute name="header" type="string" />
+      <attribute name="index" type="int" />
+    </complexType>
+
+    <complexType name="Relation">
+    		<annotation>
+    				<documentation><![CDATA[Defines how a tabular file is mapped to an ONDEX relation.
+    						the source-ref and target-ref attributes refers to two <concept> instances by pointing to their 'id' attribute.
+    				  	The child elements reflects the parameters mentioned in the ONDEX user guide.]]>    						
+    				</documentation>
+    		</annotation>
+    		<sequence>
+    				<element name="type" type="tab:ColumnOrValue" maxOccurs="1" minOccurs="0" />
+    				<element name="evidence" type="tab:ColumnOrValue" maxOccurs="unbounded" minOccurs="0" />
+    				<element name="attribute" type="tab:Attribute" maxOccurs="unbounded" minOccurs="0" />
+    		</sequence>
+    		<attribute name="source-ref" type="IDREF" use="required" />
+    		<attribute name="target-ref" type="IDREF" use="required" />
+    </complexType>
+
+
+    <complexType name="Attribute">
+        <annotation>
+        		<documentation>This maps to a column via the ColumnOrValue structure (see).</documentation>
+        </annotation>
+        <complexContent>
+    			<extension base="tab:ColumnOrValue">
+			  		<attribute name="name" type="string" />
+			  		<attribute name="type" type="string" />
+			  		<attribute name="indexed" type="boolean" />
+    			</extension>
+        </complexContent>
+    </complexType>
+    
+    
+    <complexType name = "Accession">
+        <annotation>
+        		<documentation>This maps to a column via the ColumnOrValue structure (see).</documentation>
+        </annotation>
+        <complexContent>
+    			<extension base="tab:ColumnOrValue">
+						<attribute name = "data-source" type = "string" />
+						<attribute name = "ambiguous" type = "boolean" />
+    			</extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name = "Name">
+        <annotation>
+        		<documentation>This maps to a column via the ColumnOrValue structure (see).</documentation>
+        </annotation>
+        <complexContent>
+    			<extension base="tab:ColumnOrValue">
+						<attribute name = "preferred" type = "boolean" />
+    			</extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name = "ColumnOrValue"  mixed="true">
+    
+        <annotation>
+        		<documentation><![CDATA[A type having a group of this type allows for the definition of a value or of a column reference (see the Column XSD type).
+for instance, one might say:
+
+<accession data-source = 'UNIPROT'>
+  <column index = '0' />
+</accession>
+
+<accession data-source = 'UNIPROT'>
+  <column header = 'Interactor A' />
+</accession>
+
+<accession data-source = 'UNIPROT'>
+  <column header = 'Interactor A'>
+    <match>ID:(.+)</match>
+  </column>
+</accession>
+
+<concept>
+  <!-- class is of ColumnOrValue type, so it can contain just text, alternatively to column -->
+  <class>Protein</class>
+  ...
+</concept>
+
+]]></documentation>
+        </annotation>
+        <sequence>
+					<element name="column" type="tab:Column" minOccurs="0"/>
+				</sequence>
+    
+    </complexType>
+
+
+
+
+</schema>
