@@ -54,20 +54,20 @@
 This repository is a rather big code base. The main submodules that it contains are described below.
 
 
-### ondex-full
+### ondex-full
 
 This is the top-level POM, defining many common things shared by Ondex code.
 
-### ondex-base
+### ondex-base
 The base code, used to build everything else.
 
-### ondex-knet-builder
+### ondex-knet-builder
 What we use to build projects like [KNetMiner](http://knetminer.rothamsted.ac.uk).
 
-### ondex-desktop
+### ondex-desktop
 Components for the desktop/GUI applications.
 
-### ondex-opt
+### ondex-opt
 Optional components. **NOTE**: these are still linked by the components above (so, not so optional), but we usually 
 build them separately. If you build the whole ONDEX from this top repository, these optional modules will be built 
 from (the local clone of) this child repository, if you build an ONDEX component independently (e.g., by cloning 
@@ -78,7 +78,7 @@ to inspect the Java code).
 
 ## Old code repositories and materials
 
-### [ondex-doc](https://github.com/Rothamsted/ondex-doc.git)
+### [ondex-doc](https://github.com/Rothamsted/ondex-doc.git)
 Documentation and tutorials. Now replaced by [the Wiki](https://github.com/Rothamsted/knetbuilder/wiki).
 
 ### [ondex-old-components](https://github.com/Rothamsted/ondex-old-components)
