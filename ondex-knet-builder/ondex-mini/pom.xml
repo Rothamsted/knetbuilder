@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <parent>
+      <artifactId>knet-builder</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>3.0.1-SNAPSHOT</version>
+   </parent>
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>net.sourceforge.ondex.apps</groupId>
+   <artifactId>ondex-mini</artifactId>
+   <name>ondex-mini</name>
+   <build>
+      <plugins>
+				 <!-- 
+				 	Prepares the plugins to be shipped with the final binary.
+				 	
+				 	PLEASE NOTE: this approach is used for those plugins that need the *-with-dependencies.jar to be
+				 	craned. Those that already contains everything in their own jar are put in place by the 'test'
+				 	dependencies below.
+				 -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${maven.dependency.plugin.version}</version>            
+            <executions>
+               <execution>
+                  <id>copy</id>
+                  <phase>initialize</phase>
+                  <goals>
+                     <goal>copy</goal>
+                  </goals>
+                  <configuration>
+                     <artifactItems>
+
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>tab-parser-2</artifactId>
+                           <version>${project.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                           <includes>**/*</includes>
+<!--                            <destFileName>tab-parser-2-jar-with-dependencies.jar</destFileName> -->
+                        </artifactItem>
+
+
+                        <artifactItem>
+                           <groupId>net.sourceforge.ondex.modules</groupId>
+                           <artifactId>js-plugin</artifactId>
+                           <version>${ondex.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+                           <type>jar</type>
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                           <includes>**/*</includes>
+<!--                            <destFileName>js-plugin-jar-with-dependencies.jar</destFileName> -->
+                        </artifactItem>
+                        
+									      <artifactItem>
+									         <groupId>net.sourceforge.ondex.modules</groupId>
+									         <artifactId>cyc-pathwaydbs</artifactId>
+									         <version>${project.version}</version>
+                           <classifier>jar-with-dependencies</classifier>
+													 <type>jar</type>									         
+                           <overWrite>true</overWrite>
+                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                           <includes>**/*</includes>
+									      </artifactItem>
+                        
+												<artifactItem>
+													<groupId>net.sourceforge.ondex.modules</groupId>
+													<artifactId>textmining</artifactId>
+													<version>${project.version}</version>
+													<classifier>jar-with-dependencies</classifier>
+													<type>jar</type>									         
+													<overWrite>true</overWrite>
+													<outputDirectory>${project.build.directory}/plugins</outputDirectory>
+													<includes>**/*</includes>
+												</artifactItem>
+                        
+                     </artifactItems>
+                     <overWriteReleases>false</overWriteReleases>
+                     <overWriteSnapshots>true</overWriteSnapshots>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>unpack</id>
+                  <phase>initialize</phase>
+                  <goals>
+                    <goal>unpack</goal>
+                  </goals>
+                  <configuration>
+										<artifactItems>
+											<!-- 
+											  See the installer for an explanation of how we unpack these.  
+											-->                        
+	                    <artifactItem>
+	                       <groupId>net.sourceforge.ondex.modules</groupId>
+	                       <artifactId>owl-parser</artifactId>
+	                       <version>${project.version}</version>
+	                       <classifier>bundle</classifier>
+	                       <type>zip</type>
+	                       <overWrite>true</overWrite>
+	                       <outputDirectory>${project.build.directory}</outputDirectory>
+	                       <includes>**/*</includes>
+	                    </artifactItem>
+                      <artifactItem>
+                         <groupId>net.sourceforge.ondex.modules</groupId>
+                         <artifactId>rdf-export-2</artifactId>
+                         <version>${project.version}</version>
+                         <classifier>bundle</classifier>
+                         <type>zip</type>
+                         <overWrite>true</overWrite>
+                         <includes>**/*</includes>
+                         <outputDirectory>${project.build.directory}</outputDirectory>                        
+                      </artifactItem>
+	                    <artifactItem>
+	                    	 <!-- 
+	                    	 	This is a stand-alone command-line tool, which is embedded in the 
+	                    	  Mini shipped package.
+	                    	 -->
+	                       <groupId>net.sourceforge.ondex.modules</groupId>
+	                       <artifactId>neo4j-export</artifactId>
+	                       <version>${project.version}</version>
+	                       <classifier>bundle</classifier>
+	                       <type>zip</type>
+	                       <overWrite>true</overWrite>
+	                       <outputDirectory>${project.build.directory}</outputDirectory>
+	                       <includes>**/*</includes>
+	                    </artifactItem>
+										</artifactItems>
+										<overWriteReleases>false</overWriteReleases>
+										<overWriteSnapshots>true</overWriteSnapshots>
+									</configuration>
+							 </execution>         							       
+            </executions>
+         </plugin>      
+      
+      
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <mainClass>net.sourceforge.ondex.OndexMiniMain</mainClass>
+                     <addClasspath>true</addClasspath>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                     <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                  </manifest>
+               </archive>
+            </configuration>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>${maven.assembly.plugin.version}</version>            
+            <configuration>
+               <descriptors>
+                  <descriptor>src/main/assembly/zip_distro.xml</descriptor>
+               </descriptors>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>make-assembly</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>attached</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+   <dependencies>
+   		<!-- 
+   			Dependencies for maven-jar-plugin
+   			TODO: what does this mean? 
+   		-->
+      <dependency>
+         <groupId>commons-lang</groupId>
+         <artifactId>commons-lang</artifactId>
+         <version>2.4</version>
+      </dependency>
+      <dependency>
+         <groupId>org.codehaus.plexus</groupId>
+         <artifactId>plexus-utils</artifactId>
+         <version>1.1</version>
+      </dependency>
+
+
+      <!-- Dependencies required for compilation -->     
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>workflow-base</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+
+
+      <!-- 
+        Dependencies required for the lib directory, promoted from 'provided' 
+				to 'runtime' 
+				
+			  TODO: what does it mean?
+			-->      
+			<dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.collections</groupId>
+         <artifactId>collections-generic</artifactId>
+         <scope>runtime</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.jexcelapi</groupId>
+         <artifactId>jxl</artifactId>
+         <scope>runtime</scope>
+      </dependency>
+
+      <!-- Dependencies required for the archive -->      
+      <dependency>
+         <groupId>net.sourceforge.ondex</groupId>
+         <artifactId>datadir</artifactId>
+         <version>${project.version}</version>
+         <classifier>data</classifier>
+         <type>zip</type>
+         <scope>runtime</scope>
+      </dependency>
+
+
+      <!-- 
+        bundled plugins - this is a hack to get them into the plugins/ directory. 
+			  zip_distro.xml picks up test deps from the modules group and puts them into 
+			  plugins/ for us. 
+			 
+			  SEE ALSO the note above linked to the dependency plugin
+			-->      
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>oxl</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>         
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>generic</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>validator</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>json</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+      
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>cyjs_json</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>sequence</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>go</artifactId>
+         <version>${project.version}</version>
+         <scope>test</scope>
+      </dependency>
+      
+			<!-- 
+				These are only here with the provided scope in order to make Maven set the correct build order, 
+				mini won't build otherwise (the first time you build a new version).
+			-->
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>rdf-export-2</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>neo4j-export</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      
+   </dependencies>
+</project>

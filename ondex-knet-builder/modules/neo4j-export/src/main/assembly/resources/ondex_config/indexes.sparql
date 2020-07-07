@@ -1,0 +1,26 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX bk: <http://knetminer.org/data/rdf/terms/biokno/>
+PREFIX bkr: <http://knetminer.org/data/rdf/resources/>
+PREFIX bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/>
+
+SELECT ?label ?propertyName
+{
+  {
+		VALUES ( ?label ?propertyName )
+		{
+			( '*' dcterms:identifier )
+			( '*' bk:prefName )
+			( '*' bk:altName )
+			( '*' rdfs:label )
+		}
+	}
+		
+	UNION {
+	  ?propertyName rdfs:subPropertyOf* bk:attribute;
+					  bk:isIndexed true.
+	  
+	  BIND ( '*' AS ?label )
+	}
+}

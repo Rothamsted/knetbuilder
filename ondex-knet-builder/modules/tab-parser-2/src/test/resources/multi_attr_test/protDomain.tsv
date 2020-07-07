@@ -1,0 +1,8 @@
+Gene stable ID	Transcript stable ID	Pfam ID	InterPro ID	InterPro short description	InterPro description
+AT3G05780	AT3G05780.1	PF02190	IPR003111	Pept_S16_N	Peptidase S16, lon N-terminal
+AT3G05780	AT3G05780.1	PF02190	IPR003593	AAA+_ATPase	AAA+ ATPase domain
+AT3G05780	AT3G05780.1	PF02190	IPR003959	ATPase_AAA_core	ATPase, AAA-type, core
+AT3G05780	AT3G05780.1	PF02190	IPR004815	Pept_S16_lon	Peptidase S16, ATP-dependent protease La
+AT3G05780	AT3G05780.1	PF02190	IPR008268	Peptidase_S16_AS	Peptidase S16, active site
+AT3G05780	AT3G05780.1	PF02190	IPR008269	Pept_S16_C	Peptidase S16, Lon C-terminal
+AT3G05780	AT3G05780.1	PF02190	IPR014721	Ribosomal_S5_D2-typ_fold_subgr	Ribosomal protein S5 domain 2-type fold, subgroup

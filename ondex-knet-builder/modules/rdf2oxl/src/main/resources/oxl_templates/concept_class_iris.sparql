@@ -1,0 +1,5 @@
+SELECT ?resourceIri ?conceptId
+WHERE {
+  ?resourceIri rdfs:subClassOf+ bk:Concept;
+  	  		     bk:isOndexPreferred true.
+}

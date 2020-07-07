@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ondex version="3.0">
+  <Workflow>
+    <Graph name="memorygraph">
+      <Arg name="GraphName">default</Arg>
+      <Arg name="graphId">default</Arg>
+    </Graph>
+    <Transformer name="javaScriptPlugin">
+      <Arg name="Script Path">/Users/brandizi/Documents/Work/RRes/ondex_tests/scripting_test_plugin/src/test/resources/hello_world_args.js</Arg>
+      <Arg name="graphId">default</Arg>
+      <Arg name="Script Argument(s)">Marco</Arg>
+      <Arg name="Script Argument(s)">Brandizi</Arg>
+    </Transformer>
+  </Workflow>
+</Ondex>
+

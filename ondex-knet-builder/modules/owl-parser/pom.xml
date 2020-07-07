@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <artifactId>modules</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>3.0.1-SNAPSHOT</version>
+   </parent>
+   <groupId>net.sourceforge.ondex.modules</groupId>
+   <artifactId>owl-parser</artifactId>
+
+   <name>ONDEX OWL Parser</name>
+   <description>A parser for OWL ontologies</description>
+   
+ 	 <developers>
+	   <developer>
+		   <name>Marco Brandizi</name>
+			 <url>https://github.com/marco-brandizi</url>
+		 </developer>
+	 </developers>
+   
+   <dependencies>
+   
+      <dependency>    
+      	<groupId>net.sourceforge.ondex</groupId>
+ 			  <artifactId>parser-api</artifactId>
+        <version>${project.version}</version>      
+      </dependency>
+      
+	    <dependency>
+	      <groupId>uk.ac.ebi</groupId>
+	      <artifactId>jutils-io</artifactId>
+	    </dependency>
+      
+			<dependency>
+				<artifactId>api</artifactId>
+			  <groupId>net.sourceforge.ondex.core</groupId>
+			  <version>${project.version}</version>
+		    <scope>provided</scope>   		  
+			</dependency>
+      
+      <dependency>
+        <groupId>net.sourceforge.ondex.core</groupId>
+        <artifactId>workflow-api</artifactId>
+        <version>${project.version}</version>
+        <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>memory</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+            
+      <dependency>
+         <groupId>log4j</groupId>
+         <artifactId>log4j</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      
+			<dependency>
+			  <groupId>info.marcobrandizi</groupId>
+			  <artifactId>rdfutils-jena</artifactId>
+			</dependency>
+      
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+			</dependency>
+			      
+			<dependency>
+				<groupId>net.sourceforge.ondex.modules</groupId>
+				<artifactId>oxl</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>			
+			</dependency>			      
+			      
+   </dependencies>
+   
+   <build>
+   
+			<testResources>
+			  <!--  This is stuff used both in the binary distribution and in tests -->
+			  <testResource>
+			    <directory>src/main/assembly/resources/config</directory>
+			  </testResource>
+			  <!-- This is as per usual Maven conventions -->
+			  <testResource>
+			    <directory>src/test/resources</directory>
+			  </testResource>
+		  </testResources>   
+   
+      <plugins>
+      
+			  <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <version>2.20</version>			    
+			    <configuration>
+			      <properties>
+			        <property>
+			        	<!-- Prints out spaces and test name before/after every test method and automatically -->
+			          <name>listener</name>
+			          <value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>			          
+			        </property>
+			       </properties>
+             <forkMode>always</forkMode>
+             <forkCount>1</forkCount>
+             <!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
+             <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
+             <argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>
+             <trimStackTrace>false</trimStackTrace>        
+			    </configuration>
+			  </plugin>
+      
+      
+        <plugin>
+	        <artifactId>maven-assembly-plugin</artifactId>
+	        <version>${maven.assembly.plugin.version}</version>
+	        <executions>
+	        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+						<execution>
+							<id>make-assembly-packaged_with_jars</id>
+							<phase />
+						</execution>    
+	             
+						<execution>
+						  <id>assembly-bundle</id>
+						  <phase>package</phase>
+						  <goals>
+						     <goal>attached</goal>
+						  </goals>
+						  <configuration>
+						     <descriptors>
+						     	<descriptor>src/main/assembly/bundle.xml</descriptor>
+						     </descriptors>
+						  </configuration>
+						</execution>
+	        </executions>
+        </plugin>
+				         
+      </plugins>
+
+   </build>
+
+</project>

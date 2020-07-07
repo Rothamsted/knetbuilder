@@ -1,0 +1,27 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bk: <http://knetminer.org/data/rdf/terms/biokno/>
+PREFIX bkr: <http://knetminer.org/data/rdf/resources/>
+PREFIX bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+SELECT ?iri ?type ?fromIri ?toIri
+{
+	# this is the only outbound relation type that accessions can have, the inbound ones are managed
+	# by respective incoming types
+	
+  BIND ( bk:dataSource AS ?type )
+  
+  ?fromIri a bk:Accession; ?type ?toIri. 
+  
+  # IRI is used in Cypher to assign an ID to each relation		
+	BIND ( 
+		IRI ( 
+	  		CONCAT ( 
+	  		  STR ( bkr: ),
+	  		  MD5 ( CONCAT ( STR ( ?type ), STR ( ?fromIri ), STR ( ?toIri ) ) )
+	  		) 
+	  	)
+	  AS ?iri
+	)
+}

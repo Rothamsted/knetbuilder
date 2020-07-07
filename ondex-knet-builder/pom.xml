@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <artifactId>knet-builder</artifactId>
+   <packaging>pom</packaging>
+   <name>K-Net Builder</name>
+
+   <parent>
+      <artifactId>ondex-full</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>3.0.1-SNAPSHOT</version>
+   </parent>
+
+   <modules>
+    <module>scripting</module>     
+    <module>modules</module>
+    <module>ondex-integrator</module>
+    <module>ondex-mini</module>
+    <module>launcher</module>
+    <module>installer</module>
+    <module>mini-integration-tests</module>
+   </modules>
+   
+	 <repositories>
+      <repository>
+         <id>ondex-releases</id>
+         <name>Internal Releases</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/releases</url>
+         <releases><enabled>true</enabled></releases>
+         <snapshots><enabled>false</enabled></snapshots>
+      </repository>
+      <repository>
+         <id>ondex-snapshots</id>
+         <name>Internal Snapshots</name>
+         <url>http://ondex.rothamsted.ac.uk/nexus/content/repositories/snapshots</url>
+         <releases><enabled>false</enabled></releases>
+         <snapshots><enabled>true</enabled></snapshots>
+      </repository>
+	 </repositories>   
+</project>
