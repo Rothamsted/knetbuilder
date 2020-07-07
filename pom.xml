@@ -376,6 +376,8 @@
 		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
 		<rdf2neo.version>3.0-SNAPSHOT</rdf2neo.version>  
 
+		<slf4j.version>1.7.25</slf4j.version>
+
    </properties>   
    
    
@@ -524,14 +526,21 @@
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.7.25</version>
+				<version>${slf4j.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>log4j-over-slf4j</artifactId>
-				<version>1.7.25</version>
+				<version>${slf4j.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			
 			
 			<!-- Newer modules that are stand-alone command lines use this logger -->
       <dependency>
