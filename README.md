@@ -76,7 +76,7 @@ Maven repositories as dependencies. This is because it is currently hard to modu
 to inspect the Java code).
 
 
-## Old code repositories and materials
+## Old code repositories and materials
 
 ### [ondex-doc](https://github.com/Rothamsted/ondex-doc.git)
 Documentation and tutorials. Now replaced by [the Wiki](https://github.com/Rothamsted/knetbuilder/wiki).
