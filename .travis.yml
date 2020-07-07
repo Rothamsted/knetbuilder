@@ -6,6 +6,12 @@ jdk:
 services:
   - xvfb # To manage Headless Java
 
+env:
+  # If set, builds the ondex-knet-builder subtree only. This env section can be
+  # given to the Travis web interface ('Trigger build'), it will be added to the rest.
+  # Note that you MUST BE SURE that you don't need to rebuild the rest of the codebase.
+  #- IS_SIMPLE_BUILD='true'
+
 before_script:
   - sudo apt-get update
 # We need this due to: https://github.com/lukaszlenart/launch4j-maven-plugin/issues/29

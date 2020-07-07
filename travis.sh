@@ -21,6 +21,11 @@ EOT
 	fi
 fi
 
+if [[ "$IS_SIMPLE_BUILD" == 'true' ]]; then
+  echo "Building the ondex-knet-builder subtree only"
+  cd ondex-knet-builder
+fi
+
 export JAVA_TOOL_OPTIONS="-Xms1G -Xmx4G -Dsun.net.client.defaultConnectTimeout=600000 -Dsun.net.client.defaultReadTimeout=600000" 
 # We need to reduce Maven verbosity, Travis has an out limit
 export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dorg.slf4j.simpleLogger.defaultLogLevel=INFO"
