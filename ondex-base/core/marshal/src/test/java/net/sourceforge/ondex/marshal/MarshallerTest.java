@@ -1,61 +1,43 @@
 package net.sourceforge.ondex.marshal;
 
+import static org.junit.Assert.assertEquals;
+
 import java.awt.Color;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 /**
  * Unit test for simple App.
  */
 public class MarshallerTest
-    extends TestCase
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public MarshallerTest( String testName )
-    {
-        super( testName );
-    }
+	private static Marshaller marshaller = Marshaller.getMarshaller ();
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( MarshallerTest.class );
-    }
+	private <T> void doTestMarshalling ( String errMsg, T src )
+	{
+		String xml = marshaller.toXML ( src );
+		Object revertedResult = marshaller.fromXML ( xml );
+		assertEquals ( "Wrong string conversion!", src, revertedResult );
+	}
+	
+	@Test
+	public void testNull () {
+		doTestMarshalling ( "null conversion didn't work!", null );
+	}
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        Marshaller marshaller = Marshaller.getMarshaller();
-        String xml;
-        Object check;
+	@Test
+	public void testString () {
+		doTestMarshalling ( "String conversion didn't work!", "This is a Test" );
+	}
 
-        xml = marshaller.toXML(null);
-        check = marshaller.fromXML(xml);
-        assertEquals(null, check);
+	@Test
+	public void testDouble () {
+		doTestMarshalling ( "Double conversion didn't work!", 34.567d );
+	}
 
-        String string = "This is a Test";
-        xml = marshaller.toXML(string);
-        check = marshaller.fromXML(xml);
-        assertEquals(string, check);
+	@Test
+	public void testColor () {
+		doTestMarshalling ( "Color conversion didn't work!", new Color ( 45, 78, 54 ) );
+	}
 
-        java.lang.Double myDouble = new Double(34.567);
-        xml = marshaller.toXML(myDouble);
-        check = marshaller.fromXML(xml);
-        assertEquals(myDouble, check);
-
-        Color color = new Color(45,78,54);
-        xml = marshaller.toXML(color);
-        check = marshaller.fromXML(xml);
-        assertEquals(color, check);
-    }
 }

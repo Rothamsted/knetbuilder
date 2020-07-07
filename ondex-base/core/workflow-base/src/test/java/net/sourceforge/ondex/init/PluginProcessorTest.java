@@ -39,7 +39,7 @@ public class PluginProcessorTest
     private void pluginTest(Class<? extends ONDEXPlugin> pluginClass, int outputCount) throws Exception
     {
         UUID uuid = UUID.randomUUID();
-        ONDEXPlugin plugin = pluginClass.newInstance();
+        ONDEXPlugin plugin = pluginClass.getDeclaredConstructor ().newInstance();
         PluginProcessor pp = new PluginProcessor(pluginClass, null);
         pp.configure(
                 new Processor.Argument[] {

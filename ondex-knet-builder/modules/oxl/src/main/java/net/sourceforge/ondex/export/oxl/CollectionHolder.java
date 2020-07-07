@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.export.oxl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import javax.xml.bind.JAXBException;
@@ -41,16 +42,21 @@ public class CollectionHolder<E> implements Holder<Collection<E>> {
 
     public Collection<E> getValue() throws JAXBException {
         try {
-            Collection<E> newcollection = ((Collection<E>) clazz.newInstance());
+            Collection<E> newcollection = ((Collection<E>) clazz.getDeclaredConstructor().newInstance());
             for (Object value : values) {
                 newcollection.add((E) value);
             }
             return newcollection;
-        } catch (InstantiationException e) {
+        } 
+        catch ( InstantiationException 
+        					| IllegalAccessException
+        					| IllegalArgumentException
+        					| InvocationTargetException
+        					| NoSuchMethodException
+        					| SecurityException e) 
+        {
             throw new JAXBException(e);
-        } catch (IllegalAccessException e) {
-            throw new JAXBException(e);
-        }
+        } 
     }
 
     public void setValue(Collection<E> col) {

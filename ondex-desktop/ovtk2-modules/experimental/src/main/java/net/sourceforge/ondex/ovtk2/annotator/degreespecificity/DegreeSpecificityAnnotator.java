@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -170,7 +172,7 @@ public class DegreeSpecificityAnnotator extends OVTK2Annotator implements
 		value = new JFormattedTextField(valueLabel);
 		value.setActionCommand(CHECK_ACTION);
 		value.addActionListener(this);
-		value.setValue(new Double(0));
+		value.setValue(Double.valueOf(0));
 		value.setColumns(6);
 
 		// row 7
@@ -267,9 +269,8 @@ public class DegreeSpecificityAnnotator extends OVTK2Annotator implements
 		if (CHECK_ACTION.equals(e.getActionCommand())) {
 			check();
 		} else if (FINISH_ACTION.equals(e.getActionCommand())) {
-
-			Object[] sourceCC = source.getSelectedValues();
-			Object[] targetCC = target.getSelectedValues();
+			Object[] sourceCC = jlistSelectedValuesAsArray ( source );
+			Object[] targetCC = jlistSelectedValuesAsArray ( target );
 			String rt = (String) relationType.getSelectedItem();
 			String att = specificityAttributeName.getText().trim();
 			String deg_att = degreeAttributeName.getText().trim();
@@ -314,8 +315,8 @@ public class DegreeSpecificityAnnotator extends OVTK2Annotator implements
 	}
 
 	private void check() {
-		Object[] sourceCC = source.getSelectedValues();
-		Object[] targetCC = target.getSelectedValues();
+		Object[] sourceCC = jlistSelectedValuesAsArray ( source );
+		Object[] targetCC = jlistSelectedValuesAsArray ( target );
 
 		String rt = (String) relationType.getSelectedItem();
 		String spec_att = specificityAttributeName.getText().trim();
@@ -347,4 +348,10 @@ public class DegreeSpecificityAnnotator extends OVTK2Annotator implements
 		return used;
 	}
 
+	@SuppressWarnings ( "unchecked" )
+	private static Object[] jlistSelectedValuesAsArray ( JList<?> jl )
+	{
+		List<Object> vals = (List<Object>) jl.getSelectedValuesList ();
+		return vals.toArray ( new Object[ vals.size () ] );
+	}
 }

@@ -441,6 +441,7 @@ public class MenuGraphSearchBox extends JPanel implements ActionListener, CaretL
 		int modifiers = 0;
 		AWTEvent currentEvent = EventQueue.getCurrentEvent();
 		if (currentEvent instanceof InputEvent) {
+			// TODO: we have to migrate to getModifiersEx()
 			modifiers = ((InputEvent) currentEvent).getModifiers();
 		} else if (currentEvent instanceof ActionEvent) {
 			modifiers = ((ActionEvent) currentEvent).getModifiers();

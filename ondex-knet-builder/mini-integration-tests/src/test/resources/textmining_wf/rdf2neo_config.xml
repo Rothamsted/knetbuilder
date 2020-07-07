@@ -9,7 +9,7 @@
 			We use the same configuration that is shipped with ONDEX/MINI, but we need local config for the 
 			Neo4j driver, so this is overridden here.
 		-->
-		<import resource = "file://${project.build.directory}/ondex-mini/tools/neo4j-exporter/ondex_config/config.xml" />
+		<import resource = "file:///${project.build.directory}/ondex-mini/tools/neo4j-exporter/ondex_config/config.xml" />
 
 
 		<!-- We need the loadingSession scope, since a new driver is created for each query set -->		

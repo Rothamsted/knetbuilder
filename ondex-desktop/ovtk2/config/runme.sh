@@ -1,10 +1,11 @@
 #!/bin/bash
-DATA=data/
-OVTK_DATA=config/
-echo "Running OVTK on top of '$DATA'"
+DATA=data
+OVTK_DATA=config
+echo "Running OVTK on '$DATA', config on '$OVTK_DATA'"
 
 for J in lib/*jar
 do
+	[[ -z "$CLASSPATH" ]] || CLASSPATH="$CLASSPATH:"
   CLASSPATH=$CLASSPATH":"$J
 done
 

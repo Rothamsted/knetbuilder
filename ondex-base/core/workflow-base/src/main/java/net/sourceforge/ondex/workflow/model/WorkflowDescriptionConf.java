@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.workflow.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +60,17 @@ public class WorkflowDescriptionConf
     {
         Class<? extends ArgumentParser> amc = typeToAM.get(ab.getParser());
         if(amc == null) amc = WorkflowDescriptionConf.StandardArgMaker.class;
-        return amc.newInstance();
+        try {
+					return amc.getDeclaredConstructor().newInstance();
+				}
+				catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+						| NoSuchMethodException | SecurityException ex )
+				{
+					throw new IllegalArgumentException (
+						"Error while getting an instance of '" + amc.getName() + "', : " + ex.getMessage (),
+						ex
+					);
+				}
     }
 
     /**
@@ -79,8 +90,8 @@ public class WorkflowDescriptionConf
                 if (argParser == null) {
                     try {
                         argParser = (typeToAM.get(ab.getParser()) == null
-                                ? StandardArgMaker.class.newInstance()
-                                : typeToAM.get(ab.getParser()).newInstance());
+                                ? StandardArgMaker.class.getDeclaredConstructor().newInstance()
+                                : typeToAM.get( ab.getParser() ).getDeclaredConstructor().newInstance());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

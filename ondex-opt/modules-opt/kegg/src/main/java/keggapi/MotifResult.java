@@ -223,8 +223,8 @@ public class MotifResult  implements java.io.Serializable {
         }
         _hashCode += getStart_position();
         _hashCode += getEnd_position();
-        _hashCode += new Float(getScore()).hashCode();
-        _hashCode += new Double(getEvalue()).hashCode();
+        _hashCode += Float.valueOf(getScore()).hashCode();
+        _hashCode += Double.valueOf(getEvalue()).hashCode();
         __hashCodeCalc = false;
         return _hashCode;
     }

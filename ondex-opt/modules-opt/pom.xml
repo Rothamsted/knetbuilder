@@ -6,7 +6,7 @@
    <parent>
       <artifactId>ondex-opt</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>3.0.1-SNAPSHOT</version>
+      <version>4.0-SNAPSHOT</version>
    </parent>
 
    <artifactId>modules-opt</artifactId>
@@ -39,7 +39,7 @@
       <module>prolog</module>
       <module>protein-structure</module>
       <!--  module>psimi25</module -->
-      <!--  module>rdf</module -->
+      <!-- module>rdf</module -->
       <module>relevance</module>
       <!--  module>sbml</module -->
       <module>taxonomy</module>
@@ -50,19 +50,19 @@
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>taglist-maven-plugin</artifactId>
-            <version>${mojo.taglist.maven.plugin.version}</version>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-report-plugin</artifactId>
-            <version>${maven.surefire.report.plugin.version}</version>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>${maven.project.info.reports.plugin.version}</version>
          </plugin>
-         <plugin>
+				 <!--
+				 	TODO: We're already using FindBugs and this needs to be updated anyway
+				 	-->
+         <!-- plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
             <version>${maven.pmd.plugin.version}</version>
@@ -72,19 +72,10 @@
                <minimumTokens>100</minimumTokens>
                <targetJdk>${java.version}</targetJdk>
             </configuration>
-         </plugin>
+         </plugin -->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${maven.javadoc.plugin.version}</version>
-            <configuration>
-               <stylesheet>maven</stylesheet>
-               <additionalparam>
-						-link http://java.sun.com/javase/6/docs/api/
-						-link http://www.oracle.com/technology/documentation/berkeley-db/je/java
-						-link http://junit.sourceforge.net/javadoc/
-                    </additionalparam>
-            </configuration>
          </plugin>
       </plugins>
    </reporting>
@@ -96,7 +87,6 @@
 				-->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
-            <version>${maven.dependency.plugin.version}</version>
             <executions>
                <execution>
                   <id>unpack</id>
@@ -105,9 +95,7 @@
                      <goal>unpack</goal>
                   </goals>
                   <configuration>
-                     <artifactItems><!--artifactItem> <groupId>net.sourceforge.ondex</groupId> <artifactId>datadir</artifactId>
-									<type>zip</type> <classifier>data</classifier> <overWrite>false</overWrite>
-									<outputDirectory>${basedir}</outputDirectory> <includes>**/*</includes> </artifactItem -->
+                     <artifactItems>
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.core</groupId>
                            <artifactId>workflow-component-descriptor</artifactId>
@@ -143,7 +131,6 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${maven.javadoc.plugin.version}</version>
             <executions>
                <execution>
                   <goals><goal>javadoc</goal></goals>
@@ -166,7 +153,7 @@
 						-groupId ${project.groupId}
 						-version ${project.version}
 						-classdir ${project.build.directory}/classes
-						${project.build.directory}/libs4javadoc
+						-libsdir ${project.build.directory}/libs4javadoc
             </additionalparam>
             </configuration>
          </plugin>
@@ -175,16 +162,13 @@
 
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>${maven.assembly.plugin.version}</version>
             <executions>
                <execution>
                   <id>make-assembly-packaged_with_jars</id>
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
-                  <!-- append to the packaging phase. -->
                   <goals>
                      <goal>attached</goal>
-                     <!-- goals == mojos -->
                   </goals>
                   <configuration>
                      <descriptors>
@@ -196,10 +180,8 @@
                   <id>make-assembly-wf-descriptor</id>
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
-                  <!-- append to the packaging phase. -->
                   <goals>
                      <goal>attached</goal>
-                     <!-- goals == mojos -->
                   </goals>
                   <configuration>
                      <descriptors>
@@ -211,15 +193,12 @@
                   <id>jar-with-module-descriptor</id>
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
-                  <!-- append to the packaging phase. -->
                   <goals>
                      <goal>attached</goal>
-                     <!-- goals == mojos -->
                   </goals>
                   <configuration>
                      <descriptors>
-                        <descriptor>${project.build.directory}/assemblies/default_package.xml
-                                </descriptor>
+                        <descriptor>${project.build.directory}/assemblies/default_package.xml</descriptor>
                      </descriptors>
                   </configuration>
                </execution>
@@ -262,5 +241,4 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
-   
 </project>

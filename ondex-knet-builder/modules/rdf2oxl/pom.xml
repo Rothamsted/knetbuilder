@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>modules</artifactId>
 		<groupId>net.sourceforge.ondex</groupId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>4.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>net.sourceforge.ondex.modules</groupId>
@@ -55,6 +55,15 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 		</dependency>
+
+		<dependency>             
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+		</dependency>  
+		<dependency>             
+      <groupId>javax.annotation</groupId>
+      <artifactId>jsr250-api</artifactId>
+		</dependency>  
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -123,18 +132,10 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.20</version>
 				<configuration>
-					<properties>
-						<property>
-							<!-- Prints out spaces and test name before/after every test method and automatically -->
-							<name>listener</name>
-							<value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
-						</property>
-					</properties>
-					<forkMode>always</forkMode>
 					<forkCount>1</forkCount>
 					<!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
 					<forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
-					<argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>
+					<argLine>-XX:MaxRAM=4g -Dondex.dir=/tmp</argLine>
 				</configuration>
 			</plugin>
 

@@ -1,8 +1,10 @@
 package net.sourceforge.ondex.scripting.ui;
 
 import java.awt.Component;
+import java.awt.Event;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -35,13 +37,15 @@ import net.sourceforge.ondex.scripting.CommandCompletenessStrategy;
 import net.sourceforge.ondex.scripting.FunctionException;
 import net.sourceforge.ondex.scripting.InterpretationController;
 import net.sourceforge.ondex.scripting.OutputPrinter;
+import uk.ac.ebi.utils.memory.MemoryUtils;
 
 /**
  * @author lysenkoa Implementation of a command line GUI. Supports Up/Down arrow
  *         to browse history buffer, is an output printer
  */
-public class CommandLine extends JTextArea implements KeyListener,
-		ComponentListener, OutputPrinter {
+public class CommandLine extends JTextArea 
+	implements KeyListener, ComponentListener, OutputPrinter, AutoCloseable 
+{
 	private static CommandLine currentInstance;
 	private static final long serialVersionUID = 424446128004520635L;
 	private CommandBuffer cmdHistory;
@@ -67,6 +71,10 @@ public class CommandLine extends JTextArea implements KeyListener,
 	private CommandCompletenessStrategy ccs = new DefaultCommandCompletenessStrategy();
 	private boolean commandInterpreterReady = false;
 
+	{
+		MemoryUtils.registerCleaner ( this, this::close );
+	}
+	
 	private static void setFinished(boolean f) {
 		synchronized (finishedLock) {
 			finished = f;
@@ -143,7 +151,8 @@ public class CommandLine extends JTextArea implements KeyListener,
 		if (e.getKeyCode() == 10) {
 			command = this.getText().substring(inputPos,
 					this.getText().length());
-			if (!isComplete(command) || e.getModifiers() == 8) {
+			// TODO: it used to be 8, this should be the new corresponding value
+			if (!isComplete(command) || ( e.getModifiersEx() & InputEvent.ALT_DOWN_MASK ) != 0) {
 				return;
 			}
 			cmdHistory.add(command);
@@ -496,7 +505,8 @@ public class CommandLine extends JTextArea implements KeyListener,
 		}
 	}
 
-	public void finalize() {
+	@Override
+	public void close () {
 		stq.shutdownNow();
 		finished = true;
 	}

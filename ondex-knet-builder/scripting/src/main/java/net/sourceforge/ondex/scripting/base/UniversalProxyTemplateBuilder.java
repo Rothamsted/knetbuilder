@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.scripting.base;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -1006,7 +1007,18 @@ public class UniversalProxyTemplateBuilder extends ApplicationTreeBuilder implem
 				continue;
 			}
 			final Class<?> wrapperCls = Class.forName(s);
-			final ScriptingWrapper inst = (ScriptingWrapper)wrapperCls.newInstance();
+			
+			ScriptingWrapper inst;
+			try {
+				inst = (ScriptingWrapper)wrapperCls.getDeclaredConstructor ().newInstance();
+			}
+			catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException ex )
+			{
+				// TODO: this exception doesn't accept a parent exception, possibly define an extension
+				throw new InstantiationException ( "Error while instantiating ScriptingWrapper: " + ex.getMessage () );
+			}
+			
 			inst.wrap(input[i]);
 			result[i] = inst;
 		}

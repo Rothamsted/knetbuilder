@@ -143,7 +143,7 @@ public class StructureAlignment  implements java.io.Serializable {
         if (getTarget_id() != null) {
             _hashCode += getTarget_id().hashCode();
         }
-        _hashCode += new Float(getScore()).hashCode();
+        _hashCode += Float.valueOf(getScore()).hashCode();
         if (getQuery_nodes() != null) {
             for (int i=0;
                  i<java.lang.reflect.Array.getLength(getQuery_nodes());

@@ -106,11 +106,11 @@ public class ResultTableModel extends AbstractTableModel {
 			Object item = getValueAt(i,column);
 			if (!tmp.containsKey(item)) {
 				Vector<Integer> v = new Vector<Integer>();
-				v.add(new Integer(i));
+				v.add(i);
 				tmp.put(item, v);
 			} else {
 				Vector<Integer> v = tmp.get(item);
-				v.add(new Integer(i));
+				v.add(i);
 				tmp.remove(item);
 				tmp.put(item, v);
 			}

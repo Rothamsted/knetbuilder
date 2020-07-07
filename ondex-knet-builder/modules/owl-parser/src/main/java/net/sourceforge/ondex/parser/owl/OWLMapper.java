@@ -117,7 +117,7 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 	 * Creates a Spring container from the XML configuration file and then invokes 
 	 * {@link #mapFrom(ONDEXGraph, ApplicationContext, String...)}.
 	 * 
-	 * springXmlPath can be an URI starting with {@code file://}.
+	 * springXmlPath can be an URI starting with {@code file:///}.
 	 *  
 	 */
 	public static ONDEXGraph mapFrom ( ONDEXGraph graph, String springXmlPath, String... owlInputPaths )
@@ -131,7 +131,7 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 					? Paths.get ( IOUtils.uri ( springXmlPath ) ).toAbsolutePath ().toString ()
 					: new File ( springXmlPath ).getCanonicalPath ();
 					
-				springXmlPath = "file://" + springXmlPath;
+				springXmlPath = "file:///" + springXmlPath;
 			}
 		}
 		catch ( IOException ex ) 

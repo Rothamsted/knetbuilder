@@ -16,11 +16,6 @@ public class MemoryONDEXGraphMetaDataTest extends AbstractONDEXGraphMetaDataTest
 		return new MemoryONDEXGraph(name);
 	}
 
-	@Override
-	protected void finalize() {
-		// nothing to do
-	}
-
 	public void testWorkflow() {
 		//TODO: add tests
 	}

@@ -8,11 +8,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import uk.ac.ebi.utils.memory.CleaningObject;
+
 
 /**
  * @author hindlem
  */
-public class SingleThreadQueue {
+public class SingleThreadQueue extends CleaningObject {
 
     private ExecutorService executor;
     private boolean debug;
@@ -62,7 +64,8 @@ public class SingleThreadQueue {
         }
     }
 
-    public void finalize() {
+    @Override
+    public void close () {
         waitToFinish("finalize()");
         executor = null;
     }

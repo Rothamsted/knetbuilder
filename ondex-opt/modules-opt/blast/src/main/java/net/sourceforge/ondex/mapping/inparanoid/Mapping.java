@@ -489,11 +489,11 @@ public class Mapping extends ONDEXMapping implements ArgumentNames, MetaData {
 			// create relation between main orthologs in both directions
 			ONDEXRelation r = graph.getFactory().createRelation(mainA, mainB,
 					relationTypeOrtho, evidencetype);
-			r.createAttribute(attributeBitscore, new Double(ortho.getScore()),
+			r.createAttribute(attributeBitscore, ortho.getScore(),
 					false);
 			r = graph.getFactory().createRelation(mainB, mainA,
 					relationTypeOrtho, evidencetype);
-			r.createAttribute(attributeBitscore, new Double(ortho.getScore()),
+			r.createAttribute(attributeBitscore, ortho.getScore(),
 					false);
 
 			// create relations for inparalogs for mainA
@@ -504,8 +504,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames, MetaData {
 				if (graph.getRelation(c, mainA, relationTypeIpara) == null) {
 					r = graph.getFactory().createRelation(c, mainA,
 							relationTypeIpara, evidencetype);
-					r.createAttribute(attributeConf,
-							new Double(ipara.getConfidence()), false);
+					r.createAttribute(attributeConf, ipara.getConfidence(), false);
 				}
 			}
 
@@ -517,39 +516,13 @@ public class Mapping extends ONDEXMapping implements ArgumentNames, MetaData {
 				if (graph.getRelation(c, mainB, relationTypeIpara) == null) {
 					r = graph.getFactory().createRelation(c, mainB,
 							relationTypeIpara, evidencetype);
-					r.createAttribute(attributeConf,
-							new Double(ipara.getConfidence()), false);
+					r.createAttribute(attributeConf, ipara.getConfidence(), false);
 				}
 			}
 		}
 	}
 
-	// /**
-	// * To capture BLAST err output stream.
-	// *
-	// * @author taubertj
-	// *
-	// */
-	// private class StreamReaderThread extends Thread {
-	// StringBuffer mOut;
-	//
-	// InputStreamReader mIn;
-	//
-	// public StreamReaderThread(InputStream in, StringBuffer out) {
-	// mOut = out;
-	// mIn = new InputStreamReader(in);
-	// }
-	//
-	// public void run() {
-	// int ch;
-	// try {
-	// while (-1 != (ch = mIn.read()))
-	// mOut.append((char) ch);
-	// } catch (Exception e) {
-	// mOut.append("\nRead error:" + e.getMessage());
-	// }
-	// }
-	// }
+
 
 	/**
 	 * Convenience method for outputing the current method name in a dynamic way

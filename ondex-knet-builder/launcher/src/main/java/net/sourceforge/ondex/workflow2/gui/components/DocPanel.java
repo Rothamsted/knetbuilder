@@ -193,16 +193,6 @@ public class DocPanel extends JTabbedPane implements ComponentListener {
         }
     }
 
-    public void hide() {
-        switch (currentState) {
-            case DOCKED:
-                break;
-            case WINDOWED:
-                break;
-            case HIDDEN:
-                break;
-        }
-    }
 
     class HyperlinkListen implements HyperlinkListener {
 

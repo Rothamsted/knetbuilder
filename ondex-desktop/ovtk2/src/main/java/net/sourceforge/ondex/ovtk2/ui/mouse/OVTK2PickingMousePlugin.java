@@ -41,13 +41,23 @@ import net.sourceforge.ondex.ovtk2.ui.gds.AttributePanel;
 import net.sourceforge.ondex.ovtk2.ui.popup.VertexMenu;
 import net.sourceforge.ondex.tools.data.ChemicalStructure;
 
+import uk.ac.ebi.utils.memory.CleaningObject;
+import uk.ac.ebi.utils.memory.MemoryUtils;
+
 /**
  * Realises the change in cursor while in picking mode.
  * 
  * @author taubertj
  * @version 27.05.2008
  */
-public class OVTK2PickingMousePlugin extends PickingGraphMousePlugin<ONDEXConcept, ONDEXRelation> {
+public class OVTK2PickingMousePlugin
+	extends PickingGraphMousePlugin<ONDEXConcept, ONDEXRelation>
+	implements AutoCloseable
+{
+	{
+		MemoryUtils.registerCleaner ( this, this::close );
+	}
+	
 	// TODO the timer thread used here is the cause of random graph
 	// visualisation corruption and should be removed
 	/**
@@ -245,9 +255,7 @@ public class OVTK2PickingMousePlugin extends PickingGraphMousePlugin<ONDEXConcep
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-
+	public void close () {
 		// just being paranoid
 		cleanPopups();
 	}

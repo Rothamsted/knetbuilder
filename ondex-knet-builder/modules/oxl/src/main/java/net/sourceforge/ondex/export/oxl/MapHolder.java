@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.export.oxl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -46,14 +47,19 @@ public class MapHolder<K, V> implements Holder<Map<K, V>> {
 
     public Map<K, V> getValue() throws JAXBException {
         try {
-            Map<K, V> map = clazz.newInstance();
+            Map<K, V> map = clazz.getDeclaredConstructor ().newInstance();
             for (int i = 0; i < keys.length; i++) {
                 map.put((K) keys[i], (V) values[i]);
             }
             return map;
-        } catch (InstantiationException e) {
-            throw new JAXBException(e);
-        } catch (IllegalAccessException e) {
+        } 
+        catch (InstantiationException 
+        			 | IllegalAccessException
+        			 | IllegalArgumentException
+        			 | InvocationTargetException
+        			 | NoSuchMethodException
+        			 | SecurityException e) 
+        {
             throw new JAXBException(e);
         }
     }

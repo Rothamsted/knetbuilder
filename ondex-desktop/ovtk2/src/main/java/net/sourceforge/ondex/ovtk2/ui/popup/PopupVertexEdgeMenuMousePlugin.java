@@ -30,6 +30,9 @@ public class PopupVertexEdgeMenuMousePlugin<V, E> extends AbstractPopupGraphMous
 	 * 
 	 */
 	public PopupVertexEdgeMenuMousePlugin() {
+		// TODO: should migrate to J11, but the Jung component this derives from still
+		// uses the old getModifiers(), so we have to see if it will be updated:
+		// https://github.com/jrtom/jung/issues/250
 		this(MouseEvent.BUTTON3_MASK);
 	}
 

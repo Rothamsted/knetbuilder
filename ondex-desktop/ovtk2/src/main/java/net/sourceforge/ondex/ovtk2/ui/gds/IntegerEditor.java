@@ -79,7 +79,7 @@ public class IntegerEditor extends JTable implements GDSEditor {
 	}
 
 	public Object getDefaultValue() {
-		return new Integer(0);
+		return Integer.valueOf ( 0 );
 	}
 
 	public void flushChanges() {

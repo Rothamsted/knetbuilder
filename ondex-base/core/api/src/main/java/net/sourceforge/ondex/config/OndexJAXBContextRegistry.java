@@ -125,7 +125,7 @@ public class OndexJAXBContextRegistry {
 		if (hc != null) {
 			Holder holder = null;
 			try {
-				holder = (Holder) hc.newInstance();
+				holder = (Holder) hc.getDeclaredConstructor().newInstance();
 				holder.setValue(applyTo);
 			} catch (Exception e) {
 				throw new Error("Unable to create holder for object "

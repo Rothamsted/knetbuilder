@@ -188,7 +188,7 @@ public class JSInterpreter implements CommandInterpreter {
 				return super.wrapAsJavaObject(cx, scope, javaObject, staticType);
 			}
 			try {
-				ScriptingWrapper sw = (ScriptingWrapper)wrp.newInstance();
+				ScriptingWrapper sw = (ScriptingWrapper)wrp.getDeclaredConstructor ().newInstance();
 				sw.wrap(javaObject);
 				return new NativeJavaObject(scope, sw, staticType);
 			} catch (Exception e) {

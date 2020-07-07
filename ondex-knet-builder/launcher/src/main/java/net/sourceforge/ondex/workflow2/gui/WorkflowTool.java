@@ -671,7 +671,7 @@ public class WorkflowTool extends javax.swing.JFrame {
 			}
 		} else if (command.equals("close")) {
 			try {
-				selected.finalize();
+				selected.close ();
 			} catch (Throwable throwable) {
 				throwable.printStackTrace();
 			}

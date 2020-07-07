@@ -14,7 +14,22 @@
       <Arg name="InputFile">data/examples/rdf-export-2/text_mining.oxl</Arg>
       <Arg name="graphId">default</Arg>
     </Parser>
-    
+
+		<!-- Adds URIs to the OXL, ensuring they can be used later to match data in RDF -->
+    <Transformer name="URIAdditionPlugin">
+    	<!-- 
+    	  None of these are needed, it will take suitable defaults if not specified
+      
+      <Arg name="instanceNamespace">http://www.ondex.org/bioknet/resources/</Arg>
+      <Arg name="uriAttributeId">iri</Arg>
+      <Arg name="uriAttributeFullName">Entity IRI</Arg>
+      <Arg name="uriAttributeDescription">IRI/URI associated to the concept or relation, so that Ondex tools can be bridged with RDF or other graph database tools.</Arg>
+      <Arg name="uriIndexingEnabled">false</Arg>
+      
+      -->
+      <Arg name="graphId">default</Arg>
+    </Transformer>
+
 		<!-- 
 			The RDF format to produce. Accepts values from either Jena RDFFormat (https://goo.gl/XVQBHi)
 			or Jena Lang (https://goo.gl/gbp6bL). The default TURTLE_BLOCKS writes Turtle in an efficient way.

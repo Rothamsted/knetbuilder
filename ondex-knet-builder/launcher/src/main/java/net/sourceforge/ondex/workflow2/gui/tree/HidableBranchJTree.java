@@ -37,12 +37,12 @@ public class HidableBranchJTree extends JTree {
             for (MutableTreeNode n : currentLevel) {
                 List<MutableTreeNode> nextLevel = new ArrayList<MutableTreeNode>();
                 if (element.equals("?")) {
-                    Enumeration<MutableTreeNode> en = n.children();
+                    Enumeration<MutableTreeNode> en = (Enumeration<MutableTreeNode> ) n.children();
                     while (en.hasMoreElements()) {
                         nextLevel.add(en.nextElement());
                     }
                 } else {
-                    Enumeration<MutableTreeNode> en = n.children();
+                    Enumeration<MutableTreeNode> en = (Enumeration<MutableTreeNode> ) n.children();
                     while (en.hasMoreElements()) {
                         Object o = en.nextElement();
                         if (o instanceof DocumentedTreeNode) {

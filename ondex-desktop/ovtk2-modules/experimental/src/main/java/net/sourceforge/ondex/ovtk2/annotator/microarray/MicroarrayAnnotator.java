@@ -111,8 +111,7 @@ public class MicroarrayAnnotator extends OVTK2Annotator implements
 
 		chooser.setAccessory(optionsPanel);
 
-		final JFormattedTextField logBasefield = new JFormattedTextField(
-				new Double(2));
+		final JFormattedTextField logBasefield = new JFormattedTextField( Double.valueOf(2) );
 		logBasefield.setEnabled(false);
 
 		dataIsLogged.addActionListener(new ActionListener() {
@@ -332,7 +331,7 @@ public class MicroarrayAnnotator extends OVTK2Annotator implements
 	private JComponent createNodeSizePanel() {
 		JPanel sizeConstraints = new JPanel(new SpringLayout());
 		sizeConstraints.add(new JLabel("Min Node Size"));
-		JFormattedTextField minField = new JFormattedTextField(new Integer(5));
+		JFormattedTextField minField = new JFormattedTextField(Integer.valueOf(5));
 		minField.setColumns(5);
 		JPanel panel = new JPanel();
 		panel.add(minField);
@@ -340,7 +339,7 @@ public class MicroarrayAnnotator extends OVTK2Annotator implements
 		minField.setActionCommand("MIN");
 
 		sizeConstraints.add(new JLabel("Max Node Size"));
-		JFormattedTextField maxField = new JFormattedTextField(new Integer(50));
+		JFormattedTextField maxField = new JFormattedTextField(Integer.valueOf(50));
 		maxField.setColumns(5);
 		panel = new JPanel();
 		panel.add(maxField);

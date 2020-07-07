@@ -7,7 +7,7 @@
    <parent>
       <artifactId>knet-builder</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>3.0.1-SNAPSHOT</version>
+      <version>4.0-SNAPSHOT</version>
    </parent>
 
    <groupId>net.sourceforge.ondex.apps</groupId>
@@ -27,7 +27,6 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
-            <version>${maven.dependency.plugin.version}</version>
             <executions>
                <execution>
                   <id>unpack</id>
@@ -123,7 +122,6 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
-            <version>${maven.dependency.plugin.version}</version>            
             <executions>
                <execution>
                   <id>copy</id>
@@ -648,7 +646,6 @@
          
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>${maven.assembly.plugin.version}</version>
             <configuration>
                <descriptors>
                   <descriptor>${basedir}/zip_distro.xml</descriptor>

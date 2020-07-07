@@ -90,8 +90,8 @@ public class SVGExport {
 				jiw.isFunctional();
 				JPEGTranscoder t = new JPEGTranscoder();
 				t.setErrorHandler(new ErrorHandlerBridge());
-				t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(1.0));
-				t.addTranscodingHint(JPEGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, new Float(25.4f / 300f));
+				t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, 1.0);
+				t.addTranscodingHint(JPEGTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 25.4f / 300f);
 				transcode(t, svgGenerator, useCSS, rect, fos);
 			} else if (option.equalsIgnoreCase("eps")) {
 				EPSTranscoder t = new EPSTranscoder();

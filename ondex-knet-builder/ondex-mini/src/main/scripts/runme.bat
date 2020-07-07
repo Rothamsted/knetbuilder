@@ -1,1 +1,2 @@
-java -Xmx1G -Dondex.dir=./data -jar lib/ondex-mini-${project.version}.jar -ubla -ptest -w%1
+SET mypath=%~dp0
+PowerShell.exe -ExecutionPolicy Bypass -File %mypath%ondex-mini.ps1 %*

@@ -1,4 +1,6 @@
 @echo off
+REM TODO: remove? We use the scripts in ovtk2 instead
+
 cd /d %~dp0
 set MEMORY=1200M
 set DATA=data/

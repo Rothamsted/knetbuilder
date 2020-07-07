@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>modules</artifactId>
 		<groupId>net.sourceforge.ondex</groupId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>4.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>net.sourceforge.ondex.modules</groupId>
@@ -101,7 +101,6 @@
 	            	<artifactItem>
 							    <groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
 									<artifactId>rdf2neo-cli</artifactId>
-							    <version>${rdf2neo.version}</version>
 	               	<type>zip</type>
 	               	<excludes>**/examples/</excludes>
 	             	</artifactItem>
@@ -119,9 +118,7 @@
 
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.20.1</version>
 				<configuration>
-					<trimStackTrace>false</trimStackTrace>
 					<systemPropertyVariables>
 						<neo4j.server.boltPort>${neo4j.server.boltPort}</neo4j.server.boltPort>						
 					</systemPropertyVariables>
@@ -130,42 +127,24 @@
 	      			<RDF2NEO_HOME>${project.basedir}/src/main/assembly/resources</RDF2NEO_HOME>
 	      		</environmentVariables>					
 				</configuration>
-				<executions>
-					<execution>
-						<id>failsafe-test</id>
-						<goals><goal>integration-test</goal></goals>
-					</execution>
-					<execution>
-						<id>failsafe-verify</id>
-						<goals><goal>verify</goal></goals>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<!-- TODO: see if the top POM can work with this upgrade -->
 				<version>2.20</version>
 				<configuration>
-					<properties>
-						<property>
-							<!-- Prints out spaces and test name before/after every test method and automatically -->
-							<name>listener</name>
-							<value>uk.ac.ebi.utils.test.junit.TestOutputDecorator</value>
-						</property>
-					</properties>
-					<forkMode>always</forkMode>
 					<forkCount>1</forkCount>
 					<!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
 					<forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
-					<argLine>-Xms2G -Xmx12G -Dondex.dir=/tmp</argLine>
+					<argLine>-XX:MaxRAM=4g -Dondex.dir=/tmp</argLine>
 				</configuration>
 			</plugin>
 
 
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>${maven.assembly.plugin.version}</version>
 				<executions>
 					<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
 					<execution>

@@ -9,7 +9,7 @@
 			We have a special config for the Neo4j test instance, so we redefine that only 
 			(see this file for config details)
 		-->
-		<import resource = "file://${project.basedir}/src/main/assembly/resources/ondex_config/config.xml" />
+		<import resource = "file:///${project.basedir}/src/main/assembly/resources/ondex_config/config.xml" />
 		
 		<bean id = "neoDriver" 
 				  class = "org.neo4j.driver.v1.GraphDatabase" factory-method="driver"

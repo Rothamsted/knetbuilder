@@ -499,7 +499,7 @@ public class Engine {
         {
             try {
                 Thread.sleep(1000);
-            } 
+            }
             catch (InterruptedException e1) {
               System.err.println("Warning: unexpected thread interruption while trying to delete: " + dir );
             }

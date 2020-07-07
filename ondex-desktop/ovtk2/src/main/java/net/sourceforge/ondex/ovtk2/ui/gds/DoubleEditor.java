@@ -101,7 +101,7 @@ public class DoubleEditor extends JTable implements GDSEditor {
 	}
 
 	public Object getDefaultValue() {
-		return new Double(0);
+		return Double.valueOf( 0 );
 	}
 
 	public void flushChanges() {

@@ -7,7 +7,7 @@
    <parent>
      <groupId>net.sourceforge.ondex</groupId>
      <artifactId>ondex-full</artifactId>
-     <version>3.0.1-SNAPSHOT</version>
+     <version>4.0-SNAPSHOT</version>
    </parent>
 
    <artifactId>ondex-base</artifactId>
@@ -17,10 +17,6 @@
  
    <modules>
       <module>core</module>
-      <!-- module>modules</module -->
       <module>datadir</module>
-      <!-- module>doc</module -->
-      <!--module>apps</module -->
-      <!-- module>integration</module --> 
    </modules>
 </project>

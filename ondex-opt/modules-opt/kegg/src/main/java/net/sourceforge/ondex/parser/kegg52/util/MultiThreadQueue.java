@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.parser.kegg52.util;
 
+import java.lang.ref.Cleaner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -13,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * @author hindlem
  */
-public class MultiThreadQueue {
+public class MultiThreadQueue implements AutoCloseable {
 
     private static final long serialVersionUID = 8059211122995538242L;
 
@@ -26,6 +27,11 @@ public class MultiThreadQueue {
 
     private int objectsAllowed;
 
+    {
+    	// Finalization in J9+
+    	Cleaner.create ().register ( this, this::close );
+    }
+    
     class WaitableExecuter extends ThreadPoolExecutor {
 
         public WaitableExecuter(int corePoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue) {
@@ -136,7 +142,7 @@ public class MultiThreadQueue {
     }
 
     @Override
-    public void finalize() {
+    public void close () {
 
         waitToFinish("Termination for " + this.getClass().getName());
 

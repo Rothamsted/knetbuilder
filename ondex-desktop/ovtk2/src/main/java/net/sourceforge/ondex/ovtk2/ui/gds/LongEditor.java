@@ -79,7 +79,7 @@ public class LongEditor extends JTable implements GDSEditor {
 	}
 
 	public Object getDefaultValue() {
-		return new Long(0);
+		return Long.valueOf ( 0 );
 	}
 
 	public void flushChanges() {

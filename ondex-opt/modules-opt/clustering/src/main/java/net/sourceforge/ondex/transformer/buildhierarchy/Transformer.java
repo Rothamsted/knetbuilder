@@ -345,8 +345,8 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
         } else {
             c = graph.getFactory().createConcept("hierarchy_node:" + n.getId(), dataSource_unknown, cc_hierarchy, ev);
 
-            c.createAttribute(an_theta, new Double(n.theta), false);
-            c.createAttribute(an_logl, new Double(n.logF), false);
+            c.createAttribute(an_theta, n.theta, false);
+            c.createAttribute(an_logl, n.logF, false);
 
             ONDEXConcept cl = buildOutput(n.getChild(Node.LEFT));
             ONDEXConcept cr = buildOutput(n.getChild(Node.RIGHT));
@@ -593,7 +593,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
             for (ONDEXConcept c : graph.getConceptsOfAttributeName(an_taxid)) {
                 Attribute attribute = c.getAttribute(an_taxid);
                 int tax_curr = Integer.parseInt((String) attribute.getValue());
-                if (taxids.contains(new Integer(tax_curr)))
+                if (taxids.contains(tax_curr))
                     idOfTaxid.add(c.getId());
             }
         } else {

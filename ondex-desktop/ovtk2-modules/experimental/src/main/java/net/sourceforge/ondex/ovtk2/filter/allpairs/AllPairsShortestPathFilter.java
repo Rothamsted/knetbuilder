@@ -225,10 +225,10 @@ public class AllPairsShortestPathFilter extends OVTK2Filter implements
 			if (name.equals(ArgumentNames.WEIGHTATTRIBUTENAME_ARG))
 				value = attributeName;
 			else if (name.equals(ArgumentNames.ONLYDIRECTED_ARG))
-				value = new Boolean(directed);
+				value = Boolean.valueOf ( directed );
 			fa.addOption(name, value);
 			if (name.equals(ArgumentNames.INVERSE_WEIGHT_ARG))
-				value = new Boolean(inverse);
+				value = Boolean.valueOf ( inverse );
 		}
 
 		filter.setONDEXGraph(graph);

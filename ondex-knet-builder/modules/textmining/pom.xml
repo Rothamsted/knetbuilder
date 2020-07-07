@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>modules</artifactId>
 		<groupId>net.sourceforge.ondex</groupId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>4.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>net.sourceforge.ondex.modules</groupId>
@@ -17,11 +17,6 @@
 	<description>A collection of parsers, mapping and transformers to do textmining</description>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.codehaus.woodstox</groupId>
-			<artifactId>stax2-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>woodstox-core-lgpl</artifactId>

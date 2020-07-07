@@ -36,7 +36,7 @@ public class Util {
     private Set<String> element_of;
 
     public Util(ONDEXGraph og) {
-        if (queue != null) queue.finalize();
+        if (queue != null) queue.close ();
         queue = new SingleThreadQueue(Util.class.getName());
         queue.setDEBUG(Parser.DEBUG);
         element_of = Collections.synchronizedSet(new HashSet<String>());
@@ -47,7 +47,7 @@ public class Util {
 
     public void cleanup() {
         element_of = null;
-        queue.finalize();
+        queue.close ();
         queue = null;
         cw.cleanup();
         cw = null;

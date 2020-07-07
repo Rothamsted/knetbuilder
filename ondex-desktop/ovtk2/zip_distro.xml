@@ -8,7 +8,16 @@
 	<dependencySets>
 		<dependencySet>
 			<outputDirectory>${project.artifactId}/lib</outputDirectory>
-			<outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<!--outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping -->
+			<useTransitiveDependencies>true</useTransitiveDependencies>
+			<scope>compile</scope>
+			<excludes>
+				<exclude>*:zip</exclude>
+			</excludes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>${project.artifactId}/lib</outputDirectory>
+			<!--outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping -->
 			<useTransitiveDependencies>true</useTransitiveDependencies>
 			<scope>runtime</scope>
 			<excludes>
@@ -25,11 +34,20 @@
 		</dependencySet>
 	</dependencySets>
 	 <files>
+	  <!-- TODO: Remove, no longer used
 		<file>
 		 <source>target/${project.artifactId}-${project.version}.exe</source>
 		 <outputDirectory></outputDirectory>
 		 <destName>${project.artifactId}/${project.artifactId}.exe</destName>
 		</file>
+		<file>
+		 <source>${basedir}/config/ovtk2.l4j.ini</source>
+		 <outputDirectory></outputDirectory>
+		 <destName>${project.artifactId}/ovtk2.l4j.ini</destName>
+		 <fileMode>0644</fileMode>
+		 <lineEnding>dos</lineEnding>
+		</file>
+		-->		
 		<file>
 		 <source>${basedir}/config/runme.sh</source>
 		 <outputDirectory></outputDirectory>
@@ -45,10 +63,10 @@
 		 <lineEnding>dos</lineEnding>
 		</file>
 		<file>
-		 <source>${basedir}/config/ovtk2.l4j.ini</source>
+		 <source>${basedir}/config/ondex.ps1</source>
 		 <outputDirectory></outputDirectory>
-		 <destName>${project.artifactId}/ovtk2.l4j.ini</destName>
-		 <fileMode>0644</fileMode>
+		 <destName>${project.artifactId}/ondex.ps1</destName>
+		 <fileMode>0755</fileMode>
 		 <lineEnding>dos</lineEnding>
 		</file>
 	</files>

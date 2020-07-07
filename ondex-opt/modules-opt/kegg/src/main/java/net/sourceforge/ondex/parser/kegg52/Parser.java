@@ -501,7 +501,7 @@ public class Parser extends ONDEXParser implements ArgumentNames {
         }
 
         queue.waitToFinish("Parser");
-        queue.finalize();
+        queue.close ();
 
         System.out.println("Parsing Map pathways");
         List<File> mapFiles = getFilenames(new File(pathToKGML + File.separator
@@ -596,14 +596,14 @@ public class Parser extends ONDEXParser implements ArgumentNames {
             System.out.println("RelationPathwayParser");
         new RelationPathwayParser().parseAndWrite(pathwayCache, relationsCache);
 
-        relationsCache.finalize();
-        sequenceCache.finalize();
+        relationsCache.close ();
+        sequenceCache.close ();
 
         if (DEBUG)
             System.out.println("clean up Writers");
         writerUtils.cleanup();
-        pathwayCache.finalize();
-        env.finalize();
+        pathwayCache.close ();
+        env.close ();
         env = null;
 
         kgmlFilenamesToParse.clear();

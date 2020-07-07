@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -106,6 +107,7 @@ public class FASTAExporter extends JInternalFrame implements ActionListener,
 		this.setVisible(true);
 	}
 
+	@SuppressWarnings ( { "unchecked", "rawtypes" } )
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -116,8 +118,9 @@ public class FASTAExporter extends JInternalFrame implements ActionListener,
 			repaint();
 		} else if (e.getActionCommand().equals(GO)) {
 
-			if (file != null && selectedConcepts.getSelectedValues().length > 0) {
-				Object[] values = selectedConcepts.getSelectedValues();
+			List<Object> selConceptVals = selectedConcepts.getSelectedValuesList();
+			if (file != null && selConceptVals.size() > 0) {
+				Object[] values = selConceptVals.toArray ( new Object [ selConceptVals.size () ] );
 				Integer[] cids = new Integer[values.length];
 
 				for (int i = 0; i < values.length; i++) {

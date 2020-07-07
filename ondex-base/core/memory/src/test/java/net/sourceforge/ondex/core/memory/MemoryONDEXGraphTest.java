@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.core.memory;
 
+import org.junit.Test;
+
 import net.sourceforge.ondex.core.base.AbstractONDEXGraph;
 import net.sourceforge.ondex.core.test.AbstractONDEXGraphTest;
 
@@ -16,11 +18,7 @@ public class MemoryONDEXGraphTest extends AbstractONDEXGraphTest {
 		return new MemoryONDEXGraph(name);
 	}
 
-	@Override
-	protected void finalize() {
-		// nothing to do
-	}
-
+	@Test
 	public void testWorkflow() {
 		//TODO: add tests
 	}
