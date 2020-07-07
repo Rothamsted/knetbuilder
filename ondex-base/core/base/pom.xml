@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>core</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>3.0.1-SNAPSHOT</version>
+   </parent>
+
+   <groupId>net.sourceforge.ondex.core</groupId>
+   <artifactId>base</artifactId>
+   <packaging>jar</packaging>
+
+   <name>ONDEX/core/base</name>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>${maven.jar.plugin.version}</version>
+            <inherited>false</inherited>
+            <executions>
+               <execution>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>test-jar</goal>
+                     <goal>jar</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <archive>
+                  <manifest>
+                     <addClasspath>true</addClasspath>
+                  </manifest>
+               </archive>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+   <dependencies>
+      <dependency>
+         <groupId>net.sourceforge.collections</groupId>
+         <artifactId>collections-generic</artifactId>
+         <scope>compile</scope>
+      </dependency>
+      
+      <dependency>
+         <groupId>com.google.guava</groupId>
+         <artifactId>guava</artifactId>
+      </dependency>
+			
+			<!-- Used in a couple of plug-ins, we cannot make it working as their local dependency only -->
+      <dependency>
+         <groupId>com.sleepycat</groupId>
+         <artifactId>je</artifactId>
+         <scope>compile</scope>
+      </dependency>
+
+			<!-- Routes SLF4J to LOG4j, which is the ONDEX logger (here we use both LOG4j and SLF4J -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+			</dependency>
+      
+      <!-- ONDEX deps -->
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>api</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.sourceforge.ondex.core</groupId>
+         <artifactId>marshal</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+
+			<dependency>
+		  		<groupId>uk.ac.ebi</groupId>
+		  		<artifactId>jutils</artifactId>
+			</dependency>
+			
+   </dependencies>
+</project>

@@ -1,0 +1,6 @@
+[COMMENT] Format profile source into profile target
+[ALGORITHM] TB
+[QUERY TYPE] AA
+[OPTIONS] -O1
+[TARGET PATH] %TARGETPATH%
+[TARGET SET] NEW_DB

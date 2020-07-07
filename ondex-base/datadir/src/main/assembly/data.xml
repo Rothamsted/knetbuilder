@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<assembly>
+	<id>data</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+	    <fileSet>
+		    <directory>src/main/resources</directory>
+            <outputDirectory>/data/</outputDirectory>
+		    <excludes>
+			   	<!--  <exclude>dbs/**</exclude> This is the reason why Berkeley tests fail.-->
+			   	<exclude>seqs/**</exclude>
+			</excludes>
+      <fileMode>0644</fileMode>
+			<directoryMode>0755</directoryMode>      
+	    </fileSet>
+	</fileSets>
+</assembly>
