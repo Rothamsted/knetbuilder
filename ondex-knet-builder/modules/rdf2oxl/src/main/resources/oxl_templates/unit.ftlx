@@ -1,7 +1,0 @@
-<#include "graph_header.ftlx">
-<#include "utils.ftlx">
-<#list js as unit>
-			<unit>
-				<@render_metadata unit />
-			</unit>
-</#list>

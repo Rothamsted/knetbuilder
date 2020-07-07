@@ -1,5 +1,0 @@
-SELECT ?resourceIri 
-WHERE {
-  ?resourceIri a bk:DataSource;
-  	  		     bk:isOndexPreferred true.
-}

@@ -1,6 +1,0 @@
-<#-- 
-  Common initialisation for templates working with json graph variables, which come from JSON-LD RDF graphs.
-
--->
-<#--   assign js = jsonGraph?eval>
-<#assign js = js[ '@graph' ]???then( js[ '@graph' ], [ js ] ) -->

@@ -1,2 +1,0 @@
-This list is too big to be worth keeping it here.
-Look at the attachment at https://github.com/Rothamsted/ondex-knet-builder/issues/19

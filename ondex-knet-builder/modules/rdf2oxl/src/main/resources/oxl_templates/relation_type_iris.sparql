@@ -1,5 +1,0 @@
-SELECT ?resourceIri 
-WHERE {
-  ?resourceIri rdfs:subPropertyOf+ bk:conceptsRelation;
-  						 bk:isOndexPreferred true;
-}

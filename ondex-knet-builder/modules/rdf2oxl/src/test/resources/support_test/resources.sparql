@@ -1,6 +1,0 @@
-prefix bk:  <http://knetminer.org/data/rdf/terms/biokno/>
-
-SELECT ?resourceIri
-{
-  ?resourceIri a bk:Publication.
-}

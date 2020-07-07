@@ -1,1 +1,0 @@
-unList.exe /DATE=0 /INSTDIR="C:\Program Files (x86)\Ondex" /LOG=uninstall.log /PREFIX="	" /UNDIR_VAR=$INSTDIR /MB=0

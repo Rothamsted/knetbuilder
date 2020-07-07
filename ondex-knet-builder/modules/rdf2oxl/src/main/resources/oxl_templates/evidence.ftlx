@@ -1,7 +1,0 @@
-<#include "graph_header.ftlx">
-<#include "utils.ftlx">
-<#list js as evidence>
-			<evidence>
-				<@render_metadata evidence />
-			</evidence>
-</#list>
