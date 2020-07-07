@@ -96,10 +96,7 @@ cd "$wdir"
 # Gets all the download links by chaining multiple invocations of make_doc()/Nexus-API
 #
 
-# TODO: For now, we report both 4-* version (JDK11) and 3-* version (JDK8)
-# Later, we will omit the version param and fetch the last snapshot only
-#
-# TODO: I've added the same trick as a temp hack to obtain 3.0 instead of 3.0-RC
+# TODO: The 3.0 specified below is to obtain the right release, rather than 3.0-RC
 # I've filed a bug to Sonatype about this. Needs a more stable solution, like 
 # results filtering.
 #
@@ -107,22 +104,13 @@ cd "$wdir"
 cat "$mydir/Downloads_template.md" \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.apps installer \
-  	packaged-distro zip ondexJ11Url 4.0-SNAPSHOT \
+  	packaged-distro zip ondexSnapUrl \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.apps ondex-mini \
-    packaged-distro zip miniJ11Url 4.0-SNAPSHOT \
+    packaged-distro zip miniSnapUrl \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.modules rdf-export-2-cli \
-    '' zip rdfExporterJ11Url 4.0-SNAPSHOT \
-| make_doc \
-    maven-snapshots net.sourceforge.ondex.apps installer \
-  	packaged-distro zip ondexSnapUrl 3.0.1-SNAPSHOT \
-| make_doc \
-    maven-snapshots net.sourceforge.ondex.apps ondex-mini \
-    packaged-distro zip miniSnapUrl 3.0.1-SNAPSHOT \
-| make_doc \
-    maven-snapshots net.sourceforge.ondex.modules rdf-export-2-cli \
-    '' zip rdfExporterSnapUrl 3.0.1-SNAPSHOT \
+    '' zip rdfExporterSnapUrl \
 | make_doc \
     maven-releases net.sourceforge.ondex.apps installer \
   	packaged-distro zip ondexRelUrl 3.0 \
@@ -132,4 +120,3 @@ cat "$mydir/Downloads_template.md" \
 | make_doc \
     maven-releases net.sourceforge.ondex.modules rdf-export-2-cli \
     '' zip rdfExporterRelUrl 3.0
-    

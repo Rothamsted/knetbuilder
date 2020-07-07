@@ -5,10 +5,8 @@
 
 ## ONDEX Desktop Application
 
-  * **NEW!** [Java 11 Test Release](%ondexJ11Url%)
-  
-  * [Latest Stable Release](%ondexRelUrl%)
-  * [Latest Dev Release](%ondexSnapUrl%)
+  * [Latest Stable Release](%ondexRelUrl%) (requires Java 1.8)
+  * [Latest Dev Release](%ondexSnapUrl%) (requires Java >= 11)
   
   * [Older Releases](https://knetminer.org/artifactory/service/rest/repository/browse/maven-public/net/sourceforge/ondex/apps/installer/)
 
@@ -16,10 +14,8 @@
 
 ## ONDEX Mini (i.e., command line application)
 
-  * **NEW!** [Java 11 Test Release](%miniJ11Url%)
-
-  * [Latest Stable Release](%miniRelUrl%)
-  * [Latest Dev Release](%miniSnapUrl%)
+  * [Latest Stable Release](%miniRelUrl%) (requires Java 1.8)
+  * [Latest Dev Release](%miniSnapUrl%) (requires Java >= 11)
 
   * [Older Releases](https://knetminer.org/artifactory/service/rest/repository/browse/maven-public/net/sourceforge/ondex/apps/ondex-mini)
   
@@ -37,10 +33,8 @@ The zip includes data, configuration and example files.
 This is the command-line version for the OXL-to-RDF exporter, both the desktop application and the Mini have it embedded
 as a plugin.
  
-  * **NEW!** [Java 11 Test Release](%rdfExporterJ11Url%)
-
-  * [Latest Stable Release](%rdfExporterRelUrl%)
-  * [Latest Dev Release](%rdfExporterSnapUrl%)
+  * [Latest Stable Release](%rdfExporterRelUrl%) (requires Java 1.8)
+  * [Latest Dev Release](%rdfExporterSnapUrl%) (requires Java >= 11)
  
   * [Older Releases](https://knetminer.org/artifactory/service/rest/repository/browse/maven-public/net/sourceforge/ondex/modules/rdf-export-2-cli)
 
