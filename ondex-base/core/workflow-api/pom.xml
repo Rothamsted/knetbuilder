@@ -77,7 +77,7 @@
          <scope>compile</scope>
       </dependency>
       <dependency>
-         <groupId>uk.org.mygrid.resources.clapper</groupId>
+         <groupId>org.clapper.util</groupId>
          <artifactId>ocutil</artifactId>
          <version>2.5.1</version>
          <scope>compile</scope>
