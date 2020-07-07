@@ -1,3 +1,26 @@
+
+# TODO: factorise this fragment into knetminer-common
+#
+if [[ "$TRAVIS_EVENT_TYPE" == "cron" ]]; then
+	
+	# Travis's cron doesn't consider if there have been changes or not, so we rely on 
+	# git commits to check that. This isn't perfect (eg, last build could have failed due to network problems,
+	# not necessarily the code itself), but good enough in most cases. 
+	# TODO: see if the date of the last successful build can be get from the Travis API.
+	#
+	nchanges=$(git log --since '24 hours ago' --format=oneline | wc -l)
+	if [[ $(($nchanges)) == 0  ]]; then
+		cat <<EOT
+
+
+	This is a cron-triggered build and the code didn't change since the latest build, so we're not rebuilding.
+	This is based on github logs (--since '24 hours ago'). Please, launch a new build manually if I didn't get it right.
+	
+EOT
+	exit
+	fi
+fi
+
 export JAVA_TOOL_OPTIONS="-Xms1G -Xmx4G -Dsun.net.client.defaultConnectTimeout=600000 -Dsun.net.client.defaultReadTimeout=600000" 
 # We need to reduce Maven verbosity, Travis has an out limit
 export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dorg.slf4j.simpleLogger.defaultLogLevel=INFO"
