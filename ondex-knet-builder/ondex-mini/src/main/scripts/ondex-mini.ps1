@@ -12,6 +12,20 @@ while ( $args.count -gt 0 )
   $PLUGIN_ARGS = "$PLUGIN_ARGS -P$vardef"
 }
 
+# Note: the JARS loaded by the plugin engine don't work anymore in J11
+#
+$CLASSPATH = ""
+$jars = Get-ChildItem lib -Filter '*.jar'
+foreach ($jar in $jars)
+{
+  $jar = Split-Path $jar -leaf
+  if ( ! "$CLASSPATH" -eq "" ) {
+    $CLASSPATH = "${CLASSPATH};"
+  }
+  $CLASSPATH = "${CLASSPATH}lib\$jar"
+}
+
+
 $jar_path = Get-ChildItem $MYDIR/lib -Filter 'ondex-mini-*.jar'
 $jar_path = "lib\$jar_path"
 
@@ -34,6 +48,8 @@ if ( "$JAVA_TOOL_OPTIONS" -eq "" ) {
 #$env:JAVA_TOOL_OPTIONS = "env:$JAVA_TOOL_OPTIONS  -Djava.rmi.server.hostname=localhost"
 #$env:JAVA_TOOL_OPTIONS = "env:$JAVA_TOOL_OPTIONS -Dcom.sun.management.jmxremote.local.only=false"
 
-$jcmd = "-Dondex.dir=$MYDIR/data -jar $jar_path -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS"
+$cmd = "-Dondex.dir=$MYDIR/data --class-path $CLASSPATH net.sourceforge.ondex.OndexMiniMain"
+$cmd = "$cmd -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS"
+
 #echo $jcmd
 Start-Process -FilePath java -NoNewWindow -Wait -ArgumentList $jcmd
