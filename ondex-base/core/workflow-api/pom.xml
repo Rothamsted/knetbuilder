@@ -76,6 +76,12 @@
          <version>1.1</version>
          <scope>compile</scope>
       </dependency>
+      <!-- 
+      	Try a more recent version, which shouldn't require uploads from old 
+      	Ondex repo: 
+      		https://search.maven.org/artifact/org.clapper/javautil
+      	 	https://github.com/bmc/javautil/
+      -->
       <dependency>
          <groupId>org.clapper.util</groupId>
          <artifactId>ocutil</artifactId>
