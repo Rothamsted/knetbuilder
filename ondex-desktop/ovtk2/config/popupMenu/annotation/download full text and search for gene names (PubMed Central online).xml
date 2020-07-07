@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_22" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>importPackage(javax.xml.parsers)
+importPackage(net.sourceforge.ondex.tools.threading.monitoring)
+importPackage(net.sourceforge.ondex.ovtk2.util)
+
+function main() {
+	// show progress bar
+	startMonitor(&quot;download and search in full text&quot;, getPickedConcepts().size()*3+1)
+
+	// mapping of  Gene Name -&gt; Concept
+	// this has 2 purposes:
+	// 1. we use the Gene Names (TreeMap.keySet()) for searching in publication full text 
+	// 2. If found, we instantly have the corresponding gene concept through this mapping. (TreeMap.get(name))
+	var geneName2ConceptMap = createGeneName2ConceptMap()
+
+	var i = getPickedConcepts().iterator()
+	var j = 1
+	while(i.hasNext()) {
+		var publication = i.next()
+		
+		// download full text
+		if(!nextState(&quot;Processing concept &quot;+j+&quot; of &quot;+getPickedConcepts().size()+&quot; - downloading full text...&quot;)) return
+		var fullText = eFetch(publication)
+		if(fullText==null) {
+			j++
+			continue
+		}
+
+		// create suffix tree on full text
+		if(!nextState(&quot;Processing concept &quot;+j+&quot; of &quot;+getPickedConcepts().size()+&quot; - creating suffix tree...&quot;)) return
+		var tree = new com.blogspot.illyakeeplearning.suffixtree.SuffixTree(fullText)
+		
+		// search for gene names (~15 000) in full text using the suffix tree
+		if(!nextState(&quot;Processing concept &quot;+j+&quot; of &quot;+getPickedConcepts().size()+&quot; - searching full text for genes...&quot;)) return
+		doFullTextSearch(publication, fullText, tree, geneName2ConceptMap)
+		
+		j++
+	}
+
+	monitorComplete()
+}
+
+// create a mapping of Names and GENE_NAMEs to &quot;Gene&quot; Concepts
+function createGeneName2ConceptMap() {
+	var i = getActiveGraph().getConceptsOfConceptClass(&quot;Gene&quot;).iterator()
+	var map = new java.util.TreeMap()
+	
+	if(!getActiveGraph().getMetaData().checkAttributeName(&quot;GENE_NAME&quot;))
+		getActiveGraph().getMetaData().createAttributeName(&quot;GENE_NAME&quot;,&quot;GENE_NAME&quot;,&quot;&quot;,&quot;null&quot;,java.lang.String,&quot;null&quot;)
+	
+	while(i.hasNext()) {
+		var gene = i.next()
+//		map.put(gene.getConceptName().getName(),gene)
+		var accs = gene.getConceptAccessions()
+		var iter = accs.iterator()
+		while(iter.hasNext()){
+			var acc = iter.next()
+			var id = acc.getElementOf().getId()
+			if(id ==&quot;CADREGeneID&quot; || id ==  &quot;Alias&quot; || id == &quot;EnsemblGeneID&quot;  || id == &quot;AspGDID&quot; )
+				map.put(acc.getAccession(),gene)
+		}
+		if( null!=gene.getAttribute(&quot;GENE_NAME&quot;)  &amp;&amp;  null!=gene.getAttribute(&quot;GENE_NAME&quot;).unwrap() &amp;&amp;  !&quot;(null)&quot;.equals( gene.getAttribute(&quot;GENE_NAME&quot;).getValue() ) )
+			map.put(gene.getAttribute(&quot;GENE_NAME&quot;).getValue(),gene)
+	}
+	return map
+}
+
+// access xml from entrez http api
+function eFetch(publication)
+{
+	// ID used in EFetch to access the full text
+	var pmcid = getConceptAccessionById(publication, &quot;PMCID&quot;)
+	if(pmcid==null)
+		return null
+	
+	var dbf = createDocumentBuilderFactory()
+	var db = dbf.newDocumentBuilder()
+	var dom = db.parse(&quot;http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&amp;id=&quot;+pmcid+&quot;&amp;retmode=xml&quot;)
+	var docEle = dom.getDocumentElement()
+	var fullText = docEle.getTextContent() // getElementsByTagName(&quot;body&quot;).item(0).getTextContent()
+
+	return fullText
+
+} // function eFetch
+
+// do the actual full text search using the suffix tree and a name-&gt;gene mapping
+function doFullTextSearch(publication, fullText, tree, map) {
+	var i = map.keySet().iterator()
+	while(i.hasNext()) {
+		var geneName = i.next()
+		if(tree.contains(geneName) &amp;&amp; isValid(fullText, geneName)) {
+			createAndShowRelation(map.get(geneName), publication, &quot;pub_in&quot;)
+		}		
+	}
+}
+
+function isValid(fullText, geneName) {
+	// for &quot;ran&quot; the regex looks like &quot;(^|[^\w])([Rr]an)($|[^\w])&quot;
+	var regex = &quot;[&quot;+geneName.substring(0,1).toUpperCase()+geneName.substring(0,1)+&quot;]&quot;
+	regex = &quot;(&quot;+regex+geneName.substring(1)+&quot;)&quot;
+	regex = &quot;(^|[^\\w])&quot;+regex+&quot;($|[^\\w])&quot;
+
+	return java.util.regex.Pattern.compile(regex).matcher(fullText).find()
+}
+
+main()</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Publication</string>
+  </void>
+  <void property="libraries">
+   <string>toolbox.js, xml.js, monitor.js</string>
+  </void>
+  <void property="name">
+   <string>download full text and search for gene names (PubMed Central online)</string>
+  </void>
+ </object>
+</java>

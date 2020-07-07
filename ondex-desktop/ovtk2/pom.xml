@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>apps</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>3.0.1-SNAPSHOT</version>
+   </parent>
+
+   <groupId>net.sourceforge.ondex.apps</groupId>
+   <artifactId>ovtk2</artifactId>
+
+   <name>ONDEX OVTK2</name>
+   <description>ONDEX OVTK2</description>
+
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+               <archive>
+                  <index>true</index>
+                  <manifest>
+                     <addClasspath>true</addClasspath>
+                     <mainClass>net.sourceforge.ondex.ovtk2.Main</mainClass>
+                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                     <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                  </manifest>
+                  <manifestEntries>
+                     <Permissions>all-permissions</Permissions>
+                     <Codebase>*</Codebase>
+                  </manifestEntries>
+               </archive>
+            </configuration>
+         </plugin>
+
+         <plugin>
+            <groupId>com.akathist.maven.plugins.launch4j</groupId>
+            <artifactId>launch4j-maven-plugin</artifactId>
+            <version>1.7.21</version>
+            <executions>
+               <execution>
+                  <id>l4j-gui</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>launch4j</goal>
+                  </goals>
+                  <configuration>
+                     <headerType>gui</headerType>
+                     <outfile>target/${project.artifactId}-${project.version}.exe</outfile>
+                     <jar>lib/${project.artifactId}-${project.version}.jar</jar>
+                     <dontWrapJar>true</dontWrapJar>
+                     <chdir>.</chdir>
+                     <errTitle>Ondex - no JAVA found</errTitle>
+                     <classPath>
+                        <mainClass>net.sourceforge.ondex.ovtk2.Main</mainClass>
+                     </classPath>
+                     <jre>
+                        <minVersion>1.6.0</minVersion>
+                     </jre>
+                     <versionInfo>
+                        <fileVersion>2014.26.1.0</fileVersion>
+                        <txtFileVersion>${project.version}</txtFileVersion>
+                        <fileDescription>Ondex front-end executable</fileDescription>
+                        <copyright>${project.organization.name} 2014</copyright>
+                        <productVersion>2014.26.1.0</productVersion>
+                        <txtProductVersion>${project.version}</txtProductVersion>
+                        <productName>${project.name}</productName>
+                        <internalName>${project.artifactId}</internalName>
+                        <originalFilename>${project.artifactId}-${project.version}.exe</originalFilename>
+                     </versionInfo>
+                     <icon>config/icons/ondex.ico</icon>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>${maven.assembly.plugin.version}</version>
+            <configuration>
+               <descriptors>
+                  <descriptor>${basedir}/zip_distro.xml</descriptor>
+               </descriptors>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>make-assembly</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>attached</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+
+      <finalName>${project.artifactId}-${project.version}</finalName>
+   </build>
+
+   <reporting>
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>taglist-maven-plugin</artifactId>
+            <version>${mojo.taglist.maven.plugin.version}</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <version>${maven.surefire.plugin.version}</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-project-info-reports-plugin</artifactId>
+            <version>${maven.project.info.reports.plugin.version}</version>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>${maven.pmd.plugin.version}</version>
+            <configuration>
+               <linkXref>true</linkXref>
+               <sourceEncoding>ISO-8859-1</sourceEncoding>
+               <minimumTokens>100</minimumTokens>
+               <targetJdk>${java.version}</targetJdk>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${maven.javadoc.plugin.version}</version>
+            <configuration>
+               <stylesheet>maven</stylesheet>
+               <additionalparam>
+						-link http://java.sun.com/javase/6/docs/api/
+						-link
+						http://www.oracle.com/technology/documentation/berkeley-db/je/java
+						-link http://junit.sourceforge.net/javadoc/
+						-link
+						http://ondex.rothamsted.ac.uk/ondex/core/apidocs/
+						-link
+						http://ondex.rothamsted.ac.uk/ondex/modules/apidocs/
+					</additionalparam>
+            </configuration>
+         </plugin>
+         <!-- <producer> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-producer</artifactId> 
+				<configuration> <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet> <docletArtifact> 
+				<groupId>gr.spinellis</groupId> <artifactId>UmlGraph</artifactId> <version>5.0</version> 
+				</docletArtifact> <additionalparam> -inferrel -inferdep -hide java.* -collpackages 
+				java.util.* -qualify -postfixpackage -nodefontsize 9 -nodefontpackagesize 
+				7 -link http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec -link 
+				http://java.sun.com/j2se/1.5/docs/api -inferdepvis </additionalparam> <encoding>ISO-8859-1</encoding> 
+				</configuration> </producer> -->
+      </plugins>
+   </reporting>
+
+   <dependencies>
+      <dependency>
+         <groupId>net.java.dev.glazedlists</groupId>
+         <artifactId>glazedlists_java15</artifactId>
+         <version>1.8.0</version>
+      </dependency>
+      <dependency>
+         <groupId>jfree</groupId>
+         <artifactId>jfreechart</artifactId>
+         <version>1.0.11</version>
+         <exclusions>
+            <exclusion>
+               <groupId>gnujaxp</groupId>
+               <artifactId>gnujaxp</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>jfree</groupId>
+         <artifactId>jcommon</artifactId>
+         <version>1.0.12</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.epsgraphics</groupId>
+         <artifactId>epsgraphics</artifactId>
+         <version>1.2</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-api</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-jai</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-visualization</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-algorithms</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>net.sf.jung</groupId>
+         <artifactId>jung-graph-impl</artifactId>
+         <version>2.0.1</version>
+      </dependency>
+			<dependency>
+			  <groupId>javax.help</groupId>
+			  <artifactId>javahelp</artifactId>
+			  <version>2.0.05</version>
+			</dependency>
+      <dependency>
+         <groupId>org.apache.xmlgraphics</groupId>
+         <artifactId>batik-svggen</artifactId>
+         <version>1.7</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.xmlgraphics</groupId>
+         <artifactId>batik-bridge</artifactId>
+         <version>1.7</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.apache.xmlgraphics</groupId>
+               <artifactId>batik-js</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.xmlgraphics</groupId>
+         <artifactId>batik-transcoder</artifactId>
+         <version>1.7</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.xmlgraphics</groupId>
+         <artifactId>batik-codec</artifactId>
+         <version>1.7</version>
+      </dependency>
+      <dependency>
+         <groupId>org.apache.xmlgraphics</groupId>
+         <artifactId>fop</artifactId>
+         <version>0.95</version>
+      </dependency>
+      <dependency>
+         <groupId>commons-logging</groupId>
+         <artifactId>commons-logging</artifactId>
+         <version>1.1.1</version>
+      </dependency>
+      <dependency>
+         <groupId>stax</groupId>
+         <artifactId>stax</artifactId>
+         <version>1.2.0</version>
+      </dependency>
+      <dependency>
+         <groupId>stax</groupId>
+         <artifactId>stax-api</artifactId>
+         <version>1.0.1</version>
+      </dependency>
+      <dependency>
+         <groupId>xpp3</groupId>
+         <artifactId>xpp3_min</artifactId>
+         <version>1.1.4c</version>
+      </dependency>
+      <dependency>
+         <groupId>com.sun.jersey</groupId>
+         <artifactId>jersey-bundle</artifactId>
+         <version>1.1.2-ea</version>
+      </dependency>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-log4j12</artifactId>
+      </dependency>
+
+      <!-- ONDEX deps -->
+      <dependency>
+         <groupId>net.sourceforge.ondex</groupId>
+         <artifactId>datadir</artifactId>
+         <version>${project.version}</version>
+         <type>zip</type>
+         <classifier>data</classifier>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>generic</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>validator</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>taxonomy</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>sequence</artifactId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
+
+<!--       <dependency> -->
+<!--          <groupId>net.sourceforge.ondex.modules</groupId> -->
+<!--          <artifactId>chemical</artifactId> -->
+<!--          <version>${project.version}</version> -->
+<!--          <scope>compile</scope> -->
+<!--       </dependency> -->
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.apps</groupId>
+         <artifactId>launcher</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>net.sourceforge.ondex.apps</groupId>
+         <artifactId>scripting-commandline</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.codehaus.swizzle</groupId>
+         <artifactId>swizzle-jira</artifactId>
+         <version>1.6.1</version>
+      </dependency>
+
+      <!-- Popup deps       
+      <dependency>
+         <groupId>uk.ac.ebi</groupId>
+         <artifactId>IPRScan</artifactId>
+         <version>May2011</version>
+      </dependency>
+
+      <dependency>
+         <groupId>uk.ac.ebi</groupId>
+         <artifactId>NCBIBlast</artifactId>
+         <version>May2011</version>
+      </dependency>
+
+      <dependency>
+         <groupId>com.blogspot.illya-keeplearning</groupId>
+         <artifactId>suffix-tree</artifactId>
+         <version>1.0</version>
+      </dependency -->
+
+      <dependency>
+         <groupId>org.apache.axis</groupId>
+         <artifactId>axis</artifactId>
+         <version>1.4</version>
+      </dependency>
+
+      <dependency>
+         <groupId>axis</groupId>
+         <artifactId>axis-jaxrpc</artifactId>
+         <version>1.4</version>
+      </dependency>
+
+      <dependency>
+         <groupId>commons-discovery</groupId>
+         <artifactId>commons-discovery</artifactId>
+         <version>0.4</version>
+      </dependency>
+
+      <dependency>
+         <groupId>wsdl4j</groupId>
+         <artifactId>wsdl4j</artifactId>
+         <version>1.4</version>
+      </dependency>
+   </dependencies>
+
+
+
+</project>

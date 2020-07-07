@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_35" class="java.beans.XMLDecoder"> 
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean"> 
+  <void property="code"> 
+   <string>// Perform similarity search for a compound.
+//
+// Author: Chris Pudney (chris.pudney@syngenta.com)
+//
+// Code created was by or on behalf of Syngenta and is released under the open source license in use for the
+// pre-existing code or project. Syngenta does not assert ownership or copyright any over pre-existing work.
+
+importPackage(java.net);
+importPackage(java.io);
+importPackage(org.apache.log4j);
+importPackage(net.sourceforge.ondex.mapping.tanimoto);
+
+// Version.
+var VERSION = &quot;1.0.0&quot;;
+
+// Logging
+var LOG = Logger.getLogger(&quot;popupMenu.annotation.similarity search&quot;);
+
+// Uncomment the following line to see all logging (debug) messages.
+// LOG.setLevel(Level.ALL);
+
+LOG.info(&quot;Similarity Search Popup v&quot; + VERSION);
+
+// Similarity search URL.
+var SEARCH_URI = &quot;http://localhost:8080/simsearch&quot;;
+
+// Similarity search cut-off.
+var DEFAULT_CUTOFF = 0.8;
+
+// Concept class for similar compounds.
+var COMPOUND_CONCEPT_CLASS = getConceptClassById(&quot;Comp&quot;, &quot;Compound&quot;);
+
+// Data source for similar compounds.
+var COMPOUND_DATA_SOURCE = getDataSourceById(&quot;Syngenta&quot;, &quot;Syngenta&quot;);
+
+// Evidence type for similar compounds.
+var COMPOUND_EVIDENCE_TYPE = getEvidenceTypeById(&quot;IMPD&quot;, &quot;Imported from database&quot;);
+
+// Evidence type for accession data source.
+var COMPOUND_ACCESSION_DATA_SOURCE_ID = getDataSourceById(&quot;CS&quot;, &quot;Compound Substance Number&quot;).getId();
+
+// Parser ID for new compound concepts.
+var COMPOUND_PID = &quot;&quot;;
+
+// Annotation for similar compounds.
+var COMPOUND_ANNOTATION = &quot;&quot;;
+
+// Description for similar compounds.
+var COMPOUND_DESCRIPTION = &quot;&quot;;
+
+// ID for similarity relation.
+var SIMILARITY_RELATION_ID = getRelationTypeById(MetaData.RT, &quot;is_similar&quot;).getId();
+
+// Evidence type for similarity relations.
+var SIMILARITY_EVIDENCE_TYPE = getEvidenceTypeById(MetaData.ET, &quot;Tanimoto coefficient&quot;);
+
+// ID for similarity attribute.
+var SIMILARITY_ATTRIBUTE_ID = getAttributeById(MetaData.ATTR_CONF, java.lang.Double, &quot;%&quot;).getId();
+
+// ID for SMILES attribute.
+var STRUCTURE_ATTRIBUTE_ID = MetaData.ATTR_CHEMICAL_STRUCTURE;
+
+// Tests whether an object is null including unwrapping it.
+//
+// Object obj: the object to test.
+//
+// Returns true/false if the object or the object it wraps is null.
+//
+function isNull(obj)
+{
+    return obj == null || obj.unwrap() == null;
+}
+
+// Get a concept class with a given ID.
+//
+// String id: the concept class ID.
+// String name: the name of the concept class to use when creating it.
+//
+// Return the concept class with the given ID. It&apos;s created if necessary.
+//
+function getConceptClassById(id,
+                             name)
+{
+    LOG.debug(&quot;Get concept class by id: &quot; + id);
+
+    var metaData = getActiveGraph().getMetaData();
+    var cls = metaData.getConceptClass(id);
+    if (isNull(cls))
+    {
+        cls = metaData.createConceptClass(id, name, &quot;&quot;, &quot;Thing&quot;);
+        LOG.info(&quot;Created concept class: &quot; + id);
+    }
+    return cls;
+}
+
+// Get a data source with a given ID.
+//
+// String id: the data source ID.
+// String name: the name of the data source to use when creating it.
+//
+// Return the data source with the given ID. It&apos;s created if necessary.
+//
+function getDataSourceById(id,
+                           name)
+{
+    LOG.debug(&quot;Get data source by id: &quot; + id);
+
+    var metaData = getActiveGraph().getMetaData();
+    var source = metaData.getDataSource(id);
+    if (isNull(source))
+    {
+        source = metaData.createDataSource(id, name, &quot;&quot;);
+        LOG.info(&quot;Created data source: &quot; + id);
+    }
+    return source;
+}
+
+// Get the evidence type with a given ID.
+//
+// String id: the evidence type id.
+// String name: the name of the relation to use when creating the type.
+//
+// Returns the evidence type with the specified id. If it doesn&apos;t exist then it is created.
+//
+function getEvidenceTypeById(id,
+                             name)
+{
+    LOG.debug(&quot;Get evidence type by id: &quot; + id);
+
+    var metaData = getActiveGraph().getMetaData();
+    var type = metaData.getEvidenceType(id);
+    if (isNull(type))
+    {
+        type = metaData.createEvidenceType(id, name, &quot;&quot;);
+        LOG.info(&quot;Created evidence type: &quot; + id);
+    }
+    return type;
+}
+
+// Get relation type with a given ID.
+//
+// String id: the relation type id.
+// String name: the name of the relation to use when creating the type.
+//
+// Returns the relation type with the specified id. If it doesn&apos;t exist then it is created.
+//
+function getRelationTypeById(id,
+                             name)
+{
+    LOG.debug(&quot;Get relation type by id: &quot; + id);
+
+    var metaData = getActiveGraph().getMetaData();
+    var type = metaData.getRelationType(id);
+    if (isNull(type))
+    {
+        type = metaData.createRelationType(id, name, &quot;&quot;, &quot;not &quot; + name, false, false, false, false, &quot;Thing&quot;);
+        LOG.info(&quot;Created relation type: &quot; + id);
+    }
+    return type;
+}
+
+// Get attribute with a given ID.
+//
+// String id: the attribute  id.
+// java.lang.Class cls: type of attribute (if created).
+// String unit: attribute unit ID (if created).
+//
+// Returns the attribute with the specified id. If it doesn&apos;t exist then it is created.
+//
+function getAttributeById(id,
+                          cls,
+                          unit)
+{
+    LOG.debug(&quot;Get attribute name by id: &quot; + id);
+
+    var metaData = getActiveGraph().getMetaData();
+    var type = metaData.getAttributeName(id);
+    if (isNull(type))
+    {
+        type = metaData.createAttributeName(id, id, &quot;&quot;, unit, cls, &quot;Thing&quot;);
+        LOG.info(&quot;Created attribute type: &quot; + id);
+    }
+    return type;
+}
+
+// Check that graph metadata holds certain information.
+//
+// Returns true/false if the metadata holds required information.
+//
+function checkMetaData()
+{
+    LOG.debug(&quot;Checking meta data&quot;);
+
+    var metaData = getActiveGraph().getMetaData();
+
+    // Check structure attribute.
+    var name = metaData.getAttributeName(STRUCTURE_ATTRIBUTE_ID);
+    if (isNull(name))
+    {
+        var msg = &quot;Structure attribute \&quot;&quot; + STRUCTURE_ATTRIBUTE_ID + &quot;\&quot; is not defined in the current graph.&quot;;
+        LOG.error(msg);
+        alert(msg);
+        return false;
+    }
+
+    return true;
+}
+
+// Top-level search function: get parameters and search.
+//
+function doSimilaritySearch()
+{
+    LOG.debug(&quot;Similarity Search&quot;);
+
+    // Get the compounds selected by the user.
+    var compounds = getPickedConcepts();
+    var numCompounds = compounds.size();
+    if (numCompounds == 0)
+    {
+        alert(&quot;Please select at least one compound.&quot;);
+        return;
+    }
+
+    // Prompt user for the cut-off.
+    var cutOff = promptUserForCutOff();
+
+    // Show progress bar.
+    startMonitor(&quot;Searching for structurally similar compounds (&quot; + cutOff + &quot;%)&quot;, numCompounds + 2);
+
+    // Process the selected compounds.
+    compoundSimilaritySearch(compounds, cutOff);
+
+    // Exit if cancelled.
+    if (!nextState(&quot;Layout...&quot;))
+    {
+        return
+    }
+
+    // Layout new neighbours.
+    reLayout(compounds)
+}
+
+// Prompts the user for the similarity cut-off.
+//
+// Returns the value provided by the user or the default cut-off if an invalid value is entered.
+//
+function promptUserForCutOff()
+{
+    LOG.debug(&quot;Prompt user for cut-off&quot;);
+
+    var cutoff = parseFloat(prompt(&quot;Specify a similarity cut-off between 0.5 &amp; 1.0 (default: &quot; + DEFAULT_CUTOFF + &quot;)&quot;));
+    if (isNaN(cutoff) || cutoff &lt; 0.5 || cutoff &gt; 1.0)
+    {
+        cutoff = DEFAULT_CUTOFF
+    }
+
+    return cutoff
+}
+
+// Similarity search for a given list of compounds and cut-off.
+//
+// compounds: the list of compound concepts.
+// cutOff: the similarity cut-off.
+//
+function compoundSimilaritySearch(compounds,
+                                  cutOff)
+{
+    LOG.debug(&quot;Picked compounds: &quot; + compounds.size() + &quot;; cut-off: &quot; + cutOff);
+
+    // Process each compound.
+    var i = 1;
+    for (var iter = compounds.iterator();
+         iter.hasNext();)
+    {
+        // Exit if cancelled.
+        if (!nextState(&quot;Processing compound &quot; + (i++) + &quot; of &quot; + compounds.size()))
+        {
+            return
+        }
+
+        // Find compounds similar to the current compound.
+        similaritySearch(iter.next(), cutOff);
+    }
+}
+
+// Similarity search for a given compound and cut-off.
+//
+// compound: the compound to search for.
+// cutOff: the similarity cut-off.
+//
+function similaritySearch(compound,
+                          cutOff)
+{
+    var id = compound.getId();
+
+    LOG.debug(&quot;Processing compound: &quot; + id);
+
+    // Get SMILES.
+    var smiles = getSmilesAttribute(compound);
+    if (smiles == null || smiles == &quot;&quot;)
+    {
+        var name = compound.getConceptName();
+        LOG.warn(&quot;No &quot; + STRUCTURE_ATTRIBUTE_ID + &quot; attribute for compound &quot; + (isNull(name) ? id : name.getName()));
+        return
+    }
+
+    // Query server.
+    var hits = querySearchServer(smiles, cutOff);
+    for (var i = 0;
+         i &lt; hits.length;
+         i++)
+    {
+        var hit = hits[i];
+        var neighb = createCompound(hit.id, hit.smiles);
+
+        // Don&apos;t connect compound to itself.
+        if (id != neighb.getId())
+        {
+            connectSimilarCompounds(compound, neighb, hit.similarity);
+        }
+    }
+}
+
+// Query the similarity search server.
+//
+// String smiles: the query structure in SMILES format.
+// Double cutOff: Tanimoto similarity coefficient cut-off.
+//
+// Returns an array of hits. Each hit is an object with id, smiles and conf fields.
+//
+function querySearchServer(smiles,
+                           cutOff)
+{
+    // Construct URL.
+    var url = SEARCH_URI
+                      + &quot;?smiles=&quot; + encodeURIComponent(smiles)
+                      + &quot;&amp;cutoff=&quot; + encodeURIComponent(cutOff);
+
+    LOG.debug(&quot;Connecting to URL &quot; + url);
+
+    // Send search request to server.
+    var connection = new URL(url).openConnection();
+    connection.setDoInput(true);
+
+    // Store hits.
+    var hits = [];
+
+    // Read response.
+    var input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    for (var line = &quot;&quot;;
+         (line = input.readLine()) != null;)
+    {
+        LOG.debug(&quot;Response line: &quot; + line);
+
+        line = line.trim();
+        if (line.length() &gt; 0)
+        {
+            var fields = line.split(&quot;\t&quot;);
+            if (fields.length == 3 &amp;&amp; !isNaN(fields[2]))
+            {
+                hits.push({id: fields[0],
+                              smiles: fields[1],
+                              similarity: parseFloat(fields[2])});
+            }
+            else
+            {
+                LOG.warn(&quot;Couldn&apos;t parse line: &quot; + line);
+            }
+        }
+    }
+    input.close();
+
+    return hits;
+}
+
+// Gets a compound&apos;s SMILES attribute.
+//
+// Concept compound: the compound to query.
+//
+// The SMILES attribute value, if it is set, otherwise null.
+//
+function getSmilesAttribute(compound)
+{
+    LOG.debug(&quot;Get SMILES attribute&quot;);
+
+    var attribute = compound.getAttribute(STRUCTURE_ATTRIBUTE_ID);
+    return isNull(attribute) ? null : attribute.getValue();
+}
+
+// Creates a compound with the given ID and SMILES.
+//
+// String id: structure identifier.
+// String smiles: the SMILES structure.
+//
+// Returns the compound (Concept). If the graph already includes a matching compound then it is returned, otherwise a new compound
+// is created and added to the graph.
+//
+function createCompound(name,
+                        smiles)
+{
+    LOG.debug(&quot;Create new compound concept (named: &quot; + name + &quot;; SMILES: &quot; + smiles + &quot;)&quot;);
+
+    // Compound already exists?
+    var comp = findCompoundByName(name);
+    if (isNull(comp))
+    {
+        comp = getActiveGraph().createConcept(
+                COMPOUND_PID, COMPOUND_ANNOTATION, COMPOUND_DESCRIPTION, COMPOUND_DATA_SOURCE,
+                COMPOUND_CONCEPT_CLASS, asSingleton(COMPOUND_EVIDENCE_TYPE.unwrap()));
+
+        // Add concept name.
+        comp.createConceptName(name, true);
+
+        // Add accession for name.
+        comp.createConceptAccession(name, COMPOUND_ACCESSION_DATA_SOURCE_ID, false);
+
+        // Add SMILES attribute.
+        var cs = new net.sourceforge.ondex.tools.data.ChemicalStructure();
+        cs.setSMILES(smiles);
+        comp.createAttribute(STRUCTURE_ATTRIBUTE_ID, cs, false);
+    }
+    return comp;
+}
+
+// Find a compound in the graph with the given name..
+//
+// String name: the name to match.
+//
+// Returns a matching compound (Concept) if it exists. The data source must also match COMPOUND_DATA_SOURCE. Null is returned if
+// there is no match.
+//
+function findCompoundByName(name)
+{
+    LOG.debug(&quot;Find compound named: &quot; + name);
+
+    var ds = COMPOUND_DATA_SOURCE.getId();
+
+    for (var iter = getActiveGraph().getConceptsOfConceptClass(COMPOUND_CONCEPT_CLASS).iterator();
+         iter.hasNext();)
+    {
+        var comp = iter.next();
+        var conceptName = comp.getConceptName();
+        if (!isNull(conceptName) &amp;&amp; conceptName.getName() == name &amp;&amp; comp.getElementOf().getId() == ds)
+        {
+            LOG.debug(&quot;Found compound &quot; + name);
+            return comp;
+        }
+    }
+
+    return null;
+}
+
+// Connect similar compounds.
+//
+// Concept c1: first compound.
+// Concept c2: second compound.
+//
+// Return the relation connecting the compounds. No new relation is created if the compounds are already connected by a similarity relation.
+//
+function connectSimilarCompounds(c1,
+                                 c2,
+                                 similarity)
+{
+    LOG.debug(&quot;Connect compounds &quot; + c1.getId() + &quot; &amp; &quot; + c2.getId() + &quot; with similarity &quot; + similarity);
+
+    // Already connected?
+    var rel = getActiveGraph().getRelation(c1, c2, SIMILARITY_RELATION_ID);
+    if (isNull(rel))
+    {
+        // Create new relation.
+        rel = getActiveGraph().createRelation(c1, c2, SIMILARITY_RELATION_ID,
+                                              asSingleton(SIMILARITY_EVIDENCE_TYPE.unwrap()));
+
+        // Set similarity attribute.
+        rel.createAttribute(SIMILARITY_ATTRIBUTE_ID, similarity, false);
+    }
+    else {
+
+        LOG.debug(&quot;Compounds already connected by similarity relation&quot;);
+    }
+
+    // Make visible.
+    setVisibility(c1, true);
+    setVisibility(c2, true);
+    setVisibility(rel, true);
+    return rel
+}
+
+// Wrap an object in a list.
+//
+// Object e: the element to add to the list.
+//
+// Return the list containing e.
+// Return the list containing e.
+//
+function asSingleton(e)
+{
+    LOG.debug(&quot;In asSingleton()&quot;);
+
+    var list = new java.util.ArrayList();
+    list.add(e);
+    return list;
+}
+
+// Lays out a set of compounds and the compounds it&apos;s connected to.
+//
+// compounds: the compounds to layout.
+//
+function reLayout(compounds)
+{
+    LOG.debug(&quot;Layout &quot; + compounds.size() + &quot; compounds&quot;);
+
+    // Concept ID.
+    var id = COMPOUND_CONCEPT_CLASS.getId();
+
+    // Process each compound.
+    for (var iter = compounds.iterator();
+         iter.hasNext();)
+    {
+        // Layout compound neighbours.
+        var compound = iter.next();
+        layoutNeighbours(compound.getId(), getAssociatedConceptIDsOfType(compound, false, id));
+    }
+}
+
+// Invoke the similarity search and handle exceptions.
+//
+function main()
+{
+    try
+    {
+        // Check meta data.
+        if (checkMetaData())
+        {
+            // Do the similarity search.
+            doSimilaritySearch()
+        }
+    }
+    catch (e)
+    {
+        // Something went wrong.
+        alert(e.name + &quot;\nSee console output...&quot;);
+
+        var javaException = e.javaException;
+        if (typeof javaException === &apos;undefined&apos;)
+        {
+            LOG.error(&quot;Search failed (&quot; + e + &quot;)&quot;);
+        }
+        else
+        {
+            LOG.error(&quot;Search failed&quot;, javaException);
+        }
+    }
+
+    // Release monitor.
+    monitorComplete()
+}
+
+
+// Entry point.
+main();</string> 
+  </void> 
+  <void property="conceptClasses"> 
+   <string>Comp</string> 
+  </void> 
+  <void property="libraries"> 
+   <string>toolbox.js,monitor.js</string> 
+  </void> 
+  <void property="name"> 
+   <string>annotation/similarity search</string> 
+  </void> 
+ </object> 
+</java> 

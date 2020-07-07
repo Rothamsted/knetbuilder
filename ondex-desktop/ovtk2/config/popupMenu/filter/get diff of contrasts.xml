@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_20" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>function main() {
+	logFCCutoff = parseFloat(prompt(&quot;Keep visible if |logFC| &gt; x  (default:1)&quot;))
+	if (isNaN(logFCCutoff)){
+		logFCCutoff=1
+	}
+	pValCutoff = parseFloat(prompt(&quot;Keep visible if adjusted pValue &lt; x  (default:0.05)&quot;))
+	if (isNaN(pValCutoff)){
+		pValCutoff=0.05
+	}
+
+	
+	makeUndefinedInvisible = confirm(&quot;If a concept has no logFC or Std, should it be filtered?&quot;)
+
+	var i = getPickedConcepts().iterator()
+	while(i.hasNext()) {
+		var concept = i.next()
+		//check if it is a DEGs in the base contrast
+		var logFC = concept.getAttribute(&quot;logFC-&quot;+contrastMain)
+		var pVal = concept.getAttribute(&quot;adjpVal-&quot;+contrastMain)
+		if(logFC.unwrap()!=null &amp;&amp; pVal.unwrap()!=null) {
+			if (Math.abs(logFC.getValue()) &lt; logFCCutoff || pVal.getValue() &gt; pValCutoff) { 
+				setVisibility(concept,false)
+				continue
+			}
+		} else if (makeUndefinedInvisible) {
+			setVisibility(concept,false)
+			continue
+		}
+
+		//check if it is a DEGs in the other contrasts
+		for (var j = 0; j&lt;contrastDiffs.length; j=j+1){
+			logFC = concept.getAttribute(&quot;logFC-&quot;+contrastDiffs[j])
+			pVal = concept.getAttribute(&quot;adjpVal-&quot;+contrastDiffs[j])
+			// if logFC und Std are available for the given concept, apply cut off function
+			if(logFC.unwrap()!=null &amp;&amp; pVal.unwrap()!=null) {
+				if (Math.abs(logFC.getValue()) &gt; logFCCutoff &amp;&amp; pVal.getValue() &lt; pValCutoff) {
+					setVisibility(concept,false)
+					continue
+				}
+			} else if (makeUndefinedInvisible) {
+				setVisibility(concept,false)
+				continue
+			}
+		}
+	}
+}
+
+
+contrastMain = prompt(&quot;The gene basis is from which contrast? (V14,V20,S48,A48)  (default:S48)&quot;)
+if(contrastMain == &apos;&apos;){
+	contrastMain = &quot;S48&quot;
+}
+contrastDiff = prompt(&quot;The genes should not be contained in which contrasts? (V14,V20,S48,A48)  (default:V14+V20)&quot;)
+if(contrastDiff == &apos;&apos;){
+	contrastDiff = &quot;V14\\+V20&quot;
+}
+
+var contrastDiffs = contrastDiff.split(&quot;\\+&quot;)
+noError = 1;
+
+if(getActiveGraph().getMetaData().getAttributeName(&quot;logFC-&quot;+contrastMain).unwrap()==null) { 
+	alert(&quot;There is no logFC data in this graph. Applied contrast:&quot;+contrastMain)
+	noError = 0
+} else if (getActiveGraph().getMetaData().getAttributeName(&quot;adjpVal-&quot;+contrastMain).unwrap()==null) {
+	alert(&quot;There is no adjpVal or logFC data in this graph. Applied contrast:&quot;+contrastMain)
+	noError = 0
+}
+
+for (var i = 0; i&lt;contrastDiffs.length; i=i+1){
+	if(getActiveGraph().getMetaData().getAttributeName(&quot;logFC-&quot;+contrastDiffs[i]).unwrap()==null) { 
+		alert(&quot;There is no logFC data in this graph. Applied contrast:&quot;+contrastDiffs[i])
+		noError = 0
+	} else if (getActiveGraph().getMetaData().getAttributeName(&quot;adjpVal-&quot;+contrastDiffs[i]).unwrap()==null) {
+		alert(&quot;There is no adjpVal or logFC data in this graph. Applied contrast:&quot;+contrastDiffs[i])
+		noError = 0
+	}
+}
+if (noError){
+	main()
+}
+
+</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Gene</string>
+  </void>
+  <void property="name">
+   <string>filter/get diff of contrasts</string>
+  </void>
+ </object>
+</java>

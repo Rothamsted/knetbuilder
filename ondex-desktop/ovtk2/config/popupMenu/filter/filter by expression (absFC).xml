@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_20" class="java.beans.XMLDecoder">
+ <object class="net.sourceforge.ondex.ovtk2.ui.popup.custom.CustomPopupItemBean">
+  <void property="code">
+   <string>function main() {
+	absFCCutoff = parseFloat(prompt(&quot;Keep visible if |absFC| &gt; x  (default:2)&quot;))
+	if (isNaN(absFCCutoff)){
+		absFCCutoff=2
+	}
+	aveExpCutoff = parseFloat(prompt(&quot;Keep visible if aveExp &gt; x  (default:8)&quot;))
+	if (isNaN(aveExpCutoff)){
+		aveExpCutoff=8
+	}
+
+	
+	makeUndefinedInvisible = confirm(&quot;If a concept has no logFC or Std, should it be filtered?&quot;)
+
+	var i = getPickedConcepts().iterator()
+	while(i.hasNext()) {
+
+		var concept = i.next()
+		var absFC = concept.getAttribute(&quot;absFC-&quot;+contrast)
+		var aveExp = concept.getAttribute(&quot;AveExpr-&quot;+contrast)
+		// if logFC und Std are available for the given concept, apply cut off function
+		if(absFC.unwrap()!=null &amp;&amp; aveExp.unwrap()!=null) {
+			if (Math.abs(absFC.getValue()) &lt; absFCCutoff || aveExp.getValue() &lt; aveExpCutoff)
+				setVisibility(concept,false)
+		}
+		else if (makeUndefinedInvisible) {
+			setVisibility(concept,false)
+		}
+	}
+}
+
+
+contrast = prompt(&quot;Which contrast should be filtered? (C-P,C-N,P-N)  (default:C-N)&quot;)
+if(contrast == &apos;&apos;){
+	contrast = &apos;C-N&apos;
+}
+
+
+if(getActiveGraph().getMetaData().getAttributeName(&quot;absFC-&quot;+contrast).unwrap()==null) { 
+	alert(&quot;There is no absFC data in this graph. Applied contrast:&quot;+contrast)
+} else if (getActiveGraph().getMetaData().getAttributeName(&quot;AveExpr-&quot;+contrast).unwrap()==null) {
+	alert(&quot;There is no AveExpr data in this graph. Applied contrast:&quot;+contrast)
+} else {
+	main()
+}
+
+</string>
+  </void>
+  <void property="conceptClasses">
+   <string>Gene</string>
+  </void>
+  <void property="name">
+   <string>filter/filter by expression (absFC)</string>
+  </void>
+ </object>
+</java>
