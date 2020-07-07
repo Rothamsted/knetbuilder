@@ -35,7 +35,7 @@ ignore_re='\[DEBUG\]| DEBUG |already added\, skipping|Copying|Adding|Loading|Ins
 ignore_re="$ignore_re|Visibility index built on|javadoc: warning"
 ignore_re="($ignore_re)"
 
-echo mvn deploy --no-transfer-progress --batch-mode --settings maven-settings.xml\
+mvn deploy --no-transfer-progress --batch-mode --settings maven-settings.xml\
  | egrep --ignore-case --invert-match "$ignore_re"
 
 exit_code=${PIPESTATUS[0]} # we don't care about the grep exit code, we want mvn result!
