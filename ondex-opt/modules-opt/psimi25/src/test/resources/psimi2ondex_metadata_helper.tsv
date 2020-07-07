@@ -1,0 +1,468 @@
+#CONCEPT_CLASS
+MI:0329	Participant	MI:0329	unknown participant
+MI:0681	dDNA	MI:0681	double stranded deoxyribonucleic acid
+MI:0680	sDNA	MI:0680	single stranded deoxyribonucleic acid
+MI:0319	DNA	MI:0319	deoxyribonucleic acid
+MI:0610	SIRNA	MI:0610	small interfering rna
+MI:0679	MI:0679	poly adenine
+MI:0611	MI:0611	signal recognition particle rna
+MI:0321	MI:0321	catalytic rna
+MI:0322	MI:0322	guide rna
+MI:0323	MI:0323	heterogeneous nuclear rna
+MI:0608	RRNA	MI:0608	ribosomal rna
+MI:0324	MRNA	MI:0324	messenger rna
+MI:0609	SNORNA	MI:0609	small nucleolar rna
+MI:0325	TRNA	MI:0325	transfer rna
+MI:0607	SNRNA	MI:0607	small nuclear rna
+MI:0320	RNA	MI:0320	ribonucleic acid
+MI:0318	Polynucleotide	MI:0318	nucleic acid
+MI:0904	MI:0904	polysaccharide
+MI:0326	Polypeptide	MI:0326	protein
+MI:0327	MI:0327	peptide
+MI:0383	InfoPolymer	MI:0383	biopolymer
+MI:0317	Interaction	MI:0317	interaction
+MI:0233	MI:0233	protein dna complex
+MI:0316	MI:0316	ribonucleoprotein complex
+MI:0315	Protein	MI:0315	protein complex
+MI:0314	MolCmplx	MI:0314	complex
+MI:0250	Gene	MI:0250	gene
+MI:0328	Metabolite	MI:0328	small molecule
+MI:0932	MI:0932	noninteractive genetic interaction defined by inequality
+MI:0800	MI:0800	single nonmonotonic genetic interaction defined by inequality
+MI:0797	MI:0797	epistatic genetic interaction defined by inequality
+MI:0801	MI:0801	double nonmonotonic genetic interaction defined by inequality
+MI:0796	MI:0796	suppressive genetic interaction defined by inequality
+MI:0795	MI:0795	asynthetic genetic interaction defined by inequality
+MI:0794	MI:0794	synthetic genetic interaction defined by inequality
+MI:0799	MI:0799	additive genetic interaction defined by inequality
+MI:0798	MI:0798	conditional genetic interaction defined by inequality
+MI:0931	MI:0931	genetic interaction defined by inequality
+MI:0794	MI:0794	synthetic genetic interaction defined by inequality
+MI:0933	MI:0933	negative genetic interaction
+MI:0932	MI:0932	noninteractive genetic interaction defined by inequality
+MI:0934	MI:0934	neutral genetic interaction
+MI:0797	MI:0797	epistatic genetic interaction defined by inequality
+MI:0796	MI:0796	suppressive genetic interaction defined by inequality
+MI:0795	MI:0795	asynthetic genetic interaction defined by inequality
+MI:0930	MI:0930	epistatic genetic interaction
+MI:0801	MI:0801	double nonmonotonic genetic interaction defined by inequality
+MI:0935	MI:0935	positive genetic interaction
+MI:0208	MI:0208	genetic interaction
+MI:0403	MI:0403	colocalization
+MI:0844	MI:0844	phosphotransfer reaction
+MI:0882	MI:0882	atpase reaction
+MI:0883	MI:0883	gtpase reaction
+MI:0881	MI:0881	nucleoside triphosphatase reaction
+MI:0209	MI:0209	geranylgeranylation reaction
+MI:0206	MI:0206	farnesylation reaction
+MI:0214	MI:0214	myristoylation reaction
+MI:0216	MI:0216	palmitoylation reaction
+MI:0211	MI:0211	lipid addition
+MI:0213	MI:0213	methylation reaction
+MI:0566	MI:0566	sumoylation reaction
+MI:0567	MI:0567	neddylation reaction
+MI:0568	MI:0568	desumoylation reaction
+MI:0569	MI:0569	deneddylation reaction
+MI:0217	MI:0217	phosphorylation reaction
+MI:0220	MI:0220	ubiquitination reaction
+MI:0871	MI:0871	demethylation reaction
+MI:0945	MI:0945	oxidoreductase activity electron transfer reaction
+MI:0701	MI:0701	dna strand elongation
+MI:0987	MI:0987	rna strand elongation
+MI:0986	MI:0986	nucleic acid strand elongation reaction
+MI:0985	MI:0985	deamination reaction
+MI:0207	MI:0207	formylation reaction
+MI:0192	MI:0192	acetylation reaction
+MI:0193	MI:0193	amidation reaction
+MI:0571	MI:0571	mrna cleavage
+MI:0902	MI:0902	rna cleavage
+MI:0572	MI:0572	dna cleavage
+MI:0910	MI:0910	nucleic acid cleavage
+MI:0570	MI:0570	protein cleavage
+MI:0202	MI:0202	depalmitoylation reaction
+MI:0198	MI:0198	defarnesylation reaction
+MI:0201	MI:0201	demyristoylation reaction
+MI:0200	MI:0200	degeranylation reaction
+MI:0212	MI:0212	lipid cleavage reaction
+MI:0194	MI:0194	cleavage reaction
+MI:0204	MI:0204	deubiquitination reaction
+MI:0558	MI:0558	deglycosylation reaction
+MI:0203	MI:0203	dephosphorylation reaction
+MI:0559	MI:0559	glycosylation reaction
+MI:0197	MI:0197	deacetylation reaction
+MI:0557	MI:0557	adp ribosylation reaction
+MI:0199	MI:0199	deformylation reaction
+MI:0210	MI:0210	hydroxylation reaction
+MI:0971	MI:0971	phosphopantetheinylation
+MI:0414	MI:0414	enzymatic reaction
+MI:0408	MI:0408	disulfide bond
+MI:0556	MI:0556	transglutamination reaction
+MI:0195	MI:0195	covalent binding
+MI:0407	MI:0407	direct interaction
+MI:0915	MI:0915	physical association
+MI:0914	MI:0914	association
+#RELATION_TYPE
+MI:0684	MI:0684	ancillary
+MI:0840	MI:0840	stimulator
+MI:0941	MI:0941	competitor
+MI:0842	MI:0842	phosphate donor
+MI:0579	MI:0579	electron donor
+MI:0918	MI:0918	donor
+MI:0898	MI:0898	putative self
+MI:0843	MI:0843	phosphate acceptor
+MI:0580	MI:0580	electron acceptor
+MI:0919	MI:0919	acceptor
+MI:0503	MI:0503	self
+MI:0682	MI:0682	cofactor
+MI:0586	MI:0586	inhibitor
+MI:0501	MI:0501	enzyme
+MI:0499	participates_in	MI:0499	unspecified role
+MI:0502	MI:0502	enzyme target
+MI:0496	MI:0496	bait
+MI:0497	MI:0497	neutral component
+MI:0498	MI:0498	prey
+MI:0581	MI:0581	suppressed gene
+MI:0582	MI:0582	suppressor gene
+#CV
+MI:0446	PubMed	MI:0446	pubmed
+MI:0574	DOI	MI:0574	digital object identifier
+MI:0445	MI:0445	literature database
+MI:0459	MI:0459	mmdb
+MI:0248	RESID	MI:0248	resid
+MI:0592	MI:0592	ipfam
+MI:0601	SO	MI:0601	sequence ontology
+MI:2017	MI:2017	heterogen
+MI:0806	PDB	MI:0806	pdbj
+MI:0936	MI:0936	emdb
+MI:0472	PDB	MI:0472	pdbe
+MI:0460	MI:0460	rcsb pdb
+MI:0805	MI:0805	wwpdb
+MI:0448	GO	MI:0448	gene ontology
+MI:0457	SMART	MI:0457	smart
+MI:0458	MI:0458	tigrfams
+MI:0455	MI:0455	prosite
+MI:0456	SCOP	MI:0456	scop superfamily
+MI:0702	MI:0702	panther
+MI:0453	PRINTS	MI:0453	prints
+MI:0454	PRODOM	MI:0454	prodom
+MI:0703	MI:0703	gene3d
+MI:0452	MI:0452	pirsf
+MI:0451	PFAM	MI:0451	pfam
+MI:0449	IPRO	MI:0449	interpro
+MI:0897	MI:0897	protein modification ontology
+MI:0450	MI:0450	cdd
+MI:0447	MI:0447	feature database
+MI:0469	INTACT	MI:0469	intact
+MI:0464	MIPS	MI:0464	cygd
+MI:0465	MI:0465	dip
+MI:0463	MI:0463	grid
+MI:0462	MI:0462	bind
+MI:0471	MINT	MI:0471	mint
+MI:0917	MI:0917	matrixdb
+MI:0731	MI:0731	3d repertoire
+MI:0973	MI:0973	imex source
+MI:0923	MI:0923	irefindex
+MI:0575	AFCS	MI:0575	alliance for cellular signaling
+MI:0489	MI:0489	source database
+MI:0488	PSI-MIO	MI:0488	psi-mi
+MI:0903	MI:0903	mpidb
+MI:0585	MI:0585	intenz
+MI:2012	MI:2012	kegg compound
+MI:0470	KEGG	MI:0470	kegg
+MI:0468	MI:0468	hprd
+MI:0670	MI:0670	imex
+MI:0466	ECOCYC	MI:0466	ecocyc
+MI:0244	MI:0244	reactome complex
+MI:0245	MI:0245	reactome protein
+MI:0467	REAC	MI:0467	reactome
+MI:0967	MI:0967	chembl
+MI:0974	MI:0974	innatedb
+MI:0461	MI:0461	interaction database
+MI:0831	CL	MI:0831	cell ontology
+MI:0830	MI:0830	tissue list
+MI:0246	MI:0246	cabri
+MI:2021	MI:2021	rxlist link
+MI:2020	MI:2020	canadian drug identification number
+MI:2002	MI:2002	drugbank
+MI:2011	MI:2011	cas registry number
+MI:0474	CHEBI	MI:0474	chebi
+MI:2153	MI:2153	pdr health
+MI:2015	MI:2015	pharmgkb
+MI:2016	MI:2016	bind smid
+MI:2154	WIKI	MI:2154	wikipedia
+MI:2054	MI:2054	bioactive entity reference
+MI:0864	MI:0864	brenda
+MI:0942	MI:0942	uniprot taxonomy
+MI:0730	PUBCHEM	MI:0730	pubchem
+MI:0849	MI:0849	ncbi taxonomy
+MI:1013	ENSEMBL	MI:1013	ensemblgenomes
+MI:0675	IPI	MI:0675	international protein index
+MI:0738	MI:0738	pride
+MI:0742	MI:0742	gpm
+MI:0741	MI:0741	peptide atlas
+MI:0737	MI:0737	peptide sequence database
+MI:0850	MI:0850	encode
+MI:0852	NC_GI	MI:0852	nucleotide genbank identifier
+MI:0851	NC_NP	MI:0851	protein genbank identifier
+MI:0860	GENB	MI:0860	genbank indentifier
+MI:0476	ENSEMBL	MI:0476	ensembl
+MI:0475	MI:0475	ddbj/embl/genbank
+MI:0487	WB	MI:0487	wormbase
+MI:0478	FLYBASE	MI:0478	flybase
+MI:0477	MI:0477	entrez gene/locuslink
+MI:0486	UNIPROTKB	MI:0486	uniprot knowledge base
+MI:0479	MGI	MI:0479	mgd/mgi
+MI:0249	HUGE	MI:0249	huge
+MI:0480	OMIM	MI:0480	omim
+MI:0481	MI:0481	refseq
+MI:0482	MI:0482	rfam
+MI:0483	RGD	MI:0483	rgd
+MI:0484	SGD	MI:0484	sgd
+MI:0485	UNIPARC	MI:0485	uniparc
+MI:0924	MI:0924	camjedb
+MI:0683	MI:0683	sequence database
+MI:0473	MI:0473	participant database
+MI:0673	MI:0673	complex-synonym
+MI:2004	MI:2004	drug brand name
+MI:2005	MI:2005	drug mixture brand name
+MI:2007	MI:2007	iupac name
+MI:0304	MI:0304	isoform synonym
+MI:0303	MI:0303	gene ontology synonym
+MI:0306	MI:0306	open reading frame name
+MI:0305	MI:0305	ordered locus name
+MI:2003	MI:2003	commercial name
+MI:0302	MI:0302	gene name synonym
+MI:0301	MI:0301	gene name
+MI:0616	MI:0616	example
+MI:0345	MI:0345	author assigned name
+#EVIDENCE_TYPE
+MI:0257	MI:0257	antisense rna
+MI:0256	MI:0256	rna interference
+MI:0255	MI:0255	post transcriptional interference
+MI:0016	MI:0016	circular dichroism
+MI:0905	MI:0905	amplified luminescent proximity homogeneous assay
+MI:0891	MI:0891	neutron fiber diffraction
+MI:0859	MI:0859	intermolecular force
+MI:0071	MI:0071	molecular sieving
+MI:0042	MI:0042	electron paramagnetic resonance
+MI:0041	MI:0041	electron nuclear double resonance
+MI:0043	MI:0043	electron resonance
+MI:0944	MI:0944	mass spectrometry study of hydrogen/deuterium exchange
+MI:0069	MI:0069	mass spectrometry studies of complexes
+MI:0943	MI:0943	detection by mass spectrometry
+MI:0425	MI:0425	kinase scintillation proximity assay
+MI:0099	MI:0099	scintillation proximity assay
+MI:0104	MI:0104	static light scattering
+MI:0826	MI:0826	x ray scattering
+MI:0038	MI:0038	dynamic light scattering
+MI:0067	MI:0067	light scattering
+MI:0921	MI:0921	surface plasmon resonance array
+MI:0107	MI:0107	surface plasmon resonance
+MI:0969	MI:0969	bio-layer interferometry
+MI:0968	MI:0968	biosensor
+MI:0077	MI:0077	nuclear magnetic resonance
+MI:0053	MI:0053	fluorescence polarization spectroscopy
+MI:0809	MI:0809	bimolecular fluorescence complementation
+MI:0511	MI:0511	protease homogeneous time resolved fluorescence
+MI:0509	MI:0509	phosphatase homogeneous time resolved fluorescence
+MI:0420	MI:0420	kinase homogeneous time resolved fluorescence
+MI:0510	MI:0510	homogeneous time resolved fluorescence
+MI:0009	MI:0009	bacterial display
+MI:0115	MI:0115	yeast display
+MI:0054	MI:0054	fluorescence-activated cell sorting
+MI:0055	MI:0055	fluorescent resonance energy transfer
+MI:0017	MI:0017	classical fluorescence spectroscopy
+MI:0052	MI:0052	fluorescence correlation spectroscopy
+MI:0012	MI:0012	bioluminescence resonance energy transfer
+MI:0976	MI:0976	total internal reflection fluorescence spectroscopy
+MI:0051	MI:0051	fluorescence technology
+MI:0065	MI:0065	isothermal titration calorimetry
+MI:0966	MI:0966	ultraviolet-visible spectroscopy
+MI:0965	MI:0965	2d-infrared spectrometry
+MI:0964	MI:0964	infrared spectroscopy
+MI:0928	MI:0928	filter trap assay
+MI:0824	MI:0824	x-ray powder diffraction
+MI:0825	MI:0825	x-ray fiber diffraction
+MI:0114	MI:0114	x-ray crystallography
+MI:0938	MI:0938	rheology measurement
+MI:0893	MI:0893	neutron diffraction
+MI:0888	MI:0888	small angle neutron scattering
+MI:0894	MI:0894	electron diffraction
+MI:0013	MI:0013	biophysical
+MI:0827	MI:0827	x-ray tomography
+MI:0410	MI:0410	electron tomography
+MI:0020	MI:0020	transmission electron microscopy
+MI:0040	MI:0040	electron microscopy
+MI:0416	MI:0416	fluorescence microscopy
+MI:0872	MI:0872	atomic force microscopy
+MI:0426	MI:0426	light microscopy
+MI:0663	MI:0663	confocal microscopy
+MI:0428	MI:0428	imaging technique
+MI:0028	MI:0028	cosedimentation in solution
+MI:0029	MI:0029	cosedimentation through density gradient
+MI:0027	MI:0027	cosedimentation
+MI:0603	MI:0603	dimethylsulphate footprinting
+MI:0604	MI:0604	potassium permanganate footprinting
+MI:0602	MI:0602	chemical footprinting
+MI:0814	MI:0814	protease accessibility laddering
+MI:0901	MI:0901	isotope label footprinting
+MI:0606	MI:0606	DNase I footprinting
+MI:0605	MI:0605	enzymatic footprinting
+MI:0417	MI:0417	footprinting
+MI:0953	MI:0953	polymerization
+MI:0998	MI:0998	deubiquination assay>
+MI:0994	MI:0994	demyristoylation assay
+MI:0995	MI:0995	depalmitoylation assay
+MI:0992	MI:0992	defarnesylation assay
+MI:0993	MI:0993	degeranylation assay
+MI:0991	MI:0991	lipid cleavage assay
+MI:0513	MI:0513	collagen film assay
+MI:0512	MI:0512	zymography
+MI:0435	MI:0435	protease assay
+MI:0990	MI:0990	cleavage assay
+MI:0841	MI:0841	phosphotransfer assay
+MI:0999	MI:0999	formylase assay
+MI:0996	MI:0996	deformylation assay
+MI:0997	MI:0997	ubiquitination assay
+MI:1000	MI:1000	hydroxylase assay
+MI:1003	MI:1003	geranylgeranylation assay
+MI:1004	MI:1004	palmitoylation assay
+MI:1002	MI:1002	myristoylation assay
+MI:1001	MI:1001	lipidation assay
+MI:0508	MI:0508	deacetylase radiometric assay
+MI:0406	MI:0406	deacetylase assay
+MI:0880	MI:0880	atpase assay
+MI:0419	MI:0419	gtpase assay
+MI:0879	MI:0879	nucleoside triphosphatase assay
+MI:0920	MI:0920	ribonuclease assay
+MI:0989	MI:0989	amidation assay
+MI:0984	MI:0984	deamination assay
+MI:0423	MI:0423	in-gel kinase assay
+MI:0424	MI:0424	protein kinase assay
+MI:0870	MI:0870	demethylase assay
+MI:1011	MI:1011	deneddylation assay
+MI:1010	MI:1010	neddylation assay
+MI:0516	MI:0516	methyltransferase radiometric assay
+MI:0515	MI:0515	methyltransferase assay
+MI:0699	MI:0699	rna directed dna polymerase assay
+MI:0697	MI:0697	dna directed dna polymerase assay
+MI:0698	MI:0698	dna directed rna polymerase assay
+MI:0700	MI:0700	rna directed rna polymerase assay
+MI:0696	MI:0696	polymerase assay
+MI:0979	MI:0979	oxidoreductase assay
+MI:0514	MI:0514	in gel phosphatase assay
+MI:0434	MI:0434	phosphatase assay
+MI:1009	MI:1009	desumoylation assay
+MI:1007	MI:1007	glycosylation assay
+MI:0972	MI:0972	phosphopantetheinylation assay
+MI:1008	MI:1008	sumoylation assay
+MI:1005	MI:1005	adp ribosylation assay
+MI:1006	MI:1006	deglycosylase assay
+MI:0887	MI:0887	histone acetylation assay
+MI:0889	MI:0889	acetylation assay
+MI:0415	MI:0415	enzymatic study
+MI:0430	MI:0430	nucleic acid uv cross-linking assay
+MI:0031	MI:0031	protein cross-linking with a bifunctional reagent
+MI:0030	MI:0030	cross-linking study
+MI:0808	MI:0808	comigration in sds page
+MI:0412	MI:0412	electrophoretic mobility supershift assay
+MI:0413	MI:0413	electrophoretic mobility shift assay
+MI:0276	MI:0276	blue native page
+MI:0404	MI:0404	comigration in non denaturing gel electrophoresis
+MI:0807	MI:0807	comigration in gel electrophoresis
+MI:0983	MI:0983	gemma
+MI:0982	MI:0982	electrophoretic mobility-based method
+MI:0813	MI:0813	proximity enzyme linked immunosorbent assay
+MI:0095	MI:0095	proteinchip(r) on a surface-enhanced laser desorption/ionization
+MI:0695	MI:0695	sandwich immunoassay
+MI:0678	MI:0678	antibody array
+MI:0946	MI:0946	ping
+MI:0092	MI:0092	protein in situ array
+MI:0089	MI:0089	protein array
+MI:0225	MI:0225	chromatin immunoprecipitation array
+MI:0081	MI:0081	peptide array
+MI:0008	MI:0008	array technology
+MI:0947	MI:0947	bead aggregation assay
+MI:0047	MI:0047	far western blotting
+MI:0049	MI:0049	filter binding
+MI:0892	MI:0892	solid phase assay
+MI:0963	MI:0963	interactome parallel affinity capture
+MI:0096	MI:0096	pull down
+MI:0676	MI:0676	tandem affinity purification
+MI:0729	MI:0729	luminescence based mammalian interactome mapping
+MI:0006	MI:0006	anti bait coimmunoprecipitation
+MI:0007	MI:0007	anti tag coimmunoprecipitation
+MI:0858	MI:0858	immunodepleted coimmunoprecipitation
+MI:0019	MI:0019	coimmunoprecipitation
+MI:0004	MI:0004	affinity chromatography technology
+MI:0657	MI:0657	systematic evolution of ligands by exponential enrichment
+MI:0440	MI:0440	saturation binding
+MI:0402	MI:0402	chromatin immunoprecipitation assay
+MI:0405	MI:0405	competition binding
+MI:0073	MI:0073	mrna display
+MI:0108	MI:0108	t7 phage display
+MI:0066	MI:0066	lambda phage display
+MI:0899	MI:0899	p3 filamentous phage display
+MI:0900	MI:0900	p8 filamentous phage display
+MI:0048	MI:0048	filamentous phage display
+MI:0084	MI:0084	phage display
+MI:0098	MI:0098	ribosome display
+MI:0034	MI:0034	display technology
+MI:0400	MI:0400	affinity technology
+MI:0227	MI:0227	reverse phase chromatography
+MI:0226	MI:0226	ion exchange chromatography
+MI:0091	MI:0091	chromatography technology
+MI:0949	MI:0949	gdp/gtp exchange assay
+MI:0401	MI:0401	biochemical
+MI:0439	MI:0439	random spore analysis
+MI:0441	MI:0441	synthetic genetic analysis
+MI:0254	MI:0254	genetic interference
+MI:0432	MI:0432	one hybrid
+MI:0438	MI:0438	rna tri hybrid
+MI:0726	MI:0726	reverse two hybrid
+MI:0369	MI:0369	lex-a dimerization assay
+MI:0437	MI:0437	protein tri hybrid
+MI:0728	MI:0728	gal4 vp16 complementation
+MI:0727	MI:0727	lexa b52 complementation
+MI:0399	MI:0399	two hybrid fragment pooling approach
+MI:0398	MI:0398	two hybrid pooling approach
+MI:0916	MI:0916	lexa vp16 complementation
+MI:0397	MI:0397	two hybrid array
+MI:0018	MI:0018	two hybrid
+MI:0655	MI:0655	lambda repressor two hybrid
+MI:0232	MI:0232	transcriptional complementation assay
+MI:0231	MI:0231	mammalian protein protein interaction trap
+MI:0370	MI:0370	tox-r dimerization assay
+MI:0230	MI:0230	membrane bound complementation assay
+MI:0014	MI:0014	adenylate cyclase complementation
+MI:0097	MI:0097	reverse ras recruitment system
+MI:0010	MI:0010	beta galactosidase complementation
+MI:0011	MI:0011	beta lactamase complementation
+MI:0895	MI:0895	protein kinase A complementation
+MI:0229	MI:0229	green fluorescence protein complementation assay
+MI:0111	MI:0111	dihydrofolate reductase reconstruction
+MI:0112	MI:0112	ubiquitin reconstruction
+MI:0228	MI:0228	cytoplasmic complementation assay
+MI:0588	MI:0588	3 hybrid method
+MI:0090	MI:0090	protein complementation assay
+MI:0045	MI:0045	experimental interaction detection
+MI:0026	MI:0026	correlated mutations
+MI:0064	MI:0064	interologs mapping
+MI:0037	MI:0037	domain profile pairs
+MI:0036	MI:0036	domain fusion
+MI:0100	MI:0100	sequence based phylogenetic profile
+MI:0101	MI:0101	sequence based prediction
+MI:0035	MI:0035	docking
+MI:0105	MI:0105	structure based prediction
+MI:0085	MI:0085	phylogenetic profile
+MI:0057	MI:0057	gene neighbourhood
+MI:0058	MI:0058	genome based prediction
+MI:0024	MI:0024	confirmational text mining
+MI:0087	MI:0087	predictive text mining
+MI:0110	MI:0110	text mining
+MI:0046	MI:0046	experimental knowledge based
+MI:0063	MI:0063	interaction prediction
+MI:0686	MI:0686	unspecified method
+MI:0363	MI:0363	inferred by author
+MI:0364	MI:0364	inferred by curator
+MI:0362	MI:0362	inference

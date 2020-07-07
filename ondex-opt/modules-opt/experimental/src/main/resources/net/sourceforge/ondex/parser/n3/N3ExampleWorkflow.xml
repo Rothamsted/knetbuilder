@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<Ondex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ONDEXParameters.xsd">
+
+	<DefaultGraph name="N3test" type="memory">
+		<Parameter name="ReplaceExisting">true</Parameter>
+	</DefaultGraph>
+
+	<Parser name="n3">
+		<Parameter name="InputFile">E:\test.n3</Parameter>
+		<Parameter name="ConceptClassPredicate">Publication,http://purl.org/dc/terms/issued</Parameter>
+		<Parameter name="ConceptClassPredicate">Publication,http://purl.org/dc/terms/bibliographicCitation</Parameter>
+		<Parameter name="ConceptNamePredicate">true,http://purl.org/dc/terms/bibliographicCitation</Parameter>
+		<Parameter name="RelationTypePredicate">pub_in,http://purl.org/net/cito/cites</Parameter>
+		<Parameter name="ConceptAttributeNamePredicate">CitNum,PREFIX cito: &lt;http://purl.org/net/cito/&gt; SELECT ?pub (SUM(?count) AS ?count) WHERE { ?pub cito:citationFrequency ?frequency . ?frequency cito:countValue ?count . } GROUP BY ?pub</Parameter>
+		<Parameter name="RelationAttributeNamePredicate">CitNum,PREFIX cito: &lt;http://purl.org/net/cito/&gt; SELECT ?from ?type ?to ?count WHERE { LET (?type := str(cito:cites)) . ?from cito:cites ?to . ?from cito:inTextCitationFrequency ?frequency . ?frequency cito:inTextCitationTarget ?to . ?frequency cito:inTextCountValue ?count . }</Parameter>
+		<Parameter name="ConceptAttributeNamePredicate">description,PREFIX dcterms: &lt;http://purl.org/dc/terms/&gt; SELECT ?pub ?issued WHERE { ?pub dcterms:issued ?issued . }</Parameter>
+	</Parser>
+
+	<Transformer name="gdsregex">
+		<Parameter name="ConceptAttributeNameRegex">description,^\w\w\w\w</Parameter>
+		<Parameter name="ConceptAttributeNameCubeRoot">CitNum</Parameter>
+		<Parameter name="RelationAttributeNameSquareRoot">CitNum</Parameter>
+	</Transformer>
+	
+	<Export name="oxl">
+		<Parameter name="ExportFile">E:\n3.xml</Parameter>
+		<Parameter name="GZip">true</Parameter>
+	</Export>
+
+</Ondex>
+

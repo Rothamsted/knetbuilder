@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>modules-opt</artifactId>
+      <groupId>net.sourceforge.ondex</groupId>
+      <version>2.1.2-SNAPSHOT</version>
+   </parent>
+   <groupId>net.sourceforge.ondex.modules</groupId>
+   <artifactId>sbml</artifactId>
+
+   <name>sbml</name>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.codehaus.woodstox</groupId>
+         <artifactId>woodstox-core-lgpl</artifactId>
+         <version>4.0.6</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.codehaus.woodstox</groupId>
+         <artifactId>stax2-api</artifactId>
+         <version>3.0.1</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.java.dev.stax-utils</groupId>
+         <artifactId>stax-utils</artifactId>
+         <version>20070216</version>
+      </dependency>
+			<dependency>
+			    <groupId>com.bea.xml</groupId>
+			    <artifactId>jsr173-ri</artifactId>
+			    <version>1.0</version>
+			</dependency>
+      <dependency>
+         <groupId>org.codehaus.staxmate</groupId>
+         <artifactId>staxmate</artifactId>
+         <version>2.0.0</version>
+      </dependency>
+      <dependency>
+         <groupId>org.sbml.jsbml</groupId>
+         <artifactId>jsbml</artifactId>
+         <version>1.0</version>
+         <scope>compile</scope>
+         <exclusions>
+         	<exclusion>
+				    <groupId>org.sbml.jsbml.ext</groupId>
+				    <artifactId>jsbml-dyn</artifactId>
+         	</exclusion>
+         	<exclusion>
+				    <groupId>org.sbml.jsbml.ext</groupId>
+				    <artifactId>jsbml-req</artifactId>
+         	</exclusion>
+         </exclusions>
+      </dependency>
+			<dependency>
+			    <groupId>org.sbml.jsbml.ext</groupId>
+			    <artifactId>jsbml-dyn</artifactId>
+			    <version>1.1</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.sbml.jsbml.ext</groupId>
+			    <artifactId>jsbml-req</artifactId>
+			    <version>1.1</version>
+			</dependency>
+      <dependency>
+         <groupId>org.biojava</groupId>
+         <artifactId>biojava</artifactId>
+         <version>3.0</version>
+         <scope>compile</scope>
+      </dependency>
+
+      <!-- ONDEX deps -->
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>oxl</artifactId>
+         <version>${project.version}</version>
+         <scope>provided</scope>
+      </dependency>
+   </dependencies>
+   
+   <repositories>
+   	<repository>
+   		<!-- jsr173 -->
+   		<id>mmbase</id>
+   		<url>http://www.mmbase.org/maven2/</url>
+   	</repository>
+   </repositories>
+</project>
