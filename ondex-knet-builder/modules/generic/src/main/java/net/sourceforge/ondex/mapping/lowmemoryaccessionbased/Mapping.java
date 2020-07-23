@@ -160,12 +160,11 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		return true;
 	}
 
-	public void start() throws InvalidPluginArgumentException {
+	public void start() throws InvalidPluginArgumentException 
+	{
 
-		if (args.getUniqueValue(WITHIN_DATASOURCE_ARG) != null) {
-			mapWithInDataSource = (Boolean) args
-					.getUniqueValue(WITHIN_DATASOURCE_ARG);
-		}
+		if (args.getUniqueValue(WITHIN_DATASOURCE_ARG) != null)
+			mapWithInDataSource = (Boolean) args.getUniqueValue(WITHIN_DATASOURCE_ARG);
 
 		relations = new HashSet<>();
 
@@ -174,27 +173,30 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		Set<DataSource> exclusiveDataSources = getExclusiveDataSources();
 
 		ccMapping = getAllowedCCs(graph);
-		for (ConceptClass key : ccMapping.keySet()) {
+		for (ConceptClass key : ccMapping.keySet())
+		{
 			fireEventOccurred(new GeneralOutputEvent(
-					"Accession based mapping concept class restriction "
-							+ key.getId() + " => " + ccMapping.get(key).getId(),
-					getCurrentMethodName()));
+				"Accession based mapping concept class restriction "
+						+ key.getId() + " => " + ccMapping.get(key).getId(),
+				getCurrentMethodName()));
 		}
 
-		for (String s : args
-				.getObjectValueList(EQUIVALENT_CC_ARG, String.class)) {
+		for (String s : args.getObjectValueList(EQUIVALENT_CC_ARG, String.class))
+		{
 			String[] split = s.split(",");
 			fireEventOccurred(new GeneralOutputEvent(
-					"Adding concept class equivalent " + split[0] + " "
-							+ split[1], getCurrentMethodName()));
+				"Adding concept class equivalent " + split[0] + " "
+				+ split[1], getCurrentMethodName())
+			);
 		}
 
 		// define concepts to map from
 		Set<ONDEXConcept> hitConcepts = getBaseConcepts();
 		int total = hitConcepts.size();
 
-		fireEventOccurred(new GeneralOutputEvent("Accession based mapping on "
-				+ total + " concepts", getCurrentMethodName()));
+		fireEventOccurred ( new GeneralOutputEvent ( 
+			"Accession based mapping on " + total + " concepts", getCurrentMethodName()
+		));
 
 		long timeStart = System.currentTimeMillis();
 
@@ -205,32 +207,30 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		{
 			for (ONDEXConcept concept : hitConcepts)
 			{
-			// get actual concept, data source and corresponding concept class
-			current++;
-
-			if ((current % 50000d) == 0) {
-				fireEventOccurred(new GeneralOutputEvent("Mapping complete on "
-						+ decimalFormat.format(((double) current)
-								/ ((double) total) * 100d) + "% ("
-						+ numberFormat.format(current) + " Concepts)",
-						getCurrentMethodName()));
-					// TODO: remove? In general, this is bad practice, we aren't smarter than the GC.
-					// if (current % 200000 == 0) System.runFinalization();
-				}
-
-				for (ConceptAccession conceptAcc : concept.getConceptAccessions()) {
+				// get actual concept, data source and corresponding concept class
+				current++;
 	
-					if (exclusiveDataSources != null
-							&& !exclusiveDataSources.contains(conceptAcc
-									.getElementOf())) {
+				if ((current % 50000d) == 0)
+				{
+					fireEventOccurred(new GeneralOutputEvent("Mapping complete on "
+							+ decimalFormat.format(((double) current)
+									/ ((double) total) * 100d) + "% ("
+							+ numberFormat.format(current) + " Concepts)",
+							getCurrentMethodName()));
+						// TODO: remove? In general, this is bad practice, we aren't smarter than the GC.
+						// if (current % 200000 == 0) System.runFinalization();
+				}
+				
+				for (ConceptAccession conceptAcc : concept.getConceptAccessions())
+				{
+					if (exclusiveDataSources != null 
+							&& !exclusiveDataSources.contains(conceptAcc.getElementOf()))
 						continue;
-					}
 	
 					// accession must not be ambiguous or ignore ambiguous
-					if (ignoreAmbiguity || !conceptAcc.isAmbiguous()) {
-	
-						Set<DataSource> dataSourceToMapTo = getDataSourceToMapTo(
-								graph, conceptAcc.getElementOf());
+					if (ignoreAmbiguity || !conceptAcc.isAmbiguous())
+					{
+						var dataSourceToMapTo = getDataSourceToMapTo ( graph, conceptAcc.getElementOf() );
 						for (ConceptClass cc : getCCtoMapTo(graph, concept.getOfType()))
 						{
 							// possible DataSource for concept accessions
@@ -308,26 +308,27 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 
 	}
 
-	private Set<ONDEXConcept> getBaseConcepts()
-			throws InvalidPluginArgumentException {
-		Set<ONDEXConcept> itConcepts = null;
+	private Set<ONDEXConcept> getBaseConcepts() throws InvalidPluginArgumentException
+	{
+		Set<ONDEXConcept> hitConcepts = null;
 		Set<ConceptClass> validCCs = getExclusiveConceptClasses();
-		if (validCCs.size() > 0) {
-			for (ConceptClass cc : validCCs) {
-				fireEventOccurred(new GeneralOutputEvent("Filtering on cc "
-						+ cc.getId(), getCurrentMethodName()));
-				if (itConcepts == null) {
-					itConcepts = BitSetFunctions.copy(graph
-							.getConceptsOfConceptClass(cc));
-				} else {
-					itConcepts.addAll(graph.getConceptsOfConceptClass(cc));
-				}
+		if (validCCs.size() > 0)
+		{
+			for (ConceptClass cc : validCCs)
+			{
+				fireEventOccurred(
+					new GeneralOutputEvent("Filtering on cc " + cc.getId(), getCurrentMethodName())
+				);
+				if (hitConcepts == null)
+					hitConcepts = BitSetFunctions.copy(graph.getConceptsOfConceptClass(cc));
+				else
+					hitConcepts.addAll(graph.getConceptsOfConceptClass(cc));
 			}
-		} else {
-			itConcepts = BitSetFunctions.copy(graph.getConcepts());
+		} 
+		else 
+			hitConcepts = BitSetFunctions.copy(graph.getConcepts());
 			// map to everything
-		}
-		return itConcepts;
+		return hitConcepts;
 	}
 
 	public void createRelationsOnResults(Set<ONDEXConcept> hitResults,
