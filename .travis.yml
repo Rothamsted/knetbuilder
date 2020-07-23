@@ -13,11 +13,13 @@ env:
   #- IS_SIMPLE_BUILD='true'
 
 before_script:
-  - sudo apt-get update
+# TODO: Remove, launch4j was disabled
+#  - sudo apt-get update
 # We need this due to: https://github.com/lukaszlenart/launch4j-maven-plugin/issues/29
-  - sudo apt-get install libc6:i386 libstdc++6:i386
-# Headless Java
+#  - sudo apt-get install libc6:i386 libstdc++6:i386
+  # Headless Java
   - "export DISPLAY=:99.0"
+  # Common settings file
   - wget --no-verbose https://raw.githubusercontent.com/Rothamsted/knetminer-common/master/travis/maven-settings.xml
     
 install: echo "Skipping default installation step"

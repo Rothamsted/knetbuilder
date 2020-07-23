@@ -37,6 +37,7 @@
             </configuration>
          </plugin>
 
+				 <!-- TODO: Remove, we don't use it anymore
          <plugin>
             <groupId>com.akathist.maven.plugins.launch4j</groupId>
             <artifactId>launch4j-maven-plugin</artifactId>
@@ -77,6 +78,7 @@
                </execution>
             </executions>
          </plugin>
+         -->
 
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
