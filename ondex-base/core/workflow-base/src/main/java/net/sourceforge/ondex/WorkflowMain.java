@@ -215,7 +215,7 @@ public class WorkflowMain {
             try {
                 job.run();
             } finally {
-                if (job != null && job.getErrorState()) {
+                if (job.getErrorState()) {
                     throw job.getException();
                 }
             }
