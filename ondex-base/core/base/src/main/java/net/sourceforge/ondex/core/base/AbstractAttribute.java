@@ -76,7 +76,7 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 	protected int hashCode;
 
 	static {
-		COMPRESSOR = Executors.newCachedThreadPool();
+		COMPRESSOR = Executors.newWorkStealingPool();
 		Runtime.getRuntime().addShutdownHook ( 
 			new Thread ( () -> {
 				COMPRESSOR.shutdownNow ();
@@ -158,8 +158,8 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 				{
 					Thread myThread = Thread.currentThread ();
 					String myName = myThread.getName ();
-					if ( ! myName.startsWith ( "[attrComressor] " ) )
-						myThread.setName ( "[compressor]" + myThread.getName () );
+					if ( ! myName.startsWith ( "[attrZip] " ) )
+						myThread.setName ( "[attrZip] " + myThread.getName () );
 					return compress ( strVal ); 
 				});
 			} else {

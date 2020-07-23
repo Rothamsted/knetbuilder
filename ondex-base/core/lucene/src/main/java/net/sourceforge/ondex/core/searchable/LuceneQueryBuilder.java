@@ -3,6 +3,7 @@ package net.sourceforge.ondex.core.searchable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -476,12 +477,12 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 			// see rawAccession() for details about why we search these fields 
 			String accFld = accFldPrefx + RAW;
 			
-			term = LuceneEnv.rawAccession ( term );
-			boolQb.add ( qparser.createPhraseQuery ( accFld, term ), BooleanClause.Occur.SHOULD );
+			var sterm = LuceneEnv.rawAccession ( term );
+			boolQb.add ( createPhraseQuery ( qparser, accFld, sterm ), BooleanClause.Occur.SHOULD );
 
 			if ( !ignoreAmbiguity ) {
 				String accAmbiguousFld = accFldPrefx + AMBIGUOUS + DELIM + RAW;
-				boolQb.add ( qparser.createPhraseQuery ( accAmbiguousFld, term ), BooleanClause.Occur.SHOULD );
+				boolQb.add ( createPhraseQuery ( qparser, accAmbiguousFld, sterm ), BooleanClause.Occur.SHOULD );
 			}
 		}
 		return boolQb.build ();
@@ -603,11 +604,11 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		
 		for ( String term : terms )
 		{
-			term = LuceneEnv.rawAccession ( term );
-			termsOrQb.add ( qparser.createPhraseQuery ( accFld, term ), SHOULD );
+			var searchTerm = LuceneEnv.rawAccession ( term );
+			termsOrQb.add ( createPhraseQuery ( qparser, accFld, searchTerm, term ), SHOULD );
 			
 			if ( ignoreAmbiguity )
-				termsOrQb.add ( qparser.createPhraseQuery ( accAmbiguousFld, term ), SHOULD );
+				termsOrQb.add ( createPhraseQuery ( qparser, accAmbiguousFld, searchTerm, term ), SHOULD );
 		}
 		boolQb.add ( termsOrQb.build (), MUST );
 		
@@ -1028,6 +1029,22 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		throws ParseException	
 	{
 		return searchByAttributeFuzzy ( RELATTRIBUTE_FIELD, an, term, minimumSimilarity );
+	}
+	
+	/**
+	 * A simple wrapper to {@link QueryParser#createPhraseQuery(String, String)}, which throws an exception if the
+	 * resulting query is null.
+	 */
+	public static Query createPhraseQuery ( QueryParser queryParser, String field, String searchTerm, String originalTerm )
+	{
+		return Optional
+			.ofNullable ( queryParser.createPhraseQuery ( field, searchTerm ) )
+			.orElseThrow ( () -> new IllegalArgumentException ( "Search term '" + originalTerm + "' for field '" + field + "' is invalid" ) );
+	}
+	
+	public static Query createPhraseQuery ( QueryParser queryParser, String field, String searchTerm )
+	{
+		return createPhraseQuery ( queryParser, field, searchTerm, searchTerm );
 	}
 
 }
