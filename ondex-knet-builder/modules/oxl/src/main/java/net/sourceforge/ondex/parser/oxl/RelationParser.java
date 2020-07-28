@@ -95,6 +95,7 @@ public class RelationParser extends AbstractEntityParser {
 		xmlr.nextTag(); // fromConcept
 		int fromConceptS = Integer.parseInt(xmlr.getElementText());
 		int fromId = idMapping.get(fromConceptS);
+
 		ONDEXConcept fromConcept = og.getConcept(fromId);
 		if (fromConcept == null)
 			throw new InconsistencyException(

@@ -1,7 +1,11 @@
 package net.sourceforge.ondex.parser.oxl;
 
+import static java.lang.System.out;
+
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -19,6 +23,8 @@ import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
  */
 public class MoreCasesOXLParserTest
 {
+	// TODO: set a config file.
+	private Logger log = Logger.getLogger ( this.getClass () );
 	
 	@Test
 	public void parsePoplar () throws Exception
@@ -44,10 +50,16 @@ public class MoreCasesOXLParserTest
 		parseHelper ( "GrameneTraitOntology.xml.gz" );
 	}
 
-	
-	private void parseHelper ( String resource ) throws Exception
+	@Test @Ignore ( "Not a real unit test" )
+	public void parseNeuroSpora202007 () throws Exception
 	{
-		ONDEXGraph theGraph = new MemoryONDEXGraph ( "UnitTestGraph" );
+		var graph = parseHelper ( "file:///Users/brandizi/tmp/ondex/NeurosporaKNET_v43.xml" );
+		out.println ( "Concepts: " + graph.getConcepts ().size () );
+	}
+	
+	private ONDEXGraph parseHelper ( String resource ) throws Exception
+	{
+		ONDEXGraph graph = new MemoryONDEXGraph ( "UnitTestGraph" );
 	
 		String fileForResource = getResourcePath ( resource );
 	
@@ -55,14 +67,19 @@ public class MoreCasesOXLParserTest
 		ONDEXPluginArguments pa = new ONDEXPluginArguments ( oxl.getArgumentDefinitions () );
 		pa.setOption ( FileArgumentDefinition.INPUT_FILE, fileForResource );
 		oxl.setArguments ( pa );
-		oxl.setONDEXGraph ( theGraph );
+		oxl.setONDEXGraph ( graph );
 		oxl.start ();
+		
+		return graph;
 	}
 
 
-	private String getResourcePath ( String resClassPath )
+	private String getResourcePath ( String resPath )
 	{
-		URL url = MoreCasesOXLParserTest.class.getClassLoader ().getResource ( resClassPath );
+		if ( resPath.startsWith ( "file://" ) )
+			return resPath.substring ( "file://".length () );
+			
+		URL url = MoreCasesOXLParserTest.class.getClassLoader ().getResource ( resPath );
 		if ( "file".equals ( url.getProtocol () ) )
 			return url.toString ().substring ( "file:".length () );
 		
