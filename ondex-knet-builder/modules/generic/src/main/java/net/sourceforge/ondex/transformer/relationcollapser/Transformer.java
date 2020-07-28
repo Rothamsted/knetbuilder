@@ -172,8 +172,8 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
 
 		// add relation type restrictions
 		Set<RelationType> relationTypes = new HashSet<RelationType>();
-		if (validRelationTypes != null && validRelationTypes.length > 0) {
-
+		if (validRelationTypes != null && validRelationTypes.length > 0)
+		{
 			// get relation types from arguments
 			for (String s : validRelationTypes) {
 				RelationType relationType = graph.getMetaData()
@@ -206,37 +206,39 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
 			Set<ONDEXRelation> relations = new HashSet<ONDEXRelation>();
 
 			// add all relations of the valid relation types
-			for (RelationType relationType : relationTypes) {
+			for (RelationType relationType : relationTypes)
 				// big bug was here: it has to be OR instead of AND
-				relations
-						.addAll(graph.getRelationsOfRelationType(relationType));
-			}
+				relations.addAll(graph.getRelationsOfRelationType(relationType));
 
 			if (relations.size() == 0) {
 				fireEventOccurred(new GeneralOutputEvent(
-						"No valid relations in scope of specified relations and/or relation types: THEREFORE NO RESULTS",
-						getCurrentMethodName()));
+					"No valid relations in scope of specified relations and/or relation types: THEREFORE NO RESULTS",
+					getCurrentMethodName()
+				));
 				return;
 			}
 
 			fireEventOccurred(new GeneralOutputEvent(
-					"Locating clusters and collapsing", getCurrentMethodName()));
+				"Locating clusters and collapsing", getCurrentMethodName()
+			));
 
 			NumberFormat formatter = new DecimalFormat("000.00");
 
 			double numRel = relations.size();
 			double relcol = 0;
 
-			// we research every time as relations in the graph change as they
+			// we search again every time as relations in the graph change as they
 			// are deleted and new relations reassigned to replacement concepts
-			for (ONDEXRelation relation : relations) {
-
+			for (ONDEXRelation relation : relations)
+			{
 				// calculate current percentage
 				double percent = relcol / numRel * 100d;
-				if (percent % 5d == 0) {
-					System.out.println(formatter.format(percent)
-							+ "% of relations collapsed ");
-				}
+				if (percent % 5d == 0)
+					fireEventOccurred ( new GeneralOutputEvent ( 
+						formatter.format ( percent ) + "% of relations collapsed", 
+						getCurrentMethodName()
+				));					
+
 				relcol++;
 
 				// it is deleted already
