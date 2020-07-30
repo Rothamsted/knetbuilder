@@ -21,4 +21,9 @@ public class ObjectTypeMismatchEvent extends EventType {
 		super.desc = "Object assigned was not of expected type.";
 	}
 
+	public ObjectTypeMismatchEvent(String message, String extension, Level level ) {
+		this ( message, extension );
+		this.setLog4jLevel ( level );
+	}
+
 }

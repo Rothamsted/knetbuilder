@@ -1,5 +1,7 @@
 package net.sourceforge.ondex.parser.oxl;
 
+import static uk.ac.ebi.utils.xml.stax.StaxUtils.xmlCoord;
+
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +13,11 @@ import javax.xml.stream.XMLStreamReader;
 
 import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.event.type.ObjectTypeMismatchEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.export.oxl.Export;
 import net.sourceforge.ondex.export.oxl.XMLTagNames;
+import uk.ac.ebi.utils.xml.stax.StaxUtils;
 
 /**
  * Parses XML Documents.
@@ -87,11 +91,12 @@ public class XmlParser implements XmlComponentParser {
 	{
 
 		// main loop
-		while (staxXmlReader.hasNext() && !cancelled) {
+		while (staxXmlReader.hasNext() && !cancelled) 
+		{
 			int event = staxXmlReader.next();
-
-			if (event == XMLStreamConstants.START_ELEMENT) {
-
+						
+			if (event == XMLStreamConstants.START_ELEMENT)
+			{
 				String element = staxXmlReader.getLocalName();
 
 				// check versions, complain only
@@ -105,26 +110,28 @@ public class XmlParser implements XmlComponentParser {
 
 				// If a Component Parser is registered that can handle
 				// this element delegate
-				if (delegates.containsKey(element)) {
+				// TODO: what does it happen if it's not listed?!
+				if ( !delegates.containsKey ( element ) ) continue;
 
-					XmlComponentParser parser = delegates.get(element);
+				XmlComponentParser parser = delegates.get(element);
 
-					if (count.containsKey(element)) {
-						int current = count.get(element);
+				if (count.containsKey(element))
+				{
+					int current = count.get(element);
 
-						if (current % 100000 == 0 && oxlparser != null) 
-							oxlparser.fireEventOccurred( new GeneralOutputEvent(
-								element	+ " parsed " + ELEMENT_NUMBER_FORMAT.format(current)
-								+ " elements", "", Level.INFO
-						));
+					if (current % 100000 == 0 && oxlparser != null) 
+						oxlparser.fireEventOccurred( new GeneralOutputEvent(
+							element	+ " parsed " + ELEMENT_NUMBER_FORMAT.format(current)
+							+ " elements", "", Level.INFO
+					));
 
-						count.put(element, ++current);
-					} else {
-						count.put(element, 1);
-					}
-					parser.parse(staxXmlReader);
-				}
-			}
+					count.put(element, ++current);
+				} 
+				else
+					count.put(element, 1);
+				
+				parser.parse(staxXmlReader);
+			} // if START_ELEMNT
 		} // eof
 	}
 

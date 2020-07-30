@@ -2,11 +2,16 @@ package net.sourceforge.ondex.parser.oxl;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
+import org.apache.commons.lang3.math.NumberUtils;
 
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -18,6 +23,8 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.export.oxl.RefManager;
 import net.sourceforge.ondex.export.oxl.XMLTagNames;
+import uk.ac.ebi.utils.xml.stax.StaxUtils;
+import static uk.ac.ebi.utils.xml.stax.StaxUtils.xmlCoord;
 
 /**
  * This class parses ONDEX Relation tags and stores them in a ONDEX graph. It
@@ -90,27 +97,9 @@ public class RelationParser extends AbstractEntityParser {
 			IllegalAccessException, InconsistencyException {
 
 		progress++;
-
-		// read fromConcept
-		xmlr.nextTag(); // fromConcept
-		int fromConceptS = Integer.parseInt(xmlr.getElementText());
-		int fromId = idMapping.get(fromConceptS);
-
-		ONDEXConcept fromConcept = og.getConcept(fromId);
-		if (fromConcept == null)
-			throw new InconsistencyException(
-					"Something went wrong getting fromConcept for XML ID "
-							+ fromConceptS + " mapped to ONDEX ID " + fromId);
-
-		// read toConcept
-		xmlr.nextTag(); // toConcept
-		int toConceptS = Integer.parseInt(xmlr.getElementText());
-		int toId = idMapping.get(toConceptS);
-		ONDEXConcept toConcept = og.getConcept(toId);
-		if (toConcept == null)
-			throw new InconsistencyException(
-					"Something went wrong getting toConcept for XML ID "
-							+ toConceptS + " mapped to ONDEX ID " + toId);
+				
+		ONDEXConcept fromConcept = parseRelationEndPoint ( xmlr, "fromConcept" );
+		ONDEXConcept toConcept = parseRelationEndPoint ( xmlr, "toConcept" );
 
 		// qualifier or ofTypeSet
 		xmlr.nextTag();
@@ -182,6 +171,30 @@ public class RelationParser extends AbstractEntityParser {
 		}
 	}
 
+	
+	private ONDEXConcept parseRelationEndPoint ( XMLStreamReader xmlr, String tag ) 
+		throws XMLStreamException, InconsistencyException
+	{
+		int idSrc = Optional.ofNullable ( StaxUtils.readNextTag ( xmlr, tag ) )
+			.filter ( NumberUtils::isDigits )
+			.map ( Integer::parseInt )
+			.orElseThrow ( () -> new InconsistencyException (
+				"Wrong fromConcept at " + xmlCoord ( xmlr )
+			));
+			
+		Integer idNew = idMapping.get ( idSrc );
+		if ( idNew == null ) throw new InconsistencyException ( 
+			"OXL error: no internal mapping for concept #" + idSrc 
+		);
+		
+		return Optional.ofNullable ( og.getConcept ( idNew ) )
+			.orElseThrow ( () -> new InconsistencyException (
+				"Something went wrong getting " + tag + " for XML ID "
+				+ idNew + ", mapped from XML ID " + idSrc
+		));
+	}
+	
+	
 	/**
 	 * Adds context to a relation
 	 * 

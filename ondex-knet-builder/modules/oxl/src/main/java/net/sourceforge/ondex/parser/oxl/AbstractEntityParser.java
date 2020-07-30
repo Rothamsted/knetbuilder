@@ -130,10 +130,11 @@ public abstract class AbstractEntityParser implements XmlComponentParser {
 
 		ArrayList<EvidenceType> evidences = new ArrayList<>(1);
 		int eventType = xmlr.getEventType();
-		while (xmlr.hasNext()) {
-
+		while (xmlr.hasNext())
+		{
 			if (eventType == XMLStreamConstants.START_ELEMENT
-					&& xmlr.getLocalName().equals(XMLTagNames.EVIDENCE)) {
+					&& xmlr.getLocalName().equals(XMLTagNames.EVIDENCE))
+			{
 
 				xmlr.nextTag(); // name
 				String nameS = checkForSpace(xmlr.getElementText());

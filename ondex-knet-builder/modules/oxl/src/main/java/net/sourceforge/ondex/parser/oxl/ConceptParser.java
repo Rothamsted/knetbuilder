@@ -1,4 +1,7 @@
+
 package net.sourceforge.ondex.parser.oxl;
+import static uk.ac.ebi.utils.xml.stax.StaxUtils.readNextTag;
+import static uk.ac.ebi.utils.xml.stax.StaxUtils.expectNextTag;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,6 +21,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.export.oxl.RefManager;
 import net.sourceforge.ondex.export.oxl.XMLTagNames;
+import uk.ac.ebi.utils.xml.stax.StaxUtils;
 
 /**
  * This class parses XML ONDEX Concepts and stores them in a ONDEX graph. It
@@ -26,8 +30,8 @@ import net.sourceforge.ondex.export.oxl.XMLTagNames;
  * @author sierenk
  * @author Matthew Pocock
  */
-public class ConceptParser extends AbstractEntityParser {
-
+public class ConceptParser extends AbstractEntityParser
+{
 	// associated data sources
 	private RefManager<String, DataSource> dataSourceRefManager;
 
@@ -108,17 +112,10 @@ public class ConceptParser extends AbstractEntityParser {
 
 		progress++;
 
-		xmlr.nextTag(); // concept id
-		Integer id = Integer.valueOf(xmlr.getElementText());
-
-		xmlr.nextTag(); // concept pid
-		String pid = xmlr.getElementText();
-
-		xmlr.nextTag(); // conncept annotation
-		String annotation = xmlr.getElementText();
-
-		xmlr.nextTag(); // concept description
-		String description = xmlr.getElementText();
+		Integer id = Integer.valueOf ( readNextTag ( xmlr, "id" ) );
+		String pid = readNextTag ( xmlr, "pid" );
+		String annotation = readNextTag ( xmlr, "annotation" );
+		String description = readNextTag ( xmlr, "description" );
 
 		// elementOf (DataSource)
 		DataSource dataSource = parseDataSource(xmlr).get();
@@ -126,26 +123,27 @@ public class ConceptParser extends AbstractEntityParser {
 		// ofType (CC)
 		ConceptClass cc = parseConceptClass(xmlr).get();
 
-		xmlr.nextTag(); // evidences
+		// It's not possible to be sure that this moves us to <evidences>, for that's something
+		// that's flushed into parseEvidences(). Absurd, but here it is
+		xmlr.nextTag ();
 		Collection<EvidenceType> evidences = parseEvidences(xmlr);
 
-		if (evidences == null || evidences.size () == 0)
-			throw new InconsistencyException(
-					"An evidence type is missing in the XML at Concept " + pid
-							+ " can not continue with concept.");
+		if (evidences == null || evidences.size () == 0) throw new InconsistencyException(
+			"An evidence type is missing in the XML at Concept " + pid + " can not continue with concept."
+		);
 
 		// create the concept
 		ONDEXConcept c = og.createConcept(pid, annotation, description,
 				dataSource, cc, evidences);
 		idMapping.put(id, c.getId());
 
-		xmlr.nextTag(); // conames
+		expectNextTag ( xmlr, "conames" );
 		parseConceptNames(xmlr, c);
 
-		xmlr.nextTag(); // coaccessions
-
+		expectNextTag ( xmlr, "coaccessions" );
 		parseConceptAccessions(xmlr, c);
 
+		// Again, not sure if there's an opening <codgs> here
 		xmlr.nextTag(); // cogds start
 
 		parseAttributes(xmlr, c);
@@ -401,7 +399,9 @@ public class ConceptParser extends AbstractEntityParser {
 
 		if (xmlr.getLocalName().equals(XMLTagNames.ID_REF)) {
 			// nothing else to do
-		} else {
+		}
+		else 
+		{
 			xmlr.nextTag(); // fullname
 			String fullname = xmlr.getElementText();
 
@@ -409,23 +409,21 @@ public class ConceptParser extends AbstractEntityParser {
 			String ccdescription = xmlr.getElementText();
 
 			// if cc does not exist, create Concept Class
-			if (!og.getMetaData().checkConceptClass(ccname)) {
+			if (!og.getMetaData().checkConceptClass(ccname))
 				conceptClassRefManager.resolve(
-						ccname,
-						og.getMetaData()
-								.getFactory()
-								.createConceptClass(ccname, fullname,
-										ccdescription));
-			} else { // skip everything else
-				// do nothing
-			}
+					ccname,
+					og.getMetaData()
+						.getFactory()
+						.createConceptClass(ccname, fullname,	ccdescription)
+			);
 
 			xmlr.nextTag(); // end ofType OR start specialisationOf
 
 			// optional specialisationOf tag
 			int eventType = xmlr.getEventType();
 			if (eventType == XMLStreamConstants.START_ELEMENT
-					&& xmlr.getLocalName().equals(XMLTagNames.SPECIALISATIONOF)) {
+					&& xmlr.getLocalName().equals(XMLTagNames.SPECIALISATIONOF))
+			{
 				RefManager.Ref<ConceptClass> specOf = parseConceptClassContent(xmlr);
 				specOf.setCompletionAction(new RefManager.OnCompletion<net.sourceforge.ondex.core.ConceptClass>() {
 					@Override
