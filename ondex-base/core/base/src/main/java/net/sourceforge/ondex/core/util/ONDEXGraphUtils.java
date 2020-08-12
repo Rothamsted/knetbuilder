@@ -1,9 +1,13 @@
 package net.sourceforge.ondex.core.util;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -234,6 +238,61 @@ public class ONDEXGraphUtils
 		throw new IllegalArgumentException ( 
 			ONDEXGraphUtils.class.getSimpleName () + ".getEntityType() has a value of unkknown type: " + ondexEntityType.getName () 
 		);
+	}
+
+	/**
+	 * Removes the attribute with ID attrId from all the concepts in the graph that have it.
+	 */
+	public static int removeConceptAttribute ( ONDEXGraph graph, String attrId )
+	{
+		return removeEntityAttribute (
+			graph, attrId, graph::getConceptsOfAttributeName, graph::getConcept
+		);
+	}
+		
+	/**
+	 * Removes the attribute with ID attrId from all the relations in the graph that have it.
+	 */
+	public static int removeRelationAttribute ( ONDEXGraph graph, String attrId )
+	{
+		return removeEntityAttribute (
+			graph, attrId, graph::getRelationsOfAttributeName, graph::getRelation
+		);
+	}
+
+	/**
+	 * Removes the attribute with ID attrId from all the entities of type OE in the graph that 
+	 * have such attribute. This is the common base for {@link #removeConceptAttribute(ONDEXGraph, String)}, 
+	 * {@link #removeRelationAttribute(ONDEXGraph, String)}. 
+	 * 
+	 * @param entitiesSelector is a function to extract all OE instances from the graph that
+	 * has the attribute attrId.
+	 * 
+	 * @param entityGetter gets an OE entity by {@link ONDEXEntity#getId() ID}.
+	 * 
+	 */
+	private static <OE extends ONDEXEntity> int removeEntityAttribute ( 
+		ONDEXGraph graph, String attrId, 
+		Function<AttributeName, Set<OE>> entitiesSelector,
+		Function<Integer, OE> entityGetter
+	)
+	{
+		AttributeName aname = graph.getMetaData ().getAttributeName ( attrId );
+		if ( aname == null ) return 0;
+		
+  	Set<OE> entities = entitiesSelector.apply ( aname );
+  	if ( entities == null || entities.isEmpty () ) return 0;
+    
+  	// We need this to avoid ConcurrentModificationEx
+  	Set<Pair<Integer, AttributeName>> removeMe = new HashSet<> ();
+  	entities.forEach ( c -> removeMe.add ( Pair.of ( c.getId(), aname ) ) );	
+
+  	removeMe.forEach ( pair -> 
+  		entityGetter.apply ( pair.getLeft () )
+  		.deleteAttribute ( pair.getRight () ) 
+  	);
+  	
+  	return removeMe.size ();
 	}
 
 }

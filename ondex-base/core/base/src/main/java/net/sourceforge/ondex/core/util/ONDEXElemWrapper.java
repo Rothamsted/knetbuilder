@@ -22,7 +22,7 @@ public class ONDEXElemWrapper<OE>
 	 * A facility to get a new instance quickly
 	 */
 	public static <OE> ONDEXElemWrapper<OE> of ( OE elem, ONDEXGraph graph ) {
-		return new ONDEXElemWrapper<OE> ( elem, graph ); 
+		return new ONDEXElemWrapper<> ( elem, graph ); 
 	} 
 	
 	public ONDEXElemWrapper ( OE element, ONDEXGraph graph )
