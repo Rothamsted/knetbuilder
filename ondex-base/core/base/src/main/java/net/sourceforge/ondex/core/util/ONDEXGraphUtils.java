@@ -91,7 +91,7 @@ public class ONDEXGraphUtils
 		Class<?> dataType, Unit unit, AttributeName parentAttrName
 	)
 	{
-		getOrCreateMetaDataEntity ( 
+		return getOrCreateMetaDataEntity ( 
 			graph, attrNameId, 
 			ONDEXGraphUtils::getAttributeName, 
 			gmeta -> gmeta.createAttributeName ( 
@@ -428,7 +428,7 @@ public class ONDEXGraphUtils
 		ConceptClass parent
 	)
 	{
-		getOrCreateMetaDataEntity ( 
+		return getOrCreateMetaDataEntity ( 
 			graph, ccId, 
 			ONDEXGraphUtils::getConceptClass, 
 			gmeta -> gmeta.createConceptClass ( ccId, fullName, description, parent) 
@@ -439,12 +439,12 @@ public class ONDEXGraphUtils
 		ONDEXGraph graph, String ccId, String fullName, String description 
 	)
 	{
-		getOrCreateConceptClass ( graph, ccId, fullName, description, null );
+		return getOrCreateConceptClass ( graph, ccId, fullName, description, null );
 	}
 
 	public static ConceptClass getOrCreateConceptClass ( ONDEXGraph graph, String ccId )
 	{
-		getOrCreateConceptClass ( graph, ccId, "", "" );
+		return getOrCreateConceptClass ( graph, ccId, "", "" );
 	}
 	
 
