@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -93,7 +94,7 @@ public class ONDEXGraphUtils
 	{
 		return getOrCreateMetaDataEntity ( 
 			graph, attrNameId, 
-			ONDEXGraphUtils::getAttributeName, 
+			() -> getAttributeName ( graph, attrNameId, false ), 
 			gmeta -> gmeta.createAttributeName ( 
 				attrNameId, fullName, description, unit, dataType, parentAttrName 
 			)
@@ -430,7 +431,7 @@ public class ONDEXGraphUtils
 	{
 		return getOrCreateMetaDataEntity ( 
 			graph, ccId, 
-			ONDEXGraphUtils::getConceptClass, 
+			() -> getConceptClass ( graph, ccId, false ), 
 			gmeta -> gmeta.createConceptClass ( ccId, fullName, description, parent) 
 		);
 	}
@@ -527,7 +528,9 @@ public class ONDEXGraphUtils
 	 * @param metadataName used to raise the not found exception (eg, "ConceptClass").
 	 */
 	private static <ME> ME getMetaDataEntity ( 
-		ONDEXGraph graph, String id, BiFunction<ONDEXGraphMetaData, String, ME> metadataFetcher, boolean failIfNotFound,
+		ONDEXGraph graph, String id,
+		BiFunction<ONDEXGraphMetaData, String, ME> metadataFetcher,
+		boolean failIfNotFound,
 		String metadataName 
 	)
 	{
@@ -551,12 +554,12 @@ public class ONDEXGraphUtils
 	 */
 	private static <ME> ME getOrCreateMetaDataEntity (
 		ONDEXGraph graph, String id, 
-		BiFunction<ONDEXGraph, String, ME> metadataFetcher,
+		Supplier<ME> metadataFetcher,
 		Function<ONDEXGraphMetaData, ME> metadataCreator
 	)
 	{
 		ONDEXGraphMetaData gmeta = graph.getMetaData ();
-		ME result = metadataFetcher.apply ( graph, id );
+		ME result = metadataFetcher.get ();
 		if ( result != null ) return result;
 		
 		return metadataCreator.apply ( gmeta );
