@@ -49,6 +49,9 @@ import net.sourceforge.ondex.core.util.prototypes.RelationTypePrototype;
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Apr 2017</dd></dl>
  *
+ * TODO: must be reviewed, the cached elements should be retrievable from either the graph or its metadata.
+ *
+ *
  */
 public class CachedGraphWrapper
 {
@@ -229,16 +232,21 @@ public class CachedGraphWrapper
 		return this.getAccession ( proto.getAccession (), proto.getDataSource (), proto.isAmbiguous (), concept );
 	}	
 	
+	/**
+	 * @Deprecated use {@link ONDEXGraphUtils#getOrCreateAttributeName(ONDEXGraph, String, String, String, Class, Unit, AttributeName)} 
+	 * instead
+	 */
+	@Deprecated( forRemoval = true )
 	public synchronized AttributeName getAttributeName ( 
 		String id, String fullName, String description, Unit unit, Class<?> datatype, AttributeName parent 
 	)
 	{
-		return this.cacheGet ( 
-			AttributeName.class, id, 
-			() -> this.graph.getMetaData ().createAttributeName ( id, fullName, description, unit, datatype, parent )
+		return ONDEXGraphUtils.getOrCreateAttributeName ( 
+			graph, id, fullName, description, datatype, unit, parent 
 		);
 	}
 
+	@Deprecated( forRemoval = true )
 	public synchronized AttributeName getAttributeName ( 
 		String id, String fullName, String description, Class<?> datatype 
 	)

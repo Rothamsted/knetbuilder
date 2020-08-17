@@ -5,16 +5,21 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.MetaDataFactory;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.Unit;
 
 /**
  * Some general utilities to handle {@link ONDEXGraph}s.
@@ -71,14 +76,9 @@ public class ONDEXGraphUtils
 	
 	public static AttributeName getAttributeName ( ONDEXGraph graph, String attrNameId, boolean failIfNotFound )
 	{
-		AttributeName aname = graph.getMetaData ().getAttributeName ( attrNameId );
-		if ( aname == null && failIfNotFound )
-		{
-			throw new IllegalArgumentException ( String.format (
-			  "No attribute type '%s' in the graph", attrNameId
-			));
-		}
-		return aname;
+		return getMetaDataEntity ( 
+			graph, attrNameId, ONDEXGraphMetaData::getAttributeName, failIfNotFound, "AttributeName" 
+		);
 	}
 
 	public static AttributeName getAttributeName ( ONDEXGraph graph, String attrNameId )
@@ -86,6 +86,34 @@ public class ONDEXGraphUtils
 		return getAttributeName ( graph, attrNameId, true );
 	}
 	
+	public static AttributeName getOrCreateAttributeName ( 
+		ONDEXGraph graph, String attrNameId, String fullName, String description, 
+		Class<?> dataType, Unit unit, AttributeName parentAttrName
+	)
+	{
+		getOrCreateMetaDataEntity ( 
+			graph, attrNameId, 
+			ONDEXGraphUtils::getAttributeName, 
+			gmeta -> gmeta.createAttributeName ( 
+				attrNameId, fullName, description, unit, dataType, parentAttrName 
+			)
+		);
+	}
+
+	public static AttributeName getOrCreateAttributeName ( 
+		ONDEXGraph graph, String attrNameId, String fullName, String description,
+		Class<?> dataType
+	)
+	{
+		return getOrCreateAttributeName ( graph, attrNameId, fullName, description, dataType, null, null );
+	}
+	
+	public static AttributeName getOrCreateAttributeName ( 
+		ONDEXGraph graph, String attrNameId, Class<?> dataType
+	)
+	{
+		return getOrCreateAttributeName ( graph, attrNameId, "", "", dataType );
+	}
 	
 	
 	/**
@@ -379,6 +407,46 @@ public class ONDEXGraphUtils
 		return ( getEntityType ( ondexEntity.getClass () ));
 	}
 
+	
+	public static ConceptClass getConceptClass ( ONDEXGraph graph, String ccId, boolean failIfNotFound )
+	{
+		return getMetaDataEntity ( 
+			graph, ccId, ONDEXGraphMetaData::getConceptClass, failIfNotFound, "ConceptClass" 
+		);
+	}
+	
+	/**
+	 * Defaults to true
+	 */
+	public static ConceptClass getConceptClass ( ONDEXGraph graph, String ccId )
+	{
+		return getConceptClass ( graph, ccId, true );
+	}
+	
+	public static ConceptClass getOrCreateConceptClass ( 
+		ONDEXGraph graph, String ccId, String fullName, String description, 
+		ConceptClass parent
+	)
+	{
+		getOrCreateMetaDataEntity ( 
+			graph, ccId, 
+			ONDEXGraphUtils::getConceptClass, 
+			gmeta -> gmeta.createConceptClass ( ccId, fullName, description, parent) 
+		);
+	}
+
+	public static ConceptClass getOrCreateConceptClass ( 
+		ONDEXGraph graph, String ccId, String fullName, String description 
+	)
+	{
+		getOrCreateConceptClass ( graph, ccId, fullName, description, null );
+	}
+
+	public static ConceptClass getOrCreateConceptClass ( ONDEXGraph graph, String ccId )
+	{
+		getOrCreateConceptClass ( graph, ccId, "", "" );
+	}
+	
 
 	/**
 	 * Variant of {@link #getEntityType(Collection)}
@@ -447,5 +515,51 @@ public class ONDEXGraphUtils
   	
   	return removeMe.size ();
 	}
+	
+	/**
+	 * A skeleton for getXXX methods.
+	 * 
+	 * @param <ME> they type of returned entity (eg, {@link ConceptClass}).
+	 * @param id the entity ID (eg, {@link ConceptClass#getId()}
+	 * @param metadataFetcher how the entity is fetched from the graph's metadata (eg, 
+	 *   {@link ONDEXGraphMetaData#getConceptClass(String)}). 
+	 * @param failIfNotFound if true, raises an exception when the ID isn't found. Else, returnd null.
+	 * @param metadataName used to raise the not found exception (eg, "ConceptClass").
+	 */
+	private static <ME> ME getMetaDataEntity ( 
+		ONDEXGraph graph, String id, BiFunction<ONDEXGraphMetaData, String, ME> metadataFetcher, boolean failIfNotFound,
+		String metadataName 
+	)
+	{
+		ME mentity = metadataFetcher.apply ( graph.getMetaData (), id );
+		if ( mentity == null && failIfNotFound )
+		{
+			throw new IllegalArgumentException ( String.format (
+			  "No '%s' '%s' in the graph", metadataName, id
+			));
+		}
+		return mentity;
+	}
 
+	/**
+	 * Skeleton for getOrCreate*** methods.
+	 * @param <ME> the type of entity that is returned
+	 * @param id the entity ID (eg, concept class ID, relation type ID)
+	 * @param metadataFetcher how the entity is fetched from ID (eg, {@link #getConceptClass(ONDEXGraph, String)})
+	 * @param metadataCreator how the entity is possibly created from the graph's metadata (eg, 
+	 * 	{@link ONDEXGraphMetaData#createConceptClass(String, String, String, ConceptClass)}.
+	 */
+	private static <ME> ME getOrCreateMetaDataEntity (
+		ONDEXGraph graph, String id, 
+		BiFunction<ONDEXGraph, String, ME> metadataFetcher,
+		Function<ONDEXGraphMetaData, ME> metadataCreator
+	)
+	{
+		ONDEXGraphMetaData gmeta = graph.getMetaData ();
+		ME result = metadataFetcher.apply ( graph, id );
+		if ( result != null ) return result;
+		
+		return metadataCreator.apply ( gmeta );
+	}
+	
 }
