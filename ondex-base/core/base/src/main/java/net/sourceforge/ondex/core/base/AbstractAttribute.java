@@ -3,7 +3,6 @@ package net.sourceforge.ondex.core.base;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -123,10 +122,14 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 			// decompress value
 			try {
 				return decompress(compressed.get());
-			} catch (InterruptedException e) {
-				throw new IllegalStateException(e);
-			} catch (ExecutionException e) {
-				throw new IllegalStateException(e);
+			} 
+			catch (InterruptedException|ExecutionException ex)
+			{
+				throw new IllegalStateException ( String.format ( 
+					"Error while decompressing value for Ondex attribute '%s': %s",
+					attrname == null ? "<null>" : attrname.getId (),
+					ex.getMessage ()
+				), ex);
 			}
 		}
 	}
@@ -149,25 +152,25 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 			throw new WrongParameterException(
 					Config.properties.getProperty("GDS.ObjectTypeMismatch"));
 
-		// compress Strings
-		if (value instanceof String) {
-			// compress value
-			final String strVal = (String) value;
-			if (strVal.length() >= COMPRESS_THRESHOLD) {
-				compressed = COMPRESSOR.submit( () ->
-				{
-					Thread myThread = Thread.currentThread ();
-					String myName = myThread.getName ();
-					if ( ! myName.startsWith ( "[attrZip] " ) )
-						myThread.setName ( "[attrZip] " + myThread.getName () );
-					return compress ( strVal ); 
-				});
-			} else {
-				this.value = value;
-			}
-		} else {
+		if ( ! ( value instanceof String ) ) {
 			this.value = value;
+			return;
 		}
+		
+		final String strVal = (String) value;
+		if ( strVal.length() < COMPRESS_THRESHOLD ) {
+			this.value = value;
+			return;
+		}
+
+		compressed = COMPRESSOR.submit( () ->
+		{
+			Thread myThread = Thread.currentThread ();
+			String myName = myThread.getName ();
+			if ( ! myName.startsWith ( "[attrZip] " ) )
+				myThread.setName ( "[attrZip] " + myName );
+			return compress ( strVal ); 
+		});
 	}
 
 	/**
@@ -177,7 +180,8 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 	 *            String to compress
 	 * @return byte[] compressed
 	 */
-	protected byte[] compress(String s) {
+	protected byte[] compress(String s)
+	{
 
 		byte[] input = s.getBytes();
 
@@ -192,23 +196,25 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 		// Create an expandable byte array to hold the compressed data.
 		// It is not necessary that the compressed data will be smaller than
 		// the uncompressed data.
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
+		try ( ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length) )
+		{
+			// Compress the data
+			byte[] buf = new byte[1024];
+			while ( !compressor.finished() )
+			{
+				int count = compressor.deflate(buf);
+				bos.write(buf, 0, count);
+			}
 
-		// Compress the data
-		byte[] buf = new byte[1024];
-		while (!compressor.finished()) {
-			int count = compressor.deflate(buf);
-			bos.write(buf, 0, count);
+			// Get the compressed data
+			return bos.toByteArray();
 		}
-		try {
-			bos.close();
-		} catch (IOException e) {
+		catch (IOException e) {
 			throw new StorageException(e);
 		}
-		compressor.end();
-
-		// Get the compressed data
-		return bos.toByteArray();
+		finally {
+			compressor.end();
+		}
 	}
 
 	/**
@@ -218,35 +224,37 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 	 *            byte[]
 	 * @return decompressed String
 	 */
-	protected String decompress(byte[] compressedData) {
-
+	protected String decompress(byte[] compressedData) 
+	{
 		// Create the decompressor and give it the data to compress
 		Inflater decompressor = new Inflater();
 		decompressor.setInput(compressedData);
 
 		// Create an expandable byte array to hold the decompressed data
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(
-				compressedData.length);
-
-		// Decompress the data
-		byte[] buf = new byte[1024];
-		while (!decompressor.finished()) {
-			try {
-				int count = decompressor.inflate(buf);
-				bos.write(buf, 0, count);
-			} catch (DataFormatException e) {
-				throw new StorageException(e);
+		try ( ByteArrayOutputStream bos = new ByteArrayOutputStream( compressedData.length) )
+		{
+			// Decompress the data
+			byte[] buf = new byte[1024];
+			while (!decompressor.finished())
+			{
+				try {
+					int count = decompressor.inflate(buf);
+					bos.write(buf, 0, count);
+				} 
+				catch (DataFormatException e) {
+					throw new StorageException(e);
+				}
 			}
-		}
-		try {
-			bos.close();
-		} catch (IOException e) {
+
+			// Get the decompressed data
+			return new String(bos.toByteArray());
+		} 
+		catch (IOException e) {
 			throw new StorageException(e);
 		}
-		decompressor.end();
-
-		// Get the decompressed data
-		return new String(bos.toByteArray());
+		finally {
+			decompressor.end();
+		}
 	}
 
 	@Override
@@ -260,13 +268,12 @@ public abstract class AbstractAttribute extends AbstractONDEXEntity
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		if (o == this)
-			return true;
-		if (!(o instanceof Attribute))
-			return false;
+	public boolean equals(Object o) 
+	{
+		if (o == null) return false;
+		if (o == this) return true;
+		if (!(o instanceof Attribute)) return false;
+		
 		Attribute attribute = (Attribute) o;
 		return getOfType().equals(attribute.getOfType())
 				&& getValue().equals(attribute.getValue());
