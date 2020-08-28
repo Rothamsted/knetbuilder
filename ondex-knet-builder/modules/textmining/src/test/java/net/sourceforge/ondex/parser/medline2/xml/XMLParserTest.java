@@ -102,6 +102,7 @@ public class XMLParserTest
 	 */
 	@Test
 	@Ignore ( "Not a real test, deals with #19 manually" )
+	@SuppressWarnings ( "unused" )
 	public void testEFetchIssue19 () throws IOException, XMLStreamException
 	{
 		String pmidsStr; // = IOUtils.readResource ( "issue-19-pmids.txt" );
@@ -122,6 +123,7 @@ public class XMLParserTest
 	public void testFailingIssue19 () throws IOException, XMLStreamException
 	{
 		XMLParser pmParser = new XMLParser ();
+		@SuppressWarnings ( "unused" )
 		Set<Abstract> abstracts = pmParser.parseMedlineXML (
 			new ReaderInputStream ( 
 				IOUtils.openResourceReader ( "issue-19-failing-pmed.xml" ),

@@ -11,6 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -27,6 +31,7 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
@@ -36,135 +41,123 @@ import net.sourceforge.ondex.export.oxl.Export;
 
 /**
  * @author hindlem
+ * @author Marco Brandizi (reviews in 2020)
  */
-public class OXLParserTest {
+public class OXLParserTest
+{
+	private ONDEXGraph og;
+	private File testfile;
 
-    private ONDEXGraph og;
-    private File testfile;
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp () throws Exception
+	{
+		og = new MemoryONDEXGraph ( "test" );
+		testfile = new File ( System.getProperty ( "java.io.tmpdir" ) + File.separator + "testoxl.xml" );
+		testfile.deleteOnExit ();
+	}
 
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-        og = new MemoryONDEXGraph("test");
-        testfile = new File(System.getProperty("java.io.tmpdir") + File.separator + "testoxl.xml");
-        testfile.deleteOnExit();
-    }
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown () throws Exception
+	{
+		testfile.delete ();
+	}
 
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-        og = null;
-        testfile.delete();
-    }
 
-    /**
-     * Test method for {@link net.sourceforge.ondex.parser.oxl.Parser#start()}.
-     *
-     * @TODO implement tests here
-     */
-    @Test
-    public void testStart() {
-        //fail("Not yet implemented");
-    }
+	@Test
+	public void testRoundTrip () throws JAXBException, XMLStreamException, IOException, PluginConfigurationException
+	{
 
-    @Test
-    public void testRoundTrip() throws JAXBException, XMLStreamException, IOException, PluginConfigurationException {
+		// create test graph
 
-        //create test graph
+		DataSource dataSource = og.getMetaData ().getFactory ().createDataSource ( "cv" );
+		ConceptClass cc = og.getMetaData ().getFactory ().createConceptClass ( "cc" );
+		EvidenceType et = og.getMetaData ().getFactory ().createEvidenceType ( "et" );
 
-        DataSource dataSource = og.getMetaData().getFactory().createDataSource("cv");
-        ConceptClass cc = og.getMetaData().getFactory().createConceptClass("cc");
-        EvidenceType et = og.getMetaData().getFactory().createEvidenceType("et");
+		ONDEXConcept c = og.getFactory ().createConcept ( "concept", dataSource, cc, et );
 
-        ONDEXConcept c = og.getFactory().createConcept("concept", dataSource, cc, et);
+		AttributeName an = og.getMetaData ().getFactory ().createAttributeName ( "an", List.class );
+		List<Integer> list = IntStream.rangeClosed ( 1, 3 )
+			.boxed ()
+			.collect ( Collectors.toList () );
+		c.createAttribute ( an, list, false );
 
-        AttributeName an = og.getMetaData().getFactory().createAttributeName("an", List.class);
-        List<Integer> list = new ArrayList<Integer>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        c.createAttribute(an, list, false);
+		AttributeName colourAtt = og.getMetaData ().getFactory ().createAttributeName ( "colour", Color.class );
+		Color colour = Color.WHITE;
+		c.createAttribute ( colourAtt, colour, false );
 
-        AttributeName colourAtt = og.getMetaData().getFactory().createAttributeName("colour", Color.class);
-        Color colour = Color.WHITE;
-        c.createAttribute(colourAtt, colour, false);
+		ONDEXConcept c2 = og.getFactory ().createConcept ( "concept2", dataSource, cc, et );
 
-        ONDEXConcept c2 = og.getFactory().createConcept("concept2", dataSource, cc, et);
+		RelationType rt = og.getMetaData ().getFactory ().createRelationType ( "rt" );
 
-        RelationType rt = og.getMetaData().getFactory().createRelationType("rt");
+		ONDEXRelation relation = og.getFactory ().createRelation ( c, c2, rt, et );
 
-        ONDEXRelation relation = og.getFactory().createRelation(c, c2, rt, et);
+		relation.createAttribute ( an, list, false );
+		relation.createAttribute ( colourAtt, colour, false );
 
-        relation.createAttribute(an, list, false);
-        relation.createAttribute(colourAtt, colour, false);
+		// export
 
-        //export
+		Export export = new Export ();
 
-        Export export = new Export();
+		ONDEXPluginArguments ea = new ONDEXPluginArguments ( export.getArgumentDefinitions () );
+		ea.setOption ( FileArgumentDefinition.EXPORT_FILE, testfile.getAbsolutePath () );
+		ea.setOption ( net.sourceforge.ondex.export.oxl.ArgumentNames.EXPORT_AS_ZIP_FILE, false );
 
-        ONDEXPluginArguments ea = new ONDEXPluginArguments(export.getArgumentDefinitions());
-        ea.setOption(FileArgumentDefinition.EXPORT_FILE, testfile.getAbsolutePath());
-        ea.setOption(net.sourceforge.ondex.export.oxl.ArgumentNames.EXPORT_AS_ZIP_FILE, false);
+		export.setONDEXGraph ( og );
+		export.setArguments ( ea );
+		export.start ();
 
-        export.setONDEXGraph(og);
-        export.setArguments(ea);
-        export.start();
+		// import
 
-        //import
+		ONDEXGraph g2 = new MemoryONDEXGraph ( "test2" );
 
-        ONDEXGraph g2 = new MemoryONDEXGraph("test2");
+		Parser parser = new Parser ();
 
-        Parser parser = new Parser();
+		ONDEXPluginArguments pa = new ONDEXPluginArguments ( parser.getArgumentDefinitions () );
+		pa.setOption ( FileArgumentDefinition.INPUT_FILE, testfile.getAbsolutePath () );
 
-        ONDEXPluginArguments pa = new ONDEXPluginArguments(parser.getArgumentDefinitions());
-        pa.setOption(FileArgumentDefinition.INPUT_FILE, testfile.getAbsolutePath());
+		parser.setONDEXGraph ( g2 );
+		parser.setArguments ( pa );
+		parser.start ();
 
-        parser.setONDEXGraph(g2);
-        parser.setArguments(pa);
-        parser.start();
+		// check results
 
-        //check results
+		assertEquals ( "There should be two concepts.", 2, g2.getConcepts ().size () );
+		
+		Consumer<ONDEXEntity> attrTester = odxe ->
+		{
+			Attribute attribute = odxe.getAttribute ( an );
+			@SuppressWarnings ( "unchecked" )
+			List<Integer> readList = (List<Integer>) attribute.getValue ();
+			
+			assertEquals ( "There should be three values in the list attribute.", 3, readList.size () );
+			IntStream.rangeClosed ( 1, 3 )
+					.forEach ( v -> assertTrue ( "attribute value " + v + " not found", readList.contains ( 1 ) ) );
 
-        assertEquals("There should be two concepts.", 2, g2.getConcepts().size());
-        for (ONDEXConcept concept : g2.getConcepts()) {
+			Attribute attribute2 = odxe.getAttribute ( colourAtt );
+			assertEquals ( "WHITE attributed not found", Color.WHITE, attribute2.getValue () );
+		};
+		
+		
+		for ( ONDEXConcept concept : g2.getConcepts () )
+		{
+			if ( concept.getPID ().equals ( c.getPID () ) )
+				attrTester.accept ( concept );
+			else
+				assertEquals ( "Concept shouldn't have any attribute", 0, concept.getAttributes ().size () );
+		}
 
-            if (concept.getPID().equals(c.getPID())) {
-                assertEquals(2, concept.getAttributes().size());
-
-                Attribute attribute = concept.getAttribute(an);
-                list = (List<Integer>) attribute.getValue();
-                assertEquals("There should be three values in the list.", 3, list.size());
-                assertTrue(list.contains(1));
-                assertTrue(list.contains(2));
-                assertTrue(list.contains(3));
-
-                Attribute attribute2 = concept.getAttribute(colourAtt);
-                assertEquals(Color.WHITE, attribute2.getValue());
-            } else {
-                assertEquals(0, concept.getAttributes().size());
-            }
-        }
-
-        assertEquals("There should be one relation.", 1, g2.getRelations().size());
-        for (ONDEXRelation relationT : g2.getRelations()) {
-
-            assertEquals(2, relationT.getAttributes().size());
-
-            Attribute attribute = relationT.getAttribute(an);
-            list = (List<Integer>) attribute.getValue();
-            assertEquals("There should be three values in the list.", 3, list.size());
-            assertTrue(list.contains(1));
-            assertTrue(list.contains(2));
-            assertTrue(list.contains(3));
-
-            Attribute attribute2 = relationT.getAttribute(colourAtt);
-            assertEquals(Color.WHITE, attribute2.getValue());
-        }
-
-    }
+		assertEquals ( "There should be one relation.", 1, g2.getRelations ().size () );
+		for ( ONDEXRelation relationT : g2.getRelations () )
+		{
+			assertEquals ( "Relation should have 2 attributes", 2, relationT.getAttributes ().size () );
+			attrTester.accept ( relationT );
+		}
+	}
 
 }
