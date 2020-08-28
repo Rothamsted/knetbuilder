@@ -235,6 +235,9 @@ public class ONDEXGraphUtils
 		return getAttrValueAsString ( entity, attrName, true );
 	}
 	
+	
+	
+	
 	/**
 	 * Returns the attribute value as-is, hence assuming that it's of VT type. If flags are false, missing attribute or 
 	 * null value return null. This is useful for types like numbers, but you <b>must</b> check for null result if flags 

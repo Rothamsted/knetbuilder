@@ -21,6 +21,7 @@
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>woodstox-core-lgpl</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-wstx-msv-validation</artifactId>
@@ -36,16 +37,21 @@
 				</exclusion>
 				<!-- We need the same version of Spring throughout all ONDEX -->
 				<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-core</artifactId>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
 				</exclusion>
 				<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-beans</artifactId>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
 				</exclusion>
 				<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-context</artifactId>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+        <!-- This is already in JDK11 and including it again causes module conflicts -->
+				<exclusion>
+					<groupId>org.apache.geronimo.specs</groupId>
+					<artifactId>geronimo-stax-api_1.0_spec</artifactId>				
 				</exclusion>
 			</exclusions>
 		</dependency>

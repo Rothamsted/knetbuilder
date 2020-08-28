@@ -45,6 +45,13 @@
          <groupId>com.sun.xml.stream</groupId>
          <artifactId>sjsxp</artifactId>
          <version>1.0.2</version>
+         <exclusions>
+         <!-- This is already in JDK11 and including it again causes module conflicts -->
+			    <exclusion>
+			      <groupId>javax.xml.stream</groupId>
+			      <artifactId>stax-api</artifactId>
+			    </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
          <groupId>org.jdom</groupId>
