@@ -133,8 +133,10 @@ public class ConceptParser extends AbstractEntityParser
 		);
 
 		// create the concept
-		ONDEXConcept c = og.createConcept(pid, annotation, description,
-				dataSource, cc, evidences);
+		// retain the ID if we're in loading mode (see ONDEXGraph.isLoadingMode())
+		ONDEXConcept c = og.createConcept( 
+			og.isLoadingMode () ? id : null, pid, annotation, description, dataSource, cc, evidences
+		);
 		idMapping.put(id, c.getId());
 
 		expectNextTag ( xmlr, "conames" );

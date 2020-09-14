@@ -342,11 +342,15 @@ public class Parser extends ONDEXParser {
 					}
 			});
 
+			// If the graph is empty, we can retain the IDs in the OXL.
+			this.graph.setLoadingMode ( graph.getConcepts ().size () == 0 ); 
+					
 			XmlParser parser = new XmlParser(this);
 
 			// hashtable for id mapping old to new concept ids
-			Map<Integer, Integer> table = new HashMap<Integer, Integer>();
-			Map<Integer, Set<Integer>> context = new HashMap<Integer, Set<Integer>>();
+			// This returns identities if we're in loading mode (see above).
+			Map<Integer, Integer> table = new HashMap<>();
+			Map<Integer, Set<Integer>> context = new HashMap<>();
 
 			parser.registerParser("cv", new ConceptMetaDataParser(graph, "cv"));
 			parser.registerParser("unit", new GeneralMetaDataParser(graph,
@@ -382,30 +386,15 @@ public class Parser extends ONDEXParser {
 
 			// close reader
 			xmlr.close();
-		} catch (InconsistencyException e) {
+		} 
+		catch (InconsistencyException|XMLStreamException|JAXBException|ClassNotFoundException|InstantiationException|IllegalAccessException e) 
+		{
 			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
 					"[Parser - start]"));
 			throw new ParsingFailedException(e);
-		} catch (XMLStreamException e) {
-			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
-					"[Parser - start]"));
-			throw new ParsingFailedException(e);
-		} catch (JAXBException e) {
-			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
-					"[Parser - start]"));
-			throw new ParsingFailedException(e);
-		} catch (ClassNotFoundException e) {
-			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
-					"[Parser - start]"));
-			throw new ParsingFailedException(e);
-		} catch (InstantiationException e) {
-			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
-					"[Parser - start]"));
-			throw new ParsingFailedException(e);
-		} catch (IllegalAccessException e) {
-			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
-					"[Parser - start]"));
-			throw new ParsingFailedException(e);
+		} 
+		finally {
+			this.graph.setLoadingMode ( false );
 		}
 	}
 	

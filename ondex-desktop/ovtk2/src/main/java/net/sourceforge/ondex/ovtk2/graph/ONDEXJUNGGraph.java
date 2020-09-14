@@ -77,8 +77,8 @@ public class ONDEXJUNGGraph extends JUNGGraphAdapter {
 	 *      net.sourceforge.ondex.core.DataSource,
 	 *      net.sourceforge.ondex.core.ConceptClass, java.util.Collection)
 	 */
-	public ONDEXConcept createConcept(String pid, String annotation, String description, DataSource elementOf, ConceptClass ofType, Collection<EvidenceType> evidence) {
-		return og.createConcept(pid, annotation, description, elementOf, ofType, evidence);
+	public ONDEXConcept createConcept(Integer id, String pid, String annotation, String description, DataSource elementOf, ConceptClass ofType, Collection<EvidenceType> evidence) {
+		return og.createConcept(id, pid, annotation, description, elementOf, ofType, evidence);
 	}
 
 	/**

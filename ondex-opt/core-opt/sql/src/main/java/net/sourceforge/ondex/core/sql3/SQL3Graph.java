@@ -139,9 +139,12 @@ public class SQL3Graph implements ONDEXGraph {
 	}
 
 	@Override
-	public ONDEXConcept createConcept(String pid, String annotation,
+	public ONDEXConcept createConcept(Integer id, String pid, String annotation,
 			String description, DataSource elementOf, ConceptClass ofType,
 			Collection<EvidenceType> evidence) {
+		
+		if ( id != null ) throw new UnsupportedOperationException ( LOADING_MODE_NOT_SUPPORTED_MSG ); 
+		
 		int cid = conceptId;
 		conceptId++;
 

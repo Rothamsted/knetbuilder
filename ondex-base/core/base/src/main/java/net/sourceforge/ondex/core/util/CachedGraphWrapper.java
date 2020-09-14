@@ -92,6 +92,9 @@ public class CachedGraphWrapper
 		);
 	}
 
+	/**
+	 * TODO: Move to {@link ONDEXGraphUtils}
+	 */
 	public synchronized ConceptClass getConceptClass ( ConceptClassPrototype proto )
 	{
 		try 
@@ -145,6 +148,9 @@ public class CachedGraphWrapper
 		);
 	}
 
+	/**
+	 * TODO: Move to {@link ONDEXGraphUtils}
+	 */
 	public synchronized RelationType getRelationType ( RelationTypePrototype proto )
 	{
 		try 
@@ -196,7 +202,9 @@ public class CachedGraphWrapper
 		return this.getEvidenceType ( proto.getId (), proto.getFullName (), proto.getDescription () );
 	}
 	
-	
+	/**
+	 * TODO: Move to {@link ONDEXGraphUtils}
+	 */
 	public synchronized DataSource getDataSource ( String id, String fullName, String description )
 	{
 		return this.cacheGet ( 

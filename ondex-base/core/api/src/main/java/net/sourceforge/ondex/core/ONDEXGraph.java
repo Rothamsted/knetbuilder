@@ -19,6 +19,9 @@ import net.sourceforge.ondex.exception.type.NullValueException;
  */
 public interface ONDEXGraph extends ONDEXAssociable {
 
+	public final static String LOADING_MODE_NOT_SUPPORTED_MSG = 
+		"ONDEX Graph loading mode not supported in this implementation";
+	
 	/**
 	 * Creates a new ONDEXConcept with the given pid, annotation, description,
 	 * DataSource and ConceptClass. Adds the new ONDEXConcept to the list of
@@ -42,11 +45,48 @@ public interface ONDEXGraph extends ONDEXAssociable {
 	 * @throws UnsupportedOperationException
 	 *             for read-only graphs
 	 */
-	public ONDEXConcept createConcept(String pid, String annotation,
+	public default ONDEXConcept createConcept(String pid, String annotation,
+			String description, DataSource elementOf, ConceptClass ofType,
+			Collection<EvidenceType> evidence) throws NullValueException,
+			UnsupportedOperationException
+	{
+		return createConcept ( null, pid, annotation, description, elementOf, ofType, evidence );
+	}
+
+	/**
+	 * See {@link #isLoadingMode()} regarding this version, which accepts a physical ID.
+	 * 
+	 */
+	public ONDEXConcept createConcept(Integer id, String pid, String annotation,
 			String description, DataSource elementOf, ConceptClass ofType,
 			Collection<EvidenceType> evidence) throws NullValueException,
 			UnsupportedOperationException;
+	
+	/**
+	 * When this is active, the OXL parser reuses the numerical IDs that are found in the
+	 * OXL file for concepts. Which is done by passing such IDs to 
+	 * {@link #createConcept(Integer, String, String, String, DataSource, ConceptClass, Collection)}.
+	 * 
+	 * This is useful when the OXL is saved along with other files referring to its IDs eg, graph traverser results.
+	 * 
+	 * The default throws an {@link UnsupportedOperationException} and implementation is not mandatory 
+	 * (TODO: add support flag). 
+	 * 
+	 * Moreover, graph importers and alike components can choose to fulfil this semantics (only the OXL parser does at 
+	 * the moment).
+	 * 
+	 */
+	public default boolean isLoadingMode ()
+	{
+		throw new UnsupportedOperationException ( LOADING_MODE_NOT_SUPPORTED_MSG );
+	}
 
+	public default void setLoadingMode ( boolean isLoadingMode )
+	{
+		throw new UnsupportedOperationException ( LOADING_MODE_NOT_SUPPORTED_MSG );
+	}
+	
+	
 	/**
 	 * Creates a new ONDEXRelation with the given fromConcept, toConcept, ofType
 	 * and a collection of EvidenceTypes. Adds the new created ONDEXRelation to

@@ -54,6 +54,9 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements
 	 */
 	protected boolean readOnly = false;
 
+	private boolean isLoadingMode = false;
+	
+	
 	/**
 	 * Stores the latest assigned int id to a concept. Every id gets assigned
 	 * only once.
@@ -105,11 +108,11 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements
 	 *      net.sourceforge.ondex.core.ConceptClass, java.util.Collection)
 	 */
 	@Override
-	public ONDEXConcept createConcept(String pid, String annotation,
+	public ONDEXConcept createConcept(Integer id, String pid, String annotation,
 			String description, DataSource elementOf, ConceptClass ofType,
 			Collection<EvidenceType> evidence) throws NullValueException,
-			UnsupportedOperationException {
-
+			UnsupportedOperationException 
+	{
 		// null values not allowed
 		if (pid == null)
 			throw new NullValueException(
@@ -146,9 +149,38 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements
 					Config.properties
 							.getProperty("AbstractONDEXGraph.ONDEXConceptEvidenceTypeNull"));
 
-		lastIdForConcept++;
-		return storeConcept(sid, lastIdForConcept, pid, annotation,
-				description, elementOf, ofType, evidence);
+		int conceptId = getIdForNewConcept ( id );
+		return storeConcept(sid, conceptId, pid, annotation, description, elementOf, ofType, evidence);
+	}
+	
+	/**
+	 * Implements the logic defined by {@link #isLoadingMode()}
+	 */
+	private int getIdForNewConcept ( Integer id )
+	{
+		if ( this.isLoadingMode () )
+		{
+			if ( id == null ) throw new IllegalArgumentException ( 
+				"Need non-null ID to create a concept while ONDEX Graph is in loading mode"
+			);
+			return id;
+		}
+		// Else, it's normal mode
+		if ( id != null ) throw new IllegalArgumentException ( 
+			"Concept creation cannot specify an ID while ONDEX Graph isn't in loading mode"
+		);
+		return ++lastIdForConcept;
+	}
+	
+	
+	public boolean isLoadingMode ()
+	{
+		return isLoadingMode;
+	}
+
+	public void setLoadingMode ( boolean isLoadingMode )
+	{
+		this.isLoadingMode = isLoadingMode;
 	}
 
 	/**

@@ -14,12 +14,14 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
-import net.sourceforge.ondex.core.MetaDataFactory;
+import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.Unit;
 
 /**
@@ -451,7 +453,136 @@ public class ONDEXGraphUtils
 		return getOrCreateConceptClass ( graph, ccId, "", "" );
 	}
 	
+	
+	public static DataSource getOrCreateDataSource ( 
+		ONDEXGraph graph, String dsId, String fullName, String description 
+	)
+	{
+		return getOrCreateMetaDataEntity ( 
+			graph, dsId, 
+			() -> getDataSource ( graph, dsId, false ), 
+			gmeta -> gmeta.createDataSource ( dsId, fullName, description ) 
+		);
+	}
+	
+	public static DataSource getOrCreateDataSource ( ONDEXGraph graph, String dsId )
+	{
+		return getOrCreateDataSource ( graph, dsId, "", "" );
+	}
+	
+	public static DataSource getDataSource ( ONDEXGraph graph, String dsId, boolean failIfNotFound )
+	{
+		return getMetaDataEntity ( 
+			graph, dsId, ONDEXGraphMetaData::getDataSource, failIfNotFound, "DataSource" 
+		);
+	}
+	
+	/**
+	 * Defaults to true
+	 */
+	public static DataSource getDataSource ( ONDEXGraph graph, String dsId )
+	{
+		return getDataSource ( graph, dsId, true );
+	}	
+	
 
+	public static EvidenceType getOrCreateEvidenceType ( 
+		ONDEXGraph graph, String evId, String fullName, String description 
+	)
+	{
+		return getOrCreateMetaDataEntity ( 
+			graph, evId, 
+			() -> getEvidenceType ( graph, evId, false ), 
+			gmeta -> gmeta.createEvidenceType ( evId, fullName, description ) 
+		);
+	}
+	
+	public static EvidenceType getOrCreateEvidenceType ( ONDEXGraph graph, String evId )
+	{
+		return getOrCreateEvidenceType ( graph, evId, "", "" );
+	}
+	
+	public static EvidenceType getEvidenceType ( ONDEXGraph graph, String evId, boolean failIfNotFound )
+	{
+		return getMetaDataEntity ( 
+			graph, evId, ONDEXGraphMetaData::getEvidenceType, failIfNotFound, "EvidenceType" 
+		);
+	}
+	
+	/**
+	 * Defaults to true
+	 */
+	public static EvidenceType getEvidenceType ( ONDEXGraph graph, String evId )
+	{
+		return getEvidenceType ( graph, evId, true );
+	}		
+	
+	
+	
+	public static RelationType getOrCreateRelationType ( 
+		ONDEXGraph graph, String typeId, String fullName, String description,
+		String inverseName, boolean isAntiSymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitive,
+		RelationType parent
+	)
+	{
+		return getOrCreateMetaDataEntity ( 
+			graph, typeId, 
+			() -> getRelationType ( graph, typeId, false ), 
+			gmeta -> gmeta.createRelationType ( 
+				typeId, fullName, description, 
+				inverseName, isAntiSymmetric, isReflexive, isSymmetric, isTransitive, parent
+			) 
+		);
+	}
+
+	public static RelationType getOrCreateRelationType ( 
+		ONDEXGraph graph, String typeId, String fullName, String description,
+		String inverseName, boolean isAntiSymmetric, boolean isReflexive, boolean isSymmetric, boolean isTransitive
+	)
+	{
+		return getOrCreateRelationType ( 
+			graph, typeId, fullName, description, inverseName, isAntiSymmetric, isReflexive, isSymmetric, isTransitive, null 
+		);
+	}
+	
+	public static RelationType getOrCreateRelationType ( 
+		ONDEXGraph graph, String typeId, String fullName, String description,
+		RelationType parent
+	)
+	{
+		return getOrCreateRelationType ( graph, typeId, fullName, description, "", false, false, false, false, parent );
+	}
+	
+	public static RelationType getOrCreateRelationType ( 
+		ONDEXGraph graph, String typeId, String fullName, String description
+	)
+	{
+		return getOrCreateRelationType ( graph, typeId, fullName, description, null );
+	}
+	
+	public static RelationType getOrCreateRelationType ( ONDEXGraph graph, String typeId )
+	{
+		return getOrCreateRelationType ( graph, typeId, "", "", null );
+	}
+	
+	public static RelationType getRelationType ( ONDEXGraph graph, String typeId, boolean failIfNotFound )
+	{
+		return getMetaDataEntity ( 
+			graph, typeId, ONDEXGraphMetaData::getRelationType, failIfNotFound, "RelationType" 
+		);
+	}
+	
+	/**
+	 * Defaults to true
+	 */
+	public static RelationType getRelationType ( ONDEXGraph graph, String typeId )
+	{
+		return getRelationType ( graph, typeId, true );
+	}		
+		
+		
+	
+	
 	/**
 	 * Variant of {@link #getEntityType(Collection)}
 	 */

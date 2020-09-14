@@ -1,7 +1,5 @@
 package net.sourceforge.ondex.parser.oxl;
 
-import static uk.ac.ebi.utils.xml.stax.StaxUtils.xmlCoord;
-
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,11 +11,9 @@ import javax.xml.stream.XMLStreamReader;
 
 import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
-import net.sourceforge.ondex.event.type.ObjectTypeMismatchEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.export.oxl.Export;
 import net.sourceforge.ondex.export.oxl.XMLTagNames;
-import uk.ac.ebi.utils.xml.stax.StaxUtils;
 
 /**
  * Parses XML Documents.

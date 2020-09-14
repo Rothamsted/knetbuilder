@@ -244,7 +244,7 @@ public class BitSetFunctionsTest {
 		}
 
 		@Override
-		public ONDEXConcept createConcept(String pid, String annotation,
+		public ONDEXConcept createConcept(Integer id, String pid, String annotation,
 				String description, DataSource elementOf, ConceptClass ofType,
 				Collection<EvidenceType> evidence) {
 			return null;
