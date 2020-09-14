@@ -9,12 +9,10 @@ import static org.junit.Assert.assertTrue;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -86,7 +84,7 @@ public class OXLParserTest
 			.boxed ()
 			.collect ( Collectors.toList () );
 		c.createAttribute ( an, list, false );
-
+		
 		AttributeName colourAtt = og.getMetaData ().getFactory ().createAttributeName ( "colour", Color.class );
 		Color colour = Color.WHITE;
 		c.createAttribute ( colourAtt, colour, false );

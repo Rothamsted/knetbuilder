@@ -1838,7 +1838,8 @@ public class Export extends ONDEXExport implements Monitorable {
 		
 		// Some tweakers of us to fix a few issues around with 
 		xmlWriteStream = new CDATAWriterFilter ( xmlWriteStream );
-		xmlWriteStream = new NewLineFixWriterFilter ( xmlWriteStream );
+		// TODO: remove, it should have been fixed now
+		// xmlWriteStream = new NewLineFixWriterFilter ( xmlWriteStream );
 
 		fireEventOccurred(new GeneralOutputEvent("Ready to Export.",
 				"[Export - start]"));
