@@ -30,9 +30,8 @@ import net.sourceforge.ondex.exception.type.NullValueException;
  * @author taubertj
  * 
  */
-public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements
-		ONDEXGraph {
-
+public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements	ONDEXGraph 
+{
 	/**
 	 * For short-cut method signatures
 	 */
@@ -55,7 +54,6 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements
 	protected boolean readOnly = false;
 
 	private boolean isLoadingMode = false;
-	
 	
 	/**
 	 * Stores the latest assigned int id to a concept. Every id gets assigned
@@ -163,6 +161,8 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements
 			if ( id == null ) throw new IllegalArgumentException ( 
 				"Need non-null ID to create a concept while ONDEX Graph is in loading mode"
 			);
+			// As usually, avoid overlaps
+			if ( this.lastIdForConcept < id ) lastIdForConcept = id;
 			return id;
 		}
 		// Else, it's normal mode
@@ -172,15 +172,25 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements
 		return ++lastIdForConcept;
 	}
 	
-	
+	@Override
 	public boolean isLoadingMode ()
 	{
 		return isLoadingMode;
 	}
 
+	@Override
 	public void setLoadingMode ( boolean isLoadingMode )
 	{
+		if ( isLoadingMode && this.getConcepts ().size () > 0 ) throw new IllegalStateException ( 
+			"Cannot enable ONDEX Graph loading mode for empty graphs"
+		);
 		this.isLoadingMode = isLoadingMode;
+	}
+	
+	@Override
+	public boolean isLoadingModeSupported ()
+	{
+		return true;
 	}
 
 	/**
@@ -642,10 +652,6 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements
 		return BitSetFunctions.unmodifiableSet(retrieveRelationAllTag(concept));
 	}
 
-	/**
-	 * 
-	 * @see net.sourceforge.ondex.core.ONDEXGraph#isReadOnly()
-	 */
 	@Override
 	public boolean isReadOnly() {
 		return readOnly;

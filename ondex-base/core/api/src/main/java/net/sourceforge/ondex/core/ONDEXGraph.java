@@ -22,6 +22,7 @@ public interface ONDEXGraph extends ONDEXAssociable {
 	public final static String LOADING_MODE_NOT_SUPPORTED_MSG = 
 		"ONDEX Graph loading mode not supported in this implementation";
 	
+	
 	/**
 	 * Creates a new ONDEXConcept with the given pid, annotation, description,
 	 * DataSource and ConceptClass. Adds the new ONDEXConcept to the list of
@@ -63,27 +64,41 @@ public interface ONDEXGraph extends ONDEXAssociable {
 			UnsupportedOperationException;
 	
 	/**
-	 * When this is active, the OXL parser reuses the numerical IDs that are found in the
-	 * OXL file for concepts. Which is done by passing such IDs to 
+	 * When this is active, the OXL parser reuses the numerical IDs that are found in a source
+	 * used to populate this graph (eg, an OXL file). This is done by passing such IDs to 
 	 * {@link #createConcept(Integer, String, String, String, DataSource, ConceptClass, Collection)}.
 	 * 
-	 * This is useful when the OXL is saved along with other files referring to its IDs eg, graph traverser results.
+	 * This is useful when, for instance, an OXL is saved along with other files referring to its IDs eg, graph traverser 
+	 * results.
 	 * 
-	 * The default throws an {@link UnsupportedOperationException} and implementation is not mandatory 
-	 * (TODO: add support flag). 
+	 * The defaults getter returns false, while the default setter throws an {@link UnsupportedOperationException} 
+	 * and implementing this behaviour is not mandatory. If you do, you must override {@link #isLoadingModeSupported()} 
+	 * too. 
 	 * 
-	 * Moreover, graph importers and alike components can choose to fulfil this semantics (only the OXL parser does at 
-	 * the moment).
-	 * 
+	 * It's up to components like parsers and importers to use this flag. At the moment, only the OXL parser does.
 	 */
 	public default boolean isLoadingMode ()
 	{
-		throw new UnsupportedOperationException ( LOADING_MODE_NOT_SUPPORTED_MSG );
+		return false;
 	}
 
+	/**
+	 * This might throw an {@link IllegalStateException} if the current graph isn't empty (and the flag is true). 
+	 * This is typically done to avoid ID clashes.
+	 * 
+	 * The default throws {@link UnsupportedOperationException} and this must be coherent with the isLoadingMode property.
+	 */
 	public default void setLoadingMode ( boolean isLoadingMode )
 	{
 		throw new UnsupportedOperationException ( LOADING_MODE_NOT_SUPPORTED_MSG );
+	}
+	
+	/**
+	 * As said above, the default is false.
+	 */
+	public default boolean isLoadingModeSupported ()
+	{
+		return false;
 	}
 	
 	

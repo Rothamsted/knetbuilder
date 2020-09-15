@@ -342,8 +342,9 @@ public class Parser extends ONDEXParser {
 					}
 			});
 
-			// If the graph is empty, we can retain the IDs in the OXL.
-			this.graph.setLoadingMode ( graph.getConcepts ().size () == 0 ); 
+			if ( this.graph.isLoadingModeSupported () )
+				// If the graph is empty, we can retain the IDs in the OXL (if this is supported).
+				this.graph.setLoadingMode ( graph.getConcepts ().size () == 0 ); 
 					
 			XmlParser parser = new XmlParser(this);
 
@@ -394,7 +395,7 @@ public class Parser extends ONDEXParser {
 			throw new ParsingFailedException(e);
 		} 
 		finally {
-			this.graph.setLoadingMode ( false );
+			if ( this.graph.isLoadingMode () ) this.graph.setLoadingMode ( false );
 		}
 	}
 	
