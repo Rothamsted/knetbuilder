@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.sourceforge.ondex.core.Attribute;
@@ -179,7 +180,6 @@ public class ONDEXGraphUtils
 		boolean failIfNoAttribName, boolean failIfNoEntity 
 	)
 	{		
-		@SuppressWarnings ( "unchecked" )
 		Object value = Optional.ofNullable ( getAttribute ( entity, attrName, failIfNoAttribName, failIfNoEntity ) )
 			.map ( Attribute::getValue )
 			.orElse ( null );
@@ -198,6 +198,7 @@ public class ONDEXGraphUtils
 		return getAttrValue ( entity, attrName, valueConverter, failIfNoAttribName, true );
 	}
 	
+	
 	/**
 	 * Defaults to true, true
 	 */
@@ -207,6 +208,7 @@ public class ONDEXGraphUtils
 	{
 		return getAttrValue ( entity, attrName, valueConverter, true );
 	}
+
 	
 	/**
 	 * Calls {@link #getAttrValue(ONDEXEntity, AttributeName, Function, boolean, boolean)} using 
@@ -238,7 +240,49 @@ public class ONDEXGraphUtils
 	}
 	
 	
+
 	
+	/**
+	 *  Uses {@link #getAttrValue(ONDEXGraph, ONDEXEntity, String, Function, boolean, boolean)} with a conversion function
+	 *  that: 
+	 *  - returns null if the attr value is null
+	 *  - returns {@link Number#doubleValue()} if the attrib value is a compatible number (including integer, float)
+	 *  - returns {@link NumberUtils#toDouble(String)} if the string version of the attribute value is a valid number
+	 *  - return null if all of the above fails
+	 *  As you can see, this will work with integer attributes too.  
+	 */
+	public static Double getAttrValueAsDouble (
+		ONDEXEntity entity, AttributeName attrName, boolean failIfNoAttribName, boolean failIfNoEntity
+	)
+	{
+		Function<Object, Double> converter = attr -> {
+			if ( attr == null ) return null;
+			if ( attr instanceof Number ) return ( ( Number ) attr ).doubleValue ();
+			var strAttr = attr.toString ();
+			if ( NumberUtils.isParsable ( strAttr ) ) return NumberUtils.toDouble ( strAttr );
+			return null;
+		};
+		return getAttrValue ( entity, attrName, converter, failIfNoAttribName, failIfNoEntity );
+	}
+
+	/**
+	 * Defaults to true
+	 */
+	public static Double getAttrValueAsDouble ( ONDEXEntity entity, AttributeName attrName, boolean failIfNoAttribName )
+	{
+		return getAttrValueAsDouble ( entity, attrName, failIfNoAttribName, true );
+	}
+
+	/**
+	 * Defaults to true, true
+	 */
+	public static Double getAttrValueAsDouble ( ONDEXEntity entity, AttributeName attrName )
+	{
+		return getAttrValueAsDouble ( entity, attrName, true );
+	}	
+	
+	
+		
 	
 	/**
 	 * Returns the attribute value as-is, hence assuming that it's of VT type. If flags are false, missing attribute or 
@@ -308,7 +352,6 @@ public class ONDEXGraphUtils
 	 * converter is invoked with null as parameter).</p>
 	 *  
 	 */
-	@SuppressWarnings ( { "unchecked" } )
 	public static <VT> VT getAttrValue (
 		ONDEXGraph graph, ONDEXEntity entity, String attrNameId, Function<Object, VT> valueConverter,
 		boolean failIfNoAttribName, boolean failIfNoEntity 
@@ -359,6 +402,40 @@ public class ONDEXGraphUtils
 	{
 		return getAttrValueAsString ( graph, entity, attrNameId, true );
 	}
+	
+	
+	
+	/**
+	 * Calls {@link #getAttrValue(ONDEXEntity, AttributeName, Function, boolean, boolean)} using 
+	 * {@link Object#toString()} as converter, if flags are false, returns null when the attribute value is null 
+	 * or doesn't exist.
+	 *  
+	 */
+	public static Double getAttrValueAsDouble (
+		ONDEXGraph graph, ONDEXEntity entity, String attrNameId, boolean failIfNoAttribName, boolean failIfNoEntity
+	)
+	{
+		AttributeName aname = getAttributeName ( graph, attrNameId, failIfNoAttribName );
+		return getAttrValueAsDouble ( entity, aname, failIfNoAttribName, failIfNoEntity );
+	}
+
+	/**
+	 * Defaults to true
+	 */
+	public static Double getAttrValueAsDouble ( ONDEXGraph graph, ONDEXEntity entity, String attrNameId, boolean failIfNoAttribName )
+	{
+		return getAttrValueAsDouble ( graph, entity, attrNameId, failIfNoAttribName, true );
+	}
+
+	/**
+	 * Defaults to true, true
+	 */
+	public static Double getAttrValueAsDouble ( ONDEXGraph graph, ONDEXEntity entity, String attrNameId )
+	{
+		return getAttrValueAsDouble ( graph, entity, attrNameId, true );
+	}		
+	
+	
 	
 	
 	/**
