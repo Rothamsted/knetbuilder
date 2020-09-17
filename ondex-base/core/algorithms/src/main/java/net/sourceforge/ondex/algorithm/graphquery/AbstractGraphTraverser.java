@@ -34,6 +34,7 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import uk.ac.ebi.utils.collections.OptionsMap;
 import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
@@ -50,7 +51,7 @@ import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
  */
 public abstract class AbstractGraphTraverser
 {
-	private Map<String, Object> options = new HashMap<> ();
+	private OptionsMap options = OptionsMap.from ( new HashMap<> () );
 	
   protected final Logger log = LoggerFactory.getLogger ( this.getClass () );
   protected static final Logger clog = LoggerFactory.getLogger ( AbstractGraphTraverser.class );
@@ -261,7 +262,8 @@ public abstract class AbstractGraphTraverser
 	}
 
 	/**
-	 * Invokes {@link #setOption(String, Object)} for each entry in the parameter. 
+	 * Invokes {@link #setOption(String, Object)} for each entry in the parameter,
+	 * which means initial options are overridden/extended.
 	 */
 	public void setOptions ( Map<String, Object> options ) {
 		options.forEach ( this::setOption );
@@ -274,30 +276,28 @@ public abstract class AbstractGraphTraverser
 	/**
 	 * Options are often taken from Java properties, which means they're all of String type.
 	 * converter here can be used to translate a string value to a target type.
+	 * 
+	 * This is a wrapper of {@link OptionsMap#getOpt(String, Object, Function)}
 	 */
-	@SuppressWarnings ( "unchecked" )
 	public <V> V getOption ( String key, V defaultValue, Function<String, V> converter ) 
 	{
-		Object v = this.options.get ( key );
-		if ( v == null ) return defaultValue;
-		if ( v instanceof String && converter != null ) return converter.apply ( (String) v );
-		return (V) v;
+		return options.getOpt ( key, defaultValue, converter );
 	}
 
 	/** Default is null */
 	public <V> V getOption ( String key, Function<String, V> converter ) 
 	{
-		return getOption ( key, null, converter );
+		return options.getOpt ( key, converter );
 	}
 	
 	/** No conversion, returned value type depends on what it was stored */
 	public <V> V getOption ( String key, V defaultValue ) {
-		return getOption ( key, defaultValue, null );
+		return options.getOpt ( key, defaultValue );
 	}
 
 	/** null as default value and no conversion */
 	public <V> V getOption ( String key ) {
-		return getOption ( key, null, null );
+		return options.getOpt ( key );
 	}
 	
 	/**
