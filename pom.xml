@@ -7,7 +7,7 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>1.0.1-SNAPSHOT</version>
+	  <version>2.0-SNAPSHOT</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
@@ -76,17 +76,6 @@
             <artifactId>maven-source-plugin</artifactId>
          </plugin>
          
-         <!-- 
-         	TODO: Remove: release plug-in is unreliable and inflexible: https://dzone.com/articles/why-i-never-use-maven-release
-         	Due to issues mentioned in that post, we too release thorough a Jenkins job that has the steps we want.
-         -->
-         <!--  plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-release-plugin</artifactId>
-            <configuration>
-               <preparationGoals>clean verify install</preparationGoals>
-            </configuration>
-         </plugin -->
       </plugins>
 
       <pluginManagement>
@@ -123,22 +112,6 @@
 						  </executions>
 						</plugin>
             
-            <!-- TODO: remove. Likely, it's not used and if it is, it needs upgrade and
-                 tests. -->
-            <!-- plugin>
-               <groupId>org.codehaus.mojo</groupId>
-               <artifactId>jaxb2-maven-plugin</artifactId>
-               <version>1.3</version>
-               <executions>
-                  <execution>
-                     <id>jaxb2-xjc</id>
-                     <phase>generate-sources</phase>
-                     <goals>
-                        <goal>xjc</goal>
-                     </goals>
-                  </execution>
-               </executions>
-            </plugin -->
 
             <!-- Cleans up things that are usualy left around on the main module folder, not in target/ -->
 		        <plugin>
@@ -256,34 +229,7 @@
 						  <artifactId>taglist-maven-plugin</artifactId>
 						  <version>2.4</version>
 						</plugin>
-		        
-		        <!-- TODO: Remove. It's only used in old-components/dashboard. -->
-						<!-- plugin>
-						  <groupId>org.codehaus.mojo</groupId>
-						  <artifactId>axistools-maven-plugin</artifactId>
-						  <version>1.3</version>
-						  <dependencies>
-						     <dependency>
-						        <groupId>axis</groupId>
-						        <artifactId>axis</artifactId>
-						     </dependency>
-						  </dependencies>
-						  <configuration>
-						     <wsdlFiles>
-						        <wsdlFile>jirasoapservice-v2.wsdl</wsdlFile>
-						     </wsdlFiles>
-						     <packageSpace>com.atlassian.jira.rpc.soap.client</packageSpace>
-						  </configuration>
-						  <executions>
-						     <execution>
-						        <id>wsdl2java-generation</id>
-						        <phase>generate-sources</phase>
-						        <goals>
-						           <goal>wsdl2java</goal>
-						        </goals>
-						     </execution>
-						  </executions>
-						</plugin -->
+
 						
             <!-- 
             	This is needed by Eclipse, to in which build life cycle phase a plug-in is
@@ -364,11 +310,9 @@
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<jutils.version>10.0-SNAPSHOT</jutils.version>
 		<rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
 		
 		<lucene.version>6.6.0</lucene.version>
-		<spring.version>4.3.6.RELEASE</spring.version>
 		
 		<!-- Used by neo4j-related components -->
 		<neo4j.server.version>3.5.12</neo4j.server.version>
@@ -431,35 +375,6 @@
 				<url>https://knetminer.org/artifactory/repository/maven-public/</url>
 			  <snapshots><enabled>true</enabled></snapshots>
 			</repository>
-
-	 		<!-- TODO: remove Includes releases and a couple of others 
-      <repository>
-         <id>ondex-repo</id>
-         <name>Ondex Repository</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
-         <releases><enabled>true</enabled></releases>
-         <snapshots><enabled>false</enabled></snapshots>
-      </repository>
-      <repository>
-         <id>ondex-snapshots</id>
-         <name>Ondex Repository for Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
-         <releases><enabled>false</enabled></releases>
-         <snapshots><enabled>true</enabled></snapshots>
-      </repository>
-
-			<repository>
-				<id>marcobrandizi.info</id>
-				<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
-				<releases><enabled>true</enabled></releases>
-				<snapshots><enabled>true</enabled></snapshots>
-			</repository>
-			
-			<repository>
-			  <id>EBIBioSamples-GH-repo</id>
-			  <url>https://raw.githubusercontent.com/EBIBioSamples/EBIBioSamples.github.io/maven-repo</url>
-			  <snapshots><enabled>true</enabled></snapshots>
-			</repository -->
 			          
 			<repository>
 				<id>spring-plugins</id>
@@ -467,31 +382,6 @@
 			</repository>       
 			                 
 	 </repositories>
-
-   <pluginRepositories>
-
-			<!-- TODO: Remove Includes releases and a couple of others 
-      <pluginRepository>
-         <id>ondex-repo</id>
-         <name>Ondex Repository</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public</url>
-         <releases><enabled>true</enabled></releases>
-         <snapshots><enabled>false</enabled></snapshots>
-      </pluginRepository>
-      <pluginRepository>
-         <id>ondex-snapshots</id>
-         <name>Ondex Repository for Snapshots</name>
-         <url>http://ondex.rothamsted.ac.uk/nexus/content/groups/public-snapshots</url>
-         <releases><enabled>false</enabled></releases>
-         <snapshots><enabled>true</enabled></snapshots>
-      </pluginRepository -->
-
-      <!-- TODO:remove? pluginRepository>
-      	<id>sonatype-releases</id>
-      	<url>https://oss.sonatype.org/content/repositories/releases</url>
-      </pluginRepository -->
-        
-   </pluginRepositories>
 
    <dependencies>
       <dependency>
@@ -508,13 +398,6 @@
 
    <dependencyManagement>
      <dependencies>
-
-	     <dependency>
-	        <groupId>junit</groupId>
-	        <artifactId>junit</artifactId>
-	        <version>4.11</version>
-	        <scope>test</scope>
-	     </dependency>
 
        <dependency>
           <groupId>log4j</groupId>
@@ -639,35 +522,7 @@
 			  <artifactId>commons-io</artifactId>
 			  <version>2.5</version>
 			</dependency>				
-			     
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-         
-			<!-- Marco Brandizi: my personal toolset -->
-			<dependency>
-		  		<groupId>uk.ac.ebi</groupId>
-		  		<artifactId>jutils</artifactId>
-		  		<version>${jutils.version}</version>
-			</dependency>
-			<dependency>
-		  		<groupId>uk.ac.ebi</groupId>
-		  		<artifactId>jutils-io</artifactId>
-		  		<version>${jutils.version}</version>
-			</dependency>
-				
+			              				
 			<!-- Utilities for RDF and the Jena RDF framework -->
 	    <dependency>
 	      <groupId>info.marcobrandizi</groupId>
@@ -780,7 +635,6 @@
 				<artifactId>jsoup</artifactId>
 				<version>1.8.3</version>
       </dependency>
-      
 			
     </dependencies>
 	</dependencyManagement>

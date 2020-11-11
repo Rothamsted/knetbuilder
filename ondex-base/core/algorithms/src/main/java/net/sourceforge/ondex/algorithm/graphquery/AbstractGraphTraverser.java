@@ -332,5 +332,6 @@ public abstract class AbstractGraphTraverser
 		// Options coming from the main config.xml files are passed through
 		result.setOptions ( options );
 		return result;
-	}	
+	}
+	
 }
