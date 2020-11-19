@@ -9,13 +9,6 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 
-/**
-* Created by IntelliJ IDEA.
-* User: nmrp3
-* Date: 14-Jul-2010
-* Time: 15:36:30
-* To change this template use File | Settings | File Templates.
-*/
 public class DummyFilter extends ONDEXFilter
 {
     @Override
