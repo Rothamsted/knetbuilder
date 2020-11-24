@@ -2,11 +2,13 @@ package net.sourceforge.ondex.plugins.tab_parser_2;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.core.util.ONDEXGraphOperations;
 import net.sourceforge.ondex.plugins.tab_parser_2.config.ConfigParser;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
 
@@ -33,7 +36,7 @@ public class ParserTest
 {
 	private Logger log = Logger.getLogger ( this.getClass () );
 	
-	@Test
+	//@Test
 	public void testTutorialGeneEx () throws Exception
 	{
 		Reader schemaReader = new InputStreamReader ( 
@@ -169,9 +172,48 @@ public class ParserTest
 		assertEquals ( "Wrong no of retrieved relations!", 7, graph.getRelations ().size () );
 	}
 	
+	/**
+	 * Tests cases where concept-defining cells are all empty (id/accessions/names/attributes)
+	 * This is about #31
+	 */
+	@Test
+	public void testEmptyValues () throws Exception
+	{
+		Reader schemaReader = new InputStreamReader ( 
+			Resources.getResource ( this.getClass (), "/ondex_tutorial_2016/gene_example_parser_cfg.xml" ).openStream (),
+			"UTF-8"
+		);
+		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
+
+		PathParser pp = ConfigParser.parseConfigXml ( 
+			schemaReader, graph, "target/test-classes/ondex_tutorial_2016/gene_example_holes.tsv" 
+		);
+		pp.parse ();
+		
+		ONDEXGraphOperations.dumpAll ( graph );
+		
+		Function<String, ONDEXConcept> conceptFinder = 
+			pid -> graph.getConcepts ()
+			.stream ()
+			.filter ( c -> "O43426".equals ( c.getPID () ) )
+			.findAny ()
+			.orElse ( null );
+		
+		ONDEXConcept unlinkedProto = conceptFinder.apply ( "O43426" );		
+		assertNotNull ( "Probe protein not found!", unlinkedProto );
+		assertTrue ( "Probe protein is linked!", graph.getRelationsOfConcept ( unlinkedProto ).isEmpty () );
+		
+		ONDEXConcept unlinkedGene = conceptFinder.apply ( "ENSG00000185345" );
+		assertNotNull ( "Probe gene not found!", unlinkedGene );
+		assertTrue ( "Probe gene is linked!", graph.getRelationsOfConcept ( unlinkedGene ).isEmpty () );
+
+		ONDEXConcept noAttrGene = conceptFinder.apply ( "ENSG00000184381" );
+		assertNotNull ( "No-attrib gene not found!", noAttrGene );
+		assertTrue ( "Shouldn't have any attribute!", noAttrGene.getAttributes ().isEmpty () );		
+	}
+	
 	
 	@Test
-	//@Ignore ( "It's a manual test to verify #8" )
 	public void testDupedRelation () throws Exception
 	{
 		Reader schemaReader = new InputStreamReader ( 
@@ -187,37 +229,6 @@ public class ParserTest
 		pp.setProcessingOptions ( new String [ 0 ] );
 		pp.parse ();
 		
-//		Mapping cmap = new Mapping ();
-//		ONDEXPluginArguments args = new ONDEXPluginArguments ( cmap.getArgumentDefinitions () );
-//		args.addOption ( ArgumentNames.IGNORE_AMBIGUOUS_ARG, false );
-//		args.addOption ( ArgumentNames.RELATION_TYPE_ARG, "enc" );
-//		args.addOption ( ArgumentNames.WITHIN_DATASOURCE_ARG, true );		
-//		cmap.setArguments ( args );;
-//		cmap.setONDEXGraph ( graph );
-//		cmap.start ();
-		
-		log.info ( "Concepts: " + graph.getConcepts ().size () );
-		log.info ( "Relations: " + graph.getRelations ().size () );
-		
-		graph.getConcepts ().forEach ( c -> 
-		  log.info ( String.format ( 
-		  	"Concept: '%d', '%s'", 
-		  	c.getId (), 
-		  	c.getConceptAccessions ().iterator ().next ().getAccession ()  
-		  ))
-		);
-		
-		graph.getRelations ().forEach ( r -> 
-		{
-			log.info ( String.format ( 
-				"Relation: '%s', from: '%s', to: '%s'", 
-				r.getOfType ().getId (),
-				r.getFromConcept ().getConceptAccessions ().iterator ().next ().getAccession (),
-				r.getToConcept ().getConceptAccessions ().iterator ().next ().getAccession ()
-			));
-			r.getAttributes ().forEach ( a -> log.info ( String.format ( 
-				"\t attribute: '%s', '%s'", a.getOfType ().getFullname (), a.getValue ()  
-			)));
-		});
+		ONDEXGraphOperations.dumpAll ( graph );
 	}
 }

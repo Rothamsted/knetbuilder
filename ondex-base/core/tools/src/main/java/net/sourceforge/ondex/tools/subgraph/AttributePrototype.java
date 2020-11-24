@@ -16,7 +16,7 @@ import net.sourceforge.ondex.core.util.ValueTuple;
 /**
  * @author lysenkoa
  */
-//TODO way to convoluted :( Port new version from Aug '09 branch.
+//TODO way too convoluted :( Port new version from Aug '09 branch.
 public class AttributePrototype {
     public static final String DEFATTR = "ATTRIBUTE";
     public static final String DEFEVIDENCE = "EVIDENCE";

@@ -149,7 +149,7 @@ public class ConfigParser
 		DataReader reader = new BlankLinesFilterDataReader ( new DelimitedReader ( inputPath, delim, startLine ) );
 		PathParser pp = new PathParser ( graph, reader );
 
-		Map<String, ConceptPrototype> concepts = new HashMap<String, ConceptPrototype> ();
+		Map<String, ConceptPrototype> concepts = new HashMap<> ();
 		
 		// Multiple <concept> elements 
 		NodeList conceptNodes = (NodeList) xpath ( node, "concept", XPathConstants.NODESET ).orNull ();
