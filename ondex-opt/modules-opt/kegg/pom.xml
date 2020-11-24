@@ -34,14 +34,16 @@
          <scope>compile</scope>
       </dependency>
 
-      <!-- ONDEX deps -->      <dependency>
+      <!-- ONDEX deps -->      
+      <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>validator</artifactId>
          <version>${project.version}</version>
          <scope>provided</scope>
       </dependency>
 
-      <!-- KEGG API deps -->      <dependency>
+      <!-- KEGG API deps -->
+      <dependency>
          <groupId>org.apache.axis</groupId>
          <artifactId>axis</artifactId>
          <version>1.4</version>
@@ -51,11 +53,12 @@
          <artifactId>jaxrpc-api</artifactId>
          <version>1.1</version>
       </dependency>
-      <dependency>
+      <!-- TODO: remove, it's not used and not available anymore -->
+      <!--  dependency>
          <groupId>org.apache.commons</groupId>
          <artifactId>com.springsource.org.apache.commons.discovery</artifactId>
          <version>0.4.0</version>
-      </dependency>
+      </dependency -->
 
    </dependencies>
 </project>

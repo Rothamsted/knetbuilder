@@ -18,7 +18,7 @@
    <dependencies>
 
 			<!-- ONDEX deps apps -->      
-			   <dependency>
+			<dependency>
          <groupId>net.sourceforge.ondex.apps</groupId>
          <artifactId>launcher</artifactId>
          <version>${project.version}</version>

@@ -18,19 +18,6 @@
 
    <dependencies>
 
-			 <!-- 
-			 		This trick is needed cause the standard Java doesn't pick tools.jar (at list from certain versions onwards. 
-			 		We currently need that jar for com.sun.javadoc.* TODO: J9 has a replacement for this, migrate.
-       <dependency >
-	       <groupId>com.sun</groupId>
-	       <artifactId>tools</artifactId>
-	       < !- - It's irrelevant, the point is to get the jar - - >
-	       <version>${java.version}</version>
-	       <scope>system</scope>
-	       <systemPath>${java.home}/../lib/tools.jar</systemPath>
-       </dependency>
-			 -->
-
 			<dependency>
 			  <groupId>org.apache.commons</groupId>
 			  <artifactId>commons-lang3</artifactId>
@@ -111,14 +98,4 @@
       </dependency>
    </dependencies>
    
-   <repositories>
-   	<!-- 
-   	  Was used for clapper ocutils, but now it's offline and we have a copy on
-   	  our knetminer repo. 
-   	-->
-   	<!--   repository>
-   		<id>mygrid</id>
-   		<url>http://www.mygrid.org.uk/maven/repository/</url>
-   	</repository -->
-   </repositories>
 </project>
