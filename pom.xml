@@ -335,12 +335,12 @@
 			
 			    <snapshotRepository>
 			    	<id>marcobrandizi.info</id>
-						<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+						<url>https://mbrandizi.jfrog.io/artifactory/maven</url>
 			    </snapshotRepository>
 			
 			    <repository>
 			    	<id>marcobrandizi.info</id>
-						<url>http://www.marcobrandizi.info:8081/artifactory/maven</url>
+						<url>https://mbrandizi.jfrog.io/artifactory/maven</url>
 			    </repository>
 					
 				</distributionManagement>	
@@ -375,11 +375,12 @@
 				<url>https://knetminer.org/artifactory/repository/maven-public/</url>
 			  <snapshots><enabled>true</enabled></snapshots>
 			</repository>
-			          
-			<repository>
-				<id>spring-plugins</id>
-				<url>https://repo.spring.io/plugins-release/</url>
-			</repository>       
+			    
+<!-- TODO: remove -->      
+<!-- 			<repository> -->
+<!-- 				<id>spring-plugins</id> -->
+<!-- 				<url>https://repo.spring.io/plugins-release/</url> -->
+<!-- 			</repository>        -->
 			                 
 	 </repositories>
 
