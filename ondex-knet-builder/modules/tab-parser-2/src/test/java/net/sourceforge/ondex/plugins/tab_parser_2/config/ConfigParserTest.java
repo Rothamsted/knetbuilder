@@ -180,7 +180,7 @@ public class ConfigParserTest
 		Element root = parseXmlString ( xml ).getDocumentElement ();
 		
 		PathParser pp = new PathParser ( new MemoryONDEXGraph ( "default" ) );
-		Map<String, ConceptPrototype> concepts = new HashMap<String, ConceptPrototype> ();
+		Map<String, ConceptPrototype> concepts = new HashMap<> ();
 		concepts.put ( "c1", pp.newConceptPrototype ( DefConst.defAccession ( 0, "UNIPROTKB" ) )	);
 		concepts.put ( "c2", pp.newConceptPrototype ( DefConst.defAccession ( 1, "UNIPROTKB" ) )	);
 		

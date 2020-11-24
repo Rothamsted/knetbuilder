@@ -104,12 +104,12 @@ public class Parser extends ONDEXParser implements ArgumentNames {
 		}
 
 		// hard-coded for tab separated files
-		DataReader reader = new DelimitedReader(file.getAbsolutePath(), "\t", firstRow);
+		DataReader reader = new DelimitedReader(file.getAbsolutePath(), '\t' );
 		reader.setLine(firstRow);
 		reader.setLastLine(lastRow);
 
 		// parser file
-		p = new PathParser(reader, graph);
+		p = new PathParser ( graph, reader );
 
 		// get data source from arguments
 		dataSource = safeGetStringAttribute(DATASOURCE_ARG);

@@ -7,6 +7,7 @@ import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.subgraph.DefConst;
 import net.sourceforge.ondex.tools.tab.importer.ConceptPrototype;
+import net.sourceforge.ondex.tools.tab.importer.DataReader;
 import net.sourceforge.ondex.tools.tab.importer.DelimitedReader;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
 
@@ -39,8 +40,9 @@ public class Parser extends ONDEXParser
 	public void start() throws Exception {
 		File file = new File((String) args
 				.getUniqueValue(FileArgumentDefinition.INPUT_FILE));
-		PathParser pp = new PathParser(graph, new DelimitedReader(file
-				.getAbsolutePath(), "	", 27));
+		DataReader tabReader = new DelimitedReader ( file.getAbsolutePath(), ' ' );
+		tabReader.setLine ( 27 );
+		PathParser pp = new PathParser(graph, tabReader );
 		ConceptPrototype c1 = pp.newConceptPrototype(DefConst.defAccession(1,
 				"SGD"), DefConst.defCC("Protein"), DefConst.defName(2),
 				DefConst.defAttribute(9, "Description"));

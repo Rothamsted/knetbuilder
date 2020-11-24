@@ -1,193 +1,220 @@
 package net.sourceforge.ondex.tools.tab.importer;
 
+import static uk.ac.ebi.utils.exceptions.ExceptionUtils.buildEx;
+import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
+
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.UncheckedIOException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvValidationException;
+
+import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
+import uk.ac.ebi.utils.exceptions.UnexpectedValueException;
 
 /**
- * @author lysenkoa
+ * The old delimited reader Ondex interface, rewritten using the opencsv library.
+ *
+ * @author brandizi
+ * <dl><dt>Date:</dt><dd>24 Nov 2020</dd></dl>
+ *
+ * TODO: tests.
+ * 
  */
-public class DelimitedReader extends DataReader {
+public class DelimitedReader extends DataReader
+{
+	/**
+	 * Options accepted by the constructor.
+	 * 
+	 */
+	public static final String OPT_SEPARATOR = "fieldSeparator", 
+		OPT_QUOTE_CHAR = "quoteChar",
+		OPT_CHARSET = "charset",
+		OPT_ESCAPE_CHAR = "escapeChar";
+	
+	private String filePath = null;
+	private CSVReader csvReader = null;
+	private int maxLines = Integer.MAX_VALUE;
+	
+	/**
+	 * Variant with array of key/value.
+	 */
+  public DelimitedReader ( String filePath, Object... opts )
+  {
+  	initFromFilePath ( filePath, opts );
+  }
 
-    private int lineNo = 0;
-    private String thisLine = null;
-    private String nextLine = null;
-    private String delimiter;
-    private String file;
-    private BufferedReader br = null;
-    private boolean isOpen = false;
-    private boolean isClosed = false;
-    private int lastLine = Integer.MAX_VALUE;
-    private Set<ParsingCondition> conditions = new HashSet<ParsingCondition>();
-    private int firstLine = 0;
+	
+  public DelimitedReader ( String filePath, Map<String, Object> opts )
+  {
+  	initFromFilePath ( filePath, opts );
+  }
+	
 
-    public DelimitedReader(String file, String delimiter) throws Exception {
-        this.delimiter = delimiter;
-        this.file = file;
-    }
+  public DelimitedReader ( String filePath, char separator, char quoteChar )
+  {
+  	this ( filePath, OPT_SEPARATOR, separator, OPT_QUOTE_CHAR, quoteChar );
+	}
 
-    public DelimitedReader(String file, String delimiter, int firstLine) throws Exception {
-        this.delimiter = delimiter;
-        this.file = file;
-        System.err.println("Starting from line " + firstLine);
-        this.firstLine = firstLine;
-    }
+  public DelimitedReader ( String filePath, char delimiter )
+  {
+  	this ( filePath, delimiter, '"' );
+	}
 
-    protected void openFile(String file) throws Exception {
-        InputStreamReader in = null;
-        try {
-            in = new InputStreamReader(new DataInputStream(new FileInputStream(file)));
-            br = new BufferedReader(in);
-            thisLine = null;
-            nextLine = br.readLine();
-            while (nextLine != null) {
-                if (checkConditions(nextLine.split(delimiter))) {
-                    break;
-                }
-                nextLine = br.readLine();
-            }
-            lineNo = 0;
-            isOpen = true;
-            if (nextLine == null) {
-                try {
-                    br.close();
-                    isClosed = true;
-                } catch (Exception e1) {
-                }
-            }
-        } catch (Exception e) {
-            try {
-                br.close();
-                isOpen = false;
-                isClosed = true;
-            } catch (Exception e1) {
-            }
-            throw new RuntimeException("Probelms encountered when attempting to open " + file + "\n Check that the file exists and is not locked.");
-        }
-    }
+  public DelimitedReader ( String filePath )
+  {
+  	this ( filePath, '\t' );
+	}
 
-    @Override
-    public boolean hasNext() {
-        return (!isClosed && nextLine != null && lastLine >= lineNo);
-    }
+  public DelimitedReader ( CSVReader csvReader )
+  {
+  	this.csvReader = csvReader;
+	}
+  
+  
+  
+	@Override
+	public String[] readLine ()
+	{
+		if ( !hasNext () ) throw new NoSuchElementException ( "DelimitedReader hasn't any further element" );
+		try
+		{
+			return this.csvReader.readNext ();
+		}
+		catch ( IOException ex )
+		{
+			throw buildEx ( UncheckedIOException.class, ex, 
+				"I/O Error while reading the CSV file %s: %s", 
+				Optional.ofNullable ( filePath ).map ( p -> '"' + p + "'" ).orElse ( "<NA>" ),
+				ex.getMessage () 
+			);
+		}
+		catch ( CsvValidationException ex )
+		{
+			throw buildEx ( UnexpectedValueException.class, ex, 
+				"Validation error while reading the CSV file %s: %s", 
+				Optional.ofNullable ( filePath ).map ( p -> '"' + p + "'" ).orElse ( "<NA>" ),
+				ex.getMessage () 
+			);
+		}		
+	}
 
-    @Override
-    public String[] readLine() {
-        if (!isOpen && !isClosed) {
-            try {
-                openFile(this.file);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if (firstLine > 0 && lineNo < firstLine)
-            setLine(firstLine);
-        if (br == null)
-            throw new IllegalStateException("You have read past the end of this file!");
-        try {
-            if (lastLine < lineNo)
-                throw new IllegalStateException("You have read past the line limit restriction!");
-            thisLine = nextLine;
-            nextLine = br.readLine();
-            if (nextLine != null) {
-                while (nextLine != null && !checkConditions(nextLine.split(delimiter))) {
-                    nextLine = br.readLine();
-                }
-            } else
-                this.close();
-            lineNo++;
-            return thisLine.split(delimiter);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	@Override
+	public boolean hasNext ()
+	{
+		try
+		{
+			if ( csvReader.getLinesRead () >= this.maxLines ) return false;
+			return csvReader.peek () != null;
+		}
+		catch ( IOException ex )
+		{
+			throw buildEx ( UncheckedIOException.class, ex, 
+				"Error while reading the CSV file %s: %s", 
+				Optional.ofNullable ( filePath ).map ( p -> '"' + p + "'" ).orElse ( "<NA>" ),
+				ex.getMessage () 
+			);
+		}
+	}
 
-    @Override
-    public void setLine(int lineNumber) {
-        if (lastLine < lineNo)
-            lineNumber = lastLine;
-        while (hasNext() != false && lineNo < lineNumber) {
-            lineNo++;
-            readLine();
-        }
-    }
+	/**
+	 * It can only go forward. Errors are expected to occur if you try to go back from the current point.
+	 */
+	@Override
+	public void setLine ( int lineNumber )
+	{
+		try {
+			this.csvReader.skip ( lineNumber );
+		}
+		catch ( IOException ex )
+		{
+			throwEx ( UncheckedIOException.class, ex, 
+				"I/O Error while skipping lines on the CSV file %s: %s", 
+				Optional.ofNullable ( filePath ).map ( p -> '"' + p + "'" ).orElse ( "<NA>" ),
+				ex.getMessage () 
+			);
+		}
+	}
 
-    @Override
-    public void close() {
-        try {
-            br.close();
-        }
-        catch (Exception e) {
-        }
-        br = null;
-        isClosed = true;
-        isOpen = false;
-    }
+	@Override
+	public void setLastLine ( int lastLineExcluded )
+	{
+		this.maxLines = lastLineExcluded;
+	}
 
-    @Override
-    public void reset() {
-        try {
-            if (br != null)
-                br.close();
-        }
-        catch (Exception e) {
-        }
-        try {
-            this.openFile(file);
-            isClosed = false;
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+	@Override
+	public void close ()
+	{
+		try {
+			this.csvReader.close ();
+		}
+		catch ( IOException ex )
+		{
+			throwEx ( UncheckedIOException.class, ex, 
+				"I/O Error while closing the CSV file %s: %s", 
+				Optional.ofNullable ( filePath ).map ( p -> '"' + p + "'" ).orElse ( "<NA>" ),
+				ex.getMessage () 
+			);
+		}
+	}
 
-    }
+	private void initFromFilePath ( String filePath, Object... opts )
+	{
+		Map<String, Object> optsm = new HashMap<> ();
+		for ( int i = 0; i < opts.length -2; i++ )
+		{
+			String key = (String) opts [ i ];
+			Object val = opts [ ++i ];
+			optsm.put ( key, val );
+		}
+		initFromFilePath ( filePath, optsm );
+	}
 
-
-    @Override
-    public boolean isOpen() {
-        return isOpen && !isClosed;
-    }
-
-
-    @Override
-    public void setLastLine(int lineNumber) {
-        lastLine = lineNumber;
-    }
-
-    public void addCondition(ParsingCondition c) {
-        conditions.add(c);
-    }
-
-    private boolean checkConditions(String[] line) {
-        if (conditions.size() == 0) {
-            return true;
-        } else {
-            boolean result = true;
-            for (ParsingCondition c : conditions) {
-                result = c.check(line);
-                if (!result)
-                    break;
-            }
-            return result;
-        }
-    }
-
-    public static DataReader getDelimitedReader(String file, String delimiter) throws Exception {
-        return new DelimitedReader(file, delimiter);
-    }
-
-    public static DataReader getDelimitedReader(String file, int fromLine) throws Exception {
-        DelimitedReader result = new DelimitedReader(file, "	");
-        result.setLine(fromLine);
-        return result;
-    }
-
-    public static DataReader getDelimitedReader(String file, String delimiter, int fromLine) throws Exception {
-        DelimitedReader result = new DelimitedReader(file, delimiter);
-        result.setLine(fromLine);
-        return result;
-    }
+	
+	private void initFromFilePath ( String filePath, Map<String, Object> opts )
+	{
+		try
+		{
+			this.filePath = filePath;
+			
+			CSVParser csvParser = new CSVParserBuilder ()
+				.withSeparator ( (char) opts.getOrDefault ( OPT_SEPARATOR, '\t' ) )
+				.withQuoteChar ( (char) opts.getOrDefault ( OPT_QUOTE_CHAR, '"' ) )
+				.withEscapeChar ( (char) opts.getOrDefault ( OPT_ESCAPE_CHAR, '\\' ) )
+				.build ();
+			
+			String encoding = (String) opts.getOrDefault ( OPT_CHARSET, "UTF-8" );
+			
+			Reader reader = new BufferedReader ( new FileReader ( filePath, Charset.forName ( encoding ) ), 1 << 20 );
+			
+			this.csvReader = new CSVReaderBuilder ( reader )
+				.withCSVParser ( csvParser )
+				.build ();
+		}
+		catch ( FileNotFoundException ex )
+		{
+			throwEx ( UncheckedFileNotFoundException.class, ex, 
+				"CSV file '%s' not found", filePath 
+			);
+		}
+		catch ( IOException ex )
+		{
+			throwEx ( UncheckedIOException.class, ex, 
+				"Error while opening CSV file '%s': %s", filePath, ex.getMessage () 
+			);
+		}
+	}
+	
 }

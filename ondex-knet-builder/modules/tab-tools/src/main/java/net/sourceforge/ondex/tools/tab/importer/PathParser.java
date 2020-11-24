@@ -95,7 +95,6 @@ public class PathParser
 	{
 		log.info ( "Parsing started" );
 		if ( dataReader == null ) throw new Exception ( "No input to parse was specified." );
-		if ( !dataReader.isOpen () ) dataReader.reset ();
 		
 		for ( String[] row: (Iterable<String[]>) () -> dataReader ) 
 			parse ( row );

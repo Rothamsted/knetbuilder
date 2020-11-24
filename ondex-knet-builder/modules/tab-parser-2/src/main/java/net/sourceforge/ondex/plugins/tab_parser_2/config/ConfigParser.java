@@ -23,6 +23,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -134,7 +135,19 @@ public class ConfigParser
 	 */
 	public static PathParser parseConfigXml ( Element node, ONDEXGraph graph, String inputPath ) throws Exception
 	{
-		String delim = parseOptionElem ( node, "delimiter" ).or ( "\t" );
+		String delim = parseOptionElem ( node, "delimiter" )
+			.transform ( StringEscapeUtils::unescapeJava )
+			.or ( "\t" );
+
+		String quote = parseOptionElem ( node, "quote" )
+			.transform ( StringEscapeUtils::unescapeJava )
+			.or ( "\"" );
+
+		String encoding = parseOptionElem ( node, "encoding" )
+			.transform ( StringEscapeUtils::unescapeJava )
+			.or ( "UTF-8" );
+		
+		
 		String startLineStr = parseOptionElem ( node, "start-line" ).or ( "0" );
 		int startLine = 0;
 		try {
@@ -144,9 +157,16 @@ public class ConfigParser
 			throw new IllegalArgumentException ( String.format ( "Invalid value %s for the element <start-line>", startLineStr ));
 		}
 		
-		// TODO: quote/encoding not supported at this time
-		
-		DataReader reader = new BlankLinesFilterDataReader ( new DelimitedReader ( inputPath, delim, startLine ) );
+		// TODO: encoding not supported at this time
+		DataReader reader = new BlankLinesFilterDataReader ( 
+			new DelimitedReader ( 
+				inputPath, 
+				DelimitedReader.OPT_SEPARATOR, delim.charAt ( 0 ),
+				DelimitedReader.OPT_QUOTE_CHAR, quote.charAt ( 0 ),
+				DelimitedReader.OPT_CHARSET, encoding
+			) 
+		);
+		if ( startLine > 0 ) reader.setLine ( startLine );
 		PathParser pp = new PathParser ( graph, reader );
 
 		Map<String, ConceptPrototype> concepts = new HashMap<> ();

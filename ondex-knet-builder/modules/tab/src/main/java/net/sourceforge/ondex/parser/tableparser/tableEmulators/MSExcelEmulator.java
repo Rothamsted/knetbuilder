@@ -53,13 +53,12 @@ public class MSExcelEmulator extends DataReader{
 		return (sheet.getRows()< row+1 && row+1 <= lastLine);
 	}
 
-	@Override
 	public boolean isOpen() {
 		return open;
 	}
 
 	@Override
-	protected String[] readLine() {
+	public String[] readLine() {
 		if(!hasNext())
 			return new String[0];
 		Cell[] temp = sheet.getRow(row);
@@ -70,7 +69,6 @@ public class MSExcelEmulator extends DataReader{
 		return line;
 	}
 
-	@Override
 	public void reset() {
 		row = 1;	
 	}

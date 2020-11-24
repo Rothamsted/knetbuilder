@@ -137,22 +137,6 @@ public class DefConst {
 	public static AttributePrototype defRT(String realtionType){
 		return new AttributePrototype(DEFRT, realtionType);
 	}
-/*
-	public static PathParser getParser(AbstractONDEXGraph  graph){
-		PathParser result = null;
-		try{
-			result = new PathParser(graph, new TestDataReader());	
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	public static DelimitedReader getDelimitedReader(String file){
-		return new DelimitedReader(file, "\t");	
-	}
-*/
 	
 	public interface PositionProcessor {
 		public void process(AttributePrototype ap) throws NullValueException, EmptyStringException;

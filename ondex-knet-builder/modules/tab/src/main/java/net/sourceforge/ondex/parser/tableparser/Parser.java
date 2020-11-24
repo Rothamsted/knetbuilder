@@ -22,8 +22,10 @@ import net.sourceforge.ondex.tools.tab.importer.PathParser;
  *         <p/>
  *         Parses table-like data representations into Ondex. Currently
  *         supported supports delimited files and MS-EXCEL spreadsheets.
- *         WARNING: UNDER CONSTRUCTION!
+ *         
+ * @deprecated "See tab-parser-2"
  */
+@Deprecated
 public class Parser extends ONDEXParser implements ArgumentNames {
 	// Map of prototypes
 	private Map<String, ConceptPrototype> map = new HashMap<String, ConceptPrototype>();
@@ -104,14 +106,14 @@ public class Parser extends ONDEXParser implements ArgumentNames {
 		if (file.getName().endsWith(".xls") || sheetName != null) {
 			reader = new MSExcelEmulator(file.getAbsolutePath(), sheetName);
 		} else if (colRegex != null) {
-			reader = new DelimitedReader(file.getAbsolutePath(), colRegex);
+			reader = new DelimitedReader(file.getAbsolutePath(), colRegex.charAt ( 0 ) );
 		} else {
 			throw new Exception(
 					"Table parser is missin required argument - column separator was not specified.");
 		}
 		reader.setLine(firstRow);
 		reader.setLastLine(lastRow);
-		p = new PathParser(reader, graph);
+		p = new PathParser(graph, reader);
 		
 		dataSource = safeGetStringAttribute(DATASOURCE_ARG);
 		

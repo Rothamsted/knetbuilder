@@ -23,11 +23,6 @@ public class FilterDataReader extends DataReader
 		return base.hasNext ();
 	}
 
-	public boolean isOpen ()
-	{
-		return base.isOpen ();
-	}
-
 	public void setLine ( int lineNumber )
 	{
 		base.setLine ( lineNumber );
@@ -41,11 +36,6 @@ public class FilterDataReader extends DataReader
 	public void close ()
 	{
 		base.close ();
-	}
-
-	public void reset ()
-	{
-		base.reset ();
 	}
 
 	@Override

@@ -39,7 +39,7 @@ public class ParserCallTest
 		String inpath = "target/test-classes/multi_attr_test/protDomain.tsv";
 		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
 
-		PathParser pp = new PathParser ( graph, new DelimitedReader ( inpath, "\t" ) );
+		PathParser pp = new PathParser ( graph, new DelimitedReader ( inpath, '\t' ) );
 		ConceptPrototype prot = pp.newConceptPrototype ( defAccession ( 1, "ENSEMBL" ), defCC ( "Protein" ), defDataSource ( "ENSEMBL" ) );
 		ConceptPrototype protDomain = pp.newConceptPrototype ( 
 			defName ( 2, "false" ), 
