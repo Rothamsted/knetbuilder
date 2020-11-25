@@ -35,7 +35,7 @@ ignore_re='\[DEBUG\]| DEBUG |already added\, skipping|Copying|Adding|Loading|Ins
 ignore_re="$ignore_re|Visibility index built on|javadoc: warning"
 ignore_re="($ignore_re)"
 
-mvn deploy --no-transfer-progress --batch-mode --settings maven-settings.xml\
+echo mvn deploy --no-transfer-progress --batch-mode --settings maven-settings.xml\
  | egrep --ignore-case --invert-match "$ignore_re"
 
 exit_code=${PIPESTATUS[0]} # we don't care about the grep exit code, we want mvn result!
@@ -44,8 +44,7 @@ if [[ "$exit_code" == 0 ]]; then
   # Jenkins will do internal stuff, such as updating download links and deploying
   # on our servers.
   job='ondex-knet-builder_Update_Downloads_Links'
-  curl -X POST -u $KNET_JENKINS_USER:$KNET_JENKINS_TOKEN \
-      http://ondex.rothamsted.ac.uk/build/job/$job/build  
+	curl -X POST "http://ondex.rothamsted.ac.uk/build/buildByToken/build?job=$job&token=$KNET_JENKINS_TOKEN"  
 else
 	exit $exit_code
 fi
