@@ -157,7 +157,6 @@ public class ConfigParser
 			throw new IllegalArgumentException ( String.format ( "Invalid value %s for the element <start-line>", startLineStr ));
 		}
 		
-		// TODO: encoding not supported at this time
 		DataReader reader = new BlankLinesFilterDataReader ( 
 			new DelimitedReader ( 
 				inputPath, 

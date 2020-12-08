@@ -11,7 +11,11 @@ entities (concept and relations).
 ]]></documentation>
         </annotation>
         <sequence>
-    				<element name="delimiter" type="string" minOccurs="0"></element>
+    				<element name="delimiter" type="string" minOccurs="0">
+    					<annotation>
+    				  	<documentation>The field delimiter (default is '\t')</documentation>
+    				  </annotation>
+    				</element>
     				<element name="start-line" type="integer" minOccurs="0">
     						<annotation>
     								<documentation>The line where actual data starts. Default is 0. Set to 1 if the file has an header line.</documentation>
@@ -19,12 +23,12 @@ entities (concept and relations).
     				</element>
     				<element name="quote" type="string" minOccurs="0">
     						<annotation>
-    								<documentation>TODO: not yet supported.</documentation>
+    								<documentation>How fields are possibly quoted against ambiguities (default it '"').</documentation>
     						</annotation>    				
     				</element>
     				<element name="encoding" type="string" minOccurs="0">
     						<annotation>
-    								<documentation>TODO: not yet supported.</documentation>
+    								<documentation>character set encoding that the input CSV is based on (default is UTF-8).</documentation>
     						</annotation></element>
     				<choice maxOccurs="unbounded" minOccurs="0">
     						<element name="concept" type="tab:Concept" >
