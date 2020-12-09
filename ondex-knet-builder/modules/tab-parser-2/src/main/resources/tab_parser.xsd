@@ -83,9 +83,17 @@ value, e.g.
 ]]></documentation>
         </annotation>
         <sequence>
-	    	<element name="match" type="ID" maxOccurs="1" minOccurs="0"></element>
+	    	<element name="match" type="ID" maxOccurs="1" minOccurs="0">
+	    		<annotation>
+	    			<documentation>TODO: match not supported yet</documentation>
+	    		</annotation>
+	    	</element>
 			</sequence>
-    	<attribute name="header" type="string" />
+    	<attribute name="header" type="string">
+	  		<annotation>
+	  			<documentation>TODO: header not supported yet</documentation>
+	  		</annotation>
+    	</attribute>
       <attribute name="index" type="int" />
     </complexType>
 
