@@ -37,6 +37,8 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
@@ -323,6 +325,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 	{
 		Map<String,Analyzer> fa = new HashMap<> ();
 		// TODO: can we use one analyser only for each field?
+		// TODO: if the exception fields are changed, review the search methods below, which 
+		// are invoked by knetminer.
 		
 		Stream.of ( 
 			CONID_FIELD, PID_FIELD, CC_FIELD, DataSource_FIELD, 
@@ -1093,7 +1097,48 @@ public class LuceneEnv implements ONDEXLuceneFields
 	public ScoredHits<ONDEXConcept> searchTopConcepts(Query q, int n) {
 		return searchScoredEntity ( q, CONID_FIELD, ONDEXConcept.class, n );
 	}
+	
 
+	public ScoredHits<ONDEXConcept> searchTopConceptsByIdxField ( String keywords, String idxFieldName, int resultLimit )
+	{
+		return searchTopConceptsByIdxField ( keywords, idxFieldName, null, resultLimit );
+	}
+
+	public ScoredHits<ONDEXConcept> searchTopConceptsByIdxField ( 
+		String keywords, String idxFieldName, String idxFieldSubName, int resultLimit )
+	{
+		Query query = getIdxFieldQuery ( keywords, idxFieldName, idxFieldSubName );
+		return this.searchTopConcepts ( query, resultLimit );
+	}
+	
+	
+	public Query getIdxFieldQuery ( String keywords, String idxFieldName )
+	{
+		return getIdxFieldQuery ( keywords, idxFieldName, null );
+	}
+	
+	/**
+	 * Uses {@link #getIndexFieldName(String, String)} and {@link #DEFAULTANALYZER} to 
+	 * build an index Query.
+	 * 
+	 * TODO: there is redundancy between these methods here (used by Knetminer) and
+	 * {@link LuceneQueryBuilder}.
+	 * 
+	 */
+	public Query getIdxFieldQuery ( String keywords, String idxFieldName, String idxFieldSubName )
+	{
+		try
+		{
+			String idxFullFN = getIndexFieldName ( idxFieldName, idxFieldSubName );
+			QueryParser parser = new QueryParser ( idxFullFN, DEFAULTANALYZER );
+			return parser.parse ( keywords );
+		}
+		catch ( ParseException ex ) {
+			throw new IllegalArgumentException ( "Internal error while searchin over Ondex index: " + ex.getMessage (), ex );
+		}
+	}
+
+	
 	/**
 	 * Searches the top n hits for query in Relations.
 	 * 
@@ -1129,6 +1174,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 		// start indexing
 		indexONDEXGraph( aog );
 	}
+
 
 	/**
 	 * Updates or adds new concepts to the index
@@ -1611,4 +1657,11 @@ public class LuceneEnv implements ONDEXLuceneFields
 		this.updateIndex ( () -> { action.run (); return null; } );
 	}
 
+  /**
+   * Gets a Lucene field name as it is structured in an Ondex Lucene index. 
+   */
+  private static String getIndexFieldName ( String idxFieldName, String idxFieldSubName )
+  {
+  	return idxFieldSubName == null ? idxFieldName : idxFieldName + "_" + idxFieldSubName;
+  }
 }
