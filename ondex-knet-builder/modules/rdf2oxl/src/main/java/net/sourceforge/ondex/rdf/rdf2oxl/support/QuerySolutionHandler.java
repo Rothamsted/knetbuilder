@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.Model;
 import org.slf4j.Logger;
@@ -116,6 +117,7 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 				{	
 					// some data massage to the JSON-LD that is extracted from the RDF CONSTRUCT results (ie, model)
 					Map<String, Object> data = templateHelper.getTemplateData ( model );
+
 					// Do I have customised data too?
 					if ( dataPreProcessor != null ) dataPreProcessor.accept ( model, data );
 					// And eventually here we go

@@ -5,7 +5,7 @@
 	
 	
 === Title: ${pub.AbstractHeader}
-  	Year: ${pub[ "bka:YEAR" ]?c}
+  	Year: ${pub.YEAR}
   	
   	Abstract:
 ${pub.Abstract}
