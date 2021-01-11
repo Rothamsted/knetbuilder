@@ -1,6 +1,4 @@
 set -e
-#DEBUG, traces all the commands 
-#set -x
 
 function deploy_package ()
 {
@@ -27,11 +25,13 @@ function deploy_package ()
   $wget_cmd -O _ondex_tmp.zip "$dl_url"
   rm -Rf $package_dir
   unzip _ondex_tmp.zip
+  
   # This is to delete the target dir contents, without removing the dir itself
   # That's necessary in order to keep the target Unix membership and its 
   # GID settings, which, in turn is necessary to keep write permissions for 
   # our users
   find "$target_dir" -mindepth 1 -delete
+  
   # Similarly, copies the package contents into the existing container
   cp --recursive --no-dereference --preserve=timestamps $package_dir/. "$target_dir"
   chmod -R ug=rwX,o=rX "$target_dir"
