@@ -46,7 +46,7 @@ if [[ "$exit_code" == 0 ]]; then
   # The API URL below is provided by this plug-in: https://plugins.jenkins.io/build-token-root/
 	# The token in configured in the job, in the Build Triggers section.
   job='ondex-knet-builder_Update_Downloads_Links'
-	curl -X POST "http://ondex.rothamsted.ac.uk/build/buildByToken/build?job=$job&token=$KNET_JENKINS_TOKEN"  
+	curl -X POST "https://knetminer.org/build/buildByToken/build?job=$job&token=$KNET_JENKINS_TOKEN"  
 else
 	exit $exit_code
 fi
