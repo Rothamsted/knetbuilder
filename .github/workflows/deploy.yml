@@ -1,14 +1,9 @@
 name: Build
 
 on:
-  push:
-  # You should use this (instead of push) for large, time and resource-consuming codebases.
-  # build.sh uses CI_SCHEDULE_PERIOD to decide if there has been changes recently that actually need
-  # a rebuild.
-  #
-  #schedule:
-  #  m h d M wd(MON-SUN)
-  #  cron:  '0 7 * * *'
+  schedule:
+    #  m h d M wd(MON-SUN)
+    cron:  '0 * * * *'
   workflow_dispatch:
     inputs:
       # These can be set when the build is invoked manually, from GH Actions.
@@ -55,11 +50,8 @@ jobs:
         CI_TRIGGERING_EVENT: ${{ github.event_name }}
         # If you use on: schedule:, this will tell build.sh how often you try to trigger a build
         # It uses it to know if there are git changes since the last scheduled build
-        CI_SCHEDULE_PERIOD: 4 # hours
+        CI_SCHEDULE_PERIOD: 1 # hours
+        KNET_JENKINS_TOKEN: ${{ github.event.inputs.KNET_JENKINS_TOKEN }}        
         
-      run: |
-        mkdir -p ci-build
-        export CI_DIR_URL="https://raw.githubusercontent.com/Rothamsted/knetminer-common/master/ci-build"
-        wget "$CI_DIR_URL/install.sh" -O ci-build/install.sh
-        bash ./ci-build/install.sh
-        bash ci-build/build.sh
+      run: 
+        bash ci-build/build-local.sh
