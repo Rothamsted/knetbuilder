@@ -14,6 +14,7 @@ export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dorg.slf4j.simpleLogger.defaultLog
 set -o pipefail
 ./build.sh | tee /tmp/build.out
 
+
 # We had no actual build
 grep -q "This is a cron-triggered build" /tmp/build.out && exit
 
