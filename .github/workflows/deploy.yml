@@ -1,4 +1,4 @@
-name: Build
+name: Standard Build
 
 on:
   schedule:
