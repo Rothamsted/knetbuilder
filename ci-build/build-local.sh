@@ -15,7 +15,7 @@ set -o pipefail
 ./build.sh | tee /tmp/build.out
 
 # We had no actual build
-[[ grep -q "This is a cron-triggered build" /tmp/build.out ]] && exit
+grep -q "This is a cron-triggered build" /tmp/build.out && exit
 
 # Jenkins will do internal stuff, such as updating download links and deploying
 # on our servers.
