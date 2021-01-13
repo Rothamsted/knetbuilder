@@ -8,3 +8,7 @@ target
 nb-configuration.xml
 nbactions.xml
 ondex.log
+# These are auto-downloaded by the CI
+/ci-build/build.sh
+/ci-build/install.sh
+/ci-build/maven-settings.xml

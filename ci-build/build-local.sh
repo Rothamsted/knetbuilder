@@ -11,7 +11,7 @@ export JAVA_TOOL_OPTIONS="-Xms1G -Xmx4G -Dsun.net.client.defaultConnectTimeout=6
 # Let's make it less verbose
 export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dorg.slf4j.simpleLogger.defaultLogLevel=INFO"
 
-bash ./build.sh
+echo bash ./build.sh
 cd "$mydir"
 
 # Jenkins will do internal stuff, such as updating download links and deploying
