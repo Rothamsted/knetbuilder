@@ -1,3 +1,3 @@
 
 # The output is used to decide actions in build-after.sh
-echo mvn $MAVEN_GOAL -N --settings "ci-build/maven-settings.xml" $MAVEN_ARGS
+mvn $MAVEN_GOAL --settings "ci-build/maven-settings.xml" $MAVEN_ARGS
