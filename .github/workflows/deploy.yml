@@ -3,7 +3,7 @@ name: Build
 on:
   schedule:
   #  m h d M wd(MON-SUN)
-  - cron:  '0 * * * *'
+  - cron:  '*/5 * * * *'
   workflow_dispatch:
     inputs:
       # These can be set when the build is invoked manually, from GH Actions.
