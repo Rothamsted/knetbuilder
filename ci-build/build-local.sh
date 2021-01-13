@@ -12,7 +12,7 @@ export JAVA_TOOL_OPTIONS="-Xms1G -Xmx4G -Dsun.net.client.defaultConnectTimeout=6
 export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dorg.slf4j.simpleLogger.defaultLogLevel=INFO"
 
 set -o pipefail
-./build.sh | tee /tmp/build.out
+bash ./build.sh | tee /tmp/build.out
 
 
 # We had no actual build
