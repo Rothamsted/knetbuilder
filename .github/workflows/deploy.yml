@@ -51,7 +51,7 @@ jobs:
         # If you use on: schedule:, this will tell build.sh how often you try to trigger a build
         # It uses it to know if there are git changes since the last scheduled build
         CI_SCHEDULE_PERIOD: 1 # hours
-        KNET_JENKINS_TOKEN: ${{ github.event.inputs.KNET_JENKINS_TOKEN }}        
+        KNET_JENKINS_TOKEN: ${{secrets.KNET_JENKINS_TOKEN}}       
         
       run: 
         bash ci-build/build-local.sh
