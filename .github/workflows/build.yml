@@ -54,5 +54,9 @@ jobs:
         CI_SCHEDULE_PERIOD: 1 # hours
         KNET_JENKINS_TOKEN: ${{secrets.KNET_JENKINS_TOKEN}}       
         
-      run: 
-        bash ci-build/build-local.sh
+      run: |
+        mkdir -p ci-build
+        export CI_DIR_URL="https://raw.githubusercontent.com/Rothamsted/knetminer-common/master/ci-build"
+        wget "$CI_DIR_URL/install.sh" -O ci-build/install.sh
+        bash ./ci-build/install.sh
+        bash ./ci-build/build.sh
