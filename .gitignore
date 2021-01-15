@@ -12,3 +12,5 @@ ondex.log
 /ci-build/build.sh
 /ci-build/install.sh
 /ci-build/maven-settings.xml
+# Created by GH Actions
+/settings.xml 
