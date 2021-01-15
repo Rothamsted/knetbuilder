@@ -1,4 +1,3 @@
-
 # Jenkins will do internal stuff, such as updating download links and deploying
 # on our servers.
 # The API URL below is provided by this plug-in: https://plugins.jenkins.io/build-token-root/
