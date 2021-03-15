@@ -73,7 +73,7 @@ public class FreeMarkerHelper
 	}
 	
 	/**
-	 * Gets a map of data from a Jena RDF {@link Model}. In order to do so, it converts the `model` into `JSON-LS`
+	 * Gets a map of data from a Jena RDF {@link Model}. In order to do so, it converts the `model` into `JSON-LD`
 	 * (using the Jena's internals) and then extracts the `@graph` object from the result, to put it into the a `js`
 	 * key in the resulting map.  
 	 * 

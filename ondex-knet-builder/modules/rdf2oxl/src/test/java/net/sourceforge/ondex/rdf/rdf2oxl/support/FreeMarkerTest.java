@@ -62,7 +62,7 @@ public class FreeMarkerTest
 		Template tpl = tplConfig.getTemplate ( "fremarker_test.ftlh" );
 		
 		@SuppressWarnings ( "serial" )
-		Map<String, Object> data = new HashMap<String, Object> () {{
+		Map<String, Object> data = new HashMap<> () {{
 			put ( "who", "Marco" );
 		}};
 		
