@@ -22,8 +22,8 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import info.marcobrandizi.rdfutils.jena.SparqlBasedTester;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.mini.test.MiniInvoker;
+import uk.ac.rothamsted.kg.rdf2pg.cli.Rdf2PGCli;
 import uk.ac.rothamsted.neo4j.utils.test.CypherTester;
-import uk.ac.rothamsted.rdf.neo4j.Rdf2NeoCli;
 
 /**
  * Some integration tests based on test text mining workflows.
@@ -44,7 +44,7 @@ public class Neo4jWfIT
 	public static void initRDF2Neo4j ()
 	{
 		// Prevents the CLI from invoking System.exit()
-		System.setProperty ( Rdf2NeoCli.NO_EXIT_PROP, "true" );
+		System.setProperty ( Rdf2PGCli.NO_EXIT_PROP, "true" );
 	}
 		
 	/**
@@ -87,8 +87,9 @@ public class Neo4jWfIT
 		Txn.executeWrite ( tdbDs, () -> m.read ( mavenBuildPath + "text_mining.ttl" ) );
 		
 		// Run the Neo4j importer
-		Rdf2NeoCli.main ( 
-			"--config", "file://" + neoxLocalConfig, mavenBuildPath + "text_mining_tdb"
+		Rdf2PGCli.main ( 
+			"--config", "file://" + neoxLocalConfig, 
+			"--tdb", mavenBuildPath + "text_mining_tdb"
 		);	
 		
 		// And eventually verify with Cypher
