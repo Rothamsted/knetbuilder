@@ -130,7 +130,7 @@ public class FreeMarkerTest
 		
 		String json = IOUtils.readResource ( "freemarker_test/test.json" );
 		@SuppressWarnings ( "serial" )
-		Map<String, Object> data = new HashMap<String, Object> () {{
+		Map<String, Object> data = new HashMap<> () {{
 			put ( "json", json );
 		}};
 				

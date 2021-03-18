@@ -96,7 +96,7 @@
 			<dependency>
 				<groupId>org.apache.jena</groupId>
 				<artifactId>jena-osgi</artifactId>
-				<version>3.10.0</version>
+				<version>3.14.0</version>
 			</dependency>		  
 
 			<dependency>
@@ -111,7 +111,13 @@
 				<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
 				<scope>test</scope>
 			</dependency>
-						
+
+			<dependency>
+				<groupId>uk.ac.ebi</groupId>
+				<artifactId>jutils-io</artifactId>
+				<scope>test</scope>
+			</dependency>
+
    </dependencies>
    
    <build>

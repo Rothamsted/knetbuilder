@@ -1,0 +1,40 @@
+@prefix schema: <http://schema.org/>.
+@prefix bioschema: <http://bioschemas.org/>.
+@prefix bkr: <http://knetminer.org/data/rdf/resources/>.
+@prefix bkg: <http://knetminer.org/data/rdf/resources/graphs/>.
+@prefix edam: <http://edamontology.org/>.
+
+bkg:wheat a schema:Dataset;
+  schema:identifier "${datasetId}";
+	schema:name "${datasetTitle}";
+	schema:description """${datasetDescription}""";
+	schema:url "https://knetminer.com/Triticum_aestivum/html/release.html";
+	schema:creator bkr:rresOrg;
+	schema:version "${datasetVersion}";
+.
+
+bkr:rresOrg a schema:Organization;
+  schema:name "Knetminer Team at Rothamsted Research";
+	schema:description 
+"""We provide digital technologies and innovations for getting the right data to the right people in the right format at the right time.
+
+We are part of Rothamsted Research, a world-leading, non-profit research centre that focuses on strategic agricultural science to the benefit of farmers and society worldwide.""";
+  schema:legalName "Rothamsted Research";
+	# EDAM is used as per bioschemas profile, for each onto term the pref label is reported too in the
+	# keywords property, as a matter of convenience. Mixing URIs and strings creates problems with JSON-LD.
+	bioschema:topic 
+	  edam:topic_3810, 
+    edam:topic_3053, 
+		edam:topic_3307, 
+		edam:topic_4011, 
+		edam:topic_4012, 
+		edam:topic_3070;
+	bioschema:keywords
+	  "Agricultural science",
+    "Genetics",
+		"Computational biology",
+		"Data management",
+		"FAIR data",
+		"Biology";
+	bioschema:type "working party"; # this comes from a CV recommended by bioschemas
+.
