@@ -44,7 +44,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+			<groupId>uk.ac.rothamsted.kg</groupId>
 			<artifactId>rdf2neo</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -99,7 +99,7 @@
   					<configuration>
 	          	<artifactItems>
 	            	<artifactItem>
-							    <groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+							    <groupId>uk.ac.rothamsted.kg</groupId>
 									<artifactId>rdf2neo-cli</artifactId>
 	               	<type>zip</type>
 	               	<excludes>**/examples/</excludes>
@@ -122,10 +122,10 @@
 					<systemPropertyVariables>
 						<neo4j.server.boltPort>${neo4j.server.boltPort}</neo4j.server.boltPort>						
 					</systemPropertyVariables>
-	      		<environmentVariables>
-	      			<!-- this is to re-use the config shipped to the final binary with integration tests. -->
-	      			<RDF2NEO_HOME>${project.basedir}/src/main/assembly/resources</RDF2NEO_HOME>
-	      		</environmentVariables>					
+      		<environmentVariables>
+      			<!-- this is to re-use the config shipped to the final binary with integration tests. -->
+      			<RDF2PG_HOME>${project.basedir}/src/main/assembly/resources</RDF2PG_HOME>
+      		</environmentVariables>					
 				</configuration>
 			</plugin>
 

@@ -22,8 +22,10 @@ mydir=$(pwd)
 cd ../..
 sw_home=$(pwd)
 
+
 cd "$mydir/.."
-export RDF2NEO=$(pwd)
+# TODO: remove
+#export RDF2PG_HOME=$(pwd)
 
 releases_dir=/var/lib/neo4j/data/db-dumps/releases
 my_release_dir="$releases_dir/$release/$cfg_name"
@@ -36,7 +38,7 @@ echo -e "\n\n\tRunning with the configuration at '$cfg_path'\n"
 #
 
 export JENA_HOME="$sw_home/jena"
-export RDF2NEO_TDB="$my_release_dir/rdf2neo-tdb"
+tdb_path="$my_release_dir/rdf2neo-tdb"
 
 
 export OPTS="-Dneo4j.boltUrl=bolt://localhost:$CFG_NEO_PORT"
@@ -49,8 +51,8 @@ export OPTS="$OPTS -Dneo4j.user=rouser -Dneo4j.password=rouser"
 export JAVA_TOOL_OPTIONS="-Xmx20G"
 
 if [ "$is_tdb_mode" != 'true' ]; then
-	echo "--- Deleting existing TDB '$RDF2NEO_TDB'"
-	rm -Rf "$RDF2NEO_TDB"
+	echo "--- Deleting existing TDB '$tdb_path'"
+	rm -Rf "$tdb_path"
 fi
 
 echo "--- Stopping Neo4j"
@@ -85,7 +87,7 @@ if [ "$is_tdb_mode" != 'true' ]; then
 		"$rdf_path"
 else
 	sleep 10 # Neo4j needs time to restart
-	./tdb2neo.sh --config ondex_config/config.xml "$RDF2NEO_TDB"
+	./tdb2neo.sh --config ondex_config/config.xml --tdb "$tdb_path"
 fi
 	
 echo -e "\n\n\t$(basename $0), The end\n"

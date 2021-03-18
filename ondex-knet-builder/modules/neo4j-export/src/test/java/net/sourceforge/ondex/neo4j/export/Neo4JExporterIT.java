@@ -20,11 +20,11 @@ import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.rdf.export.RDFFileExporter;
+import uk.ac.rothamsted.kg.rdf2pg.neo4j.load.MultiConfigNeo4jLoader;
+import uk.ac.rothamsted.kg.rdf2pg.neo4j.load.support.Neo4jDataManager;
+import uk.ac.rothamsted.kg.rdf2pg.pgmaker.spring.PGMakerSessionScope;
+import uk.ac.rothamsted.kg.rdf2pg.pgmaker.support.rdf.RdfDataManager;
 import uk.ac.rothamsted.neo4j.utils.test.CypherTester;
-import uk.ac.rothamsted.rdf.neo4j.load.MultiConfigCyLoader;
-import uk.ac.rothamsted.rdf.neo4j.load.spring.LoadingSessionScope;
-import uk.ac.rothamsted.rdf.neo4j.load.support.Neo4jDataManager;
-import uk.ac.rothamsted.rdf.neo4j.load.support.RdfDataManager;
 
 /**
  * @author brandizi
@@ -69,7 +69,7 @@ public class Neo4JExporterIT
 
 			log.info ( "Loading the RDF into {}", tdbPath );
 			Reader rdfReader = new BufferedReader ( new FileReader ( rdfPath ), (int) 1E6 );
-			try ( RdfDataManager dataMgr = new RdfDataManager ( tdbPath ); )
+			try ( var dataMgr = new RdfDataManager ( tdbPath ); )
 			{
 				Dataset dataSet = dataMgr.getDataSet ();
 				Txn.executeWrite ( 
@@ -85,7 +85,7 @@ public class Neo4JExporterIT
 		
 		log.info ( "Exporting to Neo4j from the TDB" );			
 				
-		MultiConfigCyLoader mloader = springContext.getBean ( MultiConfigCyLoader.class );
+		var mloader = springContext.getBean ( MultiConfigNeo4jLoader.class );
 		mloader.load ( tdbPath );
 	}
 	
@@ -98,11 +98,11 @@ public class Neo4JExporterIT
 		this.exportOxl ( testResPath + "text_mining.oxl", null );
 		
 		// Re-open a data manager 
-		springContext.getBean ( LoadingSessionScope.class ).startSession ();
-		Neo4jDataManager neoDataMgr = springContext.getBean ( Neo4jDataManager.class );
+		springContext.getBean ( PGMakerSessionScope.class ).startSession ();
+		var neoDataMgr = springContext.getBean ( Neo4jDataManager.class );
 
 		// And hand it off the Cypher tester
-		CypherTester tester = new CypherTester ( neoDataMgr );
+		CypherTester tester = new CypherTester ( neoDataMgr.getDelegateMgr () );
 		tester.setCypherHeader ( NamespaceUtils.getNamespaces () );
 		
 		long cyFilesCount = tester.askFromDirectory ( 

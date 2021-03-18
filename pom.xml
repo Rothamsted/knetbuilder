@@ -182,10 +182,16 @@
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-failsafe-plugin</artifactId>
-							<version>3.0.0-M4</version>
+							<version>3.0.0-M5</version>
 							<configuration>
 								<trimStackTrace>false</trimStackTrace>							
 							</configuration>
+							<executions>
+								<execution>
+									<phase>integration-test</phase>
+									<goals><goal>integration-test</goal></goals>
+								</execution>
+							</executions>
 						</plugin>
 						
 						
@@ -307,22 +313,23 @@
    <!-- TODO: move this up, we're keeping it here temporarily, in order to ease
    			the merges from/to master -->
 	 <properties>
-		<java.version>11</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
-		<rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
-		
-		<lucene.version>6.6.0</lucene.version>
-		
-		<!-- Used by neo4j-related components -->
-		<neo4j.server.version>3.5.12</neo4j.server.version>
-		<neo4j.server.boltPort>17690</neo4j.server.boltPort>
-		<neo4j.server.httpPort>17490</neo4j.server.httpPort>
-		<rdf2neo.version>3.0-SNAPSHOT</rdf2neo.version>  
-
-		<slf4j.version>1.7.25</slf4j.version>
-
-   </properties>   
+		 <java.version>11</java.version>
+		 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+			
+		 <rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
+			
+		 <lucene.version>6.6.0</lucene.version>
+			
+		 <!-- Used by neo4j-related components -->
+		 <neo4j.server.version>3.5.12</neo4j.server.version>
+		 <neo4j.server.boltPort>17690</neo4j.server.boltPort>
+		 <neo4j.server.httpPort>17490</neo4j.server.httpPort>
+		 <rdf2neo.version>4.0-SNAPSHOT</rdf2neo.version>  
+			
+		 <slf4j.version>1.7.25</slf4j.version>
+			
+		 <jena.version>3.17.0</jena.version>
+	 </properties>   
    
    
    <profiles>
@@ -547,9 +554,16 @@
 			<dependency>
     		<groupId>org.apache.jena</groupId>
 				<artifactId>apache-jena-libs</artifactId>
-		    <version>3.14.0</version>
+		    <version>${jena.version}</version>
 				<type>pom</type>		    
 			</dependency>
+
+			<dependency>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-osgi</artifactId>
+		    <version>${jena.version}</version>
+			</dependency>		  
+
 
       <dependency>
          <groupId>com.sleepycat</groupId>
@@ -558,19 +572,19 @@
       </dependency>
         
 			<dependency>
-				<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+				<groupId>uk.ac.rothamsted.kg</groupId>
 				<artifactId>rdf2neo</artifactId>
 				<version>${rdf2neo.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>uk.ac.rothamsted.rdf.neo4j</groupId>
+				<groupId>uk.ac.rothamsted.kg</groupId>
 				<artifactId>rdf2neo-cli</artifactId>
 				<version>${rdf2neo.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>uk.ac.rothamsted.neo4j</groupId>
+				<groupId>uk.ac.rothamsted.kg</groupId>
 				<artifactId>neo4j-utils</artifactId>
 				<version>${rdf2neo.version}</version>
 			</dependency>

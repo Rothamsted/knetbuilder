@@ -22,8 +22,7 @@
     	        
     <logger name="net.sourceforge.ondex.rdf" additivity="true"><level value="debug" /></logger>
     <logger name="net.sourceforge.ondex.neo4j" additivity="true"><level value="debug" /></logger>
-    <logger name="uk.ac.rothamsted.rdf.neo4j" additivity="true"><level value="debug" /></logger>
-    <logger name="uk.ac.rothamsted.rdf.neo4j.load.support" additivity="true"><level value="debug" /></logger>
+    <logger name="uk.ac.rothamsted.kg.rdf2pg" additivity="true"><level value="debug" /></logger>
     
 		<logger name = "org.apache.jena" additivity = "true"><level value = "info" /></logger>
 		<logger name = "TDB" additivity = "true"><level value = "info" /></logger>
