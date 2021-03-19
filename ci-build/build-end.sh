@@ -9,10 +9,13 @@ cd knetbuilder.wiki
 down_script="$MYDIR/ondex-knet-builder/src/main/deploy/mk_download_page.sh"
 $down_script >Downloads.md
 
+echo -e "\n\n\DIFFS\n"
+git diff
+
 git diff --exit-code || (  
   echo -e "\n\n\tCommitting Wiki Changes\n"
-  git commit -a -m "[Jenkins] Updating Downloads Page."
-  git push --set-upstream origin master # credentials are already set here
+  git commit -a -m "[CI] Updating Downloads Page."
+  git push --set-upstream origin master # credentials are already set at this point
 )
 
 cd "$MYDIR"
