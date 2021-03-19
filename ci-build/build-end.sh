@@ -9,7 +9,9 @@ cd knetbuilder.wiki
 down_script="$MYDIR/ondex-knet-builder/src/main/deploy/mk_download_page.sh"
 $down_script >Downloads.md
 
-echo -e "\n\n\DIFFS\n"
+echo -e "\n\nDIFFS\n"
+pwd
+ls -lh Downloads.md
 git diff
 
 git diff --exit-code || (  
