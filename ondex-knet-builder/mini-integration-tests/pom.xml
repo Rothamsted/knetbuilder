@@ -125,19 +125,20 @@
 									<type>zip</type>
 									<outputDirectory>${project.build.directory}</outputDirectory>
 									<!-- excludes>**/log4j-over-slf4j-*.jar</excludes -->
+									<!-- excludes>**/lib/base-*.jar,**/plugins/base-*.jar</excludes -->
 								</artifactItem>
 								<artifactItem>
 									<groupId>net.sourceforge.ondex.modules</groupId>
 									<artifactId>rdf-export-2</artifactId>
 									<version>${project.version}</version>
-									<type>test-jar</type>
+									<classifier>tests</classifier>
 									<outputDirectory>${project.build.directory}/ext-test-files/rdf-export-2</outputDirectory>									
 								</artifactItem>
 								<artifactItem>
 									<groupId>net.sourceforge.ondex.modules</groupId>
 									<artifactId>neo4j-export</artifactId>
 									<version>${project.version}</version>
-									<type>test-jar</type>
+									<classifier>tests</classifier>
 									<outputDirectory>${project.build.directory}/ext-test-files/neo4j-exporter</outputDirectory>									
 								</artifactItem>
 							</artifactItems>
@@ -175,7 +176,7 @@
 					</systemPropertyVariables>
 					<environmentVariables>
 						<!-- this is to re-use the config shipped to the final binary with integration tests. -->
-						<RDF2NEO_HOME>${project.build.directory}/ondex-mini/tools/neo4j-exporter/</RDF2NEO_HOME>
+						<RDF2PG_HOME>${project.build.directory}/ondex-mini/tools/neo4j-exporter/</RDF2PG_HOME>
 					</environmentVariables>					
         </configuration>				
 			</plugin>

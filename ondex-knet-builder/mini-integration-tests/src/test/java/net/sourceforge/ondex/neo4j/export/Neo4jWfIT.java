@@ -82,14 +82,17 @@ public class Neo4jWfIT
 		String neoxLocalConfig = mavenBuildPath + "test-classes/textmining_wf/rdf2neo_config.xml";
 
 		// Prepare RDF TDB
+		/*
 		Dataset tdbDs = TDBFactory.createDataset ( mavenBuildPath + "text_mining_tdb" );
 		Model m = tdbDs.getDefaultModel ();
 		Txn.executeWrite ( tdbDs, () -> m.read ( mavenBuildPath + "text_mining.ttl" ) );
+		*/
 		
 		// Run the Neo4j importer
 		Rdf2PGCli.main ( 
 			"--config", "file://" + neoxLocalConfig, 
-			"--tdb", mavenBuildPath + "text_mining_tdb"
+			"--tdb", mavenBuildPath + "text_mining_tdb",
+			mavenBuildPath + "text_mining.ttl"
 		);	
 		
 		// And eventually verify with Cypher

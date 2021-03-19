@@ -12,10 +12,10 @@
 		<import resource = "file:///${project.build.directory}/ondex-mini/tools/neo4j-exporter/ondex_config/config.xml" />
 
 
-		<!-- We need the loadingSession scope, since a new driver is created for each query set -->		
+		<!-- We need the pgmakerSession scope, since a new driver is created for each query set -->		
 		<bean id = "neoDriver" 
 				  class = "org.neo4j.driver.v1.GraphDatabase" factory-method="driver"
-				  scope = "loadingSession"
+				  scope = "pgmakerSession"
 		>
 			
 			<constructor-arg value = "bolt://127.0.0.1:${neo4j.server.boltPort}" />

@@ -150,6 +150,7 @@
 						  <groupId>org.apache.maven.plugins</groupId>
 						  <artifactId>maven-surefire-plugin</artifactId>
 						  <version>2.4.3</version>
+						  
 						  <configuration>
 						     <forkMode>always</forkMode>
 						     <forkedProcessTimeoutInSeconds>700</forkedProcessTimeoutInSeconds>
@@ -182,15 +183,24 @@
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-failsafe-plugin</artifactId>
-							<version>3.0.0-M5</version>
+							<!-- 
+								This happens in M5: https://issues.apache.org/jira/browse/SUREFIRE-1809
+								They've a workaround, but it's quicker to wait for M6 
+							-->
+							<version>3.0.0-M4</version>
 							<configuration>
-								<trimStackTrace>false</trimStackTrace>							
+								<trimStackTrace>false</trimStackTrace>
 							</configuration>
 							<executions>
 								<execution>
 									<phase>integration-test</phase>
 									<goals><goal>integration-test</goal></goals>
 								</execution>
+						    <execution>
+					        <id>verify</id>
+					        <phase>verify</phase>
+					        <goals><goal>verify</goal></goals>
+						    </execution>
 							</executions>
 						</plugin>
 						
@@ -382,13 +392,7 @@
 				<url>https://knetminer.org/artifactory/repository/maven-public/</url>
 			  <snapshots><enabled>true</enabled></snapshots>
 			</repository>
-			    
-<!-- TODO: remove -->      
-<!-- 			<repository> -->
-<!-- 				<id>spring-plugins</id> -->
-<!-- 				<url>https://repo.spring.io/plugins-release/</url> -->
-<!-- 			</repository>        -->
-			                 
+						                 
 	 </repositories>
 
    <dependencies>
