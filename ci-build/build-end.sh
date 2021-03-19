@@ -1,4 +1,3 @@
-
 echo -e "\n\n\tGenerating New Download Page\n"
 
 cd /tmp
@@ -8,12 +7,6 @@ cd knetbuilder.wiki
 
 down_script="$MYDIR/ondex-knet-builder/src/main/deploy/mk_download_page.sh"
 $down_script >Downloads.md
-echo -e "\n  " >>Downloads.md
-
-#echo -e "\n\nDIFFS\n"
-#pwd
-#ls -lh Downloads.md
-#git diff
 
 git diff --exit-code || (  
   echo -e "\n\n\tCommitting Wiki Changes\n"
@@ -23,6 +16,11 @@ git diff --exit-code || (
 
 cd "$MYDIR"
 
+
+
+# If there aren't differences in the download page, we might as well stop here, but let's not 
+# over-complicate things, this is a rare case (eg, during tests against the CI pipeline)
+#
 
 # Jenkins will do internal stuff, such as updating download links and deploying
 # on our servers.
