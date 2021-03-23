@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<!--
+	  This is like ondex_config.xml, but dedicated to converting to graphml, for the corresponding tool in the RDF2PG suite.
+	-->
+
+
+	<!-- 
+	  Just leave this here. It means some components are got from the Java source files, by means of
+	  Spring annotations. You do need this base (which the declarations below extend/override). 
+	-->
+  <context:component-scan base-package = "uk.ac.rothamsted.kg.rdf2pg">
+  	<context:exclude-filter type = "regex" expression = "uk\.ac\.rothamsted\.kg\.rdf2pg\..+\.cli" />
+  </context:component-scan>
+
+
+	<!-- This assumes that you started from rdf2neo.sh, which defines the environment variable below, or that you
+	    have defined it somewhere else. -->
+	<bean id = "pwd" class = "java.lang.String">
+	 <constructor-arg value = "#{ systemEnvironment [ 'RDF2PG_HOME' ] + '/ondex_config/' }" />
+	</bean>
+
+
+	<!-- 
+	  Each ConfigItem is a mapping query set
+	
+	  You must define instances of ConfigItem and not a list of ConfigItem(s), due to the way Spring
+	  manages injection in this case (https://jira.spring.io/browse/SPR-8519).
+	-->
+	
+	
+	<!-- Concepts -->
+	
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
+		
+		<property name = "name" value = "Concepts" />
+	
+		<property name = "nodeIrisSparql">
+			<!-- Use this to read a SPARQ query from a file -->
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	     	 <!-- 
+	     	   You need the index param, cause there are a couple of variants for this methods and Spring needs
+	     	   some disambiguation
+	     	  -->
+	       <constructor-arg value = "#{ pwd + 'concept_iris.sparql' }" index = "0" />
+	     </bean>
+		</property>
+		
+		<property name="labelsSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'concept_labels.sparql' }" index = "0" />
+	     </bean>
+		</property>
+	
+		<property name="nodePropsSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'concept_props.sparql' }" index = "0" />
+	     </bean>
+		</property>
+	
+		<property name="relationTypesSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'concept_rel_types.sparql' }" index = "0" />
+	     </bean>
+		</property>
+	
+	</bean>
+	
+	
+	<!-- Accessions -->
+	
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
+	
+		<property name = "name" value = "Accessions" />
+	
+		<property name = "nodeIrisSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'accession_iris.sparql' }" index = "0" />
+	     </bean>			
+		</property>
+		
+		<property name="labelsSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'accession_labels.sparql' }" index = "0" />
+	     </bean>						
+		</property>
+	
+		<property name="nodePropsSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'accession_props.sparql' }" index = "0" />
+	     </bean>									
+		</property>
+		
+		<property name="relationTypesSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'accession_rel_types.sparql' }" index = "0" />
+	     </bean>												
+		</property>
+					
+	</bean>
+	
+	
+	<!-- Metadata -->
+	
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
+	
+		<property name = "name" value = "Metadata" />
+	
+		<property name = "nodeIrisSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'meta_iris.sparql' }" index = "0" />
+	     </bean>												
+		</property>
+		
+		<property name="labelsSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'meta_labels.sparql' }" index = "0" />
+	     </bean>															
+		</property>
+	
+		<property name="nodePropsSparql">
+	     <bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+	       <constructor-arg value = "#{ pwd + 'meta_props.sparql' }" index = "0" />
+	     </bean>															
+		</property>		
+	
+	</bean>
+	
+	
+	<!-- Reified Relations -->
+	
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
+		
+		<property name = "name" value = "Reified Relations" />
+	
+		<property name="relationTypesSparql">
+			<bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+			  <constructor-arg value = "#{ pwd + 'reified_rel_types.sparql' }" index = "0" />
+			</bean>															
+		</property>
+	
+		<property name="relationPropsSparql">
+			<bean class = "uk.ac.ebi.utils.io.IOUtils" factory-method = "readFile">
+			  <constructor-arg value = "#{ pwd + 'reified_rel_props.sparql' }" index = "0" />
+			</bean>															
+		</property>
+	
+	</bean>
+	
+	
+</beans>
