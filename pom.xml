@@ -7,7 +7,7 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>2.0-SNAPSHOT</version>
+	  <version>2.0.1-SNAPSHOT</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
@@ -35,8 +35,12 @@
      ONDEX enables data from diverse biological data sets to be linked, integrated and visualised through
      graph analysis techniques.
 
-     This is a super-pom that... TODO
-    </description>
+     As usually, this is a super-pom that define a lot of things used by the many components that Ondex
+     is made of. The current Maven module arrangement was reviewed in 2017 and later years (by Marco Brandizi), with
+     the aim of splitting things between what is most used for Knetminer, optional components and components to
+     simply archive as legacy. In a few cases, this splitting isn't so sharp, due to existing dependencies that are
+     difficult to disentangle. 
+   </description>
    <url>http://www.ondex.org/</url>
 
    <ciManagement>
@@ -45,7 +49,7 @@
    </ciManagement>
 
    <organization>
-      <name>ONDEX</name>
+      <name>Ondex</name>
       <url>https://github.com/Rothamsted/ondex-knet-builder</url>
    </organization>
 
@@ -54,12 +58,21 @@
       <url>https://github.com/Rothamsted/ondex-full</url>
    </scm>
 
-   <distributionManagement>
-      <site>
-         <id>Ondex_site</id>
-         <url>file:///var/www/html/ondex</url>
-      </site>
-   </distributionManagement>
+	 <properties>
+		 <java.version>11</java.version>
+		 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+			
+		 <rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
+			
+		 <lucene.version>6.6.0</lucene.version>
+			
+		 <!-- Used by neo4j-related components -->
+		 <rdf2neo.version>4.0-SNAPSHOT</rdf2neo.version>  
+			
+		 <slf4j.version>1.7.25</slf4j.version>
+			
+		 <jena.version>3.17.0</jena.version>
+	 </properties>
 
    <build>
       <plugins>
@@ -207,31 +220,10 @@
 						
 					  <!-- 
 							A small plug-in that starts Neo4j. 
-							
-							1.0.1 is the official version that integrated our improvements at
-							at https://github.com/Rothamsted/neo4j-server-maven-plugin 
 					  -->
 		        <plugin>
 					    <groupId>com.github.harti2006</groupId>
 						  <artifactId>neo4j-server-maven-plugin</artifactId>
-						  <version>1.2</version>
-							<configuration>
-								<version>${neo4j.server.version}</version>
-								<port>${neo4j.server.httpPort}</port>
-								<boltPort>${neo4j.server.boltPort}</boltPort>
-								<deleteDb>true</deleteDb>
-								<serverReadyAttempts>120</serverReadyAttempts>
-							</configuration>
-							<executions>
-								<execution>
-									<id>start-neo4j-server</id>
-									<goals><goal>start</goal></goals>
-								</execution>
-								<execution>
-									<id>stop-neo4j-server</id>
-									<goals><goal>stop</goal></goals>
-								</execution>
-							</executions>		        
 		        </plugin>
 		        
 						<plugin>
@@ -254,7 +246,6 @@
             <plugin>
                <groupId>org.eclipse.m2e</groupId>
                <artifactId>lifecycle-mapping</artifactId>
-               <version>1.0.0</version>
                <configuration>
                   <lifecycleMappingMetadata>
                      <pluginExecutions>
@@ -320,27 +311,6 @@
       
    </build>
 
-   <!-- TODO: move this up, we're keeping it here temporarily, in order to ease
-   			the merges from/to master -->
-	 <properties>
-		 <java.version>11</java.version>
-		 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-			
-		 <rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
-			
-		 <lucene.version>6.6.0</lucene.version>
-			
-		 <!-- Used by neo4j-related components -->
-		 <neo4j.server.version>3.5.12</neo4j.server.version>
-		 <neo4j.server.boltPort>17690</neo4j.server.boltPort>
-		 <neo4j.server.httpPort>17490</neo4j.server.httpPort>
-		 <rdf2neo.version>4.0-SNAPSHOT</rdf2neo.version>  
-			
-		 <slf4j.version>1.7.25</slf4j.version>
-			
-		 <jena.version>3.17.0</jena.version>
-	 </properties>   
-   
    
    <profiles>
       
