@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.neo4j.driver.v1.Driver;
+import org.neo4j.driver.Driver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.FileSystemXmlApplicationContext;

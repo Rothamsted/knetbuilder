@@ -12,12 +12,12 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.tdb.TDBFactory;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.neo4j.driver.v1.AuthTokens;
-import org.neo4j.driver.v1.Driver;
-import org.neo4j.driver.v1.GraphDatabase;
-import org.neo4j.driver.v1.Session;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Values;
+import org.neo4j.driver.AuthTokens;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.Session;
+import org.neo4j.driver.Result;
+import org.neo4j.driver.Values;
 
 import info.marcobrandizi.rdfutils.jena.SparqlUtils;
 import uk.ac.ebi.utils.io.IOUtils;
@@ -53,7 +53,7 @@ public class TdbIT
 						type = qs.getResource ( "type" ).getURI ();
 					try ( Session session = neoDriver.session () )
 					{
-						StatementResult cyCursor = session.run ( 
+						var cyCursor = session.run ( 
 								"MATCH p=(:Node{iri:$from}) - [r] - (:Node{iri:$to})\n"
 							+ "WHERE r.iri = $rel\n"
 							+ "RETURN p LIMIT 1",
