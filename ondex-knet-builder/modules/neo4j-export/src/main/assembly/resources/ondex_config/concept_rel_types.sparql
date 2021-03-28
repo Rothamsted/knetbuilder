@@ -5,7 +5,7 @@ PREFIX bkr: <http://knetminer.org/data/rdf/resources/>
 PREFIX bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/>
 PREFIX dc: <http://purl.org/dc/elements/1.1/>
 
-SELECT ?iri ?type ?fromIri ?toIri
+SELECT DISTINCT ?iri ?type ?fromIri ?toIri
 {
   # BEWARE that the following is optimised, it might become significantly slower if you change order/structure
   # 
@@ -25,14 +25,22 @@ SELECT ?iri ?type ?fromIri ?toIri
   } 
   UNION
   {
+		# Initiallt we simply did ?fromIri a/rdfs:subClassOf* bk:Concept, but in recent versions
+		# of Jena this had become really slow. While this other version requires DISTINCT,
+		# it performs much better, at least as long as the bk:Concept hierarchy isn't too big, 
+		# (it has 150 classes at the moment).
+		#
+    { select distinct ?conceptType { ?conceptType rdfs:subClassOf* bk:Concept } }
+
     VALUES ( ?type ) {
       ( dc:identifier )
       ( bk:dataSource )
       ( bk:evidence )
       ( bk:relatedConcept )
     }
-	  	?fromIri ?type ?toIri.
-	  	?fromIri a/rdfs:subClassOf* bk:Concept.
+
+  	?fromIri ?type ?toIri.
+  	?fromIri a ?conceptType.
   }
     
   # IRI is used in Cypher to assign an ID to each relation		
