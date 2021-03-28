@@ -7,7 +7,7 @@ if [ "$RDF2PG_HOME" == "" ]; then
 	cd "$WORK_DIR"
 fi
 
-if  [ "$1" == '-h' ] || [ "$1" == '--help' ] || [ $# \< 1 ]; then
+if  [ "$1" == '-h' ] || [ "$1" == '--help' ]; then
 				cat <<EOT
 	
 	
