@@ -84,9 +84,10 @@ public class Neo4JExporterIT
 		}
 		
 		log.info ( "Exporting to Neo4j from the TDB" );			
-				
-		var mloader = springContext.getBean ( MultiConfigNeo4jLoader.class );
-		mloader.load ( tdbPath );
+			
+		try ( var mloader = springContext.getBean ( MultiConfigNeo4jLoader.class ) ) {
+			mloader.load ( tdbPath );
+		}
 	}
 	
 	@Test // @Ignore ( "TODO: re-enable later" )
