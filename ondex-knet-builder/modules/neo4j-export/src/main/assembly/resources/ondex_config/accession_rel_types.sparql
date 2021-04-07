@@ -23,5 +23,6 @@ SELECT ?iri ?type ?fromIri ?toIri
 	  		) 
 	  	)
 	  AS ?iri
-	)
+	)	
 }
+
