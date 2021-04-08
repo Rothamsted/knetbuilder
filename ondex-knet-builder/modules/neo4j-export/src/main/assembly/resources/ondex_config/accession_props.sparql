@@ -9,6 +9,7 @@ SELECT ?name ?value
 {
 
 	?iri ?name ?value
+	
   VALUES ( ?name ) {
   	(dcterms:identifier)
     (bk:isAmbiguousAccession)

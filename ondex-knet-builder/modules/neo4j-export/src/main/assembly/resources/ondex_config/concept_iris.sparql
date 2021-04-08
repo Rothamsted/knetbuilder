@@ -6,6 +6,6 @@ PREFIX bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/>
 
 SELECT ?iri
 {
-	?label rdfs:subClassOf* bk:Concept.
+  { SELECT ?label WHERE { ?label rdfs:subClassOf* bk:Concept } }
   ?iri a ?label.
 }
