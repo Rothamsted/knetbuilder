@@ -26,7 +26,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import info.marcobrandizi.rdfutils.jena.SparqlUtils;
+import info.marcobrandizi.rdfutils.jena.ModelEndPointHelper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import uk.ac.ebi.utils.io.IOUtils;
 import uk.ac.ebi.utils.regex.RegEx;
@@ -94,8 +94,8 @@ public class FreeMarkerTest
 			"}\n";
 
 		//out.println ( sparql );
-
-		ResultSet rs = SparqlUtils.select ( sparql, model );
+		var sparqlHelper = new ModelEndPointHelper ( model );
+		ResultSet rs = sparqlHelper.select ( sparql );
 		
 		/*
 		rs.forEachRemaining ( sol -> out.format ( "%s\t%s\n", 
@@ -104,7 +104,7 @@ public class FreeMarkerTest
 		)); */
 		
 		@SuppressWarnings ( "serial" )
-		Map<String, Object> data = new HashMap<String, Object> () {{
+		Map<String, Object> data = new HashMap<> () {{
 			put ( "who", "Marco" );
 			put ( "solutions", rs ); // pass the cursor to the template, it will loop over it.
 		}};
@@ -170,7 +170,8 @@ public class FreeMarkerTest
 
 		//out.println ( sparql );
 		
-		Model m = SparqlUtils.construct ( sparql, model );
+		var sparqlHelper = new ModelEndPointHelper ( model );
+		Model m = sparqlHelper.construct ( sparql );
 		StringWriter sw = new StringWriter ();
 		m.write ( sw, "JSON-LD" );
 		
@@ -221,7 +222,8 @@ public class FreeMarkerTest
 
 		//out.println ( sparql );
 		
-		Model m = SparqlUtils.construct ( sparql, model );
+		var sparqlHelper = new ModelEndPointHelper ( model );
+		Model m = sparqlHelper.construct ( sparql );
 		StringWriter sw = new StringWriter ();
 		
 		m.write ( sw, "JSON-LD" );

@@ -16,10 +16,9 @@ import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
 import org.neo4j.driver.Session;
-import org.neo4j.driver.Result;
 import org.neo4j.driver.Values;
 
-import info.marcobrandizi.rdfutils.jena.SparqlUtils;
+import info.marcobrandizi.rdfutils.jena.ModelEndPointHelper;
 import uk.ac.ebi.utils.io.IOUtils;
 
 /**
@@ -43,9 +42,10 @@ public class TdbIT
 			Set<String> types = new HashSet<> ();
 			Dataset dataSet = TDBFactory.createDataset ( "/var/folders/kb/8ld58jt15jl04b73rkwys9140000gn/T/neo2rdf_tdb_9203877680116318599" );
 			Model model = dataSet.getDefaultModel ();
+			var sparqlHelper = new ModelEndPointHelper ( model );
 			dataSet.begin ( ReadWrite.READ );
 			try {
-				SparqlUtils.select ( IOUtils.readResource ( "rel_types.sparql" ), model )
+				sparqlHelper.select ( IOUtils.readResource ( "rel_types.sparql" ) )
 				.forEachRemaining ( qs -> {
 					String from = qs.getResource ( "fromIri" ).getURI (),
 						to = qs.getResource ( "toIri" ).getURI (),

@@ -78,6 +78,7 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 	
 	private DataPreProcessor dataPreProcessor;
 		
+	// TODO: remove?
 	private String logPrefix = "[RDF Hanlder]";
 	
 	protected Logger log = LoggerFactory.getLogger ( this.getClass () );
@@ -111,7 +112,6 @@ public class QuerySolutionHandler implements Consumer<List<QuerySolution>>
 		synchronized ( this.outWriter ) 
 		{
 			sparqlHelper.processConstruct (
-				logPrefix,
 				sparqlConstruct,
 				model ->
 				{	
