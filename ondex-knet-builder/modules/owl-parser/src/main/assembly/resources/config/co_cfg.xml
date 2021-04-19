@@ -43,7 +43,7 @@
 		<property name="baseMapper">
 			<bean id = "iriMapper" class = "net.sourceforge.ondex.parser.owl.IRIBasedIdMapper">
 				<!-- Their URI format is like http://www.cropontology.org/rdf/CO_321:ROOT -->
-				<property name = "splitRegEx" value = "[\:]" />
+				<property name = "splitRegEx" value = ":" />
 			</bean>
 		</property>
 		<property name="postProcessor">

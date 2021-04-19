@@ -6,7 +6,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 /**
  * An {@link AccessionsMapper} based on {@link ScannerPairMapper}, that is, a {@link Scanner} that decomposes an 
  * initial data source into smaller items, each of which is mapped to an {@link ONDEXConcept} by means of 
- * a {@link ConceptAccession single-accession mapper}. 
+ * a {@link AccessionMapper single-accession mapper}. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>19 Jul 2017</dd></dl>
