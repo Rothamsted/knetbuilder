@@ -5,7 +5,7 @@
 
 	<description><![CDATA[ONDEX OWL Parser configuration for importing the Wheat Crop Ontology (http://www.cropontology.org/ontology/CO_321/Wheat).]]></description>
 
-	<import resource="default_mappings.xml" />
+	<import resource="obo_common_mappings.xml" />
 
 
 	<bean id = "owlMapper" parent = "defaultOwlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
@@ -62,7 +62,7 @@
 			<set>		
 				<bean parent = "idAccMapper">
 					<property name = "dataSourcePrefix" value="CO_321:" />
-					<property name = "addedPrefix" value="CO_321:" / >
+					<property name = "addedPrefix" value="CO_321:" />
 				</bean>
 				<bean parent = "altIdAccMapper">
 					<property name = "dataSourcePrefix" value="CO_321:" />
