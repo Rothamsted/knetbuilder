@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -22,6 +23,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.ONDEXGraphOperations;
+import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.plugins.tab_parser_2.config.ConfigParser;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
 
@@ -195,7 +197,7 @@ public class ParserTest
 		Function<String, ONDEXConcept> conceptFinder = 
 			pid -> graph.getConcepts ()
 			.stream ()
-			.filter ( c -> "O43426".equals ( c.getPID () ) )
+			.filter ( c -> pid.equals ( c.getPID () ) )
 			.findAny ()
 			.orElse ( null );
 		
@@ -209,7 +211,8 @@ public class ParserTest
 
 		ONDEXConcept noAttrGene = conceptFinder.apply ( "ENSG00000184381" );
 		assertNotNull ( "No-attrib gene not found!", noAttrGene );
-		assertTrue ( "Shouldn't have any attribute!", noAttrGene.getAttributes ().isEmpty () );		
+		assertNotNull ( "No-attrib gene is linked!", graph.getRelationsOfConcept ( noAttrGene ).isEmpty () );
+		assertEquals ( "Shouldn't have any (variable) attribute!", 1, noAttrGene.getAttributes ().size () );		
 	}
 	
 	
