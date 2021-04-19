@@ -27,8 +27,10 @@ public abstract class ScannerMapper<S, SI, OI> implements StreamMapper<S, OI>
 
 	@Override
 	public Stream<OI> map ( S source, ONDEXGraph graph ) {
-		//                             This is Stream.map(), not our map(), which is the next one.
-		return scanner.scan ( source ).map ( si -> mapper.map ( si, graph ) );
+		return scanner
+			.scan ( source ) 
+			// The first map() is Stream.map(), not our map(), which is the next one.
+			.map ( si -> mapper.map ( si, graph ) );
 	}
 	
 

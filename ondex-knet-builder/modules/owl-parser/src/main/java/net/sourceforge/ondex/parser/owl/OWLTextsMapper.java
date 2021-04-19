@@ -8,7 +8,7 @@ import net.sourceforge.ondex.parser.Scanner;
 import net.sourceforge.ondex.parser.TextMapper;
 
 /**
- * The OWL text mapper. This maps a literal property associated to a class to a string. 
+ * The OWL texts mapper. This maps a literal property associated to a class to a string. 
  * 
  * This is done via {@link RdfPropertyScanner} and {@link LiteralMapper}. This mapper needs the 
  * {@link #getPropertyIri() property URI} to be used to fetch literals.  
