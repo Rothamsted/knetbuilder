@@ -154,7 +154,7 @@
 		        	<artifactId>maven-assembly-plugin</artifactId>
 							<!-- 
 							  TODO: this is the last version known to work, except for the fact it creates directories with the wrong
-							  permissions. 
+							  permissions. See also https://github.com/Rothamsted/knetbuilder/issues/4
 							 -->
 							<version>2.2-beta-5</version>
 						</plugin>
