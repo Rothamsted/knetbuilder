@@ -15,6 +15,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
+import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -75,6 +76,28 @@ public class ONDEXGraphUtils
 		if ( ent instanceof ONDEXConcept ) return getString ( (ONDEXConcept)  ent );
 		if ( ent instanceof ONDEXRelation ) return getString ( (ONDEXRelation)  ent );
 		return String.format ( "?:%s", ent.getId () );
+	}
+
+	/**
+	 * Facility to return the {@link ONDEXConcept#getConceptName() preferred concept name}, or
+	 * the default value if none is available.
+	 * 
+	 * As in the underlying call, the result is undetermined if more than one names are defined for 
+	 * the concept (which should be avoided). 
+	 */
+	public static String getConceptName ( ONDEXConcept concept, String defaultVal )
+	{
+		return Optional.ofNullable ( concept.getConceptName () )
+		  .map ( ConceptName::getName )
+		  .orElse ( defaultVal );
+	}
+
+	/**
+	 * Defaults to {@link ONDEXConcept#getPID()}
+	 */
+	public static String getConceptName ( ONDEXConcept concept )
+	{
+		return getConceptName ( concept, concept.getPID () );
 	}
 	
 	
