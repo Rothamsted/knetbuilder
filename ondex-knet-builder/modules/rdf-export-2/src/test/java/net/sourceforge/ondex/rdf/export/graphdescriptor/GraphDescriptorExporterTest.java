@@ -4,17 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.CharSet;
 import org.apache.jena.rdf.model.Model;
-import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.io.Resources;
 
 import uk.ac.ebi.utils.io.IOUtils;
 

@@ -59,7 +59,7 @@ public class GraphDescriptorExporter
 			
 			// We need some post-processing of what Jena returns
 			@SuppressWarnings ( "unchecked" )
-			Map<String, Object> js = (Map<String, Object>) JsonUtils.fromString ( json );
+			var js = (Map<String, Object>) JsonUtils.fromString ( json );
 			
 			if ( !doSimplify ) return js;
 			
