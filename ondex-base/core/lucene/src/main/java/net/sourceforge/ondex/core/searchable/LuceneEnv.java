@@ -60,7 +60,6 @@ import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptName;
-import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -1426,9 +1425,9 @@ public class LuceneEnv implements ONDEXLuceneFields
 		// new document for fields
 		Document doc = new Document();
 		doc.add(new Field(LASTDOCUMENT_FIELD, "true", StringField.TYPE_NOT_STORED ));
-		// Attribute fields about the last document were initially not stored. However, this idxSearcher not good for Lucene 6,
-		// because it complaints that a field name having both docs where it idxSearcher stored and not stored cannot be used to 
-		// build certain searches (https://goo.gl/Ee1sfm)
+		// Attribute fields about the last document were initially not stored. However, this isn't good for Lucene 6,
+		// because it complaints that a field name having mixed docs where the field it's stored and not stored cannot 
+		// be used to build certain searches (https://goo.gl/Ee1sfm)
 		//
 		for (String name : listOfConceptAttrNames)
 			doc.add(new Field(CONATTRIBUTE_FIELD + DELIM + name, name,	FIELD_TYPE_STORED_INDEXED_VECT_STORE ));
