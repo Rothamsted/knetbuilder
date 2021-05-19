@@ -58,9 +58,9 @@ public class ProteinHandler extends DefaultHandler {
 		DataSource elementOf = getDataSource(p);
 
 		// create concept
-		ONDEXConcept c = graph.getFactory().createConcept(p.getRDFId(),
+		ONDEXConcept c = graph.getFactory().createConcept(p.getUri(),
 				elementOf, ofType, evidence);
-		rdf2Concept.put(p.getRDFId(), c);
+		rdf2Concept.put(p.getUri(), c);
 
 		// add synonyms
 		addConceptNames(c, p);

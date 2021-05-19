@@ -90,7 +90,7 @@ public class ModulationHandler extends DefaultHandler {
 						+ " is missing.");
 		} else {
 			System.err.println("Unknown control type for modulation: "
-					+ mod.getRDFId());
+					+ mod.getUri());
 			return;
 		}
 
@@ -99,7 +99,7 @@ public class ModulationHandler extends DefaultHandler {
 
 			// this is usually the co-enzyme
 			physicalEntity entity = controller.getPHYSICAL_ENTITY();
-			String rdfID = entity.getRDFId();
+			String rdfID = entity.getUri();
 			ONDEXConcept c = rdf2Concept.get(rdfID);
 			if (c == null) {
 				System.err.println("Missing concept " + rdfID);
@@ -107,10 +107,10 @@ public class ModulationHandler extends DefaultHandler {
 
 				// relation between enzyme and co-enzyme
 				for (process process : mod.getCONTROLLED()) {
-					ONDEXConcept enzyme = rdf2Concept.get(process.getRDFId());
+					ONDEXConcept enzyme = rdf2Concept.get(process.getUri());
 					if (enzyme == null)
 						System.err.println("Missing concept "
-								+ process.getRDFId());
+								+ process.getUri());
 					else {
 						// here is a systematic difference between ONDEX and
 						// BioPax, BioPax treats modulation per pathwayStep,

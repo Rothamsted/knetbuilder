@@ -87,7 +87,7 @@ public class ControlHandler extends DefaultHandler {
 						+ " is missing.");
 		} else {
 			System.err.println("Unknown control type for control: "
-					+ con.getRDFId());
+					+ con.getUri());
 			return;
 		}
 
@@ -96,7 +96,7 @@ public class ControlHandler extends DefaultHandler {
 
 			// this is usually the co-enzyme
 			physicalEntity entity = controller.getPHYSICAL_ENTITY();
-			String rdfID = entity.getRDFId();
+			String rdfID = entity.getUri();
 			ONDEXConcept c = rdf2Concept.get(rdfID);
 			if (c == null) {
 				System.err.println("Missing concept " + rdfID);
@@ -104,10 +104,10 @@ public class ControlHandler extends DefaultHandler {
 
 				// relation between enzyme and co-enzyme
 				for (process process : con.getCONTROLLED()) {
-					ONDEXConcept enzyme = rdf2Concept.get(process.getRDFId());
+					ONDEXConcept enzyme = rdf2Concept.get(process.getUri());
 					if (enzyme == null)
 						System.err.println("Missing concept "
-								+ process.getRDFId());
+								+ process.getUri());
 					else {
 						// here is a systematic difference between ONDEX and
 						// BioPax, BioPax treats control per pathwayStep,

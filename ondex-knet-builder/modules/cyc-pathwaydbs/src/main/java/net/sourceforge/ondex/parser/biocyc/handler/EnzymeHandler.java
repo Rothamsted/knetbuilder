@@ -72,9 +72,9 @@ public class EnzymeHandler extends DefaultHandler {
 		DataSource elementOf = getDataSource(cat);
 
 		// create concept
-		ONDEXConcept c = graph.getFactory().createConcept(cat.getRDFId(),
+		ONDEXConcept c = graph.getFactory().createConcept(cat.getUri(),
 				elementOf, ofType, evidence);
-		rdf2Concept.put(cat.getRDFId(), c);
+		rdf2Concept.put(cat.getUri(), c);
 
 		// add synonyms
 		addConceptNames(c, cat);
@@ -92,18 +92,18 @@ public class EnzymeHandler extends DefaultHandler {
 			physicalEntity entity = controller.getPHYSICAL_ENTITY();
 			
 			// is_a relation between enzyme and protein
-			ONDEXConcept from = rdf2Concept.get(entity.getRDFId());
+			ONDEXConcept from = rdf2Concept.get(entity.getUri());
 			if (from == null)
-				System.err.println("Missing concept " + entity.getRDFId());
+				System.err.println("Missing concept " + entity.getUri());
 			else {
 				graph.getFactory().createRelation(from, c, isA, evidence);
 			}
 
 			// ca_by relation between enzyme and reaction
 			for (process process : cat.getCONTROLLED()) {
-				ONDEXConcept reaction = rdf2Concept.get(process.getRDFId());
+				ONDEXConcept reaction = rdf2Concept.get(process.getUri());
 				if (reaction == null)
-					System.err.println("Missing concept " + process.getRDFId());
+					System.err.println("Missing concept " + process.getUri());
 				else {
 					graph.getFactory().createRelation(reaction, c, caBy,
 							evidence);

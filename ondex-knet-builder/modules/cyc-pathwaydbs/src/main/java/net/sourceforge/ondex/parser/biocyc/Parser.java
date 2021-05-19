@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import org.biopax.paxtools.io.BioPAXIOHandler;
-import org.biopax.paxtools.io.jena.JenaIOHandler;
+import org.biopax.paxtools.io.SimpleIOHandler;
 import org.biopax.paxtools.model.Model;
 import org.biopax.paxtools.model.level2.biochemicalReaction;
 import org.biopax.paxtools.model.level2.catalysis;
@@ -76,11 +76,10 @@ public class Parser extends ONDEXParser {
 	 * singleton pattern for IOHandler
 	 */
 
-	private static BioPAXIOHandler io() {
-		if (ioHandler == null) {
-			ioHandler = new JenaIOHandler();
-		}
-		return ioHandler;
+	private static BioPAXIOHandler io() 
+	{
+		if ( ioHandler != null ) return ioHandler;
+		return ioHandler = new SimpleIOHandler ();
 	}
 
 	@Override

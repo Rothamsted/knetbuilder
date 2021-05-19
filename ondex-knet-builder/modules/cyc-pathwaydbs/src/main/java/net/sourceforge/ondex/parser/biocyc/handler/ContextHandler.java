@@ -57,9 +57,9 @@ public class ContextHandler extends DefaultHandler {
 			throw new RelationTypeMissingException(rtPartOf + " is missing.");
 
 		// first get pathway concept
-		ONDEXConcept pathwayC = rdf2Concept.get(p.getRDFId());
+		ONDEXConcept pathwayC = rdf2Concept.get(p.getUri());
 		if (pathwayC == null)
-			System.err.println("Missing concept " + p.getRDFId());
+			System.err.println("Missing concept " + p.getUri());
 		else {
 
 			// self context
@@ -92,12 +92,12 @@ public class ContextHandler extends DefaultHandler {
 							addContextControl(pathwayC, con);
 						} else
 							System.err.println("Unknown process type "
-									+ process.getRDFId() + " "
+									+ process.getUri() + " "
 									+ process.getClass());
 					}
 				} else
 					System.err.println("Unsupported pathwayComponent: "
-							+ component.getRDFId());
+							+ component.getUri());
 			}
 		}
 	}
@@ -142,7 +142,7 @@ public class ContextHandler extends DefaultHandler {
 						+ " is missing.");
 		} else {
 			System.err.println("Unknown control type for modulation: "
-					+ con.getRDFId());
+					+ con.getUri());
 			return;
 		}
 
@@ -151,7 +151,7 @@ public class ContextHandler extends DefaultHandler {
 
 			// this is usually the co-enzyme
 			physicalEntity entity = controller.getPHYSICAL_ENTITY();
-			String rdfID = entity.getRDFId();
+			String rdfID = entity.getUri();
 			ONDEXConcept coEnzymeC = rdf2Concept.get(rdfID);
 			if (coEnzymeC == null) {
 				System.err.println("Missing concept " + rdfID);
@@ -162,9 +162,9 @@ public class ContextHandler extends DefaultHandler {
 
 				// relation between enzyme and co-enzyme
 				for (process co : con.getCONTROLLED()) {
-					ONDEXConcept enzyme = rdf2Concept.get(co.getRDFId());
+					ONDEXConcept enzyme = rdf2Concept.get(co.getUri());
 					if (enzyme == null)
-						System.err.println("Missing concept " + co.getRDFId());
+						System.err.println("Missing concept " + co.getUri());
 					else {
 
 						// just to make sure enzyme has context
@@ -178,7 +178,7 @@ public class ContextHandler extends DefaultHandler {
 							r.addTag(pathwayC);
 						} else
 							System.err.println("Missing relation "
-									+ co.getRDFId() + " to " + rdfID);
+									+ co.getUri() + " to " + rdfID);
 					}
 				}
 			}
@@ -198,9 +198,9 @@ public class ContextHandler extends DefaultHandler {
 			throws Exception {
 
 		// first get pathway concept
-		ONDEXConcept pathC = rdf2Concept.get(path.getRDFId());
+		ONDEXConcept pathC = rdf2Concept.get(path.getUri());
 		if (pathC == null)
-			System.err.println("Missing concept " + path.getRDFId());
+			System.err.println("Missing concept " + path.getUri());
 		else {
 
 			// context on pathway concept
@@ -216,7 +216,7 @@ public class ContextHandler extends DefaultHandler {
 				// add context to part_of relation
 				r.addTag(pathwayC);
 			} //else
-			//	System.err.println("Missing relation " + path.getRDFId()
+			//	System.err.println("Missing relation " + path.getUri()
 			//			+ " to " + pathwayC.getPID());
 		}
 	}
@@ -234,9 +234,9 @@ public class ContextHandler extends DefaultHandler {
 			throws Exception {
 
 		// first get transport concept
-		ONDEXConcept transC = rdf2Concept.get(trans.getRDFId());
+		ONDEXConcept transC = rdf2Concept.get(trans.getUri());
 		if (transC == null)
-			System.err.println("Missing concept " + trans.getRDFId());
+			System.err.println("Missing concept " + trans.getUri());
 		else {
 
 			// transport concept itself need context
@@ -244,7 +244,7 @@ public class ContextHandler extends DefaultHandler {
 
 			// what is consumed
 			for (physicalEntityParticipant left : trans.getLEFT()) {
-				String rdfID = left.getPHYSICAL_ENTITY().getRDFId();
+				String rdfID = left.getPHYSICAL_ENTITY().getUri();
 				ONDEXConcept from = rdf2Concept.get(rdfID);
 				if (from == null)
 					System.err.println("Missing concept " + rdfID);
@@ -265,13 +265,13 @@ public class ContextHandler extends DefaultHandler {
 						r.addTag(pathwayC);
 					} else
 						System.err.println("Missing relation " + rdfID + " to "
-								+ trans.getRDFId());
+								+ trans.getUri());
 				}
 			}
 
 			// what is produced
 			for (physicalEntityParticipant right : trans.getRIGHT()) {
-				String rdfID = right.getPHYSICAL_ENTITY().getRDFId();
+				String rdfID = right.getPHYSICAL_ENTITY().getUri();
 				ONDEXConcept from = rdf2Concept.get(rdfID);
 				if (from == null)
 					System.err.println("Missing concept " + rdfID);
@@ -292,7 +292,7 @@ public class ContextHandler extends DefaultHandler {
 						r.addTag(pathwayC);
 					} else
 						System.err.println("Missing relation " + rdfID + " to "
-								+ trans.getRDFId());
+								+ trans.getUri());
 				}
 			}
 		}
@@ -312,9 +312,9 @@ public class ContextHandler extends DefaultHandler {
 			biochemicalReaction reaction) throws Exception {
 
 		// first get reaction concept
-		ONDEXConcept reactionC = rdf2Concept.get(reaction.getRDFId());
+		ONDEXConcept reactionC = rdf2Concept.get(reaction.getUri());
 		if (reactionC == null)
-			System.err.println("Missing concept " + reaction.getRDFId());
+			System.err.println("Missing concept " + reaction.getUri());
 		else {
 
 			// reaction concept itself need context
@@ -346,14 +346,14 @@ public class ContextHandler extends DefaultHandler {
 							r.addTag(pathwayC);
 						} else
 							System.err.println("Missing relation "
-									+ reaction.getRDFId() + " to " + ec);
+									+ reaction.getUri() + " to " + ec);
 					}
 				}
 			}
 
 			// what is consumed
 			for (physicalEntityParticipant left : reaction.getLEFT()) {
-				String rdfID = left.getPHYSICAL_ENTITY().getRDFId();
+				String rdfID = left.getPHYSICAL_ENTITY().getUri();
 				ONDEXConcept from = rdf2Concept.get(rdfID);
 				if (from == null)
 					System.err.println("Missing concept " + rdfID);
@@ -374,13 +374,13 @@ public class ContextHandler extends DefaultHandler {
 						r.addTag(pathwayC);
 					} else
 						System.err.println("Missing relation " + rdfID + " to "
-								+ reaction.getRDFId());
+								+ reaction.getUri());
 				}
 			}
 
 			// what is produced
 			for (physicalEntityParticipant right : reaction.getRIGHT()) {
-				String rdfID = right.getPHYSICAL_ENTITY().getRDFId();
+				String rdfID = right.getPHYSICAL_ENTITY().getUri();
 				ONDEXConcept from = rdf2Concept.get(rdfID);
 				if (from == null)
 					System.err.println("Missing concept " + rdfID);
@@ -401,7 +401,7 @@ public class ContextHandler extends DefaultHandler {
 						r.addTag(pathwayC);
 					} else
 						System.err.println("Missing relation " + rdfID + " to "
-								+ reaction.getRDFId());
+								+ reaction.getUri());
 				}
 			}
 		}
@@ -420,9 +420,9 @@ public class ContextHandler extends DefaultHandler {
 			throws Exception {
 
 		// first get enzyme concept
-		ONDEXConcept enzymeC = rdf2Concept.get(cat.getRDFId());
+		ONDEXConcept enzymeC = rdf2Concept.get(cat.getUri());
 		if (enzymeC == null)
-			System.err.println("Missing concept " + cat.getRDFId());
+			System.err.println("Missing concept " + cat.getUri());
 		else {
 
 			// context on enzyme concept
@@ -435,9 +435,9 @@ public class ContextHandler extends DefaultHandler {
 				physicalEntity entity = controller.getPHYSICAL_ENTITY();
 
 				// is_a relation between enzyme and protein
-				ONDEXConcept from = rdf2Concept.get(entity.getRDFId());
+				ONDEXConcept from = rdf2Concept.get(entity.getUri());
 				if (from == null)
-					System.err.println("Missing concept " + entity.getRDFId());
+					System.err.println("Missing concept " + entity.getUri());
 				else {
 
 					// context on Protein concept
@@ -455,15 +455,15 @@ public class ContextHandler extends DefaultHandler {
 						r.addTag(pathwayC);
 					} else
 						System.err.println("Missing relation "
-								+ entity.getRDFId() + " to " + cat.getRDFId());
+								+ entity.getUri() + " to " + cat.getUri());
 				}
 
 				// ca_by relation between enzyme and reaction
 				for (process process : cat.getCONTROLLED()) {
-					ONDEXConcept reaction = rdf2Concept.get(process.getRDFId());
+					ONDEXConcept reaction = rdf2Concept.get(process.getUri());
 					if (reaction == null)
 						System.err.println("Missing concept "
-								+ process.getRDFId());
+								+ process.getUri());
 					else {
 
 						// just to make sure reaction has context
@@ -482,8 +482,8 @@ public class ContextHandler extends DefaultHandler {
 							r.addTag(pathwayC);
 						} else
 							System.err.println("Missing relation "
-									+ process.getRDFId() + " to "
-									+ cat.getRDFId());
+									+ process.getUri() + " to "
+									+ cat.getUri());
 					}
 				}
 			}
@@ -532,7 +532,7 @@ public class ContextHandler extends DefaultHandler {
 						+ " is missing.");
 		} else {
 			System.err.println("Unknown control type for modulation: "
-					+ mod.getRDFId());
+					+ mod.getUri());
 			return;
 		}
 
@@ -541,7 +541,7 @@ public class ContextHandler extends DefaultHandler {
 
 			// this is usually the co-enzyme
 			physicalEntity entity = controller.getPHYSICAL_ENTITY();
-			String rdfID = entity.getRDFId();
+			String rdfID = entity.getUri();
 			ONDEXConcept coEnzymeC = rdf2Concept.get(rdfID);
 			if (coEnzymeC == null) {
 				System.err.println("Missing concept " + rdfID);
@@ -552,9 +552,9 @@ public class ContextHandler extends DefaultHandler {
 
 				// relation between enzyme and co-enzyme
 				for (process co : mod.getCONTROLLED()) {
-					ONDEXConcept enzyme = rdf2Concept.get(co.getRDFId());
+					ONDEXConcept enzyme = rdf2Concept.get(co.getUri());
 					if (enzyme == null)
-						System.err.println("Missing concept " + co.getRDFId());
+						System.err.println("Missing concept " + co.getUri());
 					else {
 
 						// just to make sure enzyme has context
@@ -568,7 +568,7 @@ public class ContextHandler extends DefaultHandler {
 							r.addTag(pathwayC);
 						} else
 							System.err.println("Missing relation "
-									+ co.getRDFId() + " to " + rdfID);
+									+ co.getUri() + " to " + rdfID);
 					}
 				}
 			}

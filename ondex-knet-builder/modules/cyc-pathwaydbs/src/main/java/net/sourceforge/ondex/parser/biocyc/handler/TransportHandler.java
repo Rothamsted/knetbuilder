@@ -60,9 +60,9 @@ public class TransportHandler extends DefaultHandler {
 		DataSource elementOf = getDataSource(t);
 
 		// create concept
-		ONDEXConcept c = graph.getFactory().createConcept(t.getRDFId(),
+		ONDEXConcept c = graph.getFactory().createConcept(t.getUri(),
 				elementOf, ofType, evidence);
-		rdf2Concept.put(t.getRDFId(), c);
+		rdf2Concept.put(t.getUri(), c);
 
 		// add synonyms
 		addConceptNames(c, t);
@@ -75,7 +75,7 @@ public class TransportHandler extends DefaultHandler {
 
 		// what is consumed
 		for (physicalEntityParticipant left : t.getLEFT()) {
-			String rdfID = left.getPHYSICAL_ENTITY().getRDFId();
+			String rdfID = left.getPHYSICAL_ENTITY().getUri();
 			ONDEXConcept from = rdf2Concept.get(rdfID);
 			if (from == null)
 				System.err.println("Missing concept " + rdfID);
@@ -91,7 +91,7 @@ public class TransportHandler extends DefaultHandler {
 
 		// what is produced
 		for (physicalEntityParticipant right : t.getRIGHT()) {
-			String rdfID = right.getPHYSICAL_ENTITY().getRDFId();
+			String rdfID = right.getPHYSICAL_ENTITY().getUri();
 			ONDEXConcept from = rdf2Concept.get(rdfID);
 			if (from == null)
 				System.err.println("Missing concept " + rdfID);

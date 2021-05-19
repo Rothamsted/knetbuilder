@@ -60,9 +60,9 @@ public class ComplexHandler extends DefaultHandler {
 		DataSource elementOf = getDataSource(cmplx);
 
 		// create concept
-		ONDEXConcept c = graph.getFactory().createConcept(cmplx.getRDFId(),
+		ONDEXConcept c = graph.getFactory().createConcept(cmplx.getUri (),
 				elementOf, ofType, evidence);
-		rdf2Concept.put(cmplx.getRDFId(), c);
+		rdf2Concept.put(cmplx.getUri(), c);
 
 		// add synonyms
 		addConceptNames(c, cmplx);
@@ -78,7 +78,7 @@ public class ComplexHandler extends DefaultHandler {
 
 		// member relationships to complex
 		for (physicalEntityParticipant part : cmplx.getCOMPONENTS()) {
-			String rdfID = part.getPHYSICAL_ENTITY().getRDFId();
+			String rdfID = part.getPHYSICAL_ENTITY().getUri();
 			ONDEXConcept from = rdf2Concept.get(rdfID);
 			if (from == null)
 				System.err.println("Missing concept " + rdfID);

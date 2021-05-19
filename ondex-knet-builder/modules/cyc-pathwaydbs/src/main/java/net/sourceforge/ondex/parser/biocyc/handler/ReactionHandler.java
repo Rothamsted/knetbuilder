@@ -62,8 +62,8 @@ public class ReactionHandler extends DefaultHandler
 			DataSource elementOf = getDataSource ( bpaxReact );
 	
 			// create concept
-			ONDEXConcept c = graph.getFactory ().createConcept ( bpaxReact.getRDFId (), elementOf, ofType, evidence );
-			rdf2Concept.put ( bpaxReact.getRDFId (), c );
+			ONDEXConcept c = graph.getFactory ().createConcept ( bpaxReact.getUri (), elementOf, ofType, evidence );
+			rdf2Concept.put ( bpaxReact.getUri (), c );
 	
 			// add synonyms
 			addConceptNames ( c, bpaxReact );
@@ -112,7 +112,7 @@ public class ReactionHandler extends DefaultHandler
 			// what is consumed
 			for ( physicalEntityParticipant left : bpaxReact.getLEFT () )
 			{
-				String rdfID = left.getPHYSICAL_ENTITY ().getRDFId ();
+				String rdfID = left.getPHYSICAL_ENTITY ().getUri ();
 				ONDEXConcept from = rdf2Concept.get ( rdfID );
 				if ( from == null )
 					System.err.println ( "Missing concept " + rdfID );
@@ -128,7 +128,7 @@ public class ReactionHandler extends DefaultHandler
 			// what is produced
 			for ( physicalEntityParticipant right : bpaxReact.getRIGHT () )
 			{
-				String rdfID = right.getPHYSICAL_ENTITY ().getRDFId ();
+				String rdfID = right.getPHYSICAL_ENTITY ().getUri ();
 				ONDEXConcept from = rdf2Concept.get ( rdfID );
 				if ( from == null )
 					System.err.println ( "Missing concept " + rdfID );
@@ -144,7 +144,7 @@ public class ReactionHandler extends DefaultHandler
 		catch ( Exception ex )
 		{
 			ExceptionUtils.throwEx ( 
-				ex, "Error while parsing the BioPAX reaction: <%s>", bpaxReact.getRDFId ()  
+				ex, "Error while parsing the BioPAX reaction: <%s>", bpaxReact.getUri ()  
 			);
 		}
 	} // processReaction()

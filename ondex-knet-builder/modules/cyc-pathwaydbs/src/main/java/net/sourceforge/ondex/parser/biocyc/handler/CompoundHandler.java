@@ -60,9 +60,9 @@ public class CompoundHandler extends DefaultHandler {
 		DataSource elementOf = getDataSource(s);
 
 		// create concept
-		ONDEXConcept c = graph.getFactory().createConcept(s.getRDFId(),
+		ONDEXConcept c = graph.getFactory().createConcept(s.getUri(),
 				elementOf, ofType, evidence);
-		rdf2Concept.put(s.getRDFId(), c);
+		rdf2Concept.put(s.getUri(), c);
 
 		// add synonyms
 		addConceptNames(c, s);

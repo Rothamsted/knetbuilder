@@ -143,7 +143,7 @@ public abstract class DefaultHandler implements MetaData {
 
 			// report error
 			else
-				System.err.println("Unknown type of xref: " + xref.getRDFId());
+				System.err.println("Unknown type of xref: " + xref.getUri());
 		}
 	}
 
@@ -214,7 +214,7 @@ public abstract class DefaultHandler implements MetaData {
 
 		// sanity checks
 		if (uni.getID() == null || uni.getID().isEmpty()) {
-			System.err.println(uni.getRDFId() + " is empty unificationXref.");
+			System.err.println(uni.getUri() + " is empty unificationXref.");
 			return;
 		}
 
@@ -257,7 +257,7 @@ public abstract class DefaultHandler implements MetaData {
 			throw new EvidenceTypeMissingException(etIMPD + " is missing.");
 
 		// get corresponding concept
-		String rdfid = pub.getRDFId();
+		String rdfid = pub.getUri();
 		if (!rdf2Concept.containsKey(rdfid)) {
 
 			// create publication concept
@@ -362,7 +362,7 @@ public abstract class DefaultHandler implements MetaData {
 
 		// sanity checks
 		if (rel.getID() == null || rel.getID().isEmpty()) {
-			System.err.println(rel.getRDFId() + " is empty relationshipXref.");
+			System.err.println(rel.getUri() + " is empty relationshipXref.");
 			return;
 		}
 		DataSource elementOf = findDataSource(rel.getDB());
@@ -417,7 +417,7 @@ public abstract class DefaultHandler implements MetaData {
 		// count only first data source if exits
 		String id = Parser.cvToUse;
 		if (!e.getDATA_SOURCE().isEmpty())
-			id = e.getDATA_SOURCE().iterator().next().getRDFId();
+			id = e.getDATA_SOURCE().iterator().next().getUri();
 		if (!cvMap.containsKey(id))
 			cvMap.put(id, Parser.cvToUse);
 		DataSource elementOf = graph.getMetaData().getDataSource(cvMap.get(id));

@@ -63,9 +63,9 @@ public class PathwayHandler extends DefaultHandler {
 		DataSource elementOf = getDataSource(p);
 
 		// create concept
-		ONDEXConcept c = graph.getFactory().createConcept(p.getRDFId(),
+		ONDEXConcept c = graph.getFactory().createConcept(p.getUri(),
 				elementOf, ofType, evidence);
-		rdf2Concept.put(p.getRDFId(), c);
+		rdf2Concept.put(p.getUri(), c);
 
 		// add synonyms
 		addConceptNames(c, p);
@@ -81,7 +81,7 @@ public class PathwayHandler extends DefaultHandler {
 			if (component instanceof pathwayStep) {
 				pathwayStep step = (pathwayStep) component;
 				for (process process : step.getSTEP_INTERACTIONS()) {
-					String rdfID = process.getRDFId();
+					String rdfID = process.getUri();
 					// ignore modulation and control here, as expressed via
 					// relation
 					if (!(process instanceof modulation)
@@ -107,7 +107,7 @@ public class PathwayHandler extends DefaultHandler {
 				}
 			} else
 				System.err.println("Unsupported pathwayComponent: "
-						+ component.getRDFId());
+						+ component.getUri());
 		}
 
 	}

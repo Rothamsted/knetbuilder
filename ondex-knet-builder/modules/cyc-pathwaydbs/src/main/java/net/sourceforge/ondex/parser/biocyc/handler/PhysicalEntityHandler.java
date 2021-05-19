@@ -63,9 +63,9 @@ public class PhysicalEntityHandler extends DefaultHandler {
 			DataSource elementOf = getDataSource(e);
 
 			// create concept
-			ONDEXConcept c = graph.getFactory().createConcept(e.getRDFId(),
+			ONDEXConcept c = graph.getFactory().createConcept(e.getUri(),
 					elementOf, ofType, evidence);
-			rdf2Concept.put(e.getRDFId(), c);
+			rdf2Concept.put(e.getUri(), c);
 
 			// add synonyms
 			addConceptNames(c, e);
