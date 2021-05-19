@@ -25,6 +25,9 @@ public class PluginException extends Exception {
         super(s);
     }
 
+    /**
+     * TODO: the whole hierarchy needs this constructure, DAMN IT!
+     */
     public PluginException(String s, Throwable throwable)
     {
         super(s, throwable);

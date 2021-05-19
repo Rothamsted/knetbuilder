@@ -21,7 +21,6 @@ public class ConceptClassMissingException extends MetaDataMissingException {
 	 * standard constructor.
 	 */
 	public ConceptClassMissingException() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -31,8 +30,12 @@ public class ConceptClassMissingException extends MetaDataMissingException {
 	 */
 	public ConceptClassMissingException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
+	public ConceptClassMissingException ( String message, Throwable cause )
+	{
+		super ( message, cause );
+	}
+	
 	//####METHODS####
 }

@@ -21,7 +21,6 @@ public class EvidenceTypeMissingException extends MetaDataMissingException {
 	 * standard constructor.
 	 */
 	public EvidenceTypeMissingException() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -31,8 +30,13 @@ public class EvidenceTypeMissingException extends MetaDataMissingException {
 	 */
 	public EvidenceTypeMissingException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
-
+	
+	public EvidenceTypeMissingException ( String message, Throwable cause )
+	{
+		super ( message, cause );
+	}
+	
+	
 	//####METHODS####
 }

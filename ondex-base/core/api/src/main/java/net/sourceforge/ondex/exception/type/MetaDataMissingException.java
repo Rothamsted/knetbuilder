@@ -32,5 +32,11 @@ public class MetaDataMissingException extends PluginException {
 		super(message);
 	}
 
+	public MetaDataMissingException ( String message, Throwable cause )
+	{
+		super ( message, cause );
+	}
+	
+
 	//####METHODS####
 }
