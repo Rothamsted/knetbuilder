@@ -95,8 +95,13 @@ public abstract class AbstractONDEXPlugin implements ONDEXPlugin, RequiresGraph
     public void setONDEXGraph(ONDEXGraph inGraph) {
         this.graph = inGraph;
     }
+    
+    public ONDEXGraph getGraph ()
+		{
+			return graph;
+		}
 
-    /**
+		/**
 	 * Convenience method for outputing the current method name in a dynamic way
 	 * 
 	 * @return the calling method name
