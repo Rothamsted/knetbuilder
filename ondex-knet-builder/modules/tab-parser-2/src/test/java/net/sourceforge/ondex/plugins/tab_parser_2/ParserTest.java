@@ -23,7 +23,6 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.ONDEXGraphOperations;
-import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.plugins.tab_parser_2.config.ConfigParser;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
 

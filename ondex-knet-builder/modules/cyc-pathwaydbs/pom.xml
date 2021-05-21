@@ -21,22 +21,21 @@
 			<artifactId>paxtools-core</artifactId>
 			<version>5.1.0</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.biopax.paxtools</groupId> -->
-<!-- 			<artifactId>paxtools-jena-io</artifactId> -->
-<!-- 			<version>4.3.1</version> -->
-<!-- 			<exclusions> -->
-<!-- 				<exclusion> -->
-<!-- 					Old version is in the Spring repo, and this is no longer accessible -->
-<!-- 					<groupId>woodstox</groupId> -->
-<!-- 					<artifactId>wstx-asl</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 			</exclusions> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.codehaus.woodstox</groupId> -->
-<!-- 			<artifactId>wstx-asl</artifactId> -->
-<!-- 			<version>4.0.6</version> -->
-<!-- 		</dependency> -->
+
+    <dependency>
+       <groupId>net.sourceforge.ondex.core</groupId>
+       <artifactId>memory</artifactId>
+       <version>${project.version}</version>
+       <scope>test</scope>
+    </dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.modules</groupId>
+			<artifactId>oxl</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>			
+		</dependency>			      
+    
+
    </dependencies>
 </project>

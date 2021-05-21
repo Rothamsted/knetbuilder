@@ -89,6 +89,11 @@
          <scope>compile</scope>
       </dependency>
 
+			<dependency>
+				<groupId>com.machinezoo.noexception</groupId>
+				<artifactId>noexception</artifactId>
+			</dependency>      
+
       <!-- ONDEX deps -->      
       <dependency>
          <groupId>net.sourceforge.ondex.core</groupId>

@@ -75,7 +75,8 @@ public class ONDEXGraphOperations
 		concepts.forEach ( c -> 
 		{
 		  log.info ( String.format ( 
-		  	"Concept: '%d', '%s', %s",		  	
+		  	"Concept: <%s:%d>, '%s', %s",
+		  	c.getOfType ().getId (),
 		  	c.getId (),
 		  	c.getPID (),
 		  	accsDumper.apply ( c )  
