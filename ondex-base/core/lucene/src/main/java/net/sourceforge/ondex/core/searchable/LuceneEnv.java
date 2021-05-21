@@ -371,13 +371,13 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * and as the transformation returned here, ie {@code '_' + <value> + '_'}. This way, it's
 	 * possible to get unique results from '123', which instead would match both '123' and
 	 * 'go 123'. TODO: This dirty trick is necessary because the proper solution is too complicated.
-	 * That would be getting rid of this rubbish Lucene field names composed with data source IDs
+	 * That would be getting rid of this Lucene field names composed with data source IDs
 	 * and storing multiple documents per accession.
 	 * 
 	 */
 	public static String rawAccession ( String accStr )
 	{
-		return '_' + accStr.toLowerCase () + '_';		
+		return '_' + accStr + '_';		
 	}
 
 	

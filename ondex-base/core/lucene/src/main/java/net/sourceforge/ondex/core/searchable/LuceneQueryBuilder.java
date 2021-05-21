@@ -467,6 +467,8 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 			Set<String> listOfConceptAccDataSources )
 	{
 		QueryParser qparser = new QueryParser ( CONACC_FIELD, LuceneEnv.DEFAULTANALYZER );
+		qparser.setLowercaseExpandedTerms ( false ); // Makes it case-insensitive
+		
 		BooleanQuery.Builder boolQb = new BooleanQuery.Builder ();
 		boolQb.setMinimumNumberShouldMatch ( 1 );
 
@@ -479,7 +481,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 			
 			var sterm = LuceneEnv.rawAccession ( term );
 			boolQb.add ( createPhraseQuery ( qparser, accFld, sterm ), BooleanClause.Occur.SHOULD );
-
+			
 			if ( !ignoreAmbiguity ) {
 				String accAmbiguousFld = accFldPrefx + AMBIGUOUS + DELIM + RAW;
 				boolQb.add ( createPhraseQuery ( qparser, accAmbiguousFld, sterm ), BooleanClause.Occur.SHOULD );
