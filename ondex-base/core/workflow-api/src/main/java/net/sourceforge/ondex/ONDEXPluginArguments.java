@@ -122,6 +122,9 @@ public class ONDEXPluginArguments
      */
     public <A extends Object> void addOption(String name, A value) throws InvalidPluginArgumentException {
 
+		    if (value == null)
+		       throw new InvalidPluginArgumentException("An null value was passed as a parameter for " + name);
+
         ArgumentDefinition<?> definition = definitions.get(name);
         if (definition != null) {
             if (!definition.getClassType().isAssignableFrom(value.getClass())) {
@@ -133,9 +136,6 @@ public class ONDEXPluginArguments
             throw new InvalidPluginArgumentException(name + " is not a valid argument name");
         }
 
-        if (value == null) {
-            throw new InvalidPluginArgumentException("An null value was passed as a parameter for " + name);
-        }
 
         if (value instanceof String) {
 

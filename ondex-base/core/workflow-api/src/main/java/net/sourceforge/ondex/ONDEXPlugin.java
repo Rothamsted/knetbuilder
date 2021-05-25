@@ -105,6 +105,9 @@ public interface ONDEXPlugin
 	/**
 	 * Helper to invoke a plug-in as stand-alone, outside of the workflow.
 	 * 
+	 * @param args these are translated into {@link ONDEXPluginArguments}. In case of multi-value
+	 * 				arguments, use list values.
+	 * 
 	 * @return a result that depends on the plug-in type: if it's instance of {@link ProducerONDEXPlugin}, returns
 	 *         {@link ProducerONDEXPlugin#collectResults() collectResults()}, if it's {@link RequiresGraph}, returns
 	 *         {@link RequiresGraph#getGraph() the plugin's graph}, else returns null.
