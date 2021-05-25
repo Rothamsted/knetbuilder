@@ -11,7 +11,6 @@ import org.junit.Test;
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.exception.type.PluginException;
 
 /**
  * TODO: comment me!
@@ -24,7 +23,7 @@ public class BioCycParserTest
 {
 	private Logger log = Logger.getLogger ( this.getClass () );
 	
-	private ONDEXGraph loadFromBioPax ( String bpaxFileName ) throws PluginException
+	private ONDEXGraph loadFromBioPax ( String bpaxFileName )
 	{
 		log.info ( "Pre-loading graph with metadata" );
 		var graph = net.sourceforge.ondex.parser.oxl.Parser.loadOXL (
@@ -49,7 +48,7 @@ public class BioCycParserTest
 	
 	
 	@Test
-	public void testIAAPathway () throws PluginException
+	public void testIAAPathway ()
 	{
 		var graph = loadFromBioPax ( "indole-3-acetate-i-bpax2.owl" );
 		

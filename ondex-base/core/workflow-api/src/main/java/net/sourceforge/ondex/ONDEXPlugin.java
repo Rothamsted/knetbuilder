@@ -110,7 +110,7 @@ public interface ONDEXPlugin
 	 *         {@link RequiresGraph#getGraph() the plugin's graph}, else returns null.
 	 * 
 	 */
-	public static <T> T runPlugin ( ONDEXPlugin plugin, Map<String, Object> args ) throws PluginException
+	public static <T> T runPlugin ( ONDEXPlugin plugin, Map<String, Object> args ) throws UncheckedPluginException
 	{
 		try
 		{
@@ -126,7 +126,7 @@ public interface ONDEXPlugin
 			return null;
 		}
 		catch ( Exception ex ) {
-			throw new PluginException ( "Error during plug-in execution: " + ex.getMessage (), ex );
+			throw new UncheckedPluginException ( "Error during plug-in execution: " + ex.getMessage (), ex );
 		}
 	}
 
@@ -135,7 +135,7 @@ public interface ONDEXPlugin
 	 *  
 	 */
 	public static <T> T runPlugin ( ONDEXPlugin plugin, ONDEXGraph graph, Map<String, Object> args )
-		throws PluginException
+		throws UncheckedPluginException
 	{
 		if ( ! ( plugin instanceof RequiresGraph ) )
 			throw new IllegalArgumentException ( "Can't invoke a plug-in that doesn't accept a graph with this method" );
@@ -147,7 +147,8 @@ public interface ONDEXPlugin
 	/**
 	 * Wrapper to auto-instantiate the plugin using the empty constructor.
 	 */
-	public static <T> T runPlugin ( Class<? extends ONDEXPlugin> pluginCls, Map<String, Object> args ) throws PluginException
+	public static <T> T runPlugin ( Class<? extends ONDEXPlugin> pluginCls, Map<String, Object> args ) 
+		throws UncheckedPluginException
 	{
 		try
 		{
@@ -168,7 +169,7 @@ public interface ONDEXPlugin
 	 * Wrapper to auto-instantiate the plugin using the empty constructor.
 	 */
 	public static <T> T runPlugin ( Class<? extends ONDEXPlugin> pluginCls, ONDEXGraph graph, Map<String, Object> args )
-			throws PluginException
+			throws UncheckedPluginException
 	{
 		try
 		{
