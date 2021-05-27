@@ -2,6 +2,7 @@ package net.sourceforge.ondex;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.reflect.ConstructorUtils;
@@ -119,8 +120,13 @@ public interface ONDEXPlugin
 		{
 			var pargDefs = plugin.getArgumentDefinitions ();
 			var pargs = new ONDEXPluginArguments ( pargDefs );
-			args.forEach ( Exceptions.sneak ().fromBiConsumer ( ( k, v ) -> pargs.setOption ( k, v ) ) );
-
+			args.forEach ( Exceptions.sneak ().fromBiConsumer ( ( k, o ) -> 
+				{ 
+					@SuppressWarnings ( "unchecked" )
+					Collection<Object> vs = o instanceof Collection ? (Collection<Object>) o : List.of ( o );
+					vs.forEach ( Exceptions.sneak ().consumer ( v -> pargs.addOption ( k, v ) ) );
+				})
+			);
 			plugin.setArguments ( pargs );
 			plugin.start ();
 
