@@ -496,6 +496,8 @@ public class LuceneEnvTest
 		concept1.createConceptAccession ( "A 1", dataSource, false );
 		concept1.createConceptAccession ( "A:3", dataSource1, false );
 		concept1.createConceptAccession ( "3", dataSource1, false );
+		concept1.createConceptAccession ( "A:42-Beta", dataSource1, false );
+
 		
 		ONDEXConcept concept2 = og.getFactory().createConcept ( "B1", dataSource, ccB, et );
 		concept2.createConceptAccession ( "3", dataSource, false );
@@ -522,6 +524,9 @@ public class LuceneEnvTest
 		
 		testSearchByTypeAndAccession ( "B", "Cs1", false, 2, "Wrong no. of found concepts (case-insensitive)!" );
 		testSearchByTypeAndAccession ( "B", "Cs*", false, 2, "Wrong no. of found concepts (case-insensitive + wildcard)!" );
+
+		testSearchByTypeAndAccession ( "A", "42", 0, "Wrong no. of found concepts (partial match)!" );
+		testSearchByTypeAndAccession ( "A", "foo-value", 0, "Wrong no. of found concepts (non-existing value)!" );
 	}
 	
 	private Set<ONDEXConcept> testSearchByTypeAndAccession ( 

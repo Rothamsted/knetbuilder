@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
@@ -630,10 +631,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		var qp = new QueryParser ( fieldId, LuceneEnv.DEFAULTANALYZER );
 		qp.setLowercaseExpandedTerms ( !isCaseSensitive );
 		
-		// TODO: move to its own function
-		var toEscape = "\\+-&|!(){}[]\":/ ";
-		for ( var c: toEscape.toCharArray () )
-			accessionTerm = accessionTerm.replace ( "" + c, "\\" + c );
+		accessionTerm = escapeTermForExactMatch ( accessionTerm );
 		
 		accessionTerm = isCaseSensitive
 			? String.format ( "%s:%s", fieldId, accessionTerm )
@@ -664,10 +662,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		var qp = new QueryParser ( fieldId, LuceneEnv.DEFAULTANALYZER );
 		qp.setLowercaseExpandedTerms ( !isCaseSensitive );
 		
-		// TODO: move to its own function
-		var toEscape = "\\+-&|!(){}[]\":/ ";
-		for ( var c: toEscape.toCharArray () )
-			nameTerm = nameTerm.replace ( "" + c, "\\" + c );
+		nameTerm = escapeTermForExactMatch ( nameTerm );
 		
 		nameTerm = isCaseSensitive
 			? String.format ( "%s:%s", fieldId, nameTerm )
@@ -678,6 +673,19 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 			.add ( qp.parse ( nameTerm ), Occur.MUST )
 			.build ();
 	}
+	
+	/**
+	 * TODO: comment me!
+	 */
+	public static String escapeTermForExactMatch ( String term )
+	{
+		var toEscape = "\\+-&|!(){}[]\":/ ";
+		
+		for ( var c: toEscape.toCharArray () )
+			term = term.replace ( "" + c, "\\" + c );
+		return term;
+	}
+	
 		
 	/**
 	 * Defaults to case-sensitive. 
