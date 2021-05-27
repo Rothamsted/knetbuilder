@@ -9,6 +9,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -19,6 +20,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +30,7 @@ import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
@@ -329,7 +332,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 		
 		Stream.of ( 
 			CONID_FIELD, PID_FIELD, CC_FIELD, DataSource_FIELD, 
-			RELID_FIELD, FROM_FIELD, TO_FIELD, OFTYPE_FIELD, 
+			RELID_FIELD, FROM_FIELD, TO_FIELD, OFTYPE_FIELD,
+			CONACC_FIELD + DELIM + RAW, CONNAME_FIELD + DELIM + RAW,
 			"iri"
 		).forEach ( f -> fa.put ( f, new KeywordAnalyzer () ) );
 		
@@ -993,6 +997,63 @@ public class LuceneEnv implements ONDEXLuceneFields
 	}
 
 	/**
+	 * A wrapper of {@link LuceneQueryBuilder#searchByTypeAndAccession(String, String, boolean)}
+	 * that passes the accession-based query to {@link #searchInConcepts(Query)}
+	 */
+	public Set<ONDEXConcept> searchByTypeAndAccession ( String conceptClassId, String accessionTerm, boolean isCaseSensitive )
+	{
+		try
+		{
+			var q = LuceneQueryBuilder.searchByTypeAndAccession ( conceptClassId, accessionTerm, isCaseSensitive );
+			if (log.isDebugEnabled () ) log.debug ( "Searching by accession with: {}", q );
+			return this.searchInConcepts ( q );
+		}
+		catch ( ParseException ex )
+		{
+			throw ExceptionUtils.buildEx ( IllegalArgumentException.class, ex, 
+				"Error while querying '%s':'%s': %s", conceptClassId, accessionTerm, ex.getMessage ()
+			);
+		}
+	}
+
+	/**
+	 * Defaults to isCaseSensitive = true 
+	 */
+	public Set<ONDEXConcept> searchByTypeAndAccession ( String conceptClassId, String accessionTerm )
+	{
+		return this.searchByTypeAndAccession ( conceptClassId, accessionTerm, true );
+	}
+
+	/**
+	 * A wrapper of {@link LuceneQueryBuilder#searchByTypeAndName(String, String, boolean)}
+	 * that passes the accession-based query to {@link #searchInConcepts(Query)}
+	 */
+	public Set<ONDEXConcept> searchByTypeAndName ( String conceptClassId, String nameTerm, boolean isCaseSensitive )
+	{
+		try
+		{
+			var q = LuceneQueryBuilder.searchByTypeAndName ( conceptClassId, nameTerm, isCaseSensitive );
+			if (log.isDebugEnabled () ) log.debug ( "Searching by name with: {}", q );
+			return this.searchInConcepts ( q );
+		}
+		catch ( ParseException ex )
+		{
+			throw ExceptionUtils.buildEx ( IllegalArgumentException.class, ex, 
+				"Error while querying '%s':'%s': %s", conceptClassId, nameTerm, ex.getMessage ()
+			);
+		}
+	}
+
+	/**
+	 * Defaults to isCaseSensitive = true 
+	 */
+	public Set<ONDEXConcept> searchByTypeAndName ( String conceptClassId, String nameTerm )
+	{
+		return this.searchByTypeAndName ( conceptClassId, nameTerm, true );
+	}
+	
+	
+	/**
 	 * Searches in Relations and returns found Relations.
 	 * 
 	 * @param q
@@ -1097,7 +1158,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 		return searchScoredEntity ( q, CONID_FIELD, ONDEXConcept.class, n );
 	}
 	
-
 	public ScoredHits<ONDEXConcept> searchTopConceptsByIdxField ( String keywords, String idxFieldName, int resultLimit )
 	{
 		return searchTopConceptsByIdxField ( keywords, idxFieldName, null, resultLimit );
@@ -1289,9 +1349,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 	{
 		checkReadOnlyMode ();		
 
-		// ensures duplicates are not written to the Index
-		Set<String> cacheSet = new HashSet<> ( 100 );
-
 		// get textual properties
 		String conceptID = String.valueOf ( c.getId () );
 		String parserID = c.getPID ();
@@ -1352,28 +1409,28 @@ public class LuceneEnv implements ONDEXLuceneFields
 				doc.add ( new Field ( id, stripText ( accession ), ftype ));
 
 				// see rawAccession about why we do this
-				doc.add ( new Field ( id + DELIM + RAW, rawAccession ( accession ), ftype ));
+				var rawAcc = rawAccession ( accession );
+				doc.add ( new Field ( id + DELIM + RAW, rawAcc, ftype ));
+				
+				// Needed for exact search by accession independently on the source
+				doc.add ( new StringField ( CONACC_FIELD + DELIM + RAW, accession, Store.YES ) );
+				// To support case-insensitive searches too
+				doc.add ( new StringField ( CONACC_FIELD + DELIM + RAW, accession.toLowerCase (), Store.YES ) );
 			}
 		}
 
 		// start concept name handling
 		if ( cnames != null )
-		{
-
-			// add all concept names for this concept
-			for ( ConceptName cn : cnames )
-			{
-				String name = cn.getName ();
-				cacheSet.add ( LuceneEnv.stripText ( name ) );
-			}
-
-			// exclude completely equal concept names from being
-			// represented twice
-			for ( String aCacheSet : cacheSet )
-			{
-				doc.add ( new Field ( CONNAME_FIELD, aCacheSet, FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
-			}
-			cacheSet.clear ();
+		{			
+			cnames.stream ()
+			.map ( ConceptName::getName )
+			.filter ( Objects::nonNull )
+			.forEach ( nameStr -> { 
+				doc.add ( new Field ( CONNAME_FIELD, LuceneEnv.stripText ( nameStr ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
+				// Like the accession case, allows for exact searches and case-insensitive exact searches
+				doc.add ( new StringField ( CONNAME_FIELD + DELIM + RAW, nameStr, Store.YES ) );
+				doc.add ( new StringField ( CONNAME_FIELD + DELIM + RAW, nameStr.toLowerCase (), Store.YES ) );
+			});
 		}
 
 		// start concept gds processing

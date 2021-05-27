@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.core.searchable;
 
-import static java.lang.System.out;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -10,11 +9,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.apache.lucene.search.Query;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -52,8 +54,10 @@ public class LuceneEnvTest
 
 	private AttributeName at;
 
-	// private DataSource cv2;
 
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+
+	
 	public LuceneEnvTest() {
 
 	}
@@ -480,4 +484,119 @@ public class LuceneEnvTest
 		assertEquals ( "Found Relation different than expected (to)!", r1.getToConcept ().getPID (), r1.getToConcept ().getPID () );		
 	}
 
+	@Test
+	public void testSearchByTypeAndAccession() throws Exception
+	{
+		var ccA = og.getMetaData ().createConceptClass ( "A", "Concept Type A", "", null );
+		var ccB = og.getMetaData ().createConceptClass ( "B", "Concept Type B", "", null );
+		
+		ONDEXConcept concept1 = og.getFactory().createConcept ( "A1", dataSource, ccA, et );
+		concept1.createConceptAccession ( "A:1", dataSource, false );
+		concept1.createConceptAccession ( "A 2", dataSource, false );
+		concept1.createConceptAccession ( "A 1", dataSource, false );
+		concept1.createConceptAccession ( "A:3", dataSource1, false );
+		concept1.createConceptAccession ( "3", dataSource1, false );
+		
+		ONDEXConcept concept2 = og.getFactory().createConcept ( "B1", dataSource, ccB, et );
+		concept2.createConceptAccession ( "3", dataSource, false );
+		concept2.createConceptAccession ( "X:5", dataSource, false );
+		concept2.createConceptAccession ( "X 6", dataSource, false );
+		concept2.createConceptAccession ( "cs1", dataSource1, false );
+
+		ONDEXConcept concept3 = og.getFactory().createConcept ( "B2", dataSource, ccB, et );
+		concept3.createConceptAccession ( "X:4", dataSource, false );
+		concept3.createConceptAccession ( "X 7", dataSource, true );
+		concept3.createConceptAccession ( "cS1", dataSource, false );
+
+		
+		lenv.setONDEXGraph ( og );
+		
+		var concepts = testSearchByTypeAndAccession ( "A", "A:1", 1, "Wrong no. of found concepts (basic)!" );
+		assertEquals ( "Wrong fetched concept!", concept1.getPID (), concepts.iterator ().next ().getPID () );
+
+		testSearchByTypeAndAccession ( "B", "X:*", 2, "Wrong no. of found concepts (wildcard)!" );
+		testSearchByTypeAndAccession ( "A", "A 1", 1, "Wrong no. of found concepts (space)!" );
+		testSearchByTypeAndAccession ( "B", "X ?", 2, "Wrong no. of found concepts (wildcard + space)!" );
+
+		testSearchByTypeAndAccession ( "B", "X", 0, "Wrong no. of found concepts (exact matches)!" );
+		
+		testSearchByTypeAndAccession ( "B", "Cs1", false, 2, "Wrong no. of found concepts (case-insensitive)!" );
+		testSearchByTypeAndAccession ( "B", "Cs*", false, 2, "Wrong no. of found concepts (case-insensitive + wildcard)!" );
+	}
+	
+	private Set<ONDEXConcept> testSearchByTypeAndAccession ( 
+		String conceptClassId, String accessionTerm, boolean isCaseSensitive, int expectedResultSize,
+		String errMsg
+	)
+	{
+		Set<ONDEXConcept> concepts = lenv.searchByTypeAndAccession ( conceptClassId, accessionTerm, isCaseSensitive );
+		assertEquals ( errMsg, expectedResultSize, concepts.size () );
+		return concepts;
+	}
+
+	private Set<ONDEXConcept> testSearchByTypeAndAccession ( 
+		String conceptClassId, String accessionTerm, int expectedResultSize, String errMsg
+	)
+	{
+		return testSearchByTypeAndAccession ( conceptClassId, accessionTerm, true, expectedResultSize, errMsg );
+	}
+	
+	
+	
+	@Test
+	public void testSearchByTypeAndName() throws Exception
+	{
+		var ccA = og.getMetaData ().createConceptClass ( "A", "Concept Type A", "", null );
+		var ccB = og.getMetaData ().createConceptClass ( "B", "Concept Type B", "", null );
+		
+		ONDEXConcept concept1 = og.getFactory().createConcept ( "A1", dataSource, ccA, et );
+		concept1.createConceptName ( "A:1", true );
+		concept1.createConceptName ( "A 2", false );
+		concept1.createConceptName ( "A 1", false );
+		concept1.createConceptName ( "A:3", false );
+		concept1.createConceptName ( "3", false );
+		
+		ONDEXConcept concept2 = og.getFactory().createConcept ( "B1", dataSource, ccB, et );
+		concept2.createConceptName ( "3", true );
+		concept2.createConceptName ( "X:5", false );
+		concept2.createConceptName ( "X 6", false );
+		concept2.createConceptName ( "cs1", false );
+
+		ONDEXConcept concept3 = og.getFactory().createConcept ( "B2", dataSource, ccB, et );
+		concept3.createConceptName ( "X:4", true );
+		concept3.createConceptName ( "X 7", false );
+		concept3.createConceptName ( "cS1", false );
+
+		
+		lenv.setONDEXGraph ( og );
+		
+		var concepts = testSearchByTypeAndName ( "A", "A:1", 1, "Wrong no. of found concepts (basic)!" );
+		assertEquals ( "Wrong fetched concept!", concept1.getPID (), concepts.iterator ().next ().getPID () );
+
+		testSearchByTypeAndName ( "B", "X:*", 2, "Wrong no. of found concepts (wildcard)!" );
+		testSearchByTypeAndName ( "A", "A 1", 1, "Wrong no. of found concepts (space)!" );
+		testSearchByTypeAndName ( "B", "X ?", 2, "Wrong no. of found concepts (wildcard + space)!" );
+
+		testSearchByTypeAndName ( "B", "X", 0, "Wrong no. of found concepts (exact matches)!" );
+		
+		testSearchByTypeAndName ( "B", "Cs1", false, 2, "Wrong no. of found concepts (case-insensitive)!" );
+		testSearchByTypeAndName ( "B", "Cs*", false, 2, "Wrong no. of found concepts (case-insensitive + wildcard)!" );
+	}
+	
+	private Set<ONDEXConcept> testSearchByTypeAndName ( 
+		String conceptClassId, String accessionTerm, boolean isCaseSensitive, int expectedResultSize,
+		String errMsg
+	)
+	{
+		Set<ONDEXConcept> concepts = lenv.searchByTypeAndName ( conceptClassId, accessionTerm, isCaseSensitive );
+		assertEquals ( errMsg, expectedResultSize, concepts.size () );
+		return concepts;
+	}
+
+	private Set<ONDEXConcept> testSearchByTypeAndName ( 
+		String conceptClassId, String accessionTerm, int expectedResultSize, String errMsg
+	)
+	{
+		return testSearchByTypeAndName ( conceptClassId, accessionTerm, true, expectedResultSize, errMsg );
+	}	
 }

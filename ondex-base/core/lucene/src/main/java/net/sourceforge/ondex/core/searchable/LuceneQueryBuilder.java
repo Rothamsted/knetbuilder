@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
@@ -617,7 +618,76 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		return boolQb.build ();
 	}
 	
+	
+	/**
+	 * Searches concepts based on exact matching of the accession query (independently on the source).
+	 * It accepts Lucene query operators ('*', '?', '-')
+	 */
+	public static Query searchByTypeAndAccession ( String conceptClassId, String accessionTerm, boolean isCaseSensitive )
+		throws ParseException
+	{		
+		var fieldId = CONACC_FIELD + DELIM + RAW;
+		var qp = new QueryParser ( fieldId, LuceneEnv.DEFAULTANALYZER );
+		qp.setLowercaseExpandedTerms ( !isCaseSensitive );
 		
+		// TODO: move to its own function
+		var toEscape = "\\+-&|!(){}[]\":/ ";
+		for ( var c: toEscape.toCharArray () )
+			accessionTerm = accessionTerm.replace ( "" + c, "\\" + c );
+		
+		accessionTerm = isCaseSensitive
+			? String.format ( "%s:%s", fieldId, accessionTerm )
+			: String.format ( "%s:%s OR %s:%s", fieldId, accessionTerm.toUpperCase (), fieldId, accessionTerm.toLowerCase () );
+		
+		return new BooleanQuery.Builder ()
+			.add ( new TermQuery ( new Term ( CC_FIELD, conceptClassId ) ), Occur.MUST )
+			.add ( qp.parse ( accessionTerm ), Occur.MUST )
+			.build ();
+	}
+	
+	/**
+	 * Defaults to case-sensitive. 
+	 */
+	public static Query searchByTypeAndAccession ( String conceptClassId, String accessionTerm ) throws ParseException
+	{
+		return searchByTypeAndAccession ( conceptClassId, accessionTerm, true );
+	}
+
+	/**
+	 * Searches concepts based on exact matching of the name query.
+	 * It accepts Lucene query operators ('*', '?', '-')
+	 */
+	public static Query searchByTypeAndName ( String conceptClassId, String nameTerm, boolean isCaseSensitive )
+		throws ParseException
+	{		
+		var fieldId = CONNAME_FIELD + DELIM + RAW;
+		var qp = new QueryParser ( fieldId, LuceneEnv.DEFAULTANALYZER );
+		qp.setLowercaseExpandedTerms ( !isCaseSensitive );
+		
+		// TODO: move to its own function
+		var toEscape = "\\+-&|!(){}[]\":/ ";
+		for ( var c: toEscape.toCharArray () )
+			nameTerm = nameTerm.replace ( "" + c, "\\" + c );
+		
+		nameTerm = isCaseSensitive
+			? String.format ( "%s:%s", fieldId, nameTerm )
+			: String.format ( "%s:%s OR %s:%s", fieldId, nameTerm.toUpperCase (), fieldId, nameTerm.toLowerCase () );
+		
+		return new BooleanQuery.Builder ()
+			.add ( new TermQuery ( new Term ( CC_FIELD, conceptClassId ) ), Occur.MUST )
+			.add ( qp.parse ( nameTerm ), Occur.MUST )
+			.build ();
+	}
+		
+	/**
+	 * Defaults to case-sensitive. 
+	 */
+	public static Query searchByTypeAndName ( String conceptClassId, String nameTerm ) throws ParseException
+	{
+		return searchByTypeAndAccession ( conceptClassId, nameTerm, true );
+	}	
+	
+	
 
 	/**
 	 * Builds a {@link BooleanQuery} (with {@link BooleanClause.Occur#SHOULD}) where each clause
