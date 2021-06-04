@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Reader;
 
 import org.biopax.paxtools.io.BioPAXIOHandler;
 import org.biopax.paxtools.io.SimpleIOHandler;
@@ -124,18 +125,13 @@ public class Parser extends ONDEXParser {
 	 */
 	private void populateMapping(File file) throws Exception {
 
-		// open translation.tab
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		while (reader.ready()) {
-			String line = reader.readLine();
-			// skip comments
-			if (!line.startsWith("#")) {
-				// split at TAB and check length
-				String[] split = line.split("\t");
-				if (split.length == 2) {
-					DefaultHandler.cvMap.put(split[0], split[1]);
-				}
-			}
+		try ( var reader = new BufferedReader(new FileReader ( file ) ) )
+		{
+			reader.lines ()
+			.filter ( line -> !line.startsWith ( "#" ) ) // comments
+			.map ( line -> line.split ( "\t" ) )
+			.filter ( values -> values.length >= 2 )
+			.forEach ( values -> DefaultHandler.cvMap.put ( values [ 0 ], values [ 1 ] ) );
 		}
 	}
 
