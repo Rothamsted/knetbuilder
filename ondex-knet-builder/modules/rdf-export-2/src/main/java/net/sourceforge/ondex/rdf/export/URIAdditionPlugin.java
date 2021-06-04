@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.rdf.export;
 
+import static net.sourceforge.ondex.core.util.ONDEXGraphUtils.getOrCreateAttributeName;
 import static uk.ac.ebi.utils.exceptions.ExceptionUtils.buildEx;
 import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
 
@@ -29,7 +30,6 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.CachedGraphWrapper;
 import net.sourceforge.ondex.rdf.export.mappers.ConceptMapper;
 import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
 import net.sourceforge.ondex.rdf.export.mappers.RelationMapper;
@@ -222,9 +222,8 @@ public class URIAdditionPlugin extends ONDEXTransformer
 		  "{}% of " + typeStr + "s done", odxEntities.size ()		
 		);
 		
-		CachedGraphWrapper gwrap = CachedGraphWrapper.getInstance ( this.graph );		
-		AttributeName uriAttributeType = gwrap.getAttributeName ( 
-			this.uriAttributeId, this.uriAttributeFullName, this.uriAttributeDescription, String.class 
+		AttributeName uriAttributeType = getOrCreateAttributeName ( 
+			graph, this.uriAttributeId, this.uriAttributeFullName, this.uriAttributeDescription, String.class 
 		);
 		
 		// This is how the URI generator receives the instance namespace

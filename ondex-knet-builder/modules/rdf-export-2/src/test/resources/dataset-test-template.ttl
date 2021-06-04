@@ -15,13 +15,16 @@ bkg:wheat a schema:Dataset;
 
 bkr:rresOrg a schema:Organization;
   schema:name "Knetminer Team at Rothamsted Research";
+  schema:legalName "Rothamsted Research";
+
 	schema:description 
 """We provide digital technologies and innovations for getting the right data to the right people in the right format at the right time.
 
 We are part of Rothamsted Research, a world-leading, non-profit research centre that focuses on strategic agricultural science to the benefit of farmers and society worldwide.""";
-  schema:legalName "Rothamsted Research";
+
 	# EDAM is used as per bioschemas profile, for each onto term the pref label is reported too in the
 	# keywords property, as a matter of convenience. Mixing URIs and strings creates problems with JSON-LD.
+	#
 	bioschema:topic 
 	  edam:topic_3810, 
     edam:topic_3053, 
