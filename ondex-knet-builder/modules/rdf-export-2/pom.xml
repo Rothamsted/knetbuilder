@@ -1,183 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <parent>
-      <artifactId>modules</artifactId>
-      <groupId>net.sourceforge.ondex</groupId>
-      <version>4.0-SNAPSHOT</version>
-   </parent>
-   
-   <groupId>net.sourceforge.ondex.modules</groupId>
-   <artifactId>rdf-export-2</artifactId>
+<project 
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>modules</artifactId>
+		<groupId>net.sourceforge.ondex</groupId>
+		<version>4.0-SNAPSHOT</version>
+	</parent>
 
-   <name>Ondex RDF Exporter</name>
-   <description>
-   	Tools to manage RDF export from ONDEX graphs.
-   	See src/main/java/net/sourceforge/ondex/rdf/export/package-info.java for details.
-   </description>
-   
- 	 <developers>
-	   <developer>
-		   <name>Marco Brandizi</name>
-			 <url>https://github.com/marco-brandizi</url>
-		 </developer>
-	 </developers>
-   
-   <dependencies>
-   		
-   		<dependency>
-				<groupId>${project.groupId}</groupId>
-   			<artifactId>rdf-common</artifactId>
-			  <version>${project.version}</version>
-   		</dependency>
-   		
-			<dependency>
-				<artifactId>api</artifactId>
-			  <groupId>net.sourceforge.ondex.core</groupId>
-			  <version>${project.version}</version>
-		    <scope>provided</scope>   		  
-			</dependency>
-      
-      <dependency>
-        <groupId>net.sourceforge.ondex.core</groupId>
-        <artifactId>workflow-api</artifactId>
-        <version>${project.version}</version>
-        <scope>provided</scope>
-      </dependency>
+	<groupId>net.sourceforge.ondex.modules</groupId>
+	<artifactId>rdf-export-2</artifactId>
 
-      <dependency>
-         <groupId>net.sourceforge.ondex.core</groupId>
-         <artifactId>memory</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-            
-      <dependency>
-         <groupId>log4j</groupId>
-         <artifactId>log4j</artifactId>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>log4j</groupId>
-         <artifactId>log4j</artifactId>
-         <scope>test</scope>
-      </dependency>
+	<name>Ondex RDF Exporter</name>
+	<description>
+  	Tools to manage RDF export from ONDEX graphs.
+  	See src/main/java/net/sourceforge/ondex/rdf/export/package-info.java for details.
+  </description>
 
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<scope>test</scope>
-			</dependency>
-            
-			<dependency>
-			  <groupId>info.marcobrandizi</groupId>
-			  <artifactId>rdfutils-jena</artifactId>
-			</dependency>
-      
-			<dependency>
-			  <groupId>uk.ac.ebi.fg</groupId>
-			  <artifactId>java2rdf</artifactId>
-			  <version>3.0-SNAPSHOT</version>
-			</dependency>      
+	<developers>
+		<developer>
+			<name>Marco Brandizi</name>
+			<url>https://github.com/marco-brandizi</url>
+		</developer>
+	</developers>
 
-			<dependency>
-			  <groupId>org.apache.commons</groupId>
-			  <artifactId>commons-rdf-jena</artifactId>
-			  <version>0.5.0</version>
-			  <exclusions>
-					<exclusion>
-						<groupId>org.apache.jena</groupId>
-						<artifactId>jena-osgi</artifactId>
-					</exclusion>		  
-			  </exclusions>
-			</dependency>
+	<dependencies>
 
-			<dependency>
-				<groupId>org.apache.jena</groupId>
-				<artifactId>jena-osgi</artifactId>
-			</dependency>		  
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>rdf-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-			<dependency>
-			  <groupId>org.apache.commons</groupId>
-			  <artifactId>commons-collections4</artifactId>
-			</dependency>
+		<dependency>
+			<artifactId>api</artifactId>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-			<dependency>
-				<groupId>net.sourceforge.ondex.modules</groupId>
-				<artifactId>oxl</artifactId>
-				<version>${project.version}</version>
-				<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
-				<scope>test</scope>
-			</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>workflow-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
-			<dependency>
-				<groupId>uk.ac.ebi</groupId>
-				<artifactId>jutils-io</artifactId>
-				<scope>test</scope>
-			</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>memory</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-   </dependencies>
-   
-   <build>
-   
-      <plugins>
-      
-			  <plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-surefire-plugin</artifactId>
-			    <version>2.20</version>			    
-			    <configuration>
-             <forkCount>1</forkCount>
-             <!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
-             <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
-             <argLine>-XX:MaxRAM=4g -Dondex.dir=/tmp</argLine>                          
-			    </configuration>
-			  </plugin>
-      
-      
-        <plugin>
-	        <artifactId>maven-assembly-plugin</artifactId>
-	        <executions>
-	        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
-						<execution>
-							<id>make-assembly-packaged_with_jars</id>
-							<phase />
-						</execution>    
-	             
-						<execution>
-						  <id>assembly-bundle</id>
-						  <phase>package</phase>
-						  <goals>
-						     <goal>attached</goal>
-						  </goals>
-						  <configuration>
-						     <descriptors>
-						     	<descriptor>src/main/assembly/bundle.xml</descriptor>
-						     </descriptors>
-						  </configuration>
-						</execution>
-	        </executions>
-        </plugin>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-			 <!-- We have some test files that we reuse in the mini-integration-tests -->				      
-			 <plugin>
-			   <groupId>org.apache.maven.plugins</groupId>
-				 <artifactId>maven-jar-plugin</artifactId>
-				 <executions>
-				   <execution>
-				     <goals>
-				       <goal>test-jar</goal>
-				     </goals>
-				   </execution>
-				 </executions>
-			 </plugin>
-				         
-      </plugins>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-   </build>
-   
-   <repositories>
-   </repositories>   
+		<dependency>
+			<groupId>info.marcobrandizi</groupId>
+			<artifactId>rdfutils-jena</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>uk.ac.ebi.fg</groupId>
+			<artifactId>java2rdf</artifactId>
+			<version>3.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-rdf-jena</artifactId>
+			<version>0.5.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.jena</groupId>
+					<artifactId>jena-osgi</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-osgi</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.modules</groupId>
+			<artifactId>oxl</artifactId>
+			<version>${project.version}</version>
+			<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jutils-io</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<forkCount>1</forkCount>
+					<!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->
+					<forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
+					<argLine>-XX:MaxRAM=4g -Dondex.dir=/tmp</argLine>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+					<execution>
+						<id>make-assembly-packaged_with_jars</id>
+						<phase />
+					</execution>
+
+					<execution>
+						<id>assembly-bundle</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/bundle.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- We have some test files that we reuse in the mini-integration-tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
 
 </project>

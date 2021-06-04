@@ -31,7 +31,11 @@
       </dependency>
    </dependencies>
 
-   <reporting>
+	<!-- 
+		TODO: remove, if something is needed from reporting, it's only the javadoc (spawns the 
+		plugin descriptors).
+	 -->
+   <!-- reporting>
       <plugins>
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
@@ -50,7 +54,7 @@
             <artifactId>maven-javadoc-plugin</artifactId>
          </plugin>
       </plugins>
-   </reporting>
+   </reporting -->
 
    <build>
       <plugins>

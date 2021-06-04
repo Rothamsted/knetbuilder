@@ -33,7 +33,11 @@
 		<module>neo4j-export</module>
   </modules>
 
-	<reporting>
+	<!-- 
+		TODO: remove, if something is needed from reporting, it's only the javadoc (spawns the 
+		plugin descriptors).
+	 -->
+	<!-- reporting>
   	<plugins>
 			<plugin>
 			  <groupId>org.codehaus.mojo</groupId>
@@ -47,8 +51,6 @@
 			  <groupId>org.apache.maven.plugins</groupId>
 			  <artifactId>maven-project-info-reports-plugin</artifactId>
 			</plugin>
-			<!-- TODO: We're already using FindBugs and this needs to be updated anyway -->
-			<!--         
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
@@ -60,13 +62,13 @@
 				   <targetJdk>${java.version}</targetJdk>
 				</configuration>
 			</plugin>
-			-->
 			<plugin>
 			 <groupId>org.apache.maven.plugins</groupId>
 			 <artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
   	</plugins>
-	</reporting>
+  	
+	</reporting -->
 
   <build>		
 		<plugins>

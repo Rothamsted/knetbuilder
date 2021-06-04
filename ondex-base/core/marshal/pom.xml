@@ -42,4 +42,5 @@
 	     <artifactId>xstream</artifactId>
 	   </dependency>
    </dependencies>
+   
 </project>
