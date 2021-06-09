@@ -1,7 +1,6 @@
 package net.sourceforge.ondex.marshal;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * Main Utils class to support conversion of Objects to XML and back.
@@ -15,15 +14,9 @@ public class Marshaller
 
 	private static Marshaller marshaller = null;
 
-	// TODO: this is going to be problematic with JDK > 11
+	// There was a potential problem related to JDK > 11
 	// https://github.com/x-stream/xstream/issues/101
-	// a replacement will probably be needed.
-	
-	// A possible workaround in a comment to the issue cited above:
-	//
-	// "My workaround was to override the setupConverters() method and omit the "broken" converters 
-	// (ExternalizableConverter, TreeMapConverter, TreeSetConverter, PropertiesConverter, DynamicProxyConverter)."
-	//
+	// Which it should be fixed with the latest xstream version.
 	private static XStream xstream = new XStream ();
 
 	private Marshaller () {}
