@@ -5,6 +5,7 @@
   * Code changes:
   	* POMs cleaning/refactoring
   	* Some code cleaning/refactoring
+  * TODO: Review from 3.0
 
 ## 3.0.1-SNAPSHOT
 * Next dev release.
