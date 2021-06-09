@@ -1193,7 +1193,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 			return parser.parse ( keywords );
 		}
 		catch ( ParseException ex ) {
-			throw new IllegalArgumentException ( "Internal error while searchin over Ondex index: " + ex.getMessage (), ex );
+			throw new IllegalArgumentException ( "Internal error while searching over Ondex index: " + ex.getMessage (), ex );
 		}
 	}
 
