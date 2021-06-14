@@ -304,7 +304,8 @@ public class Parser extends ONDEXParser {
 								etIMPD);
 						c2.createConceptName(secuenceName, true);
 						c2.createConceptAccession(secuenceName, dsAccession, false);
-						c2.createAttribute(anSecuenceAA, secuence, false);
+						// Don't store sequence to reduce memory consumption
+						// c2.createAttribute(anSecuenceAA, secuence, false);
 						c2.createAttribute(anTaxid, taxid, false);
                                                 // System.out.println("ondex2protein: sequenceName= "+ secuenceName +", c2.id= "+ c2.getId());
 						ondex2protein.put(secuenceName, c2.getId());
@@ -324,7 +325,8 @@ public class Parser extends ONDEXParser {
 			ONDEXConcept c2 = graph.getFactory().createConcept(secuenceName, "", "", dsConcept, ccProtein, etIMPD);
 			c2.createConceptName(secuenceName, true);
 			c2.createConceptAccession(secuenceName, dsAccession, false);
-			c2.createAttribute(anSecuenceAA, secuence, false);
+			// Don't store sequence to reduce memory consumption
+			// c2.createAttribute(anSecuenceAA, secuence, false);
 			ondex2protein.put(secuenceName, c2.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
