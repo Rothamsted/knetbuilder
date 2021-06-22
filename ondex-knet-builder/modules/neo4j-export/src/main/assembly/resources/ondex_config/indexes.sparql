@@ -5,22 +5,33 @@ PREFIX bk: <http://knetminer.org/data/rdf/terms/biokno/>
 PREFIX bkr: <http://knetminer.org/data/rdf/resources/>
 PREFIX bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/>
 
-SELECT ?label ?propertyName
+SELECT ?label ?propertyName ?isRelation
 {
   {
-		VALUES ( ?label ?propertyName )
+		VALUES ( ?label ?propertyName ?isRelation )
 		{
-			( '*' dcterms:identifier )
-			( '*' bk:prefName )
-			( '*' bk:altName )
-			( '*' rdfs:label )
+			( '*' dcterms:identifier false )
+			( '*' bk:prefName false )
+			( '*' bk:altName false )
+			( '*' rdfs:label false )
+			( '*' rdfs:label true )
+			
+			# New Neo 4.3 indexing at label/relation-type level
+	  	( '*' '_type_' false)
+	  	( '*' '_type_' true)
 		}
 	}
 		
-	UNION {
+	UNION 
+	{
+		# All the Ondex-indexed properties are indexed in Neo, both for 
+		# nodes and relations
+		#
 	  ?propertyName rdfs:subPropertyOf* bk:attribute;
 					  bk:isIndexed true.
-	  
 	  BIND ( '*' AS ?label )
+
+	  { BIND ( true as ?isRelation ) }
+	  UNION { BIND ( false as ?isRelation ) }
 	}
 }
