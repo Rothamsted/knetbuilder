@@ -49,7 +49,7 @@ public class JsonLdUtils
 	
 	/**
 	 * Turns a Jena model into JSON-LD. if doSimplify is on, transforms the original JSON-LD (a JSON object 
-	 * containing @graph and @context at its root) into a map of URI -> object, with the special
+	 * containing @graph and @context at its root) into a map of URI -> object, with a special
 	 * object having the '@context' key. 
 	 */
 	public static Map<String, Object> rdf2JsonLd ( Model model, boolean doSimplify )
