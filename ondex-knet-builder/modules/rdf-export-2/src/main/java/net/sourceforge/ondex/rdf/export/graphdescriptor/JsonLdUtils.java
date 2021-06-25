@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -46,6 +48,18 @@ public class JsonLdUtils
 		result.read ( rdfReader, null, rdfLang );
 		return result;
 	}
+	
+	public static Model getRdfFromUris ( String contextUri, String rdfTemplateUri, String rdfLang )
+	{
+		return null; // TODO
+	}
+	
+	
+	public static Map<String, Object> getProperties ( String uri )
+	{
+		return null; // TODO
+	}
+	
 	
 	/**
 	 * Turns a Jena model into JSON-LD. if doSimplify is on, transforms the original JSON-LD (a JSON object 

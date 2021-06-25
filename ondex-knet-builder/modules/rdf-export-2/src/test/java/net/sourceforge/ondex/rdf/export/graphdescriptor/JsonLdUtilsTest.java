@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.riot.RDFLanguages;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -133,4 +135,12 @@ public class JsonLdUtilsTest
 		// TODO: test Dataset
 	}
 	
+	@Test // TODO: foo test to check this Jena feature, to be remove later
+	public void testPathNameToLang ()
+	{
+		assertEquals ( "pathnameToLang() didn't work!",
+			"Turtle", 
+			RDFLanguages.pathnameToLang ( "test.ttl" ).getName ()
+		);
+	}
 }
