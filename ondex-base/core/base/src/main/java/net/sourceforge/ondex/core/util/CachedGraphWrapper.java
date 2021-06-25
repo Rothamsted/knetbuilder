@@ -78,7 +78,7 @@ public class CachedGraphWrapper
 	}
 
 	
-	public CachedGraphWrapper ( ONDEXGraph graph )
+	private CachedGraphWrapper ( ONDEXGraph graph )
 	{
 		this.graph = graph;
 	}
