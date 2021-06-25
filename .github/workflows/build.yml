@@ -2,8 +2,8 @@ name: Standard Build
 
 on:
   schedule:
-  #  m h d M wd(MON-SUN)
-  - cron: "0 10 * * *"
+  #  m h d M wd(MON-SUN), times are in UTC
+  - cron: "0 9 * * *"
   
   workflow_dispatch:
     inputs:
