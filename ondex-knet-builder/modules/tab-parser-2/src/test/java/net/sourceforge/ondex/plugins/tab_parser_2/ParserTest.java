@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.io.Resources;
@@ -23,6 +25,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.util.ONDEXGraphOperations;
+import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.plugins.tab_parser_2.config.ConfigParser;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
 
@@ -37,7 +40,7 @@ public class ParserTest
 {
 	private Logger log = Logger.getLogger ( this.getClass () );
 	
-	//@Test
+	@Test
 	public void testTutorialGeneEx () throws Exception
 	{
 		Reader schemaReader = new InputStreamReader ( 
@@ -214,7 +217,9 @@ public class ParserTest
 		assertEquals ( "Shouldn't have any (variable) attribute!", 1, noAttrGene.getAttributes ().size () );		
 	}
 	
-	
+	/**
+	 * Shows that relations are duplicated when occurring in multiple rows
+	 */
 	@Test
 	public void testDupedRelation () throws Exception
 	{
@@ -228,9 +233,75 @@ public class ParserTest
 			schemaReader, graph, "target/test-classes/duped_relations/duped_rels.tsv" 
 		);
 		//pp.setProcessingOptions ( PathParser.MERGE_ACC, PathParser.MERGE_NAME, PathParser.MERGE_GDS );
+		// Resets MERGE_ACC
 		pp.setProcessingOptions ( new String [ 0 ] );
 		pp.parse ();
 		
 		ONDEXGraphOperations.dumpAll ( graph );
+		
+		assertEquals ( "Relation count is wrong!", 4, graph.getRelations ().size () );
 	}
+
+
+	@Test
+	public void testDynamicConcepts () throws Exception
+	{
+		Reader schemaReader = new InputStreamReader ( 
+			Resources.getResource ( this.getClass (), "/dynamic-types/dynamic-concepts-cfg.xml" ).openStream (),
+			"UTF-8"
+		);
+		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
+
+		PathParser pp = ConfigParser.parseConfigXml ( 
+			schemaReader, graph, "target/test-classes/dynamic-types/dynamic-concepts.tsv" 
+		);
+		pp.setProcessingOptions ( new String [ 0 ] );
+		pp.parse ();
+		
+		ONDEXGraphOperations.dumpAll ( graph );
+		
+		var concepts = graph.getConceptsOfConceptClass ( ONDEXGraphUtils.getConceptClass ( graph, "Gene" ) );
+		assertEquals ( "Wrong count for gene concepts!", 2, concepts.size () );
+		
+		concepts = graph.getConceptsOfConceptClass ( ONDEXGraphUtils.getConceptClass ( graph, "GOTerm" ) );
+		assertEquals ( "Wrong count for gene concepts!", 1, concepts.size () );
+		var concept = concepts.iterator ().next ();
+		assertEquals ( "Wrong PID for the test concept!", "Apoptosis", concept.getPID () );
+		assertEquals ( "Wrong concept test attribute", 
+			"Foo term",
+			ONDEXGraphUtils.getAttribute ( graph, concept, "Notes" ).getValue ().toString ()
+		);
+
+	}
+	
+	@Test
+	public void testDynamicRelations () throws Exception
+	{
+		Reader schemaReader = new InputStreamReader ( 
+			Resources.getResource ( this.getClass (), "/dynamic-types/dynamic-rels-cfg.xml" ).openStream (),
+			"UTF-8"
+		);
+		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
+
+		PathParser pp = ConfigParser.parseConfigXml ( 
+			schemaReader, graph, "target/test-classes/dynamic-types/dynamic-rels.tsv" 
+		);
+		pp.setProcessingOptions ( new String [ 0 ] );
+		pp.parse ();
+		
+		ONDEXGraphOperations.dumpAll ( graph );
+		
+		var rels = graph.getRelationsOfRelationType ( ONDEXGraphUtils.getRelationType ( graph, "ortho" ) );
+		assertEquals ( "Wrong count for ortho relations!", 1, rels.size () );
+		
+		var rel = rels.iterator ().next ();
+		assertEquals ( "Wrong relation test attribute", 
+			"Note 1",
+			ONDEXGraphUtils.getAttribute ( graph, rel, "TestRelationAttribute" ).getValue ().toString ()
+		);
+		
+		rels = graph.getRelationsOfRelationType ( ONDEXGraphUtils.getRelationType ( graph, "para" ) );
+		assertEquals ( "Wrong count for para relations!", 2, rels.size () );
+	}	
+	
 }

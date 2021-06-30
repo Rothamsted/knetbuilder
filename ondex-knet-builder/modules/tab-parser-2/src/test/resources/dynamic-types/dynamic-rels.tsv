@@ -1,0 +1,4 @@
+Gene 1 ID	Gene 2 ID	Relation Type	Gene 1 Note	Gene 2 Note	Relation Note
+Gene 1	Ortho Gene 1	ortho	Cool Gene	Nice Gene	Note 1
+Gene 2	Paralog Gene 2	para	Fancy Gene		Note 2
+Gene 1	Paralog Gene 3	para			Note 3

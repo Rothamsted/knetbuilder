@@ -332,10 +332,12 @@ public class ConfigParser
 	}
 
 	/**
-	 * Extracts an AttributePrototype definition from the XML and, if not null, adds it to a concept.
-	 * This is used by {@link #collectConcept(Element, PathParser)}.
+	 * Extracts an AttributePrototype definition from the XML and, if not null, adds it to a concept or
+	 * relation.
+	 * 
+	 * This is used by {@link #collectConcept(Element, PathParser)} and {@link #collectRelation(Element, PathParser, Map)}.
 	 *  
-	 * @param parent the concept/relationType to which the AttributePrototype is added
+	 * @param parent the concept/relation prototype to which the AttributePrototype is added
 	 * @param childElem the child XML element (of xml type tab:ColumnOrValue) that defines the attribute 
 	 * (e.g., "class") 
 	 * @param methodName the method in {@link DefConst} to invoke to define the new AttributePrototype 

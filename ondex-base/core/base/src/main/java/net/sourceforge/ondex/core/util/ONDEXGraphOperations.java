@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.core.util;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
@@ -72,6 +74,12 @@ public class ONDEXGraphOperations
 			.collect ( Collectors.joining ( ",", "[", "]" ) );
 		};
 		
+		Consumer<ONDEXEntity> attrsDumper = e -> 
+			e.getAttributes ()
+			.forEach ( a -> log.info ( String.format ( 
+				"\t attribute: '%s': '%s'", a.getOfType ().getId (), a.getValue ()  
+			)));
+		
 		concepts.forEach ( c -> 
 		{
 		  log.info ( String.format ( 
@@ -81,19 +89,19 @@ public class ONDEXGraphOperations
 		  	c.getPID (),
 		  	accsDumper.apply ( c )  
 		  ));
+		  attrsDumper.accept ( c );
 		});
 		
 		graph.getRelations ().forEach ( r -> 
 		{
 			log.info ( String.format ( 
-				"Relation: '%s', from: '%s', to: '%s'", 
+				"Relation: <%s:%d>, from: '%s', to: '%s'",
 				r.getOfType ().getId (),
+				r.getId (),
 				r.getFromConcept ().getPID (),
 				r.getToConcept ().getPID ()
 			));
-			r.getAttributes ().forEach ( a -> log.info ( String.format ( 
-				"\t attribute: '%s', '%s'", a.getOfType ().getFullname (), a.getValue ()  
-			)));
+		  attrsDumper.accept ( r );
 		});		
 	}
 
