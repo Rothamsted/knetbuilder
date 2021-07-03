@@ -42,7 +42,8 @@ public class JsonLdUtilsTest
 	{
 		String rdfTpl = IOUtils.readResource ( JsonLdUtils.class, "dataset-test-template.ttl" );
 		Map<String, Object> values = new HashMap<> ();
-		values.put ( "datasetId", "KnetMiner:Triticum_aestivum" );
+		values.put ( "datasetId", "wheat" );
+		values.put ( "datasetAccession", "KnetMiner:Triticum_aestivum" );
 		values.put ( "datasetTitle", "Knetminer's knowledge graph about wheat (Triticum aestivum)" );
 		values.put ( 
 			"datasetDescription", 

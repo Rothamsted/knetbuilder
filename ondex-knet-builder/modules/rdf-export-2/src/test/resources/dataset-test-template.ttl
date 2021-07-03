@@ -4,8 +4,8 @@
 @prefix bkg: <http://knetminer.org/data/rdf/resources/graphs/>.
 @prefix edam: <http://edamontology.org/>.
 
-bkg:wheat a schema:Dataset;
-  schema:identifier "${datasetId}";
+bkg:${datasetId} a schema:Dataset;
+  schema:identifier "${datasetAccession}";
 	schema:name "${datasetTitle}";
 	schema:description """${datasetDescription}""";
 	schema:url "https://knetminer.com/Triticum_aestivum/html/release.html";
