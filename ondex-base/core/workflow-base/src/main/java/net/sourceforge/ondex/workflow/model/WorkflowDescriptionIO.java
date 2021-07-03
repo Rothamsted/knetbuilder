@@ -202,7 +202,7 @@ public class WorkflowDescriptionIO {
             List<BoundArgumentValue> ads = new ArrayList<BoundArgumentValue>();
             PluginDescription pb = pr.getPluginDescription(PluginType.getType(c.getName()), c.getAttributeValue("name"));
             if (pb == null) {
-                System.err.println("Missing plugin " + c.getName());
+                System.err.println("Missing plugin " + c.getName() + ":" + c.getAttributeValue ( "name" ) );
                 continue;
             }
 

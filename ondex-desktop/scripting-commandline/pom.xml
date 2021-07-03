@@ -23,6 +23,12 @@
          <version>${project.version}</version>
          <scope>compile</scope>
       </dependency>
+
+			<dependency>
+				<groupId>uk.ac.ebi</groupId>
+				<artifactId>jutils</artifactId>
+			</dependency>
+
    </dependencies>
 
 </project>

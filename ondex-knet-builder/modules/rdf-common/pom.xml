@@ -24,6 +24,11 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jutils</artifactId>
+		</dependency>
+
     <dependency>
       <groupId>info.marcobrandizi</groupId>
       <artifactId>rdfutils-core</artifactId>

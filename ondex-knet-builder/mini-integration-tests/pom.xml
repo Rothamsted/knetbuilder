@@ -124,8 +124,6 @@
 									<classifier>packaged-distro</classifier>
 									<type>zip</type>
 									<outputDirectory>${project.build.directory}</outputDirectory>
-									<!-- excludes>**/log4j-over-slf4j-*.jar</excludes -->
-									<!-- excludes>**/lib/base-*.jar,**/plugins/base-*.jar</excludes -->
 								</artifactItem>
 								<artifactItem>
 									<groupId>net.sourceforge.ondex.modules</groupId>
@@ -166,6 +164,16 @@
 				</executions>
 			</plugin>
 
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-surefire-plugin</artifactId>
+ 				<configuration>
+					<systemPropertyVariables>
+						<maven.buildDirectory>${project.build.directory}</maven.buildDirectory>
+					</systemPropertyVariables>
+				</configuration>			  
+			</plugin>
+			
 			<!-- Tests workflows, using the whole ONDEX-mini -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

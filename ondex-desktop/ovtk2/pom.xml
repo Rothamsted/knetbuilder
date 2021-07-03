@@ -102,44 +102,13 @@
       <finalName>${project.artifactId}-${project.version}</finalName>
    </build>
 
-	<!-- 
-		TODO: remove, if something is needed from reporting, it's only the javadoc (spawns the 
-		plugin descriptors).
-	 -->
-   <!-- reporting>
-      <plugins>
-         <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>taglist-maven-plugin</artifactId>
-            <version>${mojo.taglist.maven.plugin.version}</version>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-project-info-reports-plugin</artifactId>
-         </plugin>
-	 			 <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-pmd-plugin</artifactId>
-            <version>${maven.pmd.plugin.version}</version>
-            <configuration>
-               <linkXref>true</linkXref>
-               <sourceEncoding>ISO-8859-1</sourceEncoding>
-               <minimumTokens>100</minimumTokens>
-               <targetJdk>${java.version}</targetJdk>
-            </configuration>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-         </plugin>
-      </plugins>
-   </reporting -->
-
    <dependencies>
+
+			<dependency>
+				<groupId>uk.ac.ebi</groupId>
+				<artifactId>jutils</artifactId>
+			</dependency>
+   
       <dependency>
          <groupId>net.java.dev.glazedlists</groupId>
          <artifactId>glazedlists_java15</artifactId>
@@ -314,25 +283,6 @@
          <artifactId>swizzle-jira</artifactId>
          <version>1.6.1</version>
       </dependency>
-
-      <!-- Popup deps       
-      <dependency>
-         <groupId>uk.ac.ebi</groupId>
-         <artifactId>IPRScan</artifactId>
-         <version>May2011</version>
-      </dependency>
-
-      <dependency>
-         <groupId>uk.ac.ebi</groupId>
-         <artifactId>NCBIBlast</artifactId>
-         <version>May2011</version>
-      </dependency>
-
-      <dependency>
-         <groupId>com.blogspot.illya-keeplearning</groupId>
-         <artifactId>suffix-tree</artifactId>
-         <version>1.0</version>
-      </dependency -->
 
       <dependency>
          <groupId>org.apache.axis</groupId>

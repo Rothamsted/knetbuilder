@@ -4,11 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.system.Txn;
-import org.apache.jena.tdb.TDBFactory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -57,6 +54,7 @@ public class Neo4jWfIT
 	public void test10_RdfWf ()
 	{
 		MiniInvoker invoker = new MiniInvoker ();
+		invoker.setMiniStartDirPath ( mavenBuildPath + "ondex-mini" );
 		invoker.invoke ( wfPath + "tm_rdf_wf.xml" );
 		
 		// Test the RDF

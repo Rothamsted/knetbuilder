@@ -53,12 +53,11 @@
          <artifactId>jaxrpc-api</artifactId>
          <version>1.1</version>
       </dependency>
-      <!-- TODO: remove, it's not used and not available anymore -->
-      <!--  dependency>
-         <groupId>org.apache.commons</groupId>
-         <artifactId>com.springsource.org.apache.commons.discovery</artifactId>
-         <version>0.4.0</version>
-      </dependency -->
+
+			<dependency>
+				<groupId>uk.ac.ebi</groupId>
+				<artifactId>jutils</artifactId>
+			</dependency>
 
    </dependencies>
 </project>

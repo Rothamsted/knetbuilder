@@ -1,5 +1,9 @@
 package net.sourceforge.ondex.mini.test;
 
+import java.util.Arrays;
+
+import org.apache.log4j.Logger;
+
 import com.google.common.collect.ObjectArrays;
 
 import net.sourceforge.ondex.OndexMiniMain;
@@ -25,20 +29,22 @@ import net.sourceforge.ondex.OndexMiniMain;
 public class MiniInvoker
 {
 	private String miniStartDirPath = "target/ondex-mini/";
-	private String ondexDirPath = miniStartDirPath + "data";
-	private String plugInDirPath = miniStartDirPath + "plugins";
-	private String libDirPath = miniStartDirPath + "lib";
+	private String ondexDirPath = null;
+	private String plugInDirPath = null;
+	private String libDirPath = null;
 
+  private Logger log = Logger.getLogger ( this.getClass() );
 	
 	public void invoke ( String workFlowPath, String ... optArgs )
 	{
-		System.setProperty ( "ondex.dir", ondexDirPath );
-		System.setProperty ( "ondex.plugin.dir", plugInDirPath );
-		System.setProperty ( "ondex.lib.dir", libDirPath );
+		System.setProperty ( "ondex.dir", getOndexDirPath () );
+		System.setProperty ( "ondex.plugin.dir", getPlugInDirPath () );
+		System.setProperty ( "ondex.lib.dir", getLibDirPath () );
 		
 		String[] args = new String[] { "-u", "fooTestUser", "-p", "foo-pass", "-w", workFlowPath }; 
 		args = ObjectArrays.concat ( args, optArgs, String.class );
 		
+		log.info ( "Invoking Ondex-Mini with: " + Arrays.toString ( args ) );
 		OndexMiniMain.main ( args );
 	}
 
@@ -57,7 +63,7 @@ public class MiniInvoker
 
 	public String getOndexDirPath ()
 	{
-		return ondexDirPath;
+		return getAbsoluteDir ( ondexDirPath, "data" );
 	}
 
 
@@ -69,7 +75,7 @@ public class MiniInvoker
 
 	public String getPlugInDirPath ()
 	{
-		return plugInDirPath;
+		return getAbsoluteDir ( plugInDirPath, "plugins" );
 	}
 
 
@@ -81,7 +87,7 @@ public class MiniInvoker
 
 	public String getLibDirPath ()
 	{
-		return libDirPath;
+		return getAbsoluteDir ( libDirPath, "lib" );
 	}
 
 
@@ -90,4 +96,11 @@ public class MiniInvoker
 		this.libDirPath = libDirPath;
 	}
 
+	private String getAbsoluteDir ( String localMiniDir, String defaultDir )
+	{
+		String result = this.miniStartDirPath;
+		if ( result == null ) result = "";
+		if ( !( result.isEmpty () || result.endsWith ( "/" ) ) ) result += "/";
+		return result + (localMiniDir != null ? localMiniDir : defaultDir);
+	}
 }

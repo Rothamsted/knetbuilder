@@ -34,6 +34,7 @@ public class URIAdditionPluginIT
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
 		String wfPath = mavenBuildPath + "test-classes/uri-addition-test/";
 		MiniInvoker invoker = new MiniInvoker ();
+		invoker.setMiniStartDirPath ( mavenBuildPath + "ondex-mini" );
 		invoker.invoke ( wfPath + "uri-addition-test_wf.xml" );
 		
 		// TODO: this is a very simple graph with just two nodes and one relation, we need
