@@ -2,8 +2,11 @@ package net.sourceforge.ondex.rdf.export.graphdescriptor;
 
 import static net.sourceforge.ondex.core.util.ONDEXGraphUtils.getOrCreateConceptClass;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
+import uk.ac.ebi.utils.io.IOUtils;
 
 /**
  * TODO: comment me!
@@ -37,6 +42,13 @@ public class OndexGraphDescriptorTool
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 	
 	
+	public OndexGraphDescriptorTool ( ONDEXGraph graph )
+	{
+		super ();
+		this.graph = graph;
+	}
+
+	
 	/**
 	 * Creates the descriptor without saving it in the graph.
 	 *  
@@ -45,6 +57,24 @@ public class OndexGraphDescriptorTool
 	{
 		return JsonLdUtils.getRdfFromTemplate ( context, rdfTemplate, rdfLang );
 	}
+	
+	/**
+	 * TODO: get rdfLang from the extension
+	 */
+	public Model createDescriptor ( Map<String, Object> context, Path rdfTemplatePath, String rdfLang )
+	{
+		try {
+			var tpl = IOUtils.readFile ( rdfTemplatePath.toString () );
+			return JsonLdUtils.getRdfFromTemplate ( context, tpl, rdfLang );
+		}
+		catch ( IOException ex ) {
+			throw ExceptionUtils.buildEx ( 
+				UncheckedIOException.class, ex, 
+				"Error while reading metadata template '%s': %s", rdfTemplatePath.toAbsolutePath (), ex.getMessage () 
+			);
+		}
+	}
+	
 
 	public Model saveDescriptor ( Map<String, Object> context, String rdfTemplate, String rdfLang )
 	{
@@ -52,7 +82,25 @@ public class OndexGraphDescriptorTool
 		saveDescriptor ( result );
 		return result;
 	}
+	
+	/**
+	 * TODO: get rdfLang from the extension
+	 */
+	public Model saveDescriptor ( Map<String, Object> context, Path rdfTemplatePath, String rdfLang )
+	{
+		try {
+			var tpl = IOUtils.readFile ( rdfTemplatePath.toString () );
+			return saveDescriptor ( context, tpl, rdfLang );			
+		}
+		catch ( IOException ex ) {
+			throw ExceptionUtils.buildEx ( 
+				UncheckedIOException.class, ex, 
+				"Error while reading metadata template '%s': %s", rdfTemplatePath.toAbsolutePath (), ex.getMessage () 
+			);
+		}
+	}
 
+	
 	public ONDEXConcept saveDescriptor ( Model descriptor )
 	{
 		// Save the RDF, review the Optional chain.
@@ -75,7 +123,7 @@ public class OndexGraphDescriptorTool
 		if ( descriptorConcept != null )
 		{
 			var sr = new StringReader ( descriptorConcept.getDescription () );
-			result.read ( sr, "TURTLE" );
+			result.read ( sr, null, "TURTLE" );
 		}
 		return result;
 	}
@@ -168,4 +216,5 @@ public class OndexGraphDescriptorTool
 	public Map<String, Object> getDescriptorOrganization () {
 		return null;
 	}
+	
 }
