@@ -39,8 +39,8 @@ jobs:
       with:
         path: ~/.m2
         # When you want to invalidate the cache, just increase the vX suffix in the next two lines. 
-        key: ${{ runner.os }}-m2-v4-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2-v4
+        key: ${{ runner.os }}-m2-v5-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2-v5
 
     - name: Build
       env:
