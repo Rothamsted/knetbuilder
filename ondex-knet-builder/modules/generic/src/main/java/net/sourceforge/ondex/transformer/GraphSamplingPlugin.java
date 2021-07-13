@@ -1,23 +1,19 @@
 package net.sourceforge.ondex.transformer;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import static java.lang.Math.round;
 
+import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.ONDEXRelation;
-
-import static java.lang.Math.round;
+import uk.ac.ebi.utils.runcontrol.ProgressLogger;
 
 /**
  * <h2>The Graph Sampler Plugin</h2>
@@ -97,91 +93,60 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 		if ( inGraph != null ) this.setONDEXGraph ( inGraph );
 		if ( this.graph == null ) throw new IllegalStateException ( "Input graph is null" );
 		
-		Set<ONDEXConcept> concepts = this.graph.getConcepts ();
-
-		int originalConceptCount = concepts.size ();
-		if ( originalConceptCount == 0 ) {
-			log.info ( "Empty graph, quitting the random sampler" );
-			return;
-		}
-		
-		// First the concepts, a number of relations will be dragged away with them
-		
-		log.info ( 
-			"Reducing {} concepts to {}% => {}", 
-			originalConceptCount, relativeSize * 100, round ( originalConceptCount * relativeSize ) 
-		);
-
-		Set<ONDEXRelation> relations = this.graph.getRelations ();
-		int originalRelCount = relations.size ();
-
-		deleteEntities ( concepts, relativeSize, this.graph::deleteConcept );
-		
-		log.info ( "{} concepts remaining", concepts.size () );
-
-		// So, how many relations are we left with?
-		//
-		
-		if ( originalRelCount == 0 ) {
-			log.info ( "No relation in the graph, all done");
-			return;
-		}
-		
-		// eg, if we want a 10% away and the size is still 30%, excess = 20%
-		double relQuota = 1d * relations.size () / originalRelCount;
-		double excess = relQuota - relativeSize; 
-
-		log.info ( 
-			"Relations reduced from {} to {}, which is {}%", 
-			originalRelCount, relations.size (), pcent ( relQuota ) 
-		);
-		
-		if ( excess <= 0 ) {
-			log.info ( "So, all done" );
+		int nentities0 = graph.getConcepts ().size () + graph.getRelations ().size ();
+		if ( nentities0 == 0 ) {
+			log.warn ( "The graph is empty, no sampling to do, quitting the plug-in" );
 			return;
 		}
 
-		// eg, we still need to cut 20% away, so remove anything under this threshold
-		log.info ( 
-			"Further reducing of {}% => -{} relations", 
-			pcent ( excess ), 
-			round ( relations.size () * excess ) 
+		log.info (
+			"Sampling plug-in, reducing {} concepts and {} entities",
+			graph.getConcepts ().size (),
+			graph.getRelations ().size ()
 		);
-		deleteEntities ( relations, 1 - excess, this.graph::deleteRelation );
 
-		log.info ( "{} relations remaining, all done", relations.size () );
+		Stream<Pair<Boolean, Integer>> conceptIdx = this.graph.getConcepts ()
+		.parallelStream ()
+		.map ( c -> Pair.of ( true, c.getId () ) ); // true for concepts
+		
+		Stream<Pair<Boolean, Integer>> relationIdx = this.graph.getRelations ()
+		.parallelStream ()
+		.map ( r -> Pair.of ( false, r.getId () ) );
+		
+		var entityIdx = Stream.concat ( conceptIdx, relationIdx )
+		  .collect ( Collectors.toList () );
+		
+		Collections.shuffle ( entityIdx );
+		
+		var progress = new ProgressLogger ( "{} entities removed", 10000 );
+		int ncut = (int) round ( entityIdx.size () * ( 1 - relativeSize ) );
+		for ( int i = 0; i < ncut; i++ )
+		{
+			var idx = entityIdx.get ( i );
+			if ( idx.getLeft () )
+				graph.deleteConcept ( idx.getRight () );
+			else
+				graph.deleteRelation ( idx.getRight () );
+
+			int newSize = graph.getConcepts ().size () + graph.getRelations ().size ();
+			progress.update ( nentities0 - newSize );
+
+			// We need to check the size here, since concepts might drag relations with them
+			if ( newSize <= nentities0 * relativeSize )
+				break;
+		}
+		
+		log.info (
+			"Done. The reduced graph has {} concepts and {} relations",
+			graph.getConcepts ().size (),
+			graph.getRelations ().size ()
+		);	
 	}
-	
-	
-	/**
-	 * Helper to delete a quota of entities. We generate a support array of IDs, do the removals and quit, giving 
-	 * the GC the opportunity to cleanup the IDs.
-	 */
-	private void deleteEntities ( Set<? extends ONDEXEntity> entities, double relativeSize, Consumer<Integer> eraser )
-	{
-		String etype = entities.iterator ().next () instanceof ONDEXConcept 
-			? "concept" 
-			: "relation";
-		
-		final List<Integer> entityIds = entities
-			.parallelStream ()
-			.map ( ONDEXEntity::getId )
-			.collect ( Collectors.toList () );
 
-		Collections.shuffle ( entityIds ); // shuffle the initial list of IDs
-		
-		// Then consider a quota of them (hence, a random quota)
-		IntStream
-			.range ( 0, (int) round ( entityIds.size () * ( 1 - relativeSize ) ) )
-			.forEach ( i ->  
-			{
-				eraser.accept ( entityIds.get ( i ) );
-				if ( ( i + 1 ) % 10000 == 0 ) log.info ( "Removed {} {}s", i + 1, etype );
-			}); 
-	}
 	
 	/** 
-	 * Small utility to convert a 0-1 ratio into a percentage string value. Used during logging. 
+	 * Small utility to convert a 0-1 ratio into a percentage string value. Used during logging.
+	 * TODO: remove. 
 	 */
 	private static String pcent ( double ratio ) {
 		return String.format ( "%.2f%%", ratio * 100 );

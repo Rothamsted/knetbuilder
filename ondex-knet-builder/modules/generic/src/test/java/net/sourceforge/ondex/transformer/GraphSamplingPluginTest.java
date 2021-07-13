@@ -34,9 +34,9 @@ public class GraphSamplingPluginTest
 	private ONDEXGraph graph = new MemoryONDEXGraph ( "testGraph" );
 	
 	/**
-	 * Generates a test graph of this size
+	 * Generates a test graph of this conceptsSize
 	 */
-	private int size = 1000;
+	private int conceptsSize = 1000;
 	
 	/** it's an average, they're decided randomly */
 	private int relations2ConceptSizeRatio = 5;
@@ -48,8 +48,8 @@ public class GraphSamplingPluginTest
 	/**
 	 * Generates a test graph, having relations biased around 'average node'. 
 	 * 
-	 * <b>TL/DR</b>: 0.25 means the generated relations are (quite) uniformly distributed over all the nodes. Low values
-	 * Lower values {@code biasSigma} (must be >0) means relations are concentrated around a small set of nodes (too small
+	 * <b>TL/DR</b>: 0.25 means the generated relations are (quite) uniformly distributed over all the nodes.
+	 * Lower values ({@code biasSigma} must be >0) means relations are concentrated around a small set of nodes (too small
 	 * values will cause this method to hang). 
 	 * 
 	 * <h3>Longer explanation</h3>
@@ -83,7 +83,7 @@ public class GraphSamplingPluginTest
 		);
 		
 		// Concepts
-		IntStream.range ( 0,  size ).forEach ( i ->
+		IntStream.range ( 0,  conceptsSize ).forEach ( i ->
 			graph.createConcept ( "testConcept" + i, "", "A foo concept #" + i, testDS, testCC, testEvs )
 		);
 		
@@ -125,7 +125,7 @@ public class GraphSamplingPluginTest
 	public void testGraphGen () 
 	{
 		createTestGraph ();
-		assertEquals ( "Wrong no. of concepts for generated graph!", size, this.graph.getConcepts ().size () );
+		assertEquals ( "Wrong no. of concepts for generated graph!", conceptsSize, this.graph.getConcepts ().size () );
 		assertEquals ( 
 			"Wrong no. of relations for generated graph!", 
 			1d * relations2ConceptSizeRatio, 
@@ -144,13 +144,13 @@ public class GraphSamplingPluginTest
 		
 		GraphSamplingPlugin sampler = new GraphSamplingPlugin ();
 		sampler.sample ( this.graph, relativeSize );
-		
-		assertEquals ( "Unexpected new size for concepts!", relativeSize, 1.0 * graph.getConcepts ().size () / this.size, .1 );
-		
-		// It migth be much smaller, depending on the relations distribution over nodes.
-		assertTrue ( 
-			"Unexpected new size for relations!",
-			1d * graph.getRelations ().size () / ( this.size * this.relations2ConceptSizeRatio ) <= relativeSize 
+
+		assertEquals (
+			"Wrong total relative size!",	
+		  relativeSize,
+		  1.0 * ( graph.getConcepts ().size () + graph.getRelations ().size () ) 
+		    / ( this.conceptsSize * (1 + this.relations2ConceptSizeRatio) ),
+		  0.1
 		);		
 	}
 
@@ -158,7 +158,16 @@ public class GraphSamplingPluginTest
 	@Test
 	public void testSimple ()
 	{
-		testTemplate ( 0.2, null );
+		var relativeSize = 0.2d;
+		testTemplate ( relativeSize, null );
+		// We can expect this from relations, since they're uniformly distributed and 
+		// they have 5x more chances to be pruned.
+		assertEquals (
+			"Wrong relative size for relations!",	
+			relativeSize,
+		  1.0 * graph.getRelations ().size () / ( this.conceptsSize * this.relations2ConceptSizeRatio ),
+		  0.1
+		);	
 	}
 
 
