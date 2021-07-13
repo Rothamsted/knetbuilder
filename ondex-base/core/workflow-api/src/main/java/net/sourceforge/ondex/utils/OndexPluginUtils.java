@@ -7,20 +7,18 @@ import java.util.Map;
 
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 
-import com.google.common.reflect.Reflection;
 import com.machinezoo.noexception.Exceptions;
 
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.RequiresGraph;
 import net.sourceforge.ondex.UncheckedPluginException;
-import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**
- * TODO: comment me!
+ * Utilities for plug-ins.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Jul 2021</dd></dl>
@@ -103,6 +101,10 @@ public class OndexPluginUtils
 		return runPlugin ( pluginCls, null, args );
 	}
 
+	/**
+	 * Uses {@link #loadPluginClass(String)} to run a plug-in starting from its class's fully qualified name.
+	 * 
+	 */
 	public static <T> T runPlugin ( String pluginFQN, ONDEXGraph graph, Map<String, Object> args )
 		throws UncheckedPluginException
 	{
@@ -116,6 +118,9 @@ public class OndexPluginUtils
 		return runPlugin ( pluginFQN, null, args );
 	}
 	
+	/**
+	 * Simple wrapper to instantiate a plug-in starting from its class and empty constructor.
+	 */
 	public static <P extends ONDEXPlugin> P createPlugin ( Class<P> pluginCls )
 	{
 		try
@@ -132,6 +137,10 @@ public class OndexPluginUtils
 		}
 	}
 	
+	/**
+	 * Simple wrapper to create a plug-in starting from it's class' fully-qualified name.
+	 * This uses {@link #loadPluginClass(String)}.
+	 */
 	public static <P extends ONDEXPlugin> P createPlugin ( String pluginFQN )
 	{
 		@SuppressWarnings ( "unchecked" )
@@ -139,6 +148,9 @@ public class OndexPluginUtils
 		return createPlugin ( cls );
 	}
 	
+	/**
+	 * Simple wrapper to load a plug-in class starting from its fully-qualified name.
+	 */
 	@SuppressWarnings ( "unchecked" )
 	public static <P extends ONDEXPlugin> Class<P> loadPluginClass ( String pluginFQN )
 	{

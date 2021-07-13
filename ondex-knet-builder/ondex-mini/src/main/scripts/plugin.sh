@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 workdir=`pwd`
 cd `dirname "$0"`
 mydir=`pwd`

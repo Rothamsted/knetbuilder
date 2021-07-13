@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.export.oxl.Export;
@@ -23,7 +22,12 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 /**
- * TODO: comment me!
+ * A simple command line interface to run a single plugin, possibly preceded by the load of an OXL
+ * and possibly followed by the export of the resulting graph.
+ * 
+ * This is wrapped by plugin.sh
+ * 
+ * Everything here is based on the picocli library.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>12 Jul 2021</dd></dl>
@@ -104,7 +108,9 @@ public class MiniPlugInCLI implements Callable<Integer>
 	)
 	private Map<String, Object> arguments = new HashMap<> ();
 	
-
+	/**
+	 * The core, in the form required by picocli
+	 */
 	@Override
 	public Integer call () throws Exception
 	{
@@ -131,6 +137,8 @@ public class MiniPlugInCLI implements Callable<Integer>
 	/**
 	 * Does all the job of {@link #main(String...)}, except exiting, useful for 
 	 * testing.
+	 * 
+	 * This uses {@link CommandLine}, as prescribed by the picocli library.
 	 */
 	public static int invoke ( String... args )
 	{
@@ -138,6 +146,11 @@ public class MiniPlugInCLI implements Callable<Integer>
     return exitCode; 
 	}
 	
+	/**
+	 * The usual wrapper for the external invocation. This just invokes {@link #invoke(String...)}
+	 * and exits with its result.
+	 * 
+	 */
 	public static void main ( String... args )
 	{
 		System.exit ( invoke ( args ) );

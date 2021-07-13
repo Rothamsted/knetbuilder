@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 WORKDIR=$(pwd)
 cd $(dirname $0)
 MYDIR=$(pwd)
