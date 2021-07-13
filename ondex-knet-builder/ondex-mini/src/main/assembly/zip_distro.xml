@@ -25,7 +25,6 @@
     </dependencySet>
     <dependencySet>
         <outputDirectory>/lib</outputDirectory>
-        <!-- TODO: remove outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping -->
         <useTransitiveDependencies>true</useTransitiveDependencies>
         <scope>runtime</scope>
         <excludes>
@@ -43,6 +42,10 @@
 			<includes>
 				<include>net.sourceforge.ondex.modules:*:*</include>
 			</includes>
+			<excludes>
+				<!-- It's already in /lib, having it duplicates here causes problems with plugin loading -->
+				<exclude>net.sourceforge.ondex.modules:oxl</exclude>
+			</excludes>
 		</dependencySet>
 		<dependencySet>
 			<outputDirectory></outputDirectory>

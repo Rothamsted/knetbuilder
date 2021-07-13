@@ -11,6 +11,7 @@ import org.junit.Test;
 import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
  * TODO: comment me!
@@ -33,7 +34,7 @@ public class BioCycParserTest
 		log.info ( "Loading '" + bpaxFileName + "'" );
 		String bpaxPath = Path.of ( "target/test-classes/" + bpaxFileName ).toAbsolutePath ().toString ();
 		
-		ONDEXPlugin.runPlugin ( 
+		OndexPluginUtils.runPlugin ( 
 			Parser.class, 
 			graph, 
 			Map.of (

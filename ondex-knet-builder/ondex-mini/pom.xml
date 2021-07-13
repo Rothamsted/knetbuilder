@@ -231,6 +231,12 @@
          <scope>runtime</scope>
       </dependency>
 
+			<!-- This is needed for some utilities in the sources -->
+      <dependency>
+         <groupId>net.sourceforge.ondex.modules</groupId>
+         <artifactId>oxl</artifactId>
+         <version>${project.version}</version>
+      </dependency>
 
       <!-- 
         bundled plugins - this is a hack to get them into the plugins/ directory. 
@@ -239,12 +245,6 @@
 			 
 			  SEE ALSO the note above linked to the dependency plugin
 			-->      
-      <dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>oxl</artifactId>
-         <version>${project.version}</version>
-         <scope>test</scope>         
-      </dependency>
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>generic</artifactId>
@@ -302,5 +302,14 @@
          <scope>provided</scope>
       </dependency>
       
+			<dependency>
+			  <groupId>info.picocli</groupId>
+			  <artifactId>picocli</artifactId>
+			</dependency>
+
+			<dependency>
+				<groupId>uk.ac.ebi</groupId>
+				<artifactId>jutils</artifactId>
+			</dependency>
    </dependencies>
 </project>

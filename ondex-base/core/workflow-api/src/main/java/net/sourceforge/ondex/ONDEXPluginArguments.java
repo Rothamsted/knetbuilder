@@ -108,7 +108,7 @@ public class ONDEXPluginArguments
      * @param <A>    the class of the values
      * @throws InvalidPluginArgumentException
      */
-    public <A extends Object> void addOptions(String name, A[] values) throws InvalidPluginArgumentException {
+    public <A> void addOptions(String name, A[] values) throws InvalidPluginArgumentException {
         for (A value : values)
             addOption(name, value);
     }
@@ -118,7 +118,7 @@ public class ONDEXPluginArguments
      * Adds the given value for an argument
      *
      * @param name  the name of the argument
-     * @param value Object of the expected type or a String replresentation
+     * @param value Object of the expected type or a String representation
      */
     public <A extends Object> void addOption(String name, A value) throws InvalidPluginArgumentException {
 

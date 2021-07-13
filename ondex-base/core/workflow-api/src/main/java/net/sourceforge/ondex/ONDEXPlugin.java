@@ -1,21 +1,10 @@
 package net.sourceforge.ondex;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.reflect.ConstructorUtils;
-
-import com.machinezoo.noexception.Exceptions;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.event.ONDEXListener;
-import net.sourceforge.ondex.exception.type.PluginException;
 import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
-import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**
  * The root for all the Ondex plug-ins.
@@ -102,96 +91,5 @@ public interface ONDEXPlugin
 	public void removeONDEXListener ( ONDEXListener l );
 
 	public ONDEXListener[] getONDEXListeners ();
-
-	/**
-	 * Helper to invoke a plug-in as stand-alone, outside of the workflow.
-	 * 
-	 * @param args these are translated into {@link ONDEXPluginArguments}. In case of multi-value
-	 * 				arguments, use list values.
-	 * 
-	 * @return a result that depends on the plug-in type: if it's instance of {@link ProducerONDEXPlugin}, returns
-	 *         {@link ProducerONDEXPlugin#collectResults() collectResults()}, if it's {@link RequiresGraph}, returns
-	 *         {@link RequiresGraph#getGraph() the plugin's graph}, else returns null.
-	 * 
-	 */
-	public static <T> T runPlugin ( ONDEXPlugin plugin, Map<String, Object> args ) throws UncheckedPluginException
-	{
-		try
-		{
-			var pargDefs = plugin.getArgumentDefinitions ();
-			var pargs = new ONDEXPluginArguments ( pargDefs );
-			args.forEach ( Exceptions.sneak ().fromBiConsumer ( ( k, o ) -> 
-				{ 
-					@SuppressWarnings ( "unchecked" )
-					Collection<Object> vs = o instanceof Collection ? (Collection<Object>) o : List.of ( o );
-					vs.forEach ( Exceptions.sneak ().consumer ( v -> pargs.addOption ( k, v ) ) );
-				})
-			);
-			plugin.setArguments ( pargs );
-			plugin.start ();
-
-			if ( plugin instanceof ProducerONDEXPlugin ) ( (ProducerONDEXPlugin) plugin ).collectResults ();
-			if ( plugin instanceof RequiresGraph ) ( (RequiresGraph) plugin ).getGraph ();
-			return null;
-		}
-		catch ( Exception ex ) {
-			throw new UncheckedPluginException ( "Error during plug-in execution: " + ex.getMessage (), ex );
-		}
-	}
-
-	/**
-	 * Wrapper that expects a {@link RequiresGraph} instance for plugin and invokes it with the paramter graph.
-	 *  
-	 */
-	public static <T> T runPlugin ( ONDEXPlugin plugin, ONDEXGraph graph, Map<String, Object> args )
-		throws UncheckedPluginException
-	{
-		if ( ! ( plugin instanceof RequiresGraph ) )
-			throw new IllegalArgumentException ( "Can't invoke a plug-in that doesn't accept a graph with this method" );
-
-		((RequiresGraph) plugin).setONDEXGraph ( graph );
-		return runPlugin ( plugin, args );
-	}
-
-	/**
-	 * Wrapper to auto-instantiate the plugin using the empty constructor.
-	 */
-	public static <T> T runPlugin ( Class<? extends ONDEXPlugin> pluginCls, Map<String, Object> args ) 
-		throws UncheckedPluginException
-	{
-		try
-		{
-			var plugin = ConstructorUtils.invokeConstructor ( pluginCls );
-			return runPlugin ( plugin, args );
-		}
-		catch ( NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException ex )
-		{
-			throw ExceptionUtils.buildEx ( 
-				IllegalArgumentException.class, ex, 
-				"Error with instantiating the plug-in %s: %s",
-				pluginCls.getName (), ex.getMessage ()
-			);
-		}
-	}
-
-	/**
-	 * Wrapper to auto-instantiate the plugin using the empty constructor.
-	 */
-	public static <T> T runPlugin ( Class<? extends ONDEXPlugin> pluginCls, ONDEXGraph graph, Map<String, Object> args )
-			throws UncheckedPluginException
-	{
-		try
-		{
-			var plugin = ConstructorUtils.invokeConstructor ( pluginCls );
-			return runPlugin ( plugin, graph, args );
-		}
-		catch ( NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException ex )
-		{
-			throw ExceptionUtils.buildEx ( 
-				IllegalArgumentException.class, ex, 
-				"Error with instantiating the plug-in %s: %s",
-				pluginCls.getName (), ex.getMessage ()
-			);
-		}
-	}
+		
 }

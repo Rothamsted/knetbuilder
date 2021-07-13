@@ -22,10 +22,10 @@ import static java.lang.Math.round;
 /**
  * <h2>The Graph Sampler Plugin</h2>
  *
- * A very simple plugin that reduce the input graph to a random sample of nodes and relations.
+ * A very simple plugin that reduces the input graph to a random sample of nodes and relations.
  * 
  * Initially, it cuts nodes away, keeping a quota equal to the {@code relativeSize} parameter. Then, if the no. of 
- * relations havent become under that threshold too, it cuts them randomly, until reaching the same quota.
+ * relations haven't become under that threshold too, it cuts them randomly, until reaching the same quota.
  * 
  * Beware that this process might leave isolated nodes around.
  *

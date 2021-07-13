@@ -1,10 +1,11 @@
 package net.sourceforge.ondex;
 
 import net.sourceforge.ondex.exception.type.PluginException;
+import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
  * Wraps {@link PluginException} with a corresponding unchecked exception. 
- * Used in helpers like {@link ONDEXPlugin#runPlugin(ONDEXPlugin, java.util.Map)}.  
+ * Used in helpers like {@link OndexPluginUtils#runPlugin(ONDEXPlugin, java.util.Map)}.  
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>25 May 2021</dd></dl>
