@@ -102,7 +102,8 @@ public class GraphSamplingPluginTest
 			return (int) Math.round ( rndVal * (nconcepts - 1) );
 		};
 		
-		IntStream.range ( 0,  nconcepts * relations2ConceptSizeRatio ).forEach ( i -> 
+		IntStream.range ( 0,  nconcepts * relations2ConceptSizeRatio )
+		.forEach ( i -> 
 		{
 			// Pick random concepts and relation type until you get some comibination that doesn't exist yet
 			ONDEXConcept c1,c2;
@@ -145,12 +146,12 @@ public class GraphSamplingPluginTest
 		GraphSamplingPlugin sampler = new GraphSamplingPlugin ();
 		sampler.sample ( this.graph, relativeSize );
 
-		assertEquals (
-			"Wrong total relative size!",	
-		  relativeSize,
-		  1.0 * ( graph.getConcepts ().size () + graph.getRelations ().size () ) 
-		    / ( this.conceptsSize * (1 + this.relations2ConceptSizeRatio) ),
-		  0.1
+		assertEquals ( "Unexpected new size for concepts!", relativeSize, 1.0 * graph.getConcepts ().size () / this.conceptsSize, .1 );
+		
+		// It migth be much smaller, depending on the relations distribution over nodes.
+		assertTrue ( 
+			"Unexpected new size for relations!",
+			1d * graph.getRelations ().size () / ( this.conceptsSize * this.relations2ConceptSizeRatio ) <= relativeSize 
 		);		
 	}
 
@@ -158,16 +159,7 @@ public class GraphSamplingPluginTest
 	@Test
 	public void testSimple ()
 	{
-		var relativeSize = 0.2d;
-		testTemplate ( relativeSize, null );
-		// We can expect this from relations, since they're uniformly distributed and 
-		// they have 5x more chances to be pruned.
-		assertEquals (
-			"Wrong relative size for relations!",	
-			relativeSize,
-		  1.0 * graph.getRelations ().size () / ( this.conceptsSize * this.relations2ConceptSizeRatio ),
-		  0.1
-		);	
+		testTemplate ( 0.2, null );
 	}
 
 
@@ -178,6 +170,6 @@ public class GraphSamplingPluginTest
 		// incident relations are taken away with nodes), an hence we test that the check on/removal of relations is working 
 		//
 		this.relations2ConceptSizeRatio = 2;
-		testTemplate ( 0.97, 0.005 );
+		testTemplate ( 0.5, 0.005 );
 	}
 }
