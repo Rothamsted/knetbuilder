@@ -72,7 +72,7 @@
 			
 		 <slf4j.version>1.7.25</slf4j.version>
 			
-		 <jena.version>3.17.0</jena.version>
+     <jena.version>4.1.0</jena.version>
 	 </properties>
 
    <build>
