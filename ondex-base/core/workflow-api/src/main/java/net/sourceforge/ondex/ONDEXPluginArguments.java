@@ -127,7 +127,7 @@ public class ONDEXPluginArguments
 
         ArgumentDefinition<?> definition = definitions.get(name);
         if (definition != null) {
-            if (!definition.getClassType().isAssignableFrom(value.getClass())) {
+            if (!( value instanceof String || definition.getClassType().isAssignableFrom(value.getClass()) ) ) {
                 throw new InvalidPluginArgumentException(name + " can not be assigned a value of type "
                         + value.getClass() + " only values of type "
                         + definition.getClassType() + " are accepted");

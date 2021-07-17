@@ -43,15 +43,21 @@ public class OndexPluginUtils
 	{
 		try
 		{
+			// Prepare the arguments from the map
+			//
 			var pargDefs = plugin.getArgumentDefinitions ();
 			var pargs = new ONDEXPluginArguments ( pargDefs );
-			args.forEach ( Exceptions.sneak ().fromBiConsumer ( ( k, o ) -> 
+			args.forEach ( Exceptions.sneak ().fromBiConsumer ( ( argName, valObj ) -> 
 				{ 
 					@SuppressWarnings ( "unchecked" )
-					Collection<Object> vs = o instanceof Collection ? (Collection<Object>) o : List.of ( o );
-					vs.forEach ( Exceptions.sneak ().consumer ( v -> pargs.addOption ( k, v ) ) );
+					Collection<Object> vlist = valObj instanceof Collection ? (Collection<Object>) valObj : List.of ( valObj );
+					// if the arg is accepting a type other than string, addOption() will try to parse it
+					// using ArgugmentDefition.parseString()
+					vlist.forEach ( Exceptions.sneak ().consumer ( val -> pargs.addOption ( argName, val ) ) );
 				})
 			);
+			
+			// OK, now set them
 			plugin.setArguments ( pargs );
 			plugin.start ();
 	

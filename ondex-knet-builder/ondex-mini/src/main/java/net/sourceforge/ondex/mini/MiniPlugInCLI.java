@@ -3,6 +3,7 @@ package net.sourceforge.ondex.mini;
 import static java.lang.System.out;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -104,7 +105,7 @@ public class MiniPlugInCLI implements Callable<Integer>
 	
 	@Parameters (
 		paramLabel = "<name>=<value>",
-		description = "The plugin arguments" 
+		description = "The plugin arguments (use '|' if <name> has multiple arguments)" 
 	)
 	private Map<String, Object> arguments = new HashMap<> ();
 	
@@ -126,7 +127,10 @@ public class MiniPlugInCLI implements Callable<Integer>
 			.orElse ( new MemoryONDEXGraph ( "graph" ) );
 		
 		if ( pluginFQN != null )
+		{
+			splitMultiValueArgs ( arguments );
 			OndexPluginUtils.runPlugin ( pluginFQN, graph, arguments );
+		}
 		
 		if ( oxlOutputPath != null )
 			Export.exportOXL ( graph, oxlOutputPath, zip, prettyPrint );
@@ -183,6 +187,28 @@ public class MiniPlugInCLI implements Callable<Integer>
 				arg.isRequiredArgument () ? "Y" : "N",
 				arg.isAllowedMultipleInstances () ? "Y" : "N"
 			);
+		}
+	}
+	
+	/** 
+	 * Little utility to split string arguments based on '|'. When such argument values are present
+	 * (of type string), the args map is changed with a list corresponding to the multiple values in the string.
+	 * 
+	 * TODO: write a test for a plug-in with this case. 
+	 */
+	private static void splitMultiValueArgs ( Map<String, Object> args )
+	{
+		if ( args == null || args.isEmpty () ) return;
+		for ( String aname: args.keySet () )
+		{
+			var val = args.get ( aname );
+			if ( val == null ) continue;
+			if ( ! ( val instanceof String ) ) continue;
+			String sval = (String) val;
+			if ( sval.isEmpty () ) continue;
+			if ( !sval.contains ( "|" ) ) continue;
+			var svalues = sval.split ( "\\|" );
+			args.put ( aname, List.of ( svalues ) );
 		}
 	}
 }
