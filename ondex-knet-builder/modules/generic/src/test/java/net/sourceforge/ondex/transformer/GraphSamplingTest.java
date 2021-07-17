@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.junit.Assert;
 import org.junit.Test;
 
 import net.sourceforge.ondex.core.ConceptClass;
@@ -22,6 +24,8 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.export.oxl.Export;
+import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
  *
@@ -29,7 +33,7 @@ import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
  * <dl><dt>Date:</dt><dd>8 Mar 2019</dd></dl>
  *
  */
-public class GraphSamplingPluginTest
+public class GraphSamplingTest
 {
 	private ONDEXGraph graph = new MemoryONDEXGraph ( "testGraph" );
 	
@@ -40,6 +44,9 @@ public class GraphSamplingPluginTest
 	
 	/** it's an average, they're decided randomly */
 	private int relations2ConceptSizeRatio = 5;
+	
+	/** How many dummy concept classes the test graph should have */
+	private int conceptClasseSize = 20;
 	
 	private void createTestGraph () {
 		createTestGraph ( null );
@@ -68,11 +75,18 @@ public class GraphSamplingPluginTest
 				
 		// Metadata
 		ONDEXGraphMetaData meta = graph.getMetaData ();
-		ConceptClass testCC = meta.createConceptClass ( "TestCC", "Test Class", "Foo Test Class", null );
+		
+		IntStream.range ( 0, conceptClasseSize )
+		.forEach ( 
+			i -> meta.createConceptClass ( 
+				"TestCC" + i, "Test Class " + i, "Foo Test Class " + i, null 
+		));
+		
 		DataSource testDS = meta.createDataSource ( "testDS", "Test Data Source", "Foo Test DS" );
 		Set<EvidenceType> testEvs = Collections.singleton ( 
 			meta.createEvidenceType ( "testEv", "Test Data Evidence", "Foo Test Evidence" )
 		);
+		
 		// Since there cannot be more than one relation type per concept pair, we need multiple types.
 		IntStream.range ( 0, relations2ConceptSizeRatio )
 		.forEach ( i -> 
@@ -84,8 +98,11 @@ public class GraphSamplingPluginTest
 		
 		// Concepts
 		IntStream.range ( 0,  conceptsSize ).forEach ( i ->
-			graph.createConcept ( "testConcept" + i, "", "A foo concept #" + i, testDS, testCC, testEvs )
-		);
+		{
+			int icc = RandomUtils.nextInt ( 0, conceptClasseSize );
+			var testCC = meta.getConceptClass ( "TestCC" + icc );
+			graph.createConcept ( "testConcept" + i, "", "A foo concept #" + i, testDS, testCC, testEvs );
+		});
 		
 		Set<ONDEXConcept> concepts = graph.getConcepts ();
 		final int nconcepts = concepts.size ();
@@ -139,7 +156,7 @@ public class GraphSamplingPluginTest
 	 * All tests below do the same thing: {@link #createTestGraph(Double) generate a graph with a given relation bias}, 
 	 * cut to a given percentage, see if new sizes look fine.  
 	 */
-	private void testTemplate ( double relativeSize, Double biasSigma )
+	private void filterSamplerTestTemplate ( double relativeSize, Double biasSigma )
 	{
 		createTestGraph ( biasSigma );
 		
@@ -157,19 +174,84 @@ public class GraphSamplingPluginTest
 
 	
 	@Test
-	public void testSimple ()
+	public void testFilterSamplerSimple ()
 	{
-		testTemplate ( 0.2, null );
+		filterSamplerTestTemplate ( 0.2, null );
 	}
 
 
 	@Test
-	public void testBiasedGraph ()
+	public void testFilterSamplerBiasedGraph ()
 	{
 		// We cut just a few concepts in a very unbiased graph. This causes the concepts removal to not be enough (despite 
 		// incident relations are taken away with nodes), an hence we test that the check on/removal of relations is working 
 		//
 		this.relations2ConceptSizeRatio = 2;
-		testTemplate ( 0.5, 0.005 );
+		filterSamplerTestTemplate ( 0.5, 0.005 );
+	}
+	
+	
+	@Test
+	public void testRandomWalksSampler ()
+	{
+		createTestGraph ();
+		// Export.exportOXL ( graph, "target/before-sampler.oxl" );
+		int oldConceptsSize = graph.getConcepts ().size ();
+		int oldRelsSize = graph.getRelations ().size ();
+
+		graph = RandomWalksSamplingPlugin.sample ( graph, 0.1, 10 );
+		// Export.exportOXL ( graph, "target/after-sampler.oxl" );
+		
+		// TODO: for the moment, there isn't much else we can say, study how many 
+		// nodes/relations to expect statistically
+		//
+		assertTrue ( "New graph is empty!", graph.getConcepts ().size () > 0 );
+		assertTrue ( "New graph is bigger!", graph.getConcepts ().size () < oldConceptsSize );
+		assertTrue ( "New graph is unconnected!", graph.getRelations ().size () > 0 );
+		assertTrue ( "New graph has more relations!", graph.getRelations ().size () < oldRelsSize );
+	}
+
+	@Test
+	public void testRandomWalksSamplerBiasedGraph ()
+	{
+		createTestGraph ( 0.005 );
+		// Export.exportOXL ( graph, "target/before-sampler.oxl" );
+		int oldConceptsSize = graph.getConcepts ().size ();
+		int oldRelsSize = graph.getRelations ().size ();
+
+		
+		graph = RandomWalksSamplingPlugin.sample ( graph, 0.2, 20 );
+		// Export.exportOXL ( graph, "target/after-sampler.oxl" );
+		
+		// TODO: for the moment, there isn't much else we can say, study how many 
+		// nodes/relations to expect statistically
+		//
+		assertTrue ( "New graph is empty!", graph.getConcepts ().size () > 0 );
+		assertTrue ( "New graph is bigger!", graph.getConcepts ().size () < oldConceptsSize );
+		assertTrue ( "New graph is unconnected!", graph.getRelations ().size () > 0 );
+		assertTrue ( "New graph has more relations!", graph.getRelations ().size () < oldRelsSize );
+	}
+
+	@Test
+	public void testRandomWalkPluginInvocation ()
+	{
+		createTestGraph ();
+		// Export.exportOXL ( graph, "target/before-sampler.oxl" );
+		int oldConceptsSize = graph.getConcepts ().size ();
+		int oldRelsSize = graph.getRelations ().size ();
+
+		OndexPluginUtils.runPlugin ( 
+			RandomWalksSamplingPlugin.class, graph,
+			Map.of ( "startConceptsSamplingRatio", 0.1f, "maxWalkLen", 10 )
+		); 
+		// Export.exportOXL ( graph, "target/after-sampler.oxl" );
+		
+		// TODO: for the moment, there isn't much else we can say, study how many 
+		// nodes/relations to expect statistically
+		//
+		assertTrue ( "New graph is empty!", graph.getConcepts ().size () > 0 );
+		assertTrue ( "New graph is bigger!", graph.getConcepts ().size () < oldConceptsSize );
+		assertTrue ( "New graph is unconnected!", graph.getRelations ().size () > 0 );
+		assertTrue ( "New graph has more relations!", graph.getRelations ().size () < oldRelsSize );
 	}
 }

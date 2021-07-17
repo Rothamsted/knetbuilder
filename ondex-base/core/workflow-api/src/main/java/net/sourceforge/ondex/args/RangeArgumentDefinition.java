@@ -11,6 +11,8 @@ import net.sourceforge.ondex.InvalidPluginArgumentException;
  * ArgumentDefinition for a Number within a range. Works with AtomicInteger, AtomicLong, BigDecimal, BigInteger, Byte, Double, Float, Integer, Long, and Short.
  *
  * @author hindlem
+ * 
+ * TODO: Int and Float cases should extend this, damn it!!!
  */
 public class RangeArgumentDefinition<R extends Number> extends
         AbstractArgumentDefinition<R> implements

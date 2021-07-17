@@ -33,8 +33,18 @@ public class IntegerRangeArgumentDefinition extends
                                           int upperlimit) {
         super(name, description, required, false);
         this.defaultValue = defaultValue;
-        range = new Range<Integer>(lowerlimit, upperlimit);
+        range = new Range<>(lowerlimit, upperlimit);
     }
+    
+    /**
+     * Defaults limits to the whole float range.
+     */
+    public IntegerRangeArgumentDefinition(String name, String description,
+        boolean required, int defaultValue ) 
+    {
+			this (name, description, required, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE );
+		}
+    
 
     /**
      * Returns range of valid values.

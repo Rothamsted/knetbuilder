@@ -32,9 +32,19 @@ public class FloatRangeArgumentDefinition extends
                                         float upperlimit) {
         super(name, description, required, false);
         this.defaultValue = defaultValue;
-        range = new Range<Float>(lowerlimit, upperlimit);
+        range = new Range<>(lowerlimit, upperlimit);
     }
 
+    /**
+     * Defaults limits to the whole float range.
+     */
+    public FloatRangeArgumentDefinition(String name, String description,
+        boolean required, float defaultValue ) 
+    {
+			this (name, description, required, defaultValue, Float.MIN_VALUE, Float.MAX_VALUE );
+		}
+
+    
     /**
      * Returns range of valid values.
      *

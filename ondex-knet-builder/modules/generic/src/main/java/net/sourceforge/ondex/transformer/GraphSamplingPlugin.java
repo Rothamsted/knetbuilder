@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.FloatRangeArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
@@ -60,12 +61,11 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 	public ArgumentDefinition<?>[] getArgumentDefinitions ()
 	{
 		return new ArgumentDefinition[] {
-			new StringArgumentDefinition (
+			new FloatRangeArgumentDefinition (
 				"relativeSize", 
 				"The relative (0-1) final size you want",
-				true, // required 
-				"0.1",  // default
-				false // multi-value
+				false, // required 
+				0.1f  // default
 			)
 		};
 	}
@@ -73,25 +73,10 @@ public class GraphSamplingPlugin extends ONDEXTransformer
 	@Override
 	public void start () throws Exception
 	{	
-		String relativeSizeStr = (String) this.getArguments ().getUniqueValue ( "relativeSize" );
-		sample ( null, relativeSizeStr );
+		double relativeSize = (Float) this.getArguments ().getUniqueValue ( "relativeSize" );
+		sample ( null, relativeSize );
 	}
 	
-	public void sample ( ONDEXGraph graph, String relativeSizeStr ) 
-	{
-		try
-		{
-			double relativeSize = Double.parseDouble ( relativeSizeStr );
-			sample ( graph, relativeSize );
-		}
-		catch ( NumberFormatException ex ) {
-			throw new IllegalArgumentException ( 
-				"relativeSize parameter wrong value '" + relativeSizeStr + "': " + ex.getMessage (), ex 
-			);
-		}		
-	}
-
-
 	public void sample ( ONDEXGraph inGraph, double relativeSize )
 	{
 		if ( inGraph != null ) this.setONDEXGraph ( inGraph );

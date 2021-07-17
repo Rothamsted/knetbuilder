@@ -19,6 +19,8 @@ import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.core.util.ONDEXGraphOperations;
+import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 
 /**
  * A tool for cloning an ONDEX graph
@@ -498,4 +500,18 @@ public class ONDEXGraphCloner {
 		return old2newRelationIds;
 	}
 
+	
+	/**
+	 * Replaces the contents of the first graph with the second.
+	 * This is useful with transformer plug-ins.
+	 * 
+	 * Note that metadata in the first graph that become unused aren't cleaned up. 
+	 * 
+	 */
+	public static void replaceGraph ( ONDEXGraph graph, ONDEXGraph withGraph )
+	{
+		ONDEXGraphOperations.removeConcepts ( graph, c -> true );
+		var cloner = new ONDEXGraphCloner ( withGraph, graph );
+		cloner.cloneAll ();
+	}
 }
