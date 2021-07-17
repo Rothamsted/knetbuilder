@@ -35,6 +35,7 @@ import uk.ac.ebi.utils.runcontrol.ProgressLogger;
 public class RandomWalksSamplingPlugin extends ONDEXTransformer
 {
 	private static Logger slog = LoggerFactory.getLogger ( RandomWalksSamplingPlugin.class );
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 
 	public RandomWalksSamplingPlugin ()
 	{
@@ -96,7 +97,11 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 		var newGraph = sample (
 			graph, startConceptsSamplingRatio, maxWalkLen, startConceptClassIds.toArray ( new String[0] )
 		);
+		
+		log.info ( "Replacing the old graph" );
 		ONDEXGraphCloner.replaceGraph ( graph, newGraph );
+
+		log.info ( "Sampling finished" );
 	}
 
 	@Override
@@ -125,6 +130,7 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 		// Seed concepts, based either on specified types or all the concepts in the graph
 		Stream<ONDEXConcept> startConcepts = startConceptClassIds != null && startConceptClassIds.length != 0
 			? Stream.of ( (String[]) startConceptClassIds )
+				.peek ( ccid -> slog.info ( "Sampling from the class {}", ccid ) )
 				.map ( ccid -> ONDEXGraphUtils.getConceptClass ( graph, ccid ) )
 				.flatMap ( cc -> graph.getConceptsOfConceptClass ( cc ).parallelStream () )
 			: graph.getConcepts ().parallelStream ();
