@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
-workdir=`pwd`
-cd `dirname "$0"`
+set -e
+
+# Consider the SLURM environment (many thanks to slackoverflow:56962129)
+if [[ -n "$SLURM_JOB_ID" ]];  then
+	mypath=`scontrol show job $SLURM_JOBID |grep 'Command=' |sed -r s/'.*Command=(.+\.sh).*'/'\1'/`
+else
+  mydir="$0"
+fi
+cd `dirname "$mydir"`
 mydir=`pwd`
 cd "$workdir"
+
 
 if [ "$JAVA_TOOL_OPTIONS" == "" ]; then
   # So, let's set default JVM options here, unless you already have them from the outside

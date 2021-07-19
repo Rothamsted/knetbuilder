@@ -199,7 +199,7 @@ public class GraphSamplingTest
 		int oldConceptsSize = graph.getConcepts ().size ();
 		int oldRelsSize = graph.getRelations ().size ();
 
-		graph = RandomWalksSamplingPlugin.sample ( graph, 0.1, 10 );
+		graph = RandomWalksSamplingPlugin.sample ( graph, 0.1, 10, 10 );
 		// Export.exportOXL ( graph, "target/after-sampler.oxl" );
 		
 		// TODO: for the moment, there isn't much else we can say, study how many 
@@ -220,7 +220,7 @@ public class GraphSamplingTest
 		int oldRelsSize = graph.getRelations ().size ();
 
 		
-		graph = RandomWalksSamplingPlugin.sample ( graph, 0.2, 20 );
+		graph = RandomWalksSamplingPlugin.sample ( graph, 0.2, 20, 5 );
 		// Export.exportOXL ( graph, "target/after-sampler.oxl" );
 		
 		// TODO: for the moment, there isn't much else we can say, study how many 

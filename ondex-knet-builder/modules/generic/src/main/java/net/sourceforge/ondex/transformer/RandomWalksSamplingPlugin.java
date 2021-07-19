@@ -1,9 +1,22 @@
 package net.sourceforge.ondex.transformer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.apache.commons.collections4.ComparatorUtils;
+import org.apache.commons.lang.mutable.MutableDouble;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +89,12 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 				false, // required 
 				10  // default
 			),
+			new IntegerRangeArgumentDefinition (
+				"walksPerSeed", 
+				"Number of walks to start from every seed concept",
+				false, // required 
+				10  // default
+			),
 			new StringArgumentDefinition (
 				"startConceptClassIds",
 				"Concept class IDs to start from for seeding the random walks. If not specified, selects randomly from all concepts",
@@ -92,10 +111,11 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 		var args = this.getArguments ();
 		double startConceptsSamplingRatio = (Float) args.getUniqueValue ( "startConceptsSamplingRatio" );
 		int maxWalkLen = (int) args.getUniqueValue ( "maxWalkLen" );
+		int walksPerSeed = (int) args.getUniqueValue ( "walksPerSeed" );
 		var startConceptClassIds = args.getObjectValueList ( "startConceptClassIds", String.class );
 		
 		var newGraph = sample (
-			graph, startConceptsSamplingRatio, maxWalkLen, startConceptClassIds.toArray ( new String[0] )
+			graph, startConceptsSamplingRatio, maxWalkLen, walksPerSeed, startConceptClassIds.toArray ( new String[0] )
 		);
 		
 		log.info ( "Replacing the old graph" );
@@ -118,7 +138,7 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 
 	
 	public static ONDEXGraph sample ( 
-		ONDEXGraph graph, double startConceptsSamplingRatio, int maxWalkLen, String ...startConceptClassIds )
+		ONDEXGraph graph, double startConceptsSamplingRatio, int maxWalkLen, int walksPerSeed, String ...startConceptClassIds )
 	{
 		slog.info ( 
 			"Sampling {} concepts and {} relations", 
@@ -136,46 +156,68 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 			: graph.getConcepts ().parallelStream ();
 				
 		// Now, take a random sample of these concepts
-		startConcepts = startConcepts.filter ( c -> RandomUtils.nextDouble ( 0, 1 ) < startConceptsSamplingRatio );
+		var startConceptsFinal = startConcepts.filter ( c -> Math.random () < startConceptsSamplingRatio );
 		
-		var progress = new ProgressLogger ( "{} concepts walked", 10000 );
-		progress.setIsThreadSafe ( true );
+		// Use it to decrease the likelihood to re-visit nodes.
+		Map<Integer, Integer> relationVisits = new ConcurrentHashMap<> ();
+		
+		var progress = new ProgressLogger ( "{} concepts walked", 1000 );
 		
 		// And walk the graph randomly starting from each concept
-		startConcepts.forEach ( c -> 
+		startConceptsFinal.forEach ( startConcept -> 
 		{
-			var rndLen = RandomUtils.nextInt ( 0, maxWalkLen );
-			ONDEXEntity pathEl = c;
-			for ( var step = 0; step < rndLen; step++ )
+			for ( int repeat = 0; repeat < walksPerSeed; repeat++ )
 			{
-				boolean isConcept = pathEl instanceof ONDEXConcept;
-				synchronized ( graphCloner )
+				var rndLen = RandomUtils.nextInt ( 1, maxWalkLen );
+				ONDEXConcept pathConcept = startConcept;
+				for ( var step = 1; step <= rndLen; step+=2 )
 				{
-					if ( isConcept ) graphCloner.cloneConcept ( (ONDEXConcept) pathEl );
-					else graphCloner.cloneRelation ( (ONDEXRelation) pathEl );
-				}
-								
-				if ( isConcept )
-				{
-					// Draw a random concept relation
-					var rels = graph.getRelationsOfConcept ( (ONDEXConcept) pathEl );
-					if ( !rels.isEmpty () )
-					{
-						var relsItr = rels.iterator ();
-						var rndSteps = RandomUtils.nextInt ( 1, rels.size () );
-						for ( int conceptRelStep = 1; conceptRelStep <= rndSteps; conceptRelStep++ )
-							pathEl = relsItr.next ();
+					synchronized ( graphCloner ) {
+					 graphCloner.cloneConcept ( pathConcept );
 					}
-				}
-				else
-				{
-					// Just take one of the end points
-					var rel = ((ONDEXRelation) pathEl);
-					pathEl = RandomUtils.nextBoolean () ? rel.getFromConcept () : rel.getToConcept ();
-				}
-			} // for steps
+	
+					// Now, pick a random relation, giving more chances to the ones having fewer visits
+					//
+					var crels = new ArrayList<> ( graph.getRelationsOfConcept ( pathConcept ) );
+					if ( crels.isEmpty () ) break;
+					
+					var visitsCount = crels.stream ()
+					.map ( ONDEXRelation::getId )
+					.mapToInt ( rid -> relationVisits.getOrDefault ( rid, 0 ) )
+					.sum ();
+	
+					// This is how we do it: we get the cumulative distribution function using the dual relative frequencies,
+					// and then we toss a 0-1 number over it
+					Collections.shuffle ( crels ); // allows for random selection of items with same frequency (in particular, 0)
+					var rnd = Math.random ();
+					var cdf = 0d;
+					ONDEXRelation selectedRel = null;
+					for ( var r: crels )
+					{
+						selectedRel = r; // Cause, if never breaks, the last one is selected anyway.
+						cdf += 1 - 1d * relationVisits.getOrDefault ( r.getId (), 0 ) / visitsCount;					
+						if ( rnd < cdf ) break;
+					}
+					
+					// Shouldn't happen, but anyway...
+					if ( selectedRel == null ) throw new IllegalStateException ( 
+						"Internal error: no random relation selected during the random walk for the concept: "
+						+ pathConcept.getPID ()
+					);
+					
+					synchronized ( graphCloner ) {
+					 graphCloner.cloneRelation ( selectedRel );
+					}
+					relationVisits.merge ( selectedRel.getId (), 1, (vold, vnew) -> vold + vnew );
+					
+					// And eventually use the relation to move to another node
+					// This might be the same, so that multiple walks can be started from seed nodes and hubs
+					pathConcept = RandomUtils.nextBoolean () ? selectedRel.getFromConcept () : selectedRel.getToConcept ();
+	
+				} // for step
+			} // for repeat
 			progress.updateWithIncrement ();
-		}); // forEach ( concept )
+		}); // forEach ( startConcept )
 		
 		var sampledGraph = graphCloner.getNewGraph ();
 		slog.info ( 
@@ -186,5 +228,4 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 		return sampledGraph;
 		
 	} // sample()
-	
 }
