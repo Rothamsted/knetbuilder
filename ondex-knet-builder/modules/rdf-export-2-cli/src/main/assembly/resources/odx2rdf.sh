@@ -1,41 +1,49 @@
 #!/bin/sh
 
-# This is the Bash Launcher.
-# 
+#!/usr/bin/env bash
+set -e
 
-# These are passed to the JVM. they're appended, so that you can predefine it from the shell
-# You need a lot of memory with big OXLs
-: ${OPTS:=-Xms2G -Xmx4G}
+if [ "$JAVA_TOOL_OPTIONS" == "" ]; then
+  # So, let's set default JVM options here, unless you already have them from the outside
+  # Note that this variable is part of standard Java (https://goo.gl/rrmXEX), so we don't need
+  # to pass it to the java command below and possible further JVM invocations get it automatically too
+  export JAVA_TOOL_OPTIONS="-Xmx2G"
+fi
 
-# We always work with universal text encoding.
-OPTS="$OPTS -Dfile.encoding=UTF-8"
+# Enable the debugger, this is sometimes needed by developers
+#JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Xdebug -Xnoagent -Djava.compiler=NONE
+#									 -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 
-# Monitoring with jvisualvm/jconsole (end-user doesn't usually need this)
-#OPTS="$OPTS 
-# -Dcom.sun.management.jmxremote.port=5010
-# -Dcom.sun.management.jmxremote.authenticate=false
-# -Dcom.sun.management.jmxremote.ssl=false"
-       
-# Used for invoking a command in debug mode (end user doesn't usually need this)
-#OPTS="$OPTS -Xdebug -Xnoagent"
-#OPTS="$OPTS -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
+# JMX connection to be used via SSH (map both ports) and with client tools like jvisualvm
+#JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS  -Dcom.sun.management.jmxremote.ssl=false
+#                    -Dcom.sun.management.jmxremote.authenticate=false
+#                    -Dcom.sun.management.jmxremote.port=9010
+#                    -Dcom.sun.management.jmxremote.rmi.port=9011
+#                    -Djava.rmi.server.hostname=localhost
+#                    -Dcom.sun.management.jmxremote.local.only=false"
 
 # You shouldn't need to change the rest
 #
 ###
 
-cd "$(dirname $0)"
-MYDIR="$(pwd)"
+# Consider the SLURM environment (many thanks to slackoverflow:56962129)
+if [[ -n "$SLURM_JOB_ID" ]];  then
+	mypath=`scontrol show job $SLURM_JOBID |grep 'Command=' |sed -r s/'.*Command=(.+\.sh).*'/'\1'/`
+else
+  mydir="$0"
+fi
+cd `dirname "$mydir"`
+mydir=`pwd`
+cd "$workdir"
 
 # Additional .jar files or other CLASSPATH directories can be set with this.
 # (see http://kevinboone.net/classpath.html for details)  
-export CLASSPATH="$CLASSPATH:$MYDIR:$MYDIR/lib/*"
+export CLASSPATH="$CLASSPATH:$mydir:$mydir/lib/*"
 
 # See here for an explanation about ${1+"$@"} :
 # http://stackoverflow.com/questions/743454/space-in-java-command-line-arguments 
 
-java \
-	$OPTS net.sourceforge.ondex.rdf.export.RDFFileExporterCLI ${1+"$@"}
+java net.sourceforge.ondex.rdf.export.RDFFileExporterCLI ${1+"$@"}
 
 ex_code=$?
 
