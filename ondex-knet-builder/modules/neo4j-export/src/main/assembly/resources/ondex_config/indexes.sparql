@@ -5,7 +5,7 @@ PREFIX bk: <http://knetminer.org/data/rdf/terms/biokno/>
 PREFIX bkr: <http://knetminer.org/data/rdf/resources/>
 PREFIX bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/>
 
-SELECT ?label ?propertyName ?isRelation
+SELECT DISTINCT ?label ?propertyName ?isRelation
 {
   {
 		VALUES ( ?label ?propertyName ?isRelation )
@@ -29,9 +29,19 @@ SELECT ?label ?propertyName ?isRelation
 		#
 	  ?propertyName rdfs:subPropertyOf* bk:attribute;
 					  bk:isIndexed true.
-	  BIND ( '*' AS ?label )
 
-	  { BIND ( true as ?isRelation ) }
-	  UNION { BIND ( false as ?isRelation ) }
+	  # Use the data to get where the attributes are applied
+	  # TODO: verify performance.
+		{
+			?concept ?propertyName ?val;
+		  				 a ?label.
+	    BIND ( false as ?isRelation )
+	  }
+	  UNION {
+	    ?rel ?propertyName ?val;
+	     	 	 a bk:Relation;
+					 bk:relTypeRef ?label.
+	  	BIND ( true as ?isRelation )
+	  }
 	}
 }
