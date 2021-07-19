@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.rdf.export.mappers;
 
-import org.apache.commons.rdf.jena.JenaGraph;
 import org.apache.commons.rdf.jena.JenaRDF;
 import org.apache.jena.rdf.model.Model;
 
