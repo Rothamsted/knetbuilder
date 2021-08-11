@@ -85,13 +85,13 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 			),
 			new IntegerRangeArgumentDefinition (
 				"maxWalkLen", 
-				"The maximum no. of random steps done during the path sampling",
+				"Max no. of random steps done during the path sampling",
 				false, // required 
 				10  // default
 			),
 			new IntegerRangeArgumentDefinition (
-				"walksPerSeed", 
-				"Number of walks to start from every seed concept",
+				"maxWalksPerSeed", 
+				"Max no. of walks to start from every seed concept",
 				false, // required 
 				10  // default
 			),
@@ -111,16 +111,21 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 		var args = this.getArguments ();
 		double startConceptsSamplingRatio = (Float) args.getUniqueValue ( "startConceptsSamplingRatio" );
 		int maxWalkLen = (int) args.getUniqueValue ( "maxWalkLen" );
-		int walksPerSeed = (int) args.getUniqueValue ( "walksPerSeed" );
+		int maxWalksPerSeed = (int) args.getUniqueValue ( "maxWalksPerSeed" );
 		var startConceptClassIds = args.getObjectValueList ( "startConceptClassIds", String.class );
 		
 		var newGraph = sample (
-			graph, startConceptsSamplingRatio, maxWalkLen, walksPerSeed, startConceptClassIds.toArray ( new String[0] )
+			graph, startConceptsSamplingRatio, maxWalkLen, maxWalksPerSeed, startConceptClassIds.toArray ( new String[0] )
 		);
 		
 		log.info ( "Replacing the old graph" );
 		ONDEXGraphCloner.replaceGraph ( graph, newGraph );
 
+		log.debug ( 
+			"Replaced graph has {} concept(s) and {} relation(s)",
+			graph.getConcepts ().size (),
+			graph.getRelations ().size ()
+		);
 		log.info ( "Sampling finished" );
 	}
 
@@ -138,7 +143,7 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 
 	
 	public static ONDEXGraph sample ( 
-		ONDEXGraph graph, double startConceptsSamplingRatio, int maxWalkLen, int walksPerSeed, String ...startConceptClassIds )
+		ONDEXGraph graph, double startConceptsSamplingRatio, int maxWalkLen, int maxWalksPerSeed, String ...startConceptClassIds )
 	{
 		slog.info ( 
 			"Sampling {} concepts and {} relations", 
@@ -166,7 +171,8 @@ public class RandomWalksSamplingPlugin extends ONDEXTransformer
 		// And walk the graph randomly starting from each concept
 		startConceptsFinal.forEach ( startConcept -> 
 		{
-			for ( int repeat = 0; repeat < walksPerSeed; repeat++ )
+			var repeats = RandomUtils.nextInt ( 0, maxWalksPerSeed );
+			for ( int repeat = 0; repeat < repeats; repeat++ )
 			{
 				var rndLen = RandomUtils.nextInt ( 1, maxWalkLen );
 				ONDEXConcept pathConcept = startConcept;
