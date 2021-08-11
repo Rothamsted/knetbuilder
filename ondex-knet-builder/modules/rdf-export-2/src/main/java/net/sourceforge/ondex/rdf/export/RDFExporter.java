@@ -14,6 +14,7 @@ import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
 import net.sourceforge.ondex.rdf.export.util.RDFXFactoryBatchCollector;
+import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 import uk.ac.ebi.utils.threading.batchproc.ItemizedBatchProcessor;
 
 /**
@@ -75,12 +76,23 @@ public class RDFExporter
 		
 		Set<ONDEXConcept> concepts = graph.getConcepts ();
 		log.info ( "Exporting {} concept(s)", concepts.size () );
-		super.process ( concepts.stream()::forEach );
+		var progress = new PercentProgressLogger ( "{}% of concepts exported", concepts.size () );
+		super.process (
+			concepts.stream ()
+			.peek ( c -> progress.updateWithIncrement () )
+			::forEach
+		);
 		
 
 		Set<ONDEXRelation> relations = graph.getRelations ();
 		log.info ( "Exporting {} relation(s)", relations.size () );
-		super.process ( relations.stream()::forEach );
+		progress.setLogMessageTemplate ( "{}% of relations exported" );
+		progress.reset ();
+		super.process (
+			relations.stream ()
+			.peek ( c -> progress.updateWithIncrement () )
+			::forEach
+		);
 
 		log.info ( 
 			"RDF export finished, a total of {} concepts+relations exported, {} triples created",
