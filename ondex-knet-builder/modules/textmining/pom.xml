@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>org.unix4j</groupId>
 			<artifactId>unix4j-command</artifactId>
-			<version>0.4</version>
+			<version>0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jsignature.io-tools</groupId>
