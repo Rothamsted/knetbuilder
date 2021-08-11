@@ -65,7 +65,7 @@
 			
 		 <rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
 			
-		 <lucene.version>6.6.0</lucene.version>
+		 <lucene.version>8.8.1</lucene.version>
 			
 		 <!-- Used by neo4j-related components -->
 		 <rdf2neo.version>4.0-SNAPSHOT</rdf2neo.version>  
