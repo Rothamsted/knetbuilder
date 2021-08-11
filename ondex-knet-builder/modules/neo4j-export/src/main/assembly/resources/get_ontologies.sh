@@ -2,7 +2,7 @@
 # Downloads relevant ontology files, which you typically want to upload into Neo together with data.
 #
 
-target_dir=${1:=data}
+target_dir="${1:-data}"
 
 
 function get_onto ()
