@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-WORKDIR=$(pwd)
-cd $(dirname $0)
-MYDIR=$(pwd)
-cd "$WORKDIR"
+workdir="`pwd`"
+cd "`dirname $0`"
+mydir="`pwd`"
+cd "$workdir"
 
-WORKFLOW=$1
+workflow=$1
 shift
 
-PLUGIN_ARGS=""
+plugin_args=""
 until [ -z $1 ]
 do
-  PLUGIN_ARGS="$PLUGIN_ARGS -P$1"
+  plugin_args="$plugin_args -P$1"
   shift
 done
 
@@ -34,14 +34,17 @@ fi
 #                    -Djava.rmi.server.hostname=localhost
 #                    -Dcom.sun.management.jmxremote.local.only=false"
 
-# Note: the JARS loaded by the plugin engine don't work anymore in J11
-# TODO: that loading should be removed
+# Note: the JARS loaded by the plugin engine don't work anymore in recent J11 versions.
 #
-for jar in lib/*jar
+# So, we need to put everything in the classpath and then the plugin loader will just
+# read the plugin descriptors. This seems to be an operation without side effects. 
+# For the moment, there isn't an easy way to avoid this redundancy.
+#
+for jar in lib/*.jar plugins/*.jar
 do
   [[ -z "$clspath" ]] || clspath="$clspath:"
-  clspath="$clspath$jar"
+  clspath="$clspath$mydir/$jar"
 done
 
-java -Dondex.dir="$MYDIR/data" -classpath "$clspath" net.sourceforge.ondex.OndexMiniMain \
-     -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS
+java -Dondex.dir="$mydir/data" -classpath "$clspath" net.sourceforge.ondex.OndexMiniMain \
+     -ubla -ptest -w$workflow $plugin_args

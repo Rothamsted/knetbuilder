@@ -4,7 +4,9 @@
 DATA=data/
 echo "Running OVTK on top of '$DATA'"
 
-for J in lib/*jar
+# See ondex-mini/src/main/scripts/runme.sh for details on why we include plugins/
+# 
+for J in lib/*.jar plugins/*.jar
 do
   CLASSPATH=$CLASSPATH":"$J
 done

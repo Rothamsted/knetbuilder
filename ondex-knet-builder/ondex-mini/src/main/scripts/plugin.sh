@@ -31,6 +31,8 @@ fi
 #                    -Djava.rmi.server.hostname=localhost
 #                    -Dcom.sun.management.jmxremote.local.only=false"
 
+# See runme.sh for details on why we include plugins/
+# 
 for jar in lib/*.jar plugins/*.jar
 do
   [[ -z "$classpath" ]] || classpath="$classpath:"

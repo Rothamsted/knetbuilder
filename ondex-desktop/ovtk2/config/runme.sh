@@ -3,7 +3,9 @@ DATA=data
 OVTK_DATA=config
 echo "Running OVTK on '$DATA', config on '$OVTK_DATA'"
 
-for J in lib/*jar
+# See ondex-mini/src/main/scripts/runme.sh for details on why we include plugins/
+# 
+for J in lib/*.jar plugins/*.jar
 do
 	[[ -z "$CLASSPATH" ]] || CLASSPATH="$CLASSPATH:"
   CLASSPATH=$CLASSPATH":"$J
