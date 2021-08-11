@@ -244,7 +244,7 @@ public class GraphSamplingTest
 			RandomWalksSamplingPlugin.class, graph,
 			Map.of ( "startConceptsSamplingRatio", 0.1f, "maxWalkLen", 10 )
 		); 
-		// Export.exportOXL ( graph, "target/after-sampler.oxl" );
+		Export.exportOXL ( graph, "target/after-sampler.oxl" );
 		
 		// TODO: for the moment, there isn't much else we can say, study how many 
 		// nodes/relations to expect statistically
