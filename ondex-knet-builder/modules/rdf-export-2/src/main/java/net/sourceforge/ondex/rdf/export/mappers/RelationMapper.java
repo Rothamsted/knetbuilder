@@ -123,6 +123,7 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 		
 		if ( sizeIsEmpty ( rel.getAttributes () ) && sizeIsEmpty ( rel.getEvidence () ) && sizeIsEmpty ( rel.getTags () ) )
 			// If we have nothing to add to the triple, let's just skip it.
+			// With the current Ondex implementation, this should never happen, since evidence is mandatory
 			return true;
 		
 		String reifiedIri = this.getRdfUriGenerator ().getUri ( rel, params );
