@@ -1,0 +1,61 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX bk: <http://knetminer.org/data/rdf/terms/biokno/>
+PREFIX bkr: <http://knetminer.org/data/rdf/resources/>
+PREFIX bka: <http://knetminer.org/data/rdf/terms/biokno/attributes/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+# This is NOT USED by default. See concept_rel_types.sparql for details 
+# 
+SELECT DISTINCT ?iri ?type ?fromIri ?toIri
+{
+  # BEWARE that the following is optimised, it might become significantly slower if you change order/structure
+  # 
+  { 
+    # Use a subquery to get them once for all
+    { select distinct ?type { ?type rdfs:subPropertyOf* bk:conceptsRelation } }
+  		
+    # And then let's pick up all straight relations
+    ?fromIri ?type ?toIri.
+    
+    # If it's also a reified relation, it is taken care of by the reified relation queries (reified relations always 
+    # have a direct statement too). For optimisation purposes, this filter goes here only, the next UNION branch 
+    # doesn't yield reified relations.
+    MINUS {
+      ?reifiedIri 
+      	bk:relTypeRef ?type; 
+      	bk:relFrom ?fromIri;
+      	bk:relTo ?toIri.
+    }
+  } 
+  UNION
+  {
+		# Initially we simply did ?fromIri a/rdfs:subClassOf* bk:Concept, but in recent versions
+		# of Jena this had become really slow. While this other version requires DISTINCT,
+		# it performs much better, at least as long as the bk:Concept hierarchy isn't too big, 
+		# (it has 150 classes at the moment).
+		#
+    { select distinct ?conceptType { ?conceptType rdfs:subClassOf* bk:Concept } }
+
+    VALUES ( ?type ) {
+      ( dc:identifier )
+      ( bk:dataSource )
+      ( bk:evidence )
+      ( bk:relatedConcept )
+    }
+
+  	?fromIri ?type ?toIri.
+  	?fromIri a ?conceptType.
+  }
+    
+  # IRI is used in Cypher to assign an ID to each relation		
+  BIND ( 
+    IRI ( 
+      CONCAT ( 
+        STR ( bkr: ),
+        MD5 ( CONCAT ( STR ( ?type ), STR ( ?fromIri ), STR ( ?toIri ) ) )
+      ) 
+    )
+    AS ?iri
+  )   
+}
