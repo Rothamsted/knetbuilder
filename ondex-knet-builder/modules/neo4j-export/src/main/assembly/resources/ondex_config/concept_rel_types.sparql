@@ -20,7 +20,10 @@ SELECT DISTINCT ?iri ?type ?fromIri ?toIri
     # have a direct statement too). For optimisation purposes, this filter goes here only, the next UNION branch 
     # doesn't yield reified relations.
     MINUS {
-      ?reifiedIri bk:relFrom ?fromIri; bk:relTo ?toIri; bk:relTypeRef ?type.
+      ?reifiedIri 
+      	bk:relTypeRef ?type; 
+      	bk:relFrom ?fromIri;
+      	bk:relTo ?toIri.
     }
   } 
   UNION
