@@ -1,0 +1,53 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<parser 
+	xmlns = "http://www.ondex.org/xml/schema/tab_parser"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<delimiter>\t</delimiter>
+	<quote>"</quote>
+	<encoding>UTF-8</encoding>
+	<start-line>1</start-line>
+	
+	<concept id="gene">
+		<class>Gene</class>
+		<data-source>TAIR</data-source>
+		<accession data-source="TAIR">
+			<column index='0' />
+		</accession>
+	</concept>
+	
+	<concept id="pheno">
+		<class>Phenotype</class>
+		<data-source>TAIR</data-source>
+		<attribute name="Phenotype" type="TEXT" indexed="true">
+			<column index='2' />
+		</attribute>
+		<accession data-source="TAIR-Pheno">
+			<column index='2' />
+		</accession>
+	</concept>
+	
+	<concept id="pub">
+		<class>Publication</class>
+		<data-source>TAIR</data-source>
+		<accession data-source="NLM">
+			<column index='3' />
+		</accession>
+	</concept>
+	
+	<relation source-ref="gene" target-ref="pheno">
+		<type>has_phenotype</type>
+		<attribute name="Germplasm" type="TEXT">
+			<column index='1' />
+		</attribute>
+		<attribute name="PMID" type="TEXT">
+			<column index='3' />
+		</attribute>
+	</relation>
+	
+	<relation source-ref="gene" target-ref="pub">
+		<type>pub_in</type>
+	</relation>
+	
+</parser>
+		

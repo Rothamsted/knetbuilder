@@ -243,6 +243,9 @@ public class ParserTest
 	}
 
 
+	/**
+	 * Tests types defined in the input
+	 */
 	@Test
 	public void testDynamicConcepts () throws Exception
 	{
@@ -274,6 +277,9 @@ public class ParserTest
 
 	}
 	
+	/**
+	 * Test types defined in the input
+	 */
 	@Test
 	public void testDynamicRelations () throws Exception
 	{
@@ -304,4 +310,40 @@ public class ParserTest
 		assertEquals ( "Wrong count for para relations!", 2, rels.size () );
 	}	
 	
+	@Test
+	public void testAccessionMerge () throws Exception
+	{
+		Reader schemaReader = new InputStreamReader ( 
+			Resources.getResource ( this.getClass (), "/acc-merge/acc-merge-cfg.xml" ).openStream (),
+			"UTF-8"
+		);
+		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
+
+		PathParser pp = ConfigParser.parseConfigXml ( 
+			schemaReader, graph, "target/test-classes//acc-merge/acc-merge.tsv" 
+		);
+		//pp.setProcessingOptions ( new String [ 0 ] );
+		pp.parse ();
+		
+		ONDEXGraphOperations.dumpAll ( graph );
+				
+		var phenos = graph.getConceptsOfConceptClass ( ONDEXGraphUtils.getConceptClass ( graph, "Phenotype" ) );
+		
+		ONDEXConcept floweringPheno = phenos.stream ()
+		.filter ( 
+			c -> c.getConceptAccessions ()
+			  .stream ()
+			  .anyMatch ( acc ->
+			  	"Delayed flowering.".toUpperCase ().equals ( acc.getAccession () )
+			  	&& "TAIR-Pheno".equals ( acc.getElementOf ().getId () ) 
+			  )
+		)
+		.findAny ()
+		.orElse ( null );
+		
+		assertNotNull ( "No flowering pheno found!", floweringPheno );
+		assertEquals ( "No flowering pheno found!", 1, floweringPheno.getConceptAccessions ().size () );
+		
+		assertEquals ( "Phenotypes count doesn't match!", 9, phenos.size () );
+	}
 }
