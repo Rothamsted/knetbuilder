@@ -1,15 +1,17 @@
 package net.sourceforge.ondex.rdf.export.graphdescriptor;
 
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ public class OndexGraphDescriptorToolTest
 	private static ONDEXGraph graph = new MemoryONDEXGraph ( "testDataset" );
 		
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
+	private static Logger slog = LoggerFactory.getLogger ( OndexGraphDescriptorToolTest.class ); 
 	
 	@BeforeClass
 	public static void init () throws IOException
@@ -50,7 +53,6 @@ public class OndexGraphDescriptorToolTest
 		var descritorTool = new OndexGraphDescriptorTool ( graph );
 		var rdfTplPath = Path.of ( "target/test-classes/dataset-test-template.ttl" );
 		var datasetModel = descritorTool.saveDescriptor ( values, rdfTplPath, "TURTLE" );
-		
 		NamespaceUtils.registerNs ( datasetModel.getNsPrefixMap () );
 	}
 	
@@ -86,4 +88,26 @@ public class OndexGraphDescriptorToolTest
 		);		
 	}
 	
+	@Test
+	public void testDescriptorTypeFetch ()
+	{
+		var descritorTool = new OndexGraphDescriptorTool ( graph );
+		var org = descritorTool.getDescriptorOrganization ();
+		assertEquals (
+			"Wrong organisation's legal name!",
+			"Rothamsted Research", JsonLdUtils.asValue ( org, "legalName", true )
+		);
+	}
+
+	
+	@Test
+	public void testGraphSummaryProps ()
+	{
+		var descritorTool = new OndexGraphDescriptorTool ( graph );
+	
+		Map<String, Map<String, Object>> pvals = descritorTool.getDatasetAdditionalProperties ();
+		
+		int concepts = OndexGraphDescriptorTool.getPropertyValueAsInt ( pvals, "KnetMiner:Dataset:Concepts Number" );
+		assertEquals ( "Wrong property value for concepts number", 0, concepts );		
+	}
 }

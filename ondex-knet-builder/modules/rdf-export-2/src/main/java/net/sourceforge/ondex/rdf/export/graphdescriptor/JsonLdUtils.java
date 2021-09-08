@@ -10,22 +10,24 @@ import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.jsonldjava.core.JsonLdProcessor;
 import com.github.jsonldjava.utils.JsonUtils;
 
 import uk.ac.ebi.utils.exceptions.TooManyValuesException;
 
 /**
- * TODO: comment me!
+ * Various utilities to manage JSON and its Java representation as {@link Map}.
+ * 
+ * TODO: move it to jutils. 
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>15 Mar 2021</dd></dl>
@@ -79,7 +81,7 @@ public class JsonLdUtils
 			// We need some post-processing of what Jena returns
 			@SuppressWarnings ( "unchecked" )
 			var js = (Map<String, Object>) JsonUtils.fromString ( json );
-			
+						
 			if ( !doSimplify ) return js;
 			
 			Map<String, Object> result = new HashMap<> ();
@@ -87,7 +89,7 @@ public class JsonLdUtils
 			@SuppressWarnings ( "unchecked" )
 			var jsObjects = (List<Map<String, Object>>) js.get ( "@graph" );
 			jsObjects.forEach ( obj -> result.put ( (String) obj.get ( "@id" ), obj ) );
-			
+						
 			result.put ( "@context", js.get ( "@context" ) );
 			
 			return result;
@@ -128,6 +130,7 @@ public class JsonLdUtils
 		return typeIndex;
 	}
 	
+		
 	/**
 	 * Simple helper to serialise a {@link Map} object into JSON. 
 	 */
@@ -159,7 +162,7 @@ public class JsonLdUtils
 		if ( !(value instanceof List) ) return (T) value;
 
 		var list = (List<?>) value;
-		if ( list.size () == 0 ) return null;
+		if ( list.isEmpty () ) return null;
 		
 		if ( list.size () > 1 )
 		{
@@ -169,7 +172,7 @@ public class JsonLdUtils
 				slog.trace ( msg );
 		}
 		
-		return (T) list.get ( 0 );
+		return (T) list.iterator ().next ();
 	}
 	
 	/** 
@@ -180,6 +183,28 @@ public class JsonLdUtils
 		return asValue ( jsobj, property, false );
 	}
 
+	public static <T> T asValue ( Map<String, Object> jsobj, String property, Function<Object, T> strConverter, boolean failIfMany )
+	{
+		Object v = asValue ( jsobj, property, failIfMany );
+		
+		return strConverter.apply ( v );
+	}
+
+	public static <T> T asValue ( Map<String, Object> jsobj, String property, Function<Object, T> strConverter )
+	{
+		return asValue ( jsobj, property, strConverter, false );
+	}
+
+	public static Integer asInt ( Map<String, Object> jsobj, String property )
+	{
+		return (Integer) asValue ( jsobj, property, v -> {
+			if ( v == null ) return null;
+			if ( v instanceof Number ) return ((Number) v).intValue ();
+			return Integer.valueOf ( v.toString () );
+		});
+	}
+
+	
 	/**
 	 * Simple helper to get a list from a JSON object property.
 	 * If the property contains a single value and failIfSingle is false, it wraps the value into a list, else throws
@@ -190,7 +215,7 @@ public class JsonLdUtils
 	public static <T> List<T> asList ( Map<String, Object> jsobj, String property, boolean failIfSingle )
 	{
 		Object value = jsobj.get ( property );
-		if ( value == null ) return null;
+		if ( value == null ) return List.of();
 		if ( (value instanceof List) ) return (List<T>) value;
 
 		var msg = String.format ( "The property: %s isn't a list", property );
@@ -208,4 +233,5 @@ public class JsonLdUtils
 	{
 		return asList ( jsobj, property, false );
 	}
+	
 }

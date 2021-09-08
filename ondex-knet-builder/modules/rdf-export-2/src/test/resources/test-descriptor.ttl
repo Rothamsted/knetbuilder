@@ -1,0 +1,42 @@
+@prefix schema: <http://schema.org/>.
+@prefix bioschema: <http://bioschemas.org/>.
+@prefix bkr: <http://knetminer.org/data/rdf/resources/>.
+@prefix bkg: <http://knetminer.org/data/rdf/resources/graphs/>.
+@prefix edam: <http://edamontology.org/>.
+
+bkg:wheat a schema:Dataset;
+  schema:identifier "Knetminer:Triticum_aestivum";
+	schema:name "Knetminer's knowledge graph about wheat (Triticum aestivum)";
+  schema:version "51";
+  schema:additionalProperty [
+		a schema:PropertyValue;
+		# TODO: requires new definitions in places like BioKNO
+		schema:propertyID "KnetMiner:Dataset:Genes Number";
+		schema:value 116503
+	],
+  [
+		a schema:PropertyValue;
+		schema:propertyID "KnetMiner:Dataset:SemanticMotifs:Concept/Gene Mappings Percent";
+		schema:value 52.52;
+		schema:unitText "%"
+	],
+	[
+		a schema:PropertyValue;
+		schema:propertyID "KnetMiner:Dataset:SemanticMotifs:Gene Evidence Network Average Size";
+		# Average
+		schema:value 185;
+		schema:minValue 1;
+		schema:maxValue 5242;
+	],
+	[
+		a schema:PropertyValue;
+		schema:propertyID "KnetMiner:Dataset:SemanticMotifs:Relation Details:ENSEMBL Plants";
+		# Used to ease the identification of the specific item type
+		schema:name "ENSEMBL PLants";
+		schema:value 
+		# Simple set should be fine for now. TODO: or a string? (yes, if it has a manual order)
+		"Gene-[enc]-Protein",
+		"Gene-[homoeolog]-Gene",
+		"Protein-[has]-Domain"
+	]
+.
