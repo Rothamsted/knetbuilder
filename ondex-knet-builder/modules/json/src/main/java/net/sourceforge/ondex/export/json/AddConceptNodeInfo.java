@@ -80,7 +80,7 @@ public class AddConceptNodeInfo {
      }*/
 //     System.out.println("\t \t Selected (preferred) concept Name: "+ conceptName +"\n");
     }
-  else if(conceptType.equals(ConceptType.Phenotype.toString())) {
+  /*else if(conceptType.equals(ConceptType.Phenotype.toString())) {
           if(conceptName.equals(" ")) {
              Set<Attribute> attributes= con.getAttributes(); // get all concept Attributes.
              for(Attribute attr : attributes) {
@@ -90,7 +90,7 @@ public class AddConceptNodeInfo {
                 }
 //             System.out.println("\t \t Phenotype: Selected Name: "+ conceptName +"\n");
             }
-         }
+         }*/
   else {
     if(!getShortestPreferredConceptName(con.getConceptNames()).equals(" ")) {
        conceptName= getShortestPreferredConceptName(con.getConceptNames());
