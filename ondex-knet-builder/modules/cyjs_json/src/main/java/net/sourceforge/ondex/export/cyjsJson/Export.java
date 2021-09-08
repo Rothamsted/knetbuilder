@@ -367,7 +367,7 @@ public class Export extends ONDEXExport {
         }*/
 //        System.out.println("\t \t Selected (preferred) concept Name: "+ conName +"\n");
        }
-     else if(conceptType.equals(ConceptType.Phenotype.toString())) {
+     /*else if(conceptType.equals(ConceptType.Phenotype.toString())) {
 //             System.out.println("Current "+ conceptType +" conName: "+ conName);
              if(conName.equals(" ")) {
                 Set<Attribute> attributes= con.getAttributes(); // get all concept Attributes.
@@ -378,7 +378,7 @@ public class Export extends ONDEXExport {
                    }
 //                System.out.println("\t Phenotype: Selected conceptName: "+ conName +"\n");
                }
-            }
+            }*/
      else {
        if(!getShortestPreferredConceptName(con.getConceptNames()).equals(" ")) {
           conName= getShortestPreferredConceptName(con.getConceptNames());
