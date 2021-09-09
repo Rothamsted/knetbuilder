@@ -72,7 +72,11 @@ public class ONDEXGraphOperations
 			if ( accs.isEmpty () ) return "[]";
 			
 			return accs.stream ()
-			.map ( acc -> acc.getAccession () + ":" + acc.getElementOf ().getId () )
+			.map ( acc -> 
+				acc.getAccession () 
+				+ ":" + acc.getElementOf ().getId () 
+				+ ( acc.isAmbiguous () ? "(A)" : "" ) 
+			)
 			.collect ( Collectors.joining ( ",", "[", "]" ) );
 		};
 		
