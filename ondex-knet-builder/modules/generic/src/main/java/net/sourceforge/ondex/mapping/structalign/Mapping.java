@@ -194,7 +194,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 			for (ConceptName cn : concept.getConceptNames()) {
 				// use only exact synonyms
 				if (!exact || cn.isPreferred()) {
-					String name = LuceneEnv.stripText(cn.getName());
+					String name = LuceneEnv.preProcessTokenizedText(cn.getName());
 					cnames.add(name);
 				}
 			}

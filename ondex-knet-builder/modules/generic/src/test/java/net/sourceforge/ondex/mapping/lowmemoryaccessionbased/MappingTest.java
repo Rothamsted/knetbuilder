@@ -19,6 +19,8 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.RelationKey;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
+import net.sourceforge.ondex.core.util.ONDEXGraphOperations;
+import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.tools.DirUtils;
@@ -110,54 +112,57 @@ public class MappingTest {
     @Test
     public void testMapping() throws Exception {
 
-        // RelationType rtSet = graph.getONDEXGraphData(s).getRelationType(s,
-        // "is_p");
-        // System.out.println(rtSet);
-
         // populate graph
-        ONDEXConcept concept = graph.getFactory().createConcept("1234",
-                dataSourceUniProt, ccProtein, etIMPD);
+        ONDEXConcept concept = graph.getFactory().createConcept(
+        	"1234", dataSourceUniProt, ccProtein, etIMPD
+        );
         concept.createConceptAccession("0003968", dataSourceUniProt, false);
         concept.createConceptAccession("aba0003969", dataSourceTair, false);
         concept.createConceptAccession("00039610", dataSourceTair, false);
 
-        concept = graph.getFactory().createConcept("1236", dataSourceTair, ccThing,
-                etIMPD);
+        concept = graph.getFactory().createConcept(
+        	"1236", dataSourceTair, ccThing, etIMPD
+        );
         concept.createConceptAccession("0003968", dataSourceUniProt, false);
         concept.createConceptAccession("aba0003969", dataSourceTair, false);
         concept.createConceptAccession("123", dataSourceTair, false);
 
-        concept = graph.getFactory().createConcept("1239", dataSourceUniProt,
-                ccProtein, etIMPD);
+        concept = graph.getFactory().createConcept(
+        	"1239", dataSourceUniProt, ccProtein, etIMPD
+        );
         concept.createConceptAccession("ABA0003969", dataSourceTair, false);
         concept.createConceptAccession("bla", dataSourceTair, false);
 
-        concept = graph.getFactory().createConcept("12310a", dataSourceUniProt,
-                ccProtein, etIMPD);
+        concept = graph.getFactory().createConcept(
+        	"12310a", dataSourceUniProt, ccProtein, etIMPD
+        );
         concept.createConceptAccession("bla", dataSourceTair, false);
 
-        concept = graph.getFactory().createConcept("12310b", dataSourceUniProt,
-                ccProtein, etIMPD);
+        concept = graph.getFactory().createConcept(
+        	"12310b", dataSourceUniProt, ccProtein, etIMPD
+        );
         concept.createConceptAccession("bla", dataSourceTair, true);
 
         // perform mapping
-        Mapping m = new Mapping();
+        Mapping mapper = new Mapping();
 
         // this have to be called after the relations and concepts are created
-        LuceneEnv env = loadLuceneEnv(graph);
-        ONDEXPluginArguments arg = new ONDEXPluginArguments(m.getArgumentDefinitions());
-        LuceneRegistry.sid2luceneEnv.put(graph.getSID(), env);
+        LuceneEnv luceneMgr = loadLuceneEnv(graph);
+        ONDEXPluginArguments arg = new ONDEXPluginArguments(mapper.getArgumentDefinitions());
+        LuceneRegistry.sid2luceneEnv.put(graph.getSID(), luceneMgr);
         arg.addOption(ArgumentNames.RELATION_TYPE_ARG, "equ");
         arg.addOption(ArgumentNames.EQUIVALENT_CC_ARG, "Thing,Protein");
         arg.addOption(ArgumentNames.IGNORE_AMBIGUOUS_ARG, false);
         arg.addOption(ArgumentNames.WITHIN_DATASOURCE_ARG, false);
 
 
-        m.setArguments(arg);
-        m.setONDEXGraph(graph);
-        m.start();
-
-        Assert.assertEquals(2, graph.getRelations().size());
+        mapper.setArguments(arg);
+        mapper.setONDEXGraph(graph);
+        mapper.start();
+        
+        ONDEXGraphOperations.dumpAll ( graph );
+        
+        Assert.assertEquals( "Mapping relations count doesn't match!", 1, graph.getRelations().size() );
     }
 
     @Test

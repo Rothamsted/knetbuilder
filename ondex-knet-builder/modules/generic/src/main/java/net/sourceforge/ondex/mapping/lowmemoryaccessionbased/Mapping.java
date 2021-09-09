@@ -217,8 +217,6 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 									/ ((double) total) * 100d) + "% ("
 							+ numberFormat.format(current) + " Concepts)",
 							getCurrentMethodName()));
-						// TODO: remove? In general, this is bad practice, we aren't smarter than the GC.
-						// if (current % 200000 == 0) System.runFinalization();
 				}
 				
 				for (ConceptAccession conceptAcc : concept.getConceptAccessions())

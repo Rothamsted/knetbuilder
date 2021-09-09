@@ -89,7 +89,7 @@ public class TextProcessing {
      */
     public static HashSet<String> searchEvidenceSentence(String text, String query) {
         //split abstract into sentences
-        query = LuceneEnv.stripText(query);
+        query = LuceneEnv.preProcessTokenizedText(query);
         query = TextProcessing.removeStopWords(query);
         String sentences[] = TextProcessing.sentenceSplit.split(text);
         HashSet<String> evidences = new HashSet<String>();

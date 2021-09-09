@@ -258,7 +258,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames
 			{
 				if ( !exactSyn || cn.isPreferred () )
 				{
-					String name = LuceneEnv.stripText ( cn.getName () ).trim ();
+					String name = LuceneEnv.preProcessTokenizedText ( cn.getName () ).trim ();
 					if ( name.length () > 0 )
 					{
 						cnames.add ( name );
@@ -310,7 +310,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames
 									boolean foundExact = false;
 									for ( ConceptName cn : hitConcept.getConceptNames () )
 									{
-										String compName = LuceneEnv.stripText ( cn.getName () ).trim ();
+										String compName = LuceneEnv.preProcessTokenizedText ( cn.getName () ).trim ();
 										if ( !exactSyn || cn.isPreferred () )
 										{
 											if ( compName.equalsIgnoreCase ( name ) )
@@ -342,7 +342,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames
 						{
 							if ( !exactSyn || cn.isPreferred () )
 							{
-								String name = LuceneEnv.stripText ( cn.getName () ).trim ();
+								String name = LuceneEnv.preProcessTokenizedText ( cn.getName () ).trim ();
 								if ( name.length () > 0 ) hitCNames.add ( name );
 							}
 						}

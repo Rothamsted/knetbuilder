@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import org.apache.lucene.search.Query;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +99,7 @@ public class LuceneEnvTest
 		// DirUtils.deleteTree(file);
 	}
 
-	@Test
+	@Test 
 	public void testSearchConceptByConceptAccessionExact() {
 
 		ONDEXConcept concept1 = og.getFactory().createConcept("A", dataSource, cc, et);
@@ -121,9 +122,9 @@ public class LuceneEnvTest
 
 		Query query = LuceneQueryBuilder.searchConceptByConceptAccessionExact(dataSource, "ABC", null, cc, true);
 		Set<ONDEXConcept> results = lenv.searchInConcepts(query);
-		assertEquals(1, results.size());
+		assertEquals( "ABC search result has wrong count!", 1, results.size());
 		Set<ONDEXConcept> ids = results;
-		assertTrue (ids.contains(concept1) );
+		assertTrue ( "ABC search result has wrong content!", ids.contains(concept1) );
 		
 		query = LuceneQueryBuilder.searchConceptByConceptAccessionExact(dataSource, "ABC", dataSource, cc, true);
 		results = lenv.searchInConcepts(query);
@@ -154,6 +155,52 @@ public class LuceneEnvTest
 		results = lenv.searchInConcepts(query);
 		assertEquals(2, results.size());
 	}
+
+	
+	/**
+	 * Tests against partial accession matching
+	 * @author M Brandizi (2021)
+	 */
+	@Test 
+	public void testSearchConceptByConceptAccessionExactPartialMatches()
+	{
+		var ccA = og.getMetaData ().createConceptClass ( "A", "Concept Type A", "", null );
+		
+		ONDEXConcept concept1 = og.getFactory().createConcept ( "A1", dataSource, ccA, et );
+		concept1.createConceptAccession ( "Prefix.", dataSource, false );
+		concept1.createConceptAccession ( "Prefix.", dataSource1, true );
+		
+		ONDEXConcept concept2 = og.getFactory().createConcept ( "A2", dataSource, ccA, et );
+		concept2.createConceptAccession ( "Prefix. And Postfix", dataSource, false );
+
+		lenv.setONDEXGraph ( og );
+
+		var query = LuceneQueryBuilder.searchConceptByConceptAccessionExact ( 
+			dataSource, "Prefix.", null, ccA, false 
+		);
+		var results = lenv.searchInConcepts ( query );
+		
+		assertEquals ( "Found concepts count doesn't match (prefix search)!", 1, results.size () );
+		assertEquals ( "Found concept don't match (prefix search)!", concept1.getPID (), results.iterator ().next ().getPID () );
+		
+
+		query = LuceneQueryBuilder.searchConceptByConceptAccessionExact ( 
+			dataSource, "Prefix. And Postfix", null, ccA, false 
+		);
+		results = lenv.searchInConcepts ( query );
+
+		assertEquals ( "Found concepts count doesn't match (complete search)!", 1, results.size () );
+		assertEquals ( "Found concept doesn't match (complete search)!", concept2.getPID (), results.iterator ().next ().getPID () );
+	
+		
+		query = LuceneQueryBuilder.searchConceptByConceptAccessionExact ( 
+			dataSource1, "Prefix.", null, ccA, true 
+		);
+		results = lenv.searchInConcepts ( query );
+		assertEquals ( "Found concepts count doesn't match (prefix, ambiguous)!", 1, results.size () );
+		assertEquals ( "Found concept doesn't match (prefix, ambiguous)!", concept1.getPID (), results.iterator ().next ().getPID () );
+	}
+	
 	
 	@Test
 	public void testSearchConceptByConceptAttributeExact() {
@@ -603,5 +650,6 @@ public class LuceneEnvTest
 	)
 	{
 		return testSearchByTypeAndName ( conceptClassId, accessionTerm, true, expectedResultSize, errMsg );
-	}	
+	}
+
 }

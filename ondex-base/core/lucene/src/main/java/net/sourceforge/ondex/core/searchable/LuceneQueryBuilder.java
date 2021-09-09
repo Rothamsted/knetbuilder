@@ -74,7 +74,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	private static PhraseQuery searchByWords ( String field, String words, boolean singleTermTrim ) 
 	{
 		PhraseQuery.Builder qb = new PhraseQuery.Builder ();
-		for ( String element : LuceneEnv.stripText ( words ).split ( SPACE ) ) {
+		for ( String element : LuceneEnv.preProcessTokenizedText ( words ).split ( SPACE ) ) {
 			if ( singleTermTrim ) element = StringUtils.trimToNull ( element );
 			if ( element == null ) continue; // TODO: warning?
 			qb.add ( new Term ( field, element ) );
@@ -306,7 +306,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 		}
 
 		PhraseQuery.Builder phraseQb = new PhraseQuery.Builder ();
-		for (String element : LuceneEnv.stripText(term).split(SPACE)) {
+		for (String element : LuceneEnv.preProcessTokenizedText(term).split(SPACE)) {
 			phraseQb.add(new Term(CONNAME_FIELD, element));
 		}
 		boolQb.add(phraseQb.build (), BooleanClause.Occur.MUST);
@@ -407,7 +407,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 			boolQb.add ( new TermQuery ( new Term ( CC_FIELD, ccID ) ), BooleanClause.Occur.MUST ); // query for CC
 		}
 
-		String[] split = LuceneEnv.stripText ( term ).split ( " " );
+		String[] split = LuceneEnv.preProcessTokenizedText ( term ).split ( " " );
 		for ( String word : split )
 		{
 			FuzzyQuery qfuzzy = searchFuzzy ( CONNAME_FIELD, word, minimumSimilarity );
@@ -481,12 +481,12 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 			// see rawAccession() for details about why we search these fields 
 			String accFld = accFldPrefx + RAW;
 			
-			var sterm = LuceneEnv.rawAccession ( term );
-			boolQb.add ( createPhraseQuery ( qparser, accFld, sterm ), BooleanClause.Occur.SHOULD );
+			// TODO: remove var sterm = LuceneEnv.rawAccession ( term );
+			boolQb.add ( createPhraseQuery ( qparser, accFld, term ), BooleanClause.Occur.SHOULD );
 			
 			if ( !ignoreAmbiguity ) {
 				String accAmbiguousFld = accFldPrefx + AMBIGUOUS + DELIM + RAW;
-				boolQb.add ( createPhraseQuery ( qparser, accAmbiguousFld, sterm ), BooleanClause.Occur.SHOULD );
+				boolQb.add ( createPhraseQuery ( qparser, accAmbiguousFld, term ), BooleanClause.Occur.SHOULD );
 			}
 		}
 		return boolQb.build ();
@@ -602,17 +602,18 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 
 		BooleanQuery.Builder termsOrQb = new BooleanQuery.Builder ();
 		String accFldPrefx = CONACC_FIELD + DELIM + dataSource.getId () + DELIM;
-		// see rawAccession() for details about why we search these fields 
+
 		String accFld = accFldPrefx + RAW;
 		String accAmbiguousFld = accFldPrefx + AMBIGUOUS + DELIM + RAW;
 		
 		for ( String term : terms )
 		{
-			var searchTerm = LuceneEnv.rawAccession ( term );
-			termsOrQb.add ( createPhraseQuery ( qparser, accFld, searchTerm, term ), SHOULD );
+			// TODO: remove. var searchTerm = LuceneEnv.rawAccession ( term );
+			// var searchTerm = escapeTermForExactMatch ( term );
+			termsOrQb.add ( createPhraseQuery ( qparser, accFld, term, term ), SHOULD );
 			
 			if ( ignoreAmbiguity )
-				termsOrQb.add ( createPhraseQuery ( qparser, accAmbiguousFld, searchTerm, term ), SHOULD );
+				termsOrQb.add ( createPhraseQuery ( qparser, accAmbiguousFld, term, term ), SHOULD );
 		}
 		boolQb.add ( termsOrQb.build (), MUST );
 		
@@ -857,7 +858,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	
 	/**
 	 * Attribute tokens search based on fuzzy queries. It clean the term text using 
-	 * {@link LuceneEnv#stripText(String)} and then setup a {@link #searchFuzzy(String, String, float) fuzzy search}
+	 * {@link LuceneEnv#preProcessTokenizedText(String)} and then setup a {@link #searchFuzzy(String, String, float) fuzzy search}
 	 * for each of the tokens and uses this to build a boolean query with the {@link BooleanClause.Occur#MUST} operator. 
 	 */
 	private static Query searchByAttributeFuzzy ( String attrFieldPrefix, String attrName, String term, float similarity ) 
@@ -865,7 +866,7 @@ public class LuceneQueryBuilder implements ONDEXLuceneFields {
 	{
 		String fieldName = attrFieldPrefix + DELIM + attrName;
 		BooleanQuery.Builder boolQb = new BooleanQuery.Builder ();
-		String[] split = LuceneEnv.stripText ( term ).split ( " " );
+		String[] split = LuceneEnv.preProcessTokenizedText ( term ).split ( " " );
 		
 		for ( String subterm : split )
 		{

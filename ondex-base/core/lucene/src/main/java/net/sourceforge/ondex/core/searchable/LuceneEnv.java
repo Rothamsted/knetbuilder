@@ -20,14 +20,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.KeywordAnalyzer;
-import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
@@ -40,10 +35,10 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
@@ -240,7 +235,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	/**
 	 * global analyser used for the index
 	 */
-	public final static Analyzer DEFAULTANALYZER;
+	public final static Analyzer DEFAULTANALYZER = new OndexAnalyzer ();
 
 	/** A marker used to mark a metadata document. */
 	private static final String LASTDOCUMENT_FIELD = "LASTDOCUMENT_FIELD";
@@ -248,7 +243,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	/**
 	 * remove double spaces
 	 */
-	private final static Pattern DOUBLESPACECHARS = Pattern.compile("\\s{2,}");
+	private final static Pattern DOUBLE_SPACES_RE = Pattern.compile("\\s{2,}");
 
 	/**
 	 * empty BitSet for empty results
@@ -304,8 +299,6 @@ public class LuceneEnv implements ONDEXLuceneFields
 			f.setOmitNorms ( true );
 			f.freeze ();
 		}
-				
-		DEFAULTANALYZER = createDefaultAnalyzer ();
 		
 		EXECUTOR = Executors.newCachedThreadPool ();
 		Runtime.getRuntime ().addShutdownHook ( 
@@ -314,31 +307,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 			) 
 		); 
 	}
-		
-	/**
-	 * The default analyser uses {@link PerFieldAnalyzerWrapper} to set up {@link KeywordAnalyzer}
-	 * for certain fields (eg, Concept Class ) and {@link StandardAnalyzer} as default.
-	 * 
-	 * This is necessary to fix problems like mixed-case searches, see 
-	 * <a href = "https://stackoverflow.com/questions/62119328">here</a>. 
-	 * 
-	 */
-	private static Analyzer createDefaultAnalyzer ()
-	{
-		Map<String,Analyzer> fa = new HashMap<> ();
-		// TODO: can we use one analyser only for each field?
-		// TODO: if the exception fields are changed, review the search methods below, which 
-		// are invoked by knetminer.
-		
-		Stream.of ( 
-			CONID_FIELD, PID_FIELD, CC_FIELD, DataSource_FIELD, 
-			RELID_FIELD, FROM_FIELD, TO_FIELD, OFTYPE_FIELD,
-			CONACC_FIELD + DELIM + RAW, CONNAME_FIELD + DELIM + RAW,
-			"iri"
-		).forEach ( f -> fa.put ( f, new KeywordAnalyzer () ) );
-		
-		return new PerFieldAnalyzerWrapper ( new StandardAnalyzer (), fa );
-	}
+
 	
 	/**
 	 * Optimises the RAM to be used for Lucene indexes, based on {@link #RAM_BUFFER_QUOTA} and
@@ -350,13 +319,13 @@ public class LuceneEnv implements ONDEXLuceneFields
 	}
 	
 	/**
-	 * Strips text to be inserted into the index.
+	 * Pre-process a text to be sent to a tokenised index field.
 	 * 
 	 * @param text
 	 *            String
 	 * @return String
 	 */
-	public static String stripText(String text) 
+	public static String preProcessTokenizedText(String text) 
 	{
 		// trim and lower case
 		text = text.trim().toLowerCase();
@@ -365,7 +334,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 		text = NON_WORD_RE.matcher(text).replaceAll(SPACE);
 
 		// replace double spaces by single ones
-		text = DOUBLESPACECHARS.matcher(text).replaceAll(SPACE);
+		text = DOUBLE_SPACES_RE.matcher(text).replaceAll(SPACE);
 
 		return text;
 	}
@@ -378,8 +347,11 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * That would be getting rid of this Lucene field names composed with data source IDs
 	 * and storing multiple documents per accession.
 	 * 
+	 * TODO: remove
+	 * 
 	 */
-	public static String rawAccession ( String accStr )
+	@Deprecated
+	private static String rawAccession ( String accStr )
 	{
 		return '_' + accStr + '_';		
 	}
@@ -1385,10 +1357,10 @@ public class LuceneEnv implements ONDEXLuceneFields
 		doc.add ( new Field ( DataSource_FIELD, c.getElementOf ().getId (), FIELD_TYPE_STORED_INDEXED_UNCHANGED ) );
 
 		if ( annotation.length () > 0 )
-			doc.add ( new Field ( ANNO_FIELD, LuceneEnv.stripText ( annotation ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
+			doc.add ( new Field ( ANNO_FIELD, LuceneEnv.preProcessTokenizedText ( annotation ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 
 		if ( description.length () > 0 )
-			doc.add ( new Field ( DESC_FIELD, LuceneEnv.stripText ( description ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
+			doc.add ( new Field ( DESC_FIELD, LuceneEnv.preProcessTokenizedText ( description ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 
 				
 		// start concept accession handling
@@ -1402,15 +1374,17 @@ public class LuceneEnv implements ONDEXLuceneFields
 				Boolean isAmbiguous = ca.isAmbiguous ();
 				listOfConceptAccDataSources.add ( elementOf );
 				
-				String id = CONACC_FIELD + DELIM + elementOf;
-				if ( isAmbiguous ) id += "" + DELIM + AMBIGUOUS;
+				String accFieldId = CONACC_FIELD + DELIM + elementOf;
+				if ( isAmbiguous ) accFieldId += "" + DELIM + AMBIGUOUS;
 
 				FieldType ftype = FIELD_TYPE_STORED_INDEXED_VECT_STORE;
-				doc.add ( new Field ( id, stripText ( accession ), ftype ));
+				doc.add ( new Field ( accFieldId, preProcessTokenizedText ( accession ), ftype ));
 
 				// see rawAccession about why we do this
-				var rawAcc = rawAccession ( accession );
-				doc.add ( new Field ( id + DELIM + RAW, rawAcc, ftype ));
+				// TODO: remove var rawAcc = rawAccession ( accession );
+				doc.add ( new StringField ( accFieldId + DELIM + RAW, accession, Store.YES  ));
+				
+				// TODO: do we need the lower case version?
 				
 				// Needed for exact search by accession independently on the source
 				doc.add ( new StringField ( CONACC_FIELD + DELIM + RAW, accession, Store.YES ) );
@@ -1426,10 +1400,11 @@ public class LuceneEnv implements ONDEXLuceneFields
 			.map ( ConceptName::getName )
 			.filter ( Objects::nonNull )
 			.forEach ( nameStr -> { 
-				doc.add ( new Field ( CONNAME_FIELD, LuceneEnv.stripText ( nameStr ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
+				doc.add ( new Field ( CONNAME_FIELD, LuceneEnv.preProcessTokenizedText ( nameStr ), FIELD_TYPE_STORED_INDEXED_VECT_STORE ) );
 				// Like the accession case, allows for exact searches and case-insensitive exact searches
-				doc.add ( new StringField ( CONNAME_FIELD + DELIM + RAW, nameStr, Store.YES ) );
-				doc.add ( new StringField ( CONNAME_FIELD + DELIM + RAW, nameStr.toLowerCase (), Store.YES ) );
+				var nameFieldId = CONNAME_FIELD + DELIM + RAW; 
+				doc.add ( new StringField ( nameFieldId, nameStr, Store.YES ) );
+				doc.add ( new StringField ( nameFieldId, nameStr.toLowerCase (), Store.YES ) );
 			});
 		}
 
@@ -1447,7 +1422,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 					String name = attribute.getOfType ().getId ();
 					listOfConceptAttrNames.add ( name );
 					String value = attribute.getValue ().toString ();
-					attrsRaw.put ( name, LuceneEnv.stripText ( value ) );
+					attrsRaw.put ( name, LuceneEnv.preProcessTokenizedText ( value ) );
 				}
 			}
 
@@ -1536,7 +1511,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 				String name = attribute.getOfType ().getId ();
 				listOfRelationAttrNames.add ( name );
 				String value = attribute.getValue ().toString ();
-				attrsRaw.put ( name, LuceneEnv.stripText ( value ) );
+				attrsRaw.put ( name, LuceneEnv.preProcessTokenizedText ( value ) );
 			}
 		}
 
