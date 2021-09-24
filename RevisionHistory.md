@@ -8,17 +8,17 @@
 * GraphSamplingPlugIn, better criteria to sample a representative graph
 * Code changes:
   * git submodules eliminated, we went back to a single repository codebase
-	* POMs cleaning/refactoring
-	* Some code cleaning/refactoring
-	* Graph manipulation and access utilities added
-	* CI Migration to GitHub Actions, common CI script from rdf-common
+  * POMs cleaning/refactoring
+  * Some code cleaning/refactoring
+  * Graph manipulation and access utilities added
+  * CI Migration to GitHub Actions, common CI script from rdf-common
 * Bugfixes and improvements to tab parser
 * Bugfixes and improvements to Lucene indexing module
 * Miscellanea:
-	* Windows scripts updated
-	* Some diagnostic messages added to the OXL parser
-	* FASTA importer: AA sequence no longer imported
-	* JSON exporter: minor changes to the output, to reflect Knetminer needs
+  * Windows scripts updated
+  * Some diagnostic messages added to the OXL parser
+  * FASTA importer: AA sequence no longer imported
+  * JSON exporter: minor changes to the output, to reflect Knetminer needs
  
 ## 3.0
 * Various bugfixes in the components:
