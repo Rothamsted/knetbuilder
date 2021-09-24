@@ -1,14 +1,24 @@
 # Revision History
 
-## 4.0-SNAPSHOT
-  * Big changes to migrate to Java 11
-  * Code changes:
-  	* POMs cleaning/refactoring
-  	* Some code cleaning/refactoring
-  * TODO: Review from 3.0
+*This file was last reviewed on 24/09/2021*
 
-## 3.0.1-SNAPSHOT
-* Next dev release.
+## 4.0-SNAPSHOT
+* Big changes to migrate to Java 11
+* New version of rd2neo integrated into the neo4j-export component
+* GraphSamplingPlugIn, better criteria to sample a representative graph
+* Code changes:
+  * git submodules eliminated, we went back to a single repository codebase
+	* POMs cleaning/refactoring
+	* Some code cleaning/refactoring
+	* Graph manipulation and access utilities added
+	* CI Migration to GitHub Actions, common CI script from rdf-common
+* Bugfixes and improvements to tab parser
+* Bugfixes and improvements to Lucene indexing module
+* Miscellanea:
+	* Windows scripts updated
+	* Some diagnostic messages added to the OXL parser
+	* FASTA importer: AA sequence no longer imported
+	* JSON exporter: minor changes to the output, to reflect Knetminer needs
  
 ## 3.0
 * Various bugfixes in the components:
