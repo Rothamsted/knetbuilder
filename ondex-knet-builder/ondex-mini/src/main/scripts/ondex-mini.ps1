@@ -59,4 +59,4 @@ $cmd = "-Dondex.dir=$MYDIR/data --class-path $CLASSPATH net.sourceforge.ondex.On
 $cmd = "$cmd -ubla -ptest -w$WORKFLOW $PLUGIN_ARGS"
 
 #echo $jcmd
-Start-Process -FilePath java -NoNewWindow -Wait -ArgumentList $jcmd
+Start-Process -FilePath java -NoNewWindow -Wait -ArgumentList $cmd
