@@ -167,6 +167,7 @@ public class JsonLdUtilsTest
 		model.write ( sw, "JSON-LD" );
 		log.info ( "JSON-LD from Jena:\n{}\n", sw );
 		
+		@SuppressWarnings ( "unchecked" )
 		var jso = (Map<String, Object>) JsonUtils.fromString ( sw.toString () );
 		log.info ( "Map from JsonUtils:\n{}\n", jso );
 		
