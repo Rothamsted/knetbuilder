@@ -1,8 +1,10 @@
 # Revision History
 
-*This file was last reviewed on 24/09/2021*
+*This file was last reviewed on 28/10/2021*
 
-## 4.0-SNAPSHOT
+## 5.0.1-SNAPSHOT
+
+## 5.0
 * Big changes to migrate to Java 11
 * New version of rd2neo integrated into the neo4j-export component
 * GraphSamplingPlugIn, better criteria to sample a representative graph
