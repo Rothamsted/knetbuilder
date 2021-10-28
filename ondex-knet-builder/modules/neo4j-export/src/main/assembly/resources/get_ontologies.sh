@@ -2,6 +2,8 @@
 # Downloads relevant ontology files, which you typically want to upload into Neo together with data.
 #
 
+set -e
+
 target_dir="${1:-data}"
 
 
@@ -27,7 +29,7 @@ echo -e "\n---- Additional ontologies, to be used for the triple store"
 
 mkdir -p "$target_dir/ext"
 
-get_onto "schema.org" http://schema.org/version/latest/schema.ttl ext/schema.ttl
+get_onto "schema.org" https://schema.org/version/latest/schemaorg-current-https.ttl ext/schema.ttl
 
 # TODO: bioschemas!
 get_onto "BioPAX" http://www.biopax.org/release/biopax-level3.owl ext/biopax-level3.owl
