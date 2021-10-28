@@ -179,7 +179,8 @@ public class FieldArgumentParser {
         ThresholdTransformer greaterThan = new ThresholdTransformer(greaterThanFields, Action.GREATERTHAN);
         ThresholdTransformer lessThan = new ThresholdTransformer(lessThanFields, Action.LESSTHAN);
         ThresholdTransformer notEquThan = new ThresholdTransformer(notEqualFields, Action.NOT_EQUAL);
-        ThresholdTransformer relativeToEnd = new ThresholdTransformer(relativeToEndFields, Action.DISTANCE_FROM_END);
+        // TODO: remove?
+        // ThresholdTransformer relativeToEnd = new ThresholdTransformer(relativeToEndFields, Action.DISTANCE_FROM_END);
 
         return new AdditiveTransformer(
                 new Transformer[]{definedFields,

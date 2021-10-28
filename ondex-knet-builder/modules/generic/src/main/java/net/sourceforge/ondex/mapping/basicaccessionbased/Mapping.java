@@ -3,7 +3,9 @@ package net.sourceforge.ondex.mapping.basicaccessionbased;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -190,7 +192,11 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
                 toMap.clear();
             }
             bw.close();
-        } catch (Exception e) {
+        } 
+        catch (IOException e) {
+        	throw new UncheckedIOException ( 
+        		"I/O problems while running the mapping plug-in:" + e.getMessage (), e
+        	);
         }
 
         System.err.println("Relations created: " + relMade);

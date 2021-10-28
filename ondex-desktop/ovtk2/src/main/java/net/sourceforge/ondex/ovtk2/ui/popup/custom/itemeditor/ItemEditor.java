@@ -216,7 +216,7 @@ public class ItemEditor extends javax.swing.JFrame {
 	}// GEN-LAST:event_deleteButtonActionPerformed
 
 	private void itemListValueChanged(javax.swing.event.ListSelectionEvent evt) {
-		if (itemEditor.getItemName() != null && itemEditor.getItemName().toString() == itemList.getSelectedValue())
+		if (itemEditor.getItemName() != null && itemEditor.getItemName().toString().equals ( itemList.getSelectedValue() ))
 			return;
 		if (!makeSureContentsAreSaved()) {
 			return;

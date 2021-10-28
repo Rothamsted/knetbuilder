@@ -41,7 +41,6 @@ public class LowMemoryAccessionBasedTest {
     @Before
     public void setUp() throws Exception {
 
-        Assert.assertNotNull(LUCENE_DIR);
         graph = new MemoryONDEXGraph("test");
 
         ONDEXEventHandler.getEventHandlerForSID(graph.getSID())

@@ -223,10 +223,10 @@ public class Export extends ONDEXExport implements Monitorable {
 				char current = in.charAt(i);
 
 				// get all UTF8 chars
-				if ((current == 0x9) || (current == 0xA) || (current == 0xD)
-						|| ((current >= 0x20) && (current <= 0xD7FF))
-						|| ((current >= 0xE000) && (current <= 0xFFFD))
-						|| ((current >= 0x10000) && (current <= 0x10FFFF))) {
+				if ( current == 0x9 || current == 0xA || current == 0xD
+						|| (current >= 0x20 && current <= 0xD7FF)
+						|| (current >= 0xE000 && current <= 0xFFFD)
+						|| (current >= 0x10000 /*&& current <= 0x10FFFF */)) {
 					// ok its a valid char
 				} else { // its invalid
 					if (invalidChars == null) {

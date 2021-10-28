@@ -242,13 +242,8 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 			relations.removeAll(selectedR);
 
 			// track what concepts and relations has been removed
-			if (invconcepts == null && invrelations == null) {
-				invconcepts = selectedC;
-				invrelations = selectedR;
-			} else {
-				invconcepts.addAll(selectedC);
-				invrelations.addAll(selectedR);
-			}
+			if ( invconcepts == null ) invconcepts = selectedC; else invconcepts.addAll ( selectedC );
+			if ( invrelations == null ) invrelations = selectedR; else invrelations.addAll ( selectedR );
 		}
 
 		// inverse the cc to exclusive inclusion if EXCLUDE_ARG is false

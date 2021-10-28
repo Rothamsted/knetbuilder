@@ -65,6 +65,8 @@ public class MappingWriter {
 		}
 		
 		// get the relationtypeset and evidencetype for this mapping
+		// TODO: this mess cannot be right, the second assignment is the same and the last one
+		// doesn't make sense.
 		rt = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
 		if (rt == null) {
 			RelationType rt = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
