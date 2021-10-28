@@ -7,7 +7,7 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>2.0.1-SNAPSHOT</version>
+	  <version>2.0RC5</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
@@ -62,9 +62,7 @@
 	 <properties>
 		 <java.version>11</java.version>
 		 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-			
-		 <rdfutils.version>3.0-SNAPSHOT</rdfutils.version>		
-			
+						
 		 <lucene.version>6.6.0</lucene.version>
 			
 		 <!-- Used by neo4j-related components -->
@@ -514,17 +512,6 @@
 			  <version>2.8.0</version>
 			</dependency>				
 			              				
-			<!-- Utilities for RDF and the Jena RDF framework -->
-	    <dependency>
-	      <groupId>info.marcobrandizi</groupId>
-	      <artifactId>rdfutils-core</artifactId>
-	      <version>${rdfutils.version}</version>
-	    </dependency>
-			<dependency>
-			  <groupId>info.marcobrandizi</groupId>
-			  <artifactId>rdfutils-jena</artifactId>
-	      <version>${rdfutils.version}</version>
-			</dependency>
 
       <!-- TODO: This is prehistoric, needs to be removed -->         
       <dependency>
