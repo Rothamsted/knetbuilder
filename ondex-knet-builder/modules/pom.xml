@@ -4,7 +4,7 @@
    <parent>
 	   <artifactId>knet-builder</artifactId>
 	   <groupId>net.sourceforge.ondex</groupId>
-	   <version>4.0RC2</version>
+	   <version>4.0.1-SNAPSHOT</version>
    </parent>
    <artifactId>modules</artifactId>
    <packaging>pom</packaging>

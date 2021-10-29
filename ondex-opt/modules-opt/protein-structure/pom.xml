@@ -7,7 +7,7 @@
    <parent>
       <artifactId>modules-opt</artifactId>
       <groupId>net.sourceforge.ondex</groupId>
-      <version>4.0RC2</version>
+      <version>4.0.1-SNAPSHOT</version>
    </parent>
 
    <groupId>net.sourceforge.ondex.modules</groupId>
