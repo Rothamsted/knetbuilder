@@ -14,11 +14,20 @@ public class Marshaller
 
 	private static Marshaller marshaller = null;
 
-	// There was a potential problem related to JDK > 11
+	// TODO: There was a potential problem related to JDK > 11
 	// https://github.com/x-stream/xstream/issues/101
 	// Which it should be fixed with the latest xstream version.
 	private static XStream xstream = new XStream ();
 
+	{
+		// See https://stackoverflow.com/a/67288175/529286
+		xstream.allowTypesByWildcard(new String[] { 
+	    "net.sourceforge.ondex.**",
+	    "java.awt.**"
+    });
+		
+	}
+	
 	private Marshaller () {}
 
 	public static Marshaller getMarshaller ()
