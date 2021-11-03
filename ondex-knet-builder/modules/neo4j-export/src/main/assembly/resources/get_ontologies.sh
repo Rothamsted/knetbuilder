@@ -14,7 +14,7 @@ function get_onto ()
 	f_name="$3"
 	
 	echo -e "\t$title"
-	wget "$url" -O "$target_dir/$f_name"
+	wget --no-check-certificate "$url" -O "$target_dir/$f_name"
 }
 
 get_onto 'BioKNO main file' \
