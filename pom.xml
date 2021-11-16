@@ -7,7 +7,7 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>2.0RC7</version>
+	  <version>2.0</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
@@ -66,7 +66,7 @@
 		 <lucene.version>6.6.0</lucene.version>
 			
 		 <!-- Used by neo4j-related components -->
-		 <rdf2neo.version>4.0RC</rdf2neo.version>  
+		 <rdf2neo.version>4.0RC1</rdf2neo.version>  
 			
 		 <slf4j.version>1.7.25</slf4j.version>
 			
