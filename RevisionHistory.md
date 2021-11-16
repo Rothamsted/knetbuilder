@@ -3,6 +3,7 @@
 *This file was last reviewed on 28/10/2021*
 
 ## 5.0.1-SNAPSHOT
+* Current snapshot
 
 ## 5.0
 * Big changes to migrate to Java 11
