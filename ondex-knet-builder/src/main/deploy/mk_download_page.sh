@@ -31,10 +31,10 @@ cat "$mydir/Downloads_template.md" \
     '' zip rdfExporterSnapUrl \
 | make_doc \
     maven-releases net.sourceforge.ondex.apps installer \
-  	packaged-distro zip ondexRelUrl 4.0RC2 \
+  	packaged-distro zip ondexRelUrl  \
 | make_doc \
     maven-releases net.sourceforge.ondex.apps ondex-mini \
-    packaged-distro zip miniRelUrl 4.0RC2 \
+    packaged-distro zip miniRelUrl  \
 | make_doc \
     maven-releases net.sourceforge.ondex.modules rdf-export-2-cli \
-    '' zip rdfExporterRelUrl 4.0RC2
+    '' zip rdfExporterRelUrl 
