@@ -840,10 +840,65 @@ public class LuceneEnv implements ONDEXLuceneFields
 	}
 
 	/**
-	 * TODO: comment me!
+	 * 
+	 * Searches for an {@link ONDEXEntity} in the index, ie, a concept or a relation.
+	 * 
+	 * @param luceneIdField the Lucene field that is used to store the entity internal unique ID, ie, 
+	 * 
 	 */
-	private <E extends ONDEXEntity> ScoredHits<E> searchScoredEntity ( 
-		Query q, String field, Class<E> returnValueClass 
+	private <E extends ONDEXEntity> Set<E> searchOndexEntity ( Query q, String luceneIdField, Class<E> entityClass )
+	{
+		try
+		{
+			this.openIdxReader ();
+			DocIdCollector collector = new DocIdCollector ( idxSearcher.getIndexReader () );
+			idxSearcher.search ( q, collector );
+
+			BitSet bs = collector.getBits ();
+			if ( bs.length () == 0 ) return BitSetFunctions.create ( og, entityClass, EMPTYBITSET );
+
+			BitSet set = new BitSet ( bs.length () );
+			// iterator of document indices
+			for ( int i = bs.nextSetBit ( 0 ); i >= 0; i = bs.nextSetBit ( i + 1 ) )
+			{
+				// retrieve associated document
+				Document document = idxSearcher.doc ( i, ID_FIELDS );
+				
+				// get concept ID from document
+				Integer entityId = Optional.ofNullable ( document.get ( luceneIdField ) )
+					.map ( Integer::valueOf )
+					.orElse ( null );
+				
+				if ( entityId == null ) {
+					log.warn ( 
+						"Skipping Lucene document having a null ID for the Lucene field: \"{}\", found by the query \"{}\"."
+						+ " This is likely to be caused by https://github.com/Rothamsted/knetbuilder/issues/53",
+						luceneIdField,
+						q.toString ()
+					);
+					continue;
+				}
+				
+				set.set ( entityId );
+			}
+			return BitSetFunctions.create ( og, entityClass, set );
+		}
+		catch ( IOException ex ) {
+			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchEntity]" ) );
+			log.error ( "Error while searching: " + q + " over field " + luceneIdField + ": " + ex.getMessage (), ex );
+			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );			
+		}
+	}	
+	
+	
+	/**
+	 * Searches for an {@link ONDEXEntity} in the index, ie, a concept or a relation.
+	 * 
+	 * @param luceneIdField the Lucene field that is used to store the entity internal unique ID, ie, 
+	 * 
+	 */
+	private <E extends ONDEXEntity> ScoredHits<E> searchScoredOndexEntity ( 
+		Query q, String luceneIdField, Class<E> entityClass 
 	)
 	{
 		try
@@ -863,22 +918,30 @@ public class LuceneEnv implements ONDEXLuceneFields
 				{
 					Document document = idxSearcher.doc ( i, ID_FIELDS );
 					float score = doc2Scores.get ( i );
-					int entityId = Optional.ofNullable ( document.get ( field ) )
+					
+					Integer entityId = Optional.ofNullable ( document.get ( luceneIdField ) )
 						.map ( Integer::valueOf )
-						.orElseThrow ( () -> new NullPointerException ( String.format ( 
-							"Internal error: for some reason I have a null ID for the Lucene field: \"%s\" and the query \"%s\"", 
-							field, 
-							q.toString () 
-						)));
+						.orElse ( null );
+					
+					if ( entityId == null ) {
+						log.warn ( 
+							"Skipping Lucene document having a null ID for the Lucene field: \"{}\", found by the query \"{}\"."
+							+ " This is likely to be caused by https://github.com/Rothamsted/knetbuilder/issues/53",
+							luceneIdField,
+							q.toString ()
+						);
+						continue;
+					}
+							
 					id2scores.put ( entityId, score );
 					set.set ( entityId );
 				}
-				view = BitSetFunctions.create ( og, returnValueClass, set );
+				view = BitSetFunctions.create ( og, entityClass, set );
 				return new ScoredHits<> ( view, id2scores );
 			} 
 			else
 			{
-				view = BitSetFunctions.create ( og, returnValueClass, EMPTYBITSET );
+				view = BitSetFunctions.create ( og, entityClass, EMPTYBITSET );
 				return new ScoredHits<> ( view, EMPTYSCOREMAP );
 			}
 		}
@@ -897,7 +960,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * @return ScoredHits<ONDEXConcept>
 	 */
 	public ScoredHits<ONDEXConcept> scoredSearchInConcepts(Query q)  {
-		return searchScoredEntity ( q, CONID_FIELD, ONDEXConcept.class );
+		return searchScoredOndexEntity ( q, CONID_FIELD, ONDEXConcept.class );
 	}
 
 	/**
@@ -908,52 +971,11 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * @return ScoredHits<ONDEXRelation>
 	 */
 	public ScoredHits<ONDEXRelation> scoredSearchInRelations(Query q) {
-		return searchScoredEntity ( q, RELID_FIELD, ONDEXRelation.class );
+		return searchScoredOndexEntity ( q, RELID_FIELD, ONDEXRelation.class );
 	}
 
 	
-	/**
-	 * Searches an {@link ONDEXEntity}, by first searching the entity in Lucene, via q, and then picking it from the
-	 * {@link #getONDEXGraph() managed Ondex graph}, using the Lucene's ID field named 'field'.
-	 * 
-	 */
-	private <E extends ONDEXEntity> Set<E> searchEntity ( Query q, String field, Class<E> returnValueClass )
-	{
-		try
-		{
-			this.openIdxReader ();
-			DocIdCollector collector = new DocIdCollector ( idxSearcher.getIndexReader () );
-			idxSearcher.search ( q, collector );
 
-			BitSet bs = collector.getBits ();
-			if ( bs.length () == 0 ) return BitSetFunctions.create ( og, returnValueClass, EMPTYBITSET );
-
-			BitSet set = new BitSet ( bs.length () );
-			// iterator of document indices
-			for ( int i = bs.nextSetBit ( 0 ); i >= 0; i = bs.nextSetBit ( i + 1 ) )
-			{
-				// retrieve associated document
-				Document document = idxSearcher.doc ( i, ID_FIELDS );
-				// get concept ID from document
-				
-				int entityId = Optional.ofNullable ( document.get ( field ) )
-					.map ( Integer::valueOf )
-					.orElseThrow ( () -> new NullPointerException ( String.format ( 
-						"Internal error: for some reason I have a null ID for the Lucene field: \"%s\" and the query \"%s\"", 
-						q.toString (), 
-						field 
-					)));
-				
-				set.set ( entityId );
-			}
-			return BitSetFunctions.create ( og, returnValueClass, set );
-		}
-		catch ( IOException ex ) {
-			fireEventOccurred ( new DataFileErrorEvent ( ex.getMessage (), "[LuceneEnv - searchEntity]" ) );
-			log.error ( "Error while searching: " + q + " over field " + field + ": " + ex.getMessage (), ex );
-			throw new UncheckedIOException ( "Internal error while working with Lucene: " + ex.getMessage (), ex );			
-		}
-	}
 	
 	
 	
@@ -965,7 +987,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * @return Set<ONDEXConcept>
 	 */
 	public Set<ONDEXConcept> searchInConcepts(Query q) {
-		return searchEntity ( q, CONID_FIELD, ONDEXConcept.class );
+		return searchOndexEntity ( q, CONID_FIELD, ONDEXConcept.class );
 	}
 
 	/**
@@ -1033,7 +1055,7 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * @return Set<ONDEXRelation>
 	 */
 	public Set<ONDEXRelation> searchInRelations(Query q) {
-		return searchEntity ( q, RELID_FIELD, ONDEXRelation.class );
+		return searchOndexEntity ( q, RELID_FIELD, ONDEXRelation.class );
 	}
 
 	/**

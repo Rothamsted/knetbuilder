@@ -11,6 +11,7 @@ import java.util.BitSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.junit.After;
 import org.junit.Before;
@@ -635,6 +636,29 @@ public class LuceneEnvTest
 		testSearchByTypeAndName ( "B", "Cs*", false, 2, "Wrong no. of found concepts (case-insensitive + wildcard)!" );
 	}
 	
+	/**
+	 * Tests searches that clash with internal metadata, as per #53
+	 * @throws Exception
+	 */
+	@Test
+	public void testMetadataClash () throws Exception
+	{
+		var meta = og.getMetaData ();
+		var ccA = meta.createConceptClass ( "A", "Concept Type A", "", null );
+		AttributeName absAttrType = meta.createAttributeName ( "Abstract", "Article Abstract", "Test Attr", null, String.class, null );
+		
+		ONDEXConcept concept1 = og.getFactory().createConcept ( "A1", dataSource, ccA, et );
+		concept1.createAttribute ( absAttrType, "Abstract", true );
+		
+		lenv.setONDEXGraph ( og );
+		
+		var query = LuceneQueryBuilder.searchConceptByConceptAttribute ( absAttrType, "Abstract", LuceneEnv.DEFAULTANALYZER );
+				
+		ScoredHits<ONDEXConcept> results = lenv.scoredSearchInConcepts ( query );
+		assertEquals ( "Wrong no. of results!", 1, results.getOndexHits ().size () );
+	}
+	
+	
 	private Set<ONDEXConcept> testSearchByTypeAndName ( 
 		String conceptClassId, String accessionTerm, boolean isCaseSensitive, int expectedResultSize,
 		String errMsg
@@ -651,5 +675,5 @@ public class LuceneEnvTest
 	{
 		return testSearchByTypeAndName ( conceptClassId, accessionTerm, true, expectedResultSize, errMsg );
 	}
-
+	
 }
