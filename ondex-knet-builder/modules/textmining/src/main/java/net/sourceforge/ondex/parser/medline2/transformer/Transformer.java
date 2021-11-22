@@ -239,7 +239,7 @@ public class Transformer {
 				c.createAttribute(gds_chemicals, pabstract.getChemicals().toString(), true);
 			}
 
-			pabstract.finalize();
+			pabstract.cleanUp ();
 		}
 		
 	}
@@ -253,8 +253,7 @@ public class Transformer {
 		return headersWritten;
 	}
 	
-	
-	public void finalize () {
+	public void cleanUp () {
 		pubmeds = null;
 		dataSourceNLM = null;
 		et = null;

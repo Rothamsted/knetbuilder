@@ -253,7 +253,7 @@ public class AbstractWriter {
 				c.createAttribute(gds_chemicals, pabstract.getChemicals().toString(), false);
 			}
 
-			pabstract.finalize();
+			pabstract.cleanUp ();
 		}
 		
 	}
@@ -267,8 +267,7 @@ public class AbstractWriter {
 		return headersWritten;
 	}
 	
-	
-	public void finalize() {
+	public void cleanUp () {
 		pubmeds = null;
 		dataSourceNLM = null;
 		et = null;

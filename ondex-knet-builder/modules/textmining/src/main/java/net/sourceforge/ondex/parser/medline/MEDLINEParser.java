@@ -71,7 +71,7 @@ public class MEDLINEParser {
         }
 
         xmlParser = null;
-        writer.finalize();
+        writer.cleanUp ();
         writer = null;
     }
 

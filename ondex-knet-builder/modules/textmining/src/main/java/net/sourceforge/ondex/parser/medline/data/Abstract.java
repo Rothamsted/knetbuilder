@@ -145,7 +145,7 @@ public class Abstract {
 		return false;
 	}
 	
-	public void finalize() {
+	public void cleanUp () {
 		chemicals = null;
 		meshs = null;
 		doi = null;

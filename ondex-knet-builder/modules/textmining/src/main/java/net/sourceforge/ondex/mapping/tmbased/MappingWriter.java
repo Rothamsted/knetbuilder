@@ -3,6 +3,7 @@ package net.sourceforge.ondex.mapping.tmbased;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -67,14 +68,24 @@ public class MappingWriter {
 		// get the relationtypeset and evidencetype for this mapping
 		// TODO: this mess cannot be right, the second assignment is the same and the last one
 		// doesn't make sense.
-		rt = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
-		if (rt == null) {
-			RelationType rt = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
-			if (rt == null) {
-				ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new RelationTypeMissingEvent(MetaData.RT_OCC_IN, Mapping.getCurrentMethodName()));
-			}
-			rt = graph.getMetaData().getFactory().createRelationType(MetaData.RT_OCC_IN, rt);
-		}
+		// The cleaner version that returns the same should be like below. This is to be removed
+		//
+//		rt = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
+//		if (rt == null) {
+//			RelationType rt = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
+//			if (rt == null) {
+//				ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new RelationTypeMissingEvent(MetaData.RT_OCC_IN, Mapping.getCurrentMethodName()));
+//			}
+//			rt = graph.getMetaData().getFactory().createRelationType(MetaData.RT_OCC_IN, rt);
+//		}
+		
+		rt = Optional.ofNullable ( graph.getMetaData().getRelationType(MetaData.RT_OCC_IN) )
+			.orElseGet ( () -> {
+				ONDEXEventHandler.getEventHandlerForSID ( graph.getSID() )
+					.fireEventOccurred ( new RelationTypeMissingEvent( MetaData.RT_OCC_IN, Mapping.getCurrentMethodName() ) );
+				return graph.getMetaData().getFactory().createRelationType ( MetaData.RT_OCC_IN, (RelationType) null );
+			});
+		
 		
 		pub_in = graph.getMetaData().getRelationType(MetaData.publishedIn);
 		
