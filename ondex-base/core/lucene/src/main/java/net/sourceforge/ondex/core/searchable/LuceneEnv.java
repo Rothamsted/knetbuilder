@@ -845,6 +845,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * 
 	 * @param luceneIdField the Lucene field that is used to store the entity internal unique ID, ie, 
 	 * 
+	 * TODO: filter non relevant Lucene documents in the query, see #53 for details.
+	 *  
 	 */
 	private <E extends ONDEXEntity> Set<E> searchOndexEntity ( Query q, String luceneIdField, Class<E> entityClass )
 	{
@@ -895,6 +897,8 @@ public class LuceneEnv implements ONDEXLuceneFields
 	 * Searches for an {@link ONDEXEntity} in the index, ie, a concept or a relation.
 	 * 
 	 * @param luceneIdField the Lucene field that is used to store the entity internal unique ID, ie, 
+	 * 
+	 * TODO: filter non relevant Lucene documents in the query, see #53 for details.
 	 * 
 	 */
 	private <E extends ONDEXEntity> ScoredHits<E> searchScoredOndexEntity ( 
