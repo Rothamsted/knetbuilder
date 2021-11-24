@@ -69,6 +69,11 @@ public class Parser extends ONDEXParser {
         };
     }
 
+    /**
+     * TODO: WHAT THE HELL IS THIS?!? There is no need to keep a static parser, and for the sole
+     * purpose of using its logger. This is repeated in thousands of plug-ins and needs to be changed.
+     * 
+     */
     public static void propagateEventOccurred(EventType et) {
         if (instance != null)
             instance.fireEventOccurred(et);
