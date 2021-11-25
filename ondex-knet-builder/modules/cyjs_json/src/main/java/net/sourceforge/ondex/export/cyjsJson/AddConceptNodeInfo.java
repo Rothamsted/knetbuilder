@@ -287,7 +287,7 @@ public class AddConceptNodeInfo {
      shape= ConceptShape.pentagon.toString(); //ConceptShape.triangle.toString();
      colour= ConceptColour.greenYellow.toString();
     }
-  else if((conType.equals(ConceptType.Compound.toString())) || (conType.equals(ConceptType.SNP.toString()))) {
+  else if((conType.equals(ConceptType.Compound.toString())) || (conType.equals(ConceptType.Allele.toString())) || (conType.equals(ConceptType.SNP.toString()))) {
      shape= ConceptShape.star.toString();
      colour= ConceptColour.teal.toString();
     }
