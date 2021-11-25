@@ -2,12 +2,11 @@ package net.sourceforge.ondex.export.json;
 
 /**
  * @author Ajit Singh
- * @version 23/07/18
+ * @version 25/11/2021
  */
 public enum ConceptType {
- Gene, Protein, Compound, Cellular_Component, Pathway, Reaction, Enzyme, Enzyme_Classification, 
- Phenotype, Publication, Biological_Process, Molecular_Function, Scaffold, Trait, Chromosome, RNA, 
- Protein_Complex, Protcmplx, Transport, SNP, Disease, Drug, DGES, 
- CoExpStudy, CoExpCluster, PlantOntologyTerm, SNPEffect
- // , Protein Domain, GWAS, Trait Ontology, Quantitative Trait Locus, Enzyme Classification
+ Gene, Protein, Comp, Compound, Cellular_Component, Pathway, Reaction, Enzyme, Enzyme_Classification, 
+ Phenotype, Publication, Biological_Process, Molecular_Function, Scaffold, Trait, 
+ Protein_Complex, Protcmplx, Transport, SNP, Allele, Disease, Drug, GWAS, QTL, DGES, 
+ CoExpStudy, CoExpCluster, PlantOntologyTerm, SNPEffect, Protein_Domain, Trait_Ontology
 }
