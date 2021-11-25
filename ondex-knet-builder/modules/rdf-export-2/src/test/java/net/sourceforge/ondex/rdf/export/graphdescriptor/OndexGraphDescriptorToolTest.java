@@ -5,13 +5,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -35,6 +34,9 @@ public class OndexGraphDescriptorToolTest
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 	private static Logger slog = LoggerFactory.getLogger ( OndexGraphDescriptorToolTest.class ); 
 	
+	/**
+	 * Saves a test descriptor into the {@link #graph}. 
+	 */
 	@BeforeClass
 	public static void init () throws IOException
 	{
@@ -44,9 +46,11 @@ public class OndexGraphDescriptorToolTest
 		values.put ( "datasetTitle", "Knetminer's knowledge graph about wheat (Triticum aestivum)" );
 		values.put ( 
 			"datasetDescription", 
-			"Knetminer is a gene discovery platform,\n"
-			+ "which allows for exploring knwoledge graphs computed from common plant biology data, such as ENSEMBL,\n"
-			+ "UniProt, PUBMED and more." 
+			"Knetminer is a gene discovery platform, "
+			+ "which allows for exploring knwoledge graphs computed from common plant biology data, such as ENSEMBL,"
+			+ "UniProt, PUBMED and more."
+			+ "\nThe wheat dataset contains information about the Triticum aestivum specie, linked to Arabidopsis. "
+			+ "Data are integrated from external resources, including ENSEMBL, UniProt, TAIR and PubMed." 
 		);
 		values.put ( "datasetVersion", 45 );
 		
@@ -64,10 +68,12 @@ public class OndexGraphDescriptorToolTest
 	}
 	
 	@Test
-	public void testDescriptorContents ()
+	public void testDescriptorContents () throws IOException
 	{
 		var descritorTool = new OndexGraphDescriptorTool ( graph );
 		var descrModel = descritorTool.getDescriptor ();
+		
+		descrModel.write ( new FileWriter ( "target/graph-descriptor-tool-test.ttl" ), "TURTLE" );
 		
 		assertTrue ( 
 			"schema:identifier not found!",

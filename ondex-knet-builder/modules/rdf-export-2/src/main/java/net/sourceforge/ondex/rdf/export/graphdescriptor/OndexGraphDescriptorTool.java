@@ -335,7 +335,7 @@ public class OndexGraphDescriptorTool
 			"bkr", 
 			"property_" + IdUtils.hashUriSignature ( propertyId + value.toString () + (unitText == null ? "" : unitText) )
 		); 
-		JENAUTILS.assertResource ( m, propUri, iri ( "rdf:type" ), "schema:PropertyValue" );
+		JENAUTILS.assertResource ( m, propUri, iri ( "rdf:type" ), iri ( "schema:PropertyValue" ) );
 		JENAUTILS.assertLiteral ( m, propUri, iri ( "schema:propertyID" ), propertyId );
 		JENAUTILS.assertLiteral ( m, propUri, iri ( "schema:value" ), value );
 		if ( unitText != null )
