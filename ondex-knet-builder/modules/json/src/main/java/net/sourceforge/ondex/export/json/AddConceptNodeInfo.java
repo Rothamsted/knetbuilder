@@ -291,7 +291,7 @@ public class AddConceptNodeInfo {
      shape= ConceptShape.star.toString();
      colour= ConceptColour.teal.toString();
     }
-  else if((conType.equals(ConceptType.Compound.toString())) || (conType.equals("Comp")) {
+  else if((conType.equals(ConceptType.Compound.toString())) || (conType.equals("Comp"))) {
      shape= ConceptShape.heptagon.toString();
      colour= ConceptColour.springGreen.toString();
     }
