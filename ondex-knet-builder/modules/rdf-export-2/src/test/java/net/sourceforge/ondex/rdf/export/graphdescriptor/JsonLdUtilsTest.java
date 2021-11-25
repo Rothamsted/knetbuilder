@@ -161,7 +161,7 @@ public class JsonLdUtilsTest
 	public void testJsonParsing () throws Exception
 	{
 		var model = ModelFactory.createDefaultModel ();
-		model.read ( "target/test-classes/test-descriptor.ttl" );
+		model.read ( "target/test-classes/test-dataset-descriptor.ttl" );
 		
 		StringWriter sw = new StringWriter ();
 		model.write ( sw, "JSON-LD" );
