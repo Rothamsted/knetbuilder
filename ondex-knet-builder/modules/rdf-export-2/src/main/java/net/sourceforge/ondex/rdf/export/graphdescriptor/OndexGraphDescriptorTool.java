@@ -95,32 +95,6 @@ public class OndexGraphDescriptorTool
 		return createDescriptor ( context, tpl, rdfLang );
 	}
 	
-
-	public Model saveDescriptor ( Map<String, Object> context, String rdfTemplate, String rdfLang )
-	{
-		var result = createDescriptor ( context, rdfTemplate, rdfLang );
-		saveDescriptor ( result );
-		return result;
-	}
-	
-	/**
-	 * TODO: get rdfLang from the extension
-	 */
-	public Model saveDescriptor ( Map<String, Object> context, Path rdfTemplatePath, String rdfLang )
-	{
-		try {
-			var tpl = IOUtils.readFile ( rdfTemplatePath.toString () );
-			return saveDescriptor ( context, tpl, rdfLang );			
-		}
-		catch ( IOException ex ) {
-			throw ExceptionUtils.buildEx ( 
-				UncheckedIOException.class, ex, 
-				"Error while reading metadata template '%s': %s", rdfTemplatePath.toAbsolutePath (), ex.getMessage () 
-			);
-		}
-	}
-
-	
 	public ONDEXConcept saveDescriptor ( Model descriptor )
 	{
 		// Save the RDF, review the Optional chain.

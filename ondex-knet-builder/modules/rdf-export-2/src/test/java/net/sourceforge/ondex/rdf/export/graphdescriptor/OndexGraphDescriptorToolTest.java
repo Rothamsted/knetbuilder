@@ -56,7 +56,8 @@ public class OndexGraphDescriptorToolTest
 		
 		var descritorTool = new OndexGraphDescriptorTool ( graph );
 		var rdfTplPath = Path.of ( "target/test-classes/dataset-test-template.ttl" );
-		var datasetModel = descritorTool.saveDescriptor ( values, rdfTplPath, "TURTLE" );
+		var datasetModel = descritorTool.createDescriptor ( values, rdfTplPath, "TURTLE" );
+		descritorTool.saveDescriptor ( datasetModel );
 		NamespaceUtils.registerNs ( datasetModel.getNsPrefixMap () );
 	}
 	
