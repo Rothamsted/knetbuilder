@@ -45,7 +45,7 @@ public class JsonLdUtilsTest
 	@BeforeClass
 	public static void init () throws IOException
 	{
-		String rdfTpl = IOUtils.readResource ( JsonLdUtilsTest.class, "dataset-test-template.ttl" );
+		String rdfTpl = IOUtils.readResource ( JsonLdUtilsTest.class, "dataset-descriptor-tests/descriptor-test-template.ttl" );
 		Map<String, Object> values = new HashMap<> ();
 		values.put ( "datasetId", "wheat" );
 		values.put ( "datasetAccession", "KnetMiner:Triticum_aestivum" );
@@ -146,7 +146,7 @@ public class JsonLdUtilsTest
 		assertEquals ( "Wrong field for schema:Dataset", "bkr:rresOrg", dset.get ( "creator" ) );
 	}
 	
-	@Test // TODO: foo test to check this Jena feature, to be remove later
+	@Test // TODO: foo test to check this Jena feature, to be removed later
 	public void testPathNameToLang ()
 	{
 		assertEquals ( "pathnameToLang() didn't work!",
@@ -159,7 +159,7 @@ public class JsonLdUtilsTest
 	public void testJsonParsing () throws Exception
 	{
 		var model = ModelFactory.createDefaultModel ();
-		model.read ( "target/test-classes/test-dataset-descriptor.ttl" );
+		model.read ( "target/test-classes/dataset-descriptor-tests/test-dataset-descriptor.ttl" );
 		
 		StringWriter sw = new StringWriter ();
 		model.write ( sw, "JSON-LD" );

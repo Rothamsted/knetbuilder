@@ -4,19 +4,27 @@ import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import static net.sourceforge.ondex.core.util.ONDEXGraphUtils.getOrCreateConceptClass;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.rdf.model.Model;
@@ -32,6 +40,7 @@ import org.apache.jena.rdf.model.Literal;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
+import uk.ac.ebi.utils.collections.OptionsMap;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.exceptions.TooFewValuesException;
 import uk.ac.ebi.utils.ids.IdUtils;
@@ -46,10 +55,110 @@ import uk.ac.ebi.utils.io.IOUtils;
  */
 public class OndexGraphDescriptorTool
 {
+	public static class Builder
+	{
+		private ONDEXGraph graph;
+		private Map<String, Object> context;
+		private String contextPath;
+		private String rdfTemplate;
+		private String rdfTemplatePath;
+		private String rdfLang;
+		private String oxlSourceURL;
+
+		
+		private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
+		
+		public OndexGraphDescriptorTool build ()
+		{
+			if ( contextPath != null && context != null ) throw new IllegalArgumentException (
+				this.getClass ().getSimpleName () + " contextPath and context are alternative options, can't specify both"
+			);
+			
+			if ( rdfTemplatePath != null && rdfTemplate != null ) throw new IllegalArgumentException (
+				this.getClass ().getSimpleName () + " rdfTemplatePath and rdfTemplate are alternative options, can't specify both"
+			);
+
+			try
+			{
+				if ( contextPath != null ) {
+					// TODO: Apache multi-format (https://stackoverflow.com/questions/70123979)
+					log.info ( "Loading graph descriptor properties from '{}'", contextPath );
+					Properties props = new Properties ();
+					props.load ( new FileReader ( contextPath, StandardCharsets.UTF_8 ) );
+					context = OptionsMap.from ( props );
+				}
+				
+				if ( rdfTemplatePath != null )
+				{
+					log.info ( "Loading graph descriptor template from '{}'", rdfTemplatePath );
+					
+					// TODO: get rdfLang from the file ext
+					rdfTemplate = IOUtils.readFile ( rdfTemplatePath.toString () );
+				}
+				
+				return new OndexGraphDescriptorTool ( graph, context, rdfTemplate, rdfLang, oxlSourceURL );
+				
+			}
+			catch ( IOException ex ) {
+				throw new UncheckedIOException ( "Error while creating OndexGraphDescriptorTool: " + ex.getMessage (), ex );
+			}
+		}
+
+		public Builder setGraph ( ONDEXGraph graph )
+		{
+			this.graph = graph;
+			return this;
+		}
+
+		public Builder setContext ( Map<String, Object> context )
+		{
+			this.context = context;
+			return this;
+		}
+
+		public Builder setContextPath ( String contextPath )
+		{
+			this.contextPath = contextPath;
+			return this;
+		}
+
+		public Builder setRdfTemplate ( String rdfTemplate )
+		{
+			this.rdfTemplate = rdfTemplate;
+			return this;
+		}
+
+		public Builder setRdfTemplatePath ( String rdfTemplatePath )
+		{
+			this.rdfTemplatePath = rdfTemplatePath;
+			return this;
+		}
+
+		public Builder setRdfLang ( String rdfLang )
+		{
+			this.rdfLang = rdfLang;
+			return this;
+		}
+
+		public Builder setOxlSourceURL ( String oxlSourceURL )
+		{
+			this.oxlSourceURL = oxlSourceURL;
+			return this;
+		}
+		
+	}
+	// end:Builder
+	
 	public static final String DESCRIPTOR_CONCEPT_CLASS_ID = "DatasetMetadata";
 	public static final String DESCRIPTOR_NODE_ID = StringUtils.uncapitalize ( DESCRIPTOR_CONCEPT_CLASS_ID );
 	
 	private ONDEXGraph graph;
+	private Map<String, Object> context; 
+	private String rdfTemplate; 
+	private String rdfLang;
+	private String oxlSourceURL;
+	
+	
 	private Model _descriptorCache = null;
 	private Map<String, Object> _jsonDescriptorCache = null;
 	private Map<String, List<Map<String, Object>>> _jsonIndexCache = null;
@@ -57,10 +166,14 @@ public class OndexGraphDescriptorTool
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 	
 	
-	public OndexGraphDescriptorTool ( ONDEXGraph graph )
+	private OndexGraphDescriptorTool ( ONDEXGraph graph, Map<String, Object> context, String rdfTemplate, String rdfLang, String oxlSourceURL )
 	{
 		super ();
 		this.graph = graph;
+		this.context = context;
+		this.rdfTemplate = rdfTemplate;
+		this.rdfLang = rdfLang;
+		this.oxlSourceURL = oxlSourceURL;
 	}
 
 	
@@ -68,35 +181,29 @@ public class OndexGraphDescriptorTool
 	 * Creates the descriptor without saving it in the graph.
 	 *  
 	 */
-	public Model createDescriptor ( Map<String, Object> context, String rdfTemplate, String rdfLang )
+	public Model createDescriptor ( boolean doSave )
 	{
-		var result = JsonLdUtils.getRdfFromTemplate ( context, rdfTemplate, rdfLang );
+		log.info ( "Creating Graph Descriptor" );
+		var result = JsonLdUtils.getRdfFromTemplate ( this.context, this.rdfTemplate, this.rdfLang );
 		
 		addGraphStatsDescriptors ( result );
+
+		if ( doSave ) this.saveDescriptor ( result );
+		
 		return result;
 	}
 	
-	/**
-	 * TODO: get rdfLang from the extension
-	 */
-	public Model createDescriptor ( Map<String, Object> context, Path rdfTemplatePath, String rdfLang )
-	{
-		String tpl = null;
-		try {
-			tpl = IOUtils.readFile ( rdfTemplatePath.toString () );
-		}
-		catch ( IOException ex ) {
-			throw ExceptionUtils.buildEx ( 
-				UncheckedIOException.class, ex, 
-				"Error while reading metadata template '%s': %s", rdfTemplatePath.toAbsolutePath (), ex.getMessage () 
-			);
-		}
-		
-		return createDescriptor ( context, tpl, rdfLang );
+	public Model createDescriptor ()
+	{		
+		return this.createDescriptor ( true );
 	}
+
+
 	
 	public ONDEXConcept saveDescriptor ( Model descriptor )
 	{
+		log.info ( "Adding metadata about graph description" );
+
 		// Save the RDF, review the Optional chain.
 		var rdfOut = new StringWriter ();
 		descriptor.write ( rdfOut, "TURTLE" );
@@ -105,7 +212,6 @@ public class OndexGraphDescriptorTool
 		
 		return getDescriptorConcept ( rdfOut.toString () );
 	}
-	
 	
 	
 	/**
@@ -238,6 +344,18 @@ public class OndexGraphDescriptorTool
 		Map<String, Map<String, Object>> result = JsonLdUtils.asList ( dset, "additionalProperty" )
 		.stream ()
 		.map ( pvuri -> (Map<String, Object>) js.get ( pvuri ) )
+
+		// when a property like schema:value is used to link values of multiple types, one "value"
+		// property is created with one type in @context, while the others are left as "schema:value".
+		// So, we have to chase both and hope for the best. This is why everyone hates the Semantic Web...
+		//
+		.map ( jobj -> {
+			if ( !jobj.containsKey ( "schema:value" ) ) return jobj;
+			jobj = new HashMap<String, Object> ( jobj );
+			jobj.put ( "value", jobj.get ( "schema:value" ) );
+			jobj.remove ( "schema:value" );
+			return jobj;
+		})
 		.collect ( Collectors.toUnmodifiableMap ( 
 			jobj -> (String) jobj.get ( "propertyID" ),
 			Function.identity ()
@@ -245,6 +363,7 @@ public class OndexGraphDescriptorTool
 		
 		return result;
 	}
+
 	
 	public static <T> T getPropertyValue ( Map<String, Map<String, Object>> pvals, String propertyId )
 	{
@@ -260,6 +379,7 @@ public class OndexGraphDescriptorTool
 	{
 		return JsonLdUtils.asList ( pvals.get ( propertyId ), "value" );
 	}
+	
 	
 	/**
 	 * Returns the schema:Organization instance from the saved descriptor
@@ -300,8 +420,35 @@ public class OndexGraphDescriptorTool
 			descriptor.createTypedLiteral ( this.graph.getRelations ().size () ) 
 		);
 		
+		assertGraphHash ( descriptor, dsetUri );
+				
 		return descriptor;
 	}
+	
+	
+	private String assertGraphHash ( Model descriptor, String datasetUri )
+	{
+		if ( this.oxlSourceURL == null ) return null;
+		URL srcURL = IOUtils.url ( oxlSourceURL );
+		
+		try
+		{
+			String hash = DigestUtils.md5Hex ( srcURL.openStream () ).toLowerCase ();
+
+			return assertPropVal ( 
+				descriptor, datasetUri, 
+				"KnetMiner:Dataset:Source MD5",
+				descriptor.createTypedLiteral ( hash ) 
+			);
+		}
+		catch ( IOException ex )
+		{
+			throw ExceptionUtils.buildEx ( UncheckedIOException.class, ex,  
+			  "Error while hashing the source OXL '%s': %s", oxlSourceURL, ex.getMessage ()
+			);
+		}
+	}
+	
 	
 	private String getSchemaPropVal ( Model m, String propertyId, Literal value, String unitText )
 	{

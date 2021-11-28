@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +29,9 @@ import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 public class OndexGraphDescriptorToolTest
 {
 	private static ONDEXGraph graph = new MemoryONDEXGraph ( "testDataset" );
-		
+	private static OndexGraphDescriptorTool descritorTool;	
+	
+	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 	private static Logger slog = LoggerFactory.getLogger ( OndexGraphDescriptorToolTest.class ); 
 	
@@ -40,38 +41,26 @@ public class OndexGraphDescriptorToolTest
 	@BeforeClass
 	public static void init () throws IOException
 	{
-		Map<String, Object> values = new HashMap<> ();
-		values.put ( "datasetId", "wheat" );
-		values.put ( "datasetAccession", "KnetMiner:Triticum_aestivum" );
-		values.put ( "datasetTitle", "Knetminer's knowledge graph about wheat (Triticum aestivum)" );
-		values.put ( 
-			"datasetDescription", 
-			"Knetminer is a gene discovery platform, "
-			+ "which allows for exploring knwoledge graphs computed from common plant biology data, such as ENSEMBL,"
-			+ "UniProt, PUBMED and more."
-			+ "\nThe wheat dataset contains information about the Triticum aestivum specie, linked to Arabidopsis. "
-			+ "Data are integrated from external resources, including ENSEMBL, UniProt, TAIR and PubMed." 
-		);
-		values.put ( "datasetVersion", 45 );
-		
-		var descritorTool = new OndexGraphDescriptorTool ( graph );
-		var rdfTplPath = Path.of ( "target/test-classes/dataset-test-template.ttl" );
-		var datasetModel = descritorTool.createDescriptor ( values, rdfTplPath, "TURTLE" );
-		descritorTool.saveDescriptor ( datasetModel );
+		descritorTool = new OndexGraphDescriptorTool.Builder ()
+			.setGraph ( graph )
+			.setContextPath ( "target/test-classes/dataset-descriptor-tests/descriptor-test.properties" )
+			.setRdfTemplatePath ( "target/test-classes/dataset-descriptor-tests/descriptor-test-template.ttl" )
+			.setRdfLang ( "TURTLE" )
+			.build ();
+				
+		var datasetModel = descritorTool.createDescriptor ();
 		NamespaceUtils.registerNs ( datasetModel.getNsPrefixMap () );
 	}
 	
 	@Test
 	public void testSaveDescriptor ()
 	{
-		var descritorTool = new OndexGraphDescriptorTool ( graph );
 		assertNotNull ( "No descritor concept!", descritorTool.getDescriptorConcept () );
 	}
 	
 	@Test
 	public void testDescriptorContents () throws IOException
 	{
-		var descritorTool = new OndexGraphDescriptorTool ( graph );
 		var descrModel = descritorTool.getDescriptor ();
 		
 		descrModel.write ( new FileWriter ( "target/graph-descriptor-tool-test.ttl" ), "TURTLE" );
@@ -98,7 +87,6 @@ public class OndexGraphDescriptorToolTest
 	@Test
 	public void testDescriptorTypeFetch ()
 	{
-		var descritorTool = new OndexGraphDescriptorTool ( graph );
 		var org = descritorTool.getDescriptorOrganization ();
 		assertEquals (
 			"Wrong organisation's legal name!",
@@ -110,11 +98,9 @@ public class OndexGraphDescriptorToolTest
 	@Test
 	public void testGraphSummaryProps ()
 	{
-		var descritorTool = new OndexGraphDescriptorTool ( graph );
-	
 		Map<String, Map<String, Object>> pvals = descritorTool.getDatasetAdditionalProperties ();
 		
-		int concepts = OndexGraphDescriptorTool.getPropertyValueAsInt ( pvals, "KnetMiner:Dataset:Concepts Number" );
-		assertEquals ( "Wrong property value for concepts number", 0, concepts );		
+		int nconcepts = OndexGraphDescriptorTool.getPropertyValueAsInt ( pvals, "KnetMiner:Dataset:Concepts Number" );
+		assertEquals ( "Wrong property value for concepts number", 0, nconcepts );		
 	}
 }
