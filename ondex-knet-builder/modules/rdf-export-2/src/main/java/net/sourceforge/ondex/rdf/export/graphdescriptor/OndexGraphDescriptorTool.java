@@ -9,10 +9,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
-import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -20,13 +18,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.graph.Graph;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
@@ -34,8 +32,6 @@ import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.sparql.graph.GraphReadOnly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.jena.rdf.model.Literal;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -53,18 +49,12 @@ import uk.ac.ebi.utils.io.IOUtils;
  * <dl><dt>Date:</dt><dd>23 Jun 2021</dd></dl>
  *
  */
-public class OndexGraphDescriptorTool
-{
-	public static class Builder
+public class OndexGraphDescriptorTool extends OndexGraphDescriptorToolFields
+{		
+	public static class Builder extends OndexGraphDescriptorToolFields
 	{
-		private ONDEXGraph graph;
-		private Map<String, Object> context;
 		private String contextPath;
-		private String rdfTemplate;
 		private String rdfTemplatePath;
-		private String rdfLang;
-		private String oxlSourceURL;
-
 		
 		private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 		
@@ -103,7 +93,8 @@ public class OndexGraphDescriptorTool
 				throw new UncheckedIOException ( "Error while creating OndexGraphDescriptorTool: " + ex.getMessage (), ex );
 			}
 		}
-
+		
+		
 		public Builder setGraph ( ONDEXGraph graph )
 		{
 			this.graph = graph;
@@ -144,39 +135,28 @@ public class OndexGraphDescriptorTool
 		{
 			this.oxlSourceURL = oxlSourceURL;
 			return this;
-		}
-		
+		}		
 	}
 	// end:Builder
 	
 	public static final String DESCRIPTOR_CONCEPT_CLASS_ID = "DatasetMetadata";
 	public static final String DESCRIPTOR_NODE_ID = StringUtils.uncapitalize ( DESCRIPTOR_CONCEPT_CLASS_ID );
-	
-	private ONDEXGraph graph;
-	private Map<String, Object> context; 
-	private String rdfTemplate; 
-	private String rdfLang;
-	private String oxlSourceURL;
-	
+		
 	
 	private Model _descriptorCache = null;
 	private Map<String, Object> _jsonDescriptorCache = null;
 	private Map<String, List<Map<String, Object>>> _jsonIndexCache = null;
 	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
-	
-	
-	private OndexGraphDescriptorTool ( ONDEXGraph graph, Map<String, Object> context, String rdfTemplate, String rdfLang, String oxlSourceURL )
-	{
-		super ();
-		this.graph = graph;
-		this.context = context;
-		this.rdfTemplate = rdfTemplate;
-		this.rdfLang = rdfLang;
-		this.oxlSourceURL = oxlSourceURL;
-	}
 
 	
+	private OndexGraphDescriptorTool ( 
+		ONDEXGraph graph, Map<String, Object> context, String rdfTemplate, String rdfLang, String oxlSourceURL
+	)
+	{
+		super ( graph, context, rdfTemplate, rdfLang, oxlSourceURL );
+	}
+
 	/**
 	 * Creates the descriptor without saving it in the graph.
 	 *  
@@ -408,13 +388,13 @@ public class OndexGraphDescriptorTool
 			"Can't find a schema:Dataset instance in the Knetminer dataset descriptor" 
 		));
 
-		assertPropVal ( 
+		assertSchemaAdditionalProp ( 
 			descriptor, dsetUri, 
 			"KnetMiner:Dataset:Concepts Number",
 			descriptor.createTypedLiteral ( this.graph.getConcepts ().size () ) 
 		);
 
-		assertPropVal ( 
+		assertSchemaAdditionalProp ( 
 			descriptor, dsetUri, 
 			"KnetMiner:Dataset:Relations Number",
 			descriptor.createTypedLiteral ( this.graph.getRelations ().size () ) 
@@ -435,7 +415,7 @@ public class OndexGraphDescriptorTool
 		{
 			String hash = DigestUtils.md5Hex ( srcURL.openStream () ).toLowerCase ();
 
-			return assertPropVal ( 
+			return assertSchemaAdditionalProp ( 
 				descriptor, datasetUri, 
 				"KnetMiner:Dataset:Source MD5",
 				descriptor.createTypedLiteral ( hash ) 
@@ -450,7 +430,7 @@ public class OndexGraphDescriptorTool
 	}
 	
 	
-	private String getSchemaPropVal ( Model m, String propertyId, Literal value, String unitText )
+	private String assertSchemaPropVal ( Model m, String propertyId, Literal value, String unitText )
 	{
 		String propUri = iri ( 
 			"bkr", 
@@ -464,27 +444,30 @@ public class OndexGraphDescriptorTool
 		return propUri;
 	}
 
-	private String getSchemaPropVal ( Model m, String propertyId, Literal value )
+	/**
+	 * TODO: not used yet
+	 */
+	private String assertSchemaPropVal ( Model m, String propertyId, Literal value )
 	{
-		return getSchemaPropVal ( m, propertyId, value, null );
+		return assertSchemaPropVal ( m, propertyId, value, null );
 	}
 
 
-	private String assertPropVal ( Model m, String subjectUri, String linkPropUri, String propertyId, Literal value, String unitText )
+	private String assertSchemaAdditionalProp ( Model m, String subjectUri, String linkPropUri, String propertyId, Literal value, String unitText )
 	{
-		String pvuri = getSchemaPropVal ( m, propertyId, value, unitText );
+		String pvuri = assertSchemaPropVal ( m, propertyId, value, unitText );
 		JENAUTILS.assertResource ( m, subjectUri, iri ( linkPropUri ), pvuri );
 		return pvuri;
 	}
 
-	private String assertPropVal ( Model m, String subjectUri, String propertyId, Literal value, String unitText )
+	private String assertSchemaAdditionalProp ( Model m, String subjectUri, String propertyId, Literal value, String unitText )
 	{
-		return assertPropVal ( m, subjectUri, "schema:additionalProperty", propertyId, value, unitText );
+		return assertSchemaAdditionalProp ( m, subjectUri, "schema:additionalProperty", propertyId, value, unitText );
 	}
 
-	private String assertPropVal ( Model m, String subjectUri, String propertyId, Literal value )
+	private String assertSchemaAdditionalProp ( Model m, String subjectUri, String propertyId, Literal value )
 	{
-		return assertPropVal ( m, subjectUri, propertyId, value, null );
+		return assertSchemaAdditionalProp ( m, subjectUri, propertyId, value, null );
 	}
 	
 }
