@@ -58,8 +58,8 @@ public class MiniPlugInCLI implements Callable<Integer>
 		paramLabel = "<path/to/oxl>",		
 		description = "The path of the OXL where to save the results (default = doesn't export)"
 	)
-	private String oxlOutputPath = null; 
-	
+	private String oxlOutputPath = null;
+		
 	@Option (
 		names = { "-c", "--compress" },
 		description = "Compress the output OXL (ignored without -o)",

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,8 +44,8 @@ public class OndexGraphDescriptorToolTest
 	{
 		descritorTool = new OndexGraphDescriptorTool.Builder ()
 			.setGraph ( graph )
-			.setContextPath ( "target/test-classes/dataset-descriptor-tests/descriptor-test.properties" )
-			.setRdfTemplatePath ( "target/test-classes/dataset-descriptor-tests/descriptor-test-template.ttl" )
+			.setContextPath ( "src/main/assembly/resources/examples/descriptor.properties" )
+			.setRdfTemplatePath ( "src/main/assembly/resources/examples/descriptor-template.ttl" )
 			.setRdfLang ( "TURTLE" )
 			.build ();
 				
@@ -61,10 +62,9 @@ public class OndexGraphDescriptorToolTest
 	@Test
 	public void testDescriptorContents () throws IOException
 	{
+		descritorTool.exportDescriptor ( "target/graph-descriptor-tool-test.ttl" );
 		var descrModel = descritorTool.getDescriptor ();
-		
-		descrModel.write ( new FileWriter ( "target/graph-descriptor-tool-test.ttl" ), "TURTLE" );
-		
+				
 		assertTrue ( 
 			"schema:identifier not found!",
 			descrModel.contains (

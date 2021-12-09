@@ -5,10 +5,12 @@ import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import static net.sourceforge.ondex.core.util.ONDEXGraphUtils.getOrCreateConceptClass;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -295,6 +297,29 @@ public class OndexGraphDescriptorTool extends OndexGraphDescriptorToolFields
 		return _jsonDescriptorCache = Collections.unmodifiableMap ( JsonLdUtils.rdf2JsonLd ( descriptor, true ) );
 	}
 
+	public void exportDescriptor ( String filePath, String lang )
+	{
+		log.info ( "Exporting OXL descriptor to '{}'", filePath );
+		
+		Model descriptor = getDescriptor ();
+		
+		try {
+			descriptor.write ( new FileWriter ( filePath ), lang );
+		}
+		catch ( IOException ex ) {
+			throw new UncheckedIOException ( "Error while exporting OXL descriptor: " + ex.getMessage (), ex );
+		}
+		
+		log.info ( "Descriptor exported" );
+	}
+
+	
+	public void exportDescriptor ( String filePath )
+	{
+		exportDescriptor ( filePath, "TURTLE" );
+	}
+	
+	
 	/**
 	 * Returns a by-type index of the descriptor.
 	 * 

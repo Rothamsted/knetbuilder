@@ -1,5 +1,8 @@
 package net.sourceforge.ondex.rdf.export.graphdescriptor;
 
+import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +26,23 @@ public class ONDEXGraphDescriptorPlugin extends ONDEXTransformer
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 
+	public static final String 
+		ARGDESCR_RDF_TEMPLATE_PATH = 
+			"The RDF template to be used to create the descriptor. Keep in mind that further RDF triples are added automatically.",
+		ARGDESCR_CTX_PATH =
+			"The file defining the dataset variables used to populate the RDF template.",
+		ARGDESCR_RDF_LANG = 
+			"The RDF format that the RDF template uses (see Jena/RIOT docs)",
+		ARGDFLT_RDF_LANG = "TURTLE",
+		ARGDESCR_OXL_SRC_URL =
+			"The OXL source URL. This is usually the same path where you have loaded the processed OXL from. "
+			+ "If present, an MD5 checksum is added to the dataset's properties.",
+		ARGDESCR_XPATH = 
+			"File path where to export the descriptor in RDF format.",
+		ARGDESCR_XPATH_LANG = 
+				"RDF syntax to use for the descriptor export file.";
 
+	
 	@Override
 	public String getId ()
 	{
@@ -49,7 +68,7 @@ public class ONDEXGraphDescriptorPlugin extends ONDEXTransformer
 		{
       new FileArgumentDefinition ( 
       	"rdfTemplatePath", 
-    		"The RDF template to be used to create the descriptor. Keep in mind that further RDF triples are added automatically.",
+    		ARGDESCR_RDF_TEMPLATE_PATH,
     		true, // required
     		false, // preExists
     		false, // isDir
@@ -57,7 +76,7 @@ public class ONDEXGraphDescriptorPlugin extends ONDEXTransformer
     	),
       new FileArgumentDefinition ( 
       	"configurationPath", 
-    		"The file defining the dataset variables used to populate the RDF template",
+    		ARGDESCR_CTX_PATH,
     		true, // required
     		false, // preExists
     		false, // isDir
@@ -65,15 +84,28 @@ public class ONDEXGraphDescriptorPlugin extends ONDEXTransformer
     	),
 	    new StringArgumentDefinition ( 
 		    "rdfLanguage", 
-				"The RDF format that the RDF template uses",
+				ARGDESCR_RDF_LANG,
 				false, // required
-				"TURTLE", // default
+				ARGDFLT_RDF_LANG, // default
+				false // canBeMultiple
+	    ),
+	    new StringArgumentDefinition ( 
+		    "exportPath", 
+		    ARGDESCR_XPATH,
+				false, // required
+				"", // default
+				false // canBeMultiple
+	    ),
+	    new StringArgumentDefinition ( 
+		    "exportRdfLanguage", 
+		    ARGDESCR_XPATH_LANG,
+				false, // required
+				ARGDFLT_RDF_LANG, // default
 				false // canBeMultiple
 	    ),
 	    new StringArgumentDefinition ( 
 		    "oxlSourceURL", 
-				"The OXL source URL. This is usually the same path where you have loaded the processed OXL from. "
-		    + "If present, an MD5 checksum is added to the dataset's properties.",
+		    ARGDESCR_OXL_SRC_URL,
 				false, // required
 				null, // default
 				false // canBeMultiple
@@ -99,6 +131,17 @@ public class ONDEXGraphDescriptorPlugin extends ONDEXTransformer
 		descriptorTool.createDescriptor ();
 
 		log.info ( "graph description metadata added to the graph itself" );
+		
+		// RDF export
+		//
+		var exportPath = Optional.ofNullable ( (String) args.getUniqueValue ( "exportPath" ) )
+			.filter ( p -> !p.isEmpty () )
+			.orElse ( null );
+		
+		if ( exportPath == null ) return;
+		
+		var exportLang = (String) args.getUniqueValue ( "exportRdfLanguage" );
+		descriptorTool.exportDescriptor ( exportPath, exportLang );
 	}
 
 	@Override

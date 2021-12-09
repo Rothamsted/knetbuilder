@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,11 @@ public class JsonLdUtilsTest
 	@BeforeClass
 	public static void init () throws IOException
 	{
-		String rdfTpl = IOUtils.readResource ( JsonLdUtilsTest.class, "dataset-descriptor-tests/descriptor-test-template.ttl" );
+		String mavenPomDir = Path.of ( System.getProperty ( "maven.basedir", "." ) )
+			.toRealPath ()
+			.toString () + '/';
+		
+		String rdfTpl = IOUtils.readFile ( mavenPomDir + "src/main/assembly/resources/examples/descriptor-template.ttl" );
 		Map<String, Object> values = new HashMap<> ();
 		values.put ( "datasetId", "wheat" );
 		values.put ( "datasetAccession", "KnetMiner:Triticum_aestivum" );

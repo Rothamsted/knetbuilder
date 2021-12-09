@@ -2,12 +2,14 @@ package net.sourceforge.ondex.rdf.export.graphdescriptor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -26,19 +28,22 @@ public class ONDEXGraphDescriptorPluginTest
 	@Test
 	public void testBasics () throws IOException
 	{
-		String mavenPomPath = Path.of ( System.getProperty ( "maven.basedir", "." ) )
+		String mavenPomDir = Path.of ( System.getProperty ( "maven.basedir", "." ) )
 			.toRealPath ()
 			.toString () + '/';
 		
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + '/';
 		
-		var oxlPath = mavenPomPath + "src/main/assembly/resources/examples/text_mining.oxl";
+		var oxlPath = mavenPomDir + "src/main/assembly/resources/examples/text_mining.oxl";
 		ONDEXGraph graph = Parser.loadOXL ( oxlPath );
+
+		var xpath = mavenBuildPath + "/graph-descriptor-plugin-test.ttl";
 		
 		Map<String, Object> args = Map.of (
-			"configurationPath", mavenBuildPath + "/test-classes/dataset-descriptor-tests/descriptor-test.properties",
-			"rdfTemplatePath", mavenBuildPath + "/test-classes/dataset-descriptor-tests/descriptor-test-template.ttl",
-			"oxlSourceURL", "file://" + oxlPath
+			"configurationPath", mavenPomDir + "src/main/assembly/resources/examples/descriptor.properties",
+			"rdfTemplatePath", mavenPomDir + "src/main/assembly/resources/examples/descriptor-template.ttl",
+			"oxlSourceURL", "file://" + oxlPath,
+			"exportPath", xpath
 		);
 		
 		OndexPluginUtils.runPlugin ( ONDEXGraphDescriptorPlugin.class, graph, args );
@@ -48,9 +53,6 @@ public class ONDEXGraphDescriptorPluginTest
 			.build ();
 
 		assertNotNull ( "No descritor concept!", descritorTool.getDescriptorConcept () );
-
-		var descrModel = descritorTool.getDescriptor ();
-		descrModel.write ( new FileWriter ( "target/graph-descriptor-plugin-test.ttl" ), "TURTLE" );
 				
 		var dataset = descritorTool.getDescriptorDataset ();
 		assertNotNull ( "No descritor dataset!", descritorTool.getDescriptorConcept () );
@@ -61,5 +63,7 @@ public class ONDEXGraphDescriptorPluginTest
 		assertEquals ( "Wrong property value for concepts number", graph.getConcepts ().size (), nconcepts + 1 );
 		
 		assertNotNull ( "No OXL hash created!", (String) OndexGraphDescriptorTool.getPropertyValue ( propVals, "KnetMiner:Dataset:Source MD5" ) );
+		
+		assertTrue ( "Descriptor not exported!", new File ( xpath ).exists () );
 	}
 }
