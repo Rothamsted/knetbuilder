@@ -3,14 +3,19 @@
 @prefix bkr: <http://knetminer.org/data/rdf/resources/>.
 @prefix bkg: <http://knetminer.org/data/rdf/resources/graphs/>.
 @prefix edam: <http://edamontology.org/>.
+@prefix dcat: <http://www.w3.org/ns/dcat#>.
+@prefix dcterms: <http://purl.org/dc/terms/>
 
-bkg:${datasetId} a schema:Dataset;
+# WARNING! This is managed by out ETL pipelines and datasetId needs to match the 
+# values used there, see https://github.com/Rothamsted/knetminer-backend
+#
+bkg:${datasetId} a schema:Dataset, dcat:Dataset;
   schema:identifier "${datasetAccession}";
 	schema:name "${datasetTitle}";
 	schema:description """${datasetDescription}""";
 	schema:url "${datasetURL}";
 	schema:creator bkr:rresOrg;
-	schema:version "${datasetVersion}";
+	schema:version "${datasetVersion}"; 
 .
 
 bkr:rresOrg a schema:Organization;
@@ -40,4 +45,36 @@ We are part of Rothamsted Research, a world-leading, non-profit research centre 
 		"FAIR data",
 		"Biology";
 	bioschema:type "working party"; # this comes from a CV recommended by bioschemas
+.
+
+
+# TODO: is ther a viable way to describe this in schema.org?
+# For the moment, using a mix of DCAT and schema.org
+#
+bkr:knetminerSparqlService a dcat:DataService, schema:Service;
+	schema:name "The KnetMiner SPARQL endpoint"; 
+	dcat:servesDataset bkg:${datasetId};
+	schema:about bkg:${datasetId};
+	dcat:endpointURL <http://knetminer-data.cyverseuk.org/lodestar/sparql>;
+	# This comes from examples on the DCAT specs.
+	dcterms:conformsTo <https://www.w3.org/TR/sparql11-protocol/>;
+.
+
+
+bkr:${datasetId}Neo4jBrowserService a dcat:DataService
+	schema:name "The Neo4j browser endpoint about ${datasetId}"; 
+	dcat:servesDataset bkg:${datasetId};
+	schema:about bkg:${datasetId};
+	dcat:endpointURL ${datasetNeo4jBrowserURL};
+	dcterms:conformsTo <https://neo4j.com>;
+.
+
+bkr:${datasetId}Neo4jBOLTService a dcat:DataService
+	schema:name "The Neo4j BOLT endpoint about ${datasetId}";
+	dcat:servesDataset bkg:${datasetId};
+	schema:about bkg:${datasetId};	
+	dcat:endpointURL ${datasetNeo4jBOLTURL};
+	dcterms:conformsTo 
+		<https://7687.org/>, # ie, Neo4j/BOLT
+		<https://neo4j.com/docs/cypher-manual>;
 .
