@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -119,25 +120,47 @@ public class Config {
 
 		URL urlConfig;
 		URL urlLog4j;
+		URL urlLog4jAlt;
 
 		// required for Ondex applet when loading from web server
 		if (isApplet) {
 			urlConfig = new URL(ondexDir + "/" + "config.xml");
-			urlLog4j = new URL(ondexDir + "/" + "log4j.properties");
+			
+			urlLog4j = new URL(ondexDir + "/" + "log4j.xml");
+			urlLog4jAlt = new URL(ondexDir + "/" + "log4j.properties");
 		} else {
 			// should be the default on a desktop
 			File file = new File(ondexDir + File.separator + "config.xml")
 					.getAbsoluteFile();
 			urlConfig = file.toURI().toURL();
-			file = new File(ondexDir + File.separator + "log4j.properties")
+			
+			file = new File(ondexDir + File.separator + "log4j.xml")
 					.getAbsoluteFile();
 			urlLog4j = file.toURI().toURL();
+
+			file = new File(ondexDir + File.separator + "log4j.properties")
+					.getAbsoluteFile();
+			urlLog4jAlt = file.toURI().toURL();
 		}
 		System.out.println("[ONDEX - core] Trying to load config at: " + urlConfig);
 		properties.loadFromXML((InputStream) urlConfig.getContent());
 
-		System.out.println("[ONDEX - core] Trying to load log4j at: " + urlLog4j);
-		PropertyConfigurator.configure(urlLog4j);
+		
+		Properties logProps = new Properties ();
+		for ( var url: new URL[] { urlLog4j, urlLog4jAlt })
+		{			
+			System.out.println("[ONDEX - core] Trying to load log4j at: " + url);
+			try {
+				logProps.load ( url.openStream () );
+				System.out.println ( "[ONDEX - core] log4j configuration loaded" );
+				break;
+			}
+			catch ( IOException ex ) {
+				// Nothing to do
+			}
+		}
+
+		if ( !logProps.isEmpty () ) PropertyConfigurator.configure( logProps );
 	}
 
 	/**
