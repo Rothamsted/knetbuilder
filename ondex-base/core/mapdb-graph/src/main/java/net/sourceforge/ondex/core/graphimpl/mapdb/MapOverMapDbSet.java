@@ -13,6 +13,7 @@ import java.util.function.Function;
 
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
+import org.mapdb.Serializer;
 
 /**
  * TODO: comment me!
@@ -30,38 +31,62 @@ public class MapOverMapDbSet<K, V> extends AbstractMap<K, Set<V>>
 	private Function<K, String> key2StringConverter;
 	private static String mapDbDir = System.getProperty ( "java.io.tmpdir" );
 	
-	private static BiFunction<String, String, DB> mapDbDatabaseProvider = (dbPath, mapName) -> 
-		DBMaker
-	  .fileDB ( dbPath + '/' + mapName + "-mapdb.db" )
-	  .closeOnJvmShutdown ()
-	  .make ();	
-
 	private DB mapdb;
 
 	private Set<K> keys;
 	
+	private Serializer<V> valueSerializer = null;
+	
 	
 	@SuppressWarnings ( "unchecked" )
-	public MapOverMapDbSet ( String mapName, Function<K, String> key2StringConverter )
+	public MapOverMapDbSet ( 
+		String mapName, Function<K, String> key2StringConverter, DB mapDb,
+		Serializer<K> keySerializer, Serializer<V> valueSerializer )
 	{
 		super ();
 		this.mapName = mapName;
 		this.key2StringConverter = key2StringConverter;
-		this.mapdb = mapDbDatabaseProvider.apply ( mapDbDir, mapName ); 
-		this.keys = (Set<K>) mapdb.hashSet ( getKeysSetName () ).createOrOpen ();
+		this.mapdb = mapDb == null 
+			? DBMaker
+			  .fileDB ( mapDbDir + '/' + this.mapName + "-mapdb.db" )
+			  .closeOnJvmShutdown ()
+			  .make ()
+			: mapDb; 
+		this.keys = keySerializer == null 
+			? (Set<K>) mapdb.hashSet ( getKeysSetName () ).createOrOpen ()
+		  : mapdb.hashSet ( getKeysSetName (), keySerializer ).createOrOpen ();
+		this.valueSerializer = valueSerializer;
 	}
-	
-	
-	public static <V> MapOverMapDbSet<Integer, V> ofIntKeys ( String mapName )
+
+	public MapOverMapDbSet ( 
+		String mapName, Function<K, String> key2StringConverter,
+		Serializer<K> keySerializer, Serializer<V> valueSerializer )
 	{
-		return new MapOverMapDbSet<> ( mapName, i -> Integer.toString ( i ) );
+		this ( mapName, key2StringConverter, null, keySerializer, valueSerializer );
 	}
 	
-	public static <V> MapOverMapDbSet<String, V> ofStringKeys ( String mapName )
+		
+	
+	public static <V> MapOverMapDbSet<Integer, V> ofIntKeys ( String mapName, DB mapDb, Serializer<V> valueSerializer )
 	{
-		return new MapOverMapDbSet<> ( mapName, Function.identity () );
+		return new MapOverMapDbSet<> ( mapName, i -> Integer.toString ( i ), mapDb, Serializer.INTEGER, valueSerializer );
+	}
+		
+	public static <V> MapOverMapDbSet<Integer, V> ofIntKeys ( String mapName, Serializer<V> valueSerializer )
+	{
+		return ofIntKeys ( mapName, null, valueSerializer );
 	}
 	
+	
+	public static <V> MapOverMapDbSet<String, V> ofStringKeys ( String mapName, DB mapDb, Serializer<V> valueSerializer )
+	{
+		return new MapOverMapDbSet<> ( mapName, Function.identity (), mapDb, Serializer.STRING, valueSerializer );
+	}
+	
+	public static <V> MapOverMapDbSet<String, V> ofStringKeys ( String mapName, Serializer<V> valueSerializer )
+	{
+		return ofStringKeys ( mapName, null, valueSerializer );
+	}
 	
 	
 	private String getSetName ( K key ) {
@@ -75,7 +100,9 @@ public class MapOverMapDbSet<K, V> extends AbstractMap<K, Set<V>>
 
 	@SuppressWarnings ( "unchecked" )
 	private Set<V> getValuesSet ( K key ) {
-		return (Set<V>) mapdb.hashSet ( getSetName ( key ) ).createOrOpen ();
+		return this.valueSerializer == null 
+			? (Set<V>) mapdb.hashSet ( getSetName ( key ) ).createOrOpen ()
+			: mapdb.hashSet ( getSetName ( key ), valueSerializer ).createOrOpen ();
 	}
 
 
@@ -295,17 +322,6 @@ public class MapOverMapDbSet<K, V> extends AbstractMap<K, Set<V>>
 	public static void setMapDbDir ( String mapDbDir )
 	{
 		MapOverMapDbSet.mapDbDir = mapDbDir;
-	}
-
-
-	public static void setMapDbDatabaseProvider ( BiFunction<String, String, DB> mapDbDatabaseProvider )
-	{
-		MapOverMapDbSet.mapDbDatabaseProvider = mapDbDatabaseProvider;
-	}
-
-	public static void setMapDbDatabaseProvider ( DB mapDb )
-	{
-		setMapDbDatabaseProvider ( (dbPath, mapName) -> mapDb );
 	}
 	
 }

@@ -1,6 +1,14 @@
 package net.sourceforge.ondex.core.graphimpl.mapdb;
 
+import static net.sourceforge.ondex.core.graphimpl.mapdb.MapOverMapDbSetTest.MAPDB_DIR;
+
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.BeforeClass;
 
 import net.sourceforge.ondex.core.base.AbstractONDEXGraph;
 import net.sourceforge.ondex.core.test.AbstractONDEXGraphTest;
@@ -13,11 +21,37 @@ import net.sourceforge.ondex.core.test.AbstractONDEXGraphTest;
  */
 public class MapDbOndexGraphTest extends AbstractONDEXGraphTest
 {
+	private MapDbOndexGraph graph;
 	
-	@Override
-	protected AbstractONDEXGraph initialize ( String name )
+  private Logger log = Logger.getLogger ( this.getClass() );
+	
+	
+	@BeforeClass
+	public static void initMapDbDir ()
 	{
-		new File ( "/tmp/" + name + "-mapdb.db" ).delete ();
-		return new MapDbOndexGraph ( name );
+		MapDbOndexGraph.setMapDbDir ( MAPDB_DIR );
+	}
+	
+	/**
+	 * Following the design of {@link AbstractONDEXGraphTest}, rather than using {@code @Before}.
+	 * @throws  
+	 */
+	@Override
+	protected AbstractONDEXGraph initialize ( String name ) throws IOException
+	{
+		var dir = new File ( MAPDB_DIR );
+		dir.mkdir ();
+		FileUtils.cleanDirectory ( dir );
+		
+		graph = new MapDbOndexGraph ( name );
+		//log.info ( "mapdb graph initialised" );
+		return graph;
+	}
+	
+	@After
+	public void closeGraph ()
+	{
+		//log.info ( "Closing mapdb graph" );
+		this.graph.close ();
 	}
 }

@@ -14,6 +14,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mapdb.Serializer;
+
+import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 
 
 /**
@@ -44,7 +48,7 @@ public class MapOverMapDbSetTest
 	@Test
 	public void testCreate ()
 	{
-		var map = MapOverMapDbSet.<String>ofIntKeys ( "testMap" );
+		var map = MapOverMapDbSet.ofIntKeys ( "testMap", Serializer.STRING );
 		map.createEntry ( 1, "test val 1.1" );
 		map.addEntry ( 1, "test val 1.2" );
 		map.addEntry ( 1, "test val 1.2" );
@@ -67,7 +71,7 @@ public class MapOverMapDbSetTest
 	@Test
 	public void testMapUtilityMethods ()
 	{
-		Map<String, Set<String>> map = MapOverMapDbSet.<String>ofStringKeys ( "testMap" );
+		Map<String, Set<String>> map = MapOverMapDbSet.ofStringKeys ( "testMap", Serializer.STRING );
 		map.computeIfAbsent ( "k1", s -> Set.of () ).add ( "v1" );
 		map.put ( "k2", Set.of ( "v2.1", "v2.2" ) );
 		
@@ -89,4 +93,29 @@ public class MapOverMapDbSetTest
 		Assert.assertEquals ( "k3 entry is wrong!", Set.of  ( "v3.1", "v3.2"  ), map.get ( "k3" ) );
 	}
 	
+	/**
+	 * It works in simple cases like this, but not always.
+	 */
+	@Test
+	public void testOndexConcept ()
+	{
+		var graph = new MemoryONDEXGraph ( "test" );
+
+		Map<ONDEXConcept, Set<String>> map = new MapOverMapDbSet<> (
+			"testMap", c -> Integer.toString ( c.getId () ), 
+			null, Serializer.STRING
+		);
+		
+		
+		var gmeta = graph.getMetaData ();
+		
+		var ev = gmeta.createEvidenceType ( "e0", "Test Evidence", "" );
+		var ds = gmeta.createDataSource ( "ds0", "Test Data Source", "" );
+		var cc = gmeta.createConceptClass ( "cc0", "Test CC", "", null );
+		var c = graph.createConcept ( "c0", "", "Test concept", ds, cc, Set.of ( ev ) );
+		
+		map.put ( c, Set.of ( "s1", "s2", "s3" ) );
+		
+		Assert.assertEquals ( "concept storing didn't work!", Set.of  ( "s3", "s2", "s1"  ), map.get ( c ) );
+	}	
 }
