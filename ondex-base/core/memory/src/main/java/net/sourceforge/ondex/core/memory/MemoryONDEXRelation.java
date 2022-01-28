@@ -35,7 +35,7 @@ public class MemoryONDEXRelation extends AbstractRelation implements
 	/**
 	 * parent graph
 	 */
-	private final MemoryONDEXGraph graph;
+	protected transient MemoryONDEXGraph graph;
 
 	/**
 	 * Constructor which fills all fields of this class.
@@ -53,7 +53,7 @@ public class MemoryONDEXRelation extends AbstractRelation implements
 	 * @param ofType
 	 *            specifies Relation Type
 	 */
-	MemoryONDEXRelation(long sid, MemoryONDEXGraph graph, int id,
+	protected MemoryONDEXRelation(long sid, MemoryONDEXGraph graph, int id,
 			ONDEXConcept fromConcept, ONDEXConcept toConcept,
 			RelationType ofType) {
 		super(sid, id, fromConcept, toConcept, ofType);
@@ -121,33 +121,27 @@ public class MemoryONDEXRelation extends AbstractRelation implements
 	}
 
 	@Override
-	protected void saveEvidenceType(EvidenceType evidenceType) {
-		Set<ONDEXRelation> evidences = graph.evidenceTypeToRelations
-				.get(evidenceType);
-		if (evidences == null) {
-			evidences = new HashSet<ONDEXRelation>();
-			graph.evidenceTypeToRelations.put(evidenceType, evidences);
-		}
-		evidences.add(this);
+	protected void saveEvidenceType(EvidenceType evidenceType) 
+	{
+		graph.evidenceTypeToRelations
+		.computeIfAbsent ( evidenceType, et -> new HashSet<> () )
+		.add ( this );
+		
 		graph.relationToEvidence.get(this).add(evidenceType);
 	}
 
 	@Override
-	protected void saveTag(ONDEXConcept tag) {
+	protected void saveTag(ONDEXConcept tag) 
+	{
 		// associate tag with this relation
-		Set<ONDEXRelation> set = graph.tagToRelations.get(tag);
-		if (set == null) {
-			set = new HashSet<ONDEXRelation>();
-			graph.tagToRelations.put(tag, set);
-		}
-		set.add(this);
+		graph.tagToRelations
+		.computeIfAbsent ( tag, tg -> new HashSet<> () )
+		.add ( this );
+		
 		// associate this relation with tag
-		Set<ONDEXConcept> tags = graph.relationToTags.get(this);
-		if (tags == null) {
-			tags = new HashSet<ONDEXConcept>();
-			graph.relationToTags.put(this, tags);
-		}
-		tags.add(tag);
+		graph.relationToTags
+		.computeIfAbsent ( this, r -> new HashSet<> () )
+		.add ( tag );
 	}
 
 	@Override
@@ -166,13 +160,11 @@ public class MemoryONDEXRelation extends AbstractRelation implements
 		}
 
 		// store it in central index
-		Set<ONDEXRelation> relations = graph.attributeNameToRelations.get(an);
-		if (relations == null) {
-			relations = new HashSet<ONDEXRelation>();
-			graph.attributeNameToRelations.put(an, relations);
-		}
-		relations.add(this);
-
+		graph.attributeNameToRelations
+		.computeIfAbsent ( an, _an -> new HashSet<> () )
+		.add ( this );
+		
 		return attribute;
 	}
+
 }

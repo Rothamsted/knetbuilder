@@ -45,7 +45,7 @@ public class MemoryONDEXConcept extends AbstractConcept implements
 	/**
 	 * parent graph
 	 */
-	private final MemoryONDEXGraph graph;
+	protected transient MemoryONDEXGraph graph;
 
 	/**
 	 * Constructor which fills all fields of Concept and initialise empty
@@ -67,7 +67,7 @@ public class MemoryONDEXConcept extends AbstractConcept implements
 	 *            ConceptClass of this Concept
 	 * @throws AccessDeniedException
 	 */
-	MemoryONDEXConcept(long sid, MemoryONDEXGraph graph, int id, String pid,
+	protected MemoryONDEXConcept(long sid, MemoryONDEXGraph graph, int id, String pid,
 			String annotation, String description, DataSource elementOf,
 			ConceptClass ofType) {
 		super(sid, id, pid, annotation, description, elementOf, ofType);
@@ -241,32 +241,26 @@ public class MemoryONDEXConcept extends AbstractConcept implements
 	}
 
 	@Override
-	protected void saveEvidenceType(EvidenceType evidencetype) {
-		Set<ONDEXConcept> set = graph.evidenceTypeToConcepts.get(evidencetype);
-		if (set == null) {
-			set = new HashSet<ONDEXConcept>();
-			graph.evidenceTypeToConcepts.put(evidencetype, set);
-		}
-		set.add(this);
+	protected void saveEvidenceType(EvidenceType evidencetype) 
+	{
+		graph.evidenceTypeToConcepts
+		.computeIfAbsent ( evidencetype, ev -> new HashSet<> () )
+		.add ( this );
+		
 		graph.conceptToEvidence.get(this).add(evidencetype);
 	}
 
 	@Override
 	protected void saveTag(ONDEXConcept tag) {
 		// associate this concept with tag
-		Set<ONDEXConcept> set = graph.tagToConcepts.get(tag);
-		if (set == null) {
-			set = new HashSet<ONDEXConcept>();
-			graph.tagToConcepts.put(tag, set);
-		}
-		set.add(this);
+		graph.tagToConcepts
+		.computeIfAbsent ( tag, tg -> new HashSet<> () )
+		.add ( this );
+		
 		// associate tag with this concept
-		Set<ONDEXConcept> tags = graph.conceptToTags.get(this);
-		if (tags == null) {
-			tags = new HashSet<ONDEXConcept>();
-			graph.conceptToTags.put(this, tags);
-		}
-		tags.add(tag);
+		graph.conceptToTags
+		.computeIfAbsent ( this, c -> new HashSet<> () )
+		.add ( tag );		
 	}
 
 	@Override
@@ -294,13 +288,10 @@ public class MemoryONDEXConcept extends AbstractConcept implements
 		}
 
 		// store it in central index
-		Set<ONDEXConcept> attrSet = graph.attributeNameToConcepts.get(an);
-		if (attrSet == null) {
-			attrSet = new HashSet<ONDEXConcept>();
-			graph.attributeNameToConcepts.put(an, attrSet);
-		}
-		attrSet.add(this);
-
+		graph.attributeNameToConcepts
+		.computeIfAbsent ( an, _an -> new HashSet<> () )
+		.add ( this );
+		
 		return attribute;
 	}
 
@@ -311,4 +302,5 @@ public class MemoryONDEXConcept extends AbstractConcept implements
 		names.add(cn);
 		return cn;
 	}
+	
 }
