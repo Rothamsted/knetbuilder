@@ -27,6 +27,7 @@ import net.sourceforge.ondex.event.ONDEXEvent;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.ONDEXListener;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,6 +40,8 @@ import org.junit.Test;
  */
 public abstract class AbstractONDEXGraphTest 
 {
+  private Logger log = Logger.getLogger ( this.getClass() );
+
 	public class FailOnErrorLogger implements ONDEXListener {
 
 		@Override
@@ -149,21 +152,21 @@ public abstract class AbstractONDEXGraphTest
 	public void setUp() throws Exception {
 
 		og = initialize("test_graph");
-		Assert.assertNotNull(og);
+		Assert.assertNotNull( "Working graph is null!", og);
 		omd = og.getMetaData();
-		Assert.assertNotNull(omd);
+		Assert.assertNotNull( "Working graph has null metadata!", omd);
 		et = omd.getFactory().createEvidenceType(ETID);
-		Assert.assertNotNull(et);
+		Assert.assertNotNull( "Test Evidence is null!", et);
 		cc = omd.getFactory().createConceptClass(CCID);
-		Assert.assertNotNull(cc);
+		Assert.assertNotNull( "Test CC is null!", cc);
 		dataSource = omd.getFactory().createDataSource(DataSourceID);
-		Assert.assertNotNull(dataSource);
+		Assert.assertNotNull( "Test Data Source is null!", dataSource);
 		rt = omd.getFactory().createRelationType("rt");
-		Assert.assertNotNull(rt);
+		Assert.assertNotNull( "Test Relation Type is null!", rt);
 		attrname = omd.getFactory().createAttributeName("double", Double.class);
-		Assert.assertNotNull(attrname);
+		Assert.assertNotNull( "Test Attribute Name is null!", attrname);
 
-		ets = new ArrayList<EvidenceType>();
+		ets = new ArrayList<>();
 		ets.add(et);
 	}
 
@@ -546,7 +549,7 @@ public abstract class AbstractONDEXGraphTest
 		}
 
 		Set<ONDEXConcept> concepts = og.getConceptsOfAttributeName(attA);
-		Assert.assertEquals("not enough concepts returned", 50, concepts.size());
+		Assert.assertEquals("# of returned concepts is wrong", 50, concepts.size());
 
 		int count = 0;
 		for (ONDEXConcept concept : concepts) {
@@ -979,7 +982,7 @@ public abstract class AbstractONDEXGraphTest
 
 		assertEquals("wrong number of relations", og.getRelations().size(), 0);
 
-		Map<ONDEXConcept, ONDEXRelation> map = new HashMap<ONDEXConcept, ONDEXRelation>();
+		Map<ONDEXConcept, ONDEXRelation> map = new HashMap<>();
 
 		for (int i = 0; i < 50; i++) {
 			ONDEXConcept from = getFromConcept(i);
@@ -993,12 +996,15 @@ public abstract class AbstractONDEXGraphTest
 
 		assertEquals("wrong number of relations", og.getRelations().size(), 50);
 
+		log.info ( "Relations created, testing retrieval" );
 		for (ONDEXConcept c : map.keySet()) {
 			assertEquals("wrong number of relations",
 					og.getRelationsOfConcept(c).size(), 1);
 			assertEquals("not equal relation", og.getRelationsOfConcept(c)
 					.iterator().next(), map.get(c));
 		}
+		log.info ( "Relations retrieval test done" );
+
 	}
 
 	@Test
