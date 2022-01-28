@@ -124,56 +124,32 @@ public class MemoryONDEXGraph extends AbstractONDEXGraph
 		this.initInternalData ();
 	}
 
+	/**
+	 * Having it here eases extensions, eg, allows for using 
+	 * collections other than the Java defaults. 
+	 */
 	protected void initInternalData ()
 	{
-		this.keyToRelation = getMap ( "keyToRelation" ); 
-		this.idToRelation = new DualHashBidiMap<> ( getMap ( "idToRelation" ) );
-		this.idToConcept = new DualHashBidiMap<> ( getMap ( "idToConcept" ) );
-		this.dataSourceToConcepts = getMap ( "dataSourceToConcepts" );
-		this.conceptClassToConcepts = getMap ( "conceptClassToConcepts" );
-		this.attributeNameToConcepts = getMap ( "attributeNameToConcepts" );
-		this.evidenceTypeToConcepts = getMap ( "evidenceTypeToConcepts" );
-		this.conceptToRelations = getMap ( "conceptToRelations" );
-		this.dataSourceToRelations = getMap ( "dataSourceToRelations" );
-		this.conceptClassToRelations = getMap ( "conceptClassToRelations" );
-		this.relationTypeToRelations = getMap ( "relationTypeToRelations" );
-		this.attributeNameToRelations = getMap ( "attributeNameToRelations" );
-		this.evidenceTypeToRelations = getMap ( "evidenceTypeToRelations" );
-		this.tagToConcepts = getMap ( "tagToConcepts" );
-		this.tagToRelations = getMap ( "tagToRelations" );
-		this.conceptToTags = getMap ( "conceptToTags" );
-		this.relationToTags = getMap ( "relationToTags" );
-		this.conceptToEvidence = getMap ( "conceptToEvidence" );
-		this.relationToEvidence = getMap ( "relationToEvidence" );
+		this.keyToRelation = new HashMap<>(); 
+		this.idToRelation = new DualHashBidiMap<> ( new HashMap<>() );
+		this.idToConcept = new DualHashBidiMap<> ( new HashMap<>() );
+		this.dataSourceToConcepts = new HashMap<>();
+		this.conceptClassToConcepts = new HashMap<> ();
+		this.attributeNameToConcepts = new HashMap<> ();
+		this.evidenceTypeToConcepts = new HashMap<> ();
+		this.conceptToRelations = new HashMap<> ();
+		this.dataSourceToRelations = new HashMap<> ();
+		this.conceptClassToRelations = new HashMap<> ();
+		this.relationTypeToRelations = new HashMap<> ();
+		this.attributeNameToRelations = new HashMap<> ();
+		this.evidenceTypeToRelations = new HashMap<> ();
+		this.tagToConcepts = new HashMap<> ();
+		this.tagToRelations = new HashMap<> ();
+		this.conceptToTags = new HashMap<> ();
+		this.relationToTags = new HashMap<> ();
+		this.conceptToEvidence = new HashMap<> ();
+		this.relationToEvidence = new HashMap<> ();
 	}
-	
-	
-	protected <V> Set<V> getSet ( String name )
-	{
-		return new HashSet<> ();
-	}
-	
-	
-	protected <K,V> Map<K,V> getMap ( String name )
-	{
-		return new HashMap<> ();
-	}
-	
-	protected <K,V> Set<V> populateValuesMap ( Map<K, Set<V>> map, K key, String mapName, String stringKey )
-	{
-		return map.computeIfAbsent ( key, k -> getSet ( mapName + ":" + k ) );
-	}
-		
-	protected <K extends ONDEXEntity,V> Set<V> populateValuesMap ( Map<K, Set<V>> map, K key, String mapName )
-	{
-		return map.computeIfAbsent ( key, k -> getSet ( mapName + ":" + Integer.valueOf ( key.getId () ) ) );
-	}
-
-	protected <K extends MetaData,V> Set<V> populateValuesMap ( Map<K, Set<V>> map, K key, String mapName )
-	{
-		return map.computeIfAbsent ( key, k -> getSet ( mapName + ":" + key.getId () ) );
-	}
-	
 	
 	
 	@Override
@@ -391,13 +367,16 @@ public class MemoryONDEXGraph extends AbstractONDEXGraph
 		return allTags;
 	}
 
-// TODO: remove?
-//	protected ONDEXConcept newConcept (
-//		long sid, int id, String pid, String annotation, String description, DataSource elementOf, ConceptClass ofType 
-//	)
-//	{
-//		return new MemoryONDEXConcept ( sid, this, id, pid, annotation, description, elementOf, ofType );		
-//	}
+	/**
+	 * Allows to use a concept implementation that is specific to an extension based on 
+	 * the hereby memory-based one.
+	 */
+	protected ONDEXConcept newConcept (
+		long sid, int id, String pid, String annotation, String description, DataSource elementOf, ConceptClass ofType 
+	)
+	{
+		return new MemoryONDEXConcept ( sid, this, id, pid, annotation, description, elementOf, ofType );		
+	}
 	
 	@Override
 	protected ONDEXConcept storeConcept ( long sid, int id, String pid, String annotation, String description,
@@ -419,10 +398,10 @@ public class MemoryONDEXGraph extends AbstractONDEXGraph
 		{
 
 			// create a new concept
-			ONDEXConcept c = new MemoryONDEXConcept ( sid, this, id, pid, annotation, description, elementOf, ofType );
+			ONDEXConcept c = newConcept ( sid, id, pid, annotation, description, elementOf, ofType );
 
 			// add all evidence to concept
-			this.populateValuesMap ( conceptToEvidence, c, "conceptToEvidence" );
+			conceptToEvidence.computeIfAbsent ( c, _c -> new HashSet<> () );
 			for ( EvidenceType anEvidence : evidence )
 			{
 				c.addEvidenceType ( anEvidence );
@@ -432,12 +411,12 @@ public class MemoryONDEXGraph extends AbstractONDEXGraph
 			idToConcept.put ( c.getId (), c );
 
 			// index by data source
-			this.populateValuesMap ( dataSourceToConcepts, elementOf, "dataSourceToConcepts" )
+			this.dataSourceToConcepts.computeIfAbsent ( elementOf, _ds -> new HashSet<> () )
 			.add ( c );
 			
 
 			// index by concept class
-			this.populateValuesMap ( conceptClassToConcepts, ofType, "conceptClassToConcepts" )
+			this.conceptClassToConcepts.computeIfAbsent ( ofType, _cc -> new HashSet<> () )
 			.add ( c );
 
 			// return new concept
@@ -445,13 +424,16 @@ public class MemoryONDEXGraph extends AbstractONDEXGraph
 		}
 	}
 
-// TODO: remove?
-//	protected ONDEXRelation newRelation (
-//		long sid, int id, ONDEXConcept fromConcept, ONDEXConcept toConcept, RelationType ofType
-//	)
-//	{
-//		return new MemoryONDEXRelation ( sid, this, id, fromConcept, toConcept, ofType );
-//	}
+	/**
+	 * Allows to use a relation implementation that is specific to an extension based on 
+	 * the hereby memory-based one.
+	 */
+	protected ONDEXRelation newRelation (
+		long sid, int id, ONDEXConcept fromConcept, ONDEXConcept toConcept, RelationType ofType
+	)
+	{
+		return new MemoryONDEXRelation ( sid, this, id, fromConcept, toConcept, ofType );
+	}
 	
 	@Override
 	protected ONDEXRelation storeRelation ( long sid, int id, ONDEXConcept fromConcept, ONDEXConcept toConcept,
@@ -476,10 +458,10 @@ public class MemoryONDEXGraph extends AbstractONDEXGraph
 		{
 
 			// create a new relation
-			ONDEXRelation r = new MemoryONDEXRelation ( sid, this, id, fromConcept, toConcept, ofType );
+			ONDEXRelation r = newRelation ( sid, id, fromConcept, toConcept, ofType );
 
 			// add all evidence to relation
-			this.populateValuesMap ( relationToEvidence, r, "relationToEvidence" );
+			this.relationToEvidence.computeIfAbsent ( r, _r -> new HashSet<> () );
 			for ( EvidenceType anEvidence : evidence )
 			{
 				r.addEvidenceType ( anEvidence );
@@ -490,32 +472,34 @@ public class MemoryONDEXGraph extends AbstractONDEXGraph
 			idToRelation.put ( r.getId (), r );
 
 			// set references for relation type
-			this.populateValuesMap ( relationTypeToRelations, ofType, "relationTypeToRelations" )
+			this.relationTypeToRelations.computeIfAbsent ( ofType, _rt -> new HashSet<> () )
 			.add ( r );
+
 			
 			// set references for fromConcept
-			this.populateValuesMap ( conceptToRelations, fromConcept, "conceptToRelations" )
+			this.conceptToRelations.computeIfAbsent ( fromConcept, _c -> new HashSet<> () )
 			.add ( r );
+			
 			
 			// index from properties
-			this.populateValuesMap ( dataSourceToRelations, fromConcept.getElementOf (), "dataSourceToRelations" )
+			this.dataSourceToRelations.computeIfAbsent ( fromConcept.getElementOf (), _ds -> new HashSet<> () )
 			.add ( r );
-			
+						
 			// from type index
-			this.populateValuesMap ( conceptClassToRelations, fromConcept.getOfType (), "conceptClassToRelations" )
+			this.conceptClassToRelations.computeIfAbsent ( fromConcept.getOfType (), _cc -> new HashSet<> () )
 			.add ( r );
 
 			// to concept index
-			this.populateValuesMap ( conceptToRelations, toConcept, "conceptToRelations" )
+			this.conceptToRelations.computeIfAbsent ( toConcept, _c -> new HashSet<> () )
 			.add ( r );
-			
+						
 
 			// index to properties
-			this.populateValuesMap ( dataSourceToRelations, toConcept.getElementOf (), "dataSourceToRelations" )
+			this.dataSourceToRelations.computeIfAbsent ( toConcept.getElementOf (), _ds -> new HashSet<> () )
 			.add ( r );
-			
+						
 			// to type index
-			this.populateValuesMap ( conceptClassToRelations, toConcept.getOfType (), "conceptClassToRelations" )
+			this.conceptClassToRelations.computeIfAbsent ( toConcept.getOfType (), __cc -> new HashSet<> () )
 			.add ( r );
 			
 			// return new relation
