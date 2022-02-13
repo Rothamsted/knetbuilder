@@ -37,49 +37,6 @@
             </configuration>
          </plugin>
 
-				 <!-- TODO: Remove, we don't use it anymore
-         <plugin>
-            <groupId>com.akathist.maven.plugins.launch4j</groupId>
-            <artifactId>launch4j-maven-plugin</artifactId>
-            <version>1.7.21</version>
-            <executions>
-               <execution>
-                  <id>l4j-gui</id>
-                  <phase>package</phase>
-                  <goals>
-                     <goal>launch4j</goal>
-                  </goals>
-                  <configuration>
-                     <headerType>gui</headerType>
-                     <outfile>target/${project.artifactId}-${project.version}.exe</outfile>
-                     <jar>lib/${project.artifactId}-${project.version}.jar</jar>
-                     <dontWrapJar>true</dontWrapJar>
-                     <chdir>.</chdir>
-                     <errTitle>Ondex - no JAVA found</errTitle>
-                     <classPath>
-                        <mainClass>net.sourceforge.ondex.ovtk2.Main</mainClass>
-                     </classPath>
-                     <jre>
-                        <minVersion>1.6.0</minVersion>
-                     </jre>
-                     <versionInfo>
-                        <fileVersion>2014.26.1.0</fileVersion>
-                        <txtFileVersion>${project.version}</txtFileVersion>
-                        <fileDescription>Ondex front-end executable</fileDescription>
-                        <copyright>${project.organization.name} 2014</copyright>
-                        <productVersion>2014.26.1.0</productVersion>
-                        <txtProductVersion>${project.version}</txtProductVersion>
-                        <productName>${project.name}</productName>
-                        <internalName>${project.artifactId}</internalName>
-                        <originalFilename>${project.artifactId}-${project.version}.exe</originalFilename>
-                     </versionInfo>
-                     <icon>config/icons/ondex.ico</icon>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
-         -->
-
          <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <configuration>

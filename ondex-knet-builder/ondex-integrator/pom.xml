@@ -141,12 +141,6 @@
 				<version>${project.version}</version>
 			</dependency>
 
-      <!--  dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>sbml</artifactId>
-         <version>${project.version}</version>
-      </dependency -->
-
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>oxl</artifactId>
@@ -190,11 +184,6 @@
          <artifactId>prolog</artifactId>
          <version>${project.version}</version>
       </dependency>
-      <!-- dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>rdf</artifactId>
-         <version>${project.version}</version>
-      </dependency -->
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>interaction</artifactId>
@@ -231,7 +220,6 @@
                   <id>make-assembly</id>
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
-                  <!-- append to the packaging phase. -->
                   <goals>
                      <goal>attached</goal>
                      <!-- goals == mojos -->
