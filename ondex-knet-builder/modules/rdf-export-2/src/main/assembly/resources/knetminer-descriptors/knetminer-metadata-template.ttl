@@ -61,7 +61,7 @@ bkr:knetminerSparqlService a dcat:DataService, schema:Service;
 .
 
 
-bkr:${datasetId}Neo4jBrowserService a dcat:DataService
+bkr:${datasetId}Neo4jBrowserService a dcat:DataService, schema:Service;
 	schema:name "The Neo4j browser endpoint about ${datasetId}"; 
 	dcat:servesDataset bkg:${datasetId};
 	schema:about bkg:${datasetId};
@@ -69,7 +69,7 @@ bkr:${datasetId}Neo4jBrowserService a dcat:DataService
 	dcterms:conformsTo <https://neo4j.com>;
 .
 
-bkr:${datasetId}Neo4jBOLTService a dcat:DataService
+bkr:${datasetId}Neo4jBOLTService a dcat:DataService, schema:Service;
 	schema:name "The Neo4j BOLT endpoint about ${datasetId}";
 	dcat:servesDataset bkg:${datasetId};
 	schema:about bkg:${datasetId};	
