@@ -310,6 +310,7 @@ public abstract class AbstractGraphTraverser
 		GT result = null;
 		
 		String graphTraverserFQN = (String) options.get ( "GraphTraverserClass" );
+		
 		if ( graphTraverserFQN == null || "".equals ( graphTraverserFQN ) )
 			graphTraverserFQN = GraphTraverser.class.getCanonicalName ();
 		

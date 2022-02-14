@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Sample Configuration for Knetminer</comment>	
+    
+	<!-- 
+	  This is crafted from production files, only variables that are relevant to the data
+	  initialiser are kept from there.
+	 -->
+
+  <entry key="StateMachineFilePath">file:////${maven.buildDirectory}/test-classes/test-case/SemanticMotifs.txt</entry>
+  
+  <entry key="DataPath">/root/knetminer-dataset/data</entry>
+  <entry key="DataFile">/root/knetminer-dataset/data/knowledge-network.oxl</entry>
+  
+	<!-- TODO: to be used later, for tests about this option -->
+	<entry key="seedGenesFile"></entry>
+
+	<!-- 
+	  The species ID the dataset is about. This can be either a single value or a comma-separated list.
+	  TODO: to be used later to test this option 
+	-->
+	<entry key="SpeciesTaxId">4565</entry>
+
+
+	<!-- The default is used when this is empty -->	
+	<entry key = "GraphTraverserClass"></entry>
+			
+</properties>

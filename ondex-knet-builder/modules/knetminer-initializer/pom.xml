@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project 
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>modules</artifactId>
+		<groupId>net.sourceforge.ondex</groupId>
+		<version>5.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>net.sourceforge.ondex.modules</groupId>
+	<artifactId>knetminer-initializer</artifactId>
+
+	<name>KnetMiner Initialiser</name>
+	<description>
+	  Tool to initialise KnetMiner-related data offline
+  </description>
+
+	<developers>
+		<developer>
+			<name>Marco Brandizi</name>
+			<url>https://github.com/marco-brandizi</url>
+		</developer>
+		<!-- TODO: add more here -->
+	</developers>
+
+	<dependencies>
+
+		<dependency>
+			<artifactId>api</artifactId>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>workflow-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>memory</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jutils</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>lucene</artifactId>
+			<version>${project.version}</version>
+		</dependency>		
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.modules</groupId>
+			<artifactId>oxl</artifactId>
+			<version>${project.version}</version>
+			<!-- we need it to compile, but it also must be inside plugins/, without redundancies. -->
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+					<execution>
+						<id>make-assembly-packaged_with_jars</id>
+						<phase />
+					</execution>
+
+					<execution>
+						<id>assembly-bundle</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/bundle.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- We have some test files that we reuse in the mini-integration-tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+</project>
