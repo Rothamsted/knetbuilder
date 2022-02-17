@@ -6,12 +6,23 @@
 	<!-- 
 	  This is crafted from production files, only variables that are relevant to the data
 	  initialiser are kept from there.
+	  
+	  project.build.testOutputDirectory is translated by Maven as target/test-classes
 	 -->
 
-  <entry key="StateMachineFilePath">file:////${maven.buildDirectory}/test-classes/test-case/SemanticMotifs.txt</entry>
+  <entry key="StateMachineFilePath">file:////${project.build.testOutputDirectory}/test-case/SemanticMotifs.txt</entry>
+
+	<!-- 
+		Tests override this with their own value. Similarly, both the plug-in and the CLI interface 
+		override this using a user-provided parameter.
+	-->
+  <!--   entry key="DataPath">/root/knetminer-dataset/data</entry -->
   
-  <entry key="DataPath">/root/knetminer-dataset/data</entry>
-  <entry key="DataFile">/root/knetminer-dataset/data/knowledge-network.oxl</entry>
+  <!-- 
+    This is used by KnetMiner, usually it's not used by the initialiser, since it either receives a
+    populated graph object or this path is a parameter (ie, of the CLI interface)
+   -->
+  <!-- entry key="DataFile">/root/knetminer-dataset/data/knowledge-network.oxl</entry -->
   
 	<!-- TODO: to be used later, for tests about this option -->
 	<entry key="seedGenesFile"></entry>

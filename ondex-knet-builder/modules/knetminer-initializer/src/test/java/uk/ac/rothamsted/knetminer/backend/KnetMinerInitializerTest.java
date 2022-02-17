@@ -1,5 +1,6 @@
 package uk.ac.rothamsted.knetminer.backend;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -18,17 +19,21 @@ public class KnetMinerInitializerTest
 	public void testBasics ()
 	{
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
+
 		// Maven copies test files here.
-		String testCasePath = mavenBuildPath + "/test-classes/test-case";
+		var testCasePath = mavenBuildPath + "/test-classes/test-case";
+		var testCaseOut = testCasePath + "/output";
 		
 		ONDEXGraph graph = Parser.loadOXL ( testCasePath + "/text-mining.oxl" );
+		Assert.assertNotNull ( "graph not loaded!", graph );
 
 		var initializer = new KnetMinerInitializer ();
 		initializer.setGraph ( graph );
 		initializer.setConfigXmlPath ( testCasePath + "/data-source-config.xml" );
-		initializer.createKnetMinerData ();
+		initializer.setDataPath ( testCaseOut );
+		initializer.initKnetMinerData ();
 		
-		// TODO: check Lucene index files
-		// TODO: check traverser files
+		// TODO: check Lucene index files exist, using testCaseOut
+		// TODO: check traverser files exist, using testCaseOut
 	}
 }

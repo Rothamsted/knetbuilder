@@ -56,7 +56,7 @@ public class GraphTraverser extends AbstractGraphTraverser {
     public GraphTraverser(StateMachine sm, int maxLengthOfAnyStateDerivedRoute) {
         this.sm = sm;
         this.maxLengthOfAnyRoute = maxLengthOfAnyStateDerivedRoute;
-        init ();
+        init ( null );
     }
 
     /**
@@ -83,7 +83,12 @@ public class GraphTraverser extends AbstractGraphTraverser {
     }
     
     
-    private synchronized void init ()
+    /**
+     * For methods that have a graph to be give to the SM parser (in {@link #loadSemanticMotifs(String, ONDEXGraph)},
+     * use that graph as parameter, else use null and the graph will be taken from the ONDEXGraph option.
+     * 
+     */
+    private synchronized void init ( ONDEXGraph graph )
     {
     	if ( EXECUTOR == null )
     	{
@@ -107,11 +112,15 @@ public class GraphTraverser extends AbstractGraphTraverser {
 	  		+ "you must configure a path for the StateMachine File (usually in config.xml)"
     	);
     	
-    	this.sm = loadSemanticMotifs ( stateMachineFilePath ); 
+    	this.sm = loadSemanticMotifs ( stateMachineFilePath, graph  ); 
     }
     
     
-  	private StateMachine loadSemanticMotifs ( String smFile ) 
+    /**
+     * @see #init(ONDEXGraph).
+     * 
+     */
+  	private StateMachine loadSemanticMotifs ( String smFile, ONDEXGraph graph  ) 
   	{
   		StateMachineFlatFileParser2 smp = null;
   		try 
@@ -120,7 +129,7 @@ public class GraphTraverser extends AbstractGraphTraverser {
   					? new URL ( smFile )
   					: Thread.currentThread().getContextClassLoader().getResource ( smFile );
   				
-				ONDEXGraph graph = this.getOption ( "ONDEXGraph", null );
+  			if ( graph == null ) graph = this.getOption ( "ONDEXGraph", null );
 				if ( graph == null ) throw new IllegalArgumentException (
 					"ONDEXGraph option not set" 
 				);
@@ -153,7 +162,7 @@ public class GraphTraverser extends AbstractGraphTraverser {
     @Override
 		public List<EvidencePathNode> traverseGraph(ONDEXGraph aog, ONDEXConcept concept, FilterPaths<EvidencePathNode> filter) {
 
-        init ();
+        init ( aog );
         
     		Set<Transition> transitions = sm.getAllTransitions();
         for (Transition transition : transitions) {
@@ -190,7 +199,7 @@ public class GraphTraverser extends AbstractGraphTraverser {
     @Override
 		public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraph(ONDEXGraph aog, Set<ONDEXConcept> concepts, FilterPaths<EvidencePathNode> filter) {
 
-    		init ();
+    		init ( aog );
     	
     		log.info ( "Graph Traverser, beginning parallel traversing of {} concept(s)", concepts.size () );
     		

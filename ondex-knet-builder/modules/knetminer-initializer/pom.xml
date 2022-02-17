@@ -70,17 +70,6 @@
 		</dependency>		
 
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<scope>test</scope>
@@ -97,6 +86,14 @@
 	</dependencies>
 
 	<build>
+	
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+	
 
 		<plugins>
 
@@ -142,6 +139,18 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<plugin>
+				<!-- TODO: move upwards -->
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-resources-plugin</artifactId>
+			  <configuration>
+			    <nonFilteredFileExtensions>
+			      <nonFilteredFileExtension>oxl</nonFilteredFileExtension>
+			    </nonFilteredFileExtensions>
+			  </configuration>
+			</plugin>
+			
 
 		</plugins>
 
