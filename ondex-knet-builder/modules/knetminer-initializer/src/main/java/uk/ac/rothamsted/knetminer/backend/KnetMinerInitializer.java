@@ -1,6 +1,11 @@
 package uk.ac.rothamsted.knetminer.backend;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Set;
 
 import net.sourceforge.ondex.algorithm.graphquery.AbstractGraphTraverser;
@@ -9,6 +14,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import uk.ac.ebi.utils.collections.OptionsMap;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**
  * TODO: comment me!
@@ -46,7 +52,22 @@ public class KnetMinerInitializer
 	 */
 	private void loadOptions ()
 	{
-		// TODO, see KnetMiner code
+		try
+		{
+			Properties props = new Properties ();
+			InputStream in = new FileInputStream ( this.configXmlPath );
+			props.loadFromXML ( in );
+			this.options = OptionsMap.from ( props );
+		}
+		catch ( IOException ex )
+		{
+			ExceptionUtils.throwEx ( 
+				UncheckedIOException.class, ex,
+				"Error while loading data source configuration from '%s': %s",
+				configXmlPath,
+				ex.getMessage ()
+			);
+		}		
 	}
 	
 	/**
