@@ -208,9 +208,9 @@ public class KnetMinerInitializer
 	{
 		log.info ( "Initializing semantic motif data" );
 		
-		File fileConcept2Genes = Paths.get ( dataPath, "concepts2Genes" ).toFile ();
-		File fileGene2Concepts = Paths.get ( dataPath, "genes2Concepts" ).toFile ();
-		File fileGene2PathLength = Paths.get ( dataPath, "genes2PathLengths" ).toFile ();
+		File fileConcept2Genes = Paths.get ( dataPath, "concepts2Genes.ser" ).toFile ();
+		File fileGene2Concepts = Paths.get ( dataPath, "genes2Concepts.ser" ).toFile ();
+		File fileGene2PathLength = Paths.get ( dataPath, "genes2PathLengths.ser" ).toFile ();
 		
 		log.info ( "Generating semantic motif result files" );
 

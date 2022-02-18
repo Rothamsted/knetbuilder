@@ -20,9 +20,9 @@ import net.sourceforge.ondex.parser.oxl.Parser;
 public class KnetMinerInitializerTest
 {
 	
-	KnetMinerInitializer initializer;
+	private KnetMinerInitializer initializer;
 	
-	String testCaseOut;
+	private String testCaseOut;
 	
 	@Before
 	public void initKnetMinerInitializer() {
@@ -78,8 +78,8 @@ public class KnetMinerInitializerTest
 		Assert.assertTrue( "Graph Traverser files not created",
 				Arrays.asList ( traverserFiles ).stream ()
 						.anyMatch( file -> file.exists () && file.isFile ()
-								&& ( file.getName ().equalsIgnoreCase ( "concepts2Genes" )
-										|| file.getName ().equalsIgnoreCase ( "genes2Concepts" )
-										|| file.getName ().equalsIgnoreCase ( "genes2PathLengths" ))));
+								&& ( file.getName ().equalsIgnoreCase ( "concepts2Genes.ser" )
+										|| file.getName ().equalsIgnoreCase ( "genes2Concepts.ser" )
+										|| file.getName ().equalsIgnoreCase ( "genes2PathLengths.ser" ))));
 	}
 }
