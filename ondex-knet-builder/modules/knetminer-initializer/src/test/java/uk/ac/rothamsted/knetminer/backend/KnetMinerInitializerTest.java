@@ -23,9 +23,9 @@ import net.sourceforge.ondex.parser.oxl.Parser;
 public class KnetMinerInitializerTest
 {
 	
-	static KnetMinerInitializer initializer;
+	private static KnetMinerInitializer initializer;
 	
-	static String testCaseOut;
+	private static String testCaseOut;
 	
 	@BeforeClass
 	public static void initKnetMinerInitializer() {
@@ -93,8 +93,28 @@ public class KnetMinerInitializerTest
 		Assert.assertTrue( "Graph Traverser files not created",
 				Arrays.asList ( traverserFiles ).stream ()
 						.anyMatch( file -> file.exists () && file.isFile ()
-								&& ( file.getName ().equalsIgnoreCase ( "concepts2Genes" )
-										|| file.getName ().equalsIgnoreCase ( "genes2Concepts" )
-										|| file.getName ().equalsIgnoreCase ( "genes2PathLengths" ))));
+								&& ( file.getName ().equalsIgnoreCase ( "concepts2Genes.ser" )
+										|| file.getName ().equalsIgnoreCase ( "genes2Concepts.ser" )
+										|| file.getName ().equalsIgnoreCase ( "genes2PathLengths.ser" ))));
+	}
+	
+	/**
+	 * TODO: to be implemented, we don't need it in the short time (very likely, the OXL building pipeline will need
+	 * to rebuild everything at each invocation). 
+	 */
+	public void testLuceneFilesReuse ()
+	{
+		// 1) read the modification date/time for the Lucene index directory 
+		// 2) reissue initLuceneData() (in the test it would be a second execution after the one in initKnetMinerInitializer()) 
+		// 3) read the directory's date/time again and check it didn't change. 
+		// This verifies that files are not re-created when they already exist.		
+	}
+	
+	/**
+	 * TODO: like {@link #testInitLuceneData()}, not immediately needed.
+	 */
+	public void testTraverserFilesReuse ()
+	{
+		// Same as testLuceneFilesReuse
 	}
 }

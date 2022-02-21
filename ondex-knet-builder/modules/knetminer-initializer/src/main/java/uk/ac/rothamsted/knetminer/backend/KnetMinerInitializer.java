@@ -107,10 +107,23 @@ public class KnetMinerInitializer
 	}
 	
 	/**
-	 * Indexes the {@link #getGraph() graph} using {@link LuceneEnv}.
-	 * Requires {@link #loadOptions()} to be invoked before this.
+	 * Defaults to false.
 	 */
 	public void initLuceneData ()
+	{
+		initLuceneData ( false );
+	}
+
+	
+	/**
+	 * Indexes the {@link #getGraph() graph} using {@link LuceneEnv}.
+	 * Requires {@link #loadOptions()} to be invoked before this.
+	 * 
+	 * @param doReset, when true, forces the recreation of the index files, even if they exist. Else, re-index
+	 * only if the index directory doesn't exist yet. 
+	 * 
+	 */
+	public void initLuceneData ( boolean doReset )
 	{
 		try 
 		{
@@ -120,9 +133,14 @@ public class KnetMinerInitializer
       // We don't have the OXL file path here, so, let's give up with checking its date. 
       // we can do that in the data building pipeline
       //
-      if ( indexFile.exists() ) {
-          log.info("Graph file updated since index last built, deleting old index");
-          FileUtils.deleteDirectory ( indexFile );
+      if ( indexFile.exists() )
+      {
+      	if ( doReset ) {
+      		log.info ( "Skipping Ondex/Lucene indexing and reusing existing index files" );
+      		return;
+      	}
+        log.info("Graph file updated since index last built, deleting old index");
+        FileUtils.deleteDirectory ( indexFile );
       }
       log.info("Building Lucene Index: " + indexFile.getAbsolutePath());
       this.luceneMgr = new LuceneEnv ( indexFile.getAbsolutePath(), !indexFile.exists() );
@@ -208,9 +226,9 @@ public class KnetMinerInitializer
 	{
 		log.info ( "Initializing semantic motif data" );
 		
-		File fileConcept2Genes = Paths.get ( dataPath, "concepts2Genes" ).toFile ();
-		File fileGene2Concepts = Paths.get ( dataPath, "genes2Concepts" ).toFile ();
-		File fileGene2PathLength = Paths.get ( dataPath, "genes2PathLengths" ).toFile ();
+		File fileConcept2Genes = Paths.get ( dataPath, "concepts2Genes.ser" ).toFile ();
+		File fileGene2Concepts = Paths.get ( dataPath, "genes2Concepts.ser" ).toFile ();
+		File fileGene2PathLength = Paths.get ( dataPath, "genes2PathLengths.ser" ).toFile ();
 		
 		log.info ( "Generating semantic motif result files" );
 
