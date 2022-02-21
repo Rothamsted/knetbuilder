@@ -2,9 +2,12 @@ package uk.ac.rothamsted.knetminer.backend;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -20,12 +23,12 @@ import net.sourceforge.ondex.parser.oxl.Parser;
 public class KnetMinerInitializerTest
 {
 	
-	KnetMinerInitializer initializer;
+	static KnetMinerInitializer initializer;
 	
-	String testCaseOut;
+	static String testCaseOut;
 	
-	@Before
-	public void initKnetMinerInitializer() {
+	@BeforeClass
+	public static void initKnetMinerInitializer() {
 		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
 
 		// Maven copies test files here.
@@ -44,6 +47,16 @@ public class KnetMinerInitializerTest
 	}
 	
 	@Test
+	public void testGetOptions ()
+	{
+		
+		Assert.assertNotNull ( "StateMachineFilePath Property not found in data-source-config.xml ",
+				initializer.getOptions ().get ( "StateMachineFilePath" ) );
+		Assert.assertNotNull("StateMachineFilePath Property not found in data-source-config.xml ",
+				initializer.getOptions ().get ( "SpeciesTaxId" ) );
+	}
+	
+	@Test
 	public void testInitLuceneData ()
 	{
 		
@@ -57,21 +70,23 @@ public class KnetMinerInitializerTest
 		
 		File indexFolder = new File ( testCaseOut + "/index/" );
 		File[] indexFiles = indexFolder.listFiles ();
-		Assert.assertTrue ( "Index files not created ",
-				Arrays.asList ( indexFiles ).stream ()
-						.anyMatch ( file -> file.exists () && file.isFile () && ( file.getName ().endsWith ( "cfe" ))
-								|| file.getName ().endsWith ( "cfs" ) || file.getName ().endsWith ( "si" )
-								|| file.getName ().endsWith ( "fdt" ) || file.getName ().endsWith ( "fdx" )
-								|| file.getName ().endsWith ( "fnm" ) || file.getName ().endsWith ( "nvd" )
-								|| file.getName ().endsWith ( "nvm" ) || file.getName ().endsWith ( "tvd" )
-								|| file.getName ().endsWith ( "tvx" ) || file.getName ().endsWith ( "pos" )
-								|| file.getName ().endsWith ( "tim" ) || file.getName ().endsWith ( "tip" )));
+		Assert.assertTrue ( "Index files not created ",indexFiles.length > 0 );
+				
 	}
 	
 	@Test
 	public void testInitSemanticMotifData ()
 	{
 		initializer.initSemanticMotifData();
+		
+		Map<Integer, Set<Integer>> concepts2Genes = initializer.getConcepts2Genes ();
+		Map<Integer, Set<Integer>> genes2Concepts = initializer.getGenes2Concepts ();
+		Map<Pair<Integer, Integer>, Integer> genes2PathLengths = initializer.getGenes2PathLengths ();
+		
+		Assert.assertTrue ( "Concepts2Genes is empty or null ", null == concepts2Genes || !concepts2Genes.isEmpty () );
+		Assert.assertTrue ( "Genes2Concepts is empty or null ", null == genes2Concepts || !genes2Concepts.isEmpty () );
+		Assert.assertTrue ( "Genes2PathLengths is empty or null ", null == genes2PathLengths || !genes2PathLengths.isEmpty () );
+		
 		// check traverser files exist, using testCaseOut
 		File folder = new File ( testCaseOut );
 		File[] traverserFiles = folder.listFiles ();
