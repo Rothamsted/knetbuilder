@@ -10,7 +10,7 @@
 	  project.build.testOutputDirectory is translated by Maven as target/test-classes
 	 -->
 
-  <entry key="StateMachineFilePath">file:////${project.build.testOutputDirectory}/test-case/SemanticMotifs.txt</entry>
+  <entry key="StateMachineFilePath">file:///${project.build.testOutputDirectory}/test-case/SemanticMotifs.txt</entry>
 
 	<!-- 
 		Tests override this with their own value. Similarly, both the plug-in and the CLI interface 

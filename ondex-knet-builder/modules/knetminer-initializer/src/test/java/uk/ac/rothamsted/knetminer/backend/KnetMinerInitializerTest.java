@@ -1,10 +1,21 @@
 package uk.ac.rothamsted.knetminer.backend;
 
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -24,15 +35,19 @@ public class KnetMinerInitializerTest
 {
 	
 	private static KnetMinerInitializer initializer;
-	
+
+	private static String testCasePath;
 	private static String testCaseOut;
 	
 	@BeforeClass
-	public static void initKnetMinerInitializer() {
-		String mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" ) + "/";
+	public static void initKnetMinerInitializer() throws IOException
+	{
+		var mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" );
+		mavenBuildPath = Path.of ( mavenBuildPath ).toRealPath ().toString ();
+		mavenBuildPath = mavenBuildPath.replace ( '\\', '/' );
 
 		// Maven copies test files here.
-		var testCasePath = mavenBuildPath + "/test-classes/test-case";
+		testCasePath = mavenBuildPath + "/test-classes/test-case";
 		testCaseOut = testCasePath + "/output";
 		
 		ONDEXGraph graph = Parser.loadOXL ( testCasePath + "/text-mining.oxl" );
@@ -50,10 +65,15 @@ public class KnetMinerInitializerTest
 	public void testGetOptions ()
 	{
 		
-		Assert.assertNotNull ( "StateMachineFilePath Property not found in data-source-config.xml ",
-				initializer.getOptions ().get ( "StateMachineFilePath" ) );
-		Assert.assertNotNull("StateMachineFilePath Property not found in data-source-config.xml ",
-				initializer.getOptions ().get ( "SpeciesTaxId" ) );
+		assertEquals ( 
+			"Wrong value for StateMachineFilePath property!",
+			"file:///" + testCasePath + "/SemanticMotifs.txt",
+			initializer.getOptions ().getString ( "StateMachineFilePath" )
+		);
+		assertEquals (
+			"Wrong value for StateMachineFilePath config property!",
+			4565, (int) initializer.getOptions ().getInt ( "SpeciesTaxId" ) 
+		);
 	}
 	
 	@Test
@@ -65,13 +85,16 @@ public class KnetMinerInitializerTest
 		// check Lucene index files exist, using testCaseOut
 		File testCaseOutFolder = new File ( testCaseOut );
 		File[] listOfFiles = testCaseOutFolder.listFiles ();
-		Assert.assertTrue ( "Index folder not created ", Arrays.asList ( listOfFiles ).stream ().anyMatch (
-				file -> file.exists () && file.isDirectory ()&& ( file.getName ().endsWith ( "index" ))));
+		Assert.assertTrue ( "Index folder not created ", 
+			Arrays.asList ( listOfFiles )
+			.stream ()
+			.anyMatch (
+				file -> file.exists () && file.isDirectory () && ( file.getName ().endsWith ( "index" )
+		)));
 		
 		File indexFolder = new File ( testCaseOut + "/index/" );
 		File[] indexFiles = indexFolder.listFiles ();
-		Assert.assertTrue ( "Index files not created ",indexFiles.length > 0 );
-				
+		Assert.assertTrue ( "Index files not created ",indexFiles.length > 0 );		
 	}
 	
 	@Test
@@ -83,19 +106,32 @@ public class KnetMinerInitializerTest
 		Map<Integer, Set<Integer>> genes2Concepts = initializer.getGenes2Concepts ();
 		Map<Pair<Integer, Integer>, Integer> genes2PathLengths = initializer.getGenes2PathLengths ();
 		
-		Assert.assertTrue ( "Concepts2Genes is empty or null ", null == concepts2Genes || !concepts2Genes.isEmpty () );
-		Assert.assertTrue ( "Genes2Concepts is empty or null ", null == genes2Concepts || !genes2Concepts.isEmpty () );
-		Assert.assertTrue ( "Genes2PathLengths is empty or null ", null == genes2PathLengths || !genes2PathLengths.isEmpty () );
+		BiConsumer<String, Map<?, ?>> verifier = (map, name) -> {
+			assertNotNull ( String.format ( "%s is null!", name ), map );
+			assertFalse ( format ( "%s is empty!", name ), map.isEmpty () );
+		};
+		
+		verifier.accept ( "concepts2Genes", concepts2Genes );
+		verifier.accept ( "genes2Concepts", genes2Concepts );
+		verifier.accept ( "genes2PathLengths", genes2PathLengths );
+		
 		
 		// check traverser files exist, using testCaseOut
 		File folder = new File ( testCaseOut );
-		File[] traverserFiles = folder.listFiles ();
-		Assert.assertTrue( "Graph Traverser files not created",
-				Arrays.asList ( traverserFiles ).stream ()
-						.anyMatch( file -> file.exists () && file.isFile ()
-								&& ( file.getName ().equalsIgnoreCase ( "concepts2Genes.ser" )
-										|| file.getName ().equalsIgnoreCase ( "genes2Concepts.ser" )
-										|| file.getName ().equalsIgnoreCase ( "genes2PathLengths.ser" ))));
+		
+		String[] traverserFileNames = (String[]) Stream.of ( folder.listFiles () )
+				.map ( File::getName )
+				.toArray ( String[]::new );
+		
+		Stream.of ( "concepts2Genes", "genes2Concepts", "genes2PathLengths"  )
+		.map ( name -> name + ".ser" )
+		.forEach ( name -> 
+			assertTrue ( 
+				format ( "Traverser File '%s' not created!", name ), 
+				ArrayUtils.contains ( traverserFileNames, name ) 
+			)
+		);
+				
 	}
 	
 	/**
