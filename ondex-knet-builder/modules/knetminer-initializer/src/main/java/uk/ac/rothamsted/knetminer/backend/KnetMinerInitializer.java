@@ -357,7 +357,7 @@ public class KnetMinerInitializer
 	 * {@code net.sourceforge.ondex.parser.oxl.Parser}. See {@code KnetMinerInitializer}.
 	 * 
 	 */
-	ONDEXGraph getGraph ()
+	public ONDEXGraph getGraph ()
 	{
 		return graph;
 	}
