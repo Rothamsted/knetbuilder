@@ -74,24 +74,39 @@ public class KnetMinerInitializer
 	 * Does all the initialisation work, by calling {@link #loadOptions()} first and then all the 
 	 * initXXX() methods.
 	 * 
+	 * @param overridingOptions if not null, overrides the options got from the {@link #getConfigXmlPath() config file}
+	 * via {@link #loadOptions()}.
+	 * 
 	 */
-	public void initKnetMinerData ()
+	public void initKnetMinerData ( Map<String, Object> overridingOptions )
 	{	
 		this.loadOptions ();
+		if ( overridingOptions != null ) this.options.putAll ( overridingOptions );
+		
 		this.initLuceneData ();
 		this.initSemanticMotifData ();
 	}
 	
+	public void initKnetMinerData ()
+	{
+		this.initKnetMinerData ( null );
+	}
+
 	/**
 	 *  Populates {@link #getOptions()} with the variables defined in  
-	 *  the {@link #getConfigXmlPath() KnetMiner config file}.
+	 *  the {@link #getConfigXmlPath() KnetMiner config file}. 
+	 *  
+	 *  Has no effect if the path is null (ie, relies entirely on {@link #getOptions()} in this case).  
+	 *  
 	 */
 	public void loadOptions ()
 	{
+		if ( this.configXmlPath == null ) return;
+		
 		try
 		{
 			Properties props = new Properties ();
-			InputStream in = new FileInputStream ( this.configXmlPath );
+			InputStream in = new FileInputStream ( configXmlPath );
 			props.loadFromXML ( in );
 			this.options = OptionsMap.from ( props );
 		}

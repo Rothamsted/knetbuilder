@@ -55,29 +55,15 @@ public class KnetMinerInitializerPlugInTest
 	public void testBasics ()
 	{
 		Map<String, Object> pluginArgs =  Map.of (
-				"configXmlPath",testCasePath + "/data-source-config.xml" ,
-				"dataPath",testCaseOut
-			);
+			"configXmlPath", testCasePath + "/data-source-config.xml" ,
+			"dataPath", testCaseOut
+		);
 		
-		// TODO: populate the args with test params (see KnetMinerInitializerTest)
-		// TODO: check this runs and do basic tests on output directories existence
-		// (we don't need detailed verifications here, they already occurs in KnetMinerInitializerTest)		
 		OndexPluginUtils.runPlugin ( KnetMinerInitializerPlugIn.class, graph, pluginArgs );
 		
-		File folder = new File ( testCaseOut );
-		
-		String[] traverserFileNames = (String[]) Stream.of ( folder.listFiles () )
-				.map ( File::getName )
-				.toArray ( String[]::new );
-		
-		Stream.of ( "concepts2Genes", "genes2Concepts", "genes2PathLengths"  )
-		.map ( name -> name + ".ser" )
-		.forEach ( name -> 
-			assertTrue ( 
-				format ( "Traverser File '%s' not created!", name ), 
-				ArrayUtils.contains ( traverserFileNames, name ) 
-			)
-		);	
+		// A simplified check, cause other details are already verified elsewhere
+		assertTrue ( "Lucene output not found!", new File ( testCaseOut + "/index" ).exists () );
+		assertTrue ( "Traverser output not found!", new File ( testCaseOut + "/concepts2Genes.ser" ).exists () );
 	}
 	
 	

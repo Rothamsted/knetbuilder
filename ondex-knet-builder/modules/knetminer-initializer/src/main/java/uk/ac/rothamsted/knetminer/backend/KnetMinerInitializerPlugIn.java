@@ -1,5 +1,13 @@
 package uk.ac.rothamsted.knetminer.backend;
 
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 
 import net.sourceforge.ondex.ONDEXPluginArguments;
@@ -9,6 +17,7 @@ import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.args.StringMappingPairArgumentDefinition;
 import net.sourceforge.ondex.export.ONDEXExport;
+import uk.ac.ebi.utils.collections.OptionsMap;
 
 /**
  * TODO: comment me!
@@ -41,7 +50,8 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 	@Override
 	public ArgumentDefinition<?>[] getArgumentDefinitions ()
 	{
-		return new ArgumentDefinition<?>[] {
+		return new ArgumentDefinition<?>[]
+		{
       new FileArgumentDefinition ( 
     		"configXmlPath", 
     		"The KnetMiner XML configuration file where to get options like traverser semantic motifs file",
@@ -70,18 +80,9 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 				"NCBITax's numerical identifiers for the specie to consider when fetching seed genes from the graph for the traversal."
 				+ " If it's empty, the value is got from the SpeciesTaxId option (set separately or in the config file)", 
 				false, // required
-				GraphTraverser.class.getName (), // default
+				null, // default
 				true // canBeMultiple
 	    ),
-      new FileArgumentDefinition ( 
-    		"seedGenesFile", 
-    		"The seed genes file, containing a custom list of gene IDs (see documentation) to seed the traversal. This overrides"
-    		+ "the TAX ID criterion for seeding. If not specified, the option with the same name is checked",
-    		false, // required
-    		true, // must exist
-    		false, // isDir
-    		false // canBeMultiple
-    	),
 			new StringMappingPairArgumentDefinition ( 
 				"options", 
 				"Options in the name:value format, which can be used provide further values to the explicit plug-in arguments and"
@@ -98,32 +99,57 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 	public void start () throws Exception
 	{
 		ONDEXPluginArguments args = this.getArguments ();
-
-		
-		// TODO: instantiate KnetMinerInitializer, use methods in args to extract the corresponding 
-		// parameters, pass the params to the initializer and run it.
-		// this.graph is available here to be passed down.
 		
 		KnetMinerInitializer initializer = new KnetMinerInitializer ();
-		initializer.setGraph ( graph );
-		initializer.setConfigXmlPath ( args.getOptions ().get ( "configXmlPath" ).get (0).toString ());
-		initializer.setDataPath ( args.getOptions ().get ( "dataPath" ).get (0).toString () );
-		initializer.initLuceneData ();
-		initializer.initSemanticMotifData ();
+		initializer.setGraph ( this.graph );
 		
+		// They are like: set if not null
+		// 
+		Optional.ofNullable ( trimToNull ( (String) args.getUniqueValue ( "configXmlPath" ) ) )
+		.ifPresent ( initializer::setConfigXmlPath );
 		
+		Optional.ofNullable ( trimToNull ( (String) args.getUniqueValue ( "dataPath" ) ) )
+		.ifPresent ( initializer::setDataPath );
+				
+		Optional.ofNullable ( trimToNull ( (String) args.getUniqueValue ( "graphTraverserFQN" ) ) )
+		.ifPresent ( initializer::setGraphTraverserFQN );
+		
+		// Check not null and not empty, possibly translate to set and pass it to the initializer
+		Optional.ofNullable ( args.getObjectValueList ( "SpeciesTaxIds", String.class ) )
+		.filter ( ids -> !ids.isEmpty () )
+		.map ( HashSet::new )
+		.ifPresent ( initializer::setTaxIds );
+				
+		// Translate "key:value" strings into a map
+		Map<String, Object> opts = args.getObjectValueList ( "options", String.class )
+		.stream ()
+		.map ( optStr -> optStr.split ( ":" ) )
+		.collect ( Collectors.toMap ( optArray -> optArray [ 0 ], optArray -> optArray [ 1 ] ) );
+		
+		// opts here will override keys taken from configXmlPath. In turn, initializer's setters will 
+		// have priority on everything else
+		//
+		initializer.initKnetMinerData ( opts );
 	}
 
+	/**
+	 * TODO: this returns false for the time being. There are plug-ins which trigger Ondex Mini indexing and 
+	 * the resulting files could be simply copied to the data output target for the initialiser. This is a possible
+	 * future improvement.
+	 *  
+	 */
 	@Override
 	public boolean requiresIndexedGraph ()
 	{
 		return false;
 	}
 
+	/**
+	 * @return null, we don't need any graph validation here.
+	 */
 	@Override
 	public String[] requiresValidators ()
 	{
-		// It doesn't
 		return null;
 	}
 
