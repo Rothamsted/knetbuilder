@@ -99,9 +99,19 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 	{
 		ONDEXPluginArguments args = this.getArguments ();
 
+		
 		// TODO: instantiate KnetMinerInitializer, use methods in args to extract the corresponding 
 		// parameters, pass the params to the initializer and run it.
 		// this.graph is available here to be passed down.
+		
+		KnetMinerInitializer initializer = new KnetMinerInitializer ();
+		initializer.setGraph ( graph );
+		initializer.setConfigXmlPath ( args.getOptions ().get ( "configXmlPath" ).get (0).toString ());
+		initializer.setDataPath ( args.getOptions ().get ( "dataPath" ).get (0).toString () );
+		initializer.initLuceneData ();
+		initializer.initSemanticMotifData ();
+		
+		
 	}
 
 	@Override
