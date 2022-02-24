@@ -123,7 +123,7 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 		// Translate "key:value" strings into a map
 		Map<String, Object> opts = args.getObjectValueList ( "options", String.class )
 		.stream ()
-		.map ( optStr -> optStr.split ( ":" ) )
+		.map ( optStr -> optStr.split ( ":" ) ).filter ( item -> null != item  && item.length >= 2 )
 		.collect ( Collectors.toMap ( optArray -> optArray [ 0 ], optArray -> optArray [ 1 ] ) );
 		
 		// opts here will override keys taken from configXmlPath. In turn, initializer's setters will 
