@@ -75,6 +75,17 @@
 		</dependency>
 
 		<dependency>
+   		<groupId>net.sourceforge.ondex.apps</groupId>
+   		<artifactId>ondex-mini</artifactId>
+			<version>${project.version}</version>
+		</dependency>	
+
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jutils</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>

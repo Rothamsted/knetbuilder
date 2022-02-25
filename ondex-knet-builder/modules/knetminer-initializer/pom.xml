@@ -58,10 +58,10 @@
 			<artifactId>jutils</artifactId>
 		</dependency>
       
-	    <dependency>
-	      <groupId>uk.ac.ebi</groupId>
-	      <artifactId>jutils-io</artifactId>
-	    </dependency>
+    <dependency>
+      <groupId>uk.ac.ebi</groupId>
+      <artifactId>jutils-io</artifactId>
+    </dependency>
 		
 		<dependency>
 			<groupId>net.sourceforge.ondex.core</groupId>

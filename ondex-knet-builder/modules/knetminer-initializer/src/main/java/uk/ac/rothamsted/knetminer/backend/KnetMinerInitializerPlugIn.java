@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,8 +29,17 @@ import uk.ac.ebi.utils.collections.OptionsMap;
  */
 public class KnetMinerInitializerPlugIn extends ONDEXExport
 {
-
-	@Override
+	public static final String
+	  OPT_DESCR_CONFIG_XML = "The KnetMiner XML configuration file where to get options like traverser semantic motifs file.",
+	  OPT_DESCR_DATA_PATH = "The data output path.",
+	  OPT_DESCR_TRAVERSER = "The FQN for the graph traverser class to be used, which has to be an instance of "
+	  	+ "AbstractGraphTraverser (see documentation).",
+		OPT_DESCR_TAXIDS = "NCBITax's numerical identifiers for the specie to consider when fetching seed genes from the graph for the traversal."
+			+ " If it's empty, the value is got from the SpeciesTaxId option (set separately or in the config file)", 
+		OPT_DESCR_OPTS = "Options in the name:value format, which can be used provide further values to the explicit plug-in arguments and"
+			+ "to override or extend the options in the KnetMiner config file.";
+	
+		@Override
 	public String getId ()
 	{
 		return StringUtils.uncapitalize ( this.getClass ().getSimpleName () );
@@ -54,7 +64,7 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 		{
       new FileArgumentDefinition ( 
     		"configXmlPath", 
-    		"The KnetMiner XML configuration file where to get options like traverser semantic motifs file",
+    		OPT_DESCR_CONFIG_XML,
     		false, // required
     		true, // must exist
     		false, // isDir
@@ -62,7 +72,7 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
     	),
       new FileArgumentDefinition ( 
     		"dataPath", 
-    		"The data output path",
+    		OPT_DESCR_DATA_PATH,
     		false, // required
     		true, // must exist
     		true, // isDir
@@ -70,23 +80,21 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
     	),
 			new StringArgumentDefinition ( 
 			  "graphTraverserFQN", 
-				"The FQN for the graph traverser class to be used, which has to be an instance of AbstractGraphTraverser (see documentation).", 
+				OPT_DESCR_TRAVERSER, 
 				true, // required
 				GraphTraverser.class.getName (), // default
 				false // canBeMultiple
 	    ),
 			new StringArgumentDefinition ( 
 			  "SpeciesTaxIds", 
-				"NCBITax's numerical identifiers for the specie to consider when fetching seed genes from the graph for the traversal."
-				+ " If it's empty, the value is got from the SpeciesTaxId option (set separately or in the config file)", 
+			  OPT_DESCR_TAXIDS, 
 				false, // required
 				null, // default
 				true // canBeMultiple
 	    ),
 			new StringMappingPairArgumentDefinition ( 
 				"options", 
-				"Options in the name:value format, which can be used provide further values to the explicit plug-in arguments and"
-				+ "to override or extend the options in the KnetMiner config file.",
+				OPT_DESCR_OPTS,
         false, // required 
         "", // default
         true, // multiple
@@ -123,7 +131,9 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 		// Translate "key:value" strings into a map
 		Map<String, Object> opts = args.getObjectValueList ( "options", String.class )
 		.stream ()
-		.map ( optStr -> optStr.split ( ":" ) ).filter ( item -> null != item  && item.length >= 2 )
+		.filter ( optStr -> optStr != null && !optStr.isEmpty () )
+		.map ( optStr -> optStr.split ( ":" ) )
+		.filter ( optArray -> optArray != null && optArray.length >= 2 )
 		.collect ( Collectors.toMap ( optArray -> optArray [ 0 ], optArray -> optArray [ 1 ] ) );
 		
 		// opts here will override keys taken from configXmlPath. In turn, initializer's setters will 
