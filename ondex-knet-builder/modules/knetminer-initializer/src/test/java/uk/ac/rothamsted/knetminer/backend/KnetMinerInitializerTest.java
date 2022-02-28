@@ -20,6 +20,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
@@ -41,6 +43,9 @@ public class KnetMinerInitializerTest
 	private static String testCasePath;
 	private static String testCaseOut;
 	
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	
+	
 	@BeforeClass
 	public static void initKnetMinerInitializer() throws IOException
 	{
@@ -52,7 +57,7 @@ public class KnetMinerInitializerTest
 		testCasePath = mavenBuildPath + "/test-classes/test-case";
 		testCaseOut = testCasePath + "/output";
 		
-		ONDEXGraph graph = Parser.loadOXL ( testCasePath + "/text-mining.oxl" );
+		ONDEXGraph graph = Parser.loadOXL ( testCasePath + "/poaceae-sample.oxl" );
 		Assert.assertNotNull ( "graph not loaded!", graph );
 
 		initializer = new KnetMinerInitializer ();
@@ -108,9 +113,10 @@ public class KnetMinerInitializerTest
 		Map<Integer, Set<Integer>> genes2Concepts = initializer.getGenes2Concepts ();
 		Map<Pair<Integer, Integer>, Integer> genes2PathLengths = initializer.getGenes2PathLengths ();
 		
-		BiConsumer<String, Map<?, ?>> verifier = (map, name) -> {
+		BiConsumer<String, Map<?, ?>> verifier = (name, map) -> {
 			assertNotNull ( String.format ( "%s is null!", name ), map );
 			assertFalse ( format ( "%s is empty!", name ), map.isEmpty () );
+			log.info ( "{} has {} mappings", name, map.size() );
 		};
 		
 		verifier.accept ( "concepts2Genes", concepts2Genes );

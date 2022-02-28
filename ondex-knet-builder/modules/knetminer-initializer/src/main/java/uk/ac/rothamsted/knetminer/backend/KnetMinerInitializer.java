@@ -65,9 +65,6 @@ public class KnetMinerInitializer
 	private Map<Integer, Set<Integer>> concepts2Genes;
 	private Map<Pair<Integer, Integer>, Integer> genes2PathLengths;
 	
-	// We have recently started using SLF4j, log4j 1.x is used in older code and there are 
-	// settings to re-route everything into SLF4j. The future is log4j 2.x anyway.
-	// TODO: delete this note when no longer needed
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 
 	/**
@@ -157,6 +154,7 @@ public class KnetMinerInitializer
         log.info("Graph file updated since index last built, deleting old index");
         FileUtils.deleteDirectory ( indexFile );
       }
+      
       log.info("Building Lucene Index: " + indexFile.getAbsolutePath());
       this.luceneMgr = new LuceneEnv ( indexFile.getAbsolutePath(), !indexFile.exists() );
       luceneMgr.addONDEXListener( new ONDEXLogger() ); // sends Ondex messages to the logger.
@@ -188,7 +186,7 @@ public class KnetMinerInitializer
 	{
 		String seedGenesPath = StringUtils.trimToNull ( getOptions ().getString ( "seedGenesFile" ) );
 		if ( seedGenesPath == null ) {
-			log.info ( "Initialising seed genes from TAXID list" );
+			log.info ( "Initialising seed genes from TAXID list: {}", this.getTaxIds () );
 			return fetchSeedGenesFromTaxIds ();
 		}
 		
@@ -204,6 +202,8 @@ public class KnetMinerInitializer
 		AttributeName attTaxId = meta.getAttributeName ( "TAXID" );
 
 		Set<ONDEXConcept> genes = graph.getConceptsOfConceptClass ( ccGene );
+		
+		Set<String> taxIds = this.getTaxIds ();
 		
 		return genes
 			.parallelStream ()
@@ -241,18 +241,17 @@ public class KnetMinerInitializer
 	{
 		log.info ( "Initializing semantic motif data" );
 		
+		var dataPath = this.getDataPath ();
+		
 		File fileConcept2Genes = Paths.get ( dataPath, "concepts2Genes.ser" ).toFile ();
 		File fileGene2Concepts = Paths.get ( dataPath, "genes2Concepts.ser" ).toFile ();
 		File fileGene2PathLength = Paths.get ( dataPath, "genes2PathLengths.ser" ).toFile ();
 		
-		log.info ( "Generating semantic motif result files" );
-
-		var seedGenes = this.getSeedGenes ();
 
 		// Again, we don't have the OXL path here, so let's not check it.
 		if ( doReset )
 		{
-			log.info ( "(Re)creating semantic motif files, as per doRest flag" );
+			log.info ( "(Re)creating semantic motif files, as per doReset flag" );
 			fileConcept2Genes.delete ();
 			fileGene2Concepts.delete ();
 			fileGene2PathLength.delete ();
@@ -260,14 +259,18 @@ public class KnetMinerInitializer
 
 		if ( !fileConcept2Genes.exists () )
 		{
+			log.info ( "Generating semantic motif result files" );
+			var seedGenes = this.getSeedGenes ();
+			
+			
 			log.info ( "Creating semantic motif data" );
 			
 			// We're going to need a lot of memory, so delete this in advance
 			// (CyDebugger might trigger this multiple times)
 			//
-			concepts2Genes = new HashMap<> ();
-			genes2Concepts = new HashMap<> ();
-			genes2PathLengths = new HashMap<> ();
+			this.concepts2Genes = new HashMap<> ();
+			this.genes2Concepts = new HashMap<> ();
+			this.genes2PathLengths = new HashMap<> ();
 
 			// the results give us a map of every starting concept to every
 			// valid path.
@@ -350,7 +353,7 @@ public class KnetMinerInitializer
 		
 		BiConsumer<String, Map<?,?>> nullChecker = (name, coll) -> 
 		{
-			if ( coll == null || coll.isEmpty () ) log.warn ( "{} is null", name );
+			if ( coll == null || coll.isEmpty () ) log.warn ( "{} is null/empty", name );
 			else log.info ( "{} populated with {} elements", name, coll.size () );
 		};
 		
@@ -477,7 +480,8 @@ public class KnetMinerInitializer
 		if ( this.graphTraverser != null ) return graphTraverser;
 		
 		var optsCopy = new HashMap<> ( this.options );
-		if ( this.graphTraverserFQN != null ) options.put ( "GraphTraverserClass", graphTraverserFQN );
+		String traverserFQN = this.getGraphTraverserFQN ();
+		if ( traverserFQN != null ) optsCopy.put ( "GraphTraverserClass", traverserFQN );
 		return graphTraverser =  AbstractGraphTraverser.getInstance ( optsCopy );
 	}
 
