@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Sample Configuration for Knetminer</comment>	
+    
+	<!-- 
+	  This is crafted from production files, only variables that are relevant to the data
+	  initialiser are kept from there.
+	  
+	  project.build.testOutputDirectory is translated by Maven as target/test-classes
+	 -->
+
+  <entry key="StateMachineFilePath">file:///${project.build.testOutputDirectory}/test-case/SemanticMotifs.txt</entry>
+
+	<!-- 
+		Tests override this with their own value. Similarly, both the plug-in and the CLI interface 
+		override this using a user-provided parameter.
+	-->
+  <!--   entry key="DataPath">/root/knetminer-dataset/data</entry -->
+  
+  <!-- 
+    This is used by KnetMiner, usually it's not used by the initialiser, since it either receives a
+    populated graph object or this path is a parameter (ie, of the CLI interface)
+   -->
+  <!-- entry key="DataFile">/root/knetminer-dataset/data/knowledge-network.oxl</entry -->
+  
+	<!-- TODO: to be used later, for tests about this option -->
+	<entry key="seedGenesFile"></entry>
+
+	<!-- 
+	  The species ID the dataset is about. This can be either a single value or a comma-separated list.
+	  TODO: to be used later to test this option 
+	-->
+	<entry key="SpeciesTaxId">4565</entry>
+
+
+	<!-- The default is used when this is empty -->	
+	<entry key = "GraphTraverserClass"></entry>
+			
+</properties>
