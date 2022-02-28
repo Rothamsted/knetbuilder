@@ -22,8 +22,9 @@ import picocli.CommandLine.Option;
  */
 @Command ( 
 	name = "knet-init", 
-		description = "\n\n  *** KnetMiner Data Initialiser ***\n" +
-			"\nCreates/updates KnetMiner data (Lucene, traverser) for an OXL.\n",
+	description = "\n\n  *** KnetMiner Data Initialiser ***\n" +
+		"\nCreates/updates KnetMiner data (Lucene, traverser) for an OXL.\n",
+	
 	exitCodeOnVersionHelp = ExitCode.USAGE, // else, it's 0 and you can't know about this event
 	exitCodeOnUsageHelp = ExitCode.USAGE, // ditto
 	mixinStandardHelpOptions = true,
@@ -49,30 +50,29 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 	private String dataPath;
 	
 	@Option (
-		names = { "-f", "--file"},
-		paramLabel = "<fqn/of/graphtraverser>",		
+		names = { "-g", "--traverser"},
+		paramLabel = "<class's FQN>",		
 		description = KnetMinerInitializerPlugIn.OPT_DESCR_TRAVERSER
 	)
 	private String graphTraverserFQN;
 	
 	@Option (
-		names = { "-c", "--conf"},
-		paramLabel = "<path/to/oxl>",		
-		description = KnetMinerInitializerPlugIn.OPT_DESCR_CONFIG_XML,
-		required = true
+		names = { "-c", "--config"},
+		paramLabel = "<path/to/XML>",		
+		description = KnetMinerInitializerPlugIn.OPT_DESCR_CONFIG_XML
 	)
 	private String configXmlPath;
 	
 	@Option (
-		names = { "-t", "--tid"},
-		paramLabel = "<taxs/numerical/identifiers>",		
+		names = { "-t", "--tax-id", "--taxid" },
+		paramLabel = "<NCBITax ID>",		
 		description = KnetMinerInitializerPlugIn.OPT_DESCR_TAXIDS
 	)
 	private Set<String> taxIds;
 	
 	@Option (
-		names = { "-o", "--opt"},
-		paramLabel = "<extend/the/options>",		
+		names = { "-o", "--option"},
+		paramLabel = "<key=value>",		
 		description = KnetMinerInitializerPlugIn.OPT_DESCR_OPTS
 	)
 	private Map<String, String> options;	
@@ -80,6 +80,7 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 	
 	
+	@SuppressWarnings ( "unchecked" )
 	@Override
 	public Integer call ()
 	{
@@ -87,10 +88,14 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 		var graph = Parser.loadOXL ( oxlInputPath );
 		
 		KnetMinerInitializer initializer = new KnetMinerInitializer ();
+		
 		initializer.setGraph ( graph );
-		initializer.setConfigXmlPath ( configXmlPath );
-		initializer.setDataPath(dataPath);		
-		initializer.initKnetMinerData ();
+		
+		if ( configXmlPath != null ) initializer.setConfigXmlPath ( configXmlPath );
+		if ( dataPath != null ) initializer.setDataPath ( dataPath );	
+		if ( taxIds != null ) initializer.setTaxIds ( taxIds );
+		
+		initializer.initKnetMinerData ( (Map<String, Object>) (Map<String,?>) options );
 		
 		return 0;
 	}
