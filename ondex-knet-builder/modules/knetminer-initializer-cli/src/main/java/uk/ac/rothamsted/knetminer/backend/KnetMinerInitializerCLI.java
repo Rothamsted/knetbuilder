@@ -7,13 +7,11 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sourceforge.ondex.mini.MiniPlugInCLI;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
-import uk.ac.ebi.utils.collections.OptionsMap;
 
 /**
  * TODO: comment me!
@@ -44,17 +42,39 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 	
 
 	@Option (
-		names = { "-o", "--data" },
+		names = { "-d", "--data" },
 		paramLabel = "<path/to/dir>",		
 		description = KnetMinerInitializerPlugIn.OPT_DESCR_DATA_PATH
 	)
 	private String dataPath;
 	
-	// TODO: complete the picocli annotations, similarly to the above. Read picocli documentation
+	@Option (
+		names = { "-f", "--file"},
+		paramLabel = "<fqn/of/graphtraverser>",		
+		description = KnetMinerInitializerPlugIn.OPT_DESCR_TRAVERSER
+	)
 	private String graphTraverserFQN;
+	
+	@Option (
+		names = { "-c", "--conf"},
+		paramLabel = "<path/to/oxl>",		
+		description = KnetMinerInitializerPlugIn.OPT_DESCR_CONFIG_XML,
+		required = true
+	)
 	private String configXmlPath;
+	
+	@Option (
+		names = { "-t", "--tid"},
+		paramLabel = "<taxs/numerical/identifiers>",		
+		description = KnetMinerInitializerPlugIn.OPT_DESCR_TAXIDS
+	)
 	private Set<String> taxIds;
 	
+	@Option (
+		names = { "-o", "--opt"},
+		paramLabel = "<extend/the/options>",		
+		description = KnetMinerInitializerPlugIn.OPT_DESCR_OPTS
+	)
 	private Map<String, String> options;	
 	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
@@ -66,8 +86,11 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 		log.info ( "Loading the OXL: '{}'", this.oxlInputPath );
 		var graph = Parser.loadOXL ( oxlInputPath );
 		
-		// TODO: as usually, instantiate a KnetMinerInitializer and use the @Option fields in this class
-		// to populate it before invoking (skip a field when it's null).
+		KnetMinerInitializer initializer = new KnetMinerInitializer ();
+		initializer.setGraph ( graph );
+		initializer.setConfigXmlPath ( configXmlPath );
+		initializer.setDataPath(dataPath);		
+		initializer.initKnetMinerData ();
 		
 		return 0;
 	}

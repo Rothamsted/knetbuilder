@@ -1,5 +1,8 @@
 package uk.ac.rothamsted.knetminer.backend;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import org.junit.Test;
 
 /**
@@ -11,12 +14,24 @@ import org.junit.Test;
  */
 public class KnetMinerInitializerCLITest
 {
+	
+	private static String testCasePath;
+	
+	private static String testCaseOut;
+	
 	@Test
-	public void testBasics ()
+	public void testBasics () throws IOException
 	{
-		// TODO: a real invocation, passing the same OXL in other tests (this time it's the CLI wrapper that
-		// loads it) and other params, in the form of CLI argument strings. See OndexGraphDescriptorCLITest
-		// or MiniPlugInCLITest for similar examples.
-		KnetMinerInitializerCLI.invoke ( "-h" );
+		var mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" );
+		mavenBuildPath = Path.of ( mavenBuildPath ).toRealPath ().toString ();
+		mavenBuildPath = mavenBuildPath.replace ( '\\', '/' );
+
+		// Maven copies test files here.
+		testCasePath = mavenBuildPath + "/test-classes/test-case";
+		testCaseOut = testCasePath + "/output";
+		
+		KnetMinerInitializerCLI.invoke (
+			"-i", testCasePath + "/text-mining.oxl", "-d", testCaseOut, "-c" , testCasePath + "/data-source-config.xml" 
+		);
 	}
 }
