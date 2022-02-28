@@ -147,7 +147,7 @@ public class KnetMinerInitializer
       //
       if ( indexFile.exists() )
       {
-      	if ( doReset ) {
+      	if ( !doReset ) {
       		log.info ( "Skipping Ondex/Lucene indexing and reusing existing index files" );
       		return;
       	}
@@ -155,7 +155,7 @@ public class KnetMinerInitializer
         FileUtils.deleteDirectory ( indexFile );
       }
       
-      log.info("Building Lucene Index: " + indexFile.getAbsolutePath());
+      log.info ( "Building Lucene Index: " + indexFile.getAbsolutePath() );
       this.luceneMgr = new LuceneEnv ( indexFile.getAbsolutePath(), !indexFile.exists() );
       luceneMgr.addONDEXListener( new ONDEXLogger() ); // sends Ondex messages to the logger.
       luceneMgr.setONDEXGraph ( graph );

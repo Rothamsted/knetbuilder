@@ -1,8 +1,10 @@
 package uk.ac.rothamsted.knetminer.backend;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,12 +30,14 @@ public class KnetMinerInitializerCLITest
 
 		// Maven copies test files here.
 		testCasePath = mavenBuildPath + "/test-classes/test-case";
-		testCaseOut = testCasePath + "/output-cli";
+		testCaseOut = testCasePath + "/output-cli";		
 	}
-	
+		
 	@Test
 	public void testBasics ()
 	{
+		FileUtils.deleteQuietly ( new File ( testCaseOut ) );
+		
 		var exitCode = KnetMinerInitializerCLI.invoke (
 			"-i", testCasePath + "/poaceae-sample.oxl", 
 			"-d", testCaseOut,
@@ -50,6 +54,7 @@ public class KnetMinerInitializerCLITest
 	public void testAdvancedOpts () throws IOException
 	{
 		testCaseOut = testCasePath + "/output-cli-advanced";
+		FileUtils.deleteQuietly ( new File ( testCaseOut ) );
 
 		var exitCode = KnetMinerInitializerCLI.invoke (
 			"-i", testCasePath + "/poaceae-sample.oxl", 
