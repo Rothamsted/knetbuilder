@@ -1,15 +1,12 @@
 package uk.ac.rothamsted.knetminer.backend;
 
-import static java.lang.String.format;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.stream.Stream;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -44,11 +41,15 @@ public class KnetMinerInitializerPlugInTest
 
 		// Maven copies test files here.
 		testCasePath = mavenBuildPath + "/test-classes/test-case";
-		testCaseOut = testCasePath + "/output";
+		testCaseOut = testCasePath + "/output-plugin";
 		
-		graph = Parser.loadOXL ( testCasePath + "/text-mining.oxl" );
+		var outFile = new File ( testCaseOut );
+		if ( !outFile.exists () ) outFile.mkdir ();
+		
+		// TODO: I copied-pasted this manually here and in the -cli module. 
+		// We need to resolve circular dependencies and get it from the backend module
+		graph = Parser.loadOXL ( testCasePath + "/poaceae-sample.oxl" );
 		Assert.assertNotNull ( "graph not loaded!", graph );
-		
 	}
 	
 	@Test
