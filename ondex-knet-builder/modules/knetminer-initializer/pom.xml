@@ -49,26 +49,25 @@
 		</dependency>
 		
 		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>uk.ac.ebi</groupId>
 			<artifactId>jutils</artifactId>
 		</dependency>
+      
+    <dependency>
+      <groupId>uk.ac.ebi</groupId>
+      <artifactId>jutils-io</artifactId>
+    </dependency>
 		
 		<dependency>
 			<groupId>net.sourceforge.ondex.core</groupId>
 			<artifactId>lucene</artifactId>
 			<version>${project.version}</version>
 		</dependency>		
-
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>test</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -87,6 +86,14 @@
 	</dependencies>
 
 	<build>
+	
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+	
 
 		<plugins>
 
@@ -120,18 +127,18 @@
 				</executions>
 			</plugin>
 
-			<!-- We have some test files that we reuse in the mini-integration-tests -->
+			
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
+				<!-- TODO: move upwards -->
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-resources-plugin</artifactId>
+			  <configuration>
+			    <nonFilteredFileExtensions>
+			      <nonFilteredFileExtension>oxl</nonFilteredFileExtension>
+			    </nonFilteredFileExtensions>
+			  </configuration>
 			</plugin>
+			
 
 		</plugins>
 

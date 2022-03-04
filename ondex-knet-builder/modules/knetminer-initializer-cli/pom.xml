@@ -75,6 +75,17 @@
 		</dependency>
 
 		<dependency>
+   		<groupId>net.sourceforge.ondex.apps</groupId>
+   		<artifactId>ondex-mini</artifactId>
+			<version>${project.version}</version>
+		</dependency>	
+
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jutils</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
@@ -102,31 +113,6 @@
 
 		<plugins>
 		
-			<!-- We re-use examples from the companion project -->
-  		<plugin>
-  			<artifactId>maven-dependency-plugin</artifactId>	  			
-  			<executions>
-  				<execution>
-  					<phase>generate-test-resources</phase>
-  					<goals>
-  						<goal>unpack</goal>
-  					</goals>
-  					<configuration>
-	          	<artifactItems>
-	            	<artifactItem>
-									<groupId>${project.groupId}</groupId>
-									<artifactId>knetminer-initializer</artifactId>
-									<version>${project.version}</version>
-	               	<type>zip</type>
-									<classifier>bundle</classifier>
-	               	<includes>**/examples/*.*</includes>
-	             	</artifactItem>
-	          	</artifactItems>  						
-  					</configuration>
-  				</execution>
-  			</executions>
-  		</plugin>				
-
 		  <plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
 		    <artifactId>maven-surefire-plugin</artifactId>
@@ -166,6 +152,18 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<plugin>
+				<!-- TODO: move upwards -->
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-resources-plugin</artifactId>
+			  <configuration>
+			    <nonFilteredFileExtensions>
+			      <nonFilteredFileExtension>oxl</nonFilteredFileExtension>
+			    </nonFilteredFileExtensions>
+			  </configuration>
+			</plugin>
+			
 
 		</plugins>
 
