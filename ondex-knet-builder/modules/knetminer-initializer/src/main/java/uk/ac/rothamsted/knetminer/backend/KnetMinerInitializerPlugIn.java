@@ -4,9 +4,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,12 +16,14 @@ import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.args.StringMappingPairArgumentDefinition;
 import net.sourceforge.ondex.export.ONDEXExport;
-import uk.ac.ebi.utils.collections.OptionsMap;
 
 /**
- * TODO: comment me!
+ * An Ondex plug-in wrapper, which defines the available options for the traverser (arguments,
+ * in the jargon of the Ondex plug-ins), and invokes the core component.This will be used in
+ * Ondex Mini workflow, presumably with a graph from core core component.
  *
  * @author brandizi
+ * @author jojicunnunni
  * <dl><dt>Date:</dt><dd>22 Feb 2022</dd></dl>
  *
  */
@@ -143,7 +143,7 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 	}
 
 	/**
-	 * TODO: this returns false for the time being. There are plug-ins which trigger Ondex Mini indexing and 
+	 * This returns false for the time being. There are plug-ins which trigger Ondex Mini indexing and 
 	 * the resulting files could be simply copied to the data output target for the initialiser. This is a possible
 	 * future improvement.
 	 *  

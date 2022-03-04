@@ -16,7 +16,7 @@ import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
- * TODO: comment me!
+ * Junit test class for KnetMinerInitializerPlugIn
  *
  * @author brandizi
  * @author jojicunnunni
@@ -46,7 +46,6 @@ public class KnetMinerInitializerPlugInTest
 		var outFile = new File ( testCaseOut );
 		if ( !outFile.exists () ) outFile.mkdir ();
 		
-		// TODO: I copied-pasted this manually here and in the -cli module. 
 		// We need to resolve circular dependencies and get it from the backend module
 		graph = Parser.loadOXL ( testCasePath + "/poaceae-sample.oxl" );
 		Assert.assertNotNull ( "graph not loaded!", graph );
@@ -62,7 +61,6 @@ public class KnetMinerInitializerPlugInTest
 		
 		OndexPluginUtils.runPlugin ( KnetMinerInitializerPlugIn.class, graph, pluginArgs );
 		
-		// A simplified check, cause other details are already verified elsewhere
 		assertTrue ( "Lucene output not found!", new File ( testCaseOut + "/index" ).exists () );
 		assertTrue ( "Traverser output not found!", new File ( testCaseOut + "/concepts2Genes.ser" ).exists () );
 	}

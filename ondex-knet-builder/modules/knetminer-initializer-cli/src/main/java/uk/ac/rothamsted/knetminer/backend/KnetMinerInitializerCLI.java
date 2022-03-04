@@ -14,9 +14,11 @@ import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
 
 /**
- * TODO: comment me!
+ * A command-line (CLI) interface, which is another wrapper to the core. This should load an OXL file
+ * from CLI parameters and then pass it to the core traverser component.
  *
  * @author brandizi
+ * @author jojicunnunni
  * <dl><dt>Date:</dt><dd>25 Feb 2022</dd></dl>
  *
  */

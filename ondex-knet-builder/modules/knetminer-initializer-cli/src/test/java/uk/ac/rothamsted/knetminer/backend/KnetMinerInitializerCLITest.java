@@ -1,5 +1,7 @@
 package uk.ac.rothamsted.knetminer.backend;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -10,9 +12,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * TODO: comment me!
- *
+ * Junit test class for KnetMinerInitializerCLI
+ * 
  * @author brandizi
+ * @author jojicunnunni
  * <dl><dt>Date:</dt><dd>25 Feb 2022</dd></dl>
  *
  */
@@ -46,7 +49,8 @@ public class KnetMinerInitializerCLITest
 		
 		Assert.assertEquals ( "Wrong exit code!", 0, exitCode );
 		
-		// TODO: minimal verification that it produced results
+		assertTrue ( "Lucene output not found!", new File ( testCaseOut + "/index" ).exists () );
+		assertTrue ( "Traverser output not found!", new File ( testCaseOut + "/concepts2Genes.ser" ).exists () );
 	}
 
 
@@ -65,9 +69,9 @@ public class KnetMinerInitializerCLITest
 		);
 		
 		Assert.assertEquals ( "Wrong exit code!", 0, exitCode );
-		
 				
-		// TODO: minimal verification that it produced results
+		assertTrue ( "Lucene output not found!", new File ( testCaseOut + "/index" ).exists () );
+		assertTrue ( "Traverser output not found!", new File ( testCaseOut + "/concepts2Genes.ser" ).exists () );
 			
 	}
 

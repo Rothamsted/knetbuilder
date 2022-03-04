@@ -37,9 +37,9 @@ import uk.ac.ebi.utils.io.SerializationUtils;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
- * TODO: comment me!
+ * A core component, containing the functionality to invoke the traverser
  *
- * TODO: probably some methods require thread safety (get {@link #getGraph()}.
+ * probably some methods require thread safety (get {@link #getGraph()}.
  * 
  * @author brandizi
  * @author jojicunnunni
@@ -139,7 +139,9 @@ public class KnetMinerInitializer
 	{
 		try 
 		{
-      // TODO: later we need to check getDataPath() isn't null
+      if( null == getDataPath ()) {
+		  throw new Exception ( "DataPath from options is null" );
+	  }
       File indexFile = Paths.get ( getDataPath (), "index" ).toFile();
 
       // We don't have the OXL file path here, so, let's give up with checking its date. 
@@ -194,7 +196,7 @@ public class KnetMinerInitializer
 		return AbstractGraphTraverser.ids2Genes ( this.graph, seedGenesPath );
 	}
 	
-	// TODO: We should move this to AbstractGraphTraverser at some point
+	// We should move this to AbstractGraphTraverser at some point
 	private Set<ONDEXConcept> fetchSeedGenesFromTaxIds ()
 	{
 		ONDEXGraphMetaData meta = graph.getMetaData ();
@@ -363,7 +365,7 @@ public class KnetMinerInitializer
 		
 		log.info ( "Semantic motif data initialization ended." );
 		
-		// TODO: this remains in KnetMiner for the moment. Pushing it down to Ondex will require:
+		// this remains in KnetMiner for the moment. Pushing it down to Ondex will require:
 		// 1) That GeneHelper is also moved to some utility class (which Knetminer module? To be decided)
 		// 2) that this is also saved on disk: Map<Integer, Set<Integer>> genes2QTLs
 		// postInit ( seedGenes );
