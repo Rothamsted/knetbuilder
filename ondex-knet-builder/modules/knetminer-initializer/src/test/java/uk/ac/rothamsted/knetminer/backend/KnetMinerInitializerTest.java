@@ -27,7 +27,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
 
 /**
- * Junit test class for KnetMinerInitializer
+ * The usual Junit tests for {@link KnetMinerInitializer}
  * 
  * @author brandizi
  * @author jojicunnunni

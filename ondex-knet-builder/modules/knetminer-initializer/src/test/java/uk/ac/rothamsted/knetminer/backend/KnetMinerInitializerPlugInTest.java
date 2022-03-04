@@ -16,7 +16,7 @@ import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
- * Junit test class for KnetMinerInitializerPlugIn
+ * The usual unit tests for {@link KnetMinerInitializerPlugIn}
  *
  * @author brandizi
  * @author jojicunnunni

@@ -14,8 +14,8 @@ import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
 
 /**
- * A command-line (CLI) interface, which is another wrapper to the core. This should load an OXL file
- * from CLI parameters and then pass it to the core traverser component.
+ * A command-line (CLI) interface, which is another wrapper to the core. This allows for producing KnetMiner
+ * data from the path of an OXL. The CLI interface is based on the pico-cli library. 
  *
  * @author brandizi
  * @author jojicunnunni

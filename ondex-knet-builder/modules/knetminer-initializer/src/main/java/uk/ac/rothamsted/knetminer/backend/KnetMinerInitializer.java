@@ -37,9 +37,15 @@ import uk.ac.ebi.utils.io.SerializationUtils;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
- * A core component, containing the functionality to invoke the traverser
+ * 
+ * The core functionality.
+ * 
+ * This realises the core functions of creating the Lucene Index for an OXL, running a 
+ * {@link AbstractGraphTraverser graph traverser} and saving the corresponding output.
+ * 
+ * As described in the POM, these are off-line data initialisations that benefit KnetMiner. 
  *
- * probably some methods require thread safety (get {@link #getGraph()}.
+ * TODO: probably some methods require thread safety (get {@link #getGraph()}.
  * 
  * @author brandizi
  * @author jojicunnunni

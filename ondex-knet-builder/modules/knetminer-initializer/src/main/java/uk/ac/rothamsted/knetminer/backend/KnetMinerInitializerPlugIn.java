@@ -143,7 +143,7 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 	}
 
 	/**
-	 * This returns false for the time being. There are plug-ins which trigger Ondex Mini indexing and 
+	 * TODO: this returns false for the time being. There are plug-ins which trigger Ondex Mini indexing and 
 	 * the resulting files could be simply copied to the data output target for the initialiser. This is a possible
 	 * future improvement.
 	 *  
