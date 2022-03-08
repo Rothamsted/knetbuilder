@@ -125,18 +125,30 @@ public class GraphTraverser extends AbstractGraphTraverser {
   		StateMachineFlatFileParser2 smp = null;
   		try 
   		{
-  			URL motifsUrl = smFile.startsWith ( "file://" )
-  					? new URL ( smFile )
-  					: Thread.currentThread().getContextClassLoader().getResource ( smFile );
-  				
   			if ( graph == null ) graph = this.getOption ( "ONDEXGraph", null );
 				if ( graph == null ) throw new IllegalArgumentException (
 					"ONDEXGraph option not set" 
 				);
+
+				URL motifsUrl = smFile.startsWith ( "file://" )
+  					? new URL ( smFile )
+  					: Thread.currentThread().getContextClassLoader().getResource ( smFile );
+  				
+  			log.info ( "Loading State Machine Traverser description from '{}'", motifsUrl.toString () );
+  			
 				smp = new StateMachineFlatFileParser2 ();
 				smp.parseReader ( new BufferedReader ( new InputStreamReader ( motifsUrl.openStream () ) ), graph );
 	
-				log.debug ( "Completed State Machine" );
+				StateMachine sm = smp.getStateMachine ();
+				if ( sm == null ) throw new NullPointerException (
+					"State Machine parser failed, result is null" 
+				);
+				
+				log.info ( 
+					"State Machine Loaded, {} states and {} transitions",
+					sm.getAllStates ().size (), sm.getAllTransitions ().size ()
+				);
+				return sm;
   		} 
   		catch (Exception e) {
   			throw new IllegalArgumentException ( String.format ( 
@@ -144,8 +156,6 @@ public class GraphTraverser extends AbstractGraphTraverser {
 					e
 				);
   		}
-
-  		return smp.getStateMachine();
   	}
     
     
