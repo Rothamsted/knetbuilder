@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +60,10 @@ public class StateMachineFlatFileParser2 {
             } else if (line.toLowerCase().startsWith("#weightings on transitions")) {
                 return TRANSITION_RANK;
             }
+            System.err.printf ( 
+            	"Ignoring the hashed line: \"%s\", no valid directive", 
+            	StringUtils.truncate ( line, 20 ) 
+            );
             return NONE;
         }
     }
@@ -196,7 +201,14 @@ public class StateMachineFlatFileParser2 {
                             if (valuest[2].trim().equalsIgnoreCase("u")) { //for unlimited
                                 maxLength = Integer.MAX_VALUE;
                             } else {
+                            	try {
                                 maxLength = Integer.parseInt(valuest[2]);
+                            	}
+                            	catch ( NumberFormatException ex ) {
+                            		throw new InvalidFileException ( String.format ( 
+                            			"Transition %s with invalid max length %s", valuest[1].trim(), valuest[2]  
+                            		));
+                            	}
                             }
                         }
                         
