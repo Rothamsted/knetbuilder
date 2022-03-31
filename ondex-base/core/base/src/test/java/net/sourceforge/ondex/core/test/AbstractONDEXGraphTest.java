@@ -143,7 +143,10 @@ public abstract class AbstractONDEXGraphTest
 	 *            String
 	 * @return ONDEXGraph
 	 */
-	protected abstract ONDEXGraph initialize(String name) throws IOException;
+	protected ONDEXGraph initialize(String name) throws IOException
+	{
+		return TestGraphProvider.getInstance ().createGraph ( name );
+	}
 
 	/**
 	 * @throws java.lang.Exception

@@ -66,7 +66,10 @@ public abstract class AbstractRelationTest extends TestCase {
 	 * @throws Exception
 	 *             an probs?
 	 */
-	public abstract ONDEXGraph initialize(String name) throws Exception;
+	public ONDEXGraph initialize(String name) throws Exception
+	{
+		return TestGraphProvider.getInstance ().createGraph ( name ); 
+	}
 
 	@Before
 	public void setUp() throws Exception {
