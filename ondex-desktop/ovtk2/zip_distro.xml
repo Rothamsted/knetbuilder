@@ -32,6 +32,14 @@
 			</includes>
 			<unpack>true</unpack>
 		</dependencySet>
+		<dependencySet>
+			<outputDirectory>${project.artifactId}</outputDirectory>
+			<scope>runtime</scope>			
+			<includes>
+				<include>net.sourceforge.ondex:datadir:*</include>
+			</includes>
+			<unpack>true</unpack>
+		</dependencySet>
 	</dependencySets>
 	 <files>
 	  <!-- TODO: Remove, no longer used

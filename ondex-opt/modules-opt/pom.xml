@@ -169,7 +169,7 @@
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
                   <goals>
-                     <goal>attached</goal>
+                     <goal>single</goal>
                   </goals>
                   <configuration>
                      <descriptors>
@@ -182,7 +182,7 @@
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
                   <goals>
-                     <goal>attached</goal>
+                     <goal>single</goal>
                   </goals>
                   <configuration>
                      <descriptors>
@@ -195,7 +195,7 @@
                   <!-- this is used for inheritance merges -->
                   <phase>package</phase>
                   <goals>
-                     <goal>attached</goal>
+                     <goal>single</goal>
                   </goals>
                   <configuration>
                      <descriptors>

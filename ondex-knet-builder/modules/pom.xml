@@ -176,8 +176,7 @@
 	         	<!-- this is used for inheritance merges -->
 	         	<phase>package</phase>
 	         	<goals>
-	          	<goal>attached</goal>
-	          	<!-- goals == mojos -->
+	          	<goal>single</goal>
 	         	</goals>
 	         	<configuration>
 	          	<descriptors>
@@ -191,8 +190,7 @@
 	         	<phase>package</phase>
 	         	<!-- append to the packaging phase. -->
 	         	<goals>
-	          	<goal>attached</goal>
-	          	<!-- goals == mojos -->
+	          	<goal>single</goal>
 	         	</goals>
 	         	<configuration>
 	          	<descriptors>
@@ -206,8 +204,7 @@
 	         	<phase>package</phase>
 	         	<!-- append to the packaging phase. -->
 	         	<goals>
-	          	<goal>attached</goal>
-	          	<!-- goals == mojos -->
+	          	<goal>single</goal>
 	         	</goals>
 	         	<configuration>
 	          	<descriptors>

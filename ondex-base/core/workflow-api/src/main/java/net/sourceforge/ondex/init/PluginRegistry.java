@@ -137,7 +137,7 @@ public class PluginRegistry {
      */
     private PluginRegistry(boolean readConfigFromJar, String... dirOrFiles) throws IOException, URISyntaxException {
         PluginRegistry.instance = this;
-        LOG.debug("Reading configuration from jar - " + readConfigFromJar);
+        LOG.info("Reading configuration from jar - " + readConfigFromJar);
         if (readConfigFromJar) {
             readConfigFromJar(dirOrFiles);
         } else {
@@ -146,17 +146,17 @@ public class PluginRegistry {
     }
 
     private void addRecursively(File dir, Set<URL> jars) {
-        LOG.debug("Scanning directory for plugins: " + dir.getAbsolutePath());
+        LOG.info ("Scanning directory for plugins: " + dir.getAbsolutePath());
 
         for (File child : dir.listFiles()) {
             if (child.isDirectory()) {
                 addRecursively(child, jars);
             }
             try {
-                LOG.debug("Adding jar: " + child);
+                LOG.info ("Adding jar: " + child);
                 jars.add(child.getAbsoluteFile().toURI().toURL());
             } catch (MalformedURLException e) {
-                LOG.debug("Failed to add jar", e);
+                LOG.info ("Failed to add jar", e);
             }
         }
     }
@@ -192,35 +192,39 @@ public class PluginRegistry {
 
         Set<File> filesToScan = new HashSet<File>();
         for (URL url : urlsToScan) {
-            LOG.debug("Scanning for plugins in: " + url);
+            LOG.info("Scanning for plugins in: " + url);
             try {
                 File f = new File(url.toURI());
-                if (f.getName().endsWith(".jar")) {
-                    JarFile jar = new JarFile(f);
-                    ZipEntry ent = jar.getEntry("workflow-component-description.xml");
-                    if (ent != null) {
+                if (f.getName().endsWith(".jar"))
+                {
+                		ZipEntry ent = null;
+                    try ( JarFile jar = new JarFile(f) )
+                    {
+                    	ent = jar.getEntry("workflow-component-description.xml");
+                    	if (ent != null) {
                         InputStream is = jar.getInputStream(ent);
                         LOG.debug("Loading plugins from: " + f);
-                        try {
                             parseWorkflowComponentDescription(is, f.getName());
-                        } catch (JDOMException e) {
-                            LOG.warn("Error in processing " + ent.getName() + " in " + f.getAbsolutePath(), e);
-                        } catch (DuplicateOndexPluginsIdsException e) {
-                            LOG.warn("Error in processing " + ent.getName() + " in " + f.getAbsolutePath(), e);
-                        }
-                    } else {
-                        LOG.debug("No workflow-component-description.xml found");
+                    	}
+                    	else
+                    		LOG.warn("No workflow-component-description.xml found");
+                		}
+                    catch (JDOMException e) {
+                    	LOG.error ("Error in processing " + ent.getName() + " in " + f.getAbsolutePath(), e);
+                    } 
+                    catch (DuplicateOndexPluginsIdsException e) {
+                    	LOG.error ("Error in processing " + ent.getName() + " in " + f.getAbsolutePath(), e);
                     }
                 } else if (f.isDirectory()) {
                     filesToScan.add(f);
                 }
             } catch (URISyntaxException e) {
-                LOG.debug("Problem processing url", e);
+                LOG.error ("Problem processing url", e);
             }
         }
 
         if (Boolean.parseBoolean(System.getProperty("plugin.scan.lib"))) {
-            LOG.debug("Scanning lib directory for plugins");
+            LOG.info ("Scanning lib directory for plugins");
 
             String urls = System.getProperties().getProperty("java.class.path", null);
             Set<File> libFileURLs = new HashSet<File>();
@@ -674,8 +678,7 @@ public class PluginRegistry {
         public LazyPluginDefinition() {
         }
 
-        @SuppressWarnings("deprecation")
-		@Override
+        @Override
         public ArgumentDescription[] getArgDef() {
             if (argDef == null) {
                 try {

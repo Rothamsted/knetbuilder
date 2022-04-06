@@ -10,7 +10,11 @@
       <unpack>true</unpack>
       <scope>runtime</scope>
       <unpackOptions>
-           <filtered>true</filtered>
+					 <!-- TODO: 
+						 It seems that 'true' breaks .class files when using a recent assembly plug-in,
+						 it doesn't seem to be necessary  
+					 -->
+           <filtered>false</filtered>
          <excludes>
            	<exclude>META-INF</exclude>
            	<exclude>**/MANIFEST.MF</exclude>
