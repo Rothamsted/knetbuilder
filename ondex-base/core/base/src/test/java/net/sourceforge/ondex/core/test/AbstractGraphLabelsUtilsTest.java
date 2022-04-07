@@ -1,13 +1,8 @@
 package net.sourceforge.ondex.core.test;
 
 import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
 import java.util.Set;
-
-import org.junit.Before;
 import org.junit.Test;
-
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
@@ -17,38 +12,29 @@ import net.sourceforge.ondex.core.util.GraphLabelsUtils;
 import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 
 /**
- * TODO: comment me!
+ * Tests for utilities in {@link GraphLabelsUtils}.
+ * 
+ * This follows the abstrac/specific approach that is described in {@link TestGraphProvider}
  *
- * @author jojicunnunni
- * <dl><dt>Date:</dt><dd>7 April 2022</dd></dl>
+ * @author brandizi
+ * <dl><dt>Date:</dt><dd>3 Dec 2021</dd></dl>
  *
  */
 public abstract class AbstractGraphLabelsUtilsTest
 {
 	
-	private ONDEXGraph graph; 	
+	private ONDEXGraph graph = TestGraphProvider.getInstance ().createGraph ( "test" );
 	
-	private ConceptClass ccA;
+	private ConceptClass ccA = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "A" );
+	private DataSource srcA = ONDEXGraphUtils.getOrCreateDataSource ( graph, "srcA" );
+	private EvidenceType evA = ONDEXGraphUtils.getOrCreateEvidenceType ( graph, "evA" );
+	private DataSource srcENSEMBL = ONDEXGraphUtils.getOrCreateDataSource ( graph, "ENSEMBL" );	
 	
-	private DataSource srcA;
+	private ONDEXConcept c = graph.createConcept ( "foo", "", "", srcA, ccA, Set.of ( evA ) );
 	
-	private EvidenceType evA;
-	
-	private ONDEXConcept c;
-	
-	@Before
-	public void init () throws IOException
-	{
-		graph = TestGraphProvider.getInstance ().createGraph ( "test" );
-		
-		ccA = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "A" );
-		srcA = ONDEXGraphUtils.getOrCreateDataSource ( graph, "srcA" );
-		evA = ONDEXGraphUtils.getOrCreateEvidenceType ( graph, "evA" );
-		c = graph.createConcept ( "foo", "", "", srcA, ccA, Set.of ( evA ) );
-	}
 	
 	/**
-	 * Tests Rothamsted/knetminer#584
+	 * Tests #584
 	 */
 	@Test
 	public void testBestNameMixedTypes ()
@@ -61,7 +47,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 
 
 	/**
-	 * Tests Rothamsted/knetminer#584
+	 * Tests #584
 	 */
 	@Test
 	public void testBestAccessionMixedTypes ()
@@ -73,14 +59,11 @@ public abstract class AbstractGraphLabelsUtilsTest
 	}
 
 	/**
-	 * Tests Rothamsted/knetminer#584
+	 * Tests #584
 	 */
 	@Test
 	public void testBestGeneAccessionPrioritySources ()
 	{
-		DataSource srcENSEMBL = ONDEXGraphUtils.getOrCreateDataSource ( graph, "ENSEMBL" );
-		
-		
 		c.createConceptAccession ( "ABC Gene", srcENSEMBL, false ); // unique
 		c.createConceptAccession ( "ABC", srcA, false ); // shorter but ENSEMBL should have priority.
 		
@@ -88,13 +71,11 @@ public abstract class AbstractGraphLabelsUtilsTest
 	}
 
 	/**
-	 * Tests Rothamsted/knetminer#593
+	 * Tests #593
 	 */
 	@Test
 	public void testZMSynonyms ()
 	{
-		DataSource srcENSEMBL = ONDEXGraphUtils.getOrCreateDataSource ( graph, "ENSEMBL" );
-		
 		c.createConceptAccession ( "ZM00001EB425260", srcENSEMBL, false ); // unique
 		c.createConceptAccession ( "ZM00001D025723", srcENSEMBL, false ); // shorter but EB should have priority.
 		
@@ -102,7 +83,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 	}
 	
 	/**
-	 * Tests Rothamsted/knetminer#584
+	 * Tests #584
 	 */
 	@Test
 	public void testBestLabel ()
@@ -116,7 +97,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 	}	
 
 	/**
-	 * Tests Rothamsted/knetminer#584
+	 * Tests #584
 	 */
 	@Test
 	public void testBestLabelAccessionFallBack ()
@@ -131,6 +112,37 @@ public abstract class AbstractGraphLabelsUtilsTest
 	public void testBestLabelPIDFallBack ()
 	{
 		assertEquals ( "Wrong label picked!", c.getPID (), GraphLabelsUtils.getBestConceptLabel ( c ) );
-	}	
-
+	}
+	
+	/**
+	 * Tests that accessions can be filtered from best name selection, see
+	 * <a href = "https://github.com/Rothamsted/knetminer/issues/602#issuecomment-1086962980">here</a>
+	 * 
+	 */
+	@Test
+	public void testBestNameAccessionFiltering ()
+	{
+		var acc = "TRAESCS3D02G468400";
+		var name = "MYB1";
+		
+		c.createConceptName ( acc, true );
+		c.createConceptName ( name, false );
+		
+		c.createConceptAccession ( acc, srcENSEMBL, false );
+		
+		assertEquals ( "Accession filtering didn't work!", name, GraphLabelsUtils.getBestName ( c, true ) );
+		assertEquals ( "Accession filtering in place when disabled too!", acc, GraphLabelsUtils.getBestName ( c ) );
+	}
+	
+	@Test
+	public void testBestNameAccessionFilteringFallback ()
+	{
+		var acc = "TRAESCS3D02G468400";
+		
+		c.createConceptName ( acc, true );
+		c.createConceptAccession ( acc, srcENSEMBL, false );
+		
+		assertEquals ( "Accession filtering didn't work (fallback case)!", acc, GraphLabelsUtils.getBestName ( c, true ) );
+	}
+	
 }
