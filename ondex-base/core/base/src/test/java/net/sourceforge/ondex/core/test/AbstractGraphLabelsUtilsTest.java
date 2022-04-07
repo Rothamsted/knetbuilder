@@ -2,10 +2,8 @@ package net.sourceforge.ondex.core.test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
 import java.util.Set;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import net.sourceforge.ondex.core.ConceptClass;
@@ -26,26 +24,15 @@ import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 public abstract class AbstractGraphLabelsUtilsTest
 {
 	
-	private ONDEXGraph graph; 	
+	private ONDEXGraph graph = TestGraphProvider.getInstance ().createGraph ( "test" ); 	
 	
-	private ConceptClass ccA;
+	private ConceptClass ccA = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "A" );
 	
-	private DataSource srcA;
+	private DataSource srcA = ONDEXGraphUtils.getOrCreateDataSource ( graph, "srcA" );
 	
-	private EvidenceType evA;
+	private EvidenceType evA = ONDEXGraphUtils.getOrCreateEvidenceType ( graph, "evA" );
 	
-	private ONDEXConcept c;
-	
-	@Before
-	public void init () throws IOException
-	{
-		graph = TestGraphProvider.getInstance ().createGraph ( "test" );
-		
-		ccA = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "A" );
-		srcA = ONDEXGraphUtils.getOrCreateDataSource ( graph, "srcA" );
-		evA = ONDEXGraphUtils.getOrCreateEvidenceType ( graph, "evA" );
-		c = graph.createConcept ( "foo", "", "", srcA, ccA, Set.of ( evA ) );
-	}
+	private ONDEXConcept c = graph.createConcept ( "foo", "", "", srcA, ccA, Set.of ( evA ) );
 	
 	/**
 	 * Tests Rothamsted/knetminer#584
