@@ -3,6 +3,7 @@ package net.sourceforge.ondex.core.util;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,14 +12,13 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 
-public class GraphLabelsUtils {
+public class GraphLabelsUtils
+{
 
 	/**
 	 * 
 	 * Returns the best label for a concept, considering several criteria, including the concept type (eg,
 	 * if it's a gene or not). 
-	 * 
-	 * TODO: Move these labelling methods into Ondex.
 	 * 
 	 */
 	public static String getBestConceptLabel ( ONDEXConcept c )
@@ -84,8 +84,7 @@ public class GraphLabelsUtils {
 		
 		return accsStrm
 		.filter ( acc -> StringUtils.trimToNull ( acc.getAccession () ) != null )
-		.sorted ( accCmp )
-		.findFirst ()
+		.min ( accCmp )
 		// Unfortunately, we have to do a final re-map, in order to be able to apply whole-ConceptAccession
 		// comparisons
 		.map ( ConceptAccession::getAccession )
@@ -219,12 +218,11 @@ public class GraphLabelsUtils {
 		.map ( ConceptName::getName )
 		.map ( String::trim )
 		.filter ( nameStr -> !nameStr.isEmpty () )
-		.sorted (
+		.min (
 			Comparator.comparing ( String::length )
 			.thenComparing ( Comparator.naturalOrder () ) 
 		)
-		.findFirst ()
-		.orElse ( "" );
+		.orElse ( "" );		
 	}
 	
 	/**
@@ -242,10 +240,48 @@ public class GraphLabelsUtils {
 
 	/**
 	 * Just a wrapper, the concept is assumed to be non-null.
+	 * 
+	 * @param filterAccessions if true, it tries to remove accessions from the result, using other available names, if
+	 *   			available.
+	 * 
+	 */
+	public static String getBestName ( ONDEXConcept concept, boolean filterAccessions )
+	{
+		var names = concept.getConceptNames ();
+		var bestName = getBestName ( names );
+		
+		if ( !filterAccessions ) return bestName;
+			
+		
+		// We need to filter accessions, first let's see if the result is an accession
+		//
+		Set<String> accs = concept.getConceptAccessions ()
+			.stream ()
+			.map ( ConceptAccession::getAccession )
+			.collect ( Collectors.toSet () );
+		
+		if ( !accs.contains ( bestName ) ) return bestName;
+
+		// There isn't any alternative
+		if ( names.size () < 2 ) return bestName;
+		
+		// OK, let's recompute the best name without accessions in the way
+		//
+		names = names.stream ()
+			.filter ( name -> !accs.contains ( name.getName () ) )
+			.collect ( Collectors.toSet () );
+				
+		var filteredBestName = getBestName ( names );
+		// Shouldn't happen, but just in case
+		return "".equals ( filteredBestName ) ? bestName : filteredBestName;
+	}
+
+	/**
+	 * Defaults to false
 	 */
 	public static String getBestName ( ONDEXConcept concept )
 	{
-		return getBestName ( concept.getConceptNames () );
+		return getBestName ( concept, false );
 	}
 
 }
