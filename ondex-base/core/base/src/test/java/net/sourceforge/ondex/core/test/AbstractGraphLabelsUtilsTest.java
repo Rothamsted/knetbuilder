@@ -34,7 +34,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 	
 	
 	/**
-	 * Tests #584
+	 * Tests Rothamsted/knetminer#584
 	 */
 	@Test
 	public void testBestNameMixedTypes ()
@@ -47,7 +47,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 
 
 	/**
-	 * Tests #584
+	 * Tests Rothamsted/knetminer#584
 	 */
 	@Test
 	public void testBestAccessionMixedTypes ()
@@ -59,7 +59,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 	}
 
 	/**
-	 * Tests #584
+	 * Tests Rothamsted/knetminer#584
 	 */
 	@Test
 	public void testBestGeneAccessionPrioritySources ()
@@ -71,7 +71,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 	}
 
 	/**
-	 * Tests #593
+	 * Tests Rothamsted/knetminer#593
 	 */
 	@Test
 	public void testZMSynonyms ()
@@ -83,7 +83,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 	}
 	
 	/**
-	 * Tests #584
+	 * Tests Rothamsted/knetminer#584
 	 */
 	@Test
 	public void testBestLabel ()
@@ -97,7 +97,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 	}	
 
 	/**
-	 * Tests #584
+	 * Tests Rothamsted/knetminer#584
 	 */
 	@Test
 	public void testBestLabelAccessionFallBack ()
