@@ -12,6 +12,10 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 
+/**
+ * Methods to choose best labels for {@link ONDEXConcept}.
+ * Was migrated from KnetMiner.
+ */
 public class GraphLabelsUtils
 {
 
