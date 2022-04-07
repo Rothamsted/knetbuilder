@@ -11,23 +11,28 @@ import net.sourceforge.ondex.core.ONDEXGraph;
  * 
  * <ul>
  * 	<li>
- * 		A new implementation (see the memory module) should add an concrete implementation of this method in the
- * 		test/java directory, and, following the Java SPI specifications, mention this implementation in 
- * 		test/resources/META-INF/services/net.sourceforge.ondex.core.test.TestGraphProvider.
+ * 		A new implementation of Ondex graph-related interfaces (see the memory module) should add a concrete 
+ * 		extension of this class in the test/java directory, which shoould implement {@link #createGraph(String)} according 
+ *    to the specific new way of creating graphs (eg, see MemTestGraphProvider in the memory module).
+ *    Then, following the Java SPI specifications, you should mention this 
+ *    implementation in {@code test/resources/META-INF/services/net.sourceforge.ondex.core.test.TestGraphProvider} 
+ *    (again, see this file in the memory module).
  * 
  * 		As per SPI, this will ensure that the {@link #getInstance()} method below uses the local provider to 
  *    create a new {@link ONDEXGraph} during tests.
  *  </li>
  *  <li>
- *  	There should be an abstract test class in the hereby base module, let's say AbstractMyTest, which should have 
+ *  	For each new test of Ondex graph-related stuff that is supposed to work with multiple mplementations of such interfaces,
+ *    There should be an abstract test class in the hereby base module, let's say AbstractMyTest, which should have 
  *  	tests that <b>do not depend</b> on any particular implementation of {@link ONDEXGraph} (or related interfaces).
- *  	These methods should use {@link #getInstance()} and {@link #createGraph(String)}. Since the binding is based 
- *  	on SPI and at runtime, they will remain implementation-independent. 
+ *  	These methods should use the hereby {@link #getInstance()} and {@link #createGraph(String)}. Since the binding 
+ *  	is based on SPI and at runtime, they will remain implementation-independent. 
  *  </li>
  *  <li>
- *  	For each new implementation of graph interfaces (eg, memory), there should be a concrete implementation of 
- *    the abstract test class (eg, MemMyTest). Typically, this will be empty (everything is already in place, including
- *    the dynamic binding above) and will only serve as a marker for JUnit to know there is a new test class to run.
+ *  	For each new implementation of graph interfaces (eg, memory module), there should be a concrete implementation of 
+ *    the abstract test class (eg, {@code MemMyTest extends AbstractMyTest}). Typically, this will be empty (everything 
+ *    is already in place, including the dynamic binding above) and will only serve as a marker for JUnit to know 
+ *    there is a new test class to run.
  *  </li>
  * </ul>
  * 
