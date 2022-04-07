@@ -2,8 +2,10 @@ package net.sourceforge.ondex.core.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import net.sourceforge.ondex.core.ConceptClass;
@@ -17,20 +19,33 @@ import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 /**
  * TODO: comment me!
  *
- * @author brandizi
- * <dl><dt>Date:</dt><dd>3 Dec 2021</dd></dl>
+ * @author jojicunnunni
+ * <dl><dt>Date:</dt><dd>7 April 2022</dd></dl>
  *
  */
-public class GraphLabelsUtilsTest
+public abstract class AbstractGraphLabelsUtilsTest
 {
-	private ONDEXGraph graph = TestGraphProvider.getInstance().createGraph("test" );			
 	
-	private ConceptClass ccA = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "A" );
-	private DataSource srcA = ONDEXGraphUtils.getOrCreateDataSource ( graph, "srcA" );
-	private EvidenceType evA = ONDEXGraphUtils.getOrCreateEvidenceType ( graph, "evA" );
+	private ONDEXGraph graph; 	
 	
-	private ONDEXConcept c = graph.createConcept ( "foo", "", "", srcA, ccA, Set.of ( evA ) );
+	private ConceptClass ccA;
 	
+	private DataSource srcA;
+	
+	private EvidenceType evA;
+	
+	private ONDEXConcept c;
+	
+	@Before
+	public void init () throws IOException
+	{
+		graph = TestGraphProvider.getInstance ().createGraph ( "test" );
+		
+		ccA = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "A" );
+		srcA = ONDEXGraphUtils.getOrCreateDataSource ( graph, "srcA" );
+		evA = ONDEXGraphUtils.getOrCreateEvidenceType ( graph, "evA" );
+		c = graph.createConcept ( "foo", "", "", srcA, ccA, Set.of ( evA ) );
+	}
 	
 	/**
 	 * Tests Rothamsted/knetminer#584
