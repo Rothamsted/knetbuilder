@@ -26,6 +26,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.core.util.GraphLabelsUtils;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
 
@@ -323,141 +324,115 @@ public class Export extends ONDEXExport {
      * @return JSONObject
      *            JSONObject containing information about the Concept.
      */
-    private JSONObject buildConcept(ONDEXConcept con) {
-     JSONObject conceptJson= new JSONObject();
+	@SuppressWarnings("unchecked")
+	private JSONObject buildConcept(ONDEXConcept con) {
+		JSONObject conceptJson = new JSONObject();
 
-     conceptJson.put(JSONAttributeNames.ID, String.valueOf(con.getId())); // concept ID.
-     String conName= " ";
-     if(con.getConceptName() != null) {
-        if(con.getConceptName().getName() != null) {
-           conName= con.getConceptName().getName();
-          }
-       }
+		conceptJson.put(JSONAttributeNames.ID, String.valueOf(con.getId())); // concept ID.
+		String conName = " ";
+		if (con.getConceptName() != null) {
+			if (con.getConceptName().getName() != null) {
+				conName = con.getConceptName().getName();
+			}
+		}
 
-     /* Concept Type (details returned in another JSON object). Now, uses "ofType" as key instead of 
-      * "ConceptClasses" & "CC".
-      */
-     String conceptType= buildConceptClass(con.getOfType());
+		/*
+		 * Concept Type (details returned in another JSON object). Now, uses "ofType" as
+		 * key instead of "ConceptClasses" & "CC".
+		 */
+		String conceptType = buildConceptClass(con.getOfType());
 
-     /* Fetch the Set of all concept names and retain only the preferred ones, to later choose the 
-      * "best" concept name to display from amongst them, for Genes. */
-     if(conceptType.equals(ConceptType.Gene.toString()) || conceptType.equals(ConceptType.Protein.toString())) {
-        // For Genes and Proteins.
-        // Get the shortest, preferred concept name for this Concept.
-        String shortest_coname= getShortestPreferredConceptName(con.getConceptNames());
-        // Get the shortest, non-ambiguous concept accession for this Concept.
-        String shortest_acc= getShortestNotAmbiguousConceptAccession(con.getConceptAccessions());
-     
-//        int shortest_acc_length= 100000, shortest_coname_length= 100000; // default values.
-        if(!shortest_coname.equals(" ")) {
-//           shortest_coname_length= shortest_coname.length();
-           conName= shortest_coname; // use the shortest, preferred concept name.
-          }
-        else {
-          if(!shortest_acc.equals(" ")) {
-//             shortest_acc_length= shortest_acc.length();
-             conName= shortest_acc; // use the shortest, non-ambiguous concept accession.
-            }
-        }
-/*        if(shortest_acc_length < shortest_coname_length) {
-           conName= shortest_acc; // use the shortest, non-ambiguous concept accession.
-          }
-        else {
-         conName= shortest_coname; // use shortest, preferred concept name.
-        }*/
-//        System.out.println("\t \t Selected (preferred) concept Name: "+ conName +"\n");
-       }
-     /*else if(conceptType.equals(ConceptType.Phenotype.toString())) {
-//             System.out.println("Current "+ conceptType +" conName: "+ conName);
-             if(conName.equals(" ")) {
-                Set<Attribute> attributes= con.getAttributes(); // get all concept Attributes.
-                for(Attribute attr : attributes) {
-                    if(attr.getOfType().toString().equals("Phenotype")) {
-                       conName= attr.getValue().toString().trim(); // use Phenotype as the preferred concept name instead.
-                      }
-                   }
-//                System.out.println("\t Phenotype: Selected conceptName: "+ conName +"\n");
-               }
-            }*/
-     else {
-       if(!getShortestPreferredConceptName(con.getConceptNames()).equals(" ")) {
-          conName= getShortestPreferredConceptName(con.getConceptNames());
-         }
-       else {
-         if(!getShortestNotAmbiguousConceptAccession(con.getConceptAccessions()).equals(" ")) {
-            conName= getShortestNotAmbiguousConceptAccession(con.getConceptAccessions());
-           }
-        }
-      }
+		/*
+		 * Fetch the Set of all concept names and retain only the preferred ones, to
+		 * later choose the "best" concept name to display from amongst them, for Genes.
+		 */
+		if (conceptType.equals(ConceptType.Gene.toString()) || conceptType.equals(ConceptType.Protein.toString())) {
+			// For Genes and Proteins.
+			// Get the shortest, preferred concept name for this Concept.
+			String shortest_coname = GraphLabelsUtils.getBestConceptLabel(con);
+			// Get the shortest, non-ambiguous concept accession for this Concept.
+			String shortest_acc = GraphLabelsUtils.getBestGeneAccession(con.getConceptAccessions());
 
-     conceptJson.put(JSONAttributeNames.VALUE, conName); // preferred concept name.
-     conceptJson.put(JSONAttributeNames.OFTYPE, conceptType);
-     conceptJson.put(JSONAttributeNames.PID, con.getPID());
-     conceptJson.put(JSONAttributeNames.ANNOTATION, con.getAnnotation().replaceAll("(\\r|\\n)", " "));
-     conceptJson.put(JSONAttributeNames.DESCRIPTION, con.getDescription());
+			if (!shortest_coname.equals(" ")) {
+				conName = shortest_coname; // use the shortest, preferred concept name.
+			} else {
+				if (!shortest_acc.equals(" ")) {
+					conName = shortest_acc; // use the shortest, non-ambiguous concept accession.
+				}
+			}
+		} else {
+			if (!getShortestPreferredConceptName(con.getConceptNames()).equals(" ")) {
+				conName = GraphLabelsUtils.getBestConceptLabel(con);
+			} else {
+				if (!getShortestNotAmbiguousConceptAccession(con.getConceptAccessions()).equals(" ")) {
+					conName = GraphLabelsUtils.getBestGeneAccession(con.getConceptAccessions());
+				}
+			}
+		}
 
-     /** Element Of (parent Data Source details returned in another JSON object). Now, uses "ElementOf" as key
-      * instead of "CVS" & "CV".
-      */
-     conceptJson.put(JSONAttributeNames.ELEMENTOF, buildDataSource(con.getElementOf()));
+		conceptJson.put(JSONAttributeNames.VALUE, conName); // preferred concept name.
+		conceptJson.put(JSONAttributeNames.OFTYPE, conceptType);
+		conceptJson.put(JSONAttributeNames.PID, con.getPID());
+		conceptJson.put(JSONAttributeNames.ANNOTATION, con.getAnnotation().replaceAll("(\\r|\\n)", " "));
+		conceptJson.put(JSONAttributeNames.DESCRIPTION, con.getDescription());
 
-     // Evidence Types.
-     Set<EvidenceType> evidenceTypes= con.getEvidence();
-//     JSONObject evidencesJson= new JSONObject();
-     JSONArray evidencesArray= new JSONArray(); // fetch array of concept attributes.
-     for(EvidenceType et : evidenceTypes) {
-         // return various JSON objects for each Evidence Type.
-//         evidencesJson.put(JSONAttributeNames.EVIDENCE, buildEvidenceType(et));
-         evidencesArray.add(buildEvidenceType(et)); // add to evidences array.
-        }
-     conceptJson.put(JSONAttributeNames.EVIDENCES, evidencesArray/*evidencesJson*/);
+		/**
+		 * Element Of (parent Data Source details returned in another JSON object). Now,
+		 * uses "ElementOf" as key instead of "CVS" & "CV".
+		 */
+		conceptJson.put(JSONAttributeNames.ELEMENTOF, buildDataSource(con.getElementOf()));
 
-     // Get all Concept Names (conames), whether preferred or not.
-     Set<ConceptName> conames= con.getConceptNames();
-//     JSONObject conamesJson= new JSONObject();
-     JSONArray concept_names_Array= new JSONArray();
-     for(ConceptName coname : conames) {
-         // return various JSON objects for each Concept Name.
-//         conamesJson.put(JSONAttributeNames.CONCEPTNAME, buildConceptName(coname));
-         concept_names_Array.add(buildConceptName(coname));
-        }
-     conceptJson.put(JSONAttributeNames.CONAMES, concept_names_Array/*conamesJson*/);
+		// Evidence Types.
+		Set<EvidenceType> evidenceTypes = con.getEvidence();
+		JSONArray evidencesArray = new JSONArray(); // fetch array of concept attributes.
+		for (EvidenceType et : evidenceTypes) {
+			// return various JSON objects for each Evidence Type.
+			evidencesArray.add(buildEvidenceType(et)); // add to evidences array.
+		}
+		conceptJson.put(JSONAttributeNames.EVIDENCES, evidencesArray/* evidencesJson */);
 
-     // Concept Accessions.
-     Set<ConceptAccession> accessions= con.getConceptAccessions();
-//     JSONObject accessionsJson= new JSONObject();
-     JSONArray accessionsArray= new JSONArray(); // fetch array of concept attributes.
-     for(ConceptAccession accession : accessions) {
-         // return various JSON objects for each Concept Accession.
-//         accessionsJson.put(JSONAttributeNames.CONCEPTACCESSION, buildConceptAccession(accession));
-         accessionsArray.add(buildConceptAccession(accession)); // add to co-accessions array.
-        }
-     conceptJson.put(JSONAttributeNames.COACCESSIONS, accessionsArray/*accessionsJson*/);
+		// Get all Concept Names (conames), whether preferred or not.
+		Set<ConceptName> conames = con.getConceptNames();
+		JSONArray concept_names_Array = new JSONArray();
+		for (ConceptName coname : conames) {
+			// return various JSON objects for each Concept Name.
+			concept_names_Array.add(buildConceptName(coname));
+		}
+		conceptJson.put(JSONAttributeNames.CONAMES, concept_names_Array/* conamesJson */);
 
-     /* Concept GDS (Attributes), Attribute Names, Units & SpecialisationOf. Now, uses "attributes" & 
-      * "attribute" instead of using older terminology: "cogds" & "concept_gds". These are now used as Keys 
-      * in addition to older terms like "attrnames" and "attrname".
-      */
-     Set<Attribute> attributes= con.getAttributes(); // get all concept Attributes.
-//     JSONObject attrJson= new JSONObject();
-     JSONArray conAttributesArray= new JSONArray(); // fetch array of concept attributes.
-     for(Attribute attr : attributes) {
-//         attrJson.put(JSONAttributeNames.COATTRIBUTE, buildAttribute(attr));
-         conAttributesArray.add(buildAttribute(attr)); // add to concept attributes array.
-        }
-     conceptJson.put(JSONAttributeNames.CONCEPTATTRIBUTES, conAttributesArray/*attrJson*/);
+		// Concept Accessions.
+		Set<ConceptAccession> accessions = con.getConceptAccessions();
+		JSONArray accessionsArray = new JSONArray(); // fetch array of concept attributes.
+		for (ConceptAccession accession : accessions) {
+			// return various JSON objects for each Concept Accession.
+			accessionsArray.add(buildConceptAccession(accession)); // add to co-accessions array.
+		}
+		conceptJson.put(JSONAttributeNames.COACCESSIONS, accessionsArray/* accessionsJson */);
 
-     // Contexts.
-     Set<ONDEXConcept> contexts= con.getTags();
-     JSONObject contextsJson= new JSONObject();
-     for(ONDEXConcept context: contexts) {
-         // return various JSON objects for each Context.
-         contextsJson.put(JSONAttributeNames.CONTEXT, buildContext(context));
-        }
-     conceptJson.put(JSONAttributeNames.CONTEXTS, contextsJson);
+		/*
+		 * Concept GDS (Attributes), Attribute Names, Units & SpecialisationOf. Now,
+		 * uses "attributes" & "attribute" instead of using older terminology: "cogds" &
+		 * "concept_gds". These are now used as Keys in addition to older terms like
+		 * "attrnames" and "attrname".
+		 */
+		Set<Attribute> attributes = con.getAttributes(); // get all concept Attributes.
+		JSONArray conAttributesArray = new JSONArray(); // fetch array of concept attributes.
+		for (Attribute attr : attributes) {
+			conAttributesArray.add(buildAttribute(attr)); // add to concept attributes array.
+		}
+		conceptJson.put(JSONAttributeNames.CONCEPTATTRIBUTES, conAttributesArray/* attrJson */);
 
-     return conceptJson;
-    }
+		// Contexts.
+		Set<ONDEXConcept> contexts = con.getTags();
+		JSONObject contextsJson = new JSONObject();
+		for (ONDEXConcept context : contexts) {
+			// return various JSON objects for each Context.
+			contextsJson.put(JSONAttributeNames.CONTEXT, buildContext(context));
+		}
+		conceptJson.put(JSONAttributeNames.CONTEXTS, contextsJson);
+
+		return conceptJson;
+	}
 
     /**
      * Generate metadata for ONDEXRelation.
