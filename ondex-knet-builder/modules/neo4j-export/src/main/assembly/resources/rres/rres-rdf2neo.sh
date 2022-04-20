@@ -1,4 +1,4 @@
-# TODO: Comment me!
+# TODO: Remove, this has been migrated to the backend project.
 #
 set -e # Stop upon error
 
@@ -40,15 +40,13 @@ echo -e "\n\n\tRunning with the configuration at '$cfg_path'\n"
 export JENA_HOME="$sw_home/jena"
 tdb_path="$my_release_dir/rdf2neo-tdb"
 
-
-export OPTS="-Dneo4j.boltUrl=bolt://localhost:$CFG_NEO_PORT"
-export OPTS="$OPTS -Dneo4j.user=rouser -Dneo4j.password=rouser"
+export JAVA_TOOL_OPTIONS="-Xmx20G"
+export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dneo4j.boltUrl=bolt://localhost:$CFG_NEO_PORT"
+export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dneo4j.user=rouser -Dneo4j.password=rouser"
 
 # Enables JMX monitoring (visualvm, etc)
-#export OPTS="$OPTS -Dcom.sun.management.jmxremote.port=5010 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
-#export OPTS="$OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$RDF2NEO/logs/jvm.dump"
-
-export JAVA_TOOL_OPTIONS="-Xmx20G"
+#export OPTS="$JAVA_TOOL_OPTIONS -Dcom.sun.management.jmxremote.port=5010 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+#export OPTS="$JAVA_TOOL_OPTIONS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$RDF2NEO/logs/jvm.dump"
 
 if [ "$is_tdb_mode" != 'true' ]; then
 	echo "--- Deleting existing TDB '$tdb_path'"
