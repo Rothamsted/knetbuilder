@@ -1,9 +1,11 @@
 package net.sourceforge.ondex.core.util;
 
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -256,26 +258,11 @@ public class GraphLabelsUtils
 		
 		if ( !filterAccessions ) return bestName;
 			
-		
-		// We need to filter accessions, first let's see if the result is an accession
-		//
-		Set<String> accs = concept.getConceptAccessions ()
-			.stream ()
-			.map ( ConceptAccession::getAccession )
-			.collect ( Collectors.toSet () );
-		
-		if ( !accs.contains ( bestName ) ) return bestName;
-
-		// There isn't any alternative
-		if ( names.size () < 2 ) return bestName;
-		
-		// OK, let's recompute the best name without accessions in the way
-		//
-		names = names.stream ()
-			.filter ( name -> !accs.contains ( name.getName () ) )
-			.collect ( Collectors.toSet () );
-				
-		var filteredBestName = getBestName ( names );
+		var filteredNames = filterAccessionsFromNames ( concept, bestName );
+		// No alternative
+		if ( filteredNames == null ) return bestName;
+						
+		var filteredBestName = getBestName ( filteredNames );
 		// Shouldn't happen, but just in case
 		return "".equals ( filteredBestName ) ? bestName : filteredBestName;
 	}
@@ -288,4 +275,69 @@ public class GraphLabelsUtils
 		return getBestName ( concept, false );
 	}
 
+	
+	/**
+	 * Filters accessions from names. This is sometime useful for visualisations where both are reported.
+	 */
+	public static Set<ConceptName> filterAccessionsFromNames ( ONDEXConcept concept )
+	{
+		return filterAccessionsFromNames ( concept, null );
+	}
+
+	/**
+	 * Same as {@link #filterAccessionsFromNames(ONDEXConcept), but returns the stream of filtered names, which 
+	 * might be more efficient if you need to further process it.
+	 */
+	public static Stream<ConceptName> filterAccessionsFromNamesAsStream ( ONDEXConcept concept )
+	{
+		return filterAccessionsFromNamesAsStream ( concept, null );
+	}
+	
+	
+	
+	/**
+	 * Just a wrapper of {@link #filterAccessionsFromNamesAsStream(ONDEXConcept, String)}.
+	 * 
+	 */
+	private static Set<ConceptName> filterAccessionsFromNames ( ONDEXConcept concept, String selectedName )
+	{
+		return Optional.ofNullable ( filterAccessionsFromNamesAsStream ( concept, selectedName ) )
+			.map ( strm -> strm.collect ( Collectors.toSet () ) )
+			.orElse ( null );
+	}
+	
+	/**
+	 * This is the real implementation of {@link #filterAccessionsFromNames(ONDEXConcept)}, which is used by 
+	 * {@link #getBestName(ONDEXConcept, boolean)}. It considers the case where a best name has already been selected 
+	 * (eg, for displaying), but it might be one of the accessions, so, it goes on with filtering only if it is indeed
+	 * an accession.
+	 * 
+	 * @param selectedName: a name that has been picked from the concept's names. This MUST be one of the names, else
+	 *        the method won't work.
+	 *        
+	 * @return if selectedName is one of the concept's accessions, or the concept has only one name (ie, the already
+	 *         selected one), returns null, else it returns the concept's names without those names that are equal to
+	 *         some of the concept's accessions.
+	 *         
+	 */
+	private static Stream<ConceptName> filterAccessionsFromNamesAsStream ( ONDEXConcept concept, String selectedName )
+	{
+		// We need to filter accessions, first let's see if the result is an accession
+		//
+		Set<String> accs = concept.getConceptAccessions ()
+			.stream ()
+			.map ( ConceptAccession::getAccession )
+			.collect ( Collectors.toSet () );
+		
+		if ( selectedName != null && !accs.contains ( selectedName ) ) return null;
+
+		Set<ConceptName> names = concept.getConceptNames ();
+		
+		// There is no alternative
+		if ( selectedName != null && names.size () < 2 ) return null;
+		
+		return names.stream ()
+			.filter ( name -> !accs.contains ( name.getName () ) );
+	}	
+		
 }
