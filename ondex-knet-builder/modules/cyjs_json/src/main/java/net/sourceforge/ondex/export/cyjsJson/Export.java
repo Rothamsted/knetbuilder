@@ -35,7 +35,7 @@ import net.sourceforge.ondex.export.ONDEXExport;
  * stored in a 'graphJSON' object & all the metadata is stored in an 'allGraphData' object, both of 
  * which are generated timestamped 'result' JSON file.
  * @author Ajit Singh
- * @version 14/10/2015
+ * 
  */
 @SuppressWarnings("unchecked")
 @Status(description = "stable", status = StatusType.STABLE)
@@ -43,9 +43,6 @@ import net.sourceforge.ondex.export.ONDEXExport;
 @Custodians(custodians = { "Ajit Singh" }, emails = { "ajit.singh at rothamsted.ac.uk" })
 public class Export extends ONDEXExport {
     
-    // current version of the cytoscapeJS JSON Exporter Plugin.
-    public static final String version = "1.0";
-
     /**
      * Builds a file with Ondex Graph data exported to JSON variables for concepts (nodes), relations (edges)
      * and other Item Info.
@@ -131,17 +128,11 @@ public class Export extends ONDEXExport {
      return "CytoscapeJS JSON Export";
     }
 
-    /**
-     * @return String (Plugin version)
-     */
     @Override
     public String getVersion() {
-     return "07/04/2015";
+     return "1.0";
     }
 
-    /**
-     * @return Argument Definitions for this Exporter Plugin (in an ArgumentDefinition[] array).
-     */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
      return new ArgumentDefinition[] {
@@ -249,7 +240,7 @@ public class Export extends ONDEXExport {
 		mdJson.put ( JSONAttributeNames.GRAPHNAME, graph.getName () ); // graph name
 
 		// Write JSON Exporter Plugin version in the JSONObject.
-		mdJson.put ( JSONAttributeNames.VERSION, version );
+		mdJson.put ( JSONAttributeNames.VERSION, getVersion () );
 
 		// Write the number of concepts in the JSONObject.
 		mdJson.put ( JSONAttributeNames.NUMBERCONCEPTS, concepts.size () );
