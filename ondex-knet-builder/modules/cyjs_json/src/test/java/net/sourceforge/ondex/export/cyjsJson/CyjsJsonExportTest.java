@@ -12,8 +12,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import JSON
-
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -72,11 +70,6 @@ public class CyjsJsonExportTest
 	/**
 	 * Foo test. TODO: to be removed later
 	 */
-	@Test
-	public void testJSONObjects ()
-	{
-		JSON
-	}
 	
 	
 	@Test
