@@ -42,8 +42,6 @@ import net.sourceforge.ondex.export.ONDEXExport;
 @Authors(authors = { "Ajit Singh" }, emails = { "ajit.singh at rothamsted.ac.uk" })
 @Custodians(custodians = { "Ajit Singh" }, emails = { "ajit.singh at rothamsted.ac.uk" })
 public class Export extends ONDEXExport {
-
-    private FileWriter graphFileWriter= null;
     
     // current version of the cytoscapeJS JSON Exporter Plugin.
     public static final String version = "1.0";
@@ -71,13 +69,13 @@ public class Export extends ONDEXExport {
 		 */
 		JSONObject allDataJson = new JSONObject ();
 
-		// JSONArray objects to store all the ceoncepts (nodes) & relations (edges) to.
+		// JSONArray objects to store all the concepts (nodes) & relations (edges) to.
 		JSONArray conceptNodes = new JSONArray ();
 		JSONArray relationEdges = new JSONArray ();
 
 		// Set output File location for writing network graph JSON data & other graph
 		// metadata to.
-		graphFileWriter = getOutputFileForGraphJson ();
+		FileWriter graphFileWriter = getOutputFileForGraphJson ();
 
 		try {
 			// Retrieving all the concepts & relations from the graph (the ONDEXGraph
@@ -335,7 +333,9 @@ public class Export extends ONDEXExport {
 		 */
 		String conceptType = buildConceptClass ( con.getOfType () );
 
-		conceptJson.put ( JSONAttributeNames.VALUE, GraphLabelsUtils.getBestConceptLabel ( con ) ); // preferred concept name.
+		// preferred concept name, chooses between names (preferred first) and accessions, using various crtieria
+		// this is the same helper that is used in multiple Knetminer visualisations 
+		conceptJson.put ( JSONAttributeNames.VALUE, GraphLabelsUtils.getBestConceptLabel ( con ) ); 
 		conceptJson.put ( JSONAttributeNames.OFTYPE, conceptType );
 		conceptJson.put ( JSONAttributeNames.PID, con.getPID () );
 		conceptJson.put ( JSONAttributeNames.ANNOTATION, con.getAnnotation ().replaceAll ( "(\\r|\\n)", " " ) );
