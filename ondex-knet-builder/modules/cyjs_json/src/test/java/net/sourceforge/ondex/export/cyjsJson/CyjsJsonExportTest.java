@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.export.cyjsJson;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -12,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -46,7 +44,7 @@ public class CyjsJsonExportTest
 	public static void prepareExport()
 	{
 		// human dataset 
-		humanGraph = Parser.loadOXL (  CyjsJsonExportTest.class.getClassLoader ().getResource ( "MyNetwork_NeuroDisease_subset.oxl" ).getFile () );
+		humanGraph = Parser.loadOXL (  CyjsJsonExportTest.class.getResource ( "MyNetwork_NeuroDisease_subset.oxl" ).getFile () );
 		
 		// Enable to see a graph dump
 		//ONDEXGraphOperations.dumpAll ( humanGraph );
@@ -91,7 +89,7 @@ public class CyjsJsonExportTest
 			
 	}
 	
-	public void assertJsonExport (String errorMessage, String json, String jsonPath, String param,
+	private void assertJsonExport (String errorMessage, String json, String jsonPath, String param,
 			String expectedValue ) {
 		assertEquals ( errorMessage, 
 				( ( ( Map<String, Object> ) ( ( JSONArray ) JsonPath.parse ( json ).read ( jsonPath ) ).get ( 0 ) ).get ( param ) ),
