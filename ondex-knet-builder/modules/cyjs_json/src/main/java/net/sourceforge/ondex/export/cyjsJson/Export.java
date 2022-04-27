@@ -2,6 +2,8 @@ package net.sourceforge.ondex.export.cyjsJson;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,11 +73,7 @@ public class Export extends ONDEXExport {
 		JSONArray conceptNodes = new JSONArray ();
 		JSONArray relationEdges = new JSONArray ();
 
-		// Set output File location for writing network graph JSON data & other graph
-		// metadata to.
-		FileWriter graphFileWriter = getOutputFileForGraphJson ();
-
-		try {
+	
 			// Retrieving all the concepts & relations from the graph (the ONDEXGraph
 			// object).
 			if (graph != null) {
@@ -93,10 +91,22 @@ public class Export extends ONDEXExport {
 			// Generate necessary edge(s) data in JSON format for CytoscapeJS graph.
 			graphJson = getEdgesJsonData ( graphJson, relationEdges );
 
+		// OK, let's start write everything
+		//
+		
+		String outputFileName = ( ( String ) args.getUniqueValue(FileArgumentDefinition.EXPORT_FILE ) ).trim ();
+
+		try ( Writer graphFileWriter = new FileWriter ( outputFileName ))
+		{
 			// Write graph JSON & metadata JSON to output file.
 			writeJSONToFile ( graphJson, allDataJson, graphFileWriter );
-		} catch ( Exception ex ) {
-			throw new IOException ( "Failed to write Attribute values", ex );
+		} 
+		catch ( IOException ex )
+		{
+			throw new IOException ( 
+				"Error while exporting CytoscapeJS to: \"" + 
+				Path.of ( outputFileName ).toAbsolutePath () + "\": " + ex.getMessage (), ex 
+			);
 		}
 
 		System.out.println ( "JSON export completed..." );
@@ -148,26 +158,6 @@ public class Export extends ONDEXExport {
     public String[] requiresValidators() {
      return new String[0];
     }
-
-	/**
-	 * Returns an Output Stream (i.e., output file location to write the JSON data
-	 * out to).
-	 * 
-	 * @param name output json file name
-	 * @return FileWriter object for destination (output) file.
-	 */
-	private FileWriter getOutputFileForGraphJson () {
-
-		FileWriter fw = null;
-		try {
-			// Get output (export) file name from arguments.
-			String outputFileName = ( ( String ) args.getUniqueValue(FileArgumentDefinition.EXPORT_FILE ) ).trim ();
-			fw = new FileWriter ( outputFileName );
-		} catch ( Exception e ) {
-			e.printStackTrace ();
-		}
-		return fw;
-	}
 
     /** 
      * Generate node(s) data in JSON format.
@@ -265,7 +255,9 @@ public class Export extends ONDEXExport {
      * @param graphJson
      *            JSONObject containing the node (concept) & edge (relation) information used by CytoscapeJS.
      */
-	private void writeJSONToFile (JSONObject graphJson, JSONObject metadataJson, FileWriter outputFile ) {
+	private void writeJSONToFile (JSONObject graphJson, JSONObject metadataJson, Writer outputFile ) 
+		throws IOException
+	{
 
 		String graphData = graphJson.toString ();
 		String allData = metadataJson.toString ();
@@ -274,28 +266,21 @@ public class Export extends ONDEXExport {
 		graphData = formatJson ( graphData );
 		allData = formatJson ( allData );
 
-		// Displaying contents of the generated JSON object.
+		// DEBUG
 		// System.out.println("graphJson= "+ graphData +"\n \n"+ "metadataJson= "+ allData);
-		try {
-			// Write the JSON object to be used for displaying the nodes & edges using
-			// CytoscapeJS.
-			outputFile.write ( "var graphJSON= " );
-			outputFile.write ( /* graphJson.toString() */graphData ); // write necessary concepts & relations data to file
-			outputFile.write ( ";" );
 
-			// Write all graph data (including metadata, concepts & relations' information).
-			outputFile.write ( "\n" );
-			outputFile.write ( "\n" );
-			outputFile.write ( "var allGraphData= " );
-			outputFile.write ( /* allDataJson.toString() */allData ); // write all graph data to file
-			outputFile.write ( ";" );
+		// Write the JSON object to be used for displaying the nodes & edges using
+		// CytoscapeJS.
+		outputFile.write ( "var graphJSON= " );
+		outputFile.write ( /* graphJson.toString() */graphData ); // write necessary concepts & relations data to file
+		outputFile.write ( ";" );
 
-			outputFile.flush ();
-			outputFile.close ();
-		} catch ( IOException e ) {
-			e.printStackTrace ();
-		}
-
+		// Write all graph data (including metadata, concepts & relations' information).
+		outputFile.write ( "\n" );
+		outputFile.write ( "\n" );
+		outputFile.write ( "var allGraphData= " );
+		outputFile.write ( /* allDataJson.toString() */allData ); // write all graph data to file
+		outputFile.write ( ";" );
 	}
 
 	/**
