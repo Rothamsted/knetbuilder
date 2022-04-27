@@ -44,7 +44,7 @@ public class CyjsJsonExportTest
 	public static void prepareExport()
 	{
 		// human dataset 
-		humanGraph = Parser.loadOXL (  CyjsJsonExportTest.class.getResource ( "MyNetwork_NeuroDisease_subset.oxl" ).getFile () );
+		humanGraph = Parser.loadOXL (  CyjsJsonExportTest.class.getClassLoader ().getResource ( "MyNetwork_NeuroDisease_subset.oxl" ).getFile () );
 		
 		// Enable to see a graph dump
 		//ONDEXGraphOperations.dumpAll ( humanGraph );
