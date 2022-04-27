@@ -25,6 +25,7 @@ import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.GraphLabelsUtils;
@@ -36,11 +37,13 @@ import net.sourceforge.ondex.export.ONDEXExport;
  * important Item Info. The concepts and relations' information used for generating the Network Graph is 
  * stored in a 'graphJSON' object & all the metadata is stored in an 'allGraphData' object, both of 
  * which are generated timestamped 'result' JSON file.
- * @author Ajit Singh
+ * 
+ * @author Ajit Singh, reviewed by Jojic Unnunni, Marco Brandizi 
  * 
  */
 @SuppressWarnings("unchecked")
 @Status(description = "stable", status = StatusType.STABLE)
+// TODO: review
 @Authors(authors = { "Ajit Singh" }, emails = { "ajit.singh at rothamsted.ac.uk" })
 @Custodians(custodians = { "Ajit Singh" }, emails = { "ajit.singh at rothamsted.ac.uk" })
 public class Export extends ONDEXExport {
@@ -49,8 +52,21 @@ public class Export extends ONDEXExport {
      * Builds a file with Ondex Graph data exported to JSON variables for concepts (nodes), relations (edges)
      * and other Item Info.
      * 
-     * @throws IOException
-     * @throws InvalidPluginArgumentException
+     * <b>NOTE</b>: the output format is a JSON-like file, having this structure:
+     * <pre>
+     *   var graphJSON= { "nodes": [ {CytoscapeJS Node}, ... ], "edges": [ {CytoscapeJS edge}, ... ] };
+     *   var allGraphData= { "ondexmetadata": { "concepts": [...], "relations": [...], <graph descriptors> };
+     * </pre> 
+     *
+     * The first variable is what Cytoscape uses for visualisation and contains equivalents of the Ondex Graph 
+     * elements plus rendering aspects (eg, colours, node symbols)
+     * 
+     * The second variable reflects the graph in its structure only (concepts, relations and aspects such as
+     * graph name or element counts).
+     * 
+     * As you see, "ondexmetadata" is a totally misleading name, it's not at all about {@link ONDEXGraph#getMetaData()}. 
+     * Indeed, the latter are not exported :-(
+     *
      */
 	@Override
 	public void start () throws IOException, InvalidPluginArgumentException {
@@ -59,19 +75,10 @@ public class Export extends ONDEXExport {
 	    throw new NullPointerException( "CytoscapeJS Exporter Error: Ondex graph not set for export");
 		
 		fireEventOccurred (new GeneralOutputEvent ( "Ready to Export.", "[Export - start]" ) );
-
-		// A jsimple-json object (JSONObject) for the node, edge data for cytoscapeJS.
-		JSONObject graphJson = new JSONObject ();
-
-		/*
-		 * Another jsimple-json object (JSONObject) to store all graph data (including
-		 * metadata, concepts & relations' information).
-		 */
-		JSONObject allDataJson = new JSONObject ();
-
+		
 		// JSONArray objects to store all the concepts (nodes) & relations (edges) to.
-		JSONArray conceptNodes = new JSONArray ();
-		JSONArray relationEdges = new JSONArray ();
+		JSONArray conceptNodesJson = new JSONArray ();
+		JSONArray relationEdgesJson = new JSONArray ();
 
 	
 		// Retrieving all the concepts & relations from the graph (the ONDEXGraph
@@ -81,17 +88,20 @@ public class Export extends ONDEXExport {
 			relations = graph.getRelations ();
 		}
 
-		// Generate all graph metadata in JSON format.
+		// The ondex graph, only its topology
 		JSONObject allGraphDataJson = getJsonMetadata ();
+		JSONObject allDataJson = new JSONObject ();
 		allDataJson.put ( JSONAttributeNames.ONDEXMETADATA, allGraphDataJson );
 
-		// Generate necessary node(s) data in JSON format for CytoscapeJS graph.
-		graphJson = getNodesJsonData ( graphJson, conceptNodes, relations );
+		/**
+		 * The graph as needed by CytoscapeJS (see class description above)
+		 * This includes topology and rendering info
+		 */
+		JSONObject graphJson = new JSONObject ();
+		getNodesJsonData ( graphJson, conceptNodesJson, relations );
+		getEdgesJsonData ( graphJson, relationEdgesJson ); // relations exported as edges
 
-		// Generate necessary edge(s) data in JSON format for CytoscapeJS graph.
-		graphJson = getEdgesJsonData ( graphJson, relationEdges );
-
-			
+		
 		// OK, let's start write everything
 		//
 		String outputFileName = ( ( String ) args.getUniqueValue(FileArgumentDefinition.EXPORT_FILE ) ).trim ();
@@ -160,14 +170,14 @@ public class Export extends ONDEXExport {
     }
 
     /** 
-     * Generate node(s) data in JSON format.
-     * @param conceptNodes
+     * Generate node(s) data in JSON format for CytoscapeJS, see the class description above.
+     * @param conceptNodesJson
      *            JSONArray object to store the required node information (in various individual JSONObjects).
      * @param graphJson
      *            JSONObject to put the JSONArray in.
      * @return A JSONObject containing information about all the nodes.
      */
-    private JSONObject getNodesJsonData(JSONObject graphJson, JSONArray conceptNodes, Set<ONDEXRelation> allRelations) {
+    private void getNodesJsonData(JSONObject graphJson, JSONArray conceptNodesJson, Set<ONDEXRelation> allRelations) {
      /** Pass a Set containing all the Concepts that are used as source or target in a Relation. 
       * This is used to toggle the default visibility of a particular Concept. */
      Set<Integer> conceptsUsedInRelations= new HashSet<Integer>();
@@ -179,24 +189,23 @@ public class Export extends ONDEXExport {
      AddConceptNodeInfo anci= new AddConceptNodeInfo();
      for(ONDEXConcept con : concepts) {
          // generate, return & store concept/ node data.
-         conceptNodes.add(anci.getNodeJson(con, conceptsUsedInRelations)); // add the returned node to the JSONArray.
+         conceptNodesJson.add(anci.getNodeJson(con, conceptsUsedInRelations)); // add the returned node to the JSONArray.
         }
      System.out.println("\n");
 
-     graphJson.put("nodes", conceptNodes); // add the "nodes" array to the JSON object.
-
-     return graphJson;
+     graphJson.put("nodes", conceptNodesJson); // add the "nodes" array to the JSON object.
     }
 
     /** 
-     * Generate edge(s) data in JSON format.
+     * Generate edge(s) data in JSON format for CytoscapeJS, see the class description above.
+     * 
      * @param relationEdges
      *            JSONArray object to store the required edge information (in various individual JSONObjects).
      * @param graphJson
      *            JSONObject to put the JSONArray in.
      * @return A JSONObject containing information about all the edges.
      */
-    private JSONObject getEdgesJsonData(JSONObject graphJson, JSONArray relationEdges) {
+    private void getEdgesJsonData(JSONObject graphJson, JSONArray relationEdges) {
 
      AddRelationEdgeInfo arei= new AddRelationEdgeInfo();
      for(ONDEXRelation rel : relations) {
@@ -204,15 +213,11 @@ public class Export extends ONDEXExport {
          relationEdges.add(arei.getEdgeJson(rel)); // add the returned edge to the JSONArray.
         }
      graphJson.put("edges", relationEdges); // add the "edges" array to the JSON object.
-
-     return graphJson;
     }
 
 	/**
-	 * Generate metadata object in JSON format.
+	 * Generate metadata object in JSON format. See the class description
 	 * 
-	 * @return A JSONObject containing information about all concepts, relations &
-	 *         metadata.
 	 */
 	private JSONObject getJsonMetadata () {
 		JSONObject mdJson = new JSONObject ();
