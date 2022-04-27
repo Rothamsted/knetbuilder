@@ -103,21 +103,21 @@ public class CyjsJsonExportTest
 		String metaData = JsonPath.parse ( json.get ( 2 ) ).json ().toString ();
 		String metaJson = metaData.substring ( metaData.indexOf ( "{" ), metaData.length () );
 		
+		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
 		ONDEXConcept nonGeneConcept = humanGraph.getConcepts ().stream ().filter ( concept -> concept.getId ()== 48391 ).findAny ().get ();
 		assertJsonExport ( "Concept Name in Non Gene don't match", metaJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept ) );
 		
+		// Pick some gene node from JSON and verify the same
 		ONDEXConcept geneConcept = humanGraph.getConcepts ().stream ().filter ( concept -> concept.getId () == 48320 ).findAny ().get ();
 		assertJsonExport ( "Concept Name in Gene don't match", metaJson, GenePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept ) );
-		
-		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
-		// Pick some gene node from JSON and verify the same
 	}
 	
 	private void assertJsonExport (String errorMessage, String json, String jsonPath, String param,
 			String expectedValue ) {
 		assertEquals ( errorMessage, 
-				( ( ( Map<String, Object> ) ( ( JSONArray ) JsonPath.parse ( json ).read ( jsonPath ) ).get ( 0 ) ).get ( param ) ),
-				expectedValue );
+			expectedValue,
+			( ( ( Map<String, Object> ) ( ( JSONArray ) JsonPath.parse ( json ).read ( jsonPath ) ).get ( 0 ) ).get ( param ) )
+		);
 	}
 	
 	
