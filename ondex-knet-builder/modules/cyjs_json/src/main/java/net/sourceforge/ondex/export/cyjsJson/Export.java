@@ -48,9 +48,6 @@ public class Export extends ONDEXExport {
     // current version of the cytoscapeJS JSON Exporter Plugin.
     public static final String version = "1.0";
 
-    // line delimiter
-    private final String newline= "\n";
-
     /**
      * Builds a file with Ondex Graph data exported to JSON variables for concepts (nodes), relations (edges)
      * and other Item Info.
@@ -307,8 +304,8 @@ public class Export extends ONDEXExport {
 			outputFile.write ( ";" );
 
 			// Write all graph data (including metadata, concepts & relations' information).
-			outputFile.write ( newline );
-			outputFile.write ( newline );
+			outputFile.write ( "\n" );
+			outputFile.write ( "\n" );
 			outputFile.write ( "var allGraphData= " );
 			outputFile.write ( /* allDataJson.toString() */allData ); // write all graph data to file
 			outputFile.write ( ";" );
