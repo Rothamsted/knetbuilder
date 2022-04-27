@@ -12,6 +12,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import JSON
+
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -44,7 +46,8 @@ public class CyjsJsonExportTest
 			Export.class, 
 			humanGraph,
 			Map.of ( FileArgumentDefinition.EXPORT_FILE, humanJsPath )
-		);		
+		);
+		
 	}
 	
 	
@@ -63,6 +66,16 @@ public class CyjsJsonExportTest
 	{
 		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
 		// Pick some gene node from JSON and verify the same
+	}
+	
+	
+	/**
+	 * Foo test. TODO: to be removed later
+	 */
+	@Test
+	public void testJSONObjects ()
+	{
+		JSON
 	}
 	
 	
