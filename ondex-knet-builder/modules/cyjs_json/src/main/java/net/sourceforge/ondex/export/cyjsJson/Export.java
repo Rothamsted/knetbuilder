@@ -74,26 +74,26 @@ public class Export extends ONDEXExport {
 		JSONArray relationEdges = new JSONArray ();
 
 	
-			// Retrieving all the concepts & relations from the graph (the ONDEXGraph
-			// object).
-			if (graph != null) {
-				concepts = graph.getConcepts ();
-				relations = graph.getRelations ();
-			}
+		// Retrieving all the concepts & relations from the graph (the ONDEXGraph
+		// object).
+		if (graph != null) {
+			concepts = graph.getConcepts ();
+			relations = graph.getRelations ();
+		}
 
-			// Generate all graph metadata in JSON format.
-			JSONObject allGraphDataJson = getJsonMetadata ();
-			allDataJson.put ( JSONAttributeNames.ONDEXMETADATA, allGraphDataJson );
+		// Generate all graph metadata in JSON format.
+		JSONObject allGraphDataJson = getJsonMetadata ();
+		allDataJson.put ( JSONAttributeNames.ONDEXMETADATA, allGraphDataJson );
 
-			// Generate necessary node(s) data in JSON format for CytoscapeJS graph.
-			graphJson = getNodesJsonData ( graphJson, conceptNodes, relations );
+		// Generate necessary node(s) data in JSON format for CytoscapeJS graph.
+		graphJson = getNodesJsonData ( graphJson, conceptNodes, relations );
 
-			// Generate necessary edge(s) data in JSON format for CytoscapeJS graph.
-			graphJson = getEdgesJsonData ( graphJson, relationEdges );
+		// Generate necessary edge(s) data in JSON format for CytoscapeJS graph.
+		graphJson = getEdgesJsonData ( graphJson, relationEdges );
 
+			
 		// OK, let's start write everything
 		//
-		
 		String outputFileName = ( ( String ) args.getUniqueValue(FileArgumentDefinition.EXPORT_FILE ) ).trim ();
 
 		try ( Writer graphFileWriter = new FileWriter ( outputFileName ))
