@@ -53,8 +53,9 @@ public class Export extends ONDEXExport {
 	@Override
 	public void start () throws IOException, InvalidPluginArgumentException {
 
-		setOptionalArguments ();
-
+		if (graph == null && (concepts == null || relations == null))
+	    throw new NullPointerException( "CytoscapeJS Exporter Error: Ondex graph not set for export");
+		
 		fireEventOccurred (new GeneralOutputEvent ( "Ready to Export.", "[Export - start]" ) );
 
 		// A jsimple-json object (JSONObject) for the node, edge data for cytoscapeJS.
@@ -100,16 +101,6 @@ public class Export extends ONDEXExport {
 
 		System.out.println ( "JSON export completed..." );
 		fireEventOccurred (new GeneralOutputEvent ( "Finished JSON Export.", "[Export - start]" ) );
-	}
-
-	/**
-	 * Builds a Document according to specifications in the ExportArguments
-	 */
-	private void setOptionalArguments() throws IOException, InvalidPluginArgumentException {
-
-		if (graph == null && (concepts == null || relations == null))
-		    throw new NullPointerException("Error: Ondex graph not set for export");
-
 	}
 
     /**
