@@ -88,14 +88,7 @@ public class CyjsJsonExportTest
 		assertJsonExport( "TaxId don't match", metaJson, attributePath, "value", "9606" );
 			
 	}
-	
-	private void assertJsonExport (String errorMessage, String json, String jsonPath, String param,
-			String expectedValue ) {
-		assertEquals ( errorMessage, 
-				( ( ( Map<String, Object> ) ( ( JSONArray ) JsonPath.parse ( json ).read ( jsonPath ) ).get ( 0 ) ).get ( param ) ),
-				expectedValue );
-	}
-	
+		
 	
 	@Test
 	public void testBestLabel () throws IOException
@@ -118,6 +111,13 @@ public class CyjsJsonExportTest
 		
 		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
 		// Pick some gene node from JSON and verify the same
+	}
+	
+	private void assertJsonExport (String errorMessage, String json, String jsonPath, String param,
+			String expectedValue ) {
+		assertEquals ( errorMessage, 
+				( ( ( Map<String, Object> ) ( ( JSONArray ) JsonPath.parse ( json ).read ( jsonPath ) ).get ( 0 ) ).get ( param ) ),
+				expectedValue );
 	}
 	
 	
