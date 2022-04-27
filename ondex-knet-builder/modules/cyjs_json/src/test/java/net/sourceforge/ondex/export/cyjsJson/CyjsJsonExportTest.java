@@ -1,23 +1,33 @@
 package net.sourceforge.ondex.export.cyjsJson;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.jayway.jsonpath.JsonPath;
+
+import net.minidev.json.JSONArray;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.core.util.GraphLabelsUtils;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
 
@@ -26,50 +36,91 @@ import net.sourceforge.ondex.utils.OndexPluginUtils;
  * 
  * @author Ajit Singh
  */
+@SuppressWarnings({"unchecked" })
 public class CyjsJsonExportTest
 {
 	private static ONDEXGraph humanGraph;
-	private static String humanJsPath = Path.of ( "target", "cy-export-basics-test.json" ).toAbsolutePath ().toString ();
+	private static Path humanJsPath = Path.of ( "target", "cy-export-basics-test.json" ).toAbsolutePath ();
 
 	@BeforeClass
 	public static void prepareExport()
 	{
-		// human dataset
-		humanGraph = Parser.loadOXL ( CyjsJsonExportTest.class.getResource ( "MyNetwork_NeuroDisease_subset.oxl" ).getFile () );
+		// human dataset 
+		humanGraph = Parser.loadOXL (  CyjsJsonExportTest.class.getClassLoader ().getResource ( "MyNetwork_NeuroDisease_subset.oxl" ).getFile () );
 		
 		// Enable to see a graph dump
-		// ONDEXGraphOperations.dumpAll ( humanGraph );
+		//ONDEXGraphOperations.dumpAll ( humanGraph );
 		
 		OndexPluginUtils.runPlugin (
 			Export.class, 
 			humanGraph,
-			Map.of ( FileArgumentDefinition.EXPORT_FILE, humanJsPath )
-		);
+			Map.of ( FileArgumentDefinition.EXPORT_FILE, humanJsPath.toString() )
+		);		
+	}
+	
+	
+	
+	@Test
+	public void testBasics () throws IOException
+	{
 		
+		String idPath = "[?(@['id'] == 48320)]";
+		String nodePath = "$.nodes.." + idPath;
+		String metaPath = "$.ondexmetadata.." + idPath;
+		String prefferedPath = "$.ondexmetadata.concepts." + idPath + ".conames.[?(@['name'] == 'PRNP')]";
+		String attributePath = "$.ondexmetadata.concepts." + idPath + ".attributes.[?(@['attrname'] == 'TAXID')]";
+		
+		assertTrue ( "humanJsPath not created!", new File ( humanJsPath.toString() ).exists () );
+		List<String> json = Files.readAllLines ( humanJsPath );
+
+		String nodesData = JsonPath.parse ( json.get ( 0 ) ).json ().toString ();
+		String metaData = JsonPath.parse ( json.get ( 2 ) ).json ().toString ();
+
+		String nodeJson = nodesData.substring ( nodesData.indexOf ( "{" ), nodesData.length () );
+		String metaJson = metaData.substring ( metaData.indexOf ( "{" ), metaData.length () );
+
+		assertJsonExport ( "Concept Type don't match", nodeJson, nodePath, "conceptType", "Gene" );
+		assertJsonExport ( "DisplayValue don't match", nodeJson, nodePath, "displayValue", "PRNP" );
+		
+		assertJsonExport ( "OfType don't match", metaJson, metaPath, "ofType", "Gene" );
+		assertJsonExport ( "Value don't match", metaJson, metaPath, "value", "PRNP" );
+		assertJsonExport ( "ElementOf don't match", metaJson, metaPath, "elementOf", "ENSEMBL" );
+		
+		assertJsonExport( "IsPreferred is false", metaJson, prefferedPath, "isPreferred", "true" );
+		assertJsonExport( "TaxId don't match", metaJson, attributePath, "value", "9606" );
+			
+	}
+	
+	public void assertJsonExport (String errorMessage, String json, String jsonPath, String param,
+			String expectedValue ) {
+		assertEquals ( errorMessage, 
+				( ( ( Map<String, Object> ) ( ( JSONArray ) JsonPath.parse ( json ).read ( jsonPath ) ).get ( 0 ) ).get ( param ) ),
+				expectedValue );
 	}
 	
 	
 	@Test
-	public void testBasics ()
+	public void testBestLabel () throws IOException
 	{
-		// TODO: test humanJsPath was created
-		// TODO: pick some concept from humanGraph (inspect it via dumpAll() above, or use the Ondex desktop application)
-		// and verify it is in the resulting JSON. Possibly, use JSONPath (https://www.baeldung.com/guide-to-jayway-jsonpath)
-		// if Map-based methods in JSONObject and JSONArray aren't enough		
-	}
-	
-	
-	@Test
-	public void testBestLabel ()
-	{
+		
+		String nonGenePath = "$.ondexmetadata.concepts.[?(@['ofType'] != 'Gene')].[?(@['id'] == 48391)]";
+		String GenePath = "$.ondexmetadata.concepts.[?(@['ofType'] == 'Gene')].[?(@['id'] == 48320)]";
+		
+		
+		List<String> json = Files.readAllLines ( humanJsPath );
+
+		String metaData = JsonPath.parse ( json.get ( 2 ) ).json ().toString ();
+		String metaJson = metaData.substring ( metaData.indexOf ( "{" ), metaData.length () );
+		
+		ONDEXConcept nonGeneConcept = humanGraph.getConcepts ().stream ().filter ( concept -> concept.getId ()== 48391 ).findAny ().get ();
+		assertJsonExport ( "Concept Name in Non Gene don't match", metaJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept ) );
+		
+		ONDEXConcept geneConcept = humanGraph.getConcepts ().stream ().filter ( concept -> concept.getId () == 48320 ).findAny ().get ();
+		assertJsonExport ( "Concept Name in Gene don't match", metaJson, GenePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept ) );
+		
 		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
 		// Pick some gene node from JSON and verify the same
 	}
-	
-	
-	/**
-	 * Foo test. TODO: to be removed later
-	 */
 	
 	
 	@Test

@@ -25,7 +25,6 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.Unit;
 import net.sourceforge.ondex.core.util.GraphLabelsUtils;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
@@ -38,6 +37,7 @@ import net.sourceforge.ondex.export.ONDEXExport;
  * @author Ajit Singh
  * @version 14/10/2015
  */
+@SuppressWarnings("unchecked")
 @Status(description = "stable", status = StatusType.STABLE)
 @Authors(authors = { "Ajit Singh" }, emails = { "ajit.singh at rothamsted.ac.uk" })
 @Custodians(custodians = { "Ajit Singh" }, emails = { "ajit.singh at rothamsted.ac.uk" })
@@ -58,55 +58,57 @@ public class Export extends ONDEXExport {
      * @throws IOException
      * @throws InvalidPluginArgumentException
      */
-    @Override
-    public void start() throws IOException, InvalidPluginArgumentException {
+	@Override
+	public void start () throws IOException, InvalidPluginArgumentException {
 
-     setOptionalArguments();
+		setOptionalArguments ();
 
-     fireEventOccurred(new GeneralOutputEvent("Ready to Export.",
-             "[Export - start]"));
+		fireEventOccurred (new GeneralOutputEvent ( "Ready to Export.", "[Export - start]" ) );
 
-     // A jsimple-json object (JSONObject) for the node, edge data for cytoscapeJS.
-     JSONObject graphJson= new JSONObject();
+		// A jsimple-json object (JSONObject) for the node, edge data for cytoscapeJS.
+		JSONObject graphJson = new JSONObject ();
 
-     /* Another jsimple-json object (JSONObject) to store all graph data (including metadata, concepts & 
-      * relations' information). */
-     JSONObject allDataJson= new JSONObject();
+		/*
+		 * Another jsimple-json object (JSONObject) to store all graph data (including
+		 * metadata, concepts & relations' information).
+		 */
+		JSONObject allDataJson = new JSONObject ();
 
-     // JSONArray objects to store all the ceoncepts (nodes) & relations (edges) to.
-     JSONArray conceptNodes= new JSONArray();
-     JSONArray relationEdges= new JSONArray();
+		// JSONArray objects to store all the ceoncepts (nodes) & relations (edges) to.
+		JSONArray conceptNodes = new JSONArray ();
+		JSONArray relationEdges = new JSONArray ();
 
-     // Set output File location for writing network graph JSON data & other graph metadata to.
-     graphFileWriter= getOutputFileForGraphJson();
+		// Set output File location for writing network graph JSON data & other graph
+		// metadata to.
+		graphFileWriter = getOutputFileForGraphJson ();
 
-     try {
- 	  // Retrieving all the concepts & relations from the graph (the ONDEXGraph object).
- 	  if(graph != null) {
-	     concepts= graph.getConcepts();
-	     relations= graph.getRelations();
-	    }
+		try {
+			// Retrieving all the concepts & relations from the graph (the ONDEXGraph
+			// object).
+			if (graph != null) {
+				concepts = graph.getConcepts ();
+				relations = graph.getRelations ();
+			}
 
- 	  // Generate all graph metadata in JSON format.
-          JSONObject allGraphDataJson= getJsonMetadata();
-          allDataJson.put(JSONAttributeNames.ONDEXMETADATA, allGraphDataJson);
+			// Generate all graph metadata in JSON format.
+			JSONObject allGraphDataJson = getJsonMetadata ();
+			allDataJson.put ( JSONAttributeNames.ONDEXMETADATA, allGraphDataJson );
 
-	  // Generate necessary node(s) data in JSON format for CytoscapeJS graph.
-          graphJson= getNodesJsonData(graphJson, conceptNodes, relations);
+			// Generate necessary node(s) data in JSON format for CytoscapeJS graph.
+			graphJson = getNodesJsonData ( graphJson, conceptNodes, relations );
 
-	  // Generate necessary edge(s) data in JSON format for CytoscapeJS graph.
-          graphJson= getEdgesJsonData(graphJson, relationEdges);
-         
-          // Write graph JSON & metadata JSON to output file.
-          writeJSONToFile(graphJson, allDataJson, graphFileWriter);
- 	 }
-     catch(Exception ex) {
-           throw new IOException("Failed to write Attribute values", ex);
-	  }
-     
-     System.out.println("JSON export completed...");
-     fireEventOccurred(new GeneralOutputEvent("Finished JSON Export.", "[Export - start]"));
-    }
+			// Generate necessary edge(s) data in JSON format for CytoscapeJS graph.
+			graphJson = getEdgesJsonData ( graphJson, relationEdges );
+
+			// Write graph JSON & metadata JSON to output file.
+			writeJSONToFile ( graphJson, allDataJson, graphFileWriter );
+		} catch ( Exception ex ) {
+			throw new IOException ( "Failed to write Attribute values", ex );
+		}
+
+		System.out.println ( "JSON export completed..." );
+		fireEventOccurred (new GeneralOutputEvent ( "Finished JSON Export.", "[Export - start]" ) );
+	}
 
 	/**
 	 * Builds a Document according to specifications in the ExportArguments
@@ -170,25 +172,25 @@ public class Export extends ONDEXExport {
      return new String[0];
     }
 
-    /**
-     * Returns an Output Stream (i.e., output file location to write the JSON data out to).
-     * @param name
-     *            output json file name
-     * @return FileWriter object for destination (output) file.
-     */
-    private FileWriter getOutputFileForGraphJson() { 
+	/**
+	 * Returns an Output Stream (i.e., output file location to write the JSON data
+	 * out to).
+	 * 
+	 * @param name output json file name
+	 * @return FileWriter object for destination (output) file.
+	 */
+	private FileWriter getOutputFileForGraphJson () {
 
-     FileWriter fw= null;
-     try {
-          // Get output (export) file name from arguments.
-          String outputFileName= ((String) args.getUniqueValue(FileArgumentDefinition.EXPORT_FILE)).trim();
-          fw= new FileWriter(outputFileName);
-         }
-     catch(Exception e) {
-           e.printStackTrace();
-          }
-     return fw;
-    }
+		FileWriter fw = null;
+		try {
+			// Get output (export) file name from arguments.
+			String outputFileName = ( ( String ) args.getUniqueValue(FileArgumentDefinition.EXPORT_FILE ) ).trim ();
+			fw = new FileWriter ( outputFileName );
+		} catch ( Exception e ) {
+			e.printStackTrace ();
+		}
+		return fw;
+	}
 
     /** 
      * Generate node(s) data in JSON format.
@@ -239,41 +241,43 @@ public class Export extends ONDEXExport {
      return graphJson;
     }
 
-    /** 
-     * Generate metadata object in JSON format.
-     * @return A JSONObject containing information about all concepts, relations & metadata.
-     */
-    private JSONObject getJsonMetadata() {
-     JSONObject mdJson= new JSONObject();
+	/**
+	 * Generate metadata object in JSON format.
+	 * 
+	 * @return A JSONObject containing information about all concepts, relations &
+	 *         metadata.
+	 */
+	private JSONObject getJsonMetadata () {
+		JSONObject mdJson = new JSONObject ();
 
-     // Write graph name in the metadata (allGraphDataJson) JSONObject.
-     mdJson.put(JSONAttributeNames.GRAPHNAME, graph.getName()); // graph name
+		// Write graph name in the metadata (allGraphDataJson) JSONObject.
+		mdJson.put ( JSONAttributeNames.GRAPHNAME, graph.getName () ); // graph name
 
-     // Write JSON Exporter Plugin version in the JSONObject.
-     mdJson.put(JSONAttributeNames.VERSION, version);
+		// Write JSON Exporter Plugin version in the JSONObject.
+		mdJson.put ( JSONAttributeNames.VERSION, version );
 
-     // Write the number of concepts in the JSONObject.
-     mdJson.put(JSONAttributeNames.NUMBERCONCEPTS, concepts.size());
+		// Write the number of concepts in the JSONObject.
+		mdJson.put ( JSONAttributeNames.NUMBERCONCEPTS, concepts.size () );
 
-     // Write the number of relations in the JSONObject.
-     mdJson.put(JSONAttributeNames.NUMBERRELATIONS, relations.size());
+		// Write the number of relations in the JSONObject.
+		mdJson.put ( JSONAttributeNames.NUMBERRELATIONS, relations.size () );
 
-     // Build JSON for all the Concepts.
-     JSONArray conceptsJsonArray= new JSONArray();
-     for(ONDEXConcept con : concepts) {
-         conceptsJsonArray.add(buildConcept(con));
-        }
-     mdJson.put(JSONAttributeNames.CONCEPTS, conceptsJsonArray);
+		// Build JSON for all the Concepts.
+		JSONArray conceptsJsonArray = new JSONArray ();
+		for ( ONDEXConcept con : concepts ) {
+			conceptsJsonArray.add ( buildConcept ( con ) );
+		}
+		mdJson.put ( JSONAttributeNames.CONCEPTS, conceptsJsonArray );
 
-     // Build JSON for all the Relations.
-     JSONArray relationsJsonArray= new JSONArray();
-     for(ONDEXRelation rel : relations) {
-         relationsJsonArray.add(buildRelation(rel));
-        }
-     mdJson.put(JSONAttributeNames.RELATIONS, relationsJsonArray);
+		// Build JSON for all the Relations.
+		JSONArray relationsJsonArray = new JSONArray ();
+		for ( ONDEXRelation rel : relations ) {
+			relationsJsonArray.add ( buildRelation ( rel ) );
+		}
+		mdJson.put ( JSONAttributeNames.RELATIONS, relationsJsonArray );
 
-     return mdJson;
-    }
+		return mdJson;
+	}
 
     /** 
      * Write to output file.
@@ -284,130 +288,94 @@ public class Export extends ONDEXExport {
      * @param graphJson
      *            JSONObject containing the node (concept) & edge (relation) information used by CytoscapeJS.
      */
-   private void writeJSONToFile(JSONObject graphJson, JSONObject metadataJson, FileWriter outputFile) {
+	private void writeJSONToFile (JSONObject graphJson, JSONObject metadataJson, FileWriter outputFile ) {
 
-    String graphData= graphJson.toString();
-    String allData= metadataJson.toString();
+		String graphData = graphJson.toString ();
+		String allData = metadataJson.toString ();
 
-    // Format the created JSON String objects.
-    graphData= formatJson(graphData);
-    allData= formatJson(allData);
+		// Format the created JSON String objects.
+		graphData = formatJson ( graphData );
+		allData = formatJson ( allData );
 
-    // Displaying contents of the generated JSON object.
-//    System.out.println("graphJson= "+ graphData +"\n \n"+ "metadataJson= "+ allData);
-    try {
-         // Write the JSON object to be used for displaying the nodes & edges using CytoscapeJS.
-         outputFile.write("var graphJSON= ");
-         outputFile.write(/*graphJson.toString()*/graphData); // write necessary concepts & relations data to file
-         outputFile.write(";");
+		// Displaying contents of the generated JSON object.
+		// System.out.println("graphJson= "+ graphData +"\n \n"+ "metadataJson= "+ allData);
+		try {
+			// Write the JSON object to be used for displaying the nodes & edges using
+			// CytoscapeJS.
+			outputFile.write ( "var graphJSON= " );
+			outputFile.write ( /* graphJson.toString() */graphData ); // write necessary concepts & relations data to file
+			outputFile.write ( ";" );
 
-         // Write all graph data (including metadata, concepts & relations' information).
-         outputFile.write(newline);
-         outputFile.write(newline);
-         outputFile.write("var allGraphData= ");
-         outputFile.write(/*allDataJson.toString()*/allData); // write all graph data to file
-         outputFile.write(";");
+			// Write all graph data (including metadata, concepts & relations' information).
+			outputFile.write ( newline );
+			outputFile.write ( newline );
+			outputFile.write ( "var allGraphData= " );
+			outputFile.write ( /* allDataJson.toString() */allData ); // write all graph data to file
+			outputFile.write ( ";" );
 
-	 outputFile.flush();
-	 outputFile.close();
-        }
-    catch(IOException e) {
-	  e.printStackTrace();
-	 }
- 
-   }
-
-    /**
-     * Generate metadata for ONDEXConcept.
-     * @param con
-     *            An ONDEXConcept (from the Ondex API).
-     * @return JSONObject
-     *            JSONObject containing information about the Concept.
-     */
-	@SuppressWarnings("unchecked")
-	private JSONObject buildConcept(ONDEXConcept con) {
-		JSONObject conceptJson = new JSONObject();
-
-		conceptJson.put(JSONAttributeNames.ID, String.valueOf(con.getId())); // concept ID.
-		String conName = " ";
-		if (con.getConceptName() != null) {
-			if (con.getConceptName().getName() != null) {
-				conName = con.getConceptName().getName();
-			}
+			outputFile.flush ();
+			outputFile.close ();
+		} catch ( IOException e ) {
+			e.printStackTrace ();
 		}
+
+	}
+
+	/**
+	 * Generate metadata for ONDEXConcept.
+	 * 
+	 * @param con An ONDEXConcept (from the Ondex API).
+	 * @return JSONObject JSONObject containing information about the Concept.
+	 */
+	private JSONObject buildConcept ( ONDEXConcept con ) {
+		JSONObject conceptJson = new JSONObject ();
+
+		conceptJson.put ( JSONAttributeNames.ID, String.valueOf ( con.getId () ) ); // concept ID.
 
 		/*
 		 * Concept Type (details returned in another JSON object). Now, uses "ofType" as
 		 * key instead of "ConceptClasses" & "CC".
 		 */
-		String conceptType = buildConceptClass(con.getOfType());
+		String conceptType = buildConceptClass ( con.getOfType () );
 
-		/*
-		 * Fetch the Set of all concept names and retain only the preferred ones, to
-		 * later choose the "best" concept name to display from amongst them, for Genes.
-		 */
-		if (conceptType.equals(ConceptType.Gene.toString()) || conceptType.equals(ConceptType.Protein.toString())) {
-			// For Genes and Proteins.
-			// Get the shortest, preferred concept name for this Concept.
-			String shortest_coname = GraphLabelsUtils.getBestConceptLabel(con);
-			// Get the shortest, non-ambiguous concept accession for this Concept.
-			String shortest_acc = GraphLabelsUtils.getBestGeneAccession(con.getConceptAccessions());
-
-			if (!shortest_coname.equals(" ")) {
-				conName = shortest_coname; // use the shortest, preferred concept name.
-			} else {
-				if (!shortest_acc.equals(" ")) {
-					conName = shortest_acc; // use the shortest, non-ambiguous concept accession.
-				}
-			}
-		} else {
-			if (!getShortestPreferredConceptName(con.getConceptNames()).equals(" ")) {
-				conName = GraphLabelsUtils.getBestConceptLabel(con);
-			} else {
-				if (!getShortestNotAmbiguousConceptAccession(con.getConceptAccessions()).equals(" ")) {
-					conName = GraphLabelsUtils.getBestGeneAccession(con.getConceptAccessions());
-				}
-			}
-		}
-
-		conceptJson.put(JSONAttributeNames.VALUE, conName); // preferred concept name.
-		conceptJson.put(JSONAttributeNames.OFTYPE, conceptType);
-		conceptJson.put(JSONAttributeNames.PID, con.getPID());
-		conceptJson.put(JSONAttributeNames.ANNOTATION, con.getAnnotation().replaceAll("(\\r|\\n)", " "));
-		conceptJson.put(JSONAttributeNames.DESCRIPTION, con.getDescription());
+		conceptJson.put ( JSONAttributeNames.VALUE, GraphLabelsUtils.getBestConceptLabel ( con ) ); // preferred concept name.
+		conceptJson.put ( JSONAttributeNames.OFTYPE, conceptType );
+		conceptJson.put ( JSONAttributeNames.PID, con.getPID () );
+		conceptJson.put ( JSONAttributeNames.ANNOTATION, con.getAnnotation ().replaceAll ( "(\\r|\\n)", " " ) );
+		conceptJson.put ( JSONAttributeNames.DESCRIPTION, con.getDescription ());
 
 		/**
 		 * Element Of (parent Data Source details returned in another JSON object). Now,
 		 * uses "ElementOf" as key instead of "CVS" & "CV".
 		 */
-		conceptJson.put(JSONAttributeNames.ELEMENTOF, buildDataSource(con.getElementOf()));
+		conceptJson.put ( JSONAttributeNames.ELEMENTOF, buildDataSource ( con.getElementOf () ) );
 
 		// Evidence Types.
-		Set<EvidenceType> evidenceTypes = con.getEvidence();
-		JSONArray evidencesArray = new JSONArray(); // fetch array of concept attributes.
-		for (EvidenceType et : evidenceTypes) {
+		Set<EvidenceType> evidenceTypes = con.getEvidence ();
+		JSONArray evidencesArray = new JSONArray (); // fetch array of concept attributes.
+		for ( EvidenceType et : evidenceTypes ) {
 			// return various JSON objects for each Evidence Type.
-			evidencesArray.add(buildEvidenceType(et)); // add to evidences array.
+			evidencesArray.add ( buildEvidenceType ( et ) ); // add to evidences array.
 		}
-		conceptJson.put(JSONAttributeNames.EVIDENCES, evidencesArray/* evidencesJson */);
+		conceptJson.put( JSONAttributeNames.EVIDENCES, evidencesArray/* evidencesJson */ );
 
 		// Get all Concept Names (conames), whether preferred or not.
-		Set<ConceptName> conames = con.getConceptNames();
-		JSONArray concept_names_Array = new JSONArray();
-		for (ConceptName coname : conames) {
+		Set<ConceptName> conames = con.getConceptNames ();
+		JSONArray concept_names_Array = new JSONArray ();
+		for ( ConceptName coname : conames ) {
 			// return various JSON objects for each Concept Name.
-			concept_names_Array.add(buildConceptName(coname));
+			concept_names_Array.add ( buildConceptName ( coname ) );
 		}
-		conceptJson.put(JSONAttributeNames.CONAMES, concept_names_Array/* conamesJson */);
+		conceptJson.put ( JSONAttributeNames.CONAMES, concept_names_Array/* conamesJson */ );
 
 		// Concept Accessions.
-		Set<ConceptAccession> accessions = con.getConceptAccessions();
-		JSONArray accessionsArray = new JSONArray(); // fetch array of concept attributes.
-		for (ConceptAccession accession : accessions) {
+		Set<ConceptAccession> accessions = con.getConceptAccessions ();
+		JSONArray accessionsArray = new JSONArray (); // fetch array of concept attributes.
+		for ( ConceptAccession accession : accessions ) {
 			// return various JSON objects for each Concept Accession.
-			accessionsArray.add(buildConceptAccession(accession)); // add to co-accessions array.
+			accessionsArray.add ( buildConceptAccession ( accession ) ); // add to co-accessions array.
 		}
-		conceptJson.put(JSONAttributeNames.COACCESSIONS, accessionsArray/* accessionsJson */);
+		conceptJson.put ( JSONAttributeNames.COACCESSIONS, accessionsArray/* accessionsJson */ );
 
 		/*
 		 * Concept GDS (Attributes), Attribute Names, Units & SpecialisationOf. Now,
@@ -415,21 +383,21 @@ public class Export extends ONDEXExport {
 		 * "concept_gds". These are now used as Keys in addition to older terms like
 		 * "attrnames" and "attrname".
 		 */
-		Set<Attribute> attributes = con.getAttributes(); // get all concept Attributes.
-		JSONArray conAttributesArray = new JSONArray(); // fetch array of concept attributes.
-		for (Attribute attr : attributes) {
-			conAttributesArray.add(buildAttribute(attr)); // add to concept attributes array.
+		Set<Attribute> attributes = con.getAttributes (); // get all concept Attributes.
+		JSONArray conAttributesArray = new JSONArray (); // fetch array of concept attributes.
+		for ( Attribute attr : attributes ) {
+			conAttributesArray.add ( buildAttribute ( attr ) ); // add to concept attributes array.
 		}
-		conceptJson.put(JSONAttributeNames.CONCEPTATTRIBUTES, conAttributesArray/* attrJson */);
+		conceptJson.put( JSONAttributeNames.CONCEPTATTRIBUTES, conAttributesArray/* attrJson */ );
 
 		// Contexts.
-		Set<ONDEXConcept> contexts = con.getTags();
-		JSONObject contextsJson = new JSONObject();
-		for (ONDEXConcept context : contexts) {
+		Set<ONDEXConcept> contexts = con.getTags ();
+		JSONObject contextsJson = new JSONObject ();
+		for ( ONDEXConcept context : contexts ) {
 			// return various JSON objects for each Context.
-			contextsJson.put(JSONAttributeNames.CONTEXT, buildContext(context));
+			contextsJson.put ( JSONAttributeNames.CONTEXT, buildContext ( context ) );
 		}
-		conceptJson.put(JSONAttributeNames.CONTEXTS, contextsJson);
+		conceptJson.put( JSONAttributeNames.CONTEXTS, contextsJson );
 
 		return conceptJson;
 	}
@@ -653,24 +621,7 @@ public class Export extends ONDEXExport {
      return attribute/*attrNameJson*/;
     }
 
-    /**
-     * Generate metadata for Unit.
-     * @param unit
-     *            A Unit (from the Ondex API).
-     * @return JSONObject
-     *            JSONObject containing information about the Unit.
-     */
-    private JSONObject buildUnit(Unit unit) {
-     JSONObject unitJson= new JSONObject();
-     
-     unitJson.put(JSONAttributeNames.ID, unit.getId());
-     unitJson.put(JSONAttributeNames.FULLNAME, unit.getFullname());
-     unitJson.put(JSONAttributeNames.DESCRIPTION, unit.getDescription());
-
-     return unitJson;
-    }
-
-    /**
+   /**
      * Generate metadata for Context.
      * @param context
      *            A Context tag (from the Ondex API).
@@ -736,32 +687,4 @@ public class Export extends ONDEXExport {
 
      return jsonData;
     }
-
-    private String getShortestNotAmbiguousConceptAccession(Set<ConceptAccession> co_accs) {
-     String shortest_acc=" ";
-     int length= 100000;
-     for(ConceptAccession acc : co_accs) {
-         if(!(acc.isAmbiguous()) && (acc.getAccession().trim().length() <= length)) {
-            shortest_acc= acc.getAccession().trim();
-	    length= shortest_acc.length();
-           }
-        }
-     return shortest_acc;
-    }
-
-    private String getShortestPreferredConceptName(Set<ConceptName> conames) {
-     String shortest_coname=" ";
-     int length= 100000;
-     for(ConceptName coname : conames) {
-         if((coname.isPreferred()) && (coname.getName() != null)) {
-//            if((coname.getName().trim().length() >= 3) && (coname.getName().trim().length() <= 6)) {
-            if(coname.getName().trim().length() <= length) {
-               shortest_coname= coname.getName().trim(); // use this preferred concept name instead.
-               length= shortest_coname.length();
-              }
-           }
-        }
-     return shortest_coname;
-    }
-
 }
