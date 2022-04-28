@@ -104,11 +104,11 @@ public class CyjsJsonExportTest
 		String metaJson = metaData.substring ( metaData.indexOf ( "{" ), metaData.length () );
 		
 		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
-		ONDEXConcept nonGeneConcept = humanGraph.getConcepts ().stream ().filter ( concept -> concept.getId ()== 48391 ).findAny ().get ();
+		ONDEXConcept nonGeneConcept = humanGraph.getConcept ( 48391 );
 		assertJsonExport ( "Concept Name in Non Gene don't match", metaJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept ) );
 		
 		// Pick some gene node from JSON and verify the same
-		ONDEXConcept geneConcept = humanGraph.getConcepts ().stream ().filter ( concept -> concept.getId () == 48320 ).findAny ().get ();
+		ONDEXConcept geneConcept = humanGraph.getConcept ( 48320 );
 		assertJsonExport ( "Concept Name in Gene don't match", metaJson, GenePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept ) );
 	}
 	
