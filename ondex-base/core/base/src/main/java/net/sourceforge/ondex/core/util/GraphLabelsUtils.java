@@ -20,18 +20,32 @@ import net.sourceforge.ondex.core.ONDEXConcept;
  */
 public class GraphLabelsUtils
 {
+	/**
+	 * Defaults to false.
+	 */
+	public static String getBestConceptLabel ( ONDEXConcept c )
+	{
+		return getBestConceptLabel ( c, false );
+	}
 
 	/**
 	 * 
 	 * Returns the best label for a concept, considering several criteria, including the concept type (eg,
-	 * if it's a gene or not). 
+	 * if it's a gene or not).
+	 * 
+	 * @param filterAccessions removes accessions from names, if these are duplicated there from accessions,
+	 *        as per {@link #getBestName(ONDEXConcept, boolean)}. 
 	 * 
 	 */
-	public static String getBestConceptLabel ( ONDEXConcept c )
+	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames )
 	{
 		String typeId = c.getOfType ().getId ();
 		
-		String result = getBestName ( c.getConceptNames () ); // priority to the shortest preferred name
+		Set<ConceptName> names = filterAccessionsFromNames 
+			? filterAccessionsFromNames ( c )
+			: c.getConceptNames ();
+		
+		String result = getBestName ( names ); // priority to the shortest preferred name
 				
 		if ( result.isEmpty () )
 		{
