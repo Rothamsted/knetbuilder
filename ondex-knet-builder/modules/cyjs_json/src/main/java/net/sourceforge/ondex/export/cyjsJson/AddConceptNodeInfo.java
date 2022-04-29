@@ -7,9 +7,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import net.sourceforge.ondex.core.Attribute;
-import net.sourceforge.ondex.core.ConceptAccession;
-import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.util.GraphLabelsUtils;
 
 /**
  * Build node json objects using their various attributes.
@@ -30,12 +29,6 @@ public class AddConceptNodeInfo {
   JSONObject nodeData= new JSONObject();
   int conId= con.getId(); // concept ID.
   String conceptID= String.valueOf(conId);
-  String conceptName= " ";
-  if(con.getConceptName() != null) {
-     if(con.getConceptName().getName() != null) {
-        conceptName= con.getConceptName().getName().trim(); // concept name.
-       }
-    }
   String conceptType= con.getOfType().getFullname(); // conceptType.
   if(conceptType.equals("")) {
 //     conceptType= ConceptType.Phenotype.toString(); // default.
@@ -54,56 +47,9 @@ public class AddConceptNodeInfo {
 //  System.out.println("Current "+ conceptType +" Name: "+ conceptName);
   /* Fetch the Set of all concept names and retain only the preferred ones, to later choose the 
    * "best" concept name to display from amongst them, for Genes. */
-  if(conceptType.equals(ConceptType.Gene.toString()) || conceptType.equals(ConceptType.Protein.toString())) {
-     // For Genes and Proteins.
-     // Get the shortest, preferred concept name for this Concept.
-     String shortest_coname= getShortestPreferredConceptName(con.getConceptNames());
-     // Get the shortest, non-ambiguous concept accession for this Concept.
-     String shortest_acc= getShortestNotAmbiguousConceptAccession(con.getConceptAccessions());
-     
-//     int shortest_acc_length= 100000, shortest_coname_length= 100000; // default values.
-     if(!shortest_coname.equals(" ")) {
-//        shortest_coname_length= shortest_coname.length();
-        conceptName= shortest_coname; // use the shortest, preferred concept name.
-       }
-     else {
-       if(!shortest_acc.equals(" ")) {
-//          shortest_acc_length= shortest_acc.length();
-          conceptName= shortest_acc; // use the shortest, non-ambiguous concept accession.
-         }
-      }
-/*     if(shortest_acc_length < shortest_coname_length) {
-        conceptName= shortest_acc; // use shortest, non-ambiguous concept accession.
-       }
-     else {
-      conceptName= shortest_coname; // use shortest, preferred concept name.
-     }*/
-//     System.out.println("\t \t Selected (preferred) concept Name: "+ conceptName +"\n");
-    }
-  /*else if(conceptType.equals(ConceptType.Phenotype.toString())) {
-          if(conceptName.equals(" ")) {
-             Set<Attribute> attributes= con.getAttributes(); // get all concept Attributes.
-             for(Attribute attr : attributes) {
-                 if(attr.getOfType().toString().equals("Phenotype")) {
-                    conceptName= attr.getValue().toString().trim(); // use Phenotype as the preferred concept name instead.
-                   }
-                }
-//             System.out.println("\t \t Phenotype: Selected Name: "+ conceptName +"\n");
-            }
-         }*/
-  else {
-    if(!getShortestPreferredConceptName(con.getConceptNames()).equals(" ")) {
-       conceptName= getShortestPreferredConceptName(con.getConceptNames());
-      }
-    else {
-      if(!getShortestNotAmbiguousConceptAccession(con.getConceptAccessions()).equals(" ")) {
-         conceptName= getShortestNotAmbiguousConceptAccession(con.getConceptAccessions());
-        }
-     }
-//    System.out.println("\t \t Selected (preferred) concept Name: "+ conceptName +"\n");
-   }
-  //System.out.println("AddConceptNodeInfo: conceptID: "+ conceptID +", type: "+ conceptType +", name: "+ conceptName);
-
+  
+  String conceptName = GraphLabelsUtils.getBestConceptLabel ( con, true );
+  
   String conceptShape;
   String conceptColour;
   String conceptSize= "18px"; // default.
@@ -111,6 +57,8 @@ public class AddConceptNodeInfo {
 
   /* Check if concept Name (value) is highlighted via HTML span tags.
    * If yes (html span tag present), strip html <span> tags and highlight background */
+  // TODO: How is it possible!?!?
+  
   String val= conceptName;
   String concept_text_bgColor= "black", concept_text_bgOpacity= "0";
   if(conceptName.contains("<span")) {
@@ -125,6 +73,7 @@ public class AddConceptNodeInfo {
      val= doc.text(); //doc.select("span").remove().toString();
     }
   // Trim the label's (conceptName) length.
+  // TODO: getBestConceptLabel() above cuts this at 60
   if(val.length()>30) { val= val.substring(0, 29) +"...";}
   //System.out.println("concept: trimmed displayValue: "+ val);
   
@@ -342,36 +291,4 @@ public class AddConceptNodeInfo {
 
   return attr;
  }
-
-    private String getShortestPreferredConceptName(Set<ConceptName> conames) {
-     String shortest_coname=" ";
-     int length= 100000;
-     for(ConceptName coname : conames) {
-//         System.out.println("\t coname: "+ coname.getName().trim() +", isPreferred: "+ coname.isPreferred());
-         if((coname.isPreferred()) && (coname.getName() != null)) {
-//            if((coname.getName().trim().length() >= 3) && (coname.getName().trim().length() <= 6)) {
-            if(coname.getName().trim().length() <= length) {
-               shortest_coname= coname.getName().trim(); // use this preferred concept name instead.
-               length= shortest_coname.length();
-              }
-           }
-        }
-//     System.out.println("\t shortest_coname: "+ shortest_coname);
-     return shortest_coname;
-    }
-
-    private String getShortestNotAmbiguousConceptAccession(Set<ConceptAccession> co_accs) {
-     String shortest_acc=" ";
-     int length= 100000;
-     for(ConceptAccession acc : co_accs) {
-//         System.out.println("\t acc: "+ acc.getAccession().trim() +", isAmbiguous: "+ acc.isAmbiguous());
-         if(!(acc.isAmbiguous()) && (acc.getAccession().trim().length() <= length)) {
-            shortest_acc= acc.getAccession().trim();
-	    length= shortest_acc.length();
-           }
-        }
-//     System.out.println("\t shortest_acc: "+ shortest_acc);
-     return shortest_acc;
-    }
-
 }

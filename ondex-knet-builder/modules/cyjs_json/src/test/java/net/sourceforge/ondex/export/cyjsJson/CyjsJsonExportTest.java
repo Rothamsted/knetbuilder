@@ -47,7 +47,7 @@ public class CyjsJsonExportTest
 		humanGraph = Parser.loadOXL (  CyjsJsonExportTest.class.getClassLoader ().getResource ( "MyNetwork_NeuroDisease_subset.oxl" ).getFile () );
 		
 		// Enable to see a graph dump
-		//ONDEXGraphOperations.dumpAll ( humanGraph );
+		// ONDEXGraphOperations.dumpAll ( humanGraph );
 		
 		OndexPluginUtils.runPlugin (
 			Export.class, 
@@ -74,11 +74,11 @@ public class CyjsJsonExportTest
 		String nodesData = JsonPath.parse ( json.get ( 0 ) ).json ().toString ();
 		String metaData = JsonPath.parse ( json.get ( 2 ) ).json ().toString ();
 
-		String nodeJson = nodesData.substring ( nodesData.indexOf ( "{" ), nodesData.length () );
+		String nodesJson = nodesData.substring ( nodesData.indexOf ( "{" ), nodesData.length () );
 		String metaJson = metaData.substring ( metaData.indexOf ( "{" ), metaData.length () );
 
-		assertJsonExport ( "Concept Type don't match", nodeJson, nodePath, "conceptType", "Gene" );
-		assertJsonExport ( "DisplayValue don't match", nodeJson, nodePath, "displayValue", "PRNP" );
+		assertJsonExport ( "Concept Type don't match", nodesJson, nodePath, "conceptType", "Gene" );
+		assertJsonExport ( "DisplayValue don't match", nodesJson, nodePath, "displayValue", "PRNP" );
 		
 		assertJsonExport ( "OfType don't match", metaJson, metaPath, "ofType", "Gene" );
 		assertJsonExport ( "Value don't match", metaJson, metaPath, "value", "PRNP" );
@@ -105,11 +105,13 @@ public class CyjsJsonExportTest
 		
 		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
 		ONDEXConcept nonGeneConcept = humanGraph.getConcept ( 48391 );
-		assertJsonExport ( "Concept Name in Non Gene don't match", metaJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept ) );
+		assertJsonExport ( "Concept Name in Non Gene don't match", metaJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept, true ) );
 		
 		// Pick some gene node from JSON and verify the same
 		ONDEXConcept geneConcept = humanGraph.getConcept ( 48320 );
-		assertJsonExport ( "Concept Name in Gene don't match", metaJson, GenePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept ) );
+		assertJsonExport ( "Concept Name in Gene don't match", metaJson, GenePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept, true ) );
+		
+		// TODO: similar test for $.nodes
 	}
 	
 	private void assertJsonExport (String errorMessage, String json, String jsonPath, String param,
