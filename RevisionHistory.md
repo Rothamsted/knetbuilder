@@ -4,10 +4,10 @@
 
 ## 5.0.1-SNAPSHOT
 * Metadata descriptor (still experimental)
-* Minor upgrades to the CytoscapeJS exporter (eg, [#51](https://github.com/Rothamsted/knetbuilder/issues/61)
+* Minor upgrades to the CytoscapeJS exporter (eg, [#61](https://github.com/Rothamsted/knetbuilder/issues/61))
 
 ### Internal changes
-* KnetMiner initialiser module added from code in KnetMiner (#51)
+* KnetMiner initialiser module added from code in KnetMiner ([#51](https://github.com/Rothamsted/knetbuilder/issues/51))
 * Lucene module: bugfixing for certain [non-working queries](https://github.com/Rothamsted/knetbuilder/issues/53)
 * Maven Assembly plug-in upgraded to latest version, many related files fixed.
 
