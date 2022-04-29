@@ -1,9 +1,17 @@
 # Revision History
 
-*This file was last reviewed on 28/10/2021*
+*This file was last reviewed on 29/30/2022*
 
 ## 5.0.1-SNAPSHOT
-* Current snapshot
+* Metadata descriptor (still experimental)
+* Minor upgrades to the CytoscapeJS exporter (eg, [#61](https://github.com/Rothamsted/knetbuilder/issues/61))
+
+### Internal changes
+* KnetMiner initialiser module added from code in KnetMiner ([#51](https://github.com/Rothamsted/knetbuilder/issues/51))
+* Lucene module: bugfixing for certain [non-working queries](https://github.com/Rothamsted/knetbuilder/issues/53)
+* Maven Assembly plug-in upgraded to latest version, many related files fixed.
+
+
 
 ## 5.0
 * Big changes to migrate to Java 11
