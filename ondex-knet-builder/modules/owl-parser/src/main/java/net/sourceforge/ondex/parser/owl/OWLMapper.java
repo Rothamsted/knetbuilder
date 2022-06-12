@@ -28,7 +28,7 @@ import net.sourceforge.ondex.parser.ConceptClassMapper;
 import net.sourceforge.ondex.parser.ExploringMapper;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
-import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.opt.io.IOUtils;
 
 /**
  * <p>This is the top level mapper/parser. Usually a class of this type is configured via 

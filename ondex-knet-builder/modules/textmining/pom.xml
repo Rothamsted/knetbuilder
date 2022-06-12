@@ -79,10 +79,6 @@
 
 		<!-- Utilities to pre-process the PubMed XML -->
 		<dependency>
-	  		<groupId>uk.ac.ebi</groupId>
-	  		<artifactId>jutils-io</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.unix4j</groupId>
 			<artifactId>unix4j-command</artifactId>
 			<version>0.6</version>

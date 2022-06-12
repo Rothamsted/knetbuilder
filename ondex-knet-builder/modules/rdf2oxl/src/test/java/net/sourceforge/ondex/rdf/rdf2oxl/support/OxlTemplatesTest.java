@@ -16,7 +16,7 @@ import com.machinezoo.noexception.Exceptions;
 
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.opt.io.IOUtils;
 import uk.ac.ebi.utils.xml.XPathReader;
 
 /**

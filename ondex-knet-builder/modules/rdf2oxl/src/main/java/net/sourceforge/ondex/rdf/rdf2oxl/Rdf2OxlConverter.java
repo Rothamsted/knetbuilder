@@ -2,7 +2,7 @@ package net.sourceforge.ondex.rdf.rdf2oxl;
 
 import static java.lang.String.format;
 import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
-import static uk.ac.ebi.utils.io.IOUtils.readResource;
+import static uk.ac.ebi.utils.opt.io.IOUtils.readResource;
 
 import java.io.File;
 import java.io.FileOutputStream;

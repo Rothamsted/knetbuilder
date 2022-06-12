@@ -43,7 +43,7 @@ import uk.ac.ebi.utils.exceptions.CausalNumberFormatException;
 import uk.ac.ebi.utils.regex.RegEx;
 import uk.ac.ebi.utils.runcontrol.MultipleAttemptsExecutor;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
-import uk.ac.ebi.utils.xml.XmlFilterUtils;
+import uk.ac.ebi.utils.opt.xml.XmlFilterUtils;
 
 /**
  * MEDLINE XML parser

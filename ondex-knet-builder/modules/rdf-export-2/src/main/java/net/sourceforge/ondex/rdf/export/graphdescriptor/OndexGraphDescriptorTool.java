@@ -42,7 +42,7 @@ import uk.ac.ebi.utils.collections.OptionsMap;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.exceptions.TooFewValuesException;
 import uk.ac.ebi.utils.ids.IdUtils;
-import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.opt.io.IOUtils;
 
 /**
  * TODO: comment me!

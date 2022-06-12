@@ -17,7 +17,7 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 import info.marcobrandizi.rdfutils.jena.TDBEndPointHelper;
 import net.sourceforge.ondex.rdf.rdf2oxl.support.freemarker.FreeMarkerHelper;
-import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.opt.io.IOUtils;
 
 /**
  * Simple tests for the {@link QueryProcessor} basics.

@@ -19,7 +19,7 @@ import org.neo4j.driver.Session;
 import org.neo4j.driver.Values;
 
 import info.marcobrandizi.rdfutils.jena.ModelEndPointHelper;
-import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.opt.io.IOUtils;
 
 /**
  * TODO: comment me!

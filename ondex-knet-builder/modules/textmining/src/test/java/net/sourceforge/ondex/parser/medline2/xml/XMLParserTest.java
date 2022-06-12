@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
-import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.opt.io.IOUtils;
 
 /**
  *

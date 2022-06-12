@@ -133,7 +133,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<!-- TODO: see if the top POM can work with this upgrade -->
-				<version>2.20</version>
 				<configuration>
 					<forkCount>1</forkCount>
 					<!-- We use this with certain demanding tests (eg, WholeGoLoadingTest) -->

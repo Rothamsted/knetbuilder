@@ -28,7 +28,7 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import info.marcobrandizi.rdfutils.jena.ModelEndPointHelper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import uk.ac.ebi.utils.io.IOUtils;
+import uk.ac.ebi.utils.opt.io.IOUtils;
 import uk.ac.ebi.utils.regex.RegEx;
 
 /**

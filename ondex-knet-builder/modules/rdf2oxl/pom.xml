@@ -41,11 +41,6 @@
 		</dependency>
 
     <dependency>
-      <groupId>uk.ac.ebi</groupId>
-      <artifactId>jutils-io</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>info.marcobrandizi</groupId>
       <artifactId>rdfutils-jena</artifactId>
     </dependency>

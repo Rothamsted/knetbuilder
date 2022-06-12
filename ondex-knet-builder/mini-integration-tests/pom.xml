@@ -77,7 +77,7 @@
     </dependency>
 		<dependency>
 			<groupId>uk.ac.ebi</groupId>
-			<artifactId>jutils-io</artifactId>
+			<artifactId>jutils</artifactId>
 			<scope>test</scope>
 		</dependency>			
   </dependencies>
