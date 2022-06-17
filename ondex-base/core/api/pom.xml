@@ -7,7 +7,7 @@
    <parent>
       <groupId>net.sourceforge.ondex</groupId>
       <artifactId>core</artifactId>
-      <version>5.0.1-SNAPSHOT</version>
+      <version>6.0-SNAPSHOT</version>
    </parent>
 
    <groupId>net.sourceforge.ondex.core</groupId>
@@ -16,10 +16,15 @@
    <name>ONDEX/Core/api</name>
    
    <dependencies>
+			<dependency>
+			  <groupId>jakarta.xml.bind</groupId>
+			  <artifactId>jakarta.xml.bind-api</artifactId>
+			</dependency>			
+			<!-- TODO:remove we switched to Jakarta in JDK 17
       <dependency>
           <groupId>javax.xml.bind</groupId>
           <artifactId>jaxb-api</artifactId>
-      </dependency>
+      </dependency> -->
       <dependency>
           <groupId>org.glassfish.jaxb</groupId>
           <artifactId>jaxb-runtime</artifactId>
