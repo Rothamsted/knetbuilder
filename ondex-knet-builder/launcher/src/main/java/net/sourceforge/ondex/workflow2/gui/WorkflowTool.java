@@ -48,7 +48,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.xml.stream.XMLStreamException;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 
 import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.core.base.util.GraphAdaptor;

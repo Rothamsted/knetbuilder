@@ -8,6 +8,8 @@ import java.io.IOException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import net.sourceforge.ondex.workflow.base.init.Initialisation;
+
 /**
  * Test key aspects of the Initialisation class.
  *

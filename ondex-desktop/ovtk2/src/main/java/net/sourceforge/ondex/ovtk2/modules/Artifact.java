@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.ovtk2.modules;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * Represents a maven artifact returned by nexus

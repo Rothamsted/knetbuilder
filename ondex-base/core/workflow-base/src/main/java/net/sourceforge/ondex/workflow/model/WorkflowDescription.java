@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.workflow.engine.OndexJob;
@@ -17,7 +18,7 @@ import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 import net.sourceforge.ondex.workflow.model.WorkflowDescriptionConf.PluginArgMaker;
 
 public class WorkflowDescription {
-    private static final Logger LOG = Logger.getLogger(WorkflowDescription.class);
+	private static final Logger LOG = LoggerFactory.getLogger(WorkflowDescription.class);
     public static final boolean DEBUG = true;
     private final Map<String, UUID> uuids = new HashMap<String, UUID>();
     private final List<WorkflowTask> components = new ArrayList<WorkflowTask>();

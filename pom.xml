@@ -367,11 +367,6 @@
          <artifactId>junit</artifactId>
          <scope>test</scope>
       </dependency>
-      <dependency>
-         <groupId>log4j</groupId>
-         <artifactId>log4j</artifactId>
-         <scope>provided</scope>
-      </dependency>
       <!--
       	This is to cope with  https://issues.apache.org/jira/browse/SUREFIRE-1917
       	TODO: remove when fixed.

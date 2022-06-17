@@ -1,7 +1,7 @@
  module net.sourceforge.ondex.parser.cyc {
 	  requires java.desktop;
 	 requires java.xml.bind;
-	 requires java.activation;
+	 //requires java.activation;
 	 requires jakarta.activation;
 	// 
 	requires workflow.api;
@@ -11,6 +11,7 @@
 	requires paxtools.core;
 	requires jutils;
 	requires log4j;
+	//requires junit;
 	
 	
 		 

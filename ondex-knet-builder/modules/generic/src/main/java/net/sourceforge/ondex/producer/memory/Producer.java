@@ -13,9 +13,9 @@ import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.init.Initialisation;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
 import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
+import net.sourceforge.ondex.workflow.base.init.Initialisation;
 import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 
 /**

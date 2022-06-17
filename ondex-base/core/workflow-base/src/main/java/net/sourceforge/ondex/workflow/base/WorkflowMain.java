@@ -1,4 +1,4 @@
-package net.sourceforge.ondex;
+package net.sourceforge.ondex.workflow.base;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,10 +16,11 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.workflow.engine.BasicJobImpl;
@@ -37,7 +38,7 @@ import net.sourceforge.ondex.workflow.validation.PluginValidator;
  * @author hindlem
  */
 public class WorkflowMain {
-    private static final Logger LOG = Logger.getLogger(WorkflowMain.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WorkflowMain.class);
 
     /**
      * The main entry point for running ONDEX workflows.

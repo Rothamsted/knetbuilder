@@ -20,7 +20,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.init.Initialisation;
+import net.sourceforge.ondex.workflow.base.init.Initialisation;
 
 /**
  * Imports the Network Workbench format

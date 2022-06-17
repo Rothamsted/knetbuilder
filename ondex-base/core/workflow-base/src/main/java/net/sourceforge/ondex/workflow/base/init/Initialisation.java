@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.init;
+package net.sourceforge.ondex.workflow.base.init;
 
 import java.io.File;
 import java.io.IOException;

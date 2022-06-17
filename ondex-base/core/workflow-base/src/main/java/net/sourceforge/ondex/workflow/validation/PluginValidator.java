@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.config.ValidatorRegistry;
@@ -31,7 +32,7 @@ import net.sourceforge.ondex.workflow.model.WorkflowTask;
  */
 public class PluginValidator {
 
-    private static final Logger LOG = Logger.getLogger(PluginValidator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PluginValidator.class);
 
     private static final List<ErrorReport> NO_ERRORS = Collections.emptyList();
 

@@ -2,7 +2,8 @@ package net.sourceforge.ondex.event.type;
 
 import java.util.function.BiConsumer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+
 
 /**
  * Abstract class specifying the kind of event that occurred.
@@ -34,7 +35,7 @@ public abstract class EventType {
      */
     public static enum Level 
     {
-    	FATAL( (log, msg) -> log.fatal ( msg ) ), 
+    	//FATAL( (log, msg) -> log.fatal ( msg ) ), 
     	ERROR( (log, msg) -> log.error ( msg ) ),
     	WARN( (log, msg) -> log.warn ( msg ) ),
     	INFO( (log, msg) -> log.info ( msg ) ),

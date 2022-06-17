@@ -5,7 +5,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.exception.type.PluginException;
 
@@ -13,7 +14,7 @@ import net.sourceforge.ondex.exception.type.PluginException;
  * @author lysenkoa
  */
 public class StandardProcessor extends AbstractProcessor {
-    private static final Logger LOG = Logger.getLogger(AbstractProcessor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StandardProcessor.class);
 
 
     private static final Object[] NOARGS = new Object[0];

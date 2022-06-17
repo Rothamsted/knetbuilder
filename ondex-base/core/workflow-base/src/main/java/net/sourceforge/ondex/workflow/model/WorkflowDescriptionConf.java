@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.workflow.ONDEXPlugin;
@@ -32,7 +33,7 @@ public class WorkflowDescriptionConf
 		public static final String OBJECT = "default";
 	}
 	
-    private static Logger LOG = Logger.getLogger(WorkflowDescriptionConf.class);
+	private static final Logger LOG = LoggerFactory.getLogger(WorkflowDescription.class);
 
     private static class ConfHolder {
         public static WorkflowDescriptionConf instance = new WorkflowDescriptionConf();
