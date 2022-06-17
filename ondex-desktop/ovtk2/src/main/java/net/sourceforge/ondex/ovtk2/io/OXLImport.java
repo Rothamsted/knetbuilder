@@ -14,7 +14,7 @@ import java.util.zip.GZIPInputStream;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 

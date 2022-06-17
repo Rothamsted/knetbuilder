@@ -9,6 +9,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.neo4j.driver.Driver;
@@ -73,7 +74,7 @@ public class Neo4jWfIT
 	/**
 	 * Loads some RDF into Neo4j and verifies results, using test cases from the Neo4j exporter.
 	 */
-	@Test
+	@Test @Ignore ( "TODO: TEMPORARILY disabled, Neo4j doesn't work with JDK as yet" )
 	public void test20_Cypher () throws IOException
 	{
 		String neoxPath = mavenBuildPath + "ondex-mini/tools/neo4j-exporter/";

@@ -132,13 +132,14 @@
 									<classifier>tests</classifier>
 									<outputDirectory>${project.build.directory}/ext-test-files/rdf-export-2</outputDirectory>									
 								</artifactItem>
+								<!-- TODO: this TEMPORARY, re-enable when Neo4j will work with JDK 17
 								<artifactItem>
 									<groupId>net.sourceforge.ondex.modules</groupId>
 									<artifactId>neo4j-export</artifactId>
 									<version>${project.version}</version>
 									<classifier>tests</classifier>
 									<outputDirectory>${project.build.directory}/ext-test-files/neo4j-exporter</outputDirectory>									
-								</artifactItem>
+								</artifactItem> -->
 							</artifactItems>
 						</configuration>
 					</execution>
@@ -190,10 +191,12 @@
 			</plugin>
 
 			<!-- Neo4j server plugin All details defined in the top POM -->
+			<!-- TODO: re-enable when Neo4j will be compatible with JDK 17
 			<plugin>
 				<groupId>com.github.harti2006</groupId>
 				<artifactId>neo4j-server-maven-plugin</artifactId>
 			</plugin>
+			-->
 
 		</plugins>
 	</build>  

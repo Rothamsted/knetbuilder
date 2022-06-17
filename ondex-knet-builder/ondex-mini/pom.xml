@@ -114,11 +114,13 @@
                          <includes>**/*</includes>
                          <outputDirectory>${project.build.directory}</outputDirectory>                        
                       </artifactItem>
-	                    <artifactItem>
-	                    	 <!-- 
+
+											<!-- TODO: ABSOLUTELY PROVISIONAL! Neo4j isn't available for J17 as yet -->
+	                    <!-- artifactItem>
+	                    	 < ! - - 
 	                    	 	This is a stand-alone command-line tool, which is embedded in the 
 	                    	  Mini shipped package.
-	                    	 -->
+	                    	 - - >
 	                       <groupId>net.sourceforge.ondex.modules</groupId>
 	                       <artifactId>neo4j-export</artifactId>
 	                       <version>${project.version}</version>
@@ -127,7 +129,7 @@
 	                       <overWrite>true</overWrite>
 	                       <outputDirectory>${project.build.directory}</outputDirectory>
 	                       <includes>**/*</includes>
-	                    </artifactItem>
+	                    </artifactItem -->
 										</artifactItems>
 										<overWriteReleases>false</overWriteReleases>
 										<overWriteSnapshots>true</overWriteSnapshots>
@@ -295,12 +297,14 @@
          <scope>provided</scope>
       </dependency>
 
-      <dependency>
+
+			<!-- TODO: ABSOLUTELY PROVISIONAL! Neo4j isn't available for J17 as yet -->
+      <!--dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>neo4j-export</artifactId>
          <version>${project.version}</version>
          <scope>provided</scope>
-      </dependency>
+      </dependency -->
       
 			<dependency>
 			  <groupId>info.picocli</groupId>

@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.core;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * This class represents the evidence type belonging to an Evidence for a

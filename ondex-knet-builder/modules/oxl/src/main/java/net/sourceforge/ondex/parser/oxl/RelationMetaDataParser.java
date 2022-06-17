@@ -2,7 +2,7 @@ package net.sourceforge.ondex.parser.oxl;
 
 import java.util.HashMap;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 

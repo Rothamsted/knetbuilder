@@ -20,14 +20,19 @@
 			  <groupId>jakarta.xml.bind</groupId>
 			  <artifactId>jakarta.xml.bind-api</artifactId>
 			</dependency>			
+			<!--This should be the implementation of jakarta.xml.bind-api -->
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+			  <artifactId>jaxb-impl</artifactId>
+			</dependency>						
 			<!-- TODO:remove we switched to Jakarta in JDK 17
       <dependency>
-          <groupId>javax.xml.bind</groupId>
-          <artifactId>jaxb-api</artifactId>
-      </dependency> -->
-      <dependency>
-          <groupId>org.glassfish.jaxb</groupId>
-          <artifactId>jaxb-runtime</artifactId>
+      	<groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
       </dependency>
+      <dependency>
+        <groupId>org.glassfish.jaxb</groupId>
+        <artifactId>jaxb-runtime</artifactId>
+      </dependency> -->
    </dependencies>
 </project>

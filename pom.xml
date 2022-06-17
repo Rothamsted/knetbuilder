@@ -71,6 +71,9 @@
 		 <slf4j.version>1.7.25</slf4j.version>
 			
      <jena.version>4.1.0</jena.version>
+     
+     <!-- TODO: this provisionally overrides knetminer-common/POM, re-align with it -->
+     <neo4j.server.version>4.4.8</neo4j.server.version>
 	 </properties>
 
    <build>
@@ -425,18 +428,24 @@
 			  <groupId>jakarta.xml.bind</groupId>
 			  <artifactId>jakarta.xml.bind-api</artifactId>
 			  <version>4.0.0</version>
-			</dependency>			
+			</dependency>
+			<!--This should be the implementation of jakarta.xml.bind-api -->
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+			  <artifactId>jaxb-impl</artifactId>
+			  <version>4.0.0</version>
+			</dependency>						
 			<!-- TODO:remove we switched to Jakarta in JDK 17
       <dependency>
       	<groupId>javax.xml.bind</groupId>
         <artifactId>jaxb-api</artifactId>
         <version>2.3.1</version>
-      </dependency> -->
+      </dependency>
       <dependency>
         <groupId>org.glassfish.jaxb</groupId>
         <artifactId>jaxb-runtime</artifactId>
         <version>2.3.2</version>
-      </dependency>
+      </dependency> -->
 
 			<!-- Spring annotations that were supported JDK<11 -->
 			<dependency>             

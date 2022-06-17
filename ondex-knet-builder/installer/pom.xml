@@ -86,6 +86,7 @@
                         
                         <!-- As above, except this is not a real ONDEX plugin, but a command line tool that we want to
                         be part of the final ONDEX binary -->
+                        <!-- TODO: re-enable when Neo4j will work with JDK 17
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>neo4j-export</artifactId>
@@ -95,7 +96,7 @@
                            <overWrite>true</overWrite>
                            <includes>**/*</includes>
                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </artifactItem>
+                        </artifactItem> -->
                         
                         
                         <!-- TODO: outdated and not building 
@@ -408,6 +409,7 @@
                            <destFileName>json-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
                         
+                        <!-- TODO: remove
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>kegg</artifactId>
@@ -418,7 +420,7 @@
                            <outputDirectory>${project.build.directory}/plugins</outputDirectory>
                            <includes>**/*</includes>
                            <destFileName>kegg-jar-with-dependencies.jar</destFileName>
-                        </artifactItem>
+                        </artifactItem> -->
                         
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>

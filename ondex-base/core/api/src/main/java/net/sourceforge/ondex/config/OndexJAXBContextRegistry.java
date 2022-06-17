@@ -6,11 +6,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
@@ -71,7 +71,7 @@ public class OndexJAXBContextRegistry {
 	 * Every marshaller internally maintains a {@link java.util.Map}&lt;
 	 * {@link Class},{@link XmlAdapter}>, which it uses for marshalling classes
 	 * whose fields/methods are annotated with
-	 * {@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter}.
+	 * {@link jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter}.
 	 * 
 	 * @param adapter
 	 *            The instance of the adapter to be used. If null, it will

@@ -1,8 +1,9 @@
 # Revision History
 
-*This file was last reviewed on 29/30/2022*
+*This file was last reviewed on 17/6/2022*
 
-## 5.0.1-SNAPSHOT
+## 6.0-SNAPSHOT
+* Migrated to Java 17. **Since this version, we don't support lower Java versions anymore**.
 * Metadata descriptor (still experimental)
 * Minor upgrades to the CytoscapeJS exporter (eg, [#61](https://github.com/Rothamsted/knetbuilder/issues/61))
 

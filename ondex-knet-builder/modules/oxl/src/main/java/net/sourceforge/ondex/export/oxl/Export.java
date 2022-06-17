@@ -19,9 +19,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
@@ -355,7 +355,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            an ONDEX Concept object
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if writing Attribute values fails
 	 */
 	protected void buildConcept(XMLStreamWriter2 xmlw, ONDEXConcept c)
@@ -573,7 +573,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 * @throws XMLStreamException
 	 *             if xml writing fails if something fails in the underlying xml
 	 *             stream
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if the gds value could not be written
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -842,7 +842,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            ConceptAttribute
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if writing Attribute values fails
 	 */
 	protected void buildConceptAttributes(XMLStreamWriter2 xmlw,
@@ -911,7 +911,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            ONDEXConcepts
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if writing Attribute values fails
 	 */
 	protected void buildConcepts(XMLStreamWriter2 xmlw, Set<ONDEXConcept> cit)
@@ -1078,7 +1078,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            a ONDEXGraph which contains the data
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if writing Attribute values fails
 	 */
 	public void buildDocument(XMLStreamWriter2 xmlw, ONDEXGraph graph)
@@ -1105,7 +1105,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            amount of relations
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if writing Attribute values fails
 	 */
 	public void buildDocument(XMLStreamWriter2 xmlw,
@@ -1207,7 +1207,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            Collection<AbstractRelation>
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if writing Attribute values fails
 	 */
 	private void buildOndexDataSequenceTag(XMLStreamWriter2 xmlw,
@@ -1266,7 +1266,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            AbstractRelations
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if writing Attribute values fails
 	 */
 	private void buildOndexDataTag(XMLStreamWriter2 xmlw,
@@ -1415,7 +1415,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            ONDEX Relation data object
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if any Attribute values could not be serialized
 	 */
 	protected void buildRelation(XMLStreamWriter2 xmlw, ONDEXRelation r)
@@ -1473,7 +1473,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            ONDEX RelationAttribute
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if any Attribute value could not be serialized
 	 */
 	protected void buildRelationAttributes(XMLStreamWriter2 xmlw,
@@ -1495,7 +1495,7 @@ public class Export extends ONDEXExport implements Monitorable {
 	 *            ONDEXRelations
 	 * @throws XMLStreamException
 	 *             if xml writing fails
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 *             if the gds value could not be serialized
 	 */
 	protected void buildRelations(XMLStreamWriter2 xmlw, Set<ONDEXRelation> rit)

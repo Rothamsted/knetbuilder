@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.core;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * This class provides information about the Class of a Concept. It has a
