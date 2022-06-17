@@ -50,14 +50,14 @@ import javax.xml.stream.XMLStreamException;
 
 import org.jdom.JDOMException;
 
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.core.util.GraphAdaptor;
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginDocumentationFactory;
-import net.sourceforge.ondex.init.PluginRegistry;
-import net.sourceforge.ondex.init.PluginType;
-import net.sourceforge.ondex.init.PluginType.UnknownPluginTypeException;
+import net.sourceforge.ondex.core.api.config.Config;
+import net.sourceforge.ondex.core.base.util.GraphAdaptor;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.init.PluginDescription;
+import net.sourceforge.ondex.workflow.init.PluginDocumentationFactory;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
+import net.sourceforge.ondex.workflow.init.PluginType;
+import net.sourceforge.ondex.workflow.init.PluginType.UnknownPluginTypeException;
 import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
 import net.sourceforge.ondex.workflow.model.WorkflowDescription;
 import net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO;
@@ -372,7 +372,7 @@ public class WorkflowTool extends javax.swing.JFrame {
 											.equals("memorygraph")) {
 								ComponentGUI cg = new ComponentGUI(
 										pr.getPluginDescription(
-												net.sourceforge.ondex.init.PluginType.PRODUCER,
+												net.sourceforge.ondex.workflow.init.PluginType.PRODUCER,
 												"memorygraph"), true);
 								ComponentGUISelectionListener listener = new ComponentGUISelectionListener(
 										cg);

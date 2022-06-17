@@ -12,7 +12,6 @@ import org.apache.lucene.search.Query;
 
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -22,6 +21,7 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.searchable.LuceneConcept;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.core.searchable.LuceneQueryBuilder;
+import net.sourceforge.ondex.lucene.config.LuceneRegistry;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 
 /**

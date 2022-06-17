@@ -6,7 +6,7 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.base.util.CachedGraphWrapper;
 
 /**
  * The default accession mapper takes a couple of mappers to the constituents of an {@link ONDEXConcept} and uses them

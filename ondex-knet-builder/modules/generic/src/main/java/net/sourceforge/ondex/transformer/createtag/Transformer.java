@@ -11,7 +11,7 @@ import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 @Custodians(custodians = {"Jochen Weile"}, emails = {"jweile at users.sourceforge.net"})
 public class Transformer extends ONDEXTransformer implements

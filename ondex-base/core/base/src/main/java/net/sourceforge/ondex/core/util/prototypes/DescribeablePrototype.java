@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.core.util.prototypes;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.base.util.CachedGraphWrapper;
 
 /**
  * These prototypes are a quick way to prepare ONDEX entities to be created later (when a {@link ONDEXGraph} is available, 

@@ -3,7 +3,7 @@ package net.sourceforge.ondex.args;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * ArgumentDefinition for a string value representing a URL.

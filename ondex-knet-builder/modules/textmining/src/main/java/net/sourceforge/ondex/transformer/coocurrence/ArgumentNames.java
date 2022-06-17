@@ -6,7 +6,7 @@ package net.sourceforge.ondex.transformer.coocurrence;
  * @author keywan, taubertj
  * 
  */
-public interface ArgumentNames extends net.sourceforge.ondex.transformer.ArgumentNames {
+public interface ArgumentNames extends net.sourceforge.ondex.workflow.transformer.ArgumentNames {
 
 	public static final String QUALIFIER_CLASS_ARG = "TargetConceptClass";
 	

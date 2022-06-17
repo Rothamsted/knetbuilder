@@ -23,7 +23,7 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * This transformer implements one-to-many and one-to-one relation collapse, as opposed to

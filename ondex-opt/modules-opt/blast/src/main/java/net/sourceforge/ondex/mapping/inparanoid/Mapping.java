@@ -29,7 +29,7 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.util.StreamGobbler;
+import net.sourceforge.ondex.core.base.util.StreamGobbler;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
@@ -299,7 +299,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames, MetaData {
 		// proceed if ready
 		if (ready) {
 
-			String ondexDir = net.sourceforge.ondex.config.Config.ondexDir;
+			String ondexDir = net.sourceforge.ondex.core.api.config.Config.ondexDir;
 
 			File tempDir = new File(ondexDir + File.separator + "temp");
 			if (!tempDir.exists()) {

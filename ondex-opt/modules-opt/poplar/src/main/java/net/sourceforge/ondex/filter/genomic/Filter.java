@@ -3,7 +3,6 @@ package net.sourceforge.ondex.filter.genomic;
 import java.util.BitSet;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.relationneighbours.DepthSensitiveRTValidator;
 import net.sourceforge.ondex.algorithm.relationneighbours.NotValidator;
 import net.sourceforge.ondex.algorithm.relationneighbours.RelationNeighboursSearch;
@@ -16,9 +15,10 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * This Filter accepts as input a genomic interval which is defined by chromosome,

@@ -1,9 +1,9 @@
 package net.sourceforge.ondex.workflow2.gui.tree;
 
 import net.sourceforge.ondex.annotations.DatabaseTarget;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginDocumentationFactory;
-import net.sourceforge.ondex.init.PluginRegistry;
+import net.sourceforge.ondex.workflow.init.PluginDescription;
+import net.sourceforge.ondex.workflow.init.PluginDocumentationFactory;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
 
 public class PluginTreeNode extends DocumentedTreeNode {
     private static final long serialVersionUID = 1L;

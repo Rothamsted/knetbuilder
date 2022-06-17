@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.config.ValidatorRegistry;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -23,6 +22,7 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 public class Writer {
 

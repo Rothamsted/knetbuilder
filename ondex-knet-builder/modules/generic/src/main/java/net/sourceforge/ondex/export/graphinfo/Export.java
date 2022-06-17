@@ -21,8 +21,6 @@ import com.ctc.wstx.api.WstxOutputProperties;
 import com.ctc.wstx.io.CharsetNames;
 import com.ctc.wstx.stax.WstxOutputFactory;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -33,9 +31,11 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
 
 /**
  * Exports information about meta data and other properties assigned to concepts

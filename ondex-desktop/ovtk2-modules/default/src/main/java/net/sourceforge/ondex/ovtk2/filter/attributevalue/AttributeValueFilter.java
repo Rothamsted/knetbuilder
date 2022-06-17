@@ -21,7 +21,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.undo.StateEdit;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -41,6 +40,7 @@ import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.listmodel.AttributeNameListModel;
 import net.sourceforge.ondex.ovtk2.util.listmodel.ValueListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Compares Attribute values with a given one to change visibility of nodes and

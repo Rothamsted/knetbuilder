@@ -20,7 +20,7 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.DataFileErrorEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
 import net.sourceforge.ondex.event.type.EventType.Level;

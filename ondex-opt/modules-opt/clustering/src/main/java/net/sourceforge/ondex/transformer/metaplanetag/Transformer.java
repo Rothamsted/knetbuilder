@@ -17,7 +17,7 @@ import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * @author jweile
@@ -49,7 +49,7 @@ public class Transformer extends ONDEXTransformer
             new StringArgumentDefinition(uniqsArg, uniqsArgDesc, false, null, true)};
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getArgumentDefinitions()
      */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
@@ -57,7 +57,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getName()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getName()
      */
     @Override
     public String getName() {
@@ -65,7 +65,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getVersion()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getVersion()
      */
     @Override
     public String getVersion() {
@@ -79,7 +79,7 @@ public class Transformer extends ONDEXTransformer
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresIndexedGraph()
      */
     @Override
     public boolean requiresIndexedGraph() {
@@ -87,7 +87,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresValidators()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresValidators()
      */
     @Override
     public String[] requiresValidators() {
@@ -95,7 +95,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     @Override
     public void start() throws Exception {

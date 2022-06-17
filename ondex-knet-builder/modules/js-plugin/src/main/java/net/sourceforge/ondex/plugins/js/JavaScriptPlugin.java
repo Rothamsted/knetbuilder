@@ -25,7 +25,7 @@ import net.sourceforge.ondex.scripting.ui.CommandEvent;
 import net.sourceforge.ondex.scripting.ui.ScriptingShell;
 import net.sourceforge.ondex.scripting.wrappers.ContextualReferenceResolver;
 import net.sourceforge.ondex.scripting.wrappers.OndexScriptingInitialiser;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * An Integrator plug-in that allows for invoking a JavaScript file from an Integrator workflow.

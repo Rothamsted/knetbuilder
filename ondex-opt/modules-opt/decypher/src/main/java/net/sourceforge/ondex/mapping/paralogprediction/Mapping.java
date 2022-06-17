@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -22,7 +21,7 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.EventType;
@@ -35,6 +34,7 @@ import net.sourceforge.ondex.programcalls.Match;
 import net.sourceforge.ondex.programcalls.decypher.DecypherAlignment;
 import net.sourceforge.ondex.programcalls.exceptions.AlgorithmNotSupportedException;
 import net.sourceforge.ondex.programcalls.exceptions.MissingFileException;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Predicts paralogs within species based on a bitscore cutoff of similar proteins (bitscores, unlike evalues do not vary with the size of the database), matches based on reciprocal blast.
@@ -210,7 +210,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames, MetaData {
         try {
             int dcbit = 0;
             if (bitscore != null) dcbit = bitscore;
-            dcAlign = new DecypherAlignment(net.sourceforge.ondex.config.Config.ondexDir,
+            dcAlign = new DecypherAlignment(net.sourceforge.ondex.core.api.config.Config.ondexDir,
                     programDir, cutoff, overlap, evalue, dcbit, 60, true);
         } catch (Exception e) {
             e.printStackTrace();

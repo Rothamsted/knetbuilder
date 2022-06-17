@@ -8,10 +8,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.mapping.tmbased.args.ArgumentNames;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Definition of different filters for text mining mappings

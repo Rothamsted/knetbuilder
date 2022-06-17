@@ -28,9 +28,10 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 import uk.ac.ebi.utils.runcontrol.ProgressLogger;
 
 /**

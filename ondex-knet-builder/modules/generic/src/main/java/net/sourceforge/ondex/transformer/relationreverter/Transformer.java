@@ -13,7 +13,7 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.exception.type.WrongParameterException;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 
 @Custodians(custodians = { "Jochen Weile" }, emails = { "jweile at users.sourceforge.net" })

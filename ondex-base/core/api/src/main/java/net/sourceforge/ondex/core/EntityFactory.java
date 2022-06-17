@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.sourceforge.ondex.config.Config;
+import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.NullValueEvent;

@@ -18,7 +18,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 //import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -56,6 +55,7 @@ import net.sourceforge.ondex.parser.uniprot.xml.filter.FilterEnum;
 import net.sourceforge.ondex.parser.uniprot.xml.filter.IntegerValueFilter;
 import net.sourceforge.ondex.parser.uniprot.xml.filter.StringValueFilter;
 import net.sourceforge.ondex.parser.uniprot.xml.filter.ValueFilter;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Parser for the UniProt Knowledgebase database. Implements this

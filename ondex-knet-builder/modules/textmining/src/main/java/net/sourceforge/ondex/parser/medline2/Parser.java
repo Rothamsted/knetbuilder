@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DataURL;
@@ -25,6 +24,7 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.medline2.sink.Abstract;
 import net.sourceforge.ondex.parser.medline2.transformer.Transformer;
 import net.sourceforge.ondex.parser.medline2.xml.XMLParser;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * @author keywan

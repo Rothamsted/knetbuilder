@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
-import net.sourceforge.ondex.core.util.GraphAdaptor;
+import net.sourceforge.ondex.core.base.util.GraphAdaptor;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.config.OVTK2PluginLoader;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;

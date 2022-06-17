@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -31,6 +30,7 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 
 /**

@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import net.sourceforge.ondex.init.ArrayKey;
+import net.sourceforge.ondex.workflow.init.ArrayKey;
 
 public class PluginTreeModelBuilder<Z extends Object> {
 	private final DefaultTreeModel model;

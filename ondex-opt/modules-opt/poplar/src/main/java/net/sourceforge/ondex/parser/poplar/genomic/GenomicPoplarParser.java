@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -27,6 +25,8 @@ import net.sourceforge.ondex.tools.auxfunctions.Fasta;
 import net.sourceforge.ondex.tools.auxfunctions.FastaObject;
 import net.sourceforge.ondex.tools.auxfunctions.TabArrayObject;
 import net.sourceforge.ondex.tools.auxfunctions.TabDelimited;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Parser for the Poplar data from the JGI.

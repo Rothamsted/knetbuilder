@@ -22,8 +22,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.undo.StateEdit;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -39,6 +37,8 @@ import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.listmodel.ConceptClassListModel;
 import net.sourceforge.ondex.ovtk2.util.listmodel.DataSourceListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Filter to change the visibility according to specified concept classes.

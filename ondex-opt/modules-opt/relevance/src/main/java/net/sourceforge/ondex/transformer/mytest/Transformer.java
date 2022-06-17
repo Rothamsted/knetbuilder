@@ -3,7 +3,7 @@ package net.sourceforge.ondex.transformer.mytest;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * A dummy transformer that simply adds "bob" as the value of the "fact" Attribute to each relation.

@@ -8,10 +8,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
 
 /**
  * TODO: comment me!

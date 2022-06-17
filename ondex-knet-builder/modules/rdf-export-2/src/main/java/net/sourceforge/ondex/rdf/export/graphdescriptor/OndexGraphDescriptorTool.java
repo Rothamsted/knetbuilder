@@ -2,7 +2,7 @@ package net.sourceforge.ondex.rdf.export.graphdescriptor;
 
 import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
-import static net.sourceforge.ondex.core.util.ONDEXGraphUtils.getOrCreateConceptClass;
+import static net.sourceforge.ondex.core.base.util.ONDEXGraphUtils.getOrCreateConceptClass;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphUtils;
 import uk.ac.ebi.utils.collections.OptionsMap;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.exceptions.TooFewValuesException;

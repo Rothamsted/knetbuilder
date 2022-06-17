@@ -8,8 +8,8 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.GraphLabelsUtils;
-import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
+import net.sourceforge.ondex.core.base.util.GraphLabelsUtils;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphUtils;
 
 /**
  * Tests for utilities in {@link GraphLabelsUtils}.

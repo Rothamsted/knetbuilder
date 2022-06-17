@@ -21,10 +21,10 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.init.PluginRegistry;
+import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.workflow.engine.BasicJobImpl;
 import net.sourceforge.ondex.workflow.engine.ResourcePool;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
 import net.sourceforge.ondex.workflow.model.WorkflowDescription;
 import net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO;
 import net.sourceforge.ondex.workflow.model.WorkflowTask;

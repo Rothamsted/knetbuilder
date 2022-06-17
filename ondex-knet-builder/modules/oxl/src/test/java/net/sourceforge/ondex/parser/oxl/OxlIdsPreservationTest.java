@@ -16,8 +16,8 @@ import org.junit.Test;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.export.oxl.Export;
 import uk.ac.ebi.utils.xml.XPathReader;
 

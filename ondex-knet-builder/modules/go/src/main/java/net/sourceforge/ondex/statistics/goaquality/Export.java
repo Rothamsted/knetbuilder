@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.algorithm.annotationquality.GoTerm;
 import net.sourceforge.ondex.algorithm.annotationquality.GoaIndexer;
@@ -24,6 +23,7 @@ import net.sourceforge.ondex.event.type.DataFileMissingEvent;
 import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 
 /**
@@ -113,7 +113,7 @@ public class Export extends ONDEXExport implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     @Override
     public void start() throws InvalidPluginArgumentException {
@@ -169,9 +169,9 @@ public class Export extends ONDEXExport implements ArgumentNames {
                 fireEventOccurred(new DataFileMissingEvent("File " + fileDummy + " does not exist.", getName()));
         } else {
             if (fileDummy.startsWith(sep))
-                fileTester = new File(net.sourceforge.ondex.config.Config.ondexDir + fileDummy);
+                fileTester = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + fileDummy);
             else
-                fileTester = new File(net.sourceforge.ondex.config.Config.ondexDir + sep + fileDummy);
+                fileTester = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + sep + fileDummy);
 
             if (fileTester.exists())
                 goLocation = fileTester.getAbsolutePath();
@@ -189,7 +189,7 @@ public class Export extends ONDEXExport implements ArgumentNames {
      * @param taxid the taxid.
      */
     private void qualityAnalysis(int taxid) {
-        String ondexdir = net.sourceforge.ondex.config.Config.ondexDir;
+        String ondexdir = net.sourceforge.ondex.core.api.config.Config.ondexDir;
 
         String sep = File.separator;
 
@@ -265,7 +265,7 @@ public class Export extends ONDEXExport implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresValidators()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresValidators()
      */
     public String[] requiresValidators() {
         return new String[0];

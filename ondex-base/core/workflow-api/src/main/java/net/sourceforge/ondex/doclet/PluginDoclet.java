@@ -44,7 +44,6 @@ import com.sun.source.util.DocTrees;
 import jdk.javadoc.doclet.Doclet;
 import jdk.javadoc.doclet.DocletEnvironment;
 import jdk.javadoc.doclet.Reporter;
-import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
@@ -54,8 +53,9 @@ import net.sourceforge.ondex.annotations.metadata.ConceptClassRequired;
 import net.sourceforge.ondex.annotations.metadata.DataSourceRequired;
 import net.sourceforge.ondex.annotations.metadata.EvidenceTypeRequired;
 import net.sourceforge.ondex.annotations.metadata.RelationTypeRequired;
-import net.sourceforge.ondex.init.PluginType;
 import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.init.PluginType;
 import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
 import uk.ac.ebi.utils.regex.RegEx;
 

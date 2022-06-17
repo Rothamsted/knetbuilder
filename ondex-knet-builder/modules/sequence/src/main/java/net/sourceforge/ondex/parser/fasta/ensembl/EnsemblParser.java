@@ -3,8 +3,6 @@ package net.sourceforge.ondex.parser.fasta.ensembl;
 import java.util.HashMap;
 import java.util.List;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -21,6 +19,8 @@ import net.sourceforge.ondex.parser.fasta.FastaBlock;
 import net.sourceforge.ondex.parser.fasta.ReadFastaFiles;
 import net.sourceforge.ondex.parser.fasta.WriteFastaFile;
 import net.sourceforge.ondex.parser.fasta.args.ArgumentNames;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Ensembl FASTA FILE parser, input a peptide file

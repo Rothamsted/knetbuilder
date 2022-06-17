@@ -3,7 +3,6 @@ package net.sourceforge.ondex.parser.fasta.ncbi;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.config.ValidatorRegistry;
@@ -20,6 +19,7 @@ import net.sourceforge.ondex.parser.fasta.FastaBlock;
 import net.sourceforge.ondex.parser.fasta.Parser;
 import net.sourceforge.ondex.parser.fasta.ReadFastaFiles;
 import net.sourceforge.ondex.parser.fasta.WriteFastaFile;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * NCBI FASTA FILE parser

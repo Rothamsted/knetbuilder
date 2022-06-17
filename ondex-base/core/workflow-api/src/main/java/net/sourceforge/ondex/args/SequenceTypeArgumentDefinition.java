@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.args;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Extension of StringArgumentDefinition for types of sequences (AA or NA).

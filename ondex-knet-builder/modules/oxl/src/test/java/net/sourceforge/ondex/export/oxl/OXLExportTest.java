@@ -28,7 +28,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -39,11 +38,12 @@ import net.sourceforge.ondex.core.MetaDataFactory;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
+import net.sourceforge.ondex.core.base.util.CachedGraphWrapper;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.util.CachedGraphWrapper;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.oxl.jaxb.CDATAWriterFilter;
 import net.sourceforge.ondex.parser.oxl.Parser;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * @author hindlem

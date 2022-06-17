@@ -12,8 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
@@ -21,8 +19,10 @@ import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.logging.ONDEXLogger;
+import net.sourceforge.ondex.lucene.config.LuceneRegistry;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.tools.DirUtils;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * A applied test case designed by catherine.c, implemented by matt.h

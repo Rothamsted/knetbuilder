@@ -3,7 +3,6 @@ package net.sourceforge.ondex.transformer.goinformationcontent;
 import java.io.File;
 import java.io.IOException;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.algorithm.annotationquality.GoaIndexer;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -17,7 +16,8 @@ import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.DataFileMissingEvent;
 import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * Iterates over the GO concepts of an Ondex graph, calculates its
@@ -56,7 +56,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
 
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#getArgumentDefinitions()
      */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
@@ -67,7 +67,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#getName()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#getName()
      */
     @Override
     public String getName() {
@@ -75,7 +75,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#getVersion()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#getVersion()
      */
     @Override
     public String getVersion() {
@@ -88,7 +88,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#requiresIndexedGraph()
      */
     @Override
     public boolean requiresIndexedGraph() {
@@ -96,7 +96,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     @Override
     public void start() throws InvalidPluginArgumentException {
@@ -152,9 +152,9 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
                     fireEventOccurred(new DataFileMissingEvent("File " + fileDummy + " does not exist.", getName()));
             } else {
                 if (fileDummy.startsWith(sep))
-                    fileTester = new File(net.sourceforge.ondex.config.Config.ondexDir + fileDummy);
+                    fileTester = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + fileDummy);
                 else
-                    fileTester = new File(net.sourceforge.ondex.config.Config.ondexDir + sep + fileDummy);
+                    fileTester = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + sep + fileDummy);
 
                 if (fileTester.exists())
                     goLocation = fileTester.getAbsolutePath();

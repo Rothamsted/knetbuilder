@@ -28,9 +28,9 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.EventType.Level;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
 import uk.ac.ncl.cs.ondex.tools.Neighbour;
 
 /**

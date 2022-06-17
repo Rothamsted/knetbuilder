@@ -14,7 +14,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.exception.type.AttributeNameMissingException;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * This transformer applies a given regular expression to a String value of a

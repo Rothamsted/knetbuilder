@@ -5,7 +5,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
@@ -37,6 +36,7 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.ec.data.Entry;
 import net.sourceforge.ondex.parser.ec.data.Extractor;
 import net.sourceforge.ondex.parser.ec.data.Relation;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * EC Nomenclature Parser for the files: "enzclass.txt" "enzyme.dat" from

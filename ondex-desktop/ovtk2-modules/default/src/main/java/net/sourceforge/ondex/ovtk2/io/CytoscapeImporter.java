@@ -29,7 +29,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
@@ -37,6 +36,7 @@ import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.OVTKProgressMonitor;
 import net.sourceforge.ondex.parser.cytoscape.Parser;
 import net.sourceforge.ondex.tools.threading.monitoring.IndeterminateProcessAdapter;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * @author jweile

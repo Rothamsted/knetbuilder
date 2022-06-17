@@ -18,13 +18,13 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.export.dot.ArgumentNames;
 import net.sourceforge.ondex.export.dot.Export;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Wrapper GUI for back-end DOT export

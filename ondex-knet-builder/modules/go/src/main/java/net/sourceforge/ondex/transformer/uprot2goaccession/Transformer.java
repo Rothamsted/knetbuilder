@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.algorithm.annotationquality.GoaIndexer;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -25,7 +24,8 @@ import net.sourceforge.ondex.event.type.DataFileMissingEvent;
 import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * Reads the uniprot accessions from the concept, looks up their associated
@@ -87,7 +87,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     //####METHODS####
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#getArgumentDefinitions()
      */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
@@ -101,7 +101,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#getName()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#getName()
      */
     @Override
     public String getName() {
@@ -109,7 +109,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#getVersion()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#getVersion()
      */
     @Override
     public String getVersion() {
@@ -122,7 +122,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#requiresIndexedGraph()
      */
     @Override
     public boolean requiresIndexedGraph() {
@@ -130,7 +130,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     @Override
     public void start() throws InvalidPluginArgumentException {
@@ -198,9 +198,9 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
                     fireEventOccurred(new DataFileMissingEvent("File " + fileDummy + " does not exist.", getName()));
             } else {
                 if (fileDummy.startsWith(sep))
-                    fileTester = new File(net.sourceforge.ondex.config.Config.ondexDir + fileDummy);
+                    fileTester = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + fileDummy);
                 else
-                    fileTester = new File(net.sourceforge.ondex.config.Config.ondexDir + sep + fileDummy);
+                    fileTester = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + sep + fileDummy);
 
                 if (fileTester.exists())
                     goLocation = fileTester.getAbsolutePath();
@@ -220,9 +220,9 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
                     fireEventOccurred(new DataFileMissingEvent("File " + fileDummy + " does not exist.", getName()));
             } else {
                 if (fileDummy.startsWith(sep))
-                    fileTester = new File(net.sourceforge.ondex.config.Config.ondexDir + fileDummy);
+                    fileTester = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + fileDummy);
                 else
-                    fileTester = new File(net.sourceforge.ondex.config.Config.ondexDir + sep + fileDummy);
+                    fileTester = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + sep + fileDummy);
 
                 if (fileTester.exists())
                     goaLocation = fileTester.getAbsolutePath();
@@ -313,7 +313,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
      * @param taxid the taxid.
      */
     private void qualityAnalysis(String file, int taxid) {
-        String ondexdir = net.sourceforge.ondex.config.Config.ondexDir;
+        String ondexdir = net.sourceforge.ondex.core.api.config.Config.ondexDir;
 
         String sep = File.separator;
 

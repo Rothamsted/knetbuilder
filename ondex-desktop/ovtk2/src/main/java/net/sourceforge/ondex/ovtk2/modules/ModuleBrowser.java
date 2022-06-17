@@ -28,7 +28,7 @@ import javax.xml.transform.TransformerException;
 
 import org.jdom.JDOMException;
 
-import net.sourceforge.ondex.config.Config;
+import net.sourceforge.ondex.core.api.config.Config;
 
 /**
  * @author lysenkoa

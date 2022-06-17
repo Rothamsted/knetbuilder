@@ -24,7 +24,7 @@ import javax.swing.JPopupMenu;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.QuerySetParser;
+import net.sourceforge.ondex.core.base.util.QuerySetParser;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.config.OVTK2PluginLoader;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;

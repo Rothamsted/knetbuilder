@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.init.PluginType;
+import net.sourceforge.ondex.workflow.init.PluginType;
 
 /**
  * Created by IntelliJ IDEA.

@@ -5,13 +5,13 @@ import static net.sourceforge.ondex.rdf.export.RDFFileExporter.DEFAULT_X_LANG;
 
 import org.apache.commons.lang3.Validate;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * The plugin wrapper, that makes the RDF exporter an ONDEX export plugin.

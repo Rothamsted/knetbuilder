@@ -3,7 +3,6 @@ package net.sourceforge.ondex.parser.gaf;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.DataURL;
@@ -19,6 +18,7 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.gaf.tab.GAFFormatParser;
 import net.sourceforge.ondex.parser.gaf.transformer.GAFTransformer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * <p/>

@@ -3,10 +3,10 @@ package net.sourceforge.ondex.parser.owl.plugin;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * @author brandizi

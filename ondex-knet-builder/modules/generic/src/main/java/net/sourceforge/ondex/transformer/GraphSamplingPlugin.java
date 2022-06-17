@@ -17,6 +17,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 import static java.lang.Math.round;
 

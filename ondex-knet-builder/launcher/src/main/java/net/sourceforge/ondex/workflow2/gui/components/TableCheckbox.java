@@ -10,7 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.UIManager;
 
-import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
 import net.sourceforge.ondex.workflow2.gui.arg.ArgumentContainer;
 import net.sourceforge.ondex.workflow2.gui.components.highlighting.HighlightHandler;

@@ -6,7 +6,7 @@ import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
 

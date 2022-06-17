@@ -5,7 +5,6 @@ import java.io.FilenameFilter;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -25,6 +24,7 @@ import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.parser.fasta.FastaBlock;
 import net.sourceforge.ondex.parser.fasta.ReadFastaFiles;
 import net.sourceforge.ondex.parser.fasta.WriteFastaFile;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Parser to parse the Affymetrix targetsequence and consensus files

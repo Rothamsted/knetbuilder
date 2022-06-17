@@ -11,7 +11,7 @@ import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.cytoscape.mapping.PathSearcher;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * A transformer that wraps Jochen's PathSearch algorithm.

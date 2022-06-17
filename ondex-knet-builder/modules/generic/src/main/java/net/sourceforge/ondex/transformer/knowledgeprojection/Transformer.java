@@ -25,7 +25,7 @@ import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.tools.functions.GraphElementManipulation;
 import net.sourceforge.ondex.tools.functions.StandardFunctions;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * Copies an attribute from one entity to another, when they are joined

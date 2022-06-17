@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -27,6 +25,8 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.parser.gaf.ArgumentNames;
 import net.sourceforge.ondex.parser.gaf.MetaData;
 import net.sourceforge.ondex.parser.gaf.sink.AnnotationLine;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * @author keywan

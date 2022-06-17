@@ -10,7 +10,6 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.config.ValidatorRegistry;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -21,6 +20,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.ui.contentsdisplay.AbstractContentDisplayPlugin;
 import net.sourceforge.ondex.ovtk2.util.OVTKProgressMonitor;

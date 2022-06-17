@@ -24,9 +24,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginDocumentationFactory;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.init.PluginDescription;
+import net.sourceforge.ondex.workflow.init.PluginDocumentationFactory;
 import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
 import net.sourceforge.ondex.workflow.model.WorkflowDescriptionIO;
 import net.sourceforge.ondex.workflow.model.WorkflowTask;

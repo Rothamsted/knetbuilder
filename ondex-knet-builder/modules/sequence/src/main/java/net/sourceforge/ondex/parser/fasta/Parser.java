@@ -1,6 +1,5 @@
 package net.sourceforge.ondex.parser.fasta;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -17,6 +16,7 @@ import net.sourceforge.ondex.parser.fasta.ensembl.EnsemblParser;
 import net.sourceforge.ondex.parser.fasta.gramene.GrameneParser;
 import net.sourceforge.ondex.parser.fasta.ncbi.NCBIParser;
 import net.sourceforge.ondex.parser.fasta.simple.SimpleParser;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 @Status(description = "Tested March 2010 (Artem Lysenko)", status = StatusType.STABLE)
 @Authors(authors = {"Matthew Hindle", "Berend Hoekman"}, emails = {"matthew_hindle at users.sourceforge.net", ""})

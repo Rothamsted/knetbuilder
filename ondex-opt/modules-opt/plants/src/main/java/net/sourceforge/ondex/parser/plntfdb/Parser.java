@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
@@ -31,6 +30,7 @@ import net.sourceforge.ondex.exception.type.DataSourceMissingException;
 import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
 import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 
 /**

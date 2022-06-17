@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.producer;
 
-import net.sourceforge.ondex.AbstractONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.AbstractONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
 
 /**
  * This class is a template for a type of Ondex plugins that can construct new

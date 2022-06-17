@@ -1,8 +1,8 @@
 package net.sourceforge.ondex.core.base;
 
-import net.sourceforge.ondex.config.ONDEXGraphRegistry;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.DataSource;
+import net.sourceforge.ondex.core.api.config.ONDEXGraphRegistry;
 
 /**
  * Implementation of ConceptAccession.

@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -28,6 +26,8 @@ import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 import net.sourceforge.ondex.parser.poplar.MetaData;
 import net.sourceforge.ondex.parser.poplar.Parser;
 import net.sourceforge.ondex.parser.poplar.Registry;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 public class TFPoplarParser {
 

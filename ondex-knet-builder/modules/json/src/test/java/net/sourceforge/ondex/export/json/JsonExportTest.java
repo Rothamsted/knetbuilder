@@ -8,13 +8,13 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * To test the JSON Export code.

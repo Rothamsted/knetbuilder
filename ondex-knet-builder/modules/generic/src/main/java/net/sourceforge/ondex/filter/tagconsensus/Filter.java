@@ -4,7 +4,6 @@ import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -13,10 +12,11 @@ import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.exception.type.WrongArgumentException;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * @author jweile
@@ -82,7 +82,7 @@ public class Filter extends ONDEXFilter
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getArgumentDefinitions()
      */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
@@ -95,7 +95,7 @@ public class Filter extends ONDEXFilter
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getName()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getName()
      */
     @Override
     public String getName() {
@@ -103,7 +103,7 @@ public class Filter extends ONDEXFilter
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getVersion()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getVersion()
      */
     @Override
     public String getVersion() {
@@ -117,7 +117,7 @@ public class Filter extends ONDEXFilter
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresIndexedGraph()
      */
     @Override
     public boolean requiresIndexedGraph() {
@@ -125,7 +125,7 @@ public class Filter extends ONDEXFilter
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresValidators()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresValidators()
      */
     @Override
     public String[] requiresValidators() {
@@ -133,7 +133,7 @@ public class Filter extends ONDEXFilter
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     @Override
     public void start() throws Exception {

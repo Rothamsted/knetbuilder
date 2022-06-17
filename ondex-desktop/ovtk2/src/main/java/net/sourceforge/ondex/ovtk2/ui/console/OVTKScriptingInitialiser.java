@@ -6,19 +6,18 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.api.config.Config;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.filter.ONDEXFilter;
+import net.sourceforge.ondex.lucene.config.LuceneRegistry;
 import net.sourceforge.ondex.ovtk2.reusable_functions.Filter;
 import net.sourceforge.ondex.ovtk2.reusable_functions.Interactivity;
 import net.sourceforge.ondex.ovtk2.reusable_functions.Statisitics;
@@ -49,6 +48,7 @@ import net.sourceforge.ondex.scripting.ui.CommandLine;
 import net.sourceforge.ondex.scripting.wrappers.ContextualReferenceResolver;
 import net.sourceforge.ondex.scripting.wrappers.OndexScriptingInitialiser;
 import net.sourceforge.ondex.tools.threading.monitoring.IndeterminateProcessAdapter;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 import net.sourceforge.ondex.workflow.engine.Engine;
 
 /**

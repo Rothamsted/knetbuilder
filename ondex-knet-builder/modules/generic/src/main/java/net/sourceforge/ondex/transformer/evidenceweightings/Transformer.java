@@ -18,8 +18,8 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * Implements the annotation of concepts in a graph with evidence code

@@ -7,7 +7,6 @@ import java.util.Collection;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -22,6 +21,7 @@ import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.filter.conceptclass.Filter;
 import net.sourceforge.ondex.logging.ONDEXLogger;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 public class TransformerTest extends TestCase {
 

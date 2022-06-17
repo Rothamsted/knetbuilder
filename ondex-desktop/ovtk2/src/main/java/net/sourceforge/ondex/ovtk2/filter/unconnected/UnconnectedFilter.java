@@ -16,7 +16,6 @@ import javax.swing.JRadioButton;
 import javax.swing.SpringLayout;
 import javax.swing.undo.StateEdit;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.ovtk2.config.Config;
@@ -26,6 +25,7 @@ import net.sourceforge.ondex.ovtk2.ui.OVTK2Desktop;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 public class UnconnectedFilter extends OVTK2Filter implements ActionListener {
 

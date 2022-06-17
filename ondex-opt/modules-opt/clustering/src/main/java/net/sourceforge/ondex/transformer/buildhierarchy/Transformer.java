@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -29,7 +28,8 @@ import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * computes a graph hierarchy model consisting of a dendrogram and edge probability
@@ -151,7 +151,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     //####METHODS####
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     @Override
     public void start() throws InvalidPluginArgumentException {
@@ -193,7 +193,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
             long interim_time = start;
 
             StatsRecorder.reset();
-            BufferedWriter w = new BufferedWriter(new FileWriter(net.sourceforge.ondex.config.Config.ondexDir + System.getProperty("file.separator") + "mcmc_" + System.currentTimeMillis() + ".txt"));
+            BufferedWriter w = new BufferedWriter(new FileWriter(net.sourceforge.ondex.core.api.config.Config.ondexDir + System.getProperty("file.separator") + "mcmc_" + System.currentTimeMillis() + ".txt"));
             int logging_step = (((int) Math.pow((double) usedConcepts.size(), 2.0)) / 32000) + 1;
 
             boolean inSaturation = false, terminate = false, record = false;
@@ -704,7 +704,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.transformer.ONDEXTransformer#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.transformer.ONDEXTransformer#getArgumentDefinitions()
      */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
@@ -716,7 +716,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getName()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getName()
      */
     @Override
     public String getName() {
@@ -724,7 +724,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getVersion()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getVersion()
      */
     @Override
     public String getVersion() {
@@ -738,7 +738,7 @@ public class Transformer extends ONDEXTransformer implements ArgumentNames {
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresIndexedGraph()
      */
     @Override
     public boolean requiresIndexedGraph() {

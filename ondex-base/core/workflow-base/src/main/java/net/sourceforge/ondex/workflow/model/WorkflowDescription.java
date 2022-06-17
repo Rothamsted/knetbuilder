@@ -10,10 +10,10 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.init.ArgumentDescription;
 import net.sourceforge.ondex.workflow.engine.OndexJob;
 import net.sourceforge.ondex.workflow.engine.Processor;
 import net.sourceforge.ondex.workflow.engine.Processor.Argument;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 import net.sourceforge.ondex.workflow.model.WorkflowDescriptionConf.PluginArgMaker;
 
 public class WorkflowDescription {

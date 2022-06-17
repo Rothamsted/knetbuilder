@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.workflow.model;
 
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPluginArguments;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * @author hindlem

@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
@@ -43,6 +42,7 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.go.data.OboConcept;
 import net.sourceforge.ondex.parser.go.data.OboImporter;
 import net.sourceforge.ondex.parser.go.data.StringMod;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * GO Ontology Parser for the file: "gene_ontology_edit.obo" in OBO v1.2 format

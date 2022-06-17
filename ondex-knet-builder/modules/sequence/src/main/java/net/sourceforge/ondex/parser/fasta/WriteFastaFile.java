@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.parser.fasta;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 public abstract class WriteFastaFile {
 

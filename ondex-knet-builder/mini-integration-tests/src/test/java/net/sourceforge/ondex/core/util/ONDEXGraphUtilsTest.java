@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.core.util;
 
-import static net.sourceforge.ondex.core.util.ONDEXGraphUtils.getAttribute;
+import static net.sourceforge.ondex.core.base.util.ONDEXGraphUtils.getAttribute;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -15,6 +15,8 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.base.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 
 /**

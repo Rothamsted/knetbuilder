@@ -23,7 +23,7 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.exception.type.PluginException;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 import uk.ac.ncl.cs.ondex.semantics.tools.Path;
 import uk.ac.ncl.cs.ondex.semantics.tools.PathSearcher;
 import uk.ac.ncl.cs.ondex.semantics.tools.PathTemplate;

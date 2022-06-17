@@ -28,12 +28,8 @@ import org.apache.commons.io.IOUtils;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.config.ValidatorRegistry;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -41,9 +37,10 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.api.config.Config;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.event.ONDEXEvent;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.ONDEXListener;
@@ -56,13 +53,16 @@ import net.sourceforge.ondex.export.ONDEXExport;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.init.Initialisation;
 import net.sourceforge.ondex.logging.ONDEXLogger;
+import net.sourceforge.ondex.lucene.config.LuceneRegistry;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.tools.DirUtils;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 import net.sourceforge.ondex.workflow.events.InvalidArgumentEvent;
 import net.sourceforge.ondex.workflow.model.PluginAndArgs;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * ONDEX Work flow is the main entry point for running ONDEX work flows specified

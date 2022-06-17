@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.core.base;
 
-import net.sourceforge.ondex.config.ONDEXGraphRegistry;
 import net.sourceforge.ondex.core.ConceptName;
+import net.sourceforge.ondex.core.api.config.ONDEXGraphRegistry;
 
 /**
  * Simple implementation of ConceptName.

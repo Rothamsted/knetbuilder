@@ -1,0 +1,10 @@
+package net.sourceforge.ondex.workflow;
+
+import net.sourceforge.ondex.core.ONDEXGraph;
+
+public interface RequiresGraph {
+		
+	public void setONDEXGraph(ONDEXGraph graph);
+	
+	public ONDEXGraph getGraph ();
+}

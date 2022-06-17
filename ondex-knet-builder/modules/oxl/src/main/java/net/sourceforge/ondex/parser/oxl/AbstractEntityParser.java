@@ -16,12 +16,12 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import net.sourceforge.ondex.config.OndexJAXBContextRegistry;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.core.api.config.OndexJAXBContextRegistry;
 import net.sourceforge.ondex.core.util.Holder;
 import net.sourceforge.ondex.exception.type.EmptyStringException;
 import net.sourceforge.ondex.exception.type.NullValueException;

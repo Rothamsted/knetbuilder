@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.workflow2.gui.arg;
 
-import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 
 /**
  * @author lysenkoa

@@ -6,7 +6,7 @@ package net.sourceforge.ondex.transformer.copyaccessions;
  * @author taubertj, hindlem
  * 
  */
-public interface ArgumentNames extends net.sourceforge.ondex.transformer.ArgumentNames {
+public interface ArgumentNames extends net.sourceforge.ondex.workflow.transformer.ArgumentNames {
 
 	public static final String RELATION_TYPE_SET_ARG = "RelationType";
 

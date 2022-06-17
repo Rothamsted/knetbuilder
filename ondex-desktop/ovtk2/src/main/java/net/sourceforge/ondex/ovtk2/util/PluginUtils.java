@@ -4,8 +4,8 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import net.sourceforge.ondex.init.PluginRegistry;
 import net.sourceforge.ondex.ovtk2.config.Config;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
 
 public class PluginUtils {
 
@@ -38,7 +38,7 @@ public class PluginUtils {
 	 */
 	public static void initPluginRegistry() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (!Config.isApplet) {
-			String pluginsDirOndex = new File(new File(net.sourceforge.ondex.config.Config.ondexDir).getAbsoluteFile().getParent() + File.separator + "plugins").getAbsoluteFile().getAbsolutePath();
+			String pluginsDirOndex = new File(new File(net.sourceforge.ondex.core.api.config.Config.ondexDir).getAbsoluteFile().getParent() + File.separator + "plugins").getAbsoluteFile().getAbsolutePath();
 			String pluginsDirOvtk = new File(new File(Config.ovtkDir).getAbsoluteFile().getParent() + File.separator + "plugins").getAbsoluteFile().getAbsolutePath();
 			Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass("net.sourceforge.ondex.init.PluginRegistry");
 			Method m = cls.getMethod("init", new Class[] { boolean.class, String[].class });

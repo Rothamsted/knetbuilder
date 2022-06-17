@@ -3,7 +3,7 @@ package net.sourceforge.ondex.export.slotable;
 import net.sourceforge.ondex.annotations.IncludeType;
 import net.sourceforge.ondex.annotations.Webservice;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.core.util.GraphAdaptor;
+import net.sourceforge.ondex.core.base.util.GraphAdaptor;
 import net.sourceforge.ondex.export.ONDEXExport;
 
 @Webservice(description = "Webservices make no direct use of GraphAdapter. August 2011 Christian",

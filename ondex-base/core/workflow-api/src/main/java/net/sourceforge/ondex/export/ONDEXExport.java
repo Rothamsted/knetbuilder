@@ -4,9 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import net.sourceforge.ondex.AbstractONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.RequiresGraph;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -21,7 +18,10 @@ import net.sourceforge.ondex.exception.type.DataSourceMissingException;
 import net.sourceforge.ondex.exception.type.EvidenceTypeMissingException;
 import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 import net.sourceforge.ondex.exception.type.UnitMissingException;
-import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.AbstractONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.RequiresGraph;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 
 /**
  * Parent class for export functionality implements ONDEXPlugin.

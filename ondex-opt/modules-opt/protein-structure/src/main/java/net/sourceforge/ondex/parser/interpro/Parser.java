@@ -17,7 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -28,6 +27,7 @@ import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Parser for the interpro database just parses domains and EC terms at the moment

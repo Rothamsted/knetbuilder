@@ -5,13 +5,13 @@ import java.util.Set;
 import org.apache.commons.collections15.BidiMap;
 import org.apache.commons.collections15.bidimap.DualHashBidiMap;
 
-import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.core.base.AbstractONDEXGraphMetaData;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.DuplicatedEntryEvent;

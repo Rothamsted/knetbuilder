@@ -12,9 +12,9 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.core.searchable.LuceneQueryBuilder;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.mapping.sequence2pfam.MetaData;
 import net.sourceforge.ondex.programcalls.HMMMatch;
 import net.sourceforge.ondex.programcalls.decypher.DecypherAlignment;
@@ -47,7 +47,7 @@ public class Decypher extends AbstractMethod {
 	}
 
 	public Collection<HMMMatch> execute() throws Exception {
-		String ondexDir = net.sourceforge.ondex.config.Config.ondexDir;
+		String ondexDir = net.sourceforge.ondex.core.api.config.Config.ondexDir;
 		try {
 			
 			float eValue = Float.parseFloat(getEvalue());

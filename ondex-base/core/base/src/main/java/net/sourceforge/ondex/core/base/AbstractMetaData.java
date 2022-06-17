@@ -1,9 +1,10 @@
 package net.sourceforge.ondex.core.base;
 
 import java.io.Serializable;
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.config.ONDEXGraphRegistry;
+
 import net.sourceforge.ondex.core.MetaData;
+import net.sourceforge.ondex.core.api.config.Config;
+import net.sourceforge.ondex.core.api.config.ONDEXGraphRegistry;
 import net.sourceforge.ondex.exception.type.NullValueException;
 
 /**

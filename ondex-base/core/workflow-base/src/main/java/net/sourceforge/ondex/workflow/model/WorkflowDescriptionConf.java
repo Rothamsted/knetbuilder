@@ -9,15 +9,15 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 import net.sourceforge.ondex.workflow.engine.Engine;
 import net.sourceforge.ondex.workflow.engine.PluginProcessor;
 import net.sourceforge.ondex.workflow.engine.Processor;
 import net.sourceforge.ondex.workflow.engine.StandardProcessor;
 import net.sourceforge.ondex.workflow.engine.ValuePair;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 
 /**
  * Configuration for TaskDescription.

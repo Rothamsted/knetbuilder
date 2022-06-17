@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.args;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Interface that defines the contract for all definitions of arguments.

@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.DataURL;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
@@ -41,6 +40,7 @@ import net.sourceforge.ondex.parser.genericobo.go.Organism;
 import net.sourceforge.ondex.parser.genericobo.go.StringMod;
 import net.sourceforge.ondex.parser.genericobo.po.POReferenceContainer;
 import net.sourceforge.ondex.validator.AbstractONDEXValidator;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * OBO Ontology Parser

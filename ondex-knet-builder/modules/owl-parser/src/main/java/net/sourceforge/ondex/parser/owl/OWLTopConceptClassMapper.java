@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.CachedGraphWrapper;
+import net.sourceforge.ondex.core.base.util.CachedGraphWrapper;
 import net.sourceforge.ondex.core.util.prototypes.ConceptClassPrototype;
 import net.sourceforge.ondex.parser.ConceptClassMapper;
 import net.sourceforge.ondex.parser.DecoratingMapper;

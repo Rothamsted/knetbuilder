@@ -31,11 +31,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.QuerySetParser;
+import net.sourceforge.ondex.core.base.util.QuerySetParser;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.config.OVTK2PluginLoader;
@@ -48,6 +47,7 @@ import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.LayoutNeighbours;
 import net.sourceforge.ondex.transformer.relationcollapser.ClusterCollapser;
 import net.sourceforge.ondex.validator.htmlaccessionlink.Condition;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Menu shown on right click on nodes.

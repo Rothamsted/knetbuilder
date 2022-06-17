@@ -14,7 +14,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -39,6 +38,7 @@ import net.sourceforge.ondex.event.type.PluginErrorEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Implements a mapping using BLAST similarity searches for sequence data.
@@ -178,7 +178,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames {
 		// proceed if ready
 		if (ready) {
 
-			String ondexDir = net.sourceforge.ondex.config.Config.ondexDir;
+			String ondexDir = net.sourceforge.ondex.core.api.config.Config.ondexDir;
 
 			File tempDir = new File(ondexDir + File.separator + "temp");
 			if (!tempDir.exists()) {

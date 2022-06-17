@@ -9,7 +9,6 @@ import java.util.Set;
 import org.apache.commons.collections15.BidiMap;
 import org.apache.commons.collections15.bidimap.DualHashBidiMap;
 
-import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -21,6 +20,7 @@ import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationKey;
 import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.core.base.AbstractONDEXGraph;
 import net.sourceforge.ondex.core.base.RelationKeyImpl;
 import net.sourceforge.ondex.event.ONDEXEventHandler;

@@ -27,7 +27,7 @@ import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.NullValueEvent;
@@ -392,7 +392,7 @@ public class Mapping extends ONDEXMapping implements ArgumentNames, MetaData {
         fireEventOccurred(new GeneralOutputEvent("Running " + SequenceAlignmentProgramArgumentDefinition.DECYPHER, getCurrentMethodName()));
 
         DecypherAlignment dcAlign = new DecypherAlignment(
-                net.sourceforge.ondex.config.Config.ondexDir,
+                net.sourceforge.ondex.core.api.config.Config.ondexDir,
                 programDir,
                 alignments_cutoff,
                 overlap,

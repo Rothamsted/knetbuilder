@@ -9,7 +9,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -26,6 +25,7 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Parses the pfam2go mapping from a given file.

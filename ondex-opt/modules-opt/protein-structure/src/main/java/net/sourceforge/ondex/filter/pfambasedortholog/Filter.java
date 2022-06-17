@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.annotationquality.GOTreeParser;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
@@ -20,7 +19,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
 import net.sourceforge.ondex.event.type.DataSourceMissingEvent;
@@ -29,6 +28,7 @@ import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * The Pfam-based ortholg filter is designed to be executed on a graph that contains
@@ -595,7 +595,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
             String fileStr = (String) o;
             File file = new File(fileStr);
             if (!file.isAbsolute())
-                fileStr = net.sourceforge.ondex.config.Config.ondexDir + fileStr;
+                fileStr = net.sourceforge.ondex.core.api.config.Config.ondexDir + fileStr;
             file = new File(fileStr);
             if (!file.exists()) {
                 continueRun = false;
@@ -619,7 +619,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getArgumentDefinitions()
      */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
@@ -634,7 +634,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getName()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getName()
      */
     @Override
     public String getName() {
@@ -642,7 +642,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getVersion()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getVersion()
      */
     @Override
     public String getVersion() {
@@ -655,7 +655,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresIndexedGraph()
      */
     @Override
     public boolean requiresIndexedGraph() {

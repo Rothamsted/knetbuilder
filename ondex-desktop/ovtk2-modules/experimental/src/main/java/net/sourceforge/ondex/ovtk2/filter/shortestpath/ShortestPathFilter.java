@@ -21,12 +21,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.undo.StateEdit;
 
 import edu.uci.ics.jung.visualization.picking.PickedState;
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.filter.shortestpath.ArgumentNames;
 import net.sourceforge.ondex.filter.shortestpath.Filter;
 import net.sourceforge.ondex.logging.ONDEXLogger;
@@ -40,6 +38,8 @@ import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.listmodel.ConceptListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Filter to change the visibility according to shortest paths present in graph.

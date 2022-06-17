@@ -13,17 +13,17 @@ import java.util.Set;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
+import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.event.type.EventType;
 import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
 import net.sourceforge.ondex.tools.MetaDataUtil;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 public class Transformer extends ONDEXTransformer
 {

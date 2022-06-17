@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
-import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.export.oxl.Export;
-import net.sourceforge.ondex.init.PluginRegistry;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;

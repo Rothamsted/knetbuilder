@@ -3,8 +3,6 @@ package net.sourceforge.ondex.core.base;
 import java.util.Collection;
 import java.util.Set;
 
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.config.ONDEXGraphRegistry;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -15,7 +13,9 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.api.config.Config;
+import net.sourceforge.ondex.core.api.config.ONDEXGraphRegistry;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 

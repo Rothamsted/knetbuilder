@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.FloatRangeArgumentDefinition;
@@ -27,6 +26,7 @@ import net.sourceforge.ondex.event.type.DataFileMissingEvent;
 import net.sourceforge.ondex.event.type.EvidenceTypeMissingEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.parser.ONDEXParser;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Parses relations from tabular files.

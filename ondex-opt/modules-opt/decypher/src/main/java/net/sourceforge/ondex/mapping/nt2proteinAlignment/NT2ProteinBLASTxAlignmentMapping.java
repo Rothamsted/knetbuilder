@@ -64,7 +64,7 @@ public class NT2ProteinBLASTxAlignmentMapping extends ONDEXMapping {
         Set<ONDEXConcept> conceptsWithProteins = graph.getConceptsOfAttributeName(graph.getMetaData().getAttributeName("AA"));
 
         DecypherAlignment dcAlign = new DecypherAlignment(
-                    net.sourceforge.ondex.config.Config.ondexDir,
+                    net.sourceforge.ondex.core.api.config.Config.ondexDir,
                     getArguments().getUniqueValue(PROGRAM_DIR_ARG).toString(),
                     0, //cutff
                     0f, //%

@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -25,6 +24,7 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.pdb.sink.ProteinProtoType;
 import net.sourceforge.ondex.parser.pdb.transformer.ProteinTransformer;
 import net.sourceforge.ondex.tools.ziptools.ZInputStream;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * PDB Parser. The Parser searches in a folder for all .enz-files and parse

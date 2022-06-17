@@ -11,8 +11,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -29,6 +27,8 @@ import net.sourceforge.ondex.parser.uniprot.sink.DbLink;
 import net.sourceforge.ondex.parser.uniprot.sink.Protein;
 import net.sourceforge.ondex.parser.uniprot.sink.Publication;
 import net.sourceforge.ondex.tools.MetaDataUtil;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * transforms the sink objects to concept with relations

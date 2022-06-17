@@ -1,8 +1,8 @@
 package net.sourceforge.ondex.mapping.paralogprediction;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.NonContinuousArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Defines the Sequence Alignment Programs valid for this mapping method

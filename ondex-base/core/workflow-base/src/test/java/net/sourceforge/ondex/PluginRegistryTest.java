@@ -14,8 +14,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginRegistry;
+import net.sourceforge.ondex.workflow.init.PluginDescription;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
 
 /**
  * @author lysenkoa

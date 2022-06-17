@@ -5,7 +5,6 @@ import static net.sourceforge.ondex.tools.functions.ControledVocabularyHelper.cr
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
@@ -18,7 +17,8 @@ import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.tools.functions.GraphElementManipulation;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * This Transformer replaces concepts of a specified concept class with equivalent ones,

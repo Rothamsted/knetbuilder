@@ -16,14 +16,12 @@ import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.RNASequence;
 import org.biojava3.core.sequence.transcription.Frame;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.RangeArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -34,14 +32,16 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.core.searchable.LuceneConcept;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
+import net.sourceforge.ondex.lucene.config.LuceneRegistry;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.mapping.sequence2pfam.method.IMethod;
 import net.sourceforge.ondex.programcalls.HMMMatch;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Sequence to Pfam mapping method. Maps a protein whith an attached amino acid

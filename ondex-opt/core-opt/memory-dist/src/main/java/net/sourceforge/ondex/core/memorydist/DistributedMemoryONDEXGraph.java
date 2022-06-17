@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.hazelcast.core.HazelcastInstance;
 
-import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -17,6 +16,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationKey;
 import net.sourceforge.ondex.core.RelationType;
+import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.core.base.AbstractONDEXGraph;
 import net.sourceforge.ondex.core.base.RelationKeyImpl;
 import net.sourceforge.ondex.event.ONDEXEventHandler;

@@ -11,10 +11,10 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.config.ONDEXGraphRegistry;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
+import net.sourceforge.ondex.core.api.config.Config;
+import net.sourceforge.ondex.core.api.config.ONDEXGraphRegistry;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.exception.type.StorageException;

@@ -9,9 +9,9 @@ import java.util.Set;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.core.sql3.SQL3Graph;
 import net.sourceforge.ondex.core.sql3.metadata.SQL3EvidenceType;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.exception.type.AccessDeniedException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 

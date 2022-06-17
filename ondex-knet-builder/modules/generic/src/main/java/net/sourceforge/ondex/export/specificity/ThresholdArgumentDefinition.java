@@ -3,8 +3,8 @@ package net.sourceforge.ondex.export.specificity;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * @author hindlem

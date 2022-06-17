@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -25,6 +24,7 @@ import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.EmptyStringException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Creates relation where all specified Attribute are equal

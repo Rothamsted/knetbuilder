@@ -158,7 +158,7 @@ public class StatsRecorder {
 		}
 		
 		try {
-			BufferedWriter w = new BufferedWriter(new FileWriter(net.sourceforge.ondex.config.Config.ondexDir+System.getProperty("file.separator")+"delta_stats"+System.currentTimeMillis()+".txt"));
+			BufferedWriter w = new BufferedWriter(new FileWriter(net.sourceforge.ondex.core.api.config.Config.ondexDir+System.getProperty("file.separator")+"delta_stats"+System.currentTimeMillis()+".txt"));
 			double dummy;
 			double calls_d = (double)calls;
 			for (int i = min; i >= 0; i--){

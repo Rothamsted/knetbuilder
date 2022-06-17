@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.DatabaseTarget;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
@@ -20,6 +19,7 @@ import net.sourceforge.ondex.parser.transfac.factor.FactorParser;
 import net.sourceforge.ondex.parser.transfac.factor.gene.GeneParser;
 import net.sourceforge.ondex.parser.transfac.matrix.MatrixParser;
 import net.sourceforge.ondex.parser.transfac.site.SiteParser;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Parses the Transfac database from BioBase.

@@ -2,26 +2,26 @@ package net.sourceforge.ondex.ovtk2.ui.console.functions;
 
 import java.util.Set;
 
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.RequiresGraph;
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
 import net.sourceforge.ondex.filter.ONDEXFilter;
-import net.sourceforge.ondex.init.PluginRegistry;
+import net.sourceforge.ondex.lucene.config.LuceneRegistry;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.OVTKProgressMonitor;
 import net.sourceforge.ondex.ovtk2.util.PluginUtils;
 import net.sourceforge.ondex.scripting.FunctionException;
 import net.sourceforge.ondex.tools.threading.monitoring.SimpleMonitor;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
+import net.sourceforge.ondex.workflow.RequiresGraph;
 import net.sourceforge.ondex.workflow.engine.Engine;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
 
 /**
  * The custom functions for OVTK can be added here. The access to all of the

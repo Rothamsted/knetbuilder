@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.rdf.export;
 
-import static net.sourceforge.ondex.core.util.ONDEXGraphUtils.getOrCreateAttributeName;
+import static net.sourceforge.ondex.core.base.util.ONDEXGraphUtils.getOrCreateAttributeName;
 import static uk.ac.ebi.utils.exceptions.ExceptionUtils.buildEx;
 import static uk.ac.ebi.utils.exceptions.ExceptionUtils.throwEx;
 
@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -33,7 +32,8 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.rdf.export.mappers.ConceptMapper;
 import net.sourceforge.ondex.rdf.export.mappers.RDFXFactory;
 import net.sourceforge.ondex.rdf.export.mappers.RelationMapper;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 

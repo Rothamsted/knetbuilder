@@ -12,9 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.sourceforge.ondex.exception.type.PluginConfigurationException;
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginType;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.init.PluginDescription;
+import net.sourceforge.ondex.workflow.init.PluginType;
 import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
 import net.sourceforge.ondex.workflow.model.WorkflowTask;
 

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
@@ -38,6 +37,7 @@ import net.sourceforge.ondex.parser.biocycold.parse.transformers.ProteinTransfor
 import net.sourceforge.ondex.parser.biocycold.parse.transformers.PublicationTransformer;
 import net.sourceforge.ondex.parser.biocycold.parse.transformers.ReactionTransformer;
 import net.sourceforge.ondex.parser.biocycold.parse.transformers.TransformerFactory;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Parser for the aracyc flatfile database. The data flow is Parser ->

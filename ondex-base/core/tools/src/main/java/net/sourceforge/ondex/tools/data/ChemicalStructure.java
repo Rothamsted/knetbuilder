@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.tools.data;
 
-import net.sourceforge.ondex.config.OndexJAXBContextRegistry;
+import net.sourceforge.ondex.core.api.config.OndexJAXBContextRegistry;
 
 public class ChemicalStructure implements Comparable<ChemicalStructure> {
 

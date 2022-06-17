@@ -19,8 +19,8 @@ import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.Unit;
-import net.sourceforge.ondex.core.util.ONDEXGraphOperations;
-import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphOperations;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphUtils;
 
 /**
  * A tool for cloning an ONDEX graph

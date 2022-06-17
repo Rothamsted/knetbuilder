@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import junit.framework.TestCase;
+import net.sourceforge.ondex.workflow.init.PluginDescription;
+import net.sourceforge.ondex.workflow.init.PluginDocumentationFactory;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
 /**
  * 
  * @author lysenkoa

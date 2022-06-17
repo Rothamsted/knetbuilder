@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.dijkstra.DijkstraQueue;
 import net.sourceforge.ondex.algorithm.dijkstra.PathNode;
 import net.sourceforge.ondex.annotations.Authors;
@@ -19,10 +18,11 @@ import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * This filter performs a shortest path search between a given root concept
@@ -116,7 +116,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getArgumentDefinitions()
      */
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
         return argdefs;
@@ -124,7 +124,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getName()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getName()
      */
     public String getName() {
         return "Shortest Path Filter";
@@ -132,7 +132,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getVersion()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getVersion()
      */
     public String getVersion() {
         return "03.04.2008";
@@ -145,7 +145,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     public void start() throws InvalidPluginArgumentException {
 
@@ -367,7 +367,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames {
 
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresIndexedGraph()
      */
     public boolean requiresIndexedGraph() {
         return true;

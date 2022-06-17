@@ -43,7 +43,7 @@ public class HazelcastInstanceFactory
        * rather than $ONDEX_HOME/config, as you might expect.
        */
       File configFile = new File(
-          net.sourceforge.ondex.config.Config.ondexDir, DEFAULT_HZ_FILENAME);
+          net.sourceforge.ondex.core.api.config.Config.ondexDir, DEFAULT_HZ_FILENAME);
       return createInstance(configFile);
   }
   

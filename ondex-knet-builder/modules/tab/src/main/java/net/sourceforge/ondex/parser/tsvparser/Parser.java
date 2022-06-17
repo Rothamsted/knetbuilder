@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -18,6 +17,7 @@ import net.sourceforge.ondex.tools.tab.importer.ConceptPrototype;
 import net.sourceforge.ondex.tools.tab.importer.DataReader;
 import net.sourceforge.ondex.tools.tab.importer.DelimitedReader;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * THIS IS A COPY OF THE ORIGINAL PARSER WITH LESS PARAMETERS.

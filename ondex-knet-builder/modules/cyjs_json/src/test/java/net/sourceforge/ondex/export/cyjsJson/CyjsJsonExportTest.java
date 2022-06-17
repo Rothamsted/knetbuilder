@@ -19,15 +19,15 @@ import org.junit.Test;
 import com.jayway.jsonpath.JsonPath;
 
 import net.minidev.json.JSONArray;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
+import net.sourceforge.ondex.core.base.util.GraphLabelsUtils;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.core.util.GraphLabelsUtils;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * To test the cyjsJSON Export code.

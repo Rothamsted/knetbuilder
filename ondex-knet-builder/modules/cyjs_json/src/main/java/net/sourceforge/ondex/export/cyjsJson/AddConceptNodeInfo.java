@@ -8,7 +8,7 @@ import org.jsoup.nodes.Document;
 
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.ONDEXConcept;
-import net.sourceforge.ondex.core.util.GraphLabelsUtils;
+import net.sourceforge.ondex.core.base.util.GraphLabelsUtils;
 
 /**
  * Build node json objects using their various attributes.

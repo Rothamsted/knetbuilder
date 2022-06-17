@@ -4,8 +4,8 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.parser.uniprot.sink.Protein;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Parses UniProt comment elements, so far looks only for disruption phenotype

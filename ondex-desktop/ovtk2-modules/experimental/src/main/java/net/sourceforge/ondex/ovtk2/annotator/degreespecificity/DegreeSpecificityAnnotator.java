@@ -29,7 +29,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.export.specificity.ArgumentNames;
@@ -40,6 +39,7 @@ import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * @author hindlem

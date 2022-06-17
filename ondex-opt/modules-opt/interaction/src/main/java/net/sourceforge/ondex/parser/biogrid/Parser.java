@@ -92,7 +92,7 @@ public class Parser extends ONDEXParser
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getArgumentDefinitions()
      */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
@@ -105,7 +105,7 @@ public class Parser extends ONDEXParser
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getName()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getName()
      */
     @Override
     public String getName() {
@@ -113,7 +113,7 @@ public class Parser extends ONDEXParser
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getVersion()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getVersion()
      */
     @Override
     public String getVersion() {
@@ -126,7 +126,7 @@ public class Parser extends ONDEXParser
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresValidators()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresValidators()
      */
     @Override
     public String[] requiresValidators() {
@@ -134,7 +134,7 @@ public class Parser extends ONDEXParser
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     @Override
     public void start() throws Exception {

@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Random;
 
-import net.sourceforge.ondex.config.Config;
+import net.sourceforge.ondex.core.api.config.Config;
 
 public class EditorCalls {
 	private EditorCalls(){}

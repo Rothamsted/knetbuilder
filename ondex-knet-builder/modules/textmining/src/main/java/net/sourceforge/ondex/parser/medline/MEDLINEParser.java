@@ -8,13 +8,13 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.parser.medline.args.ArgumentNames;
 import net.sourceforge.ondex.parser.medline.data.Abstract;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Class for parsing MEDLINE XML files.

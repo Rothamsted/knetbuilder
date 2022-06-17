@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
@@ -24,6 +23,7 @@ import net.sourceforge.ondex.parser.pfam.sink.DbLink;
 import net.sourceforge.ondex.parser.pfam.sink.Family;
 import net.sourceforge.ondex.parser.pfam.sink.Publication;
 import net.sourceforge.ondex.parser.pfam.transformer.FamilyTransformer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Parser for the http://pfam.sanger.ac.uk/ pfam database

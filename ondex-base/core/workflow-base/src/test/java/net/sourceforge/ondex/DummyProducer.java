@@ -5,8 +5,8 @@ import java.util.Collections;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.init.ArgumentDescription;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 
 /**
 * Created by IntelliJ IDEA.

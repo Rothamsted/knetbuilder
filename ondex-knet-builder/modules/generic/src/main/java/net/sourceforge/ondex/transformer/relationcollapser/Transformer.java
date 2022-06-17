@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.relationneighbours.DepthInsensitiveRTValidator;
 import net.sourceforge.ondex.algorithm.relationneighbours.RelationNeighboursSearch;
 import net.sourceforge.ondex.annotations.Authors;
@@ -24,7 +23,8 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * A equivalence collapser NB: If you do not specify a relation type it will

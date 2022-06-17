@@ -22,9 +22,9 @@ import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.ArrayKey;
+import net.sourceforge.ondex.core.base.util.ArrayKey;
 import net.sourceforge.ondex.tools.functions.StandardFunctions;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * Subnetwork transformer - identifies subnetworks in the PPI network based on the microarray data.

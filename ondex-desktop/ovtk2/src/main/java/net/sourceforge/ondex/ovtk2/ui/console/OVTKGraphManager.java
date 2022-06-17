@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.swing.JDesktopPane;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.ResourceAccess;
+import net.sourceforge.ondex.core.base.util.ResourceAccess;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2PropertiesAggregator;
 import net.sourceforge.ondex.ovtk2.ui.OVTK2Viewer;
 

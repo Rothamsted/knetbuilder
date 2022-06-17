@@ -10,9 +10,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
-import net.sourceforge.ondex.init.ArrayKey;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginType;
+import net.sourceforge.ondex.workflow.init.ArrayKey;
+import net.sourceforge.ondex.workflow.init.PluginDescription;
+import net.sourceforge.ondex.workflow.init.PluginType;
 
 public class PluginTreeModelBuilder {
 	private PluginTreeModelBuilder(){}

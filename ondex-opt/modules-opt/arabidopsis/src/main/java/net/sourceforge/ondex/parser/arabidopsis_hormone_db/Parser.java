@@ -31,7 +31,7 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.util.ArrayKey;
+import net.sourceforge.ondex.core.base.util.ArrayKey;
 import net.sourceforge.ondex.parser.ONDEXParser;
 
 /**

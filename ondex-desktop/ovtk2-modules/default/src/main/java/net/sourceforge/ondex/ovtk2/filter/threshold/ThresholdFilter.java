@@ -48,13 +48,11 @@ import org.jfree.data.statistics.SimpleHistogramBin;
 import org.jfree.data.statistics.SimpleHistogramDataset;
 import org.jfree.ui.RectangleInsets;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.filter.significance.Filter;
 import net.sourceforge.ondex.ovtk2.config.Config;
 import net.sourceforge.ondex.ovtk2.filter.OVTK2Filter;
@@ -68,6 +66,8 @@ import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.listmodel.AttributeNameListModel;
 import net.sourceforge.ondex.ovtk2.util.renderer.CustomCellRenderer;
 import net.sourceforge.ondex.tools.functions.StandardFunctions;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Filters relations based on a significance value for Attribute.

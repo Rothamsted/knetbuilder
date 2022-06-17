@@ -10,8 +10,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -31,6 +29,8 @@ import net.sourceforge.ondex.exception.type.RelationTypeMissingException;
 import net.sourceforge.ondex.parser.poplar.MetaData;
 import net.sourceforge.ondex.parser.poplar.Parser;
 import net.sourceforge.ondex.parser.poplar.Registry;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Parser for the Poplar GO Annotation file.

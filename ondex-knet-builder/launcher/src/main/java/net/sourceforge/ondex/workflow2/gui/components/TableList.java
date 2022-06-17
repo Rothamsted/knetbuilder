@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 import net.sourceforge.ondex.workflow.model.BoundArgumentValue;
 import net.sourceforge.ondex.workflow2.gui.arg.ArgumentCollectionContainer;
 import net.sourceforge.ondex.workflow2.gui.components.highlighting.HighlightHandler;

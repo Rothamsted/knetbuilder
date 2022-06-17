@@ -20,11 +20,11 @@ import org.jdom.output.Format;
 import org.jdom.output.Format.TextMode;
 import org.jdom.output.XMLOutputter;
 
-import net.sourceforge.ondex.init.ArgumentDescription;
-import net.sourceforge.ondex.init.PluginDescription;
-import net.sourceforge.ondex.init.PluginRegistry;
-import net.sourceforge.ondex.init.PluginType;
 import net.sourceforge.ondex.workflow.engine.Engine;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.init.PluginDescription;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
+import net.sourceforge.ondex.workflow.init.PluginType;
 
 /**
  * Utility class for saving and reading Ondex workflow files in a variety of formats

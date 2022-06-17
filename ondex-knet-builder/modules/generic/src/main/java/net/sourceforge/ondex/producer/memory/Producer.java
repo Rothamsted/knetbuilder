@@ -4,19 +4,19 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
-import net.sourceforge.ondex.config.Config;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.api.config.Config;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
-import net.sourceforge.ondex.init.ArgumentDescription;
 import net.sourceforge.ondex.init.Initialisation;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 
 /**
  * Created by IntelliJ IDEA.

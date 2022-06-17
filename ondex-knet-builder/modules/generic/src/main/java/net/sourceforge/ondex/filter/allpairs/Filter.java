@@ -6,7 +6,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.annotations.Authors;
 import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -17,12 +16,13 @@ import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.event.type.WrongParameterEvent;
 import net.sourceforge.ondex.filter.ONDEXFilter;
 import net.sourceforge.ondex.tools.ondex.ONDEXGraphCloner;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
 import net.sourceforge.ondex.tools.threading.monitoring.MonitoringToolKit;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * The all pairs shortest path filter is an implementation of the Floyd-Warshall
@@ -184,7 +184,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames, Monitorable {
     //####METHODS####
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     public void start() {
 
@@ -375,7 +375,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames, Monitorable {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getArgumentDefinitions()
      */
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
         return argdefs;
@@ -426,7 +426,7 @@ public class Filter extends ONDEXFilter implements ArgumentNames, Monitorable {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresIndexedGraph()
      */
     public boolean requiresIndexedGraph() {
         return false;
@@ -475,14 +475,14 @@ public class Filter extends ONDEXFilter implements ArgumentNames, Monitorable {
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getName()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getName()
      */
     public String getName() {
         return "All pairs shortest path filter";
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getVersion()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getVersion()
      */
     public String getVersion() {
         return "16.04.2008";

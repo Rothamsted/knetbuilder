@@ -1,9 +1,9 @@
 package net.sourceforge.ondex.core.base;
 
-import net.sourceforge.ondex.config.ONDEXGraphRegistry;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.Hierarchy;
 import net.sourceforge.ondex.core.Unit;
+import net.sourceforge.ondex.core.api.config.ONDEXGraphRegistry;
 import net.sourceforge.ondex.exception.type.RetrievalException;
 
 /**

@@ -2,12 +2,12 @@ package net.sourceforge.ondex.validator;
 
 import java.util.HashSet;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.event.ONDEXEvent;
 import net.sourceforge.ondex.event.ONDEXListener;
 import net.sourceforge.ondex.event.type.EventType;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Abstract implementation of an ONDEX validator, manages listener handling.

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXEntity;
 import net.sourceforge.ondex.core.ONDEXGraph;
-import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.mini.test.MiniInvoker;
 import net.sourceforge.ondex.parser.oxl.Parser;
 

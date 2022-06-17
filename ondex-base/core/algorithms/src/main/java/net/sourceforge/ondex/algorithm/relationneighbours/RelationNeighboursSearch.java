@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 
 /**
  * @author hindlem, Matthew Pocock

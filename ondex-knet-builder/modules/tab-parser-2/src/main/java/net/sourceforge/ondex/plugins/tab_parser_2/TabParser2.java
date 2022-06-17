@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
@@ -17,6 +16,7 @@ import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.plugins.tab_parser_2.config.ConfigParser;
 import net.sourceforge.ondex.tools.subgraph.Subgraph;
 import net.sourceforge.ondex.tools.tab.importer.PathParser;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * A plug-in for the workflow/integrator, which uses a simple XML to map from a particular TSV/CSV file structure 

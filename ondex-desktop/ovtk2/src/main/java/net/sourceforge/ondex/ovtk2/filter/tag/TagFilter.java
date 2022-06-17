@@ -32,11 +32,9 @@ import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.SortedList;
 import ca.odell.glazedlists.matchers.TextMatcherEditor;
 import ca.odell.glazedlists.swing.AutoCompleteSupport;
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.BitSetFunctions;
+import net.sourceforge.ondex.core.base.util.BitSetFunctions;
 import net.sourceforge.ondex.filter.tag.ArgumentNames;
 import net.sourceforge.ondex.filter.tag.Filter;
 import net.sourceforge.ondex.logging.ONDEXLogger;
@@ -49,6 +47,8 @@ import net.sourceforge.ondex.ovtk2.util.ConceptListUtils;
 import net.sourceforge.ondex.ovtk2.util.IntegerStringWrapper;
 import net.sourceforge.ondex.ovtk2.util.SpringUtilities;
 import net.sourceforge.ondex.ovtk2.util.renderer.HtmlComboBoxRenderer;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Filter on tag

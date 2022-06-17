@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.mapping.lowmemoryaccessionbased.ArgumentNames;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -18,6 +17,7 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.export.oxl.Export;
 import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.parser.oxl.Parser;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * TODO: comment me!
@@ -41,7 +41,7 @@ public class GoUniProtMappingTest
 		LowMemoryAccessionBasedTest.loadLuceneEnv ( graph );
 
 		Mapping mapper = new Mapping ();
-		mapper.setONDEXGraph ( graph );
+		mapper.setONDEXGraph( graph );
 		mapper.addONDEXListener ( new ONDEXLogger () );
 		
 		ONDEXPluginArguments args = new ONDEXPluginArguments ( mapper.getArgumentDefinitions () );

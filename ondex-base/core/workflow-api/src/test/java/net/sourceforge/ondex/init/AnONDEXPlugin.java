@@ -3,11 +3,12 @@ package net.sourceforge.ondex.init;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.event.ONDEXListener;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 
 public class AnONDEXPlugin implements ONDEXPlugin
 {

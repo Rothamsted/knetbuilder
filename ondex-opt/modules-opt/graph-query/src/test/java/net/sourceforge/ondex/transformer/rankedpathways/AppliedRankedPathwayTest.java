@@ -15,8 +15,6 @@ import javax.xml.stream.XMLStreamException;
 import org.junit.Test;
 
 import junit.framework.TestCase;
-import net.sourceforge.ondex.InvalidPluginArgumentException;
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.DataSource;
@@ -28,6 +26,8 @@ import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.event.ONDEXEventHandler;
 import net.sourceforge.ondex.logging.ONDEXLogger;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 public class AppliedRankedPathwayTest extends TestCase {
 

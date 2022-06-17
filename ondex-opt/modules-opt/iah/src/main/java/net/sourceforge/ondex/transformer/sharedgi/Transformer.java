@@ -33,7 +33,7 @@ import net.sourceforge.ondex.event.type.PluginErrorEvent;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.tools.ConsoleProgressBar;
 import net.sourceforge.ondex.tools.MetaDataLookup;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * Shared GI transformer

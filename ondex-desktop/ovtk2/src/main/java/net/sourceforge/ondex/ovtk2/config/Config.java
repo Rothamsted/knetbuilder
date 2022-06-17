@@ -314,10 +314,10 @@ public class Config {
 			ovtkDir = System.getProperty("ovtk.dir");
 
 		// only override ondexDir if not yet set
-		if (net.sourceforge.ondex.config.Config.ondexDir == null) {
-			net.sourceforge.ondex.config.Config.ondexDir = System.getProperty("ondex.dir");
-			if (net.sourceforge.ondex.config.Config.ondexDir == null) {
-				net.sourceforge.ondex.config.Config.ondexDir = ovtkDir;
+		if (net.sourceforge.ondex.core.api.config.Config.ondexDir == null) {
+			net.sourceforge.ondex.core.api.config.Config.ondexDir = System.getProperty("ondex.dir");
+			if (net.sourceforge.ondex.core.api.config.Config.ondexDir == null) {
+				net.sourceforge.ondex.core.api.config.Config.ondexDir = ovtkDir;
 			}
 		}
 

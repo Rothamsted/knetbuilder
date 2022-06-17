@@ -25,7 +25,7 @@ import net.sourceforge.ondex.event.type.InconsistencyEvent;
 import net.sourceforge.ondex.exception.type.InconsistencyException;
 import net.sourceforge.ondex.exception.type.MetaDataMissingException;
 import net.sourceforge.ondex.tools.ConsoleProgressBar;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
  * Yeast merger
@@ -151,7 +151,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getArgumentDefinitions()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getArgumentDefinitions()
      */
     @Override
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
@@ -161,7 +161,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getName()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getName()
      */
     @Override
     public String getName() {
@@ -169,7 +169,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#getVersion()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#getVersion()
      */
     @Override
     public String getVersion() {
@@ -182,7 +182,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresIndexedGraph()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresIndexedGraph()
      */
     @Override
     public boolean requiresIndexedGraph() {
@@ -190,7 +190,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#requiresValidators()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#requiresValidators()
      */
     @Override
     public String[] requiresValidators() {
@@ -198,7 +198,7 @@ public class Transformer extends ONDEXTransformer
     }
 
     /**
-     * @see net.sourceforge.ondex.ONDEXPlugin#start()
+     * @see net.sourceforge.ondex.workflow.ONDEXPlugin#start()
      */
     @Override
     public void start() throws Exception {

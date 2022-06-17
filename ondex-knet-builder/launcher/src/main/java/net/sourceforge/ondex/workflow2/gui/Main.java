@@ -12,8 +12,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import net.sourceforge.ondex.config.Config;
-import net.sourceforge.ondex.init.PluginRegistry;
+import net.sourceforge.ondex.core.api.config.Config;
+import net.sourceforge.ondex.workflow.init.PluginRegistry;
 
 public class Main {
 
@@ -112,8 +112,8 @@ public class Main {
         }
 
         if (ondexDir == null) {
-            if (net.sourceforge.ondex.config.Config.ondexDir != null) {
-                ondexDir = net.sourceforge.ondex.config.Config.ondexDir;
+            if (net.sourceforge.ondex.core.api.config.Config.ondexDir != null) {
+                ondexDir = net.sourceforge.ondex.core.api.config.Config.ondexDir;
             }
         } else {
             System.setProperty("ondex.dir", ondexDir);

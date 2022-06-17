@@ -91,7 +91,7 @@ public class DecypherAlignment implements BLASTAlignmentProgram, HMMAlignmentPro
         this.dirForDecypherClient = new File(programDir).getAbsoluteFile().getAbsolutePath();
         this.queryOnlyWithTAXID = queryOnlyWithTAXID;
         this.bitscore = bitscore;
-        decypherTemplates = new File(net.sourceforge.ondex.config.Config.ondexDir + File.separator + "decypher" + File.separator + "templates").getAbsoluteFile().getAbsolutePath();
+        decypherTemplates = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + File.separator + "decypher" + File.separator + "templates").getAbsoluteFile().getAbsolutePath();
 
         if (!initalized && System.getProperty("os.name").toLowerCase().contains("windows")) { //detect windows version and add exe to file names
             initalized = true;
@@ -402,7 +402,7 @@ public class DecypherAlignment implements BLASTAlignmentProgram, HMMAlignmentPro
         String time = new SimpleDateFormat("yyMMdd_HHmmss_SSS").format(new Date(System.currentTimeMillis()));
 
         System.out.println("<< Created decypher database >>");
-        File resultsFile = new File(net.sourceforge.ondex.config.Config.ondexDir + File.separator + "seqs" + File.separator + "ONDEX_Results_" + time + ".gz");
+        File resultsFile = new File(net.sourceforge.ondex.core.api.config.Config.ondexDir + File.separator + "seqs" + File.separator + "ONDEX_Results_" + time + ".gz");
         resultsFile.getParentFile().mkdirs();
         try {
             resultsFile.createNewFile();

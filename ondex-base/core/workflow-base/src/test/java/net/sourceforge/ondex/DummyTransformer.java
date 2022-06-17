@@ -1,7 +1,7 @@
 package net.sourceforge.ondex;
 
 import net.sourceforge.ondex.args.ArgumentDefinition;
-import net.sourceforge.ondex.transformer.ONDEXTransformer;
+import net.sourceforge.ondex.workflow.transformer.ONDEXTransformer;
 
 /**
 * Created by IntelliJ IDEA.

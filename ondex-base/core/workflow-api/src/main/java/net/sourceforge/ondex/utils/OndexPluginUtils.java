@@ -9,12 +9,12 @@ import org.apache.commons.lang3.reflect.ConstructorUtils;
 
 import com.machinezoo.noexception.Exceptions;
 
-import net.sourceforge.ondex.ONDEXPlugin;
-import net.sourceforge.ondex.ONDEXPluginArguments;
-import net.sourceforge.ondex.RequiresGraph;
-import net.sourceforge.ondex.UncheckedPluginException;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPlugin;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
+import net.sourceforge.ondex.workflow.RequiresGraph;
+import net.sourceforge.ondex.workflow.UncheckedPluginException;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 /**

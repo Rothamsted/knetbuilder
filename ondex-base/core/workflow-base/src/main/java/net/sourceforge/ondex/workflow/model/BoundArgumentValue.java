@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.workflow.model;
 
-import net.sourceforge.ondex.init.ArgumentDescription;
+import net.sourceforge.ondex.workflow.init.ArgumentDescription;
 
 public class BoundArgumentValue {
     private final ArgumentDescription arg;

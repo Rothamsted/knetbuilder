@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sourceforge.ondex.InvalidPluginArgumentException;
 import net.sourceforge.ondex.algorithm.hierarchicalsimilarity.Evaluation;
 import net.sourceforge.ondex.algorithm.hierarchicalsimilarity.HierarchicalSimilarity;
 import net.sourceforge.ondex.annotations.Custodians;
@@ -25,6 +24,7 @@ import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.ConceptClassMissingEvent;
 import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
+import net.sourceforge.ondex.workflow.InvalidPluginArgumentException;
 
 /**
  * Statistics class to evaluate a set of GO annotations to a "Gold Standard".

@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.ONDEXGraphOperations;
+import net.sourceforge.ondex.core.base.util.ONDEXGraphOperations;
 import net.sourceforge.ondex.exception.type.EmptyStringException;
 import net.sourceforge.ondex.exception.type.NullValueException;
 import net.sourceforge.ondex.tools.subgraph.AttributePrototype;

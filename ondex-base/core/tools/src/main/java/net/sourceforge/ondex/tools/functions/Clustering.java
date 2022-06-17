@@ -41,7 +41,7 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
-import net.sourceforge.ondex.core.util.StreamGobbler;
+import net.sourceforge.ondex.core.base.util.StreamGobbler;
 
 /**
  * @author lysenkoa

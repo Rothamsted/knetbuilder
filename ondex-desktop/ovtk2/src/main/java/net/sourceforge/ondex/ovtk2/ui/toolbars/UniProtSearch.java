@@ -16,7 +16,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 
-import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.args.ArgumentDefinition;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.core.ONDEXConcept;
@@ -40,6 +39,7 @@ import net.sourceforge.ondex.parser.uniprot.xml.component.TaxonomieBlockParser;
 import net.sourceforge.ondex.parser.uniprot.xml.filter.FilterEnum;
 import net.sourceforge.ondex.parser.uniprot.xml.filter.ValueFilter;
 import net.sourceforge.ondex.tools.threading.monitoring.Monitorable;
+import net.sourceforge.ondex.workflow.ONDEXPluginArguments;
 
 /**
  * Search the graph for a search term

@@ -6,7 +6,7 @@ package net.sourceforge.ondex.transformer.relationmerger;
  * @author taubertj
  * 
  */
-public interface ArgumentNames extends net.sourceforge.ondex.transformer.ArgumentNames {
+public interface ArgumentNames extends net.sourceforge.ondex.workflow.transformer.ArgumentNames {
 
 	public static final String FIRST_RELATION_TYPE_ARG = "FirstRelationType";
 
