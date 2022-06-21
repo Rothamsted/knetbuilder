@@ -7,7 +7,7 @@ cd "$WORKDIR"
 # TODO: this a provisional experiment, improve and comment.
  
 # See runme.sh
-[[ -z "$JAVA_TOOL_OPTIONS" ]] && export JAVA_TOOL_OPTIONS="-Xmx2G"
+[[ -z "$JAVA_TOOL_OPTIONS" ]] && export JAVA_TOOL_OPTIONS="-Xmx2G -Dfile.encoding=UTF-8"
 
 # TODO: get rid of these deps, they're relics now superseded by the SDK
 black_lst='(sjsxp-1.0.2|stax-api-1.0|xml-apis-1.4.01)'

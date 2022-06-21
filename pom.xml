@@ -165,7 +165,7 @@
 								 <reuseForks>false</reuseForks>
 								 						     
 						     <forkedProcessTimeoutInSeconds>700</forkedProcessTimeoutInSeconds>
-						     <argLine>-XX:MaxRAM=4G -Dondex.dir=${basedir}/data</argLine>
+						     <argLine>-XX:MaxRAM=4G -Dondex.dir=${basedir}/data -Dfile.encoding=UTF-8</argLine>
 						     <excludes>
 						        <exclude>net/sourceforge/ondex/apps/*</exclude>
 						     </excludes>
@@ -201,6 +201,7 @@
 							<version>3.0.0-M4</version>
 							<configuration>
 								<trimStackTrace>false</trimStackTrace>
+								<argLine>-XX:MaxRAM=4G -Dondex.dir=${basedir}/data -Dfile.encoding=UTF-8</argLine>
 							</configuration>
 							<executions>
 								<execution>

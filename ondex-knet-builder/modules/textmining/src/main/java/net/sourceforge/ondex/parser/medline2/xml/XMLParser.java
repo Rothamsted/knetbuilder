@@ -305,7 +305,7 @@ public class XMLParser {
 			} // while staxXmlReader
 		}
 		catch ( XMLStreamException ex ) {
-			throwEx ( 
+			throwEx (
 				ex, 
 				"Error while parsing PMID:%d: %s", 
 				medlineCitation.getId (), ex.getMessage () 
