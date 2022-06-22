@@ -162,7 +162,7 @@
 								 <reuseForks>false</reuseForks>
 								 						     
 						     <forkedProcessTimeoutInSeconds>700</forkedProcessTimeoutInSeconds>
-						     <argLine>-XX:MaxRAM=4G -Dondex.dir=${basedir}/data</argLine>
+						     <argLine>-XX:MaxRAM=4G -Dondex.dir=${basedir}/data -Dfile.encoding=UTF-8</argLine>
 						     <excludes>
 						        <exclude>net/sourceforge/ondex/apps/*</exclude>
 						     </excludes>
@@ -198,6 +198,7 @@
 							<version>3.0.0-M4</version>
 							<configuration>
 								<trimStackTrace>false</trimStackTrace>
+								<argLine>-XX:MaxRAM=4G -Dondex.dir=${basedir}/data -Dfile.encoding=UTF-8</argLine>
 							</configuration>
 							<executions>
 								<execution>
@@ -421,6 +422,18 @@
       </dependency>
 			
 			<!-- Since JDK 11, we need this as a separate lib -->
+			<dependency>
+			  <groupId>jakarta.xml.bind</groupId>
+			  <artifactId>jakarta.xml.bind-api</artifactId>
+			  <version>4.0.0</version>
+			</dependency>
+			<!--This should be the implementation of jakarta.xml.bind-api -->
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+			  <artifactId>jaxb-impl</artifactId>
+			  <version>4.0.0</version>
+			</dependency>						
+			<!-- TODO:remove we switched to Jakarta in JDK 17
       <dependency>
       	<groupId>javax.xml.bind</groupId>
         <artifactId>jaxb-api</artifactId>
@@ -430,7 +443,8 @@
         <groupId>org.glassfish.jaxb</groupId>
         <artifactId>jaxb-runtime</artifactId>
         <version>2.3.2</version>
-      </dependency>
+      </dependency> -->
+
 
 			<!-- Spring annotations that were supported JDK<11 -->
 			<dependency>             

@@ -15,7 +15,7 @@ if [ "$JAVA_TOOL_OPTIONS" == "" ]; then
   # So, let's set default JVM options here, unless you already have them from the outside
   # Note that this variable is part of standard Java (https://goo.gl/rrmXEX), so we don't need
   # to pass it to the java command below and possible further JVM invocations get it automatically too
-  export JAVA_TOOL_OPTIONS="-Xmx2G"
+  export JAVA_TOOL_OPTIONS="-Xmx2G -Dfile.encoding=UTF-8"
 fi
 
 # Enable the debugger, this is sometimes needed by developers

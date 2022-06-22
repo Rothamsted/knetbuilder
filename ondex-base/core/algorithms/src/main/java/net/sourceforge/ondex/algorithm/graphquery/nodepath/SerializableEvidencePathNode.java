@@ -2,8 +2,8 @@ package net.sourceforge.ondex.algorithm.graphquery.nodepath;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import net.sourceforge.ondex.algorithm.graphquery.StateMachineComponent;
 import net.sourceforge.ondex.core.ONDEXConcept;

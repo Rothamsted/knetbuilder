@@ -408,6 +408,7 @@
                            <destFileName>json-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
                         
+                        <!-- TODO: remove
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>kegg</artifactId>
@@ -418,7 +419,7 @@
                            <outputDirectory>${project.build.directory}/plugins</outputDirectory>
                            <includes>**/*</includes>
                            <destFileName>kegg-jar-with-dependencies.jar</destFileName>
-                        </artifactItem>
+                        </artifactItem> -->
                         
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>

@@ -15,7 +15,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.stream.StreamFilter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;

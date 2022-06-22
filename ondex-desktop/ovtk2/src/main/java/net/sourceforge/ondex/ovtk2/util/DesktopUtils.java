@@ -21,7 +21,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.MetaData;

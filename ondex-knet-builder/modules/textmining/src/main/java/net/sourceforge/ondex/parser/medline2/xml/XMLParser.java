@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -114,10 +115,7 @@ public class XMLParser {
 	 */
 	public Set<Abstract> parseMedlineXML ( InputStream inputXML ) throws IOException, XMLStreamException
 	{
-		// Wrap these elements with CDATA
-		inputXML = XmlFilterUtils.cdataWrapper ( inputXML, CDATA_ELEMENTS );
-		XMLStreamReader2 staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( inputXML );
-
+		XMLStreamReader2 staxXmlReader = this.inputStream2XmlStreamReader ( inputXML );
 		return this.parseMedlineXML ( staxXmlReader );
 	}
 
@@ -198,9 +196,7 @@ public class XMLParser {
 					httpConn.setConnectTimeout( 10*60*1000 );
 		
 					// Wrap certain elements with CDATA			
-					InputStream xmlin = XmlFilterUtils.cdataWrapper ( httpConn.getInputStream(), CDATA_ELEMENTS );
-					XMLStreamReader2 staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( xmlin );
-					Set<Abstract> thisResult = this.parseMedlineXML ( staxXmlReader );
+					Set<Abstract> thisResult = this.parseMedlineXML ( httpConn.getInputStream() );					
 					allAbstracts.addAll ( thisResult );
 					progressTracker.updateWithIncrement ( thisResult.size () );
 				});
@@ -230,11 +226,6 @@ public class XMLParser {
 	 * Reads one single MEDLINE XML file. Parses for MedlineCitation and 
 	 * return a set.
 	 * 
-	 * @param file -
-	 *            MEDLINE XML file to be parsed
-	 * @param importsession -
-	 *            defining abstracts of interest
-	 * @return Array of matching abstracts (Abstract)
 	 */
 	private Set<Abstract> parseMedlineXML ( XMLStreamReader2 staxXmlReader ) throws IOException, XMLStreamException
 	{
@@ -254,6 +245,20 @@ public class XMLParser {
 		staxXmlReader.close();
 		return medlineCitationSet;
 	}
+	
+	/**
+	 * Prepares a suitable {@link XMLStreamReader2 STAX reader} from a regular input stream. 
+	 * This includes {@link XmlFilterUtils#cdataWrapper(InputStream, String...) stream pre-processing}
+	 * and use of UTF-8 in {@link WstxInputFactory#createXMLStreamReader(InputStream, String)}.
+	 * 
+	 */
+	public XMLStreamReader2 inputStream2XmlStreamReader ( InputStream xmlIn ) throws XMLStreamException
+	{
+		xmlIn = XmlFilterUtils.cdataWrapper ( xmlIn, CDATA_ELEMENTS );
+		XMLStreamReader2 staxXmlReader = (XMLStreamReader2) factory.createXMLStreamReader( xmlIn, StandardCharsets.UTF_8.toString () );
+		return staxXmlReader;
+	}
+	
 	
 	
 	public Abstract parseMedlineCitation ( XMLStreamReader2 staxXmlReader )
@@ -300,7 +305,7 @@ public class XMLParser {
 			} // while staxXmlReader
 		}
 		catch ( XMLStreamException ex ) {
-			throwEx ( 
+			throwEx (
 				ex, 
 				"Error while parsing PMID:%d: %s", 
 				medlineCitation.getId (), ex.getMessage () 

@@ -40,7 +40,7 @@ echo -e "\n\n\tRunning with the configuration at '$cfg_path'\n"
 export JENA_HOME="$sw_home/jena"
 tdb_path="$my_release_dir/rdf2neo-tdb"
 
-export JAVA_TOOL_OPTIONS="-Xmx20G"
+export JAVA_TOOL_OPTIONS="-Xmx2G -Dfile.encoding=UTF-8"
 export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dneo4j.boltUrl=bolt://localhost:$CFG_NEO_PORT"
 export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dneo4j.user=rouser -Dneo4j.password=rouser"
 

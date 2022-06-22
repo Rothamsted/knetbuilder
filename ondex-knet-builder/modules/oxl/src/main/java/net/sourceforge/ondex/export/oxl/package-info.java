@@ -2,9 +2,9 @@
  * This is for documentation on a package level.
  */
 //@AnnotationForRuntime
-//@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters
+//@jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapters
 //({
-//	@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter ( 
+//	@jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter ( 
 //		type = java.lang.String.class, value = net.sourceforge.ondex.oxl.jaxb.CDATAStringAdapter.class 
 //	)
 //})

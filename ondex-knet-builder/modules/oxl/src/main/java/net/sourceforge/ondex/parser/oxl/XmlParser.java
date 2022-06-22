@@ -4,7 +4,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;

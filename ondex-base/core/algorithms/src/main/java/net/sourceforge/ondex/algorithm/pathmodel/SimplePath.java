@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXEntity;

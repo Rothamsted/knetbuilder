@@ -2,7 +2,7 @@ package net.sourceforge.ondex.core;
 
 import java.util.Set;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import net.sourceforge.ondex.exception.type.EmptyStringException;
 import net.sourceforge.ondex.exception.type.NullValueException;

@@ -15,7 +15,7 @@
  */
 package net.sourceforge.ondex.webservice.Adapters;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  *

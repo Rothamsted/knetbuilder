@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -185,7 +185,7 @@ public abstract class AbstractEntityParser implements XmlComponentParser {
 	 * @return an AttributName object
 	 * @throws XMLStreamException
 	 * @throws ClassNotFoundException
-	 * @throws javax.xml.bind.JAXBException
+	 * @throws jakarta.xml.bind.JAXBException
 	 * @throws UnsupportedOperationException
 	 * @throws EmptyStringException
 	 * @throws NullValueException

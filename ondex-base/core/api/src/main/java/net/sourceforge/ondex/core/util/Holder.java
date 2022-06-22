@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.core.util;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 /**
  * @author hindlem

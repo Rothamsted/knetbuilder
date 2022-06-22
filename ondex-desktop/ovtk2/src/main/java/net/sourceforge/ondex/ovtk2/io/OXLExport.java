@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.zip.GZIPOutputStream;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.stax2.XMLOutputFactory2;

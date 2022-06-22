@@ -1,6 +1,6 @@
 package net.sourceforge.ondex.core;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import net.sourceforge.ondex.exception.type.NullValueException;
 
