@@ -4,7 +4,9 @@ import java.util.Map;
 /**
  * 
  * @author lysenkoa 
- *
+ * 
+ * TODO: what is this for?
+ * 
  */
 public interface ResourceAccess {
 	/**

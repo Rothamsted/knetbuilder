@@ -2,11 +2,16 @@ package net.sourceforge.ondex.core.util;
 
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+
 /**
  * 
  * @author lysenkoa
  *
+ * @deprecated this is poor (not immutable), {@link Entry} or {@link Pair} are better alternatives.
  */
+@Deprecated
 public class ValueTuple<Z extends Object, T extends Object>  implements Entry<Z, T> {
 	private Z key;
 	private T value;
@@ -29,4 +34,5 @@ public class ValueTuple<Z extends Object, T extends Object>  implements Entry<Z,
 		this.value = value;
 		return oldValue;
 	}
+	
 }

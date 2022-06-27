@@ -4,7 +4,10 @@ import java.io.*;
 
 /**
  * @author lysenkoa
+ * 
+ * @deprecated TODO: check if it's still in use, and, if it is, replace it with {@link InputStream#transferTo(OutputStream)}.
  */
+@Deprecated
 public class StreamGobbler extends Thread {
     InputStream is;
     OutputStream os;

@@ -14,6 +14,7 @@ import net.sourceforge.ondex.config.Config;
  * Parses the queries from the source files used by the SPAQL engine in the frontend and console.
  * @author lysenkoa
  *
+ * TODO: is this still used? It shouldn't be in this module, anyway.
  */
 public class QuerySetParser {
 	private final Map<String, String> queries = new HashMap<String, String>();
