@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
@@ -143,6 +146,7 @@ public class Mapping extends ONDEXMapping
         	fields[1] = abstractAN;
         }
         
+        // Null if no file.
         Set<String> stopWords = loadGeneNameStopWords ( stopWordsFile );
         
         LuceneEnv lenv = null;
@@ -157,19 +161,28 @@ public class Mapping extends ONDEXMapping
 	                continue;
 	            }
 	            fireEventOccurred(new GeneralOutputEvent("look for " + ccConcepts.size() + " " + cc.getId() + " concepts", Mapping.getCurrentMethodName()));
+
+	            // TODO: it's never read, should we keep it?
 	            int ignoredNames = 0;
+	            
 	            //concepts
 	            for (ONDEXConcept c : ccConcepts) {
 	                //synonyms
-	                for (ConceptName name : c.getConceptNames()) {
+	                for (ConceptName name : c.getConceptNames()) 
+	                {
 	                    if (useOnlyPreferredNames && !name.isPreferred()) {
 	                        ignoredNames++;
 	                        continue;
 	                    }
 	                    
-	                    if (!validName(name.getName()) || isGeneNameStopWord ( name.getName(),stopWords ) ) {
+	                    if (!validName(name.getName()) ) {
 	                        ignoredNames++;
 	                        continue;
+	                    }
+	                    
+	                    if ( stopWords != null && stopWords.contains ( name.getName () ) ) {
+                        ignoredNames++;
+                        continue;
 	                    }
 	
 	                    String query = TextProcessing.stripText(name.getName());
@@ -271,12 +284,23 @@ public class Mapping extends ONDEXMapping
 
     }
     
-    private boolean isGeneNameStopWord ( String name ,Set<String> stopWords ) {
-     	return stopWords.contains ( name );
-    }
     
-	private Set<String> loadGeneNameStopWords ( String filePath ) {
-
+	private Set<String> loadGeneNameStopWords ( String filePath ) 
+	{
+		if ( filePath == null ) return null;
+		try
+		{
+			return Files.lines ( Path.of ( filePath ) )
+			.collect ( Collectors.toSet () );
+		}
+		catch ( IOException ex ) {
+			throw ExceptionUtils.buildEx ( UncheckedIOException.class, ex, 
+				"Error while loading the stop word file from \"%s\": $cause", filePath
+			);
+		}
+		
+		// WHAT THE HELL!?!? It's a bunch of lines with a sting in each!!!
+		/*
 		Properties props = new Properties ();
 		try {
 			InputStream in = new FileInputStream ( filePath );
@@ -289,6 +313,7 @@ public class Mapping extends ONDEXMapping
 					"Error while loading geneNameStopWords configuration from '%s': %s", filePath, e.getMessage () );
 		}
 		return OptionsMap.from ( props ).keySet ();
+		*/
 	}
 
 
