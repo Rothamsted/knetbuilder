@@ -1,10 +1,16 @@
 package net.sourceforge.ondex.mapping.tmbased;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -32,6 +38,8 @@ import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.mapping.tmbased.args.ArgumentNames;
+import uk.ac.ebi.utils.collections.OptionsMap;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 
 /**
@@ -78,6 +86,7 @@ public class Mapping extends ONDEXMapping
                 new BooleanArgumentDefinition(ArgumentNames.USE_FULLTEXT_ARG, ArgumentNames.USE_FULLTEXT_ARG_DESC, false, false),
                 new StringArgumentDefinition(ArgumentNames.SEARCH_STRATEGY_ARG, ArgumentNames.SEARCH_STRATEGY_DESC, true, "exact", false),
                 new StringArgumentDefinition(ArgumentNames.FILTER_ARG, ArgumentNames.FILTER_DESC, false, null, false),
+                new StringArgumentDefinition(ArgumentNames.STOP_WORDS_ARG, ArgumentNames.STOP_WORDS_DESC, false, null, false)
         };
     }
 
@@ -111,6 +120,7 @@ public class Mapping extends ONDEXMapping
         String searchStrategy = (String) args.getUniqueValue(ArgumentNames.SEARCH_STRATEGY_ARG);
         boolean useOnlyPreferredNames = (Boolean) args.getUniqueValue(ArgumentNames.PREFERRED_NAMES_ARG);
         boolean useFullText = (Boolean) args.getUniqueValue(ArgumentNames.USE_FULLTEXT_ARG);
+        String stopWordsFile = (String) args.getUniqueValue(ArgumentNames.STOP_WORDS_ARG);
         
         int pubsWithHeader = graph.getConceptsOfAttributeName(headerAN).size();
         int pubsWithAbstract = graph.getConceptsOfAttributeName(abstractAN).size();
@@ -133,6 +143,8 @@ public class Mapping extends ONDEXMapping
         	fields[1] = abstractAN;
         }
         
+        Set<String> stopWords = loadGeneNameStopWords ( stopWordsFile );
+        
         LuceneEnv lenv = null;
         try
         {
@@ -154,7 +166,8 @@ public class Mapping extends ONDEXMapping
 	                        ignoredNames++;
 	                        continue;
 	                    }
-	                    if (!validName(name.getName())) {
+	                    
+	                    if (!validName(name.getName()) || isGeneNameStopWord ( name.getName(),stopWords ) ) {
 	                        ignoredNames++;
 	                        continue;
 	                    }
@@ -257,6 +270,26 @@ public class Mapping extends ONDEXMapping
         createTextMiningMappings(graph);
 
     }
+    
+    private boolean isGeneNameStopWord ( String name ,Set<String> stopWords ) {
+     	return stopWords.contains ( name );
+    }
+    
+	private Set<String> loadGeneNameStopWords ( String filePath ) {
+
+		Properties props = new Properties ();
+		try {
+			InputStream in = new FileInputStream ( filePath );
+			props.load ( in );
+		} catch ( InvalidPropertiesFormatException e ) {
+			ExceptionUtils.throwEx ( UncheckedIOException.class, e,
+					"Error while loading geneNameStopWords configuration from '%s': %s", filePath, e.getMessage () );
+		} catch (IOException e) {
+			ExceptionUtils.throwEx ( UncheckedIOException.class, e,
+					"Error while loading geneNameStopWords configuration from '%s': %s", filePath, e.getMessage () );
+		}
+		return OptionsMap.from ( props ).keySet ();
+	}
 
 
     /*

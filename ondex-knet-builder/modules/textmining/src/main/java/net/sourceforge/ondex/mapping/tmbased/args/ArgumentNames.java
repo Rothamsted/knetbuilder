@@ -17,4 +17,8 @@ public final class ArgumentNames {
 	public final static String FILTER_ARG = "Filter";
 	public final static String FILTER_DESC = "Which mappings should be filtered out: lowscore, maxspecificity, besthits";
 	
+	public final static String STOP_WORDS_ARG = "GeneNameStopWords";
+	public final static String STOP_WORDS_DESC = "Stop words to exclude from search";
+
+	
 }
