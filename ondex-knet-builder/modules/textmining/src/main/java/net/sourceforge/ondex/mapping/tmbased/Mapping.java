@@ -298,22 +298,6 @@ public class Mapping extends ONDEXMapping
 				"Error while loading the stop word file from \"%s\": $cause", filePath
 			);
 		}
-		
-		// WHAT THE HELL!?!? It's a bunch of lines with a sting in each!!!
-		/*
-		Properties props = new Properties ();
-		try {
-			InputStream in = new FileInputStream ( filePath );
-			props.load ( in );
-		} catch ( InvalidPropertiesFormatException e ) {
-			ExceptionUtils.throwEx ( UncheckedIOException.class, e,
-					"Error while loading geneNameStopWords configuration from '%s': %s", filePath, e.getMessage () );
-		} catch (IOException e) {
-			ExceptionUtils.throwEx ( UncheckedIOException.class, e,
-					"Error while loading geneNameStopWords configuration from '%s': %s", filePath, e.getMessage () );
-		}
-		return OptionsMap.from ( props ).keySet ();
-		*/
 	}
 
 
