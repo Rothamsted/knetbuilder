@@ -16,6 +16,7 @@ import net.sourceforge.ondex.annotations.Custodians;
 import net.sourceforge.ondex.annotations.Status;
 import net.sourceforge.ondex.annotations.StatusType;
 import net.sourceforge.ondex.args.ArgumentDefinition;
+import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -48,7 +49,7 @@ import net.sourceforge.ondex.export.ONDEXExport;
 @Custodians(custodians = { "Ajit Singh" }, emails = { "ajit.singh at rothamsted.ac.uk" })
 public class Export extends ONDEXExport {
     
-    /**
+	/**
      * Builds a file with Ondex Graph data exported to JSON variables for concepts (nodes), relations (edges)
      * and other Item Info.
      * 
@@ -104,12 +105,18 @@ public class Export extends ONDEXExport {
 		
 		// OK, let's start write everything
 		//
-		String outputFileName = ( ( String ) args.getUniqueValue(FileArgumentDefinition.EXPORT_FILE ) ).trim ();
-
+		String outputFileName = ( ( String ) args.getUniqueValue ( FileArgumentDefinition.EXPORT_FILE ) ).trim ();
+		
+		var exportPlainJSON = ( boolean ) args.getUniqueValue ( BooleanArgumentDefinition.EXPORT_PLAIN_JSON );
+		 
 		try ( Writer graphFileWriter = new FileWriter ( outputFileName ))
 		{
 			// Write graph JSON & metadata JSON to output file.
-			writeJSONToFile ( graphJson, allDataJson, graphFileWriter );
+			if( exportPlainJSON ) {
+				writePlainJSON ( graphJson, allDataJson, graphFileWriter );
+			}else {
+				writeJSONToFile ( graphJson, allDataJson, graphFileWriter );
+			}
 		} 
 		catch ( IOException ex )
 		{
@@ -148,7 +155,9 @@ public class Export extends ONDEXExport {
     public ArgumentDefinition<?>[] getArgumentDefinitions() {
      return new ArgumentDefinition[] {
          new FileArgumentDefinition(FileArgumentDefinition.EXPORT_FILE, "JSON file to export to", 
-             true, false, false, false)
+             true, false, false, false),
+         new BooleanArgumentDefinition(BooleanArgumentDefinition.EXPORT_PLAIN_JSON, "boolean to export to", 
+                 true, false)
      };
     }
 
@@ -287,7 +296,25 @@ public class Export extends ONDEXExport {
 		outputFile.write ( /* allDataJson.toString() */allData ); // write all graph data to file
 		outputFile.write ( ";" );
 	}
-
+	
+	/** 
+     * Write to output file.
+     * @param outputFile
+     *            The output file that gets written out.
+     * @param allDataJson
+     *            JSONObject containing all the metadata, concepts & relations information.
+     * @param graphJson
+     *            JSONObject containing the node (concept) & edge (relation) information used by CytoscapeJS.
+     */
+	private void writePlainJSON ( JSONObject graphJson, JSONObject metadataJson, Writer outputFile ) 
+			throws IOException
+	{
+		var combined = new JSONObject ();
+		combined.put ( "graphJSON", graphJson );
+		combined.put ( "allGraphData", metadataJson );
+		outputFile.write ( combined.toString () );
+	}
+	
 	/**
 	 * Generate metadata for ONDEXConcept.
 	 * 

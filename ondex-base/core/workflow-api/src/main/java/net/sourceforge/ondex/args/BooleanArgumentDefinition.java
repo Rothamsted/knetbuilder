@@ -11,9 +11,11 @@ public class BooleanArgumentDefinition extends
         AbstractArgumentDefinition<Boolean> implements
         NonContinuousArgumentDefinition<Boolean> {
 
+	public static String EXPORT_PLAIN_JSON = "ExportPlainJSON";
+    
     // default state
     private boolean defaultValue;
-
+    
     /**
      * Constructor which fills most internal fields and sets multiple instances
      * to false.
