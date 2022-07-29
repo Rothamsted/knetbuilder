@@ -33,9 +33,10 @@ public class CyjsJsonExportTest
 {
 	private static ONDEXGraph humanGraph;
 	private static Path humanJsPath = Path.of ( "target", "cy-export-basics-test.json" ).toAbsolutePath ();
-
+	private static String exportedJson;
+	
 	@BeforeClass
-	public static void prepareExport()
+	public static void prepareExport() throws IOException
 	{
 		// human dataset 
 		humanGraph = Parser.loadOXL (  CyjsJsonExportTest.class.getClassLoader ().getResource ( "MyNetwork_NeuroDisease_subset.oxl" ).getFile () );
@@ -48,7 +49,11 @@ public class CyjsJsonExportTest
 			humanGraph,
 			Map.of ( FileArgumentDefinition.EXPORT_FILE, humanJsPath.toString() ,
 					BooleanArgumentDefinition.EXPORT_PLAIN_JSON,true )
-		);		
+		);
+		
+		assertTrue ( "humanJsPath not created!", new File ( humanJsPath.toString() ).exists () );
+		
+		String exportedJson = Files.readString ( humanJsPath );
 	}
 	
 	
@@ -56,26 +61,22 @@ public class CyjsJsonExportTest
 	@Test
 	public void testBasics () throws IOException
 	{
-		
-		assertTrue ( "humanJsPath not created!", new File ( humanJsPath.toString() ).exists () );
-		
 		String idPath = "[?(@['id'] == 48320)]";
 		String nodePath = "$.graphJSON.nodes.." + idPath;
 		String metaPath = "$.allGraphData.ondexmetadata.." + idPath;
 		String prefferedPath = "$.allGraphData.ondexmetadata.concepts." + idPath + ".conames.[?(@['name'] == 'PRNP')]";
 		String attributePath = "$.allGraphData.ondexmetadata.concepts." + idPath + ".attributes.[?(@['attrname'] == 'TAXID')]";
+				
 		
-		String json = Files.readString ( humanJsPath );
+		assertJsonExport ( "Concept Type don't match", exportedJson, nodePath, "conceptType", "Gene" );
+		assertJsonExport ( "DisplayValue don't match", exportedJson, nodePath, "displayValue", "PRNP" );
 		
-		assertJsonExport ( "Concept Type don't match", json, nodePath, "conceptType", "Gene" );
-		assertJsonExport ( "DisplayValue don't match", json, nodePath, "displayValue", "PRNP" );
+		assertJsonExport ( "OfType don't match", exportedJson, metaPath, "ofType", "Gene" );
+		assertJsonExport ( "Value don't match", exportedJson, metaPath, "value", "PRNP" );
+		assertJsonExport ( "ElementOf don't match", exportedJson, metaPath, "elementOf", "ENSEMBL" );
 		
-		assertJsonExport ( "OfType don't match", json, metaPath, "ofType", "Gene" );
-		assertJsonExport ( "Value don't match", json, metaPath, "value", "PRNP" );
-		assertJsonExport ( "ElementOf don't match", json, metaPath, "elementOf", "ENSEMBL" );
-		
-		assertJsonExport( "IsPreferred is false", json, prefferedPath, "isPreferred", "true" );
-		assertJsonExport( "TaxId don't match", json, attributePath, "value", "9606" );
+		assertJsonExport( "IsPreferred is false", exportedJson, prefferedPath, "isPreferred", "true" );
+		assertJsonExport( "TaxId don't match", exportedJson, attributePath, "value", "9606" );
 			
 	}
 		
@@ -85,18 +86,16 @@ public class CyjsJsonExportTest
 	{
 		
 		String nonGenePath = "$.allGraphData.ondexmetadata.concepts.[?(@['ofType'] != 'Gene')].[?(@['id'] == 48391)]";
-		String GenePath = "$.allGraphData.ondexmetadata.concepts.[?(@['ofType'] == 'Gene')].[?(@['id'] == 48320)]";
+		String genePath = "$.allGraphData.ondexmetadata.concepts.[?(@['ofType'] == 'Gene')].[?(@['id'] == 48320)]";
 		
-		
-		String json = Files.readString ( humanJsPath );
 
 		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
 		ONDEXConcept nonGeneConcept = humanGraph.getConcept ( 48391 );
-		assertJsonExport ( "Concept Name in Non Gene don't match", json, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept, true ) );
+		assertJsonExport ( "Concept Name in Non Gene don't match", exportedJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept, true ) );
 		
 		// Pick some gene node from JSON and verify the same
 		ONDEXConcept geneConcept = humanGraph.getConcept ( 48320 );
-		assertJsonExport ( "Concept Name in Gene don't match", json, GenePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept, true ) );
+		assertJsonExport ( "Concept Name in Gene don't match", exportedJson, genePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept, true ) );
 		
 		// TODO: similar test for $.nodes
 	}
