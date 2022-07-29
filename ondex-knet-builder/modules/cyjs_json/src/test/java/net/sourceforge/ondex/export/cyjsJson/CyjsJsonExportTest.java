@@ -25,8 +25,7 @@ import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
  * To test the cyjsJSON Export code.
- * 
- * @author Ajit Singh
+ *  
  */
 @SuppressWarnings({"unchecked" })
 public class CyjsJsonExportTest
@@ -53,7 +52,7 @@ public class CyjsJsonExportTest
 		
 		assertTrue ( "humanJsPath not created!", new File ( humanJsPath.toString() ).exists () );
 		
-		String exportedJson = Files.readString ( humanJsPath );
+		exportedJson = Files.readString ( humanJsPath );
 	}
 	
 	
