@@ -10,12 +10,14 @@
 [i66]: https://github.com/Rothamsted/knetbuilder/issues/66
 
 ### Internal changes
-* KnetMiner initialiser module added from code in KnetMiner ([#51](https://github.com/Rothamsted/knetbuilder/issues/51))
-* Lucene module: bugfixing for certain [non-working queries](https://github.com/Rothamsted/knetbuilder/issues/53)
+* KnetMiner initialiser module added from code in KnetMiner ([#51][i51])
+* Lucene module: bugfixing for certain [non-working queries][i53]
 * Maven Assembly plug-in upgraded to latest version, many related files fixed.
 * `javax.xml.bind` + `jaxb-runtime` replaced with `jakarta.xml.bind-api` + `jaxb-impl`, due to problems with J17 compatibility 
 (moreover, the previous modules are a dead projects).
 
+[i51]: https://github.com/Rothamsted/knetbuilder/issues/51
+[i53]: https://github.com/Rothamsted/knetbuilder/issues/53
 
 ## 5.0
 * Big changes to migrate to Java 11
