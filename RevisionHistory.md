@@ -4,7 +4,10 @@
 
 ## 5.0.1-SNAPSHOT
 * Metadata descriptor (still experimental)
-* Minor upgrades to the CytoscapeJS exporter (eg, [#61](https://github.com/Rothamsted/knetbuilder/issues/61))
+* Minor upgrades to the CytoscapeJS exporter (eg, [#61][i61], [#66][i66])
+
+[i61]: https://github.com/Rothamsted/knetbuilder/issues/61
+[i66]: https://github.com/Rothamsted/knetbuilder/issues/66
 
 ### Internal changes
 * KnetMiner initialiser module added from code in KnetMiner ([#51](https://github.com/Rothamsted/knetbuilder/issues/51))
