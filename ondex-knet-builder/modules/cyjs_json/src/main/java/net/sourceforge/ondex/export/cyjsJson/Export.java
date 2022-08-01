@@ -115,7 +115,7 @@ public class Export extends ONDEXExport {
 			if( exportPlainJSON ) {
 				writePlainJSON ( graphJson, allDataJson, graphFileWriter );
 			}else {
-				writeJSONToFile ( graphJson, allDataJson, graphFileWriter );
+				writeJSON ( graphJson, allDataJson, graphFileWriter );
 			}
 		} 
 		catch ( IOException ex )
@@ -261,50 +261,43 @@ public class Export extends ONDEXExport {
 	}
 
     /** 
-     * Write to output file.
-     * @param outputFile
-     *            The output file that gets written out.
+     * Writes the output. This is the original format, which contains JSON-like definitions embedded in a 
+     * JSON field.
+     * 
+     * See #652 for details.
+     * 
      * @param allDataJson
-     *            JSONObject containing all the metadata, concepts & relations information.
+     *            JSONObject containing all the metadata, concepts & relations information, ie the ONDEX graph.
      * @param graphJson
      *            JSONObject containing the node (concept) & edge (relation) information used by CytoscapeJS.
      */
-	private void writeJSONToFile (JSONObject graphJson, JSONObject metadataJson, Writer outputFile ) 
+	private void writeJSON (JSONObject graphJson, JSONObject metadataJson, Writer out ) 
 		throws IOException
 	{
 
 		String graphData = graphJson.toString ();
 		String allData = metadataJson.toString ();
 
-		// Format the created JSON String objects.
 		graphData = formatJson ( graphData );
 		allData = formatJson ( allData );
 
-		// DEBUG
-		// System.out.println("graphJson= "+ graphData +"\n \n"+ "metadataJson= "+ allData);
 
-		// Write the JSON object to be used for displaying the nodes & edges using
-		// CytoscapeJS.
-		outputFile.write ( "var graphJSON= " );
-		outputFile.write ( /* graphJson.toString() */graphData ); // write necessary concepts & relations data to file
-		outputFile.write ( ";" );
+		out.write ( "var graphJSON= " );
+		out.write ( /* graphJson.toString() */graphData ); // write necessary concepts & relations data to file
+		out.write ( ";" );
 
-		// Write all graph data (including metadata, concepts & relations' information).
-		outputFile.write ( "\n" );
-		outputFile.write ( "\n" );
-		outputFile.write ( "var allGraphData= " );
-		outputFile.write ( /* allDataJson.toString() */allData ); // write all graph data to file
-		outputFile.write ( ";" );
+		out.write ( "\n" );
+		out.write ( "\n" );
+		out.write ( "var allGraphData= " );
+		out.write ( allData );
+		out.write ( ";" );
 	}
 	
 	/** 
-     * Write to output file.
-     * @param outputFile
-     *            The output file that gets written out.
-     * @param allDataJson
-     *            JSONObject containing all the metadata, concepts & relations information.
-     * @param graphJson
-     *            JSONObject containing the node (concept) & edge (relation) information used by CytoscapeJS.
+     * Writes the output in pure JSON format. This option was introduced more recently (2022).
+     * 
+     * See #652 for details. Also @see {@link #writeJSON(JSONObject, JSONObject, Writer)}.
+     * 
      */
 	private void writePlainJSON ( JSONObject graphJson, JSONObject metadataJson, Writer outputFile ) 
 			throws IOException
