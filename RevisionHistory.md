@@ -1,6 +1,6 @@
 # Revision History
 
-*This file was last reviewed on 29/30/2022*
+*This file was last reviewed on 1/8/2022*
 
 ## 5.0.1-SNAPSHOT
 * Metadata descriptor (still experimental)
@@ -15,6 +15,7 @@
 * Maven Assembly plug-in upgraded to latest version, many related files fixed.
 * `javax.xml.bind` + `jaxb-runtime` replaced with `jakarta.xml.bind-api` + `jaxb-impl`, due to problems with J17 compatibility 
 (moreover, the previous modules are a dead projects).
+
 
 [i51]: https://github.com/Rothamsted/knetbuilder/issues/51
 [i53]: https://github.com/Rothamsted/knetbuilder/issues/53
