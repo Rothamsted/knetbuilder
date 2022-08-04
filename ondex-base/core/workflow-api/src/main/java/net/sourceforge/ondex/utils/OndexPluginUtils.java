@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 
@@ -14,6 +16,8 @@ import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.RequiresGraph;
 import net.sourceforge.ondex.UncheckedPluginException;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.event.ONDEXListener;
+import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
@@ -38,11 +42,14 @@ public class OndexPluginUtils
 	 *         {@link ProducerONDEXPlugin#collectResults() collectResults()}, if it's {@link RequiresGraph}, returns
 	 *         {@link RequiresGraph#getGraph() the plugin's graph}, else returns null.
 	 * 
+	 * Note that this {@link #setupPluginLogger(ONDEXPlugin) auto-adds the default logger} to the plug-in.
 	 */
 	public static <T> T runPlugin ( ONDEXPlugin plugin, Map<String, Object> args ) throws UncheckedPluginException
 	{
 		try
-		{
+		{			
+			setupPluginLogger ( plugin );
+			
 			// Prepare the arguments from the map
 			//
 			var pargDefs = plugin.getArgumentDefinitions ();
@@ -168,5 +175,22 @@ public class OndexPluginUtils
 		{
 			throw new UncheckedPluginException ( "Can't find the ONDEX plug-in class: '" + pluginFQN + "'" );
 		}
+	}
+	
+	/**
+	 * Adds an {@link ONDEXListener} to the {@link ONDEXPlugin#getONDEXListeners() plugin listeners}
+	 * It first checks that the logger isn't already there, in which case it does nothing.
+	 */
+	public static void setupPluginLogger ( ONDEXPlugin plugin )
+	{
+		boolean alreadyExists = Optional.ofNullable ( plugin.getONDEXListeners () )
+		.map ( listeners -> 
+			Stream.of ( listeners )
+			.anyMatch ( l -> l instanceof ONDEXLogger )
+		)
+		.orElse ( false );
+		
+		if ( alreadyExists ) return;
+		plugin.addONDEXListener ( new ONDEXLogger () );
 	}
 }

@@ -151,7 +151,7 @@ public class Parser extends ONDEXParser {
 		getInputAndStart();
 
 		GeneralOutputEvent so1 = new GeneralOutputEvent(
-				"OXL parsing finished.", "[Parser - start]");
+				"OXL parsing finished.", "[OXL Parser]");
 		so1.setLog4jLevel(Level.INFO);
 		fireEventOccurred(so1);
 
@@ -166,7 +166,7 @@ public class Parser extends ONDEXParser {
 
 	private void setOptionalArguements() throws InvalidPluginArgumentException {
 		EventType so = new GeneralOutputEvent("Starting OXL parsing...",
-				"[Parser - start]");
+				"[OXL Parser]");
 		so.setLog4jLevel(Level.INFO);
 		fireEventOccurred(so);
 
@@ -182,7 +182,7 @@ public class Parser extends ONDEXParser {
 			} else {
 				fireEventOccurred(new AttributeNameMissingEvent(gds
 						+ " is not found in the metadata (ignoring parameter)",
-						"[Parser - start]"));
+						"[OXL Parser]" ) );
 			}
 
 		}
@@ -205,13 +205,13 @@ public class Parser extends ONDEXParser {
 	private void start(File fileToRead) throws PluginConfigurationException {
 
 		fireEventOccurred(new GeneralOutputEvent("Parsing "
-				+ fileToRead.getAbsolutePath(), "[Parser - start]"));
+				+ fileToRead.getAbsolutePath(), "[OXL Parser]"));
 
 		// check if file exists
 		if (!fileToRead.exists()) {
 			fireEventOccurred(new DataFileMissingEvent(
 					fileToRead.getAbsolutePath() + " can not be found.",
-					"[Parser - start]", Level.ERROR));
+					"[OXL Parser]", Level.ERROR));
 			return;
 		}
 
@@ -219,7 +219,7 @@ public class Parser extends ONDEXParser {
 		if (!fileToRead.canRead()) {
 			fireEventOccurred(new DataFileMissingEvent(
 					fileToRead.getAbsolutePath() + " can not be read.",
-					"[Parser - start]"));
+					"[OXL Parser]", Level.ERROR ));
 			return;
 		}
 
@@ -228,7 +228,7 @@ public class Parser extends ONDEXParser {
 		long sizeInMegs = fileToRead.length() / MEGABYTE;
 
 		fireEventOccurred(new GeneralOutputEvent("File to be parsed is "
-				+ format.format(sizeInMegs) + " Mb", "[Parser - start]"));
+				+ format.format(sizeInMegs) + " Mb", "[OXL Parser]"));
 
 		XMLStreamReader xmlr;
 		try {
@@ -241,32 +241,32 @@ public class Parser extends ONDEXParser {
 			case ZipEndings.XML:
 				in = new FileInputStream(fileToRead);
 				fireEventOccurred(new GeneralOutputEvent(
-						"Detected uncompressed file", "[Parser - start]"));
+						"Detected uncompressed file", "[OXL Parser]"));
 				break;
 			case ZipEndings.OXL:
 				in = new GZIPInputStream(new FileInputStream(fileToRead));
 				fireEventOccurred(new GeneralOutputEvent("Detected OXL file",
-						"[Parser - start]"));
+						"[OXL Parser]"));
 				break;
 			case ZipEndings.GZ:
 				in = new GZIPInputStream(new FileInputStream(fileToRead));
 				fireEventOccurred(new GeneralOutputEvent("Detected GZIP file",
-						"[Parser - start]"));
+						"[OXL Parser]"));
 				break;
 			case ZipEndings.ZIP:
 				ZipFile zipFile = new ZipFile(fileToRead);
 				if (zipFile.size() > 1) {
 					fireEventOccurred(new DataFileErrorEvent(
 							"There are multiple files in this zip file: can not parse",
-							"[Parser - start]"));
+							"[OXL Parser]"));
 				}
 				in = zipFile.getInputStream(zipFile.entries().nextElement());
 				fireEventOccurred(new GeneralOutputEvent("Detected ZIP file",
-						"[Parser - start]"));
+						"[OXL Parser]"));
 				break;
 			default:
 				fireEventOccurred(new GeneralOutputEvent(
-						"Unsupported filetype", "[Parser - start]"));
+						"Unsupported filetype", "[OXL Parser]", Level.ERROR ));
 				return;
 			}
 
@@ -310,7 +310,7 @@ public class Parser extends ONDEXParser {
 			start(xmlr);
 		} catch (XMLStreamException e) {
 			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
-					"[Parser - start]"));
+					"[OXL Parser]" ));
 			throw new ParsingFailedException(e);
 		}
 	}
@@ -381,7 +381,7 @@ public class Parser extends ONDEXParser {
 			// catch exceptions and throw them upwards
 			if (cp.errorMessages.size() > 0) {
 				fireEventOccurred(new ParsingErrorEvent(
-						cp.errorMessages.toString(), "[Parser - start]"));
+						cp.errorMessages.toString(), "[OXL Parser]"));
 				throw new ParsingFailedException(cp.errorMessages.toString());
 			}
 
@@ -391,7 +391,7 @@ public class Parser extends ONDEXParser {
 		catch (InconsistencyException|XMLStreamException|JAXBException|ClassNotFoundException|InstantiationException|IllegalAccessException e) 
 		{
 			fireEventOccurred(new ParsingErrorEvent(e.getMessage(),
-					"[Parser - start]"));
+					"[OXL Parser]"));
 			throw new ParsingFailedException(e);
 		} 
 		finally {

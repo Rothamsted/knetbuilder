@@ -30,6 +30,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.GraphLabelsUtils;
+import net.sourceforge.ondex.event.type.EventType.Level;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.export.ONDEXExport;
 
@@ -75,7 +76,7 @@ public class Export extends ONDEXExport {
 		if (graph == null && (concepts == null || relations == null))
 	    throw new NullPointerException( "CytoscapeJS Exporter Error: Ondex graph not set for export");
 		
-		fireEventOccurred (new GeneralOutputEvent ( "Ready to Export.", "[Export - start]" ) );
+		fireEventOccurred (new GeneralOutputEvent ( "Ready to Export.", "[CyJSON Exporter]", Level.INFO ) );
 		
 		// JSONArray objects to store all the concepts (nodes) & relations (edges) to.
 		JSONArray conceptNodesJson = new JSONArray ();
@@ -126,8 +127,11 @@ public class Export extends ONDEXExport {
 			);
 		}
 
-		System.out.println ( "JSON export completed..." );
-		fireEventOccurred (new GeneralOutputEvent ( "Finished JSON Export.", "[Export - start]" ) );
+		fireEventOccurred ( new GeneralOutputEvent ( 
+			"JSON export completed to \"" + Path.of ( outputFileName ).toAbsolutePath () + "\"",
+			"[CyJSON Exporter]",
+			Level.INFO
+		));
 	}
 
     /**
@@ -200,7 +204,6 @@ public class Export extends ONDEXExport {
          // generate, return & store concept/ node data.
          conceptNodesJson.add(anci.getNodeJson(con, conceptsUsedInRelations)); // add the returned node to the JSONArray.
         }
-     System.out.println("\n");
 
      graphJson.put("nodes", conceptNodesJson); // add the "nodes" array to the JSON object.
     }
