@@ -26,6 +26,8 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationKey;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
+import uk.ac.ebi.utils.exceptions.UnexpectedEventException;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
@@ -183,17 +185,19 @@ public class GraphTraverser extends AbstractGraphTraverser {
         Traverser traverser = new Traverser(aog, concept, sm, filter);
 
         try {
-            try {
-                List<EvidencePathNode> future = traverser.call();
-                if (filter != null) {
-                    future = filter.filterPaths(future);
-                }
-                return future;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } finally {
-            transitionViewCache.clear();
+          List<EvidencePathNode> future = traverser.call();
+          if (filter != null) {
+              future = filter.filterPaths(future);
+          }
+          return future;
+        } 
+        catch ( Exception ex ) {
+          ExceptionUtils.throwEx (
+          	RuntimeException.class, ex, "Error while running the traverser tasks: $cause" 
+          );
+        }
+        finally {
+          transitionViewCache.clear();
         }
         throw new RuntimeException("operation unsuccessful");
     }
@@ -206,7 +210,8 @@ public class GraphTraverser extends AbstractGraphTraverser {
      * @param filter   allows method caller to filter results as they are returned (can be null)
      * @return a map of starting points to StateDerivedPaths extracted
      */
-    @Override
+		@Override
+    @SuppressWarnings ( "rawtypes" )
 		public Map<ONDEXConcept, List<EvidencePathNode>> traverseGraph(ONDEXGraph aog, Set<ONDEXConcept> concepts, FilterPaths<EvidencePathNode> filter) {
 
     		init ( aog );
@@ -219,11 +224,9 @@ public class GraphTraverser extends AbstractGraphTraverser {
                     aog.getRelationsOfRelationType(transition.getValidRelationType()));
         }
 
-        Map<ONDEXConcept, List<EvidencePathNode>> completeStateDerivedRoutes
-                = new HashMap<ONDEXConcept, List<EvidencePathNode>>();
+        Map<ONDEXConcept, List<EvidencePathNode>> completeStateDerivedRoutes = new HashMap<>();
 
-        Map<ONDEXConcept, Future<List<EvidencePathNode>>>
-                futures = new LinkedHashMap<ONDEXConcept, Future<List<EvidencePathNode>>>();
+        Map<ONDEXConcept, Future<List<EvidencePathNode>>> futures = new LinkedHashMap<>();
 
         for (ONDEXConcept concept : concepts) {
             Traverser traverser = new Traverser(aog, concept, sm, filter);
@@ -244,10 +247,11 @@ public class GraphTraverser extends AbstractGraphTraverser {
                     completeStateDerivedRoutes.put(concept, results);
                 }
                 progressLogger.updateWithIncrement ();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+            } 
+            catch ( InterruptedException | ExecutionException ex ) {
+              ExceptionUtils.throwEx (
+              	RuntimeException.class, ex, "Error while running the traverser tasks: $cause" 
+              );
             }
         }
 
@@ -353,7 +357,8 @@ public class GraphTraverser extends AbstractGraphTraverser {
             }
         }
 
-        @Override
+				@Override
+        @SuppressWarnings ( { "rawtypes", "unchecked" } )
         public List<EvidencePathNode> call() throws CloneNotSupportedException {
             State startingState = sm.getStart();
             EvidencePathNode startingEmptyRoute //a new blank route to start the process off
@@ -365,19 +370,16 @@ public class GraphTraverser extends AbstractGraphTraverser {
                 while (!incompleteStateDerivedPaths.isEmpty())
                     findPaths(incompleteStateDerivedPaths.poll());
 
-            } catch (StateDoesNotExistException e) {
-                e.printStackTrace();
-            } catch (StateMachineInvalidException e) {
-                e.printStackTrace();
-            } catch (TransitionDoesNotExistException e) {
-                e.printStackTrace();
+            }
+            catch ( StateDoesNotExistException | StateMachineInvalidException | TransitionDoesNotExistException ex ) {
+              ExceptionUtils.throwEx (
+                	IllegalStateException.class, ex, "Error while running the traverser tasks: $cause" 
+                );
             }
 
-            if (filter != null) {
-                return filter.filterPaths(completeStateDerivedPaths);
-            } else {
-                return completeStateDerivedPaths;
-            }
+            return filter != null 
+            	? filter.filterPaths(completeStateDerivedPaths)
+            	: completeStateDerivedPaths;
         }
     }
 
