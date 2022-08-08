@@ -27,7 +27,6 @@ import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationKey;
 import net.sourceforge.ondex.core.util.BitSetFunctions;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
-import uk.ac.ebi.utils.exceptions.UnexpectedEventException;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
 /**
