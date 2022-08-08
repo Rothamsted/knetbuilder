@@ -44,6 +44,7 @@ public class GraphTraverser extends AbstractGraphTraverser {
 
     private static ExecutorService EXECUTOR;
 
+    // transition => all relations of the required type for the transition
     private final Map<Transition, Set<ONDEXRelation>> transitionViewCache = new HashMap<>();
 
     private StateMachine sm;
@@ -163,13 +164,12 @@ public class GraphTraverser extends AbstractGraphTraverser {
     
     
     /**
-     * No multi threading here this implementation threads on start states
-     * Only concept ids with valid routes out are returned
-     *
-     * @param aog     the graph to extract StateDerivedRoutes from (these all become start points --> be careful)
+     * Single-seed, single-thread traversal.
+     * 
      * @param concept the concepts that form the start points for this synchronous search
      * @param filter  allows method caller to filter results as they are returned (can be null)
-     * @return StateDerivedPaths extracted
+     * 
+     * @return the list found paths.
      */
     @Override
 		public List<EvidencePathNode> traverseGraph(ONDEXGraph aog, ONDEXConcept concept, FilterPaths<EvidencePathNode> filter) {
@@ -184,31 +184,31 @@ public class GraphTraverser extends AbstractGraphTraverser {
 
         Traverser traverser = new Traverser(aog, concept, sm, filter);
 
-        try {
-          List<EvidencePathNode> future = traverser.call();
-          if (filter != null) {
-              future = filter.filterPaths(future);
-          }
+        try
+        {
+        	List<EvidencePathNode> future = traverser.call();
+          if (filter != null) future = filter.filterPaths(future);
           return future;
         } 
         catch ( Exception ex ) {
-          ExceptionUtils.throwEx (
+          throw ExceptionUtils.buildEx (
           	RuntimeException.class, ex, "Error while running the traverser tasks: $cause" 
           );
         }
         finally {
           transitionViewCache.clear();
         }
-        throw new RuntimeException("operation unsuccessful");
     }
 
     /**
-     * extract StateDerivedRoutes from the given graph (multi-threaded returns on completion)
+     * Multi-thread traversal from a set of seeds.
+     * 
+     * Essentially, this invokes {@link Traverser} instances in parallel.
      *
-     * @param aog      the graph to extract StateDerivedRoutes from (these all become start points --> be careful)
      * @param concepts the concepts that form the start points for this synchronous search
      * @param filter   allows method caller to filter results as they are returned (can be null)
-     * @return a map of starting points to StateDerivedPaths extracted
+     * @return a map of starting point => paths found using the state machine from that starting point
+     *  
      */
 		@Override
     @SuppressWarnings ( "rawtypes" )
@@ -218,34 +218,34 @@ public class GraphTraverser extends AbstractGraphTraverser {
     	
     		log.info ( "Graph Traverser, beginning parallel traversing of {} concept(s)", concepts.size () );
     		
+    		// Populate the transition=>relations cache
         Set<Transition> transitions = sm.getAllTransitions();
         for (Transition transition : transitions) {
             transitionViewCache.put(transition,
                     aog.getRelationsOfRelationType(transition.getValidRelationType()));
         }
 
+        // Final and partial results
         Map<ONDEXConcept, List<EvidencePathNode>> completeStateDerivedRoutes = new HashMap<>();
+        Map<ONDEXConcept, Future<List<EvidencePathNode>>> resultFutures = new LinkedHashMap<>();
 
-        Map<ONDEXConcept, Future<List<EvidencePathNode>>> futures = new LinkedHashMap<>();
-
+        // Let's go, in parallel
         for (ONDEXConcept concept : concepts) {
             Traverser traverser = new Traverser(aog, concept, sm, filter);
-            futures.put(concept, EXECUTOR.submit(traverser));
+            resultFutures.put(concept, EXECUTOR.submit(traverser));
         }
 
-        int totalFutureNumber = futures.keySet().size();
+        int totalFutureNumber = resultFutures.keySet().size();
 
         PercentProgressLogger progressLogger = new PercentProgressLogger (
         	"{}% of traversal tasks completed", totalFutureNumber 
         );
         
-        for (ONDEXConcept concept : futures.keySet()) {
-            Future<List<EvidencePathNode>> future = futures.get(concept);
+        for (ONDEXConcept concept : resultFutures.keySet()) {
+            Future<List<EvidencePathNode>> future = resultFutures.get(concept);
             try {
                 List<EvidencePathNode> results = future.get();
-                if (results.size() > 0) {
-                    completeStateDerivedRoutes.put(concept, results);
-                }
+                if (results.size() > 0) completeStateDerivedRoutes.put(concept, results);
                 progressLogger.updateWithIncrement ();
             } 
             catch ( InterruptedException | ExecutionException ex ) {
@@ -298,7 +298,9 @@ public class GraphTraverser extends AbstractGraphTraverser {
         }
 
         /**
-         * The main body of work around here!
+         * The main body of work. Walks the graph from the tail of path, that is, 
+         * the {@link EvidencePathNode#getEntity() path end node} and the 
+         * {@link EvidencePathNode#getStateMachineComponent() state machine component that led to that node}.
          *
          * @param path the graph instance path that has so far been traversed
          */

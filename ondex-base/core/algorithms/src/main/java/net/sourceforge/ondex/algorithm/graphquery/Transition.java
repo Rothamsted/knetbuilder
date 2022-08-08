@@ -53,7 +53,10 @@ public class Transition implements StateMachineComponent<ONDEXRelation, Evidence
 
 		/**
      * @param relation the relation to check
-     * @return is it valid to traverse this relation at this point in the path
+     * @return is it valid to traverse this relation at this point in the path. In this 
+     * default, that means the relation is of the {@link #getValidRelationType() right type} and
+     * the {@link EvidencePathNode#getLength() path length} + 1 (ie, with the addition of the
+     * current transition) is <= {@link #getMaxLength()} (ignored if not set). 
      */
     public boolean isValid(ONDEXRelation relation, EvidencePathNode<ONDEXConcept, ONDEXRelation, State> path) {
         return isValid(relation) && !(maxLength < Integer.MAX_VALUE

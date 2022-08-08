@@ -192,7 +192,8 @@ public class StateMachineFlatFileParser2 {
                         RelationType relationType = og.getMetaData().getRelationType(valuest[1].trim());
                         if (relationType == null) {
                             System.err.println(
-                                    "Warning: RelationType " + valuest[1].trim() + " is not found in MetaData");
+                            	"Warning: RelationType " + valuest[1].trim() + " is not found in MetaData"
+                            );
                             continue;
                         }
 
