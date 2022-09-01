@@ -625,7 +625,7 @@
       <dependency>
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
-				<version>1.14.2</version>
+				<version>1.15.3</version>
       </dependency>
       
       <!-- TODO: would be good to replace all the uses of this with picocli, at the moment we use both -->
