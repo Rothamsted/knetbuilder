@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -51,7 +52,7 @@ public class AddConceptNodeInfo {
   /* Fetch the Set of all concept names and retain only the preferred ones, to later choose the 
    * "best" concept name to display from amongst them, for Genes. */
   
-  String conceptName = GraphLabelsUtils.getBestConceptLabel ( con, true );
+  String conceptName = GraphLabelsUtils.getBestConceptLabel ( con, true, 0 );
   
   String conceptShape;
   String conceptColour;
@@ -64,12 +65,17 @@ public class AddConceptNodeInfo {
   
   String val= conceptName;
   String concept_text_bgColor= "black", concept_text_bgOpacity= "0";
-  if(conceptName.contains("<span")) {
+  
+  if(conceptName.contains("<span")) 
+  {
      //val= "<html>"+ conceptName +"</html>";
      concept_text_bgColor= "gold";
      
      // if a color is already provided within the <span> tag, use that HEX colour code
-     Matcher hexRe = RegEx.of ( ".*(#[0-9,A-F]{6}).*", Pattern.CASE_INSENSITIVE )
+     Matcher hexRe = RegEx.of ( 
+        // style="background-color:#0123FF"
+    		".*style\\s*=\\s*[\\\",']\\s*background-color\\s*:\\s*(#[0-9,A-F]{6})\\s*[\\\",'].*", 
+    		Pattern.CASE_INSENSITIVE )
     		.matcher ( conceptName );
      if ( hexRe.matches () )
     	 concept_text_bgColor = hexRe.group ( 1 );
@@ -79,11 +85,12 @@ public class AddConceptNodeInfo {
      // remove all html content (including <span> tags) from conceptName to be displayed
      Document doc = Jsoup.parse(val);
      val= doc.text(); //doc.select("span").remove().toString();
-    }
-  // Trim the label's (conceptName) length.
-  // TODO: getBestConceptLabel() above cuts this at 60
-  if(val.length()>30) { val= val.substring(0, 29) +"...";}
-  //System.out.println("concept: trimmed displayValue: "+ val);
+  }
+  
+  // TODO: getBestConceptLabel() normally cut at 63 (including dots)
+  // TODO: this is completely ignoring the case where name is like "...<span...><b>keyword</b></span>", we
+  // should move the formatted name into a dedicated attribute and leave the original name untouched
+  val = StringUtils.abbreviate ( val, 33 );
   
   nodeData.put(JSONAttributeNames.ID, conceptID);
   nodeData.put(JSONAttributeNames.VALUE, conceptName);

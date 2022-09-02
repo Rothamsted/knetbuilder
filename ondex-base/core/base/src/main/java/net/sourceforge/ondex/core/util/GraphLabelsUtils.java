@@ -35,9 +35,11 @@ public class GraphLabelsUtils
 	 * 
 	 * @param filterAccessions removes accessions from names, if these are duplicated there from accessions,
 	 *        as per {@link #getBestName(ONDEXConcept, boolean)}. 
-	 * 
+	 *
+	 * @param maxLen if >0, the result is {@link StringUtils#abbreviate(String, int) abbreviated} at that len-3 and '...'
+	 *   is appended.
 	 */
-	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames )
+	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames, int maxLen )
 	{
 		String typeId = c.getOfType ().getId ();
 		
@@ -56,8 +58,16 @@ public class GraphLabelsUtils
 		}
 			
 		if ( result.isEmpty () ) result = StringUtils.trimToEmpty ( c.getPID () );
+		if ( maxLen > 0 ) result = StringUtils.abbreviate ( result, 63 );
+		return result;
+	}
 
-		return StringUtils.abbreviate ( result, 63 );
+	/**
+	 * Defaults to a result abbreviated at 63 chars.
+	 */
+	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames )
+	{
+		return getBestConceptLabel ( c, filterAccessionsFromNames, 63 );
 	}
 
 	
