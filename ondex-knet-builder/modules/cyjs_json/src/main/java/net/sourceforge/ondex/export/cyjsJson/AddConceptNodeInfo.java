@@ -1,6 +1,8 @@
 package net.sourceforge.ondex.export.cyjsJson;
 
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
@@ -9,6 +11,7 @@ import org.jsoup.nodes.Document;
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.util.GraphLabelsUtils;
+import uk.ac.ebi.utils.regex.RegEx;
 
 /**
  * Build node json objects using their various attributes.
@@ -64,10 +67,15 @@ public class AddConceptNodeInfo {
   if(conceptName.contains("<span")) {
      //val= "<html>"+ conceptName +"</html>";
      concept_text_bgColor= "gold";
-     if(conceptName.contains("#")) { // if a color is already provided within the <span> tag, use that HEX colour code
-        concept_text_bgColor= conceptName.substring(conceptName.indexOf("#"), conceptName.indexOf("#")+7);
-       }
+     
+     // if a color is already provided within the <span> tag, use that HEX colour code
+     Matcher hexRe = RegEx.of ( ".*(#[0-9,A-F]{6}).*", Pattern.CASE_INSENSITIVE )
+    		.matcher ( conceptName );
+     if ( hexRe.matches () )
+    	 concept_text_bgColor = hexRe.group ( 1 );
+     
      concept_text_bgOpacity= "1";
+
      // remove all html content (including <span> tags) from conceptName to be displayed
      Document doc = Jsoup.parse(val);
      val= doc.text(); //doc.select("span").remove().toString();

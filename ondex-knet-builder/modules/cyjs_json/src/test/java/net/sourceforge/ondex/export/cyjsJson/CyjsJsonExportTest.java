@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import net.minidev.json.JSONArray;
@@ -32,7 +33,7 @@ public class CyjsJsonExportTest
 {
 	private static ONDEXGraph humanGraph;
 	private static Path humanJsPath = Path.of ( "target", "cy-export-basics-test.json" ).toAbsolutePath ();
-	private static String exportedJson;
+	private static DocumentContext exportedJson;
 	
 	@BeforeClass
 	public static void prepareExport() throws IOException
@@ -52,7 +53,7 @@ public class CyjsJsonExportTest
 		
 		assertTrue ( "humanJsPath not created!", new File ( humanJsPath.toString() ).exists () );
 		
-		exportedJson = Files.readString ( humanJsPath );
+		exportedJson =  JsonPath.parse ( Files.readString ( humanJsPath ) );
 	}
 	
 	
@@ -99,12 +100,17 @@ public class CyjsJsonExportTest
 		// TODO: similar test for $.nodes
 	}
 	
-	
-	private void assertJsonExport (String errorMessage, String json, String jsonPath, String param,
-			String expectedValue ) {
-		assertEquals ( errorMessage, 
-			expectedValue,
-			( ( ( Map<String, Object> ) ( ( JSONArray ) JsonPath.parse ( json ).read ( jsonPath ) ).get ( 0 ) ).get ( param ) )
-		);
+	/**
+	 * Checks an array of exported objects. arrayJsonPath is expected to return an array of objects, the method
+	 * takes the first and assert that its field jsonField is set to expectedValue.
+	 */
+	private void assertJsonExport (
+		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue )
+	{
+		var jsArray = ( JSONArray ) json.read ( arrayJsonPath );
+		var jsElem = ( Map<String, Object> ) jsArray.get ( 0 );
+		var jsValue = jsElem.get ( jsonField );
+		
+		assertEquals ( errorMessage, expectedValue, jsValue );
 	}
 }

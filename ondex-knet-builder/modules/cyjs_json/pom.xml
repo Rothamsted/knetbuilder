@@ -81,6 +81,12 @@
          <groupId>org.codehaus.woodstox</groupId>
          <artifactId>woodstox-core-lgpl</artifactId>
       </dependency>
+      
+      <dependency>
+				<groupId>uk.ac.ebi</groupId>
+				<artifactId>jutils</artifactId>
+      </dependency>
+      
       <dependency>
 		    <groupId>com.jayway.jsonpath</groupId>
 		    <artifactId>json-path</artifactId>
