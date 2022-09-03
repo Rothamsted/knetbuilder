@@ -17,7 +17,7 @@ import uk.ac.ebi.utils.regex.RegEx;
 /**
  * Build node json objects using their various attributes.
  * @author Ajit Singh
- * @version 16/07/18
+ * date: 16/07/18
  */
 public class AddConceptNodeInfo {
 
@@ -27,7 +27,8 @@ public class AddConceptNodeInfo {
   defaultVisibility= ElementVisibility.none.toString();
  }
 
- public JSONObject getNodeJson(ONDEXConcept con, Set<Integer> conceptsUsedInRelations) {
+ @SuppressWarnings ( "unchecked" )
+public JSONObject getNodeJson(ONDEXConcept con, Set<Integer> conceptsUsedInRelations) {
 
   JSONObject node= new JSONObject();
   JSONObject nodeData= new JSONObject();
@@ -88,8 +89,6 @@ public class AddConceptNodeInfo {
   }
   
   // TODO: getBestConceptLabel() normally cut at 63 (including dots)
-  // TODO: this is completely ignoring the case where name is like "...<span...><b>keyword</b></span>", we
-  // should move the formatted name into a dedicated attribute and leave the original name untouched
   val = StringUtils.abbreviate ( val, 33 );
   
   nodeData.put(JSONAttributeNames.ID, conceptID);
@@ -178,6 +177,9 @@ public class AddConceptNodeInfo {
   String shape= ConceptShape.rectangle.toString(); // default (for concept Type: 'Phenotype').
   String colour= ConceptColour.greenYellow.toString(); // default (for concept Type: 'Phenotype').
 
+  // TODO: Come on! Needs to be replaced by a map of type -> graph attributes object
+  // and return the latter instead of the naive array.
+  
   // Determine the shape & colour attributes for this concept based on the concept type.
   if(conType.equals(ConceptType.Biological_Process.toString())) {
      shape= ConceptShape.pentagon.toString();
