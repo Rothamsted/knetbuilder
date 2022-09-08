@@ -8,9 +8,16 @@ ONDEX Mini's workflow.
 This can be downloaded and invoked as a command line tool, available from the [Ondex Downloads Page][10]. 
 The CLI interface accepts the same parameters that the [plug-in][20] accepts.
 
-An OXL [URIs addition plug-in][30] is available in the same package. Similarly, this is available both as an Ondex plug-in 
-and command line tool.
+Other utilities in the same package:
+
+* An OXL [URIs addition plug-in][30], to add URIs to an OXL, which is useful for applications that start from
+  searches (of concepts and relations) in OXL and then picks the corresponding RDF data. For instance, this
+  is the case of the Cyverse traverser
+* A [data set metadata tool][40], which creates a descriptor about an entire OXL as a whole.
+
+All these tools too are available both as an Ondex plug-ins and command line tools.
 
 [10]: https://github.com/Rothamsted/knetbuilder/wiki/Downloads#rdf-exporter
 [20]: https://github.com/Rothamsted/knetbuilder/blob/master/ondex-knet-builder/modules/rdf-export-2/src/main/java/net/sourceforge/ondex/rdf/export/RDFExporterPlugin.java
 [30]: https://github.com/Rothamsted/knetbuilder/blob/master/ondex-knet-builder/modules/rdf-export-2/src/main/java/net/sourceforge/ondex/rdf/export/URIAdditionPlugin.java
+[40]: https://github.com/Rothamsted/knetbuilder/blob/master/ondex-knet-builder/modules/rdf-export-2/src/main/java/net/sourceforge/ondex/rdf/export/graphdescriptor/OndexGraphDescriptorTool.java
