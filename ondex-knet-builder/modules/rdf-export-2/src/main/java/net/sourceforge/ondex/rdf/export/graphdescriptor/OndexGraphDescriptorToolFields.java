@@ -3,9 +3,11 @@ package net.sourceforge.ondex.rdf.export.graphdescriptor;
 import java.util.Map;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.rdf.export.graphdescriptor.OndexGraphDescriptorTool.Builder;
 
 /**
- * TODO: comment me!
+ * Simple base class of fields that are shared by both {@link OndexGraphDescriptorTool} and its
+ * {@link Builder}
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>7 Dec 2021</dd></dl>

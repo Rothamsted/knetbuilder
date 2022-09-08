@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
-import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -45,7 +44,13 @@ import uk.ac.ebi.utils.ids.IdUtils;
 import uk.ac.ebi.utils.opt.io.IOUtils;
 
 /**
- * TODO: comment me!
+ * The OXL metadata descriptor.
+ * 
+ * <p>This is a small utility to generate metadata about an OXL as a whole dataset, based on schema.org
+ * (eg, schema:Dataset).</p>
+ * 
+ * <p>It works by instantiating a template like resources/knetminer-descriptors/knetminer-metadata-template.ttl
+ * with values from a .properties file plus other values and RDF statements that are extracted from the OXL.</p>
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>23 Jun 2021</dd></dl>
@@ -60,6 +65,9 @@ public class OndexGraphDescriptorTool extends OndexGraphDescriptorToolFields
 		
 		private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 		
+		/**
+		 * Just invoke this after an initial setup via {@link Builder}.
+		 */
 		public OndexGraphDescriptorTool build ()
 		{
 			if ( contextPath != null && context != null ) throw new IllegalArgumentException (
@@ -103,36 +111,62 @@ public class OndexGraphDescriptorTool extends OndexGraphDescriptorToolFields
 			return this;
 		}
 
+		/**
+		 * A set of JSON-like properties that are used to fill the {@link #setRdfTemplate(String) RDF template}.
+		 */
 		public Builder setContext ( Map<String, Object> context )
 		{
 			this.context = context;
 			return this;
 		}
 
+		/**
+		 * The {@link #setContext(Map) context} can be specified directly, or via .properties file, here.
+		 * @param contextPath
+		 * @return
+		 */
 		public Builder setContextPath ( String contextPath )
 		{
 			this.contextPath = contextPath;
 			return this;
 		}
 
+		/**
+		 * The descriptor is generated starting from this RDF template.
+		 */
 		public Builder setRdfTemplate ( String rdfTemplate )
 		{
 			this.rdfTemplate = rdfTemplate;
 			return this;
 		}
 
+		/**
+		 * The template can either be loaded from a file or passed directly as a string.
+		 */
 		public Builder setRdfTemplatePath ( String rdfTemplatePath )
 		{
 			this.rdfTemplatePath = rdfTemplatePath;
 			return this;
 		}
 
+		/**
+		 * The RDF format the template is based on. Default is turtle. This is passed to Jena, see Jena documentation
+		 * for valid formats.
+		 */
 		public Builder setRdfLang ( String rdfLang )
 		{
 			this.rdfLang = rdfLang;
 			return this;
 		}
 
+		/**
+		 * The OXL's URL is used for the schema:url property, that is, to give the descriptor a 
+		 * download URL about the original OXL.
+		 * 
+		 * It's also used to generate a checksum MD5 hash for the pointed OXL file, which is added to the metadata and 
+		 * can be useful to check that a descriptor file correspond to the referenced OXL.
+		 * 
+		 */
 		public Builder setOxlSourceURL ( String oxlSourceURL )
 		{
 			this.oxlSourceURL = oxlSourceURL;

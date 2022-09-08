@@ -14,7 +14,7 @@ import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.transformer.ONDEXTransformer;
 
 /**
- * TODO: comment me!
+ * An ONDEX plug-in to invoke the {@link OndexGraphDescriptorTool}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>26 Nov 2021</dd></dl>

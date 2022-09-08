@@ -19,7 +19,6 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.jsonldjava.core.JsonLdProcessor;
 import com.github.jsonldjava.utils.JsonUtils;
 
 import uk.ac.ebi.utils.exceptions.TooManyValuesException;
@@ -53,13 +52,13 @@ public class JsonLdUtils
 	
 	public static Model getRdfFromUris ( String contextUri, String rdfTemplateUri, String rdfLang )
 	{
-		return null; // TODO
+		throw new UnsupportedOperationException ( "This is still to be implemented" ); // TODO
 	}
 	
 	
 	public static Map<String, Object> getProperties ( String uri )
 	{
-		return null; // TODO
+		throw new UnsupportedOperationException ( "This is still to be implemented" ); // TODO
 	}
 	
 	

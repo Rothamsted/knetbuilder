@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.export.oxl.Export;
-import net.sourceforge.ondex.parser.ONDEXParser;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -22,7 +21,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Help.Visibility;
 
 /**
- * TODO: comment me!
+ * A command-line wrapper for the {@link OndexGraphDescriptorTool}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>7 Dec 2021</dd></dl>
