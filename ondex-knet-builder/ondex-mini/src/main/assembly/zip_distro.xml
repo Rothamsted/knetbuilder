@@ -144,6 +144,10 @@
 			<directory>target/rdf-export-2-plugin/examples</directory>
 			<outputDirectory>/data/examples/rdf-export-2</outputDirectory>
 		</fileSet>
+		<fileSet>
+			<directory>target/rdf-export-2-plugin/knetminer-descriptors</directory>
+			<outputDirectory>/data/examples/rdf-export-2/knetminer-descriptors</outputDirectory>
+		</fileSet>
 		
 		
 		<!-- Neo4J Export plug-in -->

@@ -136,7 +136,10 @@
 									<version>${project.version}</version>
 	               	<type>zip</type>
 									<classifier>bundle</classifier>
-	               	<includes>**/examples/*.*</includes>
+	               	<includes>
+	               		**/examples/*.*,
+										**/knetminer-descriptors/*.*
+									</includes>
 	             	</artifactItem>
 	          	</artifactItems>  						
   					</configuration>
