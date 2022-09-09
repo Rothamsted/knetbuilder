@@ -10,14 +10,11 @@ import java.io.Serializable;
 public abstract class AbstractONDEXEntity
     implements Serializable {
 
-	/**
-	 * A unique session id for each graph for security. Currently derived from
-	 * nano system time at construction of AbstractONDEXGraph.
-	 */
 	protected long sid = -1;
 
 	/**
-	 * Returns the unique id associated with the parent AbstractONDEXGraph.
+	 * Returns the unique id associated with the parent AbstractONDEXGraph, or, for the case of 
+	 * a {@link AbstractONDEXGraph graph} itself, returns a unique ID for the graph. 
 	 * 
 	 * @return unique id of parent AbstractONDEXGraph
 	 */

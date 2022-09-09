@@ -926,9 +926,8 @@ public abstract class AbstractONDEXGraphMetaDataTest extends TestCase {
 	 * {@link net.sourceforge.ondex.core.ONDEXAssociable#getSID()}.
 	 */
 	@Test
-	public void testGetSID() {
-
-		assertNotNull("SID null", omd.getSID());
+	public void testGetSID() 
+	{
 		assertTrue("SID negative or zero", omd.getSID() > 0);
 	}
 

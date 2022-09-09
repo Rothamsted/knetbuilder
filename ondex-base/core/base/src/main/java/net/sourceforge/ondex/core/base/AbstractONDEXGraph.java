@@ -70,15 +70,12 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements	
 	/**
 	 * Constructor which fills all private fields of this class and sets a given
 	 * unique id to this graph.
+	 *
+	 * Note that we made it private in 2022, since we don't see a reason to risk 
+	 * an extension that doesn't set the SID in the way the default does.
 	 * 
-	 * @param sid
-	 *            unique id
-	 * @param name
-	 *            name of ONDEX graph
-	 * @param data
-	 *            ONDEX graph meta data
 	 */
-	protected AbstractONDEXGraph(long sid, String name, ONDEXGraphMetaData data) {
+	private AbstractONDEXGraph(long sid, String name, ONDEXGraphMetaData data) {
 		this.name = name;
 		this.data = data;
 		this.sid = sid;
@@ -89,10 +86,9 @@ public abstract class AbstractONDEXGraph extends AbstractONDEXEntity implements	
 	/**
 	 * Constructor which fills all private fields of this class.
 	 * 
-	 * @param name
-	 *            name of ONDEX graph
-	 * @param data
-	 *            ONDEX graph meta data
+	 * This uses {@link System#nanoTime()} as {@link #getSID() graph unique ID}. TODO: not the safest 
+	 * thing in the world.
+	 * 
 	 */
 	protected AbstractONDEXGraph(String name, ONDEXGraphMetaData data) {
 		this(System.nanoTime(), name, data);
