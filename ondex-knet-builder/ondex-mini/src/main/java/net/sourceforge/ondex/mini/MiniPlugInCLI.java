@@ -103,6 +103,25 @@ public class MiniPlugInCLI implements Callable<Integer>
 	)
 	private String libDir = "lib";
 	
+	/**
+	 * The dir for the plug-in's Lucene index. If null, the system's temp directory is used
+	 */
+	@Option (
+		names = { "-u", "--index-dir", "--index" },
+		paramLabel = "<path>",
+		description = "The dir for the plug-in's Lucene index, if null, the system's temp directory is used",
+		showDefaultValue = Visibility.ALWAYS
+	)
+	private String indexDir = null;
+	
+	@Option (
+		names = { "-U", "--force-index" },
+		description = "If set, index is recreated even if it already exists",
+		showDefaultValue = Visibility.ALWAYS
+	)
+	private boolean forceIndexCreation = false;
+	
+	
 	@Parameters (
 		paramLabel = "<name>=<value>",
 		description = "The plugin arguments (use '|' if <name> has multiple arguments)" 
@@ -125,6 +144,8 @@ public class MiniPlugInCLI implements Callable<Integer>
 		ONDEXGraph graph = Optional.ofNullable ( oxlInputPath )
 			.map ( Parser::loadOXL )
 			.orElse ( new MemoryONDEXGraph ( "graph" ) );
+		
+		OndexPluginUtils.getLuceneManager ( graph, this.indexDir, this.forceIndexCreation );
 		
 		if ( pluginFQN != null )
 		{

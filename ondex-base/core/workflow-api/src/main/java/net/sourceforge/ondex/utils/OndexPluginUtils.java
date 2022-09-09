@@ -15,7 +15,9 @@ import net.sourceforge.ondex.ONDEXPlugin;
 import net.sourceforge.ondex.ONDEXPluginArguments;
 import net.sourceforge.ondex.RequiresGraph;
 import net.sourceforge.ondex.UncheckedPluginException;
+import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.ONDEXGraph;
+import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.event.ONDEXListener;
 import net.sourceforge.ondex.logging.ONDEXLogger;
 import net.sourceforge.ondex.producer.ProducerONDEXPlugin;
@@ -30,6 +32,8 @@ import uk.ac.ebi.utils.exceptions.ExceptionUtils;
  */
 public class OndexPluginUtils
 {
+	private static String indexDirsBasePath = System.getProperty ( "java.io.tmpdir" + "/ondex-indices" );
+	
 	private OndexPluginUtils () {}
 
 	/**
@@ -78,9 +82,15 @@ public class OndexPluginUtils
 	}
 
 	/**
-	 * Wrapper that expects a {@link RequiresGraph} instance for plugin and invokes it with the paramter graph.
+	 * Wrapper that expects a {@link RequiresGraph} instance for plugin and invokes it with the parameter graph.
 	 * If graph is null, it just ignores the parameter and invokes {@link #runPlugin(ONDEXPlugin, Map)}
 	 *  
+	 * Note that, if the plugin {@link ONDEXPlugin#requiresIndexedGraph() requires the graph to be indexed}, 
+	 * {@link #getLuceneManager(ONDEXGraph)} is used. By default, this uses {@link #getIndexDirsBasePath()}
+	 * as a default directory for the index. If you want to override these defaults, either set 
+	 * your {@link #setIndexDirsBasePath(String) own index base path}, or invoke 
+	 * {@link #getLuceneManager(ONDEXGraph, String, boolean)} in advance. 
+	 * 
 	 */
 	public static <T> T runPlugin ( ONDEXPlugin plugin, ONDEXGraph graph, Map<String, Object> args )
 		throws UncheckedPluginException
@@ -90,6 +100,8 @@ public class OndexPluginUtils
 			if ( ! ( plugin instanceof RequiresGraph ) )
 				throw new IllegalArgumentException ( "Can't invoke a plug-in that doesn't accept a graph with this method" );
 	
+			if ( plugin.requiresIndexedGraph () ) getLuceneManager ( graph );
+			
 			((RequiresGraph) plugin).setONDEXGraph ( graph );
 		}
 		return runPlugin ( plugin, args );
@@ -193,4 +205,69 @@ public class OndexPluginUtils
 		if ( alreadyExists ) return;
 		plugin.addONDEXListener ( new ONDEXLogger () );
 	}
+	
+	/**
+	 * This is where this class creates Lucene indices, when needed.
+	 * By default, it is under the OS's temp dir + "/ondex-indices".
+	 * 
+	 * @see #getLuceneManager(String).
+	 */
+	public static String getIndexDirsBasePath ()
+	{
+		return indexDirsBasePath;
+	}
+
+	public static void setIndexDirsBasePath ( String indexDirsBasePath )
+	{
+		OndexPluginUtils.indexDirsBasePath = indexDirsBasePath;
+	}
+
+	/**
+	 *  
+	 * Gets an index manager for this graph, using the same mechanism that the workflow engine uses.
+	 * If a {@link LuceneEnv} already exists for this graph, it reuses it.
+	 *  
+	 * <p><b>WARNING</b>: this uses {@link LuceneRegistry} and {@link ONDEXGraph#getSID()}, which is 
+	 * awfully wrong, since it always returns -1. But unfortunately, there are tons of 
+	 * plugins relying on this to fetch the index, so we need to stick to this for the time being
+	 * (TODO: fix).</p>
+	 * 
+	 * @param forceCreation if it's true, the index is (re)created from scratch, even if it exists. This means
+	 *   the index files are deleted and the entry in {@link LuceneRegistry#sid2luceneEnv} for this graph
+	 *   is updated. 
+	 *  
+	 */
+	public static LuceneEnv getLuceneManager ( ONDEXGraph graph, String indexPath, boolean forceCreation )
+	{
+		long graphId = graph.getSID ();
+		
+		LuceneEnv luceneMgr = forceCreation ? null : LuceneRegistry.sid2luceneEnv.get ( graphId );
+		if ( luceneMgr != null ) return luceneMgr;
+				
+		if ( indexPath == null )
+			indexPath = indexDirsBasePath + "graph-" + graphId;
+		
+		LuceneEnv lenv = new LuceneEnv ( indexPath, forceCreation );
+		lenv.setONDEXGraph ( graph );
+		LuceneRegistry.sid2luceneEnv.put ( graph.getSID (), lenv );
+		
+		return lenv;
+	}
+	
+	/**
+	 * Defaults to false, the index on disk is possible reused.
+	 */
+	public static LuceneEnv getLuceneManager ( ONDEXGraph graph, String indexPath )
+	{
+		return getLuceneManager ( graph, indexPath, false );
+	}
+
+	/**
+	 * Defaults to {@link #getIndexDirsBasePath()}.
+	 */
+	public static LuceneEnv getLuceneManager ( ONDEXGraph graph )
+	{
+		return getLuceneManager ( graph, null );
+	}
+
 }
