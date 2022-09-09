@@ -10,7 +10,7 @@
 	<groupId>net.sourceforge.ondex.modules</groupId>
 	<artifactId>knetminer-initializer-cli</artifactId>
 
-	<name>KnetMiner Initialiser Client</name>
+	<name>knetminer-initializer-cli, KnetMiner Initialiser Client</name>
 	<description>
 	  A command-line wrapper for the knet-miner-initializer module.
 	</description>
