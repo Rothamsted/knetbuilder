@@ -45,7 +45,7 @@ public class TextMappingTest
 	public void initGraph () throws IOException
 	{
 		graph = Parser.loadOXL ( TEST_DATA_PATH + "/textmining-sample.oxl" );
-		OndexPluginUtils.getLuceneManager ( graph, BUILD_PATH + "/tm-test-index" );
+		OndexPluginUtils.getLuceneManager ( graph, BUILD_PATH + "/tm-test-index", true );
 	}
 	
 	@Test
