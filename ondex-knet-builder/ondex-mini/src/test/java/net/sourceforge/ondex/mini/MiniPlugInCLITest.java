@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import net.sourceforge.ondex.utils.OndexPluginUtils;
+
 
 /**
  * TODO: comment me!
@@ -27,7 +29,10 @@ public class MiniPlugInCLITest
 
   private Logger log = Logger.getLogger ( this.getClass() );
 	
-	
+  static {
+    OndexPluginUtils.setIndexDirsBasePath ( "target" );
+  }
+  
 	@Test
 	public void testBasics () throws IOException
 	{
