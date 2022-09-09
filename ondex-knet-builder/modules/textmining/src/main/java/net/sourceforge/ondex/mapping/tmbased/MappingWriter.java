@@ -25,16 +25,16 @@ import net.sourceforge.ondex.event.type.RelationTypeMissingEvent;
  */
 public class MappingWriter {
 	
-	private RelationType rt;
-	private RelationType pub_in;
+	private RelationType occInRelType;
+	private RelationType pubInRelType;
 
-	private EvidenceType eviType;
+	private EvidenceType textMiningEvidence;
 
-	private AttributeName eviSentence;
+	private AttributeName evidenceSentenceAttrName;
 
-	private AttributeName score;
+	private AttributeName scoreAttrName;
 	
-	private AttributeName citNum;
+	private AttributeName citNumAttrName;
 
 	private ONDEXGraph graph;
 	
@@ -45,23 +45,23 @@ public class MappingWriter {
 	public MappingWriter(ONDEXGraph graph) {
 		this.graph = graph;
 		
-		eviType = graph.getMetaData().getEvidenceType(MetaData.ET_TEXTMINING);
-		if (eviType == null) {
+		textMiningEvidence = graph.getMetaData().getEvidenceType(MetaData.ET_TEXTMINING);
+		if (textMiningEvidence == null) {
 			ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new EvidenceTypeMissingEvent(MetaData.ET_TEXTMINING, Mapping.getCurrentMethodName()));
 		}
 		
-		eviSentence = graph.getMetaData().getAttributeName(MetaData.ATT_EVIDENCE);
-		if (eviSentence == null) {
+		evidenceSentenceAttrName = graph.getMetaData().getAttributeName(MetaData.ATT_EVIDENCE);
+		if (evidenceSentenceAttrName == null) {
 			ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new EvidenceTypeMissingEvent(MetaData.ATT_EVIDENCE, Mapping.getCurrentMethodName()));
 		}
 		
-		score = graph.getMetaData().getAttributeName(MetaData.ATT_TMSCORE);
-		if (score == null) {
+		scoreAttrName = graph.getMetaData().getAttributeName(MetaData.ATT_TMSCORE);
+		if (scoreAttrName == null) {
 			ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new AttributeNameMissingEvent(MetaData.ATT_TMSCORE, Mapping.getCurrentMethodName()));
 		}
 		
-		citNum = graph.getMetaData().getAttributeName(MetaData.ATT_CITNUM);
-		if (citNum == null) {
+		citNumAttrName = graph.getMetaData().getAttributeName(MetaData.ATT_CITNUM);
+		if (citNumAttrName == null) {
 			ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new AttributeNameMissingEvent(MetaData.ATT_CITNUM, Mapping.getCurrentMethodName()));
 		}
 		
@@ -70,16 +70,16 @@ public class MappingWriter {
 		// doesn't make sense.
 		// The cleaner version that returns the same should be like below. This is to be removed
 		//
-//		rt = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
-//		if (rt == null) {
-//			RelationType rt = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
-//			if (rt == null) {
+//		occInRelType = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
+//		if (occInRelType == null) {
+//			RelationType occInRelType = graph.getMetaData().getRelationType(MetaData.RT_OCC_IN);
+//			if (occInRelType == null) {
 //				ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new RelationTypeMissingEvent(MetaData.RT_OCC_IN, Mapping.getCurrentMethodName()));
 //			}
-//			rt = graph.getMetaData().getFactory().createRelationType(MetaData.RT_OCC_IN, rt);
+//			occInRelType = graph.getMetaData().getFactory().createRelationType(MetaData.RT_OCC_IN, occInRelType);
 //		}
 		
-		rt = Optional.ofNullable ( graph.getMetaData().getRelationType(MetaData.RT_OCC_IN) )
+		occInRelType = Optional.ofNullable ( graph.getMetaData().getRelationType(MetaData.RT_OCC_IN) )
 			.orElseGet ( () -> {
 				ONDEXEventHandler.getEventHandlerForSID ( graph.getSID() )
 					.fireEventOccurred ( new RelationTypeMissingEvent( MetaData.RT_OCC_IN, Mapping.getCurrentMethodName() ) );
@@ -87,10 +87,10 @@ public class MappingWriter {
 			});
 		
 		
-		pub_in = graph.getMetaData().getRelationType(MetaData.publishedIn);
+		pubInRelType = graph.getMetaData().getRelationType(MetaData.publishedIn);
 		
-		if(pub_in == null){
-			ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new RelationTypeMissingEvent("pub_in", Mapping.getCurrentMethodName()));
+		if(pubInRelType == null){
+			ONDEXEventHandler.getEventHandlerForSID(graph.getSID()).fireEventOccurred(new RelationTypeMissingEvent("pubInRelType", Mapping.getCurrentMethodName()));
 		}
 		
 
@@ -113,16 +113,16 @@ public class MappingWriter {
                 Integer hitID = hit.getHitConID();
                 ONDEXConcept pubCon = graph.getConcept(pubID);
                 ONDEXConcept hitCon = graph.getConcept(hitID);
-                ONDEXRelation relation = graph.getRelation(hitCon, pubCon, rt);
+                ONDEXRelation relation = graph.getRelation(hitCon, pubCon, occInRelType);
 
                 // try if relation was already created
                 if (relation == null) {
                     // create a new relation between the two concepts
-                    relation = graph.getFactory().createRelation(hitCon, pubCon, rt, eviType);
+                    relation = graph.getFactory().createRelation(hitCon, pubCon, occInRelType, textMiningEvidence);
 //					pubCon.addContext(s, pubCon);
 //					hitCon.addContext(s, pubCon);
-                    relation.createAttribute(eviSentence, hit.getEvidence(), false);
-                    relation.createAttribute(score, hit.getScore(), false);
+                    relation.createAttribute(evidenceSentenceAttrName, hit.getEvidence(), false);
+                    relation.createAttribute(scoreAttrName, hit.getScore(), false);
                     this.numOfRelations++;
                 }
                 else {
@@ -155,8 +155,8 @@ public class MappingWriter {
 		for (ONDEXConcept conPub : graph.getConceptsOfConceptClass(ccPub)) {
 			ONDEXConcept con = null;
 			for (ONDEXRelation rel : graph.getRelationsOfConcept(conPub)) {
-				//if relation is "occ_in" or "pub_in" get from concept
-				if((rel.getOfType().equals(rt) || rel.getOfType().equals(pub_in)) 
+				//if relation is "occ_in" or "pubInRelType" get from concept
+				if((rel.getOfType().equals(occInRelType) || rel.getOfType().equals(pubInRelType)) 
 						&& !rel.getFromConcept().equals(con)){
 					con = rel.getFromConcept();
 					//increase its CitNum
@@ -171,12 +171,12 @@ public class MappingWriter {
 	
 	public void increaseCitCount(ONDEXConcept con){
 		//count how many times a concept is cited
-		if (con.getAttribute(citNum) == null){
-			con.createAttribute(citNum, 1, false);
+		if (con.getAttribute(citNumAttrName) == null){
+			con.createAttribute(citNumAttrName, 1, false);
 		}else{
-			Integer value = (Integer) con.getAttribute(citNum).getValue();
+			Integer value = (Integer) con.getAttribute(citNumAttrName).getValue();
 			value++;
-			con.getAttribute(citNum).setValue(value);
+			con.getAttribute(citNumAttrName).setValue(value);
 		}
 	}
 

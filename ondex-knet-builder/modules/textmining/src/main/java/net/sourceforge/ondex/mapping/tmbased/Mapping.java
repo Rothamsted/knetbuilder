@@ -1,11 +1,16 @@
 package net.sourceforge.ondex.mapping.tmbased;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
@@ -32,6 +37,7 @@ import net.sourceforge.ondex.event.type.AttributeNameMissingEvent;
 import net.sourceforge.ondex.event.type.GeneralOutputEvent;
 import net.sourceforge.ondex.mapping.ONDEXMapping;
 import net.sourceforge.ondex.mapping.tmbased.args.ArgumentNames;
+import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 
 
 /**
@@ -78,6 +84,7 @@ public class Mapping extends ONDEXMapping
                 new BooleanArgumentDefinition(ArgumentNames.USE_FULLTEXT_ARG, ArgumentNames.USE_FULLTEXT_ARG_DESC, false, false),
                 new StringArgumentDefinition(ArgumentNames.SEARCH_STRATEGY_ARG, ArgumentNames.SEARCH_STRATEGY_DESC, true, "exact", false),
                 new StringArgumentDefinition(ArgumentNames.FILTER_ARG, ArgumentNames.FILTER_DESC, false, null, false),
+                new StringArgumentDefinition(ArgumentNames.STOP_WORDS_ARG, ArgumentNames.STOP_WORDS_DESC, false, null, false)
         };
     }
 
@@ -111,6 +118,7 @@ public class Mapping extends ONDEXMapping
         String searchStrategy = (String) args.getUniqueValue(ArgumentNames.SEARCH_STRATEGY_ARG);
         boolean useOnlyPreferredNames = (Boolean) args.getUniqueValue(ArgumentNames.PREFERRED_NAMES_ARG);
         boolean useFullText = (Boolean) args.getUniqueValue(ArgumentNames.USE_FULLTEXT_ARG);
+        String stopWordsFile = (String) args.getUniqueValue(ArgumentNames.STOP_WORDS_ARG);
         
         int pubsWithHeader = graph.getConceptsOfAttributeName(headerAN).size();
         int pubsWithAbstract = graph.getConceptsOfAttributeName(abstractAN).size();
@@ -133,6 +141,9 @@ public class Mapping extends ONDEXMapping
         	fields[1] = abstractAN;
         }
         
+        // Null if no file.
+        Set<String> stopWords = loadGeneNameStopWords ( stopWordsFile );
+        
         LuceneEnv lenv = null;
         try
         {
@@ -145,18 +156,28 @@ public class Mapping extends ONDEXMapping
 	                continue;
 	            }
 	            fireEventOccurred(new GeneralOutputEvent("look for " + ccConcepts.size() + " " + cc.getId() + " concepts", Mapping.getCurrentMethodName()));
+
+	            // TODO: it's never read, should we keep it?
 	            int ignoredNames = 0;
+	            
 	            //concepts
 	            for (ONDEXConcept c : ccConcepts) {
 	                //synonyms
-	                for (ConceptName name : c.getConceptNames()) {
+	                for (ConceptName name : c.getConceptNames()) 
+	                {
 	                    if (useOnlyPreferredNames && !name.isPreferred()) {
 	                        ignoredNames++;
 	                        continue;
 	                    }
-	                    if (!validName(name.getName())) {
+	                    
+	                    if (!validName(name.getName()) ) {
 	                        ignoredNames++;
 	                        continue;
+	                    }
+	                    
+	                    if ( stopWords != null && stopWords.contains ( name.getName () ) ) {
+                        ignoredNames++;
+                        continue;
 	                    }
 	
 	                    String query = TextProcessing.stripText(name.getName());
@@ -257,6 +278,22 @@ public class Mapping extends ONDEXMapping
         createTextMiningMappings(graph);
 
     }
+    
+    
+	private Set<String> loadGeneNameStopWords ( String filePath ) 
+	{
+		if ( filePath == null ) return null;
+		try
+		{
+			return Files.lines ( Path.of ( filePath ) )
+			.collect ( Collectors.toSet () );
+		}
+		catch ( IOException ex ) {
+			throw ExceptionUtils.buildEx ( UncheckedIOException.class, ex, 
+				"Error while loading the stop word file from \"%s\": $cause", filePath
+			);
+		}
+	}
 
 
     /*
