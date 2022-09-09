@@ -13,17 +13,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import net.sourceforge.ondex.config.LuceneRegistry;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
-import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.mapping.tmbased.Mapping;
 import net.sourceforge.ondex.mapping.tmbased.args.ArgumentNames;
 import net.sourceforge.ondex.parser.oxl.Parser;
-import net.sourceforge.ondex.tools.DirUtils;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
@@ -42,15 +39,13 @@ public class TextMappingTest
 		Path.of ( System.getProperty ( "maven.buildDirectory", "target" ) ).toString ();
 
 	private static final String TEST_DATA_PATH = BUILD_PATH + "/test-classes/text-mapping";
-
-	private static final String LUCENE_PATH = BUILD_PATH + "/tm-test-index";
 	
 	
 	@Before
 	public void initGraph () throws IOException
 	{
 		graph = Parser.loadOXL ( TEST_DATA_PATH + "/textmining-sample.oxl" );
-		loadLuceneEnv ( graph );
+		OndexPluginUtils.getLuceneManager ( graph, BUILD_PATH + "/tm-test-index" );
 	}
 	
 	@Test
@@ -115,15 +110,6 @@ public class TextMappingTest
 			assertTrue ( String.format ( "Test PubMed ID %s not found in text mining relations!", testPMID ), found );
 		});
 	}
-	
-	private static LuceneEnv loadLuceneEnv ( ONDEXGraph graph ) throws IOException {
 		
-		DirUtils.deleteTree ( LUCENE_PATH );
-		LuceneEnv lenv = new LuceneEnv ( LUCENE_PATH, true );
-		lenv.setONDEXGraph ( graph );
-		LuceneRegistry.sid2luceneEnv.put ( graph.getSID (), lenv );
-		return lenv;
-	}
-	
 }
 	
