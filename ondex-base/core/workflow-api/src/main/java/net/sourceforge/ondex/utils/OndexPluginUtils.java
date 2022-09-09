@@ -1,5 +1,6 @@
 package net.sourceforge.ondex.utils;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +33,7 @@ import uk.ac.ebi.utils.exceptions.ExceptionUtils;
  */
 public class OndexPluginUtils
 {
-	private static String indexDirsBasePath = System.getProperty ( "java.io.tmpdir" + "/ondex-indices" );
+	private static String indexDirsBasePath = System.getProperty ( "java.io.tmpdir" ) + "/ondex-indices";
 	
 	private OndexPluginUtils () {}
 
@@ -227,11 +228,6 @@ public class OndexPluginUtils
 	 * Gets an index manager for this graph, using the same mechanism that the workflow engine uses.
 	 * If a {@link LuceneEnv} already exists for this graph, it reuses it.
 	 *  
-	 * <p><b>WARNING</b>: this uses {@link LuceneRegistry} and {@link ONDEXGraph#getSID()}, which is 
-	 * awfully wrong, since it always returns -1. But unfortunately, there are tons of 
-	 * plugins relying on this to fetch the index, so we need to stick to this for the time being
-	 * (TODO: fix).</p>
-	 * 
 	 * @param forceCreation if it's true, the index is (re)created from scratch, even if it exists. This means
 	 *   the index files are deleted and the entry in {@link LuceneRegistry#sid2luceneEnv} for this graph
 	 *   is updated. 
@@ -245,7 +241,9 @@ public class OndexPluginUtils
 		if ( luceneMgr != null ) return luceneMgr;
 				
 		if ( indexPath == null )
-			indexPath = indexDirsBasePath + "graph-" + graphId;
+			indexPath = indexDirsBasePath + "/graph-" + graphId;
+		
+		if ( !new File ( indexPath ).exists () ) forceCreation = true;
 		
 		LuceneEnv lenv = new LuceneEnv ( indexPath, forceCreation );
 		lenv.setONDEXGraph ( graph );
