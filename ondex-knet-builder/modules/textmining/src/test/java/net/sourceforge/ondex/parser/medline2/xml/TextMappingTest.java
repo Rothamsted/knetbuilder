@@ -43,7 +43,7 @@ public class TextMappingTest
 
 	private static final String TEST_DATA_PATH = BUILD_PATH + "/test-classes/text-mapping";
 
-	private static final String LUCENE_PATH = BUILD_PATH + "tm-test-index";
+	private static final String LUCENE_PATH = BUILD_PATH + "/tm-test-index";
 	
 	
 	@Before
