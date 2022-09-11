@@ -144,17 +144,17 @@ public class Mapping extends ONDEXMapping
         // Null if no file.
         Set<String> stopWords = loadGeneNameStopWords ( stopWordsFile );
         
-        LuceneEnv lenv = null;
+        LuceneEnv lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
         try
         {
+
 	        //concept class
 	        for (String ccName : ccs) {
 	            ConceptClass cc = graph.getMetaData().getConceptClass(ccName);
 	            Set<ONDEXConcept> ccConcepts = graph.getConceptsOfConceptClass(cc);
 	
-	            if (ccConcepts == null) {
-	                continue;
-	            }
+	            if (ccConcepts == null) continue;
+	            
 	            fireEventOccurred(new GeneralOutputEvent("look for " + ccConcepts.size() + " " + cc.getId() + " concepts", Mapping.getCurrentMethodName()));
 
 	            // TODO: it's never read, should we keep it?
@@ -186,7 +186,6 @@ public class Mapping extends ONDEXMapping
 	                    ScoredHits<ONDEXConcept> abstractsContainingTerm;
 	
 	                    //select search strategy
-	                    lenv = LuceneRegistry.sid2luceneEnv.get(graph.getSID());
 	                    if (searchStrategy.toLowerCase().equals(EXACT_SEARCH.toLowerCase())) {
 	                        query = "\"" + query + "\"";
 	                        Query luceneQuery = LuceneQueryBuilder.searchConceptByConceptAttributeMulti(fields, query, LuceneEnv.DEFAULTANALYZER, LuceneQueryBuilder.DEFAULT_ATTR_BOOSTS);
@@ -211,9 +210,7 @@ public class Mapping extends ONDEXMapping
 	                        abstractsContainingTerm = lenv.scoredSearchInConcepts(luceneQuery);
 	                    }
 	
-	                    if (abstractsContainingTerm.getOndexHits().size() == 0) {
-	                        continue;
-	                    }
+	                    if (abstractsContainingTerm.getOndexHits().size() == 0) continue;
 	
 	                    Map<Integer, Float> scores = abstractsContainingTerm.getScoresForHits();
 		
