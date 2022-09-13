@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.export.cyjsJson;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -82,7 +83,7 @@ public class ColorTweaksTest
 		String nodePath = "$.graphJSON.nodes.." + idPath;
 		
 		assertJsonExport ( "Concept Border Color don't match", htmlTagsConcept, nodePath, "conceptBorderColor", "black" );
-	
+		assertNotJsonExport ( "Concept Border Color match with the concept name", htmlTagsConcept, nodePath, "conceptBorderColor", "#000F12" );
 	}
 	
 	@Test
@@ -94,8 +95,7 @@ public class ColorTweaksTest
 		String nodePath = "$.graphJSON.nodes.." + idPath;
 		
 		assertJsonExport ( "Concept Border Color don't match", fancyNameConcept, nodePath, "conceptBorderColor", "black" );
-	
-
+		assertNotJsonExport ( "Concept Border Color match with the concept name", fancyNameConcept, nodePath, "conceptBorderColor", "#000F12" );
 	}
 	
 	
@@ -113,4 +113,14 @@ public class ColorTweaksTest
 		
 		assertEquals ( errorMessage, expectedValue, jsValue );
 	}
+	
+	private void assertNotJsonExport (
+			String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue )
+		{
+			var jsArray = ( JSONArray ) json.read ( arrayJsonPath );
+			var jsElem = ( Map<String, Object> ) jsArray.get ( 0 );
+			var jsValue = jsElem.get ( jsonField );
+			
+			assertNotEquals( errorMessage, expectedValue, jsValue );
+		}
 }
