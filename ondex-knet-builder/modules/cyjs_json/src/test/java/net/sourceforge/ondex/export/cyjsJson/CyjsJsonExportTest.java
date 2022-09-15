@@ -1,6 +1,7 @@
 package net.sourceforge.ondex.export.cyjsJson;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -28,7 +29,6 @@ import net.sourceforge.ondex.utils.OndexPluginUtils;
  * To test the cyjsJSON Export code.
  *  
  */
-@SuppressWarnings({"unchecked" })
 public class CyjsJsonExportTest
 {
 	private static ONDEXGraph humanGraph;
@@ -61,41 +61,41 @@ public class CyjsJsonExportTest
 	@Test
 	public void testBasics () throws IOException
 	{
-		String idPath = "[?(@['id'] == 48320)]";
-		String nodePath = "$.graphJSON.nodes.." + idPath;
+		int conceptId = 48320;
+		String idPath = idPath ( conceptId );
+		var nodePath = nodePath ( conceptId );
+		
 		String metaPath = "$.allGraphData.ondexmetadata.." + idPath;
 		String prefferedPath = "$.allGraphData.ondexmetadata.concepts." + idPath + ".conames.[?(@['name'] == 'PRNP')]";
 		String attributePath = "$.allGraphData.ondexmetadata.concepts." + idPath + ".attributes.[?(@['attrname'] == 'TAXID')]";
 				
 		
-		assertJsonExport ( "Concept Type don't match", exportedJson, nodePath, "conceptType", "Gene" );
-		assertJsonExport ( "DisplayValue don't match", exportedJson, nodePath, "displayValue", "PRNP" );
+		assertJson ( "Concept Type don't match", exportedJson, nodePath, "conceptType", "Gene" );
+		assertJson ( "DisplayValue don't match", exportedJson, nodePath, "displayValue", "PRNP" );
 		
-		assertJsonExport ( "OfType don't match", exportedJson, metaPath, "ofType", "Gene" );
-		assertJsonExport ( "Value don't match", exportedJson, metaPath, "value", "PRNP" );
-		assertJsonExport ( "ElementOf don't match", exportedJson, metaPath, "elementOf", "ENSEMBL" );
+		assertJson ( "OfType don't match", exportedJson, metaPath, "ofType", "Gene" );
+		assertJson ( "Value don't match", exportedJson, metaPath, "value", "PRNP" );
+		assertJson ( "ElementOf don't match", exportedJson, metaPath, "elementOf", "ENSEMBL" );
 		
-		assertJsonExport( "IsPreferred is false", exportedJson, prefferedPath, "isPreferred", "true" );
-		assertJsonExport( "TaxId don't match", exportedJson, attributePath, "value", "9606" );
-			
+		assertJson ( "IsPreferred is false", exportedJson, prefferedPath, "isPreferred", "true" );
+		assertJson ( "TaxId don't match", exportedJson, attributePath, "value", "9606" );	
 	}
 		
 	
 	@Test
 	public void testBestLabel () throws IOException
 	{
-		
 		String nonGenePath = "$.allGraphData.ondexmetadata.concepts.[?(@['ofType'] != 'Gene')].[?(@['id'] == 48391)]";
 		String genePath = "$.allGraphData.ondexmetadata.concepts.[?(@['ofType'] == 'Gene')].[?(@['id'] == 48320)]";
 		
 
 		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
 		ONDEXConcept nonGeneConcept = humanGraph.getConcept ( 48391 );
-		assertJsonExport ( "Concept Name in Non Gene don't match", exportedJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept, true ) );
+		assertJson ( "Concept Name in Non Gene don't match", exportedJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept, true ) );
 		
 		// Pick some gene node from JSON and verify the same
 		ONDEXConcept geneConcept = humanGraph.getConcept ( 48320 );
-		assertJsonExport ( "Concept Name in Gene don't match", exportedJson, genePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept, true ) );
+		assertJson ( "Concept Name in Gene don't match", exportedJson, genePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept, true ) );
 		
 		// TODO: similar test for $.nodes
 	}
@@ -104,13 +104,54 @@ public class CyjsJsonExportTest
 	 * Checks an array of exported objects. arrayJsonPath is expected to return an array of objects, the method
 	 * takes the first and assert that its field jsonField is set to expectedValue.
 	 */
-	private void assertJsonExport (
-		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue )
+	static void assertJson (
+		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue 
+	)
+	{
+		var jsValue = getJson ( json, arrayJsonPath, jsonField );
+		assertEquals ( errorMessage, expectedValue, jsValue );
+	}
+
+	/**
+	 * The same, but with negation.
+	 */
+	static void negateJson (
+		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue 
+	)
+	{
+		var jsValue = getJson ( json, arrayJsonPath, jsonField );
+		assertNotEquals ( errorMessage, expectedValue, jsValue );
+	}
+	
+	/**
+	 * See {@link #assertJson(String, DocumentContext, String, String, Object)}. This gets the value to be tested
+	 * using JSONPath.
+	 *  
+	 */
+	@SuppressWarnings ( {"unchecked" } )
+	static <T> T getJson ( DocumentContext json, String arrayJsonPath, String jsonField )
 	{
 		var jsArray = ( JSONArray ) json.read ( arrayJsonPath );
 		var jsElem = ( Map<String, Object> ) jsArray.get ( 0 );
-		var jsValue = jsElem.get ( jsonField );
-		
-		assertEquals ( errorMessage, expectedValue, jsValue );
+		T jsValue = (T) jsElem.get ( jsonField );
+
+		return jsValue;
+	}
+
+	/**
+	 * Can be used in other methods to fetch an exported concept from JSON by its ID. This returns 
+	 * the JSONPath needed for various JSON object types about an Ondex concept with a given ID:
+	 */
+	static String idPath ( int id )
+	{
+		return String.format ( "[?(@['id'] == %s)]", id );
+	}
+	
+	/**
+	 * Can be used in other methods to fetch an exported concept from JSON (ie, a node) by its ID
+	 */
+	static String nodePath ( int id )
+	{
+		return "$.graphJSON.nodes.." + idPath ( id );
 	}
 }

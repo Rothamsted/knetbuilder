@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.export.cyjsJson;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static net.sourceforge.ondex.export.cyjsJson.CyjsJsonExportTest.assertJson;
+import static net.sourceforge.ondex.export.cyjsJson.CyjsJsonExportTest.negateJson;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,11 +9,12 @@ import java.nio.file.Path;
 import java.util.Map;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-import net.minidev.json.JSONArray;
 import net.sourceforge.ondex.args.BooleanArgumentDefinition;
 import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -21,36 +22,36 @@ import net.sourceforge.ondex.core.DataSource;
 import net.sourceforge.ondex.core.EvidenceType;
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
+import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
  * To test the cyjsJSON Export code.
  *  
  */
-@SuppressWarnings({"unchecked" })
 public class ColorTweaksTest
-{
-	private static EvidenceType et;
-	private static DataSource dataSource;
+{		
+	@SuppressWarnings ( "unused" )
+	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
-	private static Path jsPath = Path.of ( "target", "test.json" ).toAbsolutePath ();
-	
-	private static ONDEXGraph getTestGraph ( String name ) {
-		
+	private static ONDEXGraph createTestGraph ( String conceptName )
+	{
 		ONDEXGraph graph = new MemoryONDEXGraph ( "testGraph" );
 
-		ConceptClass ccProtein = graph.getMetaData ().getFactory ().createConceptClass ( "Protein" );
-		et = graph.getMetaData ().getFactory ().createEvidenceType ( "I_made_it_up" );
-		dataSource = graph.getMetaData ().getFactory ().createDataSource ( "matts_db" );
-		
-		graph.getFactory ().createConcept ( name , dataSource, ccProtein, et );
+		ConceptClass ccProtein = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "Protein" );
+		EvidenceType et = ONDEXGraphUtils.getOrCreateEvidenceType ( graph, "I_made_it_up" );
+		DataSource dataSource = ONDEXGraphUtils.getOrCreateDataSource ( graph, "matts_db" );
+				
+		graph.getFactory ().createConcept ( conceptName , dataSource, ccProtein, et );
 		
 		return graph;
 	}
 
-	public static DocumentContext exportConcept ( String name ) throws IOException
+	private static DocumentContext createAndExportTestGraph ( String conceptName ) throws IOException
 	{
-		ONDEXGraph testGraph = getTestGraph ( name );
+		ONDEXGraph testGraph = createTestGraph ( conceptName );
+		
+		var jsPath = Path.of ( "target", "test.json" ).toAbsolutePath ();
 		
 		OndexPluginUtils.runPlugin (
 			Export.class, 
@@ -64,63 +65,41 @@ public class ColorTweaksTest
 	}
 	
 	@Test
-	public void testNoExistingColor() throws IOException {
-		
-		DocumentContext testConcept = exportConcept ( "test" );
-		String idPath = "[?(@['id'] == 1)]";
-		String nodePath = "$.graphJSON.nodes.." + idPath;
-		
-		assertJsonExport ( "Concept Border Color don't match", testConcept, nodePath, "conceptBorderColor", "black" );
-		
-	}
-	
-	@Test
-	public void testExistingColor() throws IOException {
-		
-		DocumentContext htmlTagsConcept = exportConcept ( "Hello, <span style = \"background-color: #000F12\"><b>World</b></span>" );
-		
-		String idPath = "[?(@['id'] == 1)]";
-		String nodePath = "$.graphJSON.nodes.." + idPath;
-		
-		assertJsonExport ( "Concept Border Color don't match", htmlTagsConcept, nodePath, "conceptBorderColor", "black" );
-		assertNotJsonExport ( "Concept Border Color match with the concept name", htmlTagsConcept, nodePath, "conceptBorderColor", "#000F12" );
-	}
-	
-	@Test
-	public void testHashedName() throws IOException {
-		
-		DocumentContext fancyNameConcept = exportConcept ( "#000F12 concept" );
-		
-		String idPath = "[?(@['id'] == 1)]";
-		String nodePath = "$.graphJSON.nodes.." + idPath;
-		
-		assertJsonExport ( "Concept Border Color don't match", fancyNameConcept, nodePath, "conceptBorderColor", "black" );
-		assertNotJsonExport ( "Concept Border Color match with the concept name", fancyNameConcept, nodePath, "conceptBorderColor", "#000F12" );
-	}
-	
-	
-	
-	/**
-	 * Checks an array of exported objects. arrayJsonPath is expected to return an array of objects, the method
-	 * takes the first and assert that its field jsonField is set to expectedValue.
-	 */
-	private void assertJsonExport (
-		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue )
+	public void testNoExistingColor() throws IOException
 	{
-		var jsArray = ( JSONArray ) json.read ( arrayJsonPath );
-		var jsElem = ( Map<String, Object> ) jsArray.get ( 0 );
-		var jsValue = jsElem.get ( jsonField );
+		DocumentContext jsExport = createAndExportTestGraph ( "test" );
 		
-		assertEquals ( errorMessage, expectedValue, jsValue );
+		String nodePath = CyjsJsonExportTest.nodePath ( 1 );
+		
+		assertJson ( "Concept Border Color don't match", jsExport, nodePath, "conceptTextBGcolor", "black" );
 	}
 	
-	private void assertNotJsonExport (
-			String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue )
-		{
-			var jsArray = ( JSONArray ) json.read ( arrayJsonPath );
-			var jsElem = ( Map<String, Object> ) jsArray.get ( 0 );
-			var jsValue = jsElem.get ( jsonField );
-			
-			assertNotEquals( errorMessage, expectedValue, jsValue );
-		}
+	@Test
+	public void testExistingColor() throws IOException
+	{
+		final var testColor = "#000F12";
+		
+		DocumentContext jsExport = createAndExportTestGraph ( 
+			String.format ( "Hello, <span style = \"background-color: %s\"><b>World</b></span>", testColor )
+		);
+		
+		String nodePath = CyjsJsonExportTest.nodePath ( 1 );
+				
+		assertJson ( "conceptBorderColor not reused!", jsExport, nodePath, "conceptTextBGcolor", testColor );
+		negateJson ( "There is still conceptBorderColor: black?!", jsExport, nodePath, "conceptTextBGcolor", "black" );
+	}
+	
+	@Test
+	public void testHashedName() throws IOException
+	{
+		final var testColor = "#000F12";
+
+		DocumentContext jsExport = createAndExportTestGraph ( testColor + " concept" );
+				
+		var nodePath = CyjsJsonExportTest.nodePath ( 1 );
+		
+		assertJson ( "Concept Border Color don't match", jsExport, nodePath, "conceptTextBGcolor", "black" );
+		negateJson ( "Concept Border Color match with the concept name", jsExport, nodePath, "conceptTextBGcolor", testColor );
+	}
+	
 }
