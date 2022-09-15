@@ -71,7 +71,7 @@ public class ColorTweaksTest
 		
 		String nodePath = CyjsJsonExportTest.nodePath ( 1 );
 		
-		assertJson ( "Concept Border Color don't match", jsExport, nodePath, "conceptTextBGcolor", "black" );
+		assertJson ( "conceptTextBGcolor should be default black", jsExport, nodePath, "conceptTextBGcolor", "black" );
 	}
 	
 	@Test
@@ -92,14 +92,27 @@ public class ColorTweaksTest
 	@Test
 	public void testHashedName() throws IOException
 	{
+		DocumentContext jsExport = createAndExportTestGraph ( "A test concept #101" );
+				
+		var nodePath = CyjsJsonExportTest.nodePath ( 1 );
+		
+		assertJson ( "conceptTextBGcolor should be default black!", jsExport, nodePath, "conceptTextBGcolor", "black" );
+	}
+
+	/**
+	 * Should some colour be named, it has to be in a proper CSS tag
+	 */
+	@Test
+	public void testHashedNameWithColor () throws IOException
+	{
 		final var testColor = "#000F12";
 
 		DocumentContext jsExport = createAndExportTestGraph ( testColor + " concept" );
 				
 		var nodePath = CyjsJsonExportTest.nodePath ( 1 );
 		
-		assertJson ( "Concept Border Color don't match", jsExport, nodePath, "conceptTextBGcolor", "black" );
-		negateJson ( "Concept Border Color match with the concept name", jsExport, nodePath, "conceptTextBGcolor", testColor );
+		assertJson ( "conceptTextBGcolor should be default black!", jsExport, nodePath, "conceptTextBGcolor", "black" );
+		negateJson ( "conceptTextBGcolor shouldn't be a code outside a proper tag!", jsExport, nodePath, "conceptTextBGcolor", testColor );
 	}
 	
 }
