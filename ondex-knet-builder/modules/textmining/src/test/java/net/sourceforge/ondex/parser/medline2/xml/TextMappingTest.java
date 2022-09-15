@@ -1,16 +1,15 @@
 package net.sourceforge.ondex.parser.medline2.xml;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -99,7 +98,7 @@ public class TextMappingTest
 
 		Set<ONDEXRelation> textMineRels = graph.getRelationsOfRelationType ( occInRelType );
 		var postRelCnt = textMineRels.size();
-		Assert.assertTrue ( "Stop words filtering failed!",  postRelCnt > initialRelCnt );
+		assertTrue ( "Stop words filtering failed!",  postRelCnt > initialRelCnt );
 		
 		
 		Stream.of ( "26074495", "34234765" )
@@ -112,42 +111,54 @@ public class TextMappingTest
 		});
 	}
 	
-	
+	/**
+	 * Checking the Stop word "ZtSEC4" with and without stop word argument.
+	 */
 	@Test
 	public void testStopWords () throws IOException
 	{
-		//Checking the Stop word "ZtSEC4" with and without stop word argument.
+		// Annotate without stop words
 		RelationType occInRelType = ONDEXGraphUtils.getRelationType ( graph, "occ_in" );
 		Map<String, Object> pluginArgs = Map.of (
 			ArgumentNames.CONCEPTCLASS_ARG, "Gene", 
 			ArgumentNames.PREFERRED_NAMES_ARG, "true" 
 		);
-		OndexPluginUtils.runPlugin ( Mapping.class, graph ,pluginArgs );
+		OndexPluginUtils.runPlugin ( Mapping.class, graph, pluginArgs );
 		
-		Optional<ONDEXRelation> relationWOSW = graph.getRelations ().stream ()
-				.filter( a -> a.getFromConcept ().getConceptName ().getName ().equalsIgnoreCase ( "ZtSEC4" ) ).findAny ();
+		boolean foundRelationWOSW = graph.getRelationsOfRelationType ( occInRelType )
+			.stream ()
+			.anyMatch ( rel -> rel.getFromConcept ()
+				.getConceptName ()
+				.getName ()
+				.equalsIgnoreCase ( "ZtSEC4" )
+			);
 		
-		Set<ONDEXRelation> textMineRels = graph.getRelationsOfRelationType ( occInRelType );
-		var postRelCntWOS = textMineRels.size();
+		assertTrue ( "Testing 'ZtSEC4' name not annotated with stop words disabled!", foundRelationWOSW );
 		
-		//Initializing the graph without any relations
-		initGraph();
+		
+		// And now check that the stop-words feature works
+		//
+
+		initGraph(); // Reset to the test graph
+				
 		
 		Map<String, Object> pluginArgsSW = Map.of (
 				ArgumentNames.STOP_WORDS_ARG, TEST_DATA_PATH + "/stop-words.txt" ,
 				ArgumentNames.CONCEPTCLASS_ARG, "Gene", 
 				ArgumentNames.PREFERRED_NAMES_ARG, "true" 
 			);
-		OndexPluginUtils.runPlugin ( Mapping.class, graph ,pluginArgsSW );
+		OndexPluginUtils.runPlugin ( Mapping.class, graph, pluginArgsSW );
 		
-		Set<ONDEXRelation> textMineRelsSW = graph.getRelationsOfRelationType ( occInRelType );
-		var postRelCntSW = textMineRelsSW.size ();
 		
-		Optional<ONDEXRelation> relationsWSW = graph.getRelations ().stream ()
-				.filter ( a -> a.getFromConcept ().getConceptName ().getName ().equalsIgnoreCase ( "ZtSEC4" ) ).findAny ();
+		boolean foundRelationsWSW = graph.getRelationsOfRelationType ( occInRelType )
+			.stream ()
+			.anyMatch ( rel -> rel.getFromConcept ()
+				.getConceptName ()
+				.getName ()
+				.equalsIgnoreCase ( "ZtSEC4" )
+			);
 		
-		Assert.assertTrue ( "Stop words filtering failed!",  postRelCntWOS > postRelCntSW );
-		Assert.assertTrue ( "Stop word 'ZtSEC4' with stop word argument failed",  relationWOSW.isPresent () && relationsWSW.isEmpty ()  );
+		assertFalse ( "Stop word 'ZtSEC4' was annotated anyway!", foundRelationsWSW );	
 	}
 }
 	
