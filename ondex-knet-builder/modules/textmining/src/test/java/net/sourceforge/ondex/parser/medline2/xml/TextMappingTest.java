@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -84,7 +85,7 @@ public class TextMappingTest
 	}
 	
 	@Test
-	public void testStopWords () throws IOException
+	public void testCreatedLinks () throws IOException
 	{
 		RelationType occInRelType = ONDEXGraphUtils.getRelationType ( graph, "occ_in" );
 		var initialRelCnt = graph.getRelationsOfRelationType ( occInRelType ).size ();
@@ -110,6 +111,43 @@ public class TextMappingTest
 			assertTrue ( String.format ( "Test PubMed ID %s not found in text mining relations!", testPMID ), found );
 		});
 	}
+	
+	
+	@Test
+	public void testStopWords () throws IOException
+	{
+		//Checking the Stop word "ZtSEC4" with and without stop word argument.
+		RelationType occInRelType = ONDEXGraphUtils.getRelationType ( graph, "occ_in" );
+		Map<String, Object> pluginArgs = Map.of (
+			ArgumentNames.CONCEPTCLASS_ARG, "Gene", 
+			ArgumentNames.PREFERRED_NAMES_ARG, "true" 
+		);
+		OndexPluginUtils.runPlugin ( Mapping.class, graph ,pluginArgs );
 		
+		Optional<ONDEXRelation> relationWOSW = graph.getRelations ().stream ()
+				.filter( a -> a.getFromConcept ().getConceptName ().getName ().equalsIgnoreCase ( "ZtSEC4" ) ).findAny ();
+		
+		Set<ONDEXRelation> textMineRels = graph.getRelationsOfRelationType ( occInRelType );
+		var postRelCntWOS = textMineRels.size();
+		
+		//Initializing the graph without any relations
+		initGraph();
+		
+		Map<String, Object> pluginArgsSW = Map.of (
+				ArgumentNames.STOP_WORDS_ARG, TEST_DATA_PATH + "/stop-words.txt" ,
+				ArgumentNames.CONCEPTCLASS_ARG, "Gene", 
+				ArgumentNames.PREFERRED_NAMES_ARG, "true" 
+			);
+		OndexPluginUtils.runPlugin ( Mapping.class, graph ,pluginArgsSW );
+		
+		Set<ONDEXRelation> textMineRelsSW = graph.getRelationsOfRelationType ( occInRelType );
+		var postRelCntSW = textMineRelsSW.size ();
+		
+		Optional<ONDEXRelation> relationsWSW = graph.getRelations ().stream ()
+				.filter ( a -> a.getFromConcept ().getConceptName ().getName ().equalsIgnoreCase ( "ZtSEC4" ) ).findAny ();
+		
+		Assert.assertTrue ( "Stop words filtering failed!",  postRelCntWOS > postRelCntSW );
+		Assert.assertTrue ( "Stop word 'ZtSEC4' with stop word argument failed",  relationWOSW.isPresent () && relationsWSW.isEmpty ()  );
+	}
 }
 	
