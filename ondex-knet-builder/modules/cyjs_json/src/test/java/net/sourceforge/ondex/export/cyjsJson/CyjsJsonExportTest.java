@@ -104,22 +104,22 @@ public class CyjsJsonExportTest
 	 * Checks an array of exported objects. arrayJsonPath is expected to return an array of objects, the method
 	 * takes the first and assert that its field jsonField is set to expectedValue.
 	 */
-	static void assertJson (
-		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue 
+	static <T> void assertJson (
+		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, T expectedValue 
 	)
 	{
-		var jsValue = getJson ( json, arrayJsonPath, jsonField );
+		T jsValue = getJson ( json, arrayJsonPath, jsonField );
 		assertEquals ( errorMessage, expectedValue, jsValue );
 	}
 
 	/**
 	 * The same, but with negation.
 	 */
-	static void negateJson (
-		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, Object expectedValue 
+	static <T> void negateJson (
+		String errorMessage, DocumentContext json, String arrayJsonPath, String jsonField, T expectedValue 
 	)
 	{
-		var jsValue = getJson ( json, arrayJsonPath, jsonField );
+		T jsValue = getJson ( json, arrayJsonPath, jsonField );
 		assertNotEquals ( errorMessage, expectedValue, jsValue );
 	}
 	
