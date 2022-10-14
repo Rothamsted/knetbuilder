@@ -1,4 +1,4 @@
-package net.sourceforge.ondex.parser.medline2.xml;
+package net.sourceforge.ondex.mapping.tmbased;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -18,7 +18,6 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.ONDEXRelation;
 import net.sourceforge.ondex.core.RelationType;
 import net.sourceforge.ondex.core.util.ONDEXGraphUtils;
-import net.sourceforge.ondex.mapping.tmbased.Mapping;
 import net.sourceforge.ondex.mapping.tmbased.args.ArgumentNames;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
@@ -56,7 +55,7 @@ public class TextMappingTest
 		
  		Map<String, Object> pluginArgs = Map.of (
 			ArgumentNames.CONCEPTCLASS_ARG, "Gene", 
-			ArgumentNames.PREFERRED_NAMES_ARG, "true" 
+			ArgumentNames.PREFERRED_NAMES_ARG, true 
 		);
 		OndexPluginUtils.runPlugin ( Mapping.class, graph, pluginArgs);
 		
@@ -90,12 +89,11 @@ public class TextMappingTest
 		var initialRelCnt = graph.getRelationsOfRelationType ( occInRelType ).size ();
 
 		Map<String, Object> pluginArgsSW = Map.of (
-			ArgumentNames.STOP_WORDS_ARG, TEST_DATA_PATH + "/stop-words.txt" ,
 			ArgumentNames.CONCEPTCLASS_ARG, "Gene", 
-			ArgumentNames.PREFERRED_NAMES_ARG, "true" 
+			ArgumentNames.PREFERRED_NAMES_ARG, true 
 		);
 		OndexPluginUtils.runPlugin ( Mapping.class, graph ,pluginArgsSW );
-
+		
 		Set<ONDEXRelation> textMineRels = graph.getRelationsOfRelationType ( occInRelType );
 		var postRelCnt = textMineRels.size();
 		assertTrue ( "Stop words filtering failed!",  postRelCnt > initialRelCnt );
@@ -121,7 +119,7 @@ public class TextMappingTest
 		RelationType occInRelType = ONDEXGraphUtils.getRelationType ( graph, "occ_in" );
 		Map<String, Object> pluginArgs = Map.of (
 			ArgumentNames.CONCEPTCLASS_ARG, "Gene", 
-			ArgumentNames.PREFERRED_NAMES_ARG, "true" 
+			ArgumentNames.PREFERRED_NAMES_ARG, true 
 		);
 		OndexPluginUtils.runPlugin ( Mapping.class, graph, pluginArgs );
 		
@@ -145,7 +143,7 @@ public class TextMappingTest
 		Map<String, Object> pluginArgsSW = Map.of (
 				ArgumentNames.STOP_WORDS_ARG, TEST_DATA_PATH + "/stop-words.txt" ,
 				ArgumentNames.CONCEPTCLASS_ARG, "Gene", 
-				ArgumentNames.PREFERRED_NAMES_ARG, "true" 
+				ArgumentNames.PREFERRED_NAMES_ARG, true 
 			);
 		OndexPluginUtils.runPlugin ( Mapping.class, graph, pluginArgsSW );
 		

@@ -17,8 +17,7 @@ public final class ArgumentNames {
 	public final static String FILTER_ARG = "Filter";
 	public final static String FILTER_DESC = "Which mappings should be filtered out: lowscore, maxspecificity, besthits";
 	
-	public final static String STOP_WORDS_ARG = "GeneNameStopWords";
+	public final static String STOP_WORDS_ARG = "ConceptNameStopWords";
 	public final static String STOP_WORDS_DESC = "Path to a file of stop words, ie, concept names (one per line) to be ignored if found via gene/concept text mining association.";
 
-	
 }
