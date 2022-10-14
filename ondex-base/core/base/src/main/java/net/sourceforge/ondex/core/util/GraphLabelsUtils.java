@@ -48,7 +48,9 @@ public class GraphLabelsUtils
 			: c.getConceptNames ();
 		
 		String result = getBestName ( names ); // priority to the shortest preferred name
-				
+		
+		result = getPrefixedBestName ( result, names );
+		
 		if ( result.isEmpty () )
 		{
 			// non-ambiguous accession, discriminate by type
@@ -267,7 +269,27 @@ public class GraphLabelsUtils
 		
 		return getBestName ( cns, false );
 	}
+	
+	/**
+	 *  This method will find the prefixed gene names from synonyms if any prefixed gene names present,
+	 *  otherwise return the name itself.
+	 * @param name
+	 * @param cns
+	 * @return
+	 */
+	private static String getPrefixedBestName ( String name, Set<ConceptName> cns ) 
+	{
+		Optional<ConceptName> preFixName = cns.stream ()
+				.filter ( item -> item.getName ().toLowerCase ().endsWith ( name.toLowerCase () ) )
+				.sorted ( (item1, item2) -> item2.getName().length() - item1.getName().length()).findFirst();
 
+		if( preFixName.isPresent () ) {
+			return preFixName.get ().getName ();
+		}else {
+			return name;
+		}
+	}
+	
 	/**
 	 * Just a wrapper, the concept is assumed to be non-null.
 	 * 
