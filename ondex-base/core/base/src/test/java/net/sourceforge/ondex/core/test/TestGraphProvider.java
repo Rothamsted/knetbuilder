@@ -6,7 +6,7 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
  * 
- * A generic test graph provider, which feed all the tests needing one. This is for organising tests about 
+ * A generic test graph provider, which feeds all the tests needing a graph. This is for organising tests about 
  * ONDEX graph interfaces in this way: 
  * 
  * <ul>

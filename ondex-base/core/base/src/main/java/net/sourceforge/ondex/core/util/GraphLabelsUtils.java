@@ -31,17 +31,69 @@ public class GraphLabelsUtils
 	}
 
 	/**
+	 * Defaults to a result abbreviated at 63 chars.
+	 */
+	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames )
+	{
+		return getBestConceptLabel ( c, filterAccessionsFromNames, 63 );
+	}
+
+	/**
+	 * Invokes {@link #getBestConceptLabelCore(ONDEXConcept, boolean, int, boolean)} without 
+	 * considering specie-prefixed names for genes.
+	 * 
+	 */
+	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames, int maxLen )
+	{
+		return getBestConceptLabelCore ( c, filterAccessionsFromNames, maxLen, false );
+	}
+	
+	
+	/**
+	 * Defaults to false.
+	 */
+	public static String getBestConceptLabelWithGeneSpeciePrefix ( ONDEXConcept c )
+	{
+		return getBestConceptLabelWithGeneSpeciePrefix ( c, false );
+	}
+
+	/**
+	 * Defaults to a result abbreviated at 63 chars.
+	 */
+	public static String getBestConceptLabelWithGeneSpeciePrefix ( ONDEXConcept c, boolean filterAccessionsFromNames )
+	{
+		return getBestConceptLabelWithGeneSpeciePrefix ( c, filterAccessionsFromNames, 63 );
+	}
+	
+	
+	/**
+	 * Invokes {@link #getBestConceptLabelCore(ONDEXConcept, boolean, int, boolean)} giving priority 
+	 * to specie-prefixed names for genes (ie, passes down useGeneSpeciePrefix = true ).
+	 * 
+	 */
+	public static String getBestConceptLabelWithGeneSpeciePrefix ( ONDEXConcept c, boolean filterAccessionsFromNames, int maxLen )
+	{
+		return getBestConceptLabelCore ( c, filterAccessionsFromNames, maxLen, true );
+	}
+
+	
+	/**
 	 * 
 	 * Returns the best label for a concept, considering several criteria, including the concept type (eg,
-	 * if it's a gene or not).
+	 * if it's a gene or not). This method is the core implementation for the other getBestConceptLabelXXX 
+	 * wrappers above. 
 	 * 
 	 * @param filterAccessions removes accessions from names, if these are duplicated there from accessions,
 	 *        as per {@link #getBestName(ONDEXConcept, boolean)}. 
 	 *
-	 * @param maxLen if >3, the result is {@link StringUtils#abbreviate(String, int) abbreviated} at maxLen - 3 and '...'
-	 *   is appended.
+	 * @param maxLen if >3, the result is {@link StringUtils#abbreviate(String, int) abbreviated} at 
+	 *        maxLen - 3 and '...' is appended.
+	 *   
+	 * @param useGeneSpeciePrefix if this is true and the concept c is of type Gene, then it tries to 
+	 *        select the name with the specie prefix, as explained in {@link #getBestNameCore(Set, boolean, boolean)}.
 	 */
-	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames, int maxLen )
+	private static String getBestConceptLabelCore (
+		ONDEXConcept c, boolean filterAccessionsFromNames, int maxLen, boolean useGeneSpeciePrefix )
 	{
 		String typeId = c.getOfType ().getId ();
 		
@@ -49,10 +101,8 @@ public class GraphLabelsUtils
 			? filterAccessionsFromNames ( c )
 			: c.getConceptNames ();
 		
-		String result = getBestName ( names ); // priority to the shortest preferred name
-		
-		result = getGenePrefixedBestName ( result, c );
-		
+		String result = getBestNameCore ( names, useGeneSpeciePrefix && "Gene".equals ( typeId ) );
+				
 		if ( result.isEmpty () )
 		{
 			// non-ambiguous accession, discriminate by type
@@ -66,14 +116,81 @@ public class GraphLabelsUtils
 		return result;
 	}
 
+
+
+
+	
 	/**
-	 * Defaults to a result abbreviated at 63 chars.
+	 * Just a wrapper of {@link #getBestAccession(Set)}, concept must be non-null
 	 */
-	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames )
+	public static String getBestAccession ( ONDEXConcept concept )
 	{
-		return getBestConceptLabel ( c, filterAccessionsFromNames, 63 );
+		return getBestAccession ( concept.getConceptAccessions () );
+	}
+	
+	/**
+	 * Just a wrapper of {@link #getBestGeneAccession(Set)}
+	 * 
+	 */
+	public static String getBestGeneAccession ( ONDEXConcept geneConcept )
+	{
+		return getBestGeneAccession ( geneConcept.getConceptAccessions () );
 	}
 
+	
+	/**
+	 * Best accession selector for genes.
+	 * 
+	 * This uses {@link #priorityByKnownSources(ConceptAccession)}, which is used in certain views
+	 * for the accession field.
+	 * 
+	 * As for {@link #getBestAccession(ONDEXConcept)}, this also gives priority to non-ambiguous accessions, then it  
+	 * possibly considers ambiguous ones.
+	 * 
+	 * @see #getBestGeneAccession(Set, boolean)
+	 * @see #getBestAccession(Set, boolean, ToIntFunction)
+	 * @see #priorityByKnownSources(ConceptAccession)
+	 */
+	public static String getBestGeneAccession ( Set<ConceptAccession> geneAccessions )
+	{	
+		String result = getBestGeneAccession ( geneAccessions, true );
+		if ( !result.isEmpty () ) return result;		
+		
+		return getBestGeneAccession ( geneAccessions, false );
+	}
+
+		
+	/**
+	 * Uses {@link #getBestAccession(Set, boolean, ToIntFunction)} with {@link #priorityByKnownSources(ConceptAccession)}, 
+	 * which is a special priority criterion we require for genes. 
+	 */
+	private static String getBestGeneAccession ( Set<ConceptAccession> geneAccs, boolean useUniques )
+	{
+		return getBestAccession ( 
+			geneAccs, useUniques, GraphLabelsUtils::priorityByKnownSources
+		);
+	}
+	
+	
+	/**
+	 *  Yields the best accession in the set.
+	 *  
+	 *  You should use this for generic concepts and end-user visualisations of accessions. 
+	 *  For generic labelling, which is also based on names, use {@link #getBestConceptLabel(ONDEXConcept)}.
+	 *  
+	 *  This tries to use a non-ambiguous accession first, and then possibly, it falls back to considering 
+	 *  ambiguous accessions too.
+	 *  
+	 *  @see #getBestAccession(Set, boolean, ToIntFunction)
+	 */
+	public static String getBestAccession ( Set<ConceptAccession> accs )
+	{
+		String result = getBestAccession ( accs, true, null );
+		if ( !result.isEmpty () ) return result;		
+		
+		return getBestAccession ( accs, false, null );
+	}
+	
 	
 	/**
 	 * This is a low-level implementation of {@link #getBestAccession(Set, boolean)}, probably you don't
@@ -99,7 +216,7 @@ public class GraphLabelsUtils
 		if ( accs == null || accs.size () == 0 ) return "";
 						
 		// Our own comparisons
-		Comparator<String> accStrCmp = (acc1, acc2) -> specialAccessionCompare ( acc1, acc2 );
+		Comparator<String> accStrCmp = (acc1, acc2) -> compareByMaizeGenes ( acc1, acc2 );
 		
 		// In all the other cases, first compare the lengths and then the string values.
 		accStrCmp = accStrCmp.thenComparingInt ( String::length )
@@ -124,116 +241,76 @@ public class GraphLabelsUtils
 		.map ( ConceptAccession::getAccession )
 		.map ( String::trim )
 		.orElse ( "" );
+	}	
+	
+	
+	
+	/**
+	 * Defaults to false
+	 */
+	public static String getBestName ( ONDEXConcept concept )
+	{
+		return getBestName ( concept, false );
 	}
+	
+	/**
+	 * Similar to {@link #getBestName(Set)}, but with some extra logics.
+	 * 
+	 * @param filterAccessions if true, it tries to remove accessions from the result, using other available names, if
+	 *   			available.
+	 */
+	public static String getBestName ( ONDEXConcept concept, boolean filterAccessions )
+	{
+		var names = concept.getConceptNames ();
 		
-	/**
-	 * Uses special comparison/priority between accession strings.
-	 * 
-	 * It assumes, trimmed accessions. This is always included in the {@link #getBestAccession(Set, boolean, ToIntFunction)}
-	 * comparisons.
-	 */
-	private static int specialAccessionCompare ( String acc1, String acc2 )
-	{
-		// This is to privilege maize genes of type EB (#593)
-		final var zmebRe = "^ZM.+EB[0-9].*";
-		final var zmdRe = "^ZM.+D[0-9].*"; 
-		if ( acc1.matches ( zmebRe ) && acc2.matches ( zmdRe  ) ) return -1;
-		if ( acc2.matches ( zmebRe ) && acc1.matches ( zmdRe ) ) return 1;
-		// I deal only with this aspect, the rest is left to the chain where I'm used
-		return 0; 
-	}
-	
-	/**
-	 * This is used for the gene accession field in certain views, it gives priority to ENSEMBL and other
-	 * sources.   
-	 */
-	private static int getKnownSourcesAccessionPriority ( ConceptAccession acc )
-	{
-		String accStr = acc.getAccession ();
-		String accSrcId = acc.getElementOf ().getId ();
-		if ( accSrcId.startsWith ( "ENSEMBL" ) ) return -1;
-		if ( "PHYTOZOME".equals ( accSrcId ) ) return -1;
-		if ( "TAIR".equals ( accSrcId ) && accStr.startsWith ( "AT" ) && accStr.indexOf ( "." ) == -1 ) return -1;
-
-		// I only deal with the above, the rest comes from the comparison chain where I'm inserted
-		return 0;
-	}
-
-	/**
-	 *  Yields the best accession in the set.
-	 *  
-	 *  You should use this for generic concepts and end-user visualisations of accessions. 
-	 *  For generic labelling, which is also based on names, use {@link #getBestConceptLabel(ONDEXConcept)}.
-	 *  
-	 *  This tries to use a non-ambiguous accession first, and then possibly, it falls back to considering 
-	 *  ambiguous accessions too.
-	 *  
-	 *  @see #getBestAccession(Set, boolean, ToIntFunction)
-	 */
-	public static String getBestAccession ( Set<ConceptAccession> accs )
-	{
-		String result = getBestAccession ( accs, true, null );
-		if ( !result.isEmpty () ) return result;		
+		var bestName = getBestName( names );
 		
-		return getBestAccession ( accs, false, null );
-	}
+		if ( !filterAccessions ) return bestName;
+			
+		var filteredNames = filterAccessionsFromNames ( concept, bestName );
+		// No alternative
+		if ( filteredNames == null ) return bestName;
+						
+		var filteredBestName = getBestName ( filteredNames );
 
-	/**
-	 * Just a wrapper, concept must be non-null
-	 */
-	public static String getBestAccession ( ONDEXConcept concept )
-	{
-		return getBestAccession ( concept.getConceptAccessions () );
+		// Shouldn't happen, but just in case
+		return "".equals ( filteredBestName ) ? bestName : filteredBestName;
 	}
 	
 	/**
-	 * Best accession selector for genes.
+	 * This tries to use the preferred names first, and then, if none is available,
+	 * it further tries the alternative names.
 	 * 
-	 * This uses {@link #getKnownSourcesAccessionPriority(ConceptAccession)}, which is used in certain views
-	 * for the accession field.
+	 * This is a wrapper of {@link #getBestNameCore(Set, boolean)} without the useGeneSpeciePrefix
+	 * feature.
 	 * 
-	 * As for {@link #getBestAccession(ONDEXConcept)}, this also gives priority to non-ambiguous accessions, then it  
-	 * possibly considers ambiguous ones.
-	 * 
-	 * @see #getBestGeneAccession(Set, boolean)
-	 * @see #getBestAccession(Set, boolean, ToIntFunction)
-	 * @see #getKnownSourcesAccessionPriority(ConceptAccession)
 	 */
-	public static String getBestGeneAccession ( Set<ConceptAccession> geneAccessions )
-	{	
-		String result = getBestGeneAccession ( geneAccessions, true );
-		if ( !result.isEmpty () ) return result;		
+	public static String getBestName ( Set<ConceptName> cns ) 
+	{
+		return getBestNameCore ( cns, false );
+	}
+
+	/**
+	 * This tries to use {@link #getBestName(Set, boolean, boolean) the best preferred name} first, and then, if none is available,
+	 * it further tries the alternative names.
+	 * 
+	 * This is private, since it's not used outside of this class, only in 
+	 * {@link #getBestConceptLabelWithGeneSpeciePrefix(ONDEXConcept, boolean, int)}. 
+	 */
+	private static String getBestNameCore ( Set<ConceptName> cns, boolean useGeneSpeciePrefix  ) 
+	{
+		String result = getBestNameCore ( cns, true, useGeneSpeciePrefix );
+		if ( !result.isEmpty () ) return result;
 		
-		return getBestGeneAccession ( geneAccessions, false );
+		return getBestNameCore ( cns, false, useGeneSpeciePrefix );
 	}
-
 	
 	/**
-	 * Just a wrapper of {@link #getBestGeneAccession(ONDEXConcept)}
+	 * Core function to select the best name for a set, giving priority based on a couple of criterion (see below).
 	 * 
-	 */
-	public static String getBestGeneAccession ( ONDEXConcept geneConcept )
-	{
-		return getBestGeneAccession ( geneConcept.getConceptAccessions () );
-	}
-	
-	
-	
-	/**
-	 * Uses {@link #getBestAccession(Set, boolean, ToIntFunction)} with {@link #getKnownSourcesAccessionPriority(ConceptAccession)}, 
-	 * which is a special priority criterion we require for genes. 
-	 */
-	private static String getBestGeneAccession ( Set<ConceptAccession> geneAccs, boolean useUniques )
-	{
-		return getBestAccession ( 
-			geneAccs, useUniques, GraphLabelsUtils::getKnownSourcesAccessionPriority
-		);
-	}
-	
-	
-	/**
-	 * Selects the best name for a set, giving priority to the shortest first and then 
-	 * to the canonical string order.
+	 * @param useGeneSpeciePrefix. use {@link #isGeneNameSpeciePrefixed(String)} as first criterion of name priority.
+	 * That is, when this flag is set names like TmABC are privileged. Then it uses other common sorting criterion, 
+	 * selecting the shortest names and the canonical string order.
 	 * 
 	 * @param usePreferredOrAltNames whether to use {@link ConceptName#isPreferred() preferred name} or not. This is 
 	 * supposed to be unique, but data are often dirty, hence we don't trust that and we still prioritise 
@@ -243,8 +320,15 @@ public class GraphLabelsUtils
 	 * so use {@link #getBestName(Set)} instead, which is public.
 	 * 
 	 */
-	private static String getBestName ( Set<ConceptName> cns, boolean usePreferredOrAltNames ) 
-	{	
+	private static String getBestNameCore ( Set<ConceptName> cns, boolean usePreferredOrAltNames, boolean useGeneSpeciePrefix ) 
+	{
+	  Comparator<String> namesCmp = Comparator.comparing ( String::length )
+		  .thenComparing ( Comparator.naturalOrder () );
+ 
+		if ( useGeneSpeciePrefix )
+			namesCmp = Comparator.comparingInt ( GraphLabelsUtils::priorityBySpeciePrefixedName )
+				.thenComparing ( namesCmp );
+		
 		var cnsStrm = cns.parallelStream ()
 		.filter ( cname -> usePreferredOrAltNames ? cname.isPreferred () : !cname.isPreferred () );
 		
@@ -257,84 +341,8 @@ public class GraphLabelsUtils
 			.thenComparing ( Comparator.naturalOrder () ) 
 		)
 		.orElse ( "" );		
-	}
+	}	
 	
-	/**
-	 * This tries to use {@link #getBestName(Set, boolean) the best preferred name} first, and then, if none is available,
-	 * it further tries the alternative names.
-	 * 
-	 */
-	public static String getBestName ( Set<ConceptName> cns ) 
-	{
-		String result = getBestName ( cns, true );
-		if ( !result.isEmpty () ) return result;
-		
-		return getBestName ( cns, false );
-	}
-	
-	/**
-	 * After you've found a name, with {@link #getBestName(ONDEXConcept, boolean)}, does
-	 * a selection for {@link ONDEXConcept concepts} of type {@link ConceptClass#getId() Gene}:
-	 * if 'name' is like ABC and there is another name like "TaABC", then it returns the 
-	 * prefixed version. If that's not the case, it returns name. 
-	 * 
-	 * Sanity checks are done too, ie, considered names must have length = name.len + 2 
-	 * and they must be like [A-Z][a-z].
-	 * 
-	 * TODO: need unit test
-	 */
-	private static String getGenePrefixedBestName ( String name, ONDEXConcept concept ) 
-	{
-		if ( !"Gene".equals ( concept.getOfType ().getId () ) ) return name;
-		
-		Set<ConceptName> cns = concept.getConceptNames ();
-				
-		RegEx prefixRe = RegEx.of ( "^[A-Z][a-z][A-Z].*" );
-			
-		String newName = cns.stream ()
-		.map ( ConceptName::getName )
-		.map ( String::trim )
-		// As said above, current name is like TaABC and name is ABC  
-		.filter ( thisName -> thisName.length () == name.length () + 2 )
-		.filter ( thisName -> thisName.endsWith ( name ) )
-		.filter ( prefixRe::matches )
-		.sorted ( Comparator.naturalOrder () )
-		.findFirst ()
-		.orElse ( name );
-		
-		return newName;
-	}
-	
-	/**
-	 * Just a wrapper, the concept is assumed to be non-null.
-	 * 
-	 * @param filterAccessions if true, it tries to remove accessions from the result, using other available names, if
-	 *   			available.
-	 * 
-	 */
-	public static String getBestName ( ONDEXConcept concept, boolean filterAccessions )
-	{
-		var names = concept.getConceptNames ();
-		var bestName = getBestName ( names );
-		
-		if ( !filterAccessions ) return bestName;
-			
-		var filteredNames = filterAccessionsFromNames ( concept, bestName );
-		// No alternative
-		if ( filteredNames == null ) return bestName;
-						
-		var filteredBestName = getBestName ( filteredNames );
-		// Shouldn't happen, but just in case
-		return "".equals ( filteredBestName ) ? bestName : filteredBestName;
-	}
-
-	/**
-	 * Defaults to false
-	 */
-	public static String getBestName ( ONDEXConcept concept )
-	{
-		return getBestName ( concept, false );
-	}
 
 	
 	/**
@@ -399,6 +407,96 @@ public class GraphLabelsUtils
 		
 		return names.stream ()
 			.filter ( name -> !accs.contains ( name.getName () ) );
-	}	
+	}
+	
+	
+	
+	/**
+	 * Establish if a given (gene) name should have priority over other common criteria, based on the fact that
+	 * has a format like TsABC, where Ts is a specie prefix.
+	 * 
+	 * This is used in {@link #getBestNameCore(Set, boolean, boolean)} and, indirectly, in
+	 * {@link #getBestConceptLabelWithGeneSpeciePrefix(ONDEXConcept, boolean, int)}.
+	 * 
+	 * As in other cases, this is a single-scope sorting criterion, all other priorities have to be chained to it.
+	 */
+	private static int priorityBySpeciePrefixedName ( String name )
+	{
+		if ( name.length () <= 2 ) return 0;
 		
+		RegEx prefixRe = RegEx.of ( "^[A-Z][a-z][A-Z].*" );
+		return prefixRe.matches ( name ) ? -1 : 0;
+	}
+	
+	
+	
+	/**
+	 * Uses special comparison/priority between accession strings that are possibly about maize.
+	 * 
+	 * It assumes, trimmed accessions. This is always included in the {@link #getBestAccession(Set, boolean, ToIntFunction)}
+	 * comparisons.
+	 */
+	private static int compareByMaizeGenes ( String acc1, String acc2 )
+	{
+		// This is to privilege maize genes of type EB (#593)
+		final var zmebRe = "^ZM.+EB[0-9].*";
+		final var zmdRe = "^ZM.+D[0-9].*"; 
+		if ( acc1.matches ( zmebRe ) && acc2.matches ( zmdRe  ) ) return -1;
+		if ( acc2.matches ( zmebRe ) && acc1.matches ( zmdRe ) ) return 1;
+		// I deal only with this aspect, the rest is left to the chain where I'm used
+		return 0; 
+	}
+	
+	
+	/**
+	 * This is used for the gene accession field in certain views, it gives priority to ENSEMBL and other
+	 * sources.
+	 * 
+	 * @return -1 if the accession belongs to certain preferred sources, else returns 0
+	 */
+	private static int priorityByKnownSources ( ConceptAccession acc )
+	{
+		String accStr = acc.getAccession ();
+		String accSrcId = acc.getElementOf ().getId ();
+		if ( accSrcId.startsWith ( "ENSEMBL" ) ) return -1;
+		if ( "PHYTOZOME".equals ( accSrcId ) ) return -1;
+		if ( "TAIR".equals ( accSrcId ) && accStr.startsWith ( "AT" ) && accStr.indexOf ( "." ) == -1 ) return -1;
+
+		// I only deal with the above, the rest comes from the comparison chain where I'm inserted
+		return 0;
+	}
+	
+	/**
+	 * After you've found a name, with {@link #getBestName(ONDEXConcept, boolean)}, does
+	 * a selection for {@link ONDEXConcept concepts} of type {@link ConceptClass#getId() Gene}:
+	 * if 'name' is like ABCD and there is another name like "TaABCD", then it returns the 
+	 * prefixed version. If that's not the case, it returns name. 
+	 * 
+	 * Sanity checks are done too, ie, considered names must have length = name.len + 2 
+	 * and they must be like [A-Z][a-z].
+	 * 
+	 * TODO:remove (probably). This doesn't work very well when there is also a name like EFG. 
+	 */
+	@Deprecated
+	private static String _getGenePrefixedBestName ( String name, ONDEXConcept concept ) 
+	{
+		if ( !"Gene".equals ( concept.getOfType ().getId () ) ) return name;
+		
+		Set<ConceptName> cns = concept.getConceptNames ();
+				
+		RegEx prefixRe = RegEx.of ( "^[A-Z][a-z][A-Z].*" );
+			
+		String newName = cns.stream ()
+		.map ( ConceptName::getName )
+		.map ( String::trim )
+		// As said above, current name is like TaABC and name is ABC  
+		.filter ( thisName -> thisName.length () == name.length () + 2 )
+		.filter ( thisName -> thisName.endsWith ( name ) )
+		.filter ( prefixRe::matches )
+		.sorted ( Comparator.naturalOrder () )
+		.findFirst ()
+		.orElse ( name );
+		
+		return newName;
+	}
 }
