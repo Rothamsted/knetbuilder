@@ -26,11 +26,13 @@ public abstract class AbstractGraphLabelsUtilsTest
 	private ONDEXGraph graph = TestGraphProvider.getInstance ().createGraph ( "test" );
 	
 	private ConceptClass ccA = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "A" );
+	private ConceptClass ccGene = ONDEXGraphUtils.getOrCreateConceptClass ( graph, "Gene" );
 	private DataSource srcA = ONDEXGraphUtils.getOrCreateDataSource ( graph, "srcA" );
 	private EvidenceType evA = ONDEXGraphUtils.getOrCreateEvidenceType ( graph, "evA" );
 	private DataSource srcENSEMBL = ONDEXGraphUtils.getOrCreateDataSource ( graph, "ENSEMBL" );	
 	
 	private ONDEXConcept c = graph.createConcept ( "foo", "", "", srcA, ccA, Set.of ( evA ) );
+	private ONDEXConcept geneConcept = graph.createConcept ( "foo gene", "", "", srcA, ccGene, Set.of ( evA ) );
 	
 	
 	/**
