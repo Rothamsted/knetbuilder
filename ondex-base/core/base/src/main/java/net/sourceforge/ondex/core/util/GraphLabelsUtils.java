@@ -11,8 +11,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import net.sourceforge.ondex.core.ConceptAccession;
+import net.sourceforge.ondex.core.ConceptClass;
 import net.sourceforge.ondex.core.ConceptName;
 import net.sourceforge.ondex.core.ONDEXConcept;
+import uk.ac.ebi.utils.regex.RegEx;
 
 /**
  * Methods to choose best labels for {@link ONDEXConcept}.
@@ -36,7 +38,7 @@ public class GraphLabelsUtils
 	 * @param filterAccessions removes accessions from names, if these are duplicated there from accessions,
 	 *        as per {@link #getBestName(ONDEXConcept, boolean)}. 
 	 *
-	 * @param maxLen if >0, the result is {@link StringUtils#abbreviate(String, int) abbreviated} at that len-3 and '...'
+	 * @param maxLen if >3, the result is {@link StringUtils#abbreviate(String, int) abbreviated} at maxLen - 3 and '...'
 	 *   is appended.
 	 */
 	public static String getBestConceptLabel ( ONDEXConcept c, boolean filterAccessionsFromNames, int maxLen )
@@ -49,7 +51,7 @@ public class GraphLabelsUtils
 		
 		String result = getBestName ( names ); // priority to the shortest preferred name
 		
-		result = getPrefixedBestName ( result, names );
+		result = getGenePrefixedBestName ( result, c );
 		
 		if ( result.isEmpty () )
 		{
@@ -60,7 +62,7 @@ public class GraphLabelsUtils
 		}
 			
 		if ( result.isEmpty () ) result = StringUtils.trimToEmpty ( c.getPID () );
-		if ( maxLen > 0 ) result = StringUtils.abbreviate ( result, 63 );
+		if ( maxLen > 3 ) result = StringUtils.abbreviate ( result, maxLen - 3 );
 		return result;
 	}
 
@@ -271,23 +273,36 @@ public class GraphLabelsUtils
 	}
 	
 	/**
-	 *  This method will find the prefixed gene names from synonyms if any prefixed gene names present,
-	 *  otherwise return the name itself.
-	 * @param name
-	 * @param cns
-	 * @return
+	 * After you've found a name, with {@link #getBestName(ONDEXConcept, boolean)}, does
+	 * a selection for {@link ONDEXConcept concepts} of type {@link ConceptClass#getId() Gene}:
+	 * if 'name' is like ABC and there is another name like "TaABC", then it returns the 
+	 * prefixed version. If that's not the case, it returns name. 
+	 * 
+	 * Sanity checks are done too, ie, considered names must have length = name.len + 2 
+	 * and they must be like [A-Z][a-z].
+	 * 
+	 * TODO: need unit test
 	 */
-	private static String getPrefixedBestName ( String name, Set<ConceptName> cns ) 
+	private static String getGenePrefixedBestName ( String name, ONDEXConcept concept ) 
 	{
-		Optional<ConceptName> preFixName = cns.stream ()
-				.filter ( item -> item.getName ().toLowerCase ().endsWith ( name.toLowerCase () ) )
-				.sorted ( (item1, item2) -> item2.getName().length() - item1.getName().length()).findFirst();
-
-		if( preFixName.isPresent () ) {
-			return preFixName.get ().getName ();
-		}else {
-			return name;
-		}
+		if ( !"Gene".equals ( concept.getOfType ().getId () ) ) return name;
+		
+		Set<ConceptName> cns = concept.getConceptNames ();
+				
+		RegEx prefixRe = RegEx.of ( "^[A-Z][a-z][A-Z].*" );
+			
+		String newName = cns.stream ()
+		.map ( ConceptName::getName )
+		.map ( String::trim )
+		// As said above, current name is like TaABC and name is ABC  
+		.filter ( thisName -> thisName.length () == name.length () + 2 )
+		.filter ( thisName -> thisName.endsWith ( name ) )
+		.filter ( prefixRe::matches )
+		.sorted ( Comparator.naturalOrder () )
+		.findFirst ()
+		.orElse ( name );
+		
+		return newName;
 	}
 	
 	/**
@@ -329,17 +344,7 @@ public class GraphLabelsUtils
 	{
 		return filterAccessionsFromNames ( concept, null );
 	}
-
-	/**
-	 * Same as {@link #filterAccessionsFromNames(ONDEXConcept), but returns the stream of filtered names, which 
-	 * might be more efficient if you need to further process it.
-	 */
-	public static Stream<ConceptName> filterAccessionsFromNamesAsStream ( ONDEXConcept concept )
-	{
-		return filterAccessionsFromNamesAsStream ( concept, null );
-	}
-	
-	
+		
 	
 	/**
 	 * Just a wrapper of {@link #filterAccessionsFromNamesAsStream(ONDEXConcept, String)}.
@@ -351,6 +356,16 @@ public class GraphLabelsUtils
 			.map ( strm -> strm.collect ( Collectors.toSet () ) )
 			.orElse ( null );
 	}
+
+	/**
+	 * Same as {@link #filterAccessionsFromNames(ONDEXConcept), but returns the stream of filtered names, which 
+	 * might be more efficient if you need to further process it.
+	 */
+	public static Stream<ConceptName> filterAccessionsFromNamesAsStream ( ONDEXConcept concept )
+	{
+		return filterAccessionsFromNamesAsStream ( concept, null );
+	}
+
 	
 	/**
 	 * This is the real implementation of {@link #filterAccessionsFromNames(ONDEXConcept)}, which is used by 
