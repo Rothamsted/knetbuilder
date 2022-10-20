@@ -336,10 +336,7 @@ public class GraphLabelsUtils
 		.map ( ConceptName::getName )
 		.map ( String::trim )
 		.filter ( nameStr -> !nameStr.isEmpty () )
-		.min (
-			Comparator.comparing ( String::length )
-			.thenComparing ( Comparator.naturalOrder () ) 
-		)
+		.min ( namesCmp )
 		.orElse ( "" );		
 	}	
 	

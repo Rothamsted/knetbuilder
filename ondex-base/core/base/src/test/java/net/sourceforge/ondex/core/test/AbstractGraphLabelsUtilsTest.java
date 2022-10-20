@@ -96,8 +96,34 @@ public abstract class AbstractGraphLabelsUtilsTest
 		c.createConceptAccession ( "ABC", srcA, true ); // shorter, but should choose the non-ambiguous anyway
 		
 		assertEquals ( "Wrong label picked!", "ABC-transporter", GraphLabelsUtils.getBestConceptLabel ( c ) );
-	}	
-
+	}
+	
+	@Test
+	public void testSpeciePrefixGeneNames(){
+		geneConcept.createConceptName ( "ABC", false );
+		geneConcept.createConceptName ( "FoABC", false );
+		geneConcept.createConceptName ( "AB", false ); 
+		
+		assertEquals ( "Wrong label picked!", "FoABC", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept ) );
+	}
+	
+	@Test
+	public void testSpeciePrefixGeneNamesWithPreferred(){
+		geneConcept.createConceptName ( "ABC", true );
+		geneConcept.createConceptName ( "FoABC", false );
+		geneConcept.createConceptName ( "AB", false ); 
+		
+		assertEquals ( "Wrong label picked!", "ABC", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept, true ) );
+	}
+	
+	@Test
+	public void testSpeciePrefixGeneNamesWrongPattern(){
+		geneConcept.createConceptName ( "ABC", false );
+		geneConcept.createConceptName ( "foAbc", false );
+		geneConcept.createConceptName ( "AB",  false ); 
+		
+		assertEquals ( "Wrong label picked!", "AB", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept ) );
+	}
 	/**
 	 * Tests Rothamsted/knetminer#584
 	 */
