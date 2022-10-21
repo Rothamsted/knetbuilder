@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.sourceforge.ondex.core.ConceptAccession;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -90,7 +91,7 @@ public class GraphLabelsUtils
 	 *        maxLen - 3 and '...' is appended.
 	 *   
 	 * @param useGeneSpeciePrefix if this is true and the concept c is of type Gene, then it tries to 
-	 *        select the name with the specie prefix, as explained in {@link #getBestNameCore(Set, boolean, boolean)}.
+	 *        select the name with the specie prefix, as explained in {@link #getBestNameCore(Set, boolean)}.
 	 */
 	private static String getBestConceptLabelCore (
 		ONDEXConcept c, boolean filterAccessionsFromNames, int maxLen, boolean useGeneSpeciePrefix )
@@ -290,54 +291,62 @@ public class GraphLabelsUtils
 		return getBestNameCore ( cns, false );
 	}
 
-	/**
-	 * This tries to use {@link #getBestName(Set, boolean, boolean) the best preferred name} first, and then, if none is available,
-	 * it further tries the alternative names.
-	 * 
-	 * This is private, since it's not used outside of this class, only in 
-	 * {@link #getBestConceptLabelWithGeneSpeciePrefix(ONDEXConcept, boolean, int)}. 
-	 */
-	private static String getBestNameCore ( Set<ConceptName> cns, boolean useGeneSpeciePrefix  ) 
-	{
-		String result = getBestNameCore ( cns, true, useGeneSpeciePrefix );
-		if ( !result.isEmpty () ) return result;
-		
-		return getBestNameCore ( cns, false, useGeneSpeciePrefix );
-	}
 	
 	/**
+	 * 
 	 * Core function to select the best name for a set, giving priority based on a couple of criterion (see below).
 	 * 
+	 * By default, it chooses a name by considering this order of priority: 
+	 * 
+	 * <ol>
+	 *   <li>the specie-prefixed names if useGeneSpeciePrefix is true (see below)</li>
+	 *   <li>the preferred names</li>
+	 *   <li>other aspects (shortest names, natural string order)</li>
+	 * </ol>
+	 * 
 	 * @param useGeneSpeciePrefix. use {@link #isGeneNameSpeciePrefixed(String)} as first criterion of name priority.
-	 * That is, when this flag is set names like TmABC are privileged. Then it uses other common sorting criterion, 
-	 * selecting the shortest names and the canonical string order.
+	 * That is, when this flag is set names like TmABC are privileged. Then it uses the other sorting criteria. 
 	 * 
-	 * @param usePreferredOrAltNames whether to use {@link ConceptName#isPreferred() preferred name} or not. This is 
-	 * supposed to be unique, but data are often dirty, hence we don't trust that and we still prioritise 
-	 * possible multiple preferred names.
-	 * 
-	 * This method version is for internal use in this class, typically, you don't want to ignore non-preferred ones, 
-	 * so use {@link #getBestName(Set)} instead, which is public.
+	 * This method version is for internal use in this class, since you don't want to use the useGeneSpeciePrefix
+	 * explicitly. In fact, this feature isn't used by default, it's only used by 
+	 * {@link #getBestConceptLabelWithGeneSpeciePrefix(ONDEXConcept, boolean, int)} 
 	 * 
 	 */
-	private static String getBestNameCore ( Set<ConceptName> cns, boolean usePreferredOrAltNames, boolean useGeneSpeciePrefix ) 
+	private static String getBestNameCore ( Set<ConceptName> cns, boolean useGeneSpeciePrefix ) 
 	{
-	  Comparator<String> namesCmp = Comparator.comparing ( String::length )
-		  .thenComparing ( Comparator.naturalOrder () );
+		// This is the common chain tail described above
+	  Comparator<String> nameStrCmp = Comparator.comparing ( String::length )
+			.thenComparing ( Comparator.naturalOrder () );
+		
+	  // This is the head of the tail, when !useGeneSpeciePrefix. We pass a pair to it, because it needs to use
+	  // the isPreferred() flag first and then a normalised string, not the original name string (see the stream below)
+	  //
+		Comparator<Pair<String, Boolean>> namesCmp = // compares Pair<normalised name string, isPreferred>
+	  	Comparator.comparing ( ( Pair<String, Boolean> nameElems ) -> nameElems.getRight () )
+	  	.reversed () // isPreferred == true takes priority, so we need to reverse this, since false < true
+	  	.thenComparing ( Pair::getLeft, nameStrCmp ); // tail appended
  
+		// As said above, this is the first thing to consider when requested, and in particular, it takes priority 
+		// over isPreferred (ie, specie-prefixed names are preferred independently on that flag)
+		//
 		if ( useGeneSpeciePrefix )
-			namesCmp = Comparator.comparingInt ( GraphLabelsUtils::priorityBySpeciePrefixedName )
-				.thenComparing ( namesCmp );
+			namesCmp = Comparator.comparingInt ( 
+				( Pair<String, Boolean> nameElems ) -> priorityBySpeciePrefixedName ( nameElems.getLeft () )
+			).thenComparing ( namesCmp ); // again, the rest is appended
 		
-		var cnsStrm = cns.parallelStream ()
-		.filter ( cname -> usePreferredOrAltNames ? cname.isPreferred () : !cname.isPreferred () );
+		// Now we can apply the priority sorting
+		//
 		
-		return cnsStrm
-		.map ( ConceptName::getName )
-		.map ( String::trim )
-		.filter ( nameStr -> !nameStr.isEmpty () )
+		return cns.parallelStream ()
+		// As said above, first of all we normalise the string name and then we continue with this normalised string
+		.map ( name -> Pair.of ( name.getName ().trim (), name.isPreferred () ) )
+		// It should never happen, but just some sanity check
+		.filter ( nameElems -> !nameElems.getLeft ().isEmpty () )
+		// Eventually!
 		.min ( namesCmp )
-		.orElse ( "" );		
+		// Of course, this is the normalised string again
+		.map ( Pair::getLeft )
+		.orElse ( "" );
 	}	
 	
 
@@ -412,7 +421,7 @@ public class GraphLabelsUtils
 	 * Establish if a given (gene) name should have priority over other common criteria, based on the fact that
 	 * has a format like TsABC, where Ts is a specie prefix.
 	 * 
-	 * This is used in {@link #getBestNameCore(Set, boolean, boolean)} and, indirectly, in
+	 * This is used in {@link #getBestNameCore(Set, boolean)} and, indirectly, in
 	 * {@link #getBestConceptLabelWithGeneSpeciePrefix(ONDEXConcept, boolean, int)}.
 	 * 
 	 * As in other cases, this is a single-scope sorting criterion, all other priorities have to be chained to it.

@@ -104,16 +104,23 @@ public abstract class AbstractGraphLabelsUtilsTest
 		geneConcept.createConceptName ( "FoABC", false );
 		geneConcept.createConceptName ( "AB", false ); 
 		
-		assertEquals ( "Wrong label picked!", "FoABC", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept ) );
+		assertEquals ( 
+			"Wrong label picked!", "FoABC", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept ) 
+		);
 	}
 	
+	/**
+	 * prefixed names take priority over preferredName flag
+	 */
 	@Test
 	public void testSpeciePrefixGeneNamesWithPreferred(){
 		geneConcept.createConceptName ( "ABC", true );
 		geneConcept.createConceptName ( "FoABC", false );
 		geneConcept.createConceptName ( "AB", false ); 
 		
-		assertEquals ( "Wrong label picked!", "ABC", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept ) );
+		assertEquals ( 
+			"Wrong label picked!", "FoABC", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept )
+		);
 	}
 	
 	@Test
