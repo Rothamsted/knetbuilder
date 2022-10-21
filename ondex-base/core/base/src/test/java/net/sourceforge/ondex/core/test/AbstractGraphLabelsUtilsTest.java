@@ -113,7 +113,7 @@ public abstract class AbstractGraphLabelsUtilsTest
 		geneConcept.createConceptName ( "FoABC", false );
 		geneConcept.createConceptName ( "AB", false ); 
 		
-		assertEquals ( "Wrong label picked!", "ABC", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept, true ) );
+		assertEquals ( "Wrong label picked!", "ABC", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept ) );
 	}
 	
 	@Test
