@@ -53,7 +53,7 @@ public JSONObject getNodeJson(ONDEXConcept con, Set<Integer> conceptsUsedInRelat
   /* Fetch the Set of all concept names and retain only the preferred ones, to later choose the 
    * "best" concept name to display from amongst them, for Genes. */
   
-  String conceptName = GraphLabelsUtils.getBestConceptLabel ( con, true, 0 );
+  String conceptName = GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( con, true, 0 );
   
   String conceptShape;
   String conceptColour;
@@ -88,7 +88,8 @@ public JSONObject getNodeJson(ONDEXConcept con, Set<Integer> conceptsUsedInRelat
      val= doc.text(); //doc.select("span").remove().toString();
   }
   
-  // TODO: getBestConceptLabel() normally cut at 63 (including dots)
+  // TODO: getBestConceptLabel() normally cut at 63 (including dots). This would require to 
+  // change the call to getBestConceptLabelWithGeneSpeciePrefix() above
   val = StringUtils.abbreviate ( val, 33 );
   
   nodeData.put(JSONAttributeNames.ID, conceptID);

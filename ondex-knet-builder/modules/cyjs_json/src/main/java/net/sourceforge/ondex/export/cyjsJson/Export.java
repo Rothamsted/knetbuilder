@@ -328,7 +328,7 @@ public class Export extends ONDEXExport {
 		 */
 		String conceptType = buildConceptClass ( con.getOfType () );
 
-		// preferred concept name, chooses between names (preferred first) and accessions, using various crtieria
+		// preferred concept name, chooses between names (preferred first) and accessions, using various criteria
 		// this is the same helper that is used in multiple Knetminer visualisations 
 		conceptJson.put ( JSONAttributeNames.VALUE, GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( con, true ) ); 
 		conceptJson.put ( JSONAttributeNames.OFTYPE, conceptType );
