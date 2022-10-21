@@ -91,11 +91,11 @@ public class CyjsJsonExportTest
 
 		// Pick non-gene node from humanGraph and verify that the corresponding JSON label is the same as getBestConceptLabel()
 		ONDEXConcept nonGeneConcept = humanGraph.getConcept ( 48391 );
-		assertJson ( "Concept Name in Non Gene don't match", exportedJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabel ( nonGeneConcept, true ) );
+		assertJson ( "Concept Name in Non Gene don't match", exportedJson, nonGenePath, "value", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( nonGeneConcept, true ) );
 		
 		// Pick some gene node from JSON and verify the same
 		ONDEXConcept geneConcept = humanGraph.getConcept ( 48320 );
-		assertJson ( "Concept Name in Gene don't match", exportedJson, genePath, "value", GraphLabelsUtils.getBestConceptLabel ( geneConcept, true ) );
+		assertJson ( "Concept Name in Gene don't match", exportedJson, genePath, "value", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept, true ) );
 		
 		// TODO: similar test for $.nodes
 	}

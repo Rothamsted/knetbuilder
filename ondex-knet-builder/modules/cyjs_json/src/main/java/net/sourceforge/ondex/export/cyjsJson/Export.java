@@ -330,7 +330,7 @@ public class Export extends ONDEXExport {
 
 		// preferred concept name, chooses between names (preferred first) and accessions, using various crtieria
 		// this is the same helper that is used in multiple Knetminer visualisations 
-		conceptJson.put ( JSONAttributeNames.VALUE, GraphLabelsUtils.getBestConceptLabel ( con, true ) ); 
+		conceptJson.put ( JSONAttributeNames.VALUE, GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( con, true ) ); 
 		conceptJson.put ( JSONAttributeNames.OFTYPE, conceptType );
 		conceptJson.put ( JSONAttributeNames.PID, con.getPID () );
 		conceptJson.put ( JSONAttributeNames.ANNOTATION, con.getAnnotation ().replaceAll ( "(\\r|\\n)", " " ) );
