@@ -33,6 +33,7 @@ import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.logging.ONDEXLogger;
 import uk.ac.ebi.utils.collections.OptionsMap;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
+import uk.ac.ebi.utils.exceptions.UnexpectedValueException;
 import uk.ac.ebi.utils.io.SerializationUtils;
 import uk.ac.ebi.utils.runcontrol.PercentProgressLogger;
 
@@ -59,9 +60,10 @@ public class KnetMinerInitializer
 	
 	private String dataPath;
 	private String graphTraverserFQN;
-	private String configXmlPath;
+	private String configXmlPath; // TODO:newConfig needs renaming configYmlPath
 	private Set<String> taxIds;
 	
+	// TODO:newConfig needs KnetminerConfig config = null
 	private OptionsMap options = OptionsMap.create ();
 
 	private LuceneEnv luceneMgr;
@@ -83,6 +85,8 @@ public class KnetMinerInitializer
 	 */
 	public void initKnetMinerData ( Map<String, Object> overridingOptions )
 	{	
+		// TODO: needs KnetminerConfig overridingConfig, just use the parameter if it's null, 
+		// in alternative to loadOptions 
 		this.loadOptions ();
 		if ( overridingOptions != null ) this.options.putAll ( overridingOptions );
 		
@@ -104,10 +108,14 @@ public class KnetMinerInitializer
 	 */
 	public void loadOptions ()
 	{
+		// TODO:needs to load a KnetMinerConfig with its own load method, and into new-name field configYmlPath 
+		
 		if ( this.configXmlPath == null ) return;
 		
 		try
 		{
+			// So, this is all different, probably you'll need to intercept RuntimeException instead
+			
 			Properties props = new Properties ();
 			InputStream in = new FileInputStream ( configXmlPath );
 			props.loadFromXML ( in );
@@ -143,11 +151,13 @@ public class KnetMinerInitializer
 	 */
 	public void initLuceneData ( boolean doReset )
 	{
+		// TODO:newConfig, verify the same code in Knetminer, to see if something significant has changed
+		
 		try 
 		{
-      if( null == getDataPath ()) {
-		  throw new Exception ( "DataPath from options is null" );
-	  }
+      if( getDataPath () == null )
+      	throw new UnexpectedValueException ( "DataPath from options is null" );
+
       File indexFile = Paths.get ( getDataPath (), "index" ).toFile();
 
       // We don't have the OXL file path here, so, let's give up with checking its date. 
@@ -190,8 +200,14 @@ public class KnetMinerInitializer
 	 * - else the 'SpeciesTaxId' {@link #getOptions() option} 
 	 *
 	 */
+	
+	// TODO:newConfig, verify the same code in Knetminer, to see if something significant has changed
+	// TODO:newConfig, maybe it was already moved to AbstractGraphTraverser, where it belongs, check that, 
+	// if needed, let's do the move later.
+	//
 	public Set<ONDEXConcept> getSeedGenes ()
 	{
+		// TODO:newConfig, KnetminerConfig has a field for this
 		String seedGenesPath = StringUtils.trimToNull ( getOptions ().getString ( "seedGenesFile" ) );
 		if ( seedGenesPath == null ) {
 			log.info ( "Initialising seed genes from TAXID list: {}", this.getTaxIds () );
@@ -202,7 +218,10 @@ public class KnetMinerInitializer
 		return AbstractGraphTraverser.ids2Genes ( this.graph, seedGenesPath );
 	}
 	
-	// We should move this to AbstractGraphTraverser at some point
+	// TODO:newConfig, verify the same code in Knetminer, to see if something significant has changed
+	// TODO:newConfig, maybe it was already moved to AbstractGraphTraverser, where it belongs, check that, 
+	// if needed, let's do the move later.
+	//
 	private Set<ONDEXConcept> fetchSeedGenesFromTaxIds ()
 	{
 		ONDEXGraphMetaData meta = graph.getMetaData ();
@@ -402,6 +421,8 @@ public class KnetMinerInitializer
 	public String getDataPath ()
 	{
 		if ( this.dataPath != null ) return dataPath;
+
+		// TODO:newConfig, KnetminerConfig has a field for this
 		return this.options.getString ( "DataPath" );
 	}
 
@@ -420,6 +441,9 @@ public class KnetMinerInitializer
 	public String getGraphTraverserFQN ()
 	{
 		if ( this.graphTraverserFQN != null ) return this.graphTraverserFQN;
+		// TODO:newConfig has some field named like traverserOptions for this. It is of type
+		// OptionsMap (or map, I don't remember), because the traverser needs flexibility with options, ie, 
+		// the old method of setting them as a map of key/value pairs 
 		return this.options.getOpt ( "GraphTraverserClass" );
 	}
 
@@ -442,12 +466,14 @@ public class KnetMinerInitializer
 	 */
 	public String getConfigXmlPath ()
 	{
+		// TODO:newConfig see above, the getter has to change name coherently with the field 
 		return configXmlPath;
 	}
 
 
 	public void setConfigXmlPath ( String configXmlPath )
 	{
+		// TODO:newConfig see above, the getter has to change name coherently with the field 
 		this.configXmlPath = configXmlPath;
 	}
 
@@ -457,6 +483,9 @@ public class KnetMinerInitializer
 	 */
 	public Set<String> getTaxIds()
 	{
+		// TODO:newConfig probably it's too complicated to allow for setting the species only, possibly get rid 
+		// of this pair of setter/getter, consumers will set it via KnetminerConfig
+
 		if ( this.taxIds != null ) return this.taxIds;
 		return this.taxIds = this.options.getOpt ( 
 			"SpeciesTaxId", Set.of (), s -> Set.of ( s.split ( "," ) ) 
@@ -465,6 +494,9 @@ public class KnetMinerInitializer
 	
 	public void setTaxIds ( Set<String> taxIds )
 	{
+		// TODO:newConfig probably it's too complicated to allow for setting the species only, possibly get rid 
+		// of this pair of setter/getter, consumers will set it via KnetminerConfig
+
 		this.taxIds = taxIds;
 	}
 
@@ -475,6 +507,7 @@ public class KnetMinerInitializer
 	 */
 	public OptionsMap getOptions ()
 	{
+		// TODO:newConfig, see above, the getter needs to match the new KnetminerConfig field
 		return options;
 	}	
 
@@ -486,6 +519,8 @@ public class KnetMinerInitializer
 	public AbstractGraphTraverser getGraphTraverser ()
 	{
 		if ( this.graphTraverser != null ) return graphTraverser;
+		
+		// TODO:newConfig, see above, KnetminerConfig has a field like traverserOptions where this map is available
 		
 		var optsCopy = new HashMap<> ( this.options );
 		String traverserFQN = this.getGraphTraverserFQN ();

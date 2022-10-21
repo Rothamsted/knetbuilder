@@ -63,7 +63,9 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 		return new ArgumentDefinition<?>[]
 		{
       new FileArgumentDefinition ( 
-    		"configXmlPath", 
+      	// TODO:newConfig, change name and description to this, as explained in KnetMinerInitializer  
+      	// do the same in the CLI module
+      	"configXmlPath",
     		OPT_DESCR_CONFIG_XML,
     		false, // required
     		true, // must exist
@@ -85,13 +87,17 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 				GraphTraverser.class.getName (), // default
 				false // canBeMultiple
 	    ),
-			new StringArgumentDefinition ( 
+			new StringArgumentDefinition (
+				// TODO:newConfig as explained in Knetminerinitializer, probably it's best to get rid of this
+				// which already comes from the config
 			  "SpeciesTaxIds", 
 			  OPT_DESCR_TAXIDS, 
 				false, // required
 				null, // default
 				true // canBeMultiple
 	    ),
+			// TODO:newConfig, remove, we cannot support KnetminerConfig this way. Maybe
+			// in future we will support a YAML string, but just maybe
 			new StringMappingPairArgumentDefinition ( 
 				"options", 
 				OPT_DESCR_OPTS,
