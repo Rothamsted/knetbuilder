@@ -62,7 +62,18 @@
 			<groupId>net.sourceforge.ondex.core</groupId>
 			<artifactId>lucene</artifactId>
 			<version>${project.version}</version>
-		</dependency>		
+		</dependency>	
+		
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-core</artifactId>
+	    </dependency>
+	    <dependency>
+			<groupId>uk.ac.rothamsted.knetminer</groupId>
+			<artifactId>server-datasource-ondexlocal</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	   	
 
 		<dependency>
 			<groupId>org.slf4j</groupId>

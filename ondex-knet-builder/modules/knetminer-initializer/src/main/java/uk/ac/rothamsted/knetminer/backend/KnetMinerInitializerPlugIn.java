@@ -3,9 +3,7 @@ package uk.ac.rothamsted.knetminer.backend;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,6 +14,7 @@ import net.sourceforge.ondex.args.FileArgumentDefinition;
 import net.sourceforge.ondex.args.StringArgumentDefinition;
 import net.sourceforge.ondex.args.StringMappingPairArgumentDefinition;
 import net.sourceforge.ondex.export.ONDEXExport;
+import rres.knetminer.datasource.ondexlocal.config.KnetminerConfiguration;
 
 /**
  * An Ondex plug-in wrapper, which defines the available options for the traverser (arguments,
@@ -30,7 +29,7 @@ import net.sourceforge.ondex.export.ONDEXExport;
 public class KnetMinerInitializerPlugIn extends ONDEXExport
 {
 	public static final String
-	  OPT_DESCR_CONFIG_XML = "The KnetMiner XML configuration file where to get options like traverser semantic motifs file.",
+	  OPT_DESCR_CONFIG_XML = "The KnetMiner YML configuration file where to get options like traverser semantic motifs file.",
 	  OPT_DESCR_DATA_PATH = "The data output path.",
 	  OPT_DESCR_TRAVERSER = "The FQN for the graph traverser class to be used, which has to be an instance of "
 	  	+ "AbstractGraphTraverser (see documentation).",
@@ -65,7 +64,7 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
       new FileArgumentDefinition ( 
       	// TODO:newConfig, change name and description to this, as explained in KnetMinerInitializer  
       	// do the same in the CLI module
-      	"configXmlPath",
+      	"configYmlPath",
     		OPT_DESCR_CONFIG_XML,
     		false, // required
     		true, // must exist
@@ -86,15 +85,6 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 				true, // required
 				GraphTraverser.class.getName (), // default
 				false // canBeMultiple
-	    ),
-			new StringArgumentDefinition (
-				// TODO:newConfig as explained in Knetminerinitializer, probably it's best to get rid of this
-				// which already comes from the config
-			  "SpeciesTaxIds", 
-			  OPT_DESCR_TAXIDS, 
-				false, // required
-				null, // default
-				true // canBeMultiple
 	    ),
 			// TODO:newConfig, remove, we cannot support KnetminerConfig this way. Maybe
 			// in future we will support a YAML string, but just maybe
@@ -117,35 +107,39 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 		KnetMinerInitializer initializer = new KnetMinerInitializer ();
 		initializer.setGraph ( this.graph );
 		
+		KnetminerConfiguration conf = KnetminerConfiguration.load ( ( String ) args.getUniqueValue ( "configYmlPath" ) );
+		
+		
 		// They are like: set if not null
 		// 
-		Optional.ofNullable ( trimToNull ( (String) args.getUniqueValue ( "configXmlPath" ) ) )
-		.ifPresent ( initializer::setConfigXmlPath );
+		Optional.ofNullable ( trimToNull ( conf.getConfigFilePath () ) )
+		.ifPresent ( initializer::setConfigYmlPath );
 		
-		Optional.ofNullable ( trimToNull ( (String) args.getUniqueValue ( "dataPath" ) ) )
+		Optional.ofNullable ( trimToNull ( conf.getDataDirPath () ) )
 		.ifPresent ( initializer::setDataPath );
 				
-		Optional.ofNullable ( trimToNull ( (String) args.getUniqueValue ( "graphTraverserFQN" ) ) )
+		Optional.ofNullable ( trimToNull ( conf.getGraphTraverserOptions ().getString ( "GraphTraverserClass" ) ) )
 		.ifPresent ( initializer::setGraphTraverserFQN );
 		
 		// Check not null and not empty, possibly translate to set and pass it to the initializer
-		Optional.ofNullable ( args.getObjectValueList ( "SpeciesTaxIds", String.class ) )
+		Optional.ofNullable ( conf.getServerDatasetInfo().getTaxIds() )
 		.filter ( ids -> !ids.isEmpty () )
 		.map ( HashSet::new )
 		.ifPresent ( initializer::setTaxIds );
 				
 		// Translate "key:value" strings into a map
-		Map<String, Object> opts = args.getObjectValueList ( "options", String.class )
-		.stream ()
-		.filter ( optStr -> optStr != null && !optStr.isEmpty () )
-		.map ( optStr -> optStr.split ( ":" ) )
-		.filter ( optArray -> optArray != null && optArray.length >= 2 )
-		.collect ( Collectors.toMap ( optArray -> optArray [ 0 ], optArray -> optArray [ 1 ] ) );
+		/*
+		 * Map<String, Object> opts = args.getObjectValueList ( "options", String.class
+		 * ) .stream () .filter ( optStr -> optStr != null && !optStr.isEmpty () ) .map
+		 * ( optStr -> optStr.split ( ":" ) ) .filter ( optArray -> optArray != null &&
+		 * optArray.length >= 2 ) .collect ( Collectors.toMap ( optArray -> optArray [ 0
+		 * ], optArray -> optArray [ 1 ] ) );
+		 */
 		
 		// opts here will override keys taken from configXmlPath. In turn, initializer's setters will 
 		// have priority on everything else
 		//
-		initializer.initKnetMinerData ( opts );
+		initializer.initKnetMinerData ( conf );
 	}
 
 	/**
