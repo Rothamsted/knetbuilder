@@ -12,6 +12,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
+import rres.knetminer.datasource.ondexlocal.config.KnetminerConfiguration;
 
 /**
  * A command-line (CLI) interface, which is another wrapper to the core. This allows for producing KnetMiner
@@ -63,7 +64,7 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 		paramLabel = "<path/to/XML>",		
 		description = KnetMinerInitializerPlugIn.OPT_DESCR_CONFIG_XML
 	)
-	private String configXmlPath;
+	private String configYmlPath;
 	
 	@Option (
 		names = { "-t", "--tax-id", "--taxid" },
@@ -82,7 +83,6 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 	
 	
-	@SuppressWarnings ( "unchecked" )
 	@Override
 	public Integer call ()
 	{
@@ -93,11 +93,8 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 		
 		initializer.setGraph ( graph );
 		
-		if ( configXmlPath != null ) initializer.setConfigXmlPath ( configXmlPath );
-		if ( dataPath != null ) initializer.setDataPath ( dataPath );	
-		if ( taxIds != null ) initializer.setTaxIds ( taxIds );
-		
-		initializer.initKnetMinerData ( (Map<String, Object>) (Map<String,?>) options );
+		KnetminerConfiguration conf = KnetminerConfiguration.load ( configYmlPath );
+		initializer.initKnetMinerData ( conf );
 		
 		return 0;
 	}
