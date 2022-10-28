@@ -144,7 +144,7 @@ public class ReactionHandler extends DefaultHandler
 		catch ( Exception ex )
 		{
 			ExceptionUtils.throwEx ( 
-				ex, "Error while parsing the BioPAX reaction: <%s>", bpaxReact.getUri ()  
+				ex, "Error while parsing the BioPAX reaction: <%s>: $cause", bpaxReact.getUri ()  
 			);
 		}
 	} // processReaction()
