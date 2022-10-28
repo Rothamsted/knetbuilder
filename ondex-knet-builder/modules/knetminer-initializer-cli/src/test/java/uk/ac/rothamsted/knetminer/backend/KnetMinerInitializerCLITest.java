@@ -32,8 +32,8 @@ public class KnetMinerInitializerCLITest
 		mavenBuildPath = mavenBuildPath.replace ( '\\', '/' );
 
 		// Maven copies test files here.
-		testCasePath = mavenBuildPath + "/test-classes/test-case";
-		testCaseOut = testCasePath + "/output-cli";		
+		testCasePath = mavenBuildPath + "/test-classes";
+		testCaseOut = testCasePath + "/test-case/output-cli";		
 	}
 		
 	@Test
@@ -42,15 +42,15 @@ public class KnetMinerInitializerCLITest
 		FileUtils.deleteQuietly ( new File ( testCaseOut ) );
 		
 		var exitCode = KnetMinerInitializerCLI.invoke (
-			"-i", testCasePath + "/poaceae-sample.oxl", 
+			"-i", testCasePath + "/test-case/poaceae-sample.oxl", 
 			"-d", testCaseOut,
-			"-c" , testCasePath + "/data-source-config.xml"
+			"-c" , testCasePath + "/config-test/dataset-cfg.yml"
 		);
 		
 		Assert.assertEquals ( "Wrong exit code!", 0, exitCode );
 		
-		assertTrue ( "Lucene output not found!", new File ( testCaseOut + "/index" ).exists () );
-		assertTrue ( "Traverser output not found!", new File ( testCaseOut + "/concepts2Genes.ser" ).exists () );
+		assertTrue ( "Lucene output not found!", new File ( testCasePath + "/config-test" + "/index" ).exists () );
+		assertTrue ( "Traverser output not found!", new File ( testCasePath + "/config-test" + "/concepts2Genes.ser" ).exists () );
 	}
 
 
@@ -61,17 +61,18 @@ public class KnetMinerInitializerCLITest
 		FileUtils.deleteQuietly ( new File ( testCaseOut ) );
 
 		var exitCode = KnetMinerInitializerCLI.invoke (
-			"-i", testCasePath + "/poaceae-sample.oxl", 
+			"-i", testCasePath + "/test-case/poaceae-sample.oxl", 
 			"-d", testCaseOut, 
 			"-o", "StateMachineFilePath=file:///" + testCasePath + "/SemanticMotifs.txt",  
 			"--tax-id", "4565",
-			"--tax-id", "3702"
+			"--tax-id", "3702",
+			"-c" , testCasePath + "/config-test/dataset-cfg.yml"
 		);
 		
 		Assert.assertEquals ( "Wrong exit code!", 0, exitCode );
 				
-		assertTrue ( "Lucene output not found!", new File ( testCaseOut + "/index" ).exists () );
-		assertTrue ( "Traverser output not found!", new File ( testCaseOut + "/concepts2Genes.ser" ).exists () );
+		assertTrue ( "Lucene output not found!", new File ( testCasePath + "/config-test" + "/index" ).exists () );
+		assertTrue ( "Traverser output not found!", new File ( testCasePath + "/config-test" + "/concepts2Genes.ser" ).exists () );
 			
 	}
 

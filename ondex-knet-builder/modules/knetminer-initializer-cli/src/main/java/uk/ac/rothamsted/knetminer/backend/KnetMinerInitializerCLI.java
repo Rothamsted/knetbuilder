@@ -93,7 +93,10 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 		
 		initializer.setGraph ( graph );
 		
-		KnetminerConfiguration conf = KnetminerConfiguration.load ( configYmlPath );
+		KnetminerConfiguration conf = null;
+		
+		if ( configYmlPath != null ) conf = KnetminerConfiguration.load ( configYmlPath );
+		
 		initializer.initKnetMinerData ( conf );
 		
 		return 0;
