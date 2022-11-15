@@ -27,6 +27,7 @@ import net.sourceforge.ondex.core.ONDEXGraphMetaData;
 import net.sourceforge.ondex.core.searchable.LuceneEnv;
 import net.sourceforge.ondex.logging.ONDEXLogger;
 import rres.knetminer.datasource.ondexlocal.config.KnetminerConfiguration;
+import uk.ac.ebi.utils.collections.OptionsMap;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.exceptions.UnexpectedValueException;
 import uk.ac.ebi.utils.io.SerializationUtils;
@@ -55,11 +56,7 @@ public class KnetMinerInitializer
 	
 	private ONDEXGraph graph;
 	
-	private String dataPath;
-	private String graphTraverserFQN;
 	private String configYmlPath;
-	private Set<String> taxIds;
-	
 	private KnetminerConfiguration config = null ;
 	
 	private LuceneEnv luceneMgr;
@@ -75,32 +72,33 @@ public class KnetMinerInitializer
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 
 	/**
-	 * Does all the initialisation work, by calling {@link #loadOptions()} first and then all the 
-	 * initXXX() methods.
+	 * Does all the initialisation work, by calling initXXX() methods.
 	 * 
-	 * @param overridingOptions if not null, overrides the options got from the {@link #getConfigXmlPath() config file}
-	 * via {@link #loadOptions()}.
+	 * @param overridingConfig if not null, sets up the Knetminer configuration to work with with this 
+	 * object and proceeds with the initialisation. If it's null, it gets the configuration from 
+	 * {@link #loadKnetminerConfiguration()}, that is, uses {@link #getConfigYmlPath() the configuration path}.
 	 * 
 	 */
 	public void initKnetMinerData ( KnetminerConfiguration overridingConfig )
 	{	
-		
 		if ( overridingConfig == null ) this.loadKnetminerConfiguration (); 
 		else this.config = overridingConfig;
+		
 		this.initLuceneData ();
 		this.initSemanticMotifData ();
 	}
 	
+	/**
+	 * Defaults to null, ie, loads the configuration from {@link #getConfigYmlPath()}.
+	 */
 	public void initKnetMinerData ()
 	{
 		this.initKnetMinerData ( null );
 	}
 
 	/**
-	 *  Populates {@link #getOptions()} with the variables defined in  
-	 *  the {@link #getConfigXmlPath() KnetMiner config file}. 
-	 *  
-	 *  Has no effect if the path is null (ie, relies entirely on {@link #getOptions()} in this case).  
+	 *	Loads a {@link KnetminerConfiguration} from {@link #getConfigYmlPath()}.
+	 *	The method has no effect if {@link #getKnetminerConfiguration()} is null.
 	 *  
 	 */
 	public void loadKnetminerConfiguration ()
@@ -130,39 +128,39 @@ public class KnetMinerInitializer
 	{
 		try 
 		{
-			if( getDataPath () == null )
-				throw new UnexpectedValueException ( "DataPath from options is null" );
+			String dataDirPath = this.config.getDataDirPath ();
+			if( dataDirPath == null ) throw new UnexpectedValueException ( "dataDirPath is null" );
 	
-			File indexFile = Paths.get ( getDataPath (), "index" ).toFile();
+			File indexFile = Paths.get ( dataDirPath, "index" ).toFile();
 
-	        // We don't have the OXL file path here, so, let's give up with checking its date. 
-	        // we can do that in the data building pipeline
-	        //
-	        if ( indexFile.exists() )
-	        {
-	      	  if ( !doReset ) {
-	      		log.info ( "Skipping Ondex/Lucene indexing and reusing existing index files" );
-	      		return;
-	      	  }
-	          log.info("Graph file updated since index last built, deleting old index");
-	          FileUtils.deleteDirectory ( indexFile );
-	        }
-      
-	        log.info ( "Building Lucene Index: " + indexFile.getAbsolutePath() );
-	        this.luceneMgr = new LuceneEnv ( indexFile.getAbsolutePath(), !indexFile.exists() );
-	        luceneMgr.addONDEXListener( new ONDEXLogger() ); // sends Ondex messages to the logger.
-	        luceneMgr.setONDEXGraph ( graph );
-	        luceneMgr.setReadOnlyMode ( true );
+      // We don't have the OXL file path here, so, let's give up with checking its date. 
+      // we can do that in the data building pipeline
+      //
+      if ( indexFile.exists() )
+      {
+    	  if ( !doReset ) {
+    		log.info ( "Skipping Ondex/Lucene indexing and reusing existing index files" );
+    		return;
+    	  }
+        log.info("Graph file updated since index last built, deleting old index");
+        FileUtils.deleteDirectory ( indexFile );
+      }
+  
+      log.info ( "Building Lucene Index: " + indexFile.getAbsolutePath() );
+      this.luceneMgr = new LuceneEnv ( indexFile.getAbsolutePath(), !indexFile.exists() );
+      luceneMgr.addONDEXListener( new ONDEXLogger() ); // sends Ondex messages to the logger.
+      luceneMgr.setONDEXGraph ( graph );
+      luceneMgr.setReadOnlyMode ( true );
 		
-		    log.info ( "Ondex graph indexed" );
-        } 
-	    catch (Exception e)
-	    {
-	      log.error ( "Error while loading/creating graph index: " + e.getMessage (), e );
-	      ExceptionUtils.throwEx (
-	      	RuntimeException.class, e, "Error while loading/creating graph index: %s", e.getMessage ()
-	      ); 
-	    }
+		  log.info ( "Ondex graph indexed" );
+    } 
+    catch (Exception e)
+    {
+      log.error ( "Error while loading/creating graph index: " + e.getMessage (), e );
+      ExceptionUtils.throwEx (
+      	RuntimeException.class, e, "Error while loading/creating graph index: %s", e.getMessage ()
+      ); 
+    }
 	}
 	
 	
@@ -236,7 +234,7 @@ public class KnetMinerInitializer
 	{
 		log.info ( "Initializing semantic motif data" );
 		
-		var dataPath = this.getDataPath ();
+		var dataPath = this.getDataDirPath ();
 		
 		File fileConcept2Genes = Paths.get ( dataPath, "concepts2Genes.ser" ).toFile ();
 		File fileGene2Concepts = Paths.get ( dataPath, "genes2Concepts.ser" ).toFile ();
@@ -380,49 +378,10 @@ public class KnetMinerInitializer
 	{
 		this.graph = graph;
 	}
-
-	/**
-	 * The directory where data are saved. This overrides the 'DataPath' {@link #getOptions() option}. Hence, you 
-	 * might either set this programmatically or use a {@link #getConfigXmlPath() config file}.  
-	 *  
-	 */
-	public String getDataPath ()
-	{
-		if ( this.dataPath != null ) return dataPath;
-		return this.config.getDatasetDirPath ();
-	}
-
-
-	public void setDataPath ( String dataPath )
-	{
-		this.dataPath = dataPath;
-	}
-
-	/**
-	 * The FQN name for the {@link AbstractGraphTraverser graph traverser} to be used for the 
-	 * {@link #getGraphTraverser()}. If left undefined, the 'GraphTraverserClass' {@link #getOptions() option}
-	 * will be used, if this is null too, the {@link GraphTraverser default traverser} will be used.
-	 *  
-	 */
-	public String getGraphTraverserFQN ()
-	{
-		if ( this.graphTraverserFQN != null ) return this.graphTraverserFQN;
-		return this.config.getGraphTraverserOptions ().getString( "GraphTraverserClass" );
-	}
-
-
-	public void setGraphTraverserFQN ( String graphTraverserFQN )
-	{
-		this.graphTraverserFQN = graphTraverserFQN;
-		this.graphTraverser = null;
-	}
 	
 	/**
-	 * The KnetMiner configuration file. This is is necessary to define various options related to 
-	 * KnetMiner, including {@link #getDataPath() data output directory} 
-	 * {@link #getSeedGenes() seed-related options} and traverser-related options like 'StateMachineFilePath'.
-	 * 
-	 * This is used by {@link #loadOptions()} to populate {@link #getOptions()}.
+	 * The path to the KnetMiner configuration file. This is used by {@link #loadKnetminerConfiguration()} and
+	 * indirectly, by {@link #initKnetMinerData()}. 
 	 * 
 	 * See the test directory in the Maven project for examples of this file.
 	 * 
@@ -438,26 +397,13 @@ public class KnetMinerInitializer
 		this.configYmlPath = configYmlPath;
 	}
 
-	/**
-	 * Get the set of NCBITaxon identifiers. These are either {@link #setTaxIds(Set) explicitly set} or 
-	 * come from the 'SpeciesTaxId' {@link #getOptions() option}. 
-	 */
-	public Set<String> getTaxIds()
-	{
-		if ( this.taxIds != null ) return this.taxIds;
-		
-		return this.taxIds = this.config.getServerDatasetInfo ().getTaxIds ();
-	}
-	
-	public void setTaxIds ( Set<String> taxIds )
-	{
-		this.taxIds = taxIds;
-	}
 
 	/**
-	 * The options coming from {@link #getConfigXmlPath()}. Once loaded, these can be overridden
-	 * programmatically. For some of the options, there are explicit setters hereby, eg, 
-	 * {@link #setDataPath(String)}. 
+	 * The Knetminer configuration used to manage the initialisation process.
+	 * 
+	 * @see {@link #initKnetMinerData(KnetminerConfiguration)}. This can be either passed at initialisation time, or
+	 * loaded from {@link #getConfigYmlPath()}.
+	 * 
 	 */
 	public KnetminerConfiguration getKnetminerConfiguration ()
 	{
@@ -472,13 +418,9 @@ public class KnetMinerInitializer
 	public AbstractGraphTraverser getGraphTraverser ()
 	{
 		if ( this.graphTraverser != null ) return graphTraverser;
-		var stateMachineFilePath = this.config.getGraphTraverserOptions ().getString ( "StateMachineFilePath" );
 		
-		Map<String, Object> optsCopy = new HashMap<> ();
-		String traverserFQN = this.getGraphTraverserFQN ();
-		if ( traverserFQN != null ) optsCopy.put ( "GraphTraverserClass", traverserFQN );
-		if ( stateMachineFilePath != null ) optsCopy.put ( "StateMachineFilePath", stateMachineFilePath );
-		return graphTraverser =  AbstractGraphTraverser.getInstance ( optsCopy );
+		OptionsMap traverserOpts = this.config.getGraphTraverserOptions ();
+		return graphTraverser =  AbstractGraphTraverser.getInstance ( traverserOpts );
 	}
 
 	public LuceneEnv getLuceneMgr ()
