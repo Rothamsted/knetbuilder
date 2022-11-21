@@ -1,7 +1,5 @@
 package uk.ac.rothamsted.knetminer.backend;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -12,7 +10,6 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
-import rres.knetminer.datasource.ondexlocal.config.KnetminerConfiguration;
 
 /**
  * A command-line (CLI) interface, which is another wrapper to the core. This allows for producing KnetMiner
@@ -51,34 +48,22 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 		description = KnetMinerInitializerPlugIn.OPT_DESCR_DATA_PATH
 	)
 	private String dataPath;
-	
-	@Option (
-		names = { "-g", "--traverser"},
-		paramLabel = "<class's FQN>",		
-		description = KnetMinerInitializerPlugIn.OPT_DESCR_TRAVERSER
-	)
-	private String graphTraverserFQN;
-	
+		
 	@Option (
 		names = { "-c", "--config"},
-		paramLabel = "<path/to/XML>",		
-		description = KnetMinerInitializerPlugIn.OPT_DESCR_CONFIG_XML
+		paramLabel = "<path/to/YML>",
+		description = KnetMinerInitializerPlugIn.OPT_DESCR_CONFIG_YML,
+		required = true
 	)
 	private String configYmlPath;
 	
 	@Option (
-		names = { "-t", "--tax-id", "--taxid" },
-		paramLabel = "<NCBITax ID>",		
-		description = KnetMinerInitializerPlugIn.OPT_DESCR_TAXIDS
+		names = { "-f", "--force"},		
+		description = "If true, reinitialises everything, independently on "
+			+ "whether data files exist and are more recent than the OXL file."
 	)
-	private Set<String> taxIds;
+	private boolean doForce = false;
 	
-	@Option (
-		names = { "-o", "--option"},
-		paramLabel = "<key=value>",		
-		description = KnetMinerInitializerPlugIn.OPT_DESCR_OPTS
-	)
-	private Map<String, String> options;	
 	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
 	
@@ -86,18 +71,23 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 	@Override
 	public Integer call ()
 	{
-		log.info ( "Loading the OXL: '{}'", this.oxlInputPath );
-		var graph = Parser.loadOXL ( oxlInputPath );
-		
 		KnetMinerInitializer initializer = new KnetMinerInitializer ();
+		log.info ( "Loading Knetminer configuration from: \"{}\"", this.configYmlPath );
+		initializer.setKnetminerConfiguration ( configYmlPath );
+
+		if ( this.dataPath != null )
+		{
+			log.info ( "Setting data dir to: \"{}\"", dataPath );
+			initializer.setDatDirPath ( dataPath );
+		}
 		
+		log.info ( "Loading the OXL from: \"{}\"", this.oxlInputPath );
+		initializer.setOxlFilePath ( oxlInputPath );
+		var graph = Parser.loadOXL ( oxlInputPath );
 		initializer.setGraph ( graph );
-		
-		KnetminerConfiguration conf = null;
-		
-		if ( configYmlPath != null ) conf = KnetminerConfiguration.load ( configYmlPath );
-		
-		initializer.initKnetMinerData ( conf );
+
+		log.info ( "Doing the data initialisation" );
+		initializer.initKnetMinerData ( this.doForce );
 		
 		return 0;
 	}

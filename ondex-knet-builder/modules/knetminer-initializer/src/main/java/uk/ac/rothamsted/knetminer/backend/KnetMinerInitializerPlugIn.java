@@ -29,14 +29,8 @@ import rres.knetminer.datasource.ondexlocal.config.KnetminerConfiguration;
 public class KnetMinerInitializerPlugIn extends ONDEXExport
 {
 	public static final String
-	  OPT_DESCR_CONFIG_XML = "The KnetMiner YML configuration file where to get options like traverser semantic motifs file.",
-	  OPT_DESCR_DATA_PATH = "The data output path.",
-	  OPT_DESCR_TRAVERSER = "The FQN for the graph traverser class to be used, which has to be an instance of "
-	  	+ "AbstractGraphTraverser (see documentation).",
-		OPT_DESCR_TAXIDS = "NCBITax's numerical identifiers for the specie to consider when fetching seed genes from the graph for the traversal."
-			+ " If it's empty, the value is got from the SpeciesTaxId option (set separately or in the config file)", 
-		OPT_DESCR_OPTS = "Options in the name:value format, which can be used provide further values to the explicit plug-in arguments and"
-			+ "to override or extend the options in the KnetMiner config file.";
+	  OPT_DESCR_CONFIG_YML = "The KnetMiner YML configuration file where to get options like traverser semantic motifs file.",
+	  OPT_DESCR_DATA_PATH = "The data output path. Default is taken from configYmlPath.";
 	
 		@Override
 	public String getId ()
@@ -65,8 +59,8 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
       	// TODO:newConfig, change name and description to this, as explained in KnetMinerInitializer  
       	// do the same in the CLI module
       	"configYmlPath",
-    		OPT_DESCR_CONFIG_XML,
-    		false, // required
+    		OPT_DESCR_CONFIG_YML,
+    		true, // required
     		true, // must exist
     		false, // isDir
     		false // canBeMultiple
@@ -78,24 +72,7 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
     		true, // must exist
     		true, // isDir
     		false // canBeMultiple
-    	),
-			new StringArgumentDefinition ( 
-			  "graphTraverserFQN", 
-				OPT_DESCR_TRAVERSER, 
-				true, // required
-				GraphTraverser.class.getName (), // default
-				false // canBeMultiple
-	    ),
-			// TODO:newConfig, remove, we cannot support KnetminerConfig this way. Maybe
-			// in future we will support a YAML string, but just maybe
-			new StringMappingPairArgumentDefinition ( 
-				"options", 
-				OPT_DESCR_OPTS,
-        false, // required 
-        "", // default
-        true, // multiple
-        ":" // separator
-			)
+    	)
 		};
 	}
 
@@ -112,34 +89,10 @@ public class KnetMinerInitializerPlugIn extends ONDEXExport
 		
 		// They are like: set if not null
 		// 
-		Optional.ofNullable ( trimToNull ( conf.getConfigFilePath () ) )
-		.ifPresent ( initializer::setConfigYmlPath );
-		
-		Optional.ofNullable ( trimToNull ( conf.getDataDirPath () ) )
-		.ifPresent ( initializer::setDataPath );
-				
-		Optional.ofNullable ( trimToNull ( conf.getGraphTraverserOptions ().getString ( "GraphTraverserClass" ) ) )
-		.ifPresent ( initializer::setGraphTraverserFQN );
-		
-		// Check not null and not empty, possibly translate to set and pass it to the initializer
-		Optional.ofNullable ( conf.getServerDatasetInfo().getTaxIds() )
-		.filter ( ids -> !ids.isEmpty () )
-		.map ( HashSet::new )
-		.ifPresent ( initializer::setTaxIds );
-				
-		// Translate "key:value" strings into a map
-		/*
-		 * Map<String, Object> opts = args.getObjectValueList ( "options", String.class
-		 * ) .stream () .filter ( optStr -> optStr != null && !optStr.isEmpty () ) .map
-		 * ( optStr -> optStr.split ( ":" ) ) .filter ( optArray -> optArray != null &&
-		 * optArray.length >= 2 ) .collect ( Collectors.toMap ( optArray -> optArray [ 0
-		 * ], optArray -> optArray [ 1 ] ) );
-		 */
-		
-		// opts here will override keys taken from configXmlPath. In turn, initializer's setters will 
-		// have priority on everything else
-		//
-		initializer.initKnetMinerData ( conf );
+		Optional.ofNullable ( trimToNull ( conf.getGraphTraverserOptions ().getString ( "dataPath" ) ) )
+		.ifPresent ( initializer::setKnetminerConfiguration );
+
+		initializer.initKnetMinerData ( true );
 	}
 
 	/**

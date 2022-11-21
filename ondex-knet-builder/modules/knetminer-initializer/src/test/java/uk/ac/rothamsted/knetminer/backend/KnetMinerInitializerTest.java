@@ -1,7 +1,6 @@
 package uk.ac.rothamsted.knetminer.backend;
 
 import static java.lang.String.format;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -10,15 +9,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -41,8 +35,7 @@ public class KnetMinerInitializerTest
 	
 	private static KnetMinerInitializer initializer;
 
-	private static String testCasePath;
-	private static String testCaseOut;
+	private static String datasetPath;
 	
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	
@@ -51,94 +44,75 @@ public class KnetMinerInitializerTest
 	public static void initKnetMinerInitializer() throws IOException
 	{
 		var mavenBuildPath = System.getProperty ( "maven.buildDirectory", "target" );
-		mavenBuildPath = Path.of ( mavenBuildPath ).toRealPath ().toString ();
+		mavenBuildPath = Path.of ( mavenBuildPath ).toAbsolutePath ().toString ();
 		mavenBuildPath = mavenBuildPath.replace ( '\\', '/' );
 
 		// Maven copies test files here.
-		testCasePath = mavenBuildPath + "/test-classes";
-		testCaseOut = testCasePath + "/output";
+		datasetPath = mavenBuildPath + "/test-classes/test-dataset";
 		
-		ONDEXGraph graph = Parser.loadOXL ( testCasePath + "/test-case/poaceae-sample.oxl" );
-		Assert.assertNotNull ( "graph not loaded!", graph );
-
+		ONDEXGraph graph = Parser.loadOXL ( datasetPath + "/data/poaceae-sample.oxl" );
 		
 		initializer = new KnetMinerInitializer ();
 		initializer.setGraph ( graph );
-		initializer.setConfigYmlPath ( testCasePath +"/config-test/dataset-cfg.yml" );
-		initializer.setDataPath ( testCaseOut );
+		initializer.setKnetminerConfiguration ( datasetPath +"/config/config.yml" );
 		
-		initializer.loadKnetminerConfiguration ();
+		initializer.initKnetMinerData ( true );
 	}
 	
 	@Test
-	public void testGetOptions ()
+	public void testGetConfig ()
 	{
+		var config = initializer.getKnetminerConfiguration ();
+				
+		assertNotNull ( "No configuration fetched!", config );
+		
+		assertEquals ( "Dataset path is wrong!", datasetPath, config.getDatasetDirPath () );
 		
 		assertEquals ( 
 			"Wrong value for StateMachineFilePath property!",
-			new File( "file:///" + testCasePath + "/config-test/config/SemanticMotifs.txt").getPath(),
-			new File(initializer.getKnetminerConfiguration ().getGraphTraverserOptions ().getString ( "StateMachineFilePath" )).getPath()
+			new File( "file:///" + datasetPath + "/config/SemanticMotifs.txt").getPath(),
+			new File ( config.getGraphTraverserOptions ().getString ( "StateMachineFilePath" )).getPath()
 		);
+		
 		assertTrue(
 			"Wrong value for StateMachineFilePath config property!",
-			initializer.getKnetminerConfiguration ().getServerDatasetInfo().containsTaxId("4565") 
+			config.getServerDatasetInfo().containsTaxId ( "4565" ) 
 		);
 	}
 	
 	@Test
 	public void testInitLuceneData ()
-	{
+	{		
+		// check Lucene index files exist
+		File luceneDir = new File ( datasetPath + "/data/index" );
+		assertTrue ( "Lucene dir not created!", luceneDir.exists () );
+		assertTrue ( "Lucene dir not a dir!", luceneDir.isDirectory () );
 		
-		initializer.initLuceneData ();
-		
-		// check Lucene index files exist, using testCaseOut
-		File testCaseOutFolder = new File ( testCaseOut );
-		File[] listOfFiles = testCaseOutFolder.listFiles ();
-		Assert.assertTrue ( "Index folder not created ", 
-			Arrays.asList ( listOfFiles )
-			.stream ()
-			.anyMatch (
-				file -> file.exists () && file.isDirectory () && ( file.getName ().endsWith ( "index" )
-		)));
-		
-		File indexFolder = new File ( testCaseOut + "/index/" );
-		File[] indexFiles = indexFolder.listFiles ();
-		Assert.assertTrue ( "Index files not created ",indexFiles.length > 0 );		
+		File[] idxFiles = luceneDir.listFiles ();
+		assertTrue ( "No file found in the Lucene dir!", idxFiles != null && idxFiles.length > 0 );
 	}
 	
 	@Test
 	public void testInitSemanticMotifData ()
-	{
-		initializer.initSemanticMotifData();
-		
-		Map<Integer, Set<Integer>> concepts2Genes = initializer.getConcepts2Genes ();
-		Map<Integer, Set<Integer>> genes2Concepts = initializer.getGenes2Concepts ();
-		Map<Pair<Integer, Integer>, Integer> genes2PathLengths = initializer.getGenes2PathLengths ();
-		
-		BiConsumer<String, Map<?, ?>> verifier = (name, map) -> {
+	{				
+		BiConsumer<String, Map<?, ?>> verifier = (name, map) -> 
+		{
 			assertNotNull ( String.format ( "%s is null!", name ), map );
 			assertFalse ( format ( "%s is empty!", name ), map.isEmpty () );
 			log.info ( "{} has {} mappings", name, map.size() );
 		};
 		
-		//verifier.accept ( "concepts2Genes", concepts2Genes );
-		//verifier.accept ( "genes2Concepts", genes2Concepts );
-		//verifier.accept ( "genes2PathLengths", genes2PathLengths );
+		verifier.accept ( "concepts2Genes", initializer.getConcepts2Genes () );
+		verifier.accept ( "genes2Concepts", initializer.getGenes2Concepts () );
+		verifier.accept ( "genes2PathLengths", initializer.getGenes2PathLengths () );
 		
-		
-		// check traverser files exist, using testCaseOut
-		File folder = new File ( testCaseOut );
-		
-		String[] traverserFileNames = (String[]) Stream.of ( folder.listFiles () )
-				.map ( File::getName )
-				.toArray ( String[]::new );
-		
+					
 		Stream.of ( "concepts2Genes", "genes2Concepts", "genes2PathLengths"  )
-		.map ( name -> name + ".ser" )
-		.forEach ( name -> 
+		.map ( name -> datasetPath + "/data/" + name + ".ser" )
+		.forEach ( path -> 
 			assertTrue ( 
-				format ( "Traverser File '%s' not created!", name ), 
-				ArrayUtils.contains ( traverserFileNames, name ) 
+				format ( "Traverser File '%s' not created!", path ), 
+				new File ( path ).exists () 
 			)
 		);
 				

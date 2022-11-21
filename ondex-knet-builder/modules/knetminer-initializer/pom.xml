@@ -76,8 +76,19 @@
 	   	
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
+			<!-- Re-routes slf4j to log4j V2 -->
+		 	<groupId>org.apache.logging.log4j</groupId>
+		 	<artifactId>log4j-slf4j-impl</artifactId>
+		</dependency>
+		<dependency>
+			<!-- Re-routes the old log4j to log4j V2 -->
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 
@@ -89,6 +100,17 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+				<groupId>net.sourceforge.ondex.core</groupId>
+				<artifactId>base</artifactId>
+				<version>${project.version}</version>
+				<exclusions>
+						<exclusion>
+								<groupId>org.slf4j</groupId>
+								<artifactId>slf4j-log4j12</artifactId>
+						</exclusion>
+				</exclusions>
+		</dependency>
 	</dependencies>
 
 	<build>

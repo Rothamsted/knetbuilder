@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.algorithm.graphquery.AbstractGraphTraverser;
-import net.sourceforge.ondex.algorithm.graphquery.GraphTraverser;
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
 import net.sourceforge.ondex.core.AttributeName;
 import net.sourceforge.ondex.core.ConceptClass;
@@ -56,12 +55,17 @@ public class KnetMinerInitializer
 	
 	private ONDEXGraph graph;
 	
-	private String configYmlPath;
-	private KnetminerConfiguration config = null ;
+	private KnetminerConfiguration config;
+	
+	private String dataDirPath;
+	private String oxlFilePath;
+	
 	
 	private LuceneEnv luceneMgr;
 	
-	private AbstractGraphTraverser graphTraverser;	
+	private AbstractGraphTraverser graphTraverser;
+	
+	private Set<ONDEXConcept> seedGenes;
 	
 	private Map<Integer, Set<Integer>> genes2Concepts;
 	private Map<Integer, Set<Integer>> concepts2Genes;
@@ -79,33 +83,17 @@ public class KnetMinerInitializer
 	 * {@link #loadKnetminerConfiguration()}, that is, uses {@link #getConfigYmlPath() the configuration path}.
 	 * 
 	 */
-	public void initKnetMinerData ( KnetminerConfiguration overridingConfig )
+	public void initKnetMinerData ( boolean doReset )
 	{	
-		if ( overridingConfig == null ) this.loadKnetminerConfiguration (); 
-		else this.config = overridingConfig;
-		
-		this.initLuceneData ();
-		this.initSemanticMotifData ();
+		this.initLuceneData ( doReset );
+		this.initSemanticMotifData ( doReset );
 	}
 	
-	/**
-	 * Defaults to null, ie, loads the configuration from {@link #getConfigYmlPath()}.
-	 */
 	public void initKnetMinerData ()
 	{
-		this.initKnetMinerData ( null );
+		initKnetMinerData ( false );
 	}
 
-	/**
-	 *	Loads a {@link KnetminerConfiguration} from {@link #getConfigYmlPath()}.
-	 *	The method has no effect if {@link #getKnetminerConfiguration()} is null.
-	 *  
-	 */
-	public void loadKnetminerConfiguration ()
-	{
-		if ( this.configYmlPath == null ) return;
-		config  = KnetminerConfiguration.load ( configYmlPath );
-	}
 	
 	/**
 	 * Defaults to false.
@@ -128,7 +116,7 @@ public class KnetMinerInitializer
 	{
 		try 
 		{
-			String dataDirPath = this.config.getDataDirPath ();
+			String dataDirPath = this.getDataDirPath ();
 			if( dataDirPath == null ) throw new UnexpectedValueException ( "dataDirPath is null" );
 	
 			File indexFile = Paths.get ( dataDirPath, "index" ).toFile();
@@ -176,15 +164,19 @@ public class KnetMinerInitializer
 	
 	public Set<ONDEXConcept> getSeedGenes ()
 	{
+		if ( this.seedGenes != null ) return seedGenes;
+		
 		String seedGenesPath = StringUtils.trimToNull ( getKnetminerConfiguration ().getSeedGenesFilePath () );
-		if ( seedGenesPath == null ) {
-			log.info ( "Initialising seed genes from TAXID list: {}", this.config.getServerDatasetInfo ()
-					.getTaxIds () );
-			return fetchSeedGenesFromTaxIds ();
+		if ( seedGenesPath == null )
+		{
+			log.info ( 
+				"Initialising seed genes from TAXID list: {}", this.config.getServerDatasetInfo ().getTaxIds ()
+			);
+			return this.seedGenes = fetchSeedGenesFromTaxIds ();
 		}
 		
 		log.info ( "Initialising seed genes from file: '{}' ", seedGenesPath );
-		return AbstractGraphTraverser.ids2Genes ( this.graph, seedGenesPath );
+		return this.seedGenes = AbstractGraphTraverser.ids2Genes ( this.graph, seedGenesPath );
 	}
 	
 	private Set<ONDEXConcept> fetchSeedGenesFromTaxIds ()
@@ -195,8 +187,7 @@ public class KnetMinerInitializer
 
 		Set<ONDEXConcept> genes = graph.getConceptsOfConceptClass ( ccGene );
 		
-		Set<String> taxIds = this.config.getServerDatasetInfo ()
-				.getTaxIds ();
+		Set<String> taxIds = this.config.getServerDatasetInfo ().getTaxIds ();
 		
 		return genes
 			.parallelStream ()
@@ -239,10 +230,13 @@ public class KnetMinerInitializer
 		File fileConcept2Genes = Paths.get ( dataPath, "concepts2Genes.ser" ).toFile ();
 		File fileGene2Concepts = Paths.get ( dataPath, "genes2Concepts.ser" ).toFile ();
 		File fileGene2PathLength = Paths.get ( dataPath, "genes2PathLengths.ser" ).toFile ();
-		
 
-		// Again, we don't have the OXL path here, so let's not check it.
-		if ( doReset )
+		File graphFile = new File ( this.getOxlFilePath () );
+		
+		if ( doReset || 
+			fileConcept2Genes.exists () && graphFile.exists () 
+			&& fileConcept2Genes.lastModified () < graphFile.lastModified () 
+		)
 		{
 			log.info ( "(Re)creating semantic motif files, as per doReset flag" );
 			fileConcept2Genes.delete ();
@@ -252,11 +246,8 @@ public class KnetMinerInitializer
 
 		if ( !fileConcept2Genes.exists () )
 		{
-			log.info ( "Generating semantic motif result files" );
-			var seedGenes = this.getSeedGenes ();
-			
-			
 			log.info ( "Creating semantic motif data" );
+			var seedGenes = this.getSeedGenes ();
 			
 			// We're going to need a lot of memory, so delete this in advance
 			// (CyDebugger might trigger this multiple times)
@@ -274,10 +265,9 @@ public class KnetMinerInitializer
 			// traversal. This option has no effect when the SM-based traverser is used.
 			graphTraverser.setOption ( "performanceReportFrequency", -1 );
 
-			log.info ( "Also, generate geneID//endNodeID & pathLength in HashMap genes2PathLengths..." );
-			var progressLogger = new PercentProgressLogger ( 
-				"{}% of paths stored", traverserPaths.values ().size () 
-			);
+			log.info ( "Generating semantic motif summary tables" );
+			var progressLogger = new PercentProgressLogger ( "{}% of paths stored", traverserPaths.values ().size () );
+			
 			for ( List<EvidencePathNode> paths : traverserPaths.values () )
 			{
 				// We dispose them after use, cause this is big and causing memory overflow issues
@@ -293,10 +283,11 @@ public class KnetMinerInitializer
 					ONDEXConcept con = (ONDEXConcept) path.getConceptsInPositionOrder ()
 						.get ( path.getConceptsInPositionOrder ().size () - 1 );
 
-					int lastConID = con.getId (); // endNode ID.
+					int lastConID = con.getId ();
 					int geneId = gene.getId ();
-					var gplKey = Pair.of ( geneId, lastConID );
-					genes2PathLengths.merge ( gplKey, pathLength, Math::min );
+					var gene2ConceptKey = Pair.of ( geneId, lastConID );
+					
+					genes2PathLengths.merge ( gene2ConceptKey, pathLength, Math::min );
 
 					genes2Concepts.computeIfAbsent ( geneId, thisGeneId -> new HashSet<> () )
 					.add ( lastConID );
@@ -310,6 +301,7 @@ public class KnetMinerInitializer
 				progressLogger.updateWithIncrement ();
 			} // for traverserPaths.values()
 
+			log.info ( "Dumping semantic motif summary tables on files, at \"{}\"", dataPath );
 			try
 			{
 				 SerializationUtils.serialize ( fileConcept2Genes, concepts2Genes );
@@ -378,24 +370,6 @@ public class KnetMinerInitializer
 	{
 		this.graph = graph;
 	}
-	
-	/**
-	 * The path to the KnetMiner configuration file. This is used by {@link #loadKnetminerConfiguration()} and
-	 * indirectly, by {@link #initKnetMinerData()}. 
-	 * 
-	 * See the test directory in the Maven project for examples of this file.
-	 * 
-	 */
-	public String getConfigYmlPath ()
-	{
-		return configYmlPath;
-	}
-
-
-	public void setConfigYmlPath ( String configYmlPath )
-	{
-		this.configYmlPath = configYmlPath;
-	}
 
 
 	/**
@@ -408,7 +382,47 @@ public class KnetMinerInitializer
 	public KnetminerConfiguration getKnetminerConfiguration ()
 	{
 		return config;
-	}	
+	}
+	
+	public void setKnetminerConfiguration ( KnetminerConfiguration config )
+	{
+		this.config = config;
+	}
+
+	public void setKnetminerConfiguration ( String configYmlPath )
+	{
+		this.setKnetminerConfiguration ( KnetminerConfiguration.load ( configYmlPath ) );
+	}
+	
+	
+	
+	public String getDataDirPath ()
+	{
+		return dataDirPath == null ? this.getKnetminerConfiguration ().getDataDirPath () : dataDirPath;
+	}
+
+
+
+	public void setDatDirPath ( String dataDirPath )
+	{
+		this.dataDirPath = dataDirPath;
+	}
+
+
+
+	public String getOxlFilePath ()
+	{
+		return oxlFilePath == null ? this.getKnetminerConfiguration ().getOxlFilePath () : oxlFilePath;
+	}
+
+
+
+	public void setOxlFilePath ( String oxlFilePath )
+	{
+		this.oxlFilePath = oxlFilePath;
+	}
+
+
 
 	/**
 	 * Uses {@link #getGraphTraverserFQN()} to initialise the graph traverser.
