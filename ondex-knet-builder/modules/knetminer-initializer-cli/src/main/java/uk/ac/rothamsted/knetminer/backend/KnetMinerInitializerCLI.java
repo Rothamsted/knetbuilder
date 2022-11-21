@@ -2,8 +2,8 @@ package uk.ac.rothamsted.knetminer.backend;
 
 import java.util.concurrent.Callable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import net.sourceforge.ondex.parser.oxl.Parser;
 import picocli.CommandLine;
@@ -65,7 +65,7 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 	private boolean doForce = false;
 	
 	
-	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
+	private Logger log = LogManager.getLogger ( this.getClass () ); 
 	
 	
 	@Override

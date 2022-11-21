@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.sourceforge.ondex.algorithm.graphquery.AbstractGraphTraverser;
 import net.sourceforge.ondex.algorithm.graphquery.nodepath.EvidencePathNode;
@@ -73,7 +73,7 @@ public class KnetMinerInitializer
 	
 	
 	
-	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+	private Logger log = LogManager.getLogger ( this.getClass () );
 
 	/**
 	 * Does all the initialisation work, by calling initXXX() methods.

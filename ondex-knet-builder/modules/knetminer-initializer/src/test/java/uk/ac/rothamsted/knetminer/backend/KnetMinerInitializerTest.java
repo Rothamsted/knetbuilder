@@ -13,9 +13,11 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
@@ -36,8 +38,8 @@ public class KnetMinerInitializerTest
 	private static KnetMinerInitializer initializer;
 
 	private static String datasetPath;
-	
-	private Logger log = LoggerFactory.getLogger ( this.getClass () );
+
+	private Logger log = LogManager.getLogger ( this.getClass () );
 	
 	
 	@BeforeClass
@@ -50,7 +52,10 @@ public class KnetMinerInitializerTest
 		// Maven copies test files here.
 		datasetPath = mavenBuildPath + "/test-classes/test-dataset";
 		
-		ONDEXGraph graph = Parser.loadOXL ( datasetPath + "/data/poaceae-sample.oxl" );
+		// The maven-dependency plug-in downloads this here and I don't know any way to change it
+		var oxlPath = mavenBuildPath + "/dependency/poaceae-sample.oxl";
+		
+		ONDEXGraph graph = Parser.loadOXL ( oxlPath );
 		
 		initializer = new KnetMinerInitializer ();
 		initializer.setGraph ( graph );

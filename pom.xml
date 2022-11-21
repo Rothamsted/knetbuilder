@@ -97,6 +97,7 @@
 			       	<artifactId>maven-dependency-plugin</artifactId>
 			       	<version>3.1.1</version>
          		</plugin>
+         		
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-compiler-plugin</artifactId>
@@ -107,11 +108,9 @@
                   <showWarnings>true</showWarnings>
                   <showDeprecation>true</showDeprecation>
                   <encoding>UTF-8</encoding>
-                  <!-- TODO: remove
-                  <fork>true</fork>
-                  <maxmem>4096m</maxmem> --> 
                </configuration>
             </plugin>
+            
 						<plugin>
 						  <groupId>org.apache.maven.plugins</groupId>
 						  <artifactId>maven-source-plugin</artifactId>

@@ -26,6 +26,12 @@
 		<!-- TODO: add more here -->
 	</developers>
 
+
+	<properties>
+		<!-- TODO: remove after migration to KNM -->
+		<knetminer.backend.version>2.0.1-SNAPSHOT</knetminer.backend.version>
+	</properties>
+
 	<dependencies>
 
 		<dependency>
@@ -51,6 +57,7 @@
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-core</artifactId>
+		    <scope>test</scope>
 		</dependency>
 		
 		<dependency>
@@ -140,18 +147,6 @@
 						<phase />
 					</execution>
 
-					<execution>
-						<id>assembly-bundle</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<descriptors>
-								<descriptor>src/main/assembly/bundle.xml</descriptor>
-							</descriptors>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 
@@ -167,6 +162,47 @@
 			  </configuration>
 			</plugin>
 			
+			
+	  	<plugin>
+	  		<artifactId>maven-dependency-plugin</artifactId>	  		
+	  		<executions>
+		  		<execution>
+		  			<phase>generate-test-resources</phase>
+		  			<goals><goal>unpack</goal></goals>
+						<configuration>
+				    	<artifactItems>
+				       	<!--  Download some reference test data, see https://github.com/Rothamsted/knetminer-backend/tree/master/test-data-server -->
+				      	<artifactItem>
+									<groupId>uk.ac.rothamsted.knetminer.backend</groupId>
+									<artifactId>test-data-server</artifactId>
+									<version>${knetminer.backend.version}</version>
+									<includes>poaceae-sample.oxl</includes>
+				        </artifactItem>
+				      </artifactItems>  			
+						</configuration>
+		  		</execution>
+	  		</executions>
+	  	</plugin>
+			
+			
+			
+			<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-jar-plugin</artifactId>
+		    <executions>
+		    		<execution>
+		        <goals>
+		        	<!-- Used by the CLI -->
+		          <goal>test-jar</goal>
+		        </goals>
+				    <configuration>
+				    	<includes>
+				    		<include>test-dataset/config/**</include>
+				    	</includes>
+				    </configuration>
+		      </execution>
+		    </executions>
+		  </plugin>				
 
 		</plugins>
 

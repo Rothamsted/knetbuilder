@@ -1,7 +1,8 @@
 # See TODO for a description of the configuration format
 #
 
-oxl: data/poaceae-sample.oxl
+oxl: "${project.build.directory}/dependency/poaceae-sample.oxl"
+
 
 "dataset @merge":
   id: aratiny
