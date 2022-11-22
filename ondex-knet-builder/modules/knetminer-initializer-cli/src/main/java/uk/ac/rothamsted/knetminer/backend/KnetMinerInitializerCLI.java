@@ -45,14 +45,14 @@ public class KnetMinerInitializerCLI implements Callable<Integer>
 	@Option (
 		names = { "-d", "--data" },
 		paramLabel = "<path/to/dir>",		
-		description = KnetMinerInitializerPlugIn.OPT_DESCR_DATA_PATH
+		description = "The data output path. Default is taken from configYmlPath."
 	)
 	private String dataPath;
 		
 	@Option (
 		names = { "-c", "--config"},
 		paramLabel = "<path/to/YML>",
-		description = KnetMinerInitializerPlugIn.OPT_DESCR_CONFIG_YML,
+		description = "The KnetMiner YML configuration file where to get options like traverser semantic motifs file.",
 		required = true
 	)
 	private String configYmlPath;
