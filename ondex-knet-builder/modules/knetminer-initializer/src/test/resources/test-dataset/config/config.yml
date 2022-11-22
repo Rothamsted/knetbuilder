@@ -1,10 +1,11 @@
-# See TODO for a description of the configuration format
+# See TODO for a description of the configuration format. If you want to test the CLI,
+# DO NOT use this file, use test-config.yml
 #
 
 oxl: "${project.build.directory}/dependency/poaceae-sample.oxl"
 
 
-"dataset @merge":
+"dataset":
   id: aratiny
   title: Aratiny dataset
   version: 5.0.1-SNAPSHOT

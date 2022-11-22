@@ -55,9 +55,9 @@
 		</dependency>
 		
 		<dependency>
-		    <groupId>org.apache.logging.log4j</groupId>
-		    <artifactId>log4j-core</artifactId>
-		    <scope>test</scope>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-core</artifactId>
+	    <scope>test</scope>
 		</dependency>
 		
 		<dependency>
@@ -108,15 +108,15 @@
 		</dependency>
 
 		<dependency>
-				<groupId>net.sourceforge.ondex.core</groupId>
-				<artifactId>base</artifactId>
-				<version>${project.version}</version>
-				<exclusions>
-						<exclusion>
-								<groupId>org.slf4j</groupId>
-								<artifactId>slf4j-log4j12</artifactId>
-						</exclusion>
-				</exclusions>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>base</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
@@ -196,8 +196,10 @@
 		          <goal>test-jar</goal>
 		        </goals>
 				    <configuration>
+				    	<!-- Take it from the sources, cause the generated files are filtered/interpolated -->
+				    	<testClassesDirectory>${project.basedir}/src/test/resources</testClassesDirectory>
 				    	<includes>
-				    		<include>test-dataset/config/**</include>
+				    		<include>test-dataset/**</include>
 				    	</includes>
 				    </configuration>
 		      </execution>

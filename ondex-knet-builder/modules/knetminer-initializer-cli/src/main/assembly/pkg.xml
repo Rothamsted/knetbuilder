@@ -17,11 +17,22 @@
 		  <!-- Enable only if non-empty <outputFileNameMapping></outputFileNameMapping> -->
 		  <outputDirectory>/lib</outputDirectory>
 		  <unpack>false</unpack>
-		  <scope>runtime</scope>
 		  <excludes>
-		    <!--  This comes in due some indirect dependency. We want to use logback and hence the exclusion  -->
+		    <!--  This comes in due some indirect dependency. We want to use log4j and hence the exclusion  -->
 				<exclude>commons-logging:commons-logging</exclude> 
 		  </excludes>
+		</dependencySet>
+		
+		<dependencySet>
+			<includes>
+				<include>${project.groupId}:knetminer-initializer:jar:tests:${project.version}</include>
+			</includes>
+		  <unpack>true</unpack>
+		  <unpackOptions>
+		  	<excludes>
+		  		<exclude>META-INF/**</exclude>
+		  	</excludes>
+		  </unpackOptions>
 		</dependencySet>
 	</dependencySets> 
   
@@ -52,11 +63,14 @@
 		</fileSet>
 		
 		<fileSet>
-			<directory>target/dependency/rdf-export-2-plugin</directory>
-			<outputDirectory></outputDirectory>
+			<directory>target/dependency</directory>
+			<outputDirectory>test-dataset/data</outputDirectory>
+			<includes>
+				<include>poaceae-sample.oxl</include>
+			</includes>
       <fileMode>0644</fileMode>
-			<directoryMode>0755</directoryMode>      
 		</fileSet>
+		
 		
   </fileSets>
 

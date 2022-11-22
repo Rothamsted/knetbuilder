@@ -16,7 +16,7 @@
 	</description>
 
 	<properties>
-		<!-- TODO: remove after migration to KNM -->
+		<!-- TODO: remove various things after migration to KNM (this, the assembly exclusions, the redundant dependencies) -->
 		<knetminer.backend.version>2.0.1-SNAPSHOT</knetminer.backend.version>
 	</properties>
 
@@ -29,6 +29,13 @@
 			<version>${project.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>workflow-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		
 		<!-- 
 			Use log4j as concrete logger. 
 			All log bridges are in the core module.
@@ -36,7 +43,6 @@
 		<dependency>
 	    <groupId>org.apache.logging.log4j</groupId>
 	    <artifactId>log4j-core</artifactId>
-	    <scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -61,6 +67,37 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+			<artifactId>base</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>jutils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.ondex.core</groupId>
+   		<artifactId>tools</artifactId>
+			<version>${project.version}</version>
+   	</dependency>
+		
+
+		<!-- Needed here, so we can include it in the assembly -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>knetminer-initializer</artifactId>
+			<version>${project.version}</version>
+			<classifier>tests</classifier>
+		</dependency>		
 
 	</dependencies>
 
@@ -101,13 +138,24 @@
 					</archiverConfig>
 				</configuration>
 				<executions>
-        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+        	<!-- 
+        		These come from the parent and they're replaced with the distro assembly below 
+        		TODO: remove after migration out of Ondex
+        	-->
+					<execution>
+						<id>make-assembly-wf-descriptor</id>
+						<phase />
+					</execution>
+					<execution>
+						<id>make-assembly-packaged_with_jars</id>
+						<phase />
+					</execution>
+					<execution>
+						<id>jar-with-module-descriptor</id>
+						<phase />
+					</execution>
 					<execution>
 						<id>make-cli-distro</id>
-						<phase />
-					</execution>    
-					<execution>
-						<id>pkg</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>

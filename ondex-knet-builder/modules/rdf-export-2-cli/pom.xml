@@ -171,13 +171,21 @@
 					</archiverConfig>
 				</configuration>
 				<executions>
-        	<!-- This comes from the parent and it's replaced with the assembly-bundle execution -->
+        	<!-- These come from the parent and they're replaced with the distro assembly below -->
+					<execution>
+						<id>make-assembly-wf-descriptor</id>
+						<phase />
+					</execution>
+					<execution>
+						<id>make-assembly-packaged_with_jars</id>
+						<phase />
+					</execution>
+					<execution>
+						<id>jar-with-module-descriptor</id>
+						<phase />
+					</execution>
 					<execution>
 						<id>make-cli-distro</id>
-						<phase />
-					</execution>    
-					<execution>
-						<id>pkg</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
