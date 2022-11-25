@@ -31,8 +31,6 @@
 		<module>rdf-export-2-cli</module>
 		<module>rdf2oxl</module>
 		<module>neo4j-export</module>
-	    <module>knetminer-initializer</module>
-	    <module>knetminer-initializer-cli</module>
 		
   </modules>
 
