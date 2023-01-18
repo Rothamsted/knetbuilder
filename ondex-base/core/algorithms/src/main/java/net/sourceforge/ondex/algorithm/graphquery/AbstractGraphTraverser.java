@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -132,18 +133,19 @@ public abstract class AbstractGraphTraverser
 	 */
 	public static Set<ONDEXConcept> ids2Genes ( ONDEXGraph graph, Set<Pair<String, String>> geneAccessions ) 
 	{
-		// src||acc
-		Set<String> rawAccs = geneAccessions
+		// src||acc, with match count
+		Map<String, Integer> rawAccs = geneAccessions
 			.parallelStream ()
 			.filter ( pair -> StringUtils.trimToNull ( pair.getRight () ) != null )
 			.map ( pair -> pair.getRight ().trim () + "||" + pair.getLeft () )
-			.collect ( Collectors.toSet () );
+			.collect ( Collectors.toMap ( Function.identity (), k -> 0 ) );
 
-		Set<String> noSrcAccs = geneAccessions
+		// again, with match count
+		Map<String, Integer> noSrcAccs = geneAccessions
 			.parallelStream ()
 			.filter ( pair -> StringUtils.trimToNull ( pair.getRight () ) == null )
 			.map ( Pair::getLeft )
-			.collect ( Collectors.toSet () );
+			.collect ( Collectors.toMap ( Function.identity (), k -> 0 ) );
 
 		ConceptClass geneCC = graph.getMetaData ().getConceptClass ( "Gene" );
 		
@@ -155,11 +157,23 @@ public abstract class AbstractGraphTraverser
 			.anyMatch ( acc ->
 			{
 				String accStr = acc.getAccession ();
-				if ( noSrcAccs.contains ( accStr ) ) return true;
-				if ( rawAccs.contains ( acc.getElementOf ().getId () + "||" + accStr ) ) return true;
+				
+				// see if the current gene is in the input, if it is, update how many matches you got and return true
+				if ( noSrcAccs.computeIfPresent ( accStr, (k, ct) -> ++ct ) != null ) return true;
+				if ( rawAccs.computeIfPresent ( acc.getElementOf ().getId () + "||" + accStr, (k, ct) -> ++ct ) != null )
+					return true;
+				
 				return false;
 			})
 		).collect ( Collectors.toSet () );
+		
+		// Issue warning for not-found genes
+		Stream.of ( rawAccs, noSrcAccs ).forEach ( accsMap ->
+			accsMap.forEach ( (accStr, matches ) -> { 
+				if ( matches == 0 ) clog.warn ( "No match for the seed gene entry {}", accStr ); 
+				if ( matches > 1 ) clog.warn ( "More than 1 match ({}) for the seed gene entry {}", matches, accStr ); 
+			})
+		);
 		
 		return seedGenes;
 	}

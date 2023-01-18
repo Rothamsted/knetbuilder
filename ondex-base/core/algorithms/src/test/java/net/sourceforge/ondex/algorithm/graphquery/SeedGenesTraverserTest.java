@@ -53,8 +53,7 @@ public class SeedGenesTraverserTest
 		"gene4\tSRC1\n" +
 		"gene6\n" + 
 		"gene7\tSRC1\n" + 
-		"gene20304";
-
+		"gene20304\n";
 	
 	@BeforeClass
 	public static void init () throws Exception
