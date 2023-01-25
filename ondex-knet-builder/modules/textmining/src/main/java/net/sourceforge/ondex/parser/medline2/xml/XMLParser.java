@@ -100,7 +100,7 @@ public class XMLParser {
 
 	
 	/** The XML content of these elements is wrapped with CDATA blocks, to avoid XML parser problems */
-	private final static String [] CDATA_ELEMENTS = new String[] { "ArticleTitle", "AbstractText" };
+	private final static String [] CDATA_ELEMENTS = new String[] { "ArticleTitle", "AbstractText", "Citation" };
 
 	/** Matches stuff like {@code <MedlineDate>2000 Spring</MedlineDate>} in the hope to extrat the year */
 	private final static RegEx MEDLINE_YEAR_RE = new RegEx ( "^([0-9]{4}).*$" );
