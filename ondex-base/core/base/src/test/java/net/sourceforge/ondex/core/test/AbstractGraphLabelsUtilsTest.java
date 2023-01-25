@@ -131,6 +131,40 @@ public abstract class AbstractGraphLabelsUtilsTest
 		
 		assertEquals ( "Wrong label picked!", "AB", GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept ) );
 	}
+	
+	/**
+	 * Tricks with TaXXX and isPreferred, see the code
+	 */
+	@Test
+	public void testSpeciePrefixGeneNamesRealCase()
+	{
+		geneConcept.createConceptName ( "TaE12A11", true );
+		geneConcept.createConceptName ( "E12A11", false );
+		geneConcept.createConceptName ( "TaMFT", true );
+		geneConcept.createConceptName ( "MFT", true );
+		geneConcept.createConceptName ( "MFT2", false ); 
+		
+		assertEquals ( 
+			"Wrong label picked (with gene specie prefix)!",
+			"TaMFT", 
+			GraphLabelsUtils.getBestConceptLabelWithGeneSpeciePrefix ( geneConcept )
+		);
+		
+		// You get MFT here only if it's isPreferred too. Maybe, in a case like this you 
+		// don't want to mark TaXXX as preferred, since getBestConceptLabelWithGeneSpeciePrefix() 
+		// (ie, the label for the network view) gives them priority independently on isPreferred,
+		// while you don't want TaXXX to win over shorter names in getBestConceptLabel()
+		// (ie, the gene view).
+		//
+		assertEquals ( 
+			"Wrong label picked (without gene specie prefix)!",
+			"MFT", 
+			GraphLabelsUtils.getBestConceptLabel ( geneConcept )
+		);
+	}
+
+	
+	
 	/**
 	 * Tests Rothamsted/knetminer#584
 	 */

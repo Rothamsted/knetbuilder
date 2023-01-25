@@ -304,8 +304,8 @@ public class GraphLabelsUtils
 	 *   <li>other aspects (shortest names, natural string order)</li>
 	 * </ol>
 	 * 
-	 * @param useGeneSpeciePrefix. use {@link #isGeneNameSpeciePrefixed(String)} as first criterion of name priority.
-	 * That is, when this flag is set names like TmABC are privileged. Then it uses the other sorting criteria. 
+	 * @param useGeneSpeciePrefix use {@link #isGeneNameSpeciePrefixed(String)} as first criterion of name priority.
+	 * That is, when this flag is set, names like TmABC are privileged. Then it uses the other sorting criteria. 
 	 * 
 	 * This method version is for internal use in this class, since you don't want to use the useGeneSpeciePrefix
 	 * explicitly. In fact, this feature isn't used by default, it's only used by 
