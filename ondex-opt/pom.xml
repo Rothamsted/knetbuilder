@@ -17,7 +17,9 @@
    <name>ONDEX Optional Components</name>
  
    <modules>
+   		<!-- TODO: remove, was moved to ondex-old 
       <module>core-opt</module>
+      -->
       <module>modules-opt</module>
    </modules>
 
