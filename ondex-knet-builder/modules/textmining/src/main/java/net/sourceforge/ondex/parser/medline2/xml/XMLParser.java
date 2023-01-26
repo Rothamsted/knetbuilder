@@ -187,7 +187,8 @@ public class XMLParser {
 			try 
 			{
 				String efetchString = Parser.EFETCH_WS + accessionGroup;
-				URL efetch = new URL ( efetchString );
+				log.trace ( "Calling E-Fetch with: {}", efetchString );
+				URL efetch = new URL ( efetchString );				
 
 				// As said above, this needs to be tried multiple times.
 				attempter.executeChecked ( () -> 
