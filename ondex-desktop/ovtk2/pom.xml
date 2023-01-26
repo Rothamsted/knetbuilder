@@ -151,7 +151,7 @@
       <dependency>
          <groupId>org.apache.xmlgraphics</groupId>
          <artifactId>fop</artifactId>
-         <version>0.95</version>
+         <version>2.2</version>
       </dependency>
       <dependency>
          <groupId>commons-logging</groupId>
@@ -242,12 +242,15 @@
          <version>1.6.1</version>
       </dependency>
 
+      
+      <!-- TODO: try to align everything to 1.4, as per main POM -->
+      <!-- TODO: remove? Was used in Kegg
       <dependency>
          <groupId>org.apache.axis</groupId>
          <artifactId>axis</artifactId>
-         <!-- TODO: try to align everything to 1.4, as per main POM -->
          <version>1.4</version>
       </dependency>
+      -->
 
       <dependency>
          <groupId>axis</groupId>

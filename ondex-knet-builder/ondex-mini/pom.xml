@@ -176,8 +176,10 @@
    <dependencies>
    		<!-- 
    			Dependencies for maven-jar-plugin
-   			TODO: what does this mean? 
+   			TODO: what does this mean?
+   			TODO: remove? 
    		-->
+      <!-- 
       <dependency>
          <groupId>commons-lang</groupId>
          <artifactId>commons-lang</artifactId>
@@ -188,6 +190,7 @@
          <artifactId>plexus-utils</artifactId>
          <version>1.1</version>
       </dependency>
+      -->
 
 
       <!-- Dependencies required for compilation -->     

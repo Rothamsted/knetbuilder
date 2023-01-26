@@ -78,13 +78,6 @@
          <scope>provided</scope>
          <type>jar</type>
       </dependency>
-      <!-- TODO: remove? -->
-      <!-- dependency>
-         <groupId>stax</groupId>
-         <artifactId>stax-api</artifactId>
-         <version>1.0.1</version>
-         <type>jar</type>
-      </dependency -->
       <dependency>
          <groupId>org.codehaus.woodstox</groupId>
          <artifactId>woodstox-core-lgpl</artifactId>

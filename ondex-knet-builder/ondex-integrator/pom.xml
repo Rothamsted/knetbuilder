@@ -58,14 +58,6 @@
          <scope>compile</scope>
       </dependency>
 
-			<!-- TODO: remove
-      <dependency>
-         <groupId>net.sourceforge.ondex.modules</groupId>
-         <artifactId>kegg</artifactId>
-         <version>${project.version}</version>
-         <scope>compile</scope>
-      </dependency> -->
-
       <dependency>
          <groupId>net.sourceforge.ondex.modules</groupId>
          <artifactId>poplar</artifactId>

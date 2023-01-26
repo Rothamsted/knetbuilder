@@ -34,43 +34,6 @@
 		
   </modules>
 
-	<!-- 
-		TODO: remove, if something is needed from reporting, it's only the javadoc (spawns the 
-		plugin descriptors).
-	 -->
-	<!-- reporting>
-  	<plugins>
-			<plugin>
-			  <groupId>org.codehaus.mojo</groupId>
-			  <artifactId>taglist-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-			  <groupId>org.apache.maven.plugins</groupId>
-			  <artifactId>maven-surefire-report-plugin</artifactId>
-			</plugin>
-			<plugin>
-			  <groupId>org.apache.maven.plugins</groupId>
-			  <artifactId>maven-project-info-reports-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>${maven.pmd.plugin.version}</version>
-				<configuration>
-				   <linkXref>true</linkXref>
-				   <sourceEncoding>ISO-8859-1</sourceEncoding>
-				   <minimumTokens>100</minimumTokens>
-				   <targetJdk>${java.version}</targetJdk>
-				</configuration>
-			</plugin>
-			<plugin>
-			 <groupId>org.apache.maven.plugins</groupId>
-			 <artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-  	</plugins>
-  	
-	</reporting -->
-
   <build>		
 		<plugins>
     	<plugin>

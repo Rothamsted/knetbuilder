@@ -14,7 +14,6 @@
 
    <name>ONDEX Optional Modules</name>
 
-	 <!-- TODO: Move unused ones to old/ -->
    <modules>
       <module>arabidopsis</module>
       <module>aries</module>
@@ -25,7 +24,6 @@
       <module>decypher</module>
       <module>enzymatics</module>
       <module>experimental</module>
-      <!--  module>expression</module -->
       <module>grain</module>
       <module>graphalgo</module>
       <module>graph-query</module>
@@ -33,60 +31,21 @@
       <module>habitat</module>
       <module>iah</module>
       <module>interaction</module>
-      <!-- module>kegg</module -->
       <module>legacy</module>
       <module>plants</module>
       <module>poplar</module>
       <module>prolog</module>
       <module>protein-structure</module>
-      <!--  module>psimi25</module -->
-      <!-- module>rdf</module -->
       <module>relevance</module>
-      <!--  module>sbml</module -->
       <module>taxonomy</module>
    </modules>
 
-	<!-- 
-		TODO: remove, if something is needed from reporting, it's only the javadoc (spawns the 
-		plugin descriptors).
-	 -->
-   <!-- reporting>
-      <plugins>
-         <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>taglist-maven-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-project-info-reports-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-pmd-plugin</artifactId>
-            <version>${maven.pmd.plugin.version}</version>
-            <configuration>
-               <linkXref>true</linkXref>
-               <sourceEncoding>ISO-8859-1</sourceEncoding>
-               <minimumTokens>100</minimumTokens>
-               <targetJdk>${java.version}</targetJdk>
-            </configuration>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-         </plugin>
-      </plugins>
-   </reporting -->
-
    <build>
       <plugins>
-         <plugin><!--
-				  TODO: doesn't work when you invoke compile/test-compile
-				-->
+         <plugin>
+		        <!--
+						  TODO: doesn't work when you invoke compile/test-compile
+						-->
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>

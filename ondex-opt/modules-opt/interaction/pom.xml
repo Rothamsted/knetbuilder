@@ -14,23 +14,4 @@
 
    <name>interaction</name>
 
-   <dependencies>
-
-   <!--
-     TODO: Remove. The code doesn't use it at all
-         
-     <dependency>
-			 <groupId>psidev.psi.mi</groupId>
-       <artifactId>psi25-xml</artifactId>
-	     <version>1.0-beta2</version>
-     </dependency> -->
-   </dependencies>
-   
-   <!-- TODO: this disappeared and psi25-xml was uploaded on our repo. Should be removed from the latter too -->
-   <!--   repositories>
-   	<repository>
-	   	<id>EBI-IntAct</id>
-	   	<url>https://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
-		</repository>   	
-   </repositories -->
 </project>

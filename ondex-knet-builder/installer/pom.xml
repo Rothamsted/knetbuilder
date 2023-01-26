@@ -407,20 +407,7 @@
                            <includes>**/*</includes>
                            <destFileName>json-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
-                        
-                        <!-- TODO: remove
-                        <artifactItem>
-                           <groupId>net.sourceforge.ondex.modules</groupId>
-                           <artifactId>kegg</artifactId>
-                           <version>${project.version}</version>
-                           <classifier>jar-with-dependencies</classifier>
-                           <type>jar</type>
-                           <overWrite>true</overWrite>
-                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
-                           <includes>**/*</includes>
-                           <destFileName>kegg-jar-with-dependencies.jar</destFileName>
-                        </artifactItem> -->
-                        
+                                                
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>legacy</artifactId>
