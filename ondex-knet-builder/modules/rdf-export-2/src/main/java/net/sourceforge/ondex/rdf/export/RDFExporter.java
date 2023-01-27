@@ -112,7 +112,7 @@ public class RDFExporter
 		RDFXFactory newBatch = super.handleNewBatch ( currentBatch, forceFlush );
 		if ( newBatch == currentBatch ) return currentBatch;
 		
-		Model currentModel = currentBatch.getJenaModel ();
+		Model currentModel = currentBatch.getGraphModel ();
 		triplesCount += currentModel.size ();
 		log.debug ( "{} RDF triples submitted for export", triplesCount );
 		

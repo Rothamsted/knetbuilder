@@ -74,25 +74,14 @@
 		<dependency>
 			<groupId>info.marcobrandizi</groupId>
 			<artifactId>rdfutils-jena</artifactId>
+			<!-- TODO: update the parent -->
+			<version>4.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>uk.ac.ebi.fg</groupId>
 			<artifactId>java2rdf</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-rdf-jena</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<exclusions>
-				<!-- TODO: no longer needed in 1.0-SNAPSHOT -->
-				<exclusion>
-					<groupId>org.apache.jena</groupId>
-					<artifactId>jena-osgi</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>4.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

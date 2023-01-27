@@ -1,12 +1,12 @@
 package net.sourceforge.ondex.rdf.export.mappers;
 
-import static info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils.COMMUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
+import static uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils.RDF_GRAPH_UTILS;
 
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.rdf.api.Graph;
+import org.apache.jena.rdf.model.Model;
 
 import info.marcobrandizi.rdfutils.XsdMapper;
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
@@ -56,7 +56,7 @@ public class AttributeNameMapper extends MetadataMapper<AttributeName>
 		if ( !super.map ( aname, params ) ) return false;
 		
 		RdfMapperFactory xfact = this.getMapperFactory ();
-		Graph graphModel = xfact.getGraphModel ();
+		Model graphModel = xfact.getGraphModel ();
 		RdfUriGenerator<AttributeName> uriGen = this.getRdfUriGenerator ();
 
 		String myiri = uriGen.getUri ( aname, params );
@@ -68,7 +68,7 @@ public class AttributeNameMapper extends MetadataMapper<AttributeName>
 		String parentIri = parent == null
 			? iri ( "bk:attribute" ) 
 			: uriGen.getUri ( parent );
-		COMMUTILS.assertResource ( graphModel, myiri, iri ( "rdfs:subPropertyOf" ), parentIri );
+		RDF_GRAPH_UTILS.assertResource ( graphModel, myiri, iri ( "rdfs:subPropertyOf" ), parentIri );
 		
 		String dataTypeIri = Optional.ofNullable ( aname.getDataType () )
 			.map ( clazz -> XsdMapper.dataTypeIri ( clazz ) )
@@ -76,7 +76,7 @@ public class AttributeNameMapper extends MetadataMapper<AttributeName>
 		
 		// The range, if a proper mapping exists.
 		if ( dataTypeIri != null ) 
-			COMMUTILS.assertResource ( graphModel, myiri, iri ( "rdfs:range" ), dataTypeIri );
+			RDF_GRAPH_UTILS.assertResource ( graphModel, myiri, iri ( "rdfs:range" ), dataTypeIri );
 		
 		return true;
 	}

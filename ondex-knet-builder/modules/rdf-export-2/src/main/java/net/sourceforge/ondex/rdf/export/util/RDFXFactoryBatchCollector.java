@@ -24,7 +24,7 @@ import uk.ac.ebi.utils.threading.batchproc.ItemizedSizedBatchCollector;
 public class RDFXFactoryBatchCollector implements ItemizedSizedBatchCollector<RDFXFactory, Object>
 {
 	/**
-	 * It's a delegate to this, so that the {@link RDFXFactory#getJenaModel() exporter factory model}
+	 * It's a delegate to this, so that the {@link RDFXFactory#getGraphModel() exporter factory model}
 	 * can be used. It has a default batch size of 50000.
 	 */
 	private ModelBatchCollector modelCollector = new ModelBatchCollector ( 50000 );
@@ -40,11 +40,11 @@ public class RDFXFactoryBatchCollector implements ItemizedSizedBatchCollector<RD
 	}
 	
 	/**
-	 * The size of the underlining {@link RDFXFactory#getJenaModel() model}.
+	 * The size of the underlining {@link RDFXFactory#getGraphModel() model}.
 	 */
 	@Override
 	public Function<RDFXFactory, Long> batchSizer () {
-		return xfact -> xfact.getJenaModel ().size ();
+		return xfact -> xfact.getGraphModel ().size ();
 	}
 
 	@Override

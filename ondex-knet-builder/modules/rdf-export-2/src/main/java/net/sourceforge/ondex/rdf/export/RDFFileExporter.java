@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.rdf.api.Graph;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
@@ -55,7 +54,7 @@ public class RDFFileExporter
 			{ 
 				log.trace ( "BEGIN RDF writing thread {}", Thread.currentThread ().getName () );
 				
-				 Model m = xfact.getJenaModel ();
+				 Model m = xfact.getGraphModel ();
 				
 				// This should be the way to ensure output streaming in Jena.
 				// However, this recognises a few languages/formats only (those registered by StreamRDFWriter)
