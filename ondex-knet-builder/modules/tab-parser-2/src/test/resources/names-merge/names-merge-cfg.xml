@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<parser 
+	xmlns = "http://www.ondex.org/xml/schema/tab_parser"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<delimiter>\t</delimiter>
+	<quote>"</quote>
+	<encoding>UTF-8</encoding>
+	<start-line>1</start-line>
+		
+	<concept id="gene">
+		<class>Gene</class>
+		<data-source>ENSEMBL</data-source>
+		<accession data-source="ENSEMBL-PLANTS">
+			<column index='0' />
+		</accession>
+		<name preferred="true">
+			<column index='1' />
+		</name>
+	</concept>
+</parser>
