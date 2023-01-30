@@ -599,7 +599,11 @@ public class GraphElementManipulation {
 			throws NullValueException, EmptyStringException,
 			AccessDeniedException {
 		if (target.getConceptName(newName.getName()) == null)
-			target.createConceptName(newName.getName(), false);
+			// Marco Brandizi, in 2023-01-31 I've changed the default 'false' parameter with
+			// newName.isPreferred(). The initial default was causing #73, I don't know if
+			// it was a mistake or if it was designed this way for some reason. Whatever, 
+			// this is being used by the PathParser only (ie, the tabular parser).
+			target.createConceptName(newName.getName(), newName.isPreferred () );
 	}
 
 	/**
