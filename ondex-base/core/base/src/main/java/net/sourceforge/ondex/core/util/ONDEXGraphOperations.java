@@ -79,20 +79,33 @@ public class ONDEXGraphOperations
 			.collect ( Collectors.joining ( ",", "[", "]" ) );
 		};
 		
+		Function<ONDEXConcept, String> namesDumper = c -> 
+		{
+			var names = c.getConceptNames ();
+			if ( names.isEmpty () ) return "[]";
+			
+			return names.stream ()
+			.map ( name -> 
+				name.getName () + ( name.isPreferred () ? "(P)" : "" ) 
+			)
+			.collect ( Collectors.joining ( ",", "[", "]" ) );
+		};
+		
 		Consumer<ONDEXEntity> attrsDumper = e -> 
 			e.getAttributes ()
 			.forEach ( a -> log.info ( String.format ( 
 				"\t attribute: '%s': '%s'", a.getOfType ().getId (), a.getValue ()  
 			)));
-		
+					
 		concepts.forEach ( c -> 
 		{
 		  log.info ( String.format ( 
-		  	"Concept: <%s:%d>, '%s', %s",
+		  	"Concept: <%s:%d>, '%s', accs: %s, names: %s",
 		  	c.getOfType ().getId (),
 		  	c.getId (),
 		  	c.getPID (),
-		  	accsDumper.apply ( c )  
+		  	accsDumper.apply ( c ),
+		  	namesDumper.apply ( c )
 		  ));
 		  attrsDumper.accept ( c );
 		});
