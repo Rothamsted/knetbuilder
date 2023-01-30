@@ -311,7 +311,7 @@ public class ParserTest
 	}	
 	
 	@Test
-	public void testAccessionMerge () throws Exception
+	public void testAccessionsMerge () throws Exception
 	{
 		Reader schemaReader = new InputStreamReader ( 
 			Resources.getResource ( this.getClass (), "/acc-merge/acc-merge-cfg.xml" ).openStream (),
@@ -346,4 +346,40 @@ public class ParserTest
 		
 		assertEquals ( "Phenotypes count doesn't match!", 9, phenos.size () );
 	}
+	
+	/**
+	 * Tests configuration with 
+	 */
+	@Test
+	public void testNamesMergeIssue73 () throws Exception
+	{
+		Reader schemaReader = new InputStreamReader ( 
+			Resources.getResource ( this.getClass (), "/names-merge/names-merge-cfg.xml" ).openStream (),
+			"UTF-8"
+		);
+		ONDEXGraph graph = new MemoryONDEXGraph ( "default" );
+
+		PathParser pp = ConfigParser.parseConfigXml ( 
+			schemaReader, graph, "target/test-classes//names-merge/names-merge.tsv" 
+		);
+		//pp.setProcessingOptions ( new String [ 0 ] );
+		pp.parse ();
+		
+		ONDEXGraphOperations.dumpAll ( graph );
+			
+		var concepts = graph.getConcepts ();
+		assertEquals ( "Wrong no of imported concepts!", 1, concepts.size () );
+		
+		var gene = concepts.iterator ().next ();
+		
+		assertEquals ( "Wrong no of imported names!", 2, gene.getConceptNames ().size () );
+		
+		var prefName1 = gene.getConceptName ( "pref-name-1" );
+		assertNotNull ( "pref-name-1 is null!", prefName1 );
+		assertTrue ( "pref-name-1 isn't preferred!", prefName1.isPreferred () );
+		
+		var prefName2 = gene.getConceptName ( "pref-name-2" );
+		assertNotNull ( "pref-name-2 is null!", prefName2 );
+		assertTrue ( "pref-name-2 isn't preferred!", prefName2.isPreferred () );
+	}	
 }
