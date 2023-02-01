@@ -342,7 +342,7 @@ public class ConfigParser
 	 * (e.g., "class") 
 	 * @param methodName the method in {@link DefConst} to invoke to define the new AttributePrototype 
 	 * (e.g., "defCC")
-	 * @param moreArgs, optional additional arguments for the {@link DefConst} method you're calling
+	 * @param moreArgs optional additional arguments for the {@link DefConst} method you're calling
 	 * @param moreArgsClasses and their classes
 	 * 
 	 * @return the extracted attribute.
@@ -391,15 +391,9 @@ public class ConfigParser
 			
 			return Optional.of ( result );
 		}
-		catch ( NoSuchMethodException ex ) {
+		catch ( NoSuchMethodException| IllegalAccessException| InvocationTargetException ex ) {
 			throw new IllegalArgumentException ( "Internal error: " + ex.getMessage (), ex );
 		}
-		catch ( IllegalAccessException ex ) {
-			throw new IllegalArgumentException ( "Internal error: " + ex.getMessage (), ex );
-		}
-		catch ( InvocationTargetException ex ) {
-			throw new IllegalArgumentException ( "Internal error: " + ex.getMessage (), ex );
-		}		
 	}
 	
 	/**
