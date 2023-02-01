@@ -7,13 +7,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Function;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.io.Resources;
@@ -362,7 +359,6 @@ public class ParserTest
 		PathParser pp = ConfigParser.parseConfigXml ( 
 			schemaReader, graph, "target/test-classes//names-merge/names-merge.tsv" 
 		);
-		//pp.setProcessingOptions ( new String [ 0 ] );
 		pp.parse ();
 		
 		ONDEXGraphOperations.dumpAll ( graph );
@@ -372,7 +368,7 @@ public class ParserTest
 		
 		var gene = concepts.iterator ().next ();
 		
-		assertEquals ( "Wrong no of imported names!", 2, gene.getConceptNames ().size () );
+		assertEquals ( "Wrong no of imported names!", 3, gene.getConceptNames ().size () );
 		
 		var prefName1 = gene.getConceptName ( "pref-name-1" );
 		assertNotNull ( "pref-name-1 is null!", prefName1 );
@@ -381,5 +377,9 @@ public class ParserTest
 		var prefName2 = gene.getConceptName ( "pref-name-2" );
 		assertNotNull ( "pref-name-2 is null!", prefName2 );
 		assertTrue ( "pref-name-2 isn't preferred!", prefName2.isPreferred () );
+
+		var otherName = gene.getConceptName ( "other name" );
+		assertNotNull ( "'other name' is null!", otherName );
+		assertFalse ( "'other name' is preferred!", otherName.isPreferred () );	
 	}	
 }

@@ -17,5 +17,8 @@
 		<name preferred="true">
 			<column index='1' />
 		</name>
+		<name preferred="false">
+			<column index='2' />
+		</name>
 	</concept>
 </parser>
