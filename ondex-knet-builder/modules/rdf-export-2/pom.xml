@@ -59,11 +59,11 @@
 			<artifactId>log4j</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency -->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -74,8 +74,6 @@
 		<dependency>
 			<groupId>info.marcobrandizi</groupId>
 			<artifactId>rdfutils-jena</artifactId>
-			<!-- TODO: update the parent -->
-			<version>4.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
