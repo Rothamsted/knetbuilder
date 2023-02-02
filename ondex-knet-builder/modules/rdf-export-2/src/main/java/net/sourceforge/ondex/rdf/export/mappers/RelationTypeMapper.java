@@ -1,8 +1,8 @@
 package net.sourceforge.ondex.rdf.export.mappers;
 
-import static info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils.COMMUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import static org.apache.commons.lang3.ArrayUtils.contains;
+import static uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils.RDF_GRAPH_UTILS;
 
 import java.util.Map;
 
@@ -42,7 +42,7 @@ public class RelationTypeMapper extends MetadataMapper<RelationType>
 			? iri ( "bk:conceptsRelation" ) 
 			: uriGen.getUri ( parent );
 		
-			COMMUTILS.assertResource ( xfact.getGraphModel (), myiri, iri ( "rdfs:subPropertyOf" ), parentIri );
+		RDF_GRAPH_UTILS.assertResource ( xfact.getGraphModel (), myiri, iri ( "rdfs:subPropertyOf" ), parentIri );
 
 		return true;
 	}

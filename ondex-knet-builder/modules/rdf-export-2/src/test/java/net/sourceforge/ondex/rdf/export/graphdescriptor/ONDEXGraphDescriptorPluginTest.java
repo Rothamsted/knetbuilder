@@ -9,15 +9,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.parser.oxl.Parser;
 import net.sourceforge.ondex.utils.OndexPluginUtils;
 
 /**
- * TODO: comment me!
+ * Basic functionality for the graph descriptor generator.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>27 Nov 2021</dd></dl>
@@ -25,6 +26,8 @@ import net.sourceforge.ondex.utils.OndexPluginUtils;
  */
 public class ONDEXGraphDescriptorPluginTest
 {
+	private Logger log = LoggerFactory.getLogger ( this.getClass () ); 
+
 	@Test
 	public void testBasics () throws IOException
 	{
@@ -55,10 +58,13 @@ public class ONDEXGraphDescriptorPluginTest
 		assertNotNull ( "No descritor concept!", descritorTool.getDescriptorConcept () );
 				
 		var dataset = descritorTool.getDescriptorDataset ();
+		log.debug ( "----- DESCRIPTOR -----\n{}\n----------", dataset );
+		
 		assertNotNull ( "No descritor dataset!", descritorTool.getDescriptorConcept () );
-		assertEquals ( "Bad dataset identifier!", "KnetMiner:Triticum_aestivum", dataset.get ( "identifier" ) );
+		assertEquals ( "Bad dataset identifier!", "KnetMiner:Triticum_aestivum", dataset.get ( "schema:identifier" ) );
 		
 		Map<String, Map<String, Object>> propVals = descritorTool.getDatasetAdditionalProperties ();
+		assertNotNull ( "additionalProperties is null!", propVals );
 		int nconcepts = OndexGraphDescriptorTool.getPropertyValueAsInt ( propVals, "KnetMiner:Dataset:Concepts Number" );
 		assertEquals ( "Wrong property value for concepts number", graph.getConcepts ().size (), nconcepts + 1 );
 		

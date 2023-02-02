@@ -27,7 +27,9 @@
                   <phase>package</phase>
                   <goals>
                      <goal>test-jar</goal>
-                     <goal>jar</goal>
+                     <!-- TODO: remove. This is always executed since 3.0.0, 
+                     	see https://stackoverflow.com/a/40964626/529286 -->
+                     <!-- goal>jar</goal -->
                   </goals>
                </execution>
             </executions>

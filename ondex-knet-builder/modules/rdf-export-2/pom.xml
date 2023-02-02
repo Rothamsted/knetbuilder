@@ -59,11 +59,11 @@
 			<artifactId>log4j</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency -->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -79,20 +79,7 @@
 		<dependency>
 			<groupId>uk.ac.ebi.fg</groupId>
 			<artifactId>java2rdf</artifactId>
-			<version>3.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-rdf-jena</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<exclusions>
-				<!-- TODO: no longer needed in 1.0-SNAPSHOT -->
-				<exclusion>
-					<groupId>org.apache.jena</groupId>
-					<artifactId>jena-osgi</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>4.0.1</version>
 		</dependency>
 
 		<dependency>

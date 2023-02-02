@@ -24,10 +24,13 @@
 
    <build>
       <plugins>
+
+				 <!-- Prepares the plugins to be shipped with the final binary-->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
+				
                <execution>
                   <id>unpack</id>
                   <phase>initialize</phase>
@@ -96,33 +99,13 @@
                            <includes>**/*</includes>
                            <outputDirectory>${project.build.directory}</outputDirectory>
                         </artifactItem>
-                        
-                        
-                        <!-- TODO: outdated and not building 
-                        <artifactItem>
-                           <groupId>net.sourceforge.ondex.doc</groupId>
-                           <artifactId>ovtk2</artifactId>
-                           <version>${project.version}</version>
-                           <classifier>data</classifier>
-                           <type>zip</type>
-                           <overWrite>true</overWrite>
-                           <outputDirectory>${project.build.directory}/ovtk2</outputDirectory>
-                           <includes>**/*</includes>
-                        </artifactItem> -->
-                                                
+                                                                        
                      </artifactItems>
                      <overWriteReleases>false</overWriteReleases>
                      <overWriteSnapshots>true</overWriteSnapshots>
                   </configuration>
                </execution>
-            </executions>
-         </plugin>
-
-				 <!-- Prepares the plugins to be shipped with the final binary-->
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
+               				
                <execution>
                   <id>copy</id>
                   <phase>initialize</phase>
@@ -491,19 +474,7 @@
                            <includes>**/*</includes>
                            <destFileName>protein-structure-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
-                        
-                        <!-- artifactItem>
-                           <groupId>net.sourceforge.ondex.modules</groupId>
-                           <artifactId>rdf</artifactId>
-                           <version>${project.version}</version>
-                           <classifier>jar-with-dependencies</classifier>
-                           <type>jar</type>
-                           <overWrite>true</overWrite>
-                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
-                           <includes>**/*</includes>
-                           <destFileName>rdf-jar-with-dependencies.jar</destFileName>
-                        </artifactItem -->
-                        
+                                                
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>relevance</artifactId>
@@ -515,19 +486,7 @@
                            <includes>**/*</includes>
                            <destFileName>relevance-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
-                        
-                        <!-- artifactItem>
-                           <groupId>net.sourceforge.ondex.modules</groupId>
-                           <artifactId>sbml</artifactId>
-                           <version>${project.version}</version>
-                           <classifier>jar-with-dependencies</classifier>
-                           <type>jar</type>
-                           <overWrite>true</overWrite>
-                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
-                           <includes>**/*</includes>
-                           <destFileName>sbml-jar-with-dependencies.jar</destFileName>
-                        </artifactItem -->
-                        
+                                                
                         <artifactItem>
                            <groupId>net.sourceforge.ondex.modules</groupId>
                            <artifactId>sequence</artifactId>
@@ -611,19 +570,7 @@
                            <includes>**/*</includes>
                            <destFileName>validator-jar-with-dependencies.jar</destFileName>
                         </artifactItem>
-                        
-                        <!-- artifactItem>
-                           <groupId>uk.ac.ncl.cs</groupId>
-                           <artifactId>psimi2ondex</artifactId>
-                           <version>${project.version}</version>
-                           <classifier>jar-with-dependencies</classifier>
-                           <type>jar</type>
-                           <overWrite>true</overWrite>
-                           <outputDirectory>${project.build.directory}/plugins</outputDirectory>
-                           <includes>**/*</includes>
-                           <destFileName>psimi2ondex-jar-with-dependencies.jar</destFileName>
-                        </artifactItem -->
-                        
+                                                
                      </artifactItems>
                      <overWriteReleases>false</overWriteReleases>
                      <overWriteSnapshots>true</overWriteSnapshots>

@@ -24,6 +24,16 @@
       <level value="trace" />
     </logger>
 
+		<logger name = "org.apache.jena"><level value = "INFO" /></logger>
+		<logger name = "TDB"><level value = "INFO" /></logger>
+		<!-- This has some detailed messages that are usually too much to see -->
+		<logger name = "info.marcobrandizi.rdfutils.jena.elt.TDBLoadingHandler">
+			<level value = "INFO" />
+		</logger>
+		<logger name = "org.apache.commons.beanutils">
+			<level value = "info" />
+		</logger>
+
     <root>
       <priority value="debug"/>
       <appender-ref ref="console"/>

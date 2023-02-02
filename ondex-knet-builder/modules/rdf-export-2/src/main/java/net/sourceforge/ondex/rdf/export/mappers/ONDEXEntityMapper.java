@@ -1,7 +1,7 @@
 package net.sourceforge.ondex.rdf.export.mappers;
 
-import static info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils.COMMUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
+import static uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils.RDF_GRAPH_UTILS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.rdf.api.Graph;
-import org.apache.commons.rdf.api.Literal;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
 
 import net.sourceforge.ondex.core.Attribute;
 import net.sourceforge.ondex.core.AttributeName;
@@ -24,6 +24,7 @@ import uk.ac.ebi.fg.java2rdf.mapping.properties.LiteralPropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.properties.ResourcePropRdfMapper;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfLiteralGenerator;
 import uk.ac.ebi.fg.java2rdf.mapping.rdfgen.RdfUriGenerator;
+import uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils;
 
 /**
  * 
@@ -84,7 +85,7 @@ public abstract class ONDEXEntityMapper<OE extends ONDEXEntity> extends BeanRdfM
 		if ( !super.map ( oe, params ) ) return false;
 		
 		RdfMapperFactory xfact = this.getMapperFactory ();
-		Graph graphModel = xfact.getGraphModel ();
+		Model graphModel = xfact.getGraphModel ();
 		
 		String myiri = this.getRdfUriGenerator ().getUri ( oe, params );		
 		
@@ -108,12 +109,12 @@ public abstract class ONDEXEntityMapper<OE extends ONDEXEntity> extends BeanRdfM
 				if ( vl == null ) continue;
 				
 				String attrProp = xfact.getUri ( attr.getOfType (), params );
-				COMMUTILS.assertLiteral ( graphModel, myiri, attrProp, vl );
+				RDF_GRAPH_UTILS.assertLiteral ( graphModel, myiri, attrProp, vl );
 				
 				if ( !attr.isDoIndex () ) continue;
-					// This goes at the level of the attribute type, as explained in the bioknet ontology file.
-				COMMUTILS.assertLiteral ( 
-					graphModel, attrProp, iri ( "bk:isIndexed" ), COMMUTILS.value2TypedLiteral ( graphModel, true ).get () 
+				// This goes at the level of the attribute type, as explained in the bioknet ontology file.
+				RDF_GRAPH_UTILS.assertLiteral ( 
+					graphModel, attrProp, iri ( "bk:isIndexed" ), RDF_GRAPH_UTILS.value2TypedLiteral ( graphModel, true ).get () 
 				);
 			}			
 		}

@@ -103,11 +103,13 @@ public class JsonLdUtilsTest
 		var jsNode = jsmapper.valueToTree ( jsonMap );
 		
 		var jsOrg = jsNode.get ( "bkr:rresOrg" );
+		log.info ( "---- Organization:\n{}\n-----", jsOrg );
+		
 		assertNotNull ( "Organisation's JSON not found!", jsOrg );
 		assertTrue ( "Organisation's JSON wrong JS type!", jsOrg.isContainerNode () );
 		
-		assertTrue ( "Organisation's keywords isn't an array!", jsOrg.get ( "keywords" ).isArray () );
-		var kw = jsmapper.convertValue ( jsOrg.get ( "keywords" ), ArrayList.class );
+		assertTrue ( "Organisation's keywords isn't an array!", jsOrg.get ( "bioschema:keywords" ).isArray () );
+		var kw = jsmapper.convertValue ( jsOrg.get ( "bioschema:keywords" ), ArrayList.class );
 		assertEquals ( "Wrong no. of organisation's keywords!", 6, kw.size () );
 		
 		assertTrue ( "Expected keywords for organisation not found!",  kw.contains ( "Agricultural science" ) );
@@ -126,7 +128,7 @@ public class JsonLdUtilsTest
 		Map<String, Object> jsOrg = JsonLdUtils.asValue ( jsonMap, "bkr:rresOrg" );
 		assertNotNull ( "Organisation's JSON not found!", jsOrg );
 		
-		List<String> kw = JsonLdUtils.asList ( jsOrg, "keywords" );
+		List<String> kw = JsonLdUtils.asList ( jsOrg, "bioschema:keywords" );
 		assertEquals ( "Wrong no. of organisation's keywords!", 6, kw.size () );
 		assertTrue ( "Expected keywords for organisation not found!",  kw.contains ( "Agricultural science" ) );
 		// log.info ( "JSON-LD is: {}", JsonLdUtils.toJson ( json ) );
@@ -148,7 +150,11 @@ public class JsonLdUtilsTest
 		assertEquals ( "wrong size result for schema:Dataset", 1, dsets.size () );
 
 		Map<String, Object> dset = dsets.get ( 0 );
-		assertEquals ( "Wrong field for schema:Dataset", "bkr:rresOrg", dset.get ( "creator" ) );
+		assertEquals (
+			"Wrong field for schema:Dataset",
+			"bkr:rresOrg",
+			((Map<String, Object>) dset.get ( "schema:creator" )).get ( "@id" )
+		);
 	}
 	
 	@Test // TODO: foo test to check this Jena feature, to be removed later

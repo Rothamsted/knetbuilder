@@ -35,4 +35,10 @@
 	<!-- Add Loggers this way if you want finer reports for selected components -->
   <!-- logger name="net.sourceforge.ondex.rdf" level="INFO"/ -->
   
+	<logger name = "org.apache.jena" level = "INFO" />
+	<logger name = "TDB" level = "INFO" />
+	<!-- This has some detailed messages that are usually too much to see -->
+	<logger name = "info.marcobrandizi.rdfutils.jena.elt.TDBLoadingHandler" level = "INFO" />
+	<logger name = "org.apache.commons.beanutils" level = "INFO" />
+  
 </configuration>

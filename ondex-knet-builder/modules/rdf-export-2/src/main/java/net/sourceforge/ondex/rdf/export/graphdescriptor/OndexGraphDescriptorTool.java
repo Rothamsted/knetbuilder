@@ -380,8 +380,11 @@ public class OndexGraphDescriptorTool extends OndexGraphDescriptorToolFields
 		Map<String, Object> dset = getDescriptorDataset ();
 		
 		@SuppressWarnings ( "unchecked" )
-		Map<String, Map<String, Object>> result = JsonLdUtils.asList ( dset, "additionalProperty" )
+		Map<String, Map<String, Object>> result = JsonLdUtils.asList ( dset, "schema:additionalProperty" )
 		.stream ()
+		// we have cases like { @id: <pv-uri> } as additionalProperty entry, so we need to
+		// pre-filter it, damn!
+		.map ( pvObj -> pvObj instanceof Map ? ((Map<String, Object>) pvObj).get ( "@id" ) : pvObj )
 		.map ( pvuri -> (Map<String, Object>) js.get ( pvuri ) )
 
 		// when a property like schema:value is used to link values of multiple types, one "value"
@@ -389,14 +392,14 @@ public class OndexGraphDescriptorTool extends OndexGraphDescriptorToolFields
 		// So, we have to chase both and hope for the best. This is why everyone hates the Semantic Web...
 		//
 		.map ( jobj -> {
-			if ( !jobj.containsKey ( "schema:value" ) ) return jobj;
+			if ( !jobj.containsKey ( "value" ) ) return jobj;
 			jobj = new HashMap<String, Object> ( jobj );
-			jobj.put ( "value", jobj.get ( "schema:value" ) );
-			jobj.remove ( "schema:value" );
+			jobj.put ( "schema:value", jobj.get ( "value" ) );
+			jobj.remove ( "value" );
 			return jobj;
 		})
 		.collect ( Collectors.toUnmodifiableMap ( 
-			jobj -> (String) jobj.get ( "propertyID" ),
+			jobj -> (String) jobj.get ( "schema:propertyID" ),
 			Function.identity ()
 		));
 		
@@ -406,17 +409,17 @@ public class OndexGraphDescriptorTool extends OndexGraphDescriptorToolFields
 	
 	public static <T> T getPropertyValue ( Map<String, Map<String, Object>> pvals, String propertyId )
 	{
-		return JsonLdUtils.asValue ( pvals.get ( propertyId ), "value" );
+		return JsonLdUtils.asValue ( pvals.get ( propertyId ), "schema:value" );
 	}
 	
 	public static Integer getPropertyValueAsInt ( Map<String, Map<String, Object>> pvals, String propertyId )
 	{
-		return JsonLdUtils.asInt ( pvals.get ( propertyId ), "value" );
+		return JsonLdUtils.asInt ( pvals.get ( propertyId ), "schema:value" );
 	}
 	
 	public static <T> List<T> getPropertyValueAsList ( Map<String, Map<String, Object>> pvals, String propertyId )
 	{
-		return JsonLdUtils.asList ( pvals.get ( propertyId ), "value" );
+		return JsonLdUtils.asList ( pvals.get ( propertyId ), "schema:value" );
 	}
 	
 	
