@@ -81,7 +81,7 @@
 		<dependency>
 			<groupId>uk.ac.ebi.fg</groupId>
 			<artifactId>java2rdf</artifactId>
-			<version>4.0-SNAPSHOT</version>
+			<version>4.0.1</version>
 		</dependency>
 
 		<dependency>

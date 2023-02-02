@@ -182,22 +182,26 @@ public class JsonLdUtils
 		return asValue ( jsobj, property, false );
 	}
 
-	public static <T> T asValue ( Map<String, Object> jsobj, String property, Function<Object, T> strConverter, boolean failIfMany )
+	public static <T> T asValue ( Map<String, Object> jsobj, String property, Function<Object, T> plainValConverter, boolean failIfMany )
 	{
 		Object v = asValue ( jsobj, property, failIfMany );
-		
-		return strConverter.apply ( v );
+				
+		return plainValConverter.apply ( v );
 	}
 
-	public static <T> T asValue ( Map<String, Object> jsobj, String property, Function<Object, T> strConverter )
+	public static <T> T asValue ( Map<String, Object> jsobj, String property, Function<Object, T> plainValConverter )
 	{
-		return asValue ( jsobj, property, strConverter, false );
+		return asValue ( jsobj, property, plainValConverter, false );
 	}
 
+	@SuppressWarnings ( "unchecked" )
 	public static Integer asInt ( Map<String, Object> jsobj, String property )
 	{
 		return (Integer) asValue ( jsobj, property, v -> {
 			if ( v == null ) return null;
+			// An additionalProperty might have a value like { @value: "1436", @type: xsd:int }
+			// the converter might want to process it or not
+			if ( v instanceof Map) v = ((Map<String, Object>) v).get ( "@value" );
 			if ( v instanceof Number ) return ((Number) v).intValue ();
 			return Integer.valueOf ( v.toString () );
 		});

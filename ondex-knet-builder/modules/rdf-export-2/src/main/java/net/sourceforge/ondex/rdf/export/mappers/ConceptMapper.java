@@ -1,14 +1,14 @@
 package net.sourceforge.ondex.rdf.export.mappers;
 
-import static info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils.COMMUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
+import static uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils.RDF_GRAPH_UTILS;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.rdf.api.Graph;
+import org.apache.jena.rdf.model.Model;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ConceptAccession;
@@ -67,14 +67,14 @@ public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 		if ( !super.map ( concept, params ) ) return false;
 
 		RdfMapperFactory xfact = this.getMapperFactory ();
-		Graph graphModel = xfact.getGraphModel ();
+		Model graphModel = xfact.getGraphModel ();
 
 		String myiri = this.getRdfUriGenerator ().getUri ( concept, params );
 		
 		ConceptClass cc = concept.getOfType ();
 		String cciri = cc == null ? iri ( "bk:Concept" ) : xfact.getUri ( cc, params );
 		
-		COMMUTILS.assertResource ( graphModel, myiri, iri ( "rdf:type" ), cciri );
+		RDF_GRAPH_UTILS.assertResource ( graphModel, myiri, iri ( "rdf:type" ), cciri );
 		
 		// Names split into 1 preferred and alternatives
 		Pair<Optional<String>, Stream<String>> nameStrings = OndexRDFUtils.normalizeNames ( 
@@ -83,12 +83,12 @@ public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 		
 		nameStrings.getLeft ()
 		.ifPresent ( 
-			prefName -> COMMUTILS.assertLiteral ( graphModel, myiri, iri ( "bk:prefName" ), prefName ) 
+			prefName -> RDF_GRAPH_UTILS.assertLiteral ( graphModel, myiri, iri ( "bk:prefName" ), prefName ) 
 		);
 		
 		nameStrings.getRight ()
 		.forEach ( 
-			altName -> COMMUTILS.assertLiteral ( graphModel, myiri, iri ( "bk:altName" ), altName )
+			altName -> RDF_GRAPH_UTILS.assertLiteral ( graphModel, myiri, iri ( "bk:altName" ), altName )
 		);
 						
 		return true;

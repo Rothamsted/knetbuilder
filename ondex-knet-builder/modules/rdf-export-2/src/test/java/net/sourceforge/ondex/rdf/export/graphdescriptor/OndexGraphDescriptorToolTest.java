@@ -90,7 +90,7 @@ public class OndexGraphDescriptorToolTest
 		var org = descritorTool.getDescriptorOrganization ();
 		assertEquals (
 			"Wrong organisation's legal name!",
-			"Rothamsted Research", JsonLdUtils.asValue ( org, "legalName", true )
+			"Rothamsted Research", JsonLdUtils.asValue ( org, "schema:legalName", true )
 		);
 	}
 

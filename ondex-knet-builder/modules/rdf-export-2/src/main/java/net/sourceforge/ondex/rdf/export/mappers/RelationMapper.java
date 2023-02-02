@@ -1,8 +1,8 @@
 package net.sourceforge.ondex.rdf.export.mappers;
 
-import static info.marcobrandizi.rdfutils.commonsrdf.CommonsRDFUtils.COMMUTILS;
 import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
 import static org.apache.commons.collections4.CollectionUtils.sizeIsEmpty;
+import static uk.ac.ebi.fg.java2rdf.utils.Java2RdfUtils.RDF_GRAPH_UTILS;
 import static uk.ac.ebi.utils.ids.IdUtils.hashUriSignature;
 
 import java.util.Collections;
@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.rdf.api.Graph;
+import org.apache.jena.rdf.model.Model;
 
 import info.marcobrandizi.rdfutils.namespaces.NamespaceUtils;
 import net.sourceforge.ondex.core.ONDEXRelation;
@@ -108,20 +108,23 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 		if ( !super.map ( rel, params ) ) return false;
 
 		RdfMapperFactory xfact = this.getMapperFactory ();
-		Graph graph = xfact.getGraphModel (); 
+		Model graphModel = xfact.getGraphModel (); 
 
 		// Straight relation
 		String fromIri = xfact.getUri ( rel.getFromConcept (), params );
 		String toIri = xfact.getUri ( rel.getToConcept (), params );
 		String relTypeIri = xfact.getUri ( rel.getOfType (), params );
 
-		COMMUTILS.assertResource ( graph, fromIri, relTypeIri, toIri );
+		RDF_GRAPH_UTILS.assertResource ( graphModel, fromIri, relTypeIri, toIri );
 
 		
 		// And the corresponding reified relation
 		//
 		
-		if ( sizeIsEmpty ( rel.getAttributes () ) && sizeIsEmpty ( rel.getEvidence () ) && sizeIsEmpty ( rel.getTags () ) )
+		if ( sizeIsEmpty ( rel.getAttributes () ) 
+				&& sizeIsEmpty ( rel.getEvidence () ) 
+				&& sizeIsEmpty ( rel.getTags () ) 
+		)
 			// If we have nothing to add to the triple, let's just skip it.
 			// With the current Ondex implementation, this should never happen, since evidence is mandatory
 			return true;
@@ -132,10 +135,10 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 		// the reified relation must not be created if there aren't further things to attach to it
 		// evidences/etc are mapped via property mappers, and only if these have values.
 		//
-		COMMUTILS.assertResource ( graph, reifiedIri, iri ( "rdf:type" ), iri ( "bk:Relation" ) );
-		COMMUTILS.assertResource ( graph, reifiedIri, iri ( "bk:relTypeRef" ), relTypeIri );
-		COMMUTILS.assertResource ( graph, reifiedIri, iri ( "bk:relFrom" ), fromIri );
-		COMMUTILS.assertResource ( graph, reifiedIri, iri ( "bk:relTo" ), toIri );
+		RDF_GRAPH_UTILS.assertResource ( graphModel, reifiedIri, iri ( "rdf:type" ), iri ( "bk:Relation" ) );
+		RDF_GRAPH_UTILS.assertResource ( graphModel, reifiedIri, iri ( "bk:relTypeRef" ), relTypeIri );
+		RDF_GRAPH_UTILS.assertResource ( graphModel, reifiedIri, iri ( "bk:relFrom" ), fromIri );
+		RDF_GRAPH_UTILS.assertResource ( graphModel, reifiedIri, iri ( "bk:relTo" ), toIri );
 		
 		// The OXL has the qualifier slot, which the OXL parser explicitly ignores when present, so, we 
 		// do it here too.
