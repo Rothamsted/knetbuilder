@@ -1,17 +1,31 @@
 # Revision History
 
-*This file was last reviewed on 1/8/2022*
+*This file was last reviewed on 2023-02-03*. **Please, keep this note up to date**.
 
-## 5.0.1-SNAPSHOT
-* Metadata descriptor (still experimental)
-* Minor upgrades to the CytoscapeJS exporter (eg, [#61][i61], [#66][i66])
+## 5.1.1-SNAPSHOT
+* Current snapshot
 
+## 5.1
+* Metadata descriptor (still experimental).
+* Text mining plug-in:
+  * stop words added to the text mining plug-in, [#65][i65].
+  * various bugfixes.
+* `GraphLabelsUtils`, case for selecting names with specie prefix added and used for the Cytoscape exporter [#681][i681]
+* CytoscapeJS exporter:
+  * Various bugfixes (eg, [#61][i61], [#66][i66], [#67][i67]).
+* (Hopefully) all logging messages sent to the logger, not to `System.out` anymore.
+* Indexing functionality added to `OndexPluginUtils`.
+* Various dependency upgrades (eg, Jena, RDF utils)
+  
+[i681]: https://github.com/Rothamsted/knetminer/issues/681
+[i65]: https://github.com/Rothamsted/knetbuilder/issues/65
 [i61]: https://github.com/Rothamsted/knetbuilder/issues/61
 [i66]: https://github.com/Rothamsted/knetbuilder/issues/66
+[i67]: https://github.com/Rothamsted/knetbuilder/issues/67
 
 ### Internal changes
-* KnetMiner initialiser module added from code in KnetMiner ([#51][i51])
-* Lucene module: bugfixing for certain [non-working queries][i53]
+* KnetMiner initialiser module added from code in KnetMiner ([#51][i51]).
+* Lucene module: bugfixing for certain [non-working queries][i53].
 * Maven Assembly plug-in upgraded to latest version, many related files fixed.
 * `javax.xml.bind` + `jaxb-runtime` replaced with `jakarta.xml.bind-api` + `jaxb-impl`, due to problems with J17 compatibility 
 (moreover, the previous modules are a dead projects).
@@ -21,9 +35,9 @@
 [i53]: https://github.com/Rothamsted/knetbuilder/issues/53
 
 ## 5.0
-* Big changes to migrate to Java 11
-* New version of rd2neo integrated into the neo4j-export component
-* GraphSamplingPlugIn, better criteria to sample a representative graph
+* Big changes to migrate to Java 11.
+* New version of rd2neo integrated into the neo4j-export component.
+* GraphSamplingPlugIn, better criteria to sample a representative graph.
 * Code changes:
   * git submodules eliminated, we went back to a single repository codebase
   * POMs cleaning/refactoring

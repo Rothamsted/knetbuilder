@@ -7,7 +7,7 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>2.0.1-SNAPSHOT</version>
+	  <version>3.0.1</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
@@ -66,9 +66,9 @@
 		 <lucene.version>6.6.0</lucene.version>
 			
 		 <!-- Used by neo4j-related components -->
-		 <rdf2neo.version>4.0.1-SNAPSHOT</rdf2neo.version>  
+		 <rdf2neo.version>4.0</rdf2neo.version>  
 			
-		 <slf4j.version>1.7.25</slf4j.version>
+		 <slf4j.version>1.7.36</slf4j.version>
 			
      <jena.version>4.7.0</jena.version>
 	 </properties>
@@ -190,7 +190,7 @@
 								This happens in M5: https://issues.apache.org/jira/browse/SUREFIRE-1809
 								They've a workaround, but it's quicker to wait for M6 
 							-->
-							<version>3.0.0-M4</version>
+							<version>3.0.0-M8</version>
 							<configuration>
 								<trimStackTrace>false</trimStackTrace>
 								<argLine>-XX:MaxRAM=4G -Dondex.dir=${basedir}/data -Dfile.encoding=UTF-8</argLine>
