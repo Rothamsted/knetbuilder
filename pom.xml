@@ -576,11 +576,13 @@
 				<version>5.1</version>
 			</dependency>
 
+			<!-- TODO: remove? Was used by Kegg
 			<dependency>
 			  <groupId>axis</groupId>
 			  <artifactId>axis</artifactId>
 			  <version>1.3</version>
 			</dependency>
+			-->
 			
 			<dependency>
 				<groupId>xerces</groupId>

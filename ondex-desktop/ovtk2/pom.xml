@@ -250,13 +250,13 @@
          <artifactId>axis</artifactId>
          <version>1.4</version>
       </dependency>
-      -->
 
       <dependency>
          <groupId>axis</groupId>
          <artifactId>axis-jaxrpc</artifactId>
          <version>1.4</version>
       </dependency>
+      -->
 
       <dependency>
          <groupId>commons-discovery</groupId>
