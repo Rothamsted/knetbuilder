@@ -74,7 +74,7 @@
 		<dependency>
 			<groupId>uk.ac.ebi.fg</groupId>
 			<artifactId>java2rdf</artifactId>
-			<!-- Update the parent version -->
+			<!-- TODO: Update the parent version -->
 			<version>4.0.2-SNAPSHOT</version>
 		</dependency>
 

@@ -71,6 +71,10 @@
 		 <slf4j.version>1.7.36</slf4j.version>
 			
      <jena.version>4.7.0</jena.version>
+     
+     <!-- TODO: update the parent POM -->
+     <rdfutils.version>4.0.4-SNAPSHOT</rdfutils.version>
+
 	 </properties>
 
    <build>
