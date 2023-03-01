@@ -76,24 +76,30 @@ public class RDFExporter
 		
 		Set<ONDEXConcept> concepts = graph.getConcepts ();
 		log.info ( "Exporting {} concept(s)", concepts.size () );
-		var progress = new PercentProgressLogger ( "{}% of concepts exported", concepts.size () );
-		super.process (
-			concepts.stream ()
-			.peek ( c -> progress.updateWithIncrement () )
-			::forEach
-		);
+		{
+			// This needs to be a local/immutable variable, so we write this inside a nested block
+			// to separate it from the next one
+			var progress = new PercentProgressLogger ( "{}% of concepts exported", concepts.size () );
+			super.process (
+				concepts.stream ()
+				.peek ( c -> progress.updateWithIncrement () )
+				::forEach
+			);
+		}
 		
 
 		Set<ONDEXRelation> relations = graph.getRelations ();
 		log.info ( "Exporting {} relation(s)", relations.size () );
-		progress.setLogMessageTemplate ( "{}% of relations exported" );
-		progress.reset ();
-		super.process (
-			relations.stream ()
-			.peek ( c -> progress.updateWithIncrement () )
-			::forEach
-		);
-
+		{
+			// As explained above (actually, wouldn't be needed here, but just to keep it clean
+			var progress = new PercentProgressLogger ( "{}% of relations exported", relations.size () );
+			super.process (
+				relations.stream ()
+				.peek ( c -> progress.updateWithIncrement () )
+				::forEach
+			);
+		}
+		
 		log.info ( 
 			"RDF export finished, a total of {} concepts+relations exported, {} triples created",
 			concepts.size () + relations.size (), triplesCount

@@ -3,7 +3,7 @@
 *This file was last reviewed on 2023-02-03*. **Please, keep this note up to date**.
 
 ## 5.1.1-SNAPSHOT
-* Current snapshot
+* Minor fix to the RDF exporter (progress reporter).
 
 ## 5.1
 * Metadata descriptor (still experimental).
