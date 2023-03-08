@@ -3,6 +3,7 @@
 *This file was last reviewed on 2023-03-08*. **Please, keep this note up to date**.
 
 ## 5.2.1-SNAPSHOT
+* Current snapshot
 
 ## 5.2
 * Bugfixes
