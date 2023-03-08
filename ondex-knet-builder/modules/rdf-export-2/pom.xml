@@ -59,11 +59,6 @@
 			<artifactId>log4j</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!--dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>test</scope>
-		</dependency -->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -74,8 +69,7 @@
 		<dependency>
 			<groupId>uk.ac.ebi.fg</groupId>
 			<artifactId>java2rdf</artifactId>
-			<!-- TODO: Update the parent version -->
-			<version>4.0.2-SNAPSHOT</version>
+			<version>4.1</version>
 		</dependency>
 
 		<dependency>

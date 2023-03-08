@@ -7,7 +7,7 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>3.0.1</version>
+	  <version>3.1</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
@@ -72,8 +72,8 @@
 			
      <jena.version>4.7.0</jena.version>
      
-     <!-- TODO: update the parent POM -->
-     <rdfutils.version>4.0.4-SNAPSHOT</rdfutils.version>
+     <!-- This is used when we want to override rdf-common -->
+     <!-- rdfutils.version>xxx</rdfutils.version -->
 
 	 </properties>
 

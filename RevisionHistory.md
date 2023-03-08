@@ -1,9 +1,12 @@
 # Revision History
 
-*This file was last reviewed on 2023-03-01*. **Please, keep this note up to date**.
+*This file was last reviewed on 2023-03-08*. **Please, keep this note up to date**.
 
-## 5.1.1-SNAPSHOT
-* Minor fix to the RDF exporter (progress reporter).
+## 5.2.1-SNAPSHOT
+
+## 5.2
+* Bugfixes
+  * Fixing problem (via dependency upgrade) with rdfutils and null literals.
 
 ## 5.1
 * Metadata descriptor (still experimental).
