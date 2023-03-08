@@ -1,5 +1,10 @@
 set -e
 
+# Invoked internally as part of the CI, deploys the binary packages onto the RRes file system.
+#
+
+# Deals with the single package
+# 
 function deploy_package ()
 {
   target_dir="$1"
