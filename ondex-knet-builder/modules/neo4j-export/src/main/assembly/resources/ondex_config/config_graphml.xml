@@ -7,8 +7,10 @@
 
 	<!--
 	  This is like ondex_config.xml, but dedicated to converting to graphml, for the corresponding tool in the RDF2PG suite.
+	  We have used the graphml format for testing purposes, during the work about the rdf2pg paper.
+	  
+	  TODO: requires upgrade to recent rdf2pg. DOES NOT WORK WITHOUT THAT.
 	-->
-
 
 	<!-- 
 	  Just leave this here. It means some components are got from the Java source files, by means of
@@ -152,5 +154,18 @@
 	
 	</bean>
 	
+  <!-- Indexing, happening after everything else -->
+
+  <bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
+
+    <property name = "name" value = "Indices" />
+
+    <property name="indexesSparql">
+      <bean class = "uk.ac.ebi.utils.opt.io.IOUtils" factory-method = "readFile">
+        <constructor-arg value = "#{ pwd + 'indexes.sparql' }" index = "0" />
+      </bean>
+    </property>
+
+  </bean>
 	
 </beans>
