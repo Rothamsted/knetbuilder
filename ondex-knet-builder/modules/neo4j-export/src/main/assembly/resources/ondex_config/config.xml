@@ -31,7 +31,7 @@
 	
 	<!-- Concepts -->
 	
-	<bean class = "uk.ac.rothamsted.kg.rdf2pg.neo4j.load.Neo4jConfigItem">
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
 		
 		<property name = "name" value = "Concepts" />
 	
@@ -69,7 +69,7 @@
 	
 	<!-- Accessions -->
 	
-	<bean class = "uk.ac.rothamsted.kg.rdf2pg.neo4j.load.Neo4jConfigItem">
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
 	
 		<property name = "name" value = "Accessions" />
 	
@@ -102,7 +102,7 @@
 	
 	<!-- Metadata -->
 	
-	<bean class = "uk.ac.rothamsted.kg.rdf2pg.neo4j.load.Neo4jConfigItem">
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
 	
 		<property name = "name" value = "Metadata" />
 	
@@ -129,7 +129,7 @@
 	
 	<!-- Reified Relations -->
 	
-	<bean class = "uk.ac.rothamsted.kg.rdf2pg.neo4j.load.Neo4jConfigItem">
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
 		
 		<property name = "name" value = "Reified Relations" />
 	
@@ -150,7 +150,7 @@
 	
 	<!-- Indexing, happening after everything else -->
 	
-	<bean class = "uk.ac.rothamsted.kg.rdf2pg.neo4j.load.Neo4jConfigItem">
+	<bean class = "uk.ac.rothamsted.kg.rdf2pg.pgmaker.ConfigItem">
 		
 		<property name = "name" value = "Indices" />
 		
@@ -178,7 +178,8 @@
 		<constructor-arg>
 			<bean class = "org.neo4j.driver.AuthTokens" factory-method = "basic">
 				<constructor-arg value = "#{systemProperties[ 'neo4j.user'] ?: 'neo4j' }" />
-				<constructor-arg value = "#{systemProperties[ 'neo4j.password'] ?: 'test' }" />
+				<!-- Since 5.10, you can't use 'test' anymore, for Neo4j wants passwords of at least 8 chars -->
+				<constructor-arg value = "#{systemProperties[ 'neo4j.password'] ?: 'testTest' }" />
 			</bean>
 		</constructor-arg>
 	

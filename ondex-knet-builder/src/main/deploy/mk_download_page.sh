@@ -13,12 +13,6 @@ cd "$wdir"
 
 # Gets all the download links by chaining multiple invocations of make_doc()/Nexus-API
 #
-
-# TODO: The 3.0 specified below is to obtain the right release, rather than 3.0-RC
-# I've filed a bug to Sonatype about this (https://issues.sonatype.org/browse/NEXUS-24220). 
-# We need a more stable solution, like  results filtering.
-#
-
 cat "$mydir/Downloads_template.md" \
 | make_doc \
     maven-snapshots net.sourceforge.ondex.apps installer \

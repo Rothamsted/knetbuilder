@@ -1,13 +1,18 @@
 # Revision History
 
-*This file was last reviewed on 2023-03-08*. **Please, keep this note up to date**.
+*This file was last reviewed on 2023-07-27*. **Please, keep this note up to date**.
 
-## 5.2.1-SNAPSHOT
+## 6.0.1-SNAPSHOT
 * Current snapshot
 
+## 6.0-SNAPSHOT
+* Migrated to Java 17. **WARNING: no backward compatibility guaranteed**.
+
 ## 5.2
-* Bugfixes
-  * Fixing problem (via dependency upgrade) with rdfutils and null literals.
+
+### Bugfixes
+* Fixing problem (via dependency upgrade) with rdfutils and null literals.
+
 
 ## 5.1
 * Metadata descriptor (still experimental).

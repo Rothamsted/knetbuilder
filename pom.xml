@@ -7,12 +7,12 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>3.1</version>
+	  <version>4.0</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
    <artifactId>ondex-full</artifactId>
-   <version>5.2.1-SNAPSHOT</version>
+   <version>6.0-SNAPSHOT</version>
    <packaging>pom</packaging>
 
    <name>ONDEX POM for Full Build</name>
@@ -60,13 +60,13 @@
    </scm>
 
 	 <properties>
-		 <java.version>11</java.version>
+		 <java.version>17</java.version>
 		 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 						
 		 <lucene.version>6.6.0</lucene.version>
 			
 		 <!-- Used by neo4j-related components -->
-		 <rdf2neo.version>4.0</rdf2neo.version>  
+		 <rdf2neo.version>5.0</rdf2neo.version>  
 			
 		 <slf4j.version>1.7.36</slf4j.version>
 			
@@ -308,46 +308,6 @@
 
    
    <profiles>
-      
-			<profile>
-				<id>brandizi-repo</id>
-				<activation><activeByDefault>false</activeByDefault></activation>
-				
-				<distributionManagement>
-			
-			    <snapshotRepository>
-			    	<id>marcobrandizi.info</id>
-						<url>https://mbrandizi.jfrog.io/artifactory/maven</url>
-			    </snapshotRepository>
-			
-			    <repository>
-			    	<id>marcobrandizi.info</id>
-						<url>https://mbrandizi.jfrog.io/artifactory/maven</url>
-			    </repository>
-					
-				</distributionManagement>	
-			
-			</profile>
-			
-			<!-- TODO: testing the new repo, needs to be moved into the defaults -->
-			<profile>
-				<id>knetminer-repo</id>
-				<activation><activeByDefault>false</activeByDefault></activation>
-				
-				<distributionManagement>
-				  <repository>
-						<id>knetminer-releases</id>
-						<name>Internal Releases</name>
-						<url>http://babvs58.rothamsted.ac.uk:8081/nexus/repository/maven-releases/</url>
-				  </repository>
-				  <snapshotRepository>
-						<id>knetminer-snapshots</id>
-						<name>Internal Snapshots</name>
-						<url>http://babvs58.rothamsted.ac.uk:8081/nexus/repository/maven-snapshots/</url>
-				  </snapshotRepository>
-				</distributionManagement>				
-			</profile>
-					     
    </profiles>
 
 	 <repositories>
@@ -408,19 +368,7 @@
 				<groupId>com.sun.xml.bind</groupId>
 			  <artifactId>jaxb-impl</artifactId>
 			  <version>4.0.0</version>
-			</dependency>						
-			<!-- TODO:remove we switched to Jakarta in JDK 17
-      <dependency>
-      	<groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>2.3.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish.jaxb</groupId>
-        <artifactId>jaxb-runtime</artifactId>
-        <version>2.3.2</version>
-      </dependency> -->
-
+			</dependency>
 
 			<!-- Spring annotations that were supported JDK<11 -->
 			<dependency>             
@@ -496,14 +444,21 @@
 			</dependency>				
 			              				
 
-      <!-- TODO: This is prehistoric, needs to be removed -->         
+      <!-- TODO: This is prehistoric, needs to be removed -->
+      <!--         
       <dependency>
         <groupId>com.hp.hpl.jena</groupId>
         <artifactId>jena</artifactId>
         <version>2.5.7</version>
       </dependency>
+      -->
 
-			<!-- The lib with main components in one bundle only -->
+			<!-- 
+				The lib with main components in one bundle only.
+				
+				TODO: this is used in the scripting module only, more recent modules (eg, RDF exporter, Neo4j exporter)
+				link these in their own way.
+			-->
 			<dependency>
     		<groupId>org.apache.jena</groupId>
 				<artifactId>apache-jena-libs</artifactId>
