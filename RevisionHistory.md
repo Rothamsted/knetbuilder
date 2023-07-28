@@ -5,7 +5,7 @@
 ## 6.0.1-SNAPSHOT
 * Current snapshot
 
-## 6.0-SNAPSHOT
+## 6.0
 * Migrated to Java 17. **WARNING: no backward compatibility guaranteed**.
 
 ## 5.2
