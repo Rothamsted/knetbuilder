@@ -5,7 +5,7 @@
 
 ## Requirements
 
- - At least Java 11. Note that we have migrated to this recently and **Ondex doesn't work with Java 1.8 anymore**. 
+ - At least Java 17. Note that we have migrated to this recently and **Ondex doesn't work with Java 11 anymore**. 
 
 ## Downloads
 
