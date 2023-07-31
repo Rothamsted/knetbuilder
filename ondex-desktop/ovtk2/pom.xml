@@ -148,11 +148,13 @@
          <artifactId>batik-codec</artifactId>
          <version>1.7</version>
       </dependency>
+      <!-- TODO: remove, we have removed SVGExport
       <dependency>
          <groupId>org.apache.xmlgraphics</groupId>
          <artifactId>fop</artifactId>
          <version>0.95</version>
       </dependency>
+      -->
       <dependency>
          <groupId>commons-logging</groupId>
          <artifactId>commons-logging</artifactId>

@@ -34,7 +34,6 @@ import net.sourceforge.ondex.ovtk2.ui.menu.OVTK2Menu;
 import net.sourceforge.ondex.ovtk2.util.DesktopUtils;
 import net.sourceforge.ondex.ovtk2.util.ErrorDialog;
 import net.sourceforge.ondex.ovtk2.util.OVTKProgressMonitor;
-import net.sourceforge.ondex.ovtk2.util.SVGExport;
 import net.sourceforge.ondex.tools.threading.monitoring.IndeterminateProcessAdapter;
 
 /**
@@ -194,7 +193,7 @@ public class FileMenuAction implements ActionListener {
 					File file = chooser.getFile();
 					Config.lastSavedFile = file.getAbsolutePath();
 					OVTK2Viewer viewer = (OVTK2Viewer) resources.getSelectedViewer();
-					new SVGExport(viewer, file, chooser.getSelectedFormat());
+					// new SVGExport(viewer, file, chooser.getSelectedFormat());
 					// ImageWriterUtil<ONDEXConcept, ONDEXRelation> iw = new
 					// ImageWriterUtil<ONDEXConcept,
 					// ONDEXRelation>(resources.getSelectedViewer());
