@@ -1,9 +1,12 @@
 # Revision History
 
-*This file was last reviewed on 2023-07-27*. **Please, keep this note up to date**.
+*This file was last reviewed on 2023-07-31*. **Please, keep this note up to date**.
 
-## 6.0.1-SNAPSHOT
-* Current snapshot
+## 7.0-SNAPSHOT
+
+## 7.0
+* Spring migrated to version 6. **No backward compatibility guaranteed**
+* Addition to `[jaxb.properties](ondex-knet-builder/modules/oxl/src/main/resources/net/sourceforge/ondex/export/oxl/jaxb.properties)`, to cope with older Jakarta bugs.
 
 ## 6.0
 * Migrated to Java 17. **WARNING: no backward compatibility guaranteed**.
