@@ -2,7 +2,8 @@
 
 *This file was last reviewed on 2023-07-31*. **Please, keep this note up to date**.
 
-## 7.0-SNAPSHOT
+## 7.0.1-SNAPSHOT
+* Current snapshot
 
 ## 7.0
 * Spring migrated to version 6. **No backward compatibility guaranteed**
