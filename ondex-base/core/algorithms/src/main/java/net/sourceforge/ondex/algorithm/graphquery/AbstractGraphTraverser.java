@@ -71,7 +71,7 @@ public abstract class AbstractGraphTraverser
 	
 
 	/**
-	 * Returns entities relevant to a concept (which is usually a gene), according to same criteria defined 
+	 * Returns entities relevant to a concept (which is usually a gene), according to the same criteria defined 
 	 * by the implementation of this class.
 	 * 
 	 * The result contains graph paths from the concept to found entities, in the form of {@link EvidencePathNode}. 
@@ -96,7 +96,7 @@ public abstract class AbstractGraphTraverser
 	 * 
 	 * <p>The resulting map will contain a list of paths per every concept. A concept will map to an empty 
 	 * list if no relevant path was found for that key. <b>This is part of the interface contract and implementations
-	 * are exptected to obey</b>.</p> 
+	 * are expected to obey</b>.</p> 
 	 * 
 	 */
 	@SuppressWarnings ( "rawtypes" )
