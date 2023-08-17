@@ -112,7 +112,7 @@ public abstract class AbstractGraphTraverser
 		
 		return concepts.parallelStream ()
 			.collect ( Collectors.toMap ( 
-				concept -> concept, 
+				Function.identity (), 
 				concept -> {
 					List<EvidencePathNode> result = traverseGraph ( graph, concept, filter );
 					progressLogger.updateWithIncrement ();
