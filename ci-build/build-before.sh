@@ -1,4 +1,4 @@
-export MAVEN_ARGS="$MAVEN_ARGS --no-transfer-progress"
+export MAVEN_BUILD_ARGS="$MAVEN_BUILD_ARGS --no-transfer-progress"
 # Note: -Xms1G has problems with Neo4j 4.3
 export JAVA_TOOL_OPTIONS="-Xmx4G -Dsun.net.client.defaultConnectTimeout=600000 -Dsun.net.client.defaultReadTimeout=600000" 
 # Let's make it less verbose
