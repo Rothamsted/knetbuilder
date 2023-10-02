@@ -113,17 +113,16 @@ public class SeedGenesTraverserTest
 
 	
 	@Test
-	public void testStringReader ()
+	public void testFromStringReader ()
 	{
 		testBasics ( AbstractGraphTraverser.ids2Genes ( graph, new StringReader ( TEST_GENE_LIST ) ) );
 	}
 
 	@Test
-	public void testStringFile () throws IOException
+	public void testFromFile () throws IOException
 	{
 		String geneListPath = "target/test-gene-list.tsv";
-		try ( FileWriter fw = new FileWriter ( geneListPath ) )
-		{
+		try ( FileWriter fw = new FileWriter ( geneListPath ) ) {
 			fw.write ( TEST_GENE_LIST );
 		}
 		testBasics ( AbstractGraphTraverser.ids2Genes ( graph, geneListPath ) );
