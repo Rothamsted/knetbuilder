@@ -367,11 +367,14 @@
 			  <artifactId>jakarta.xml.bind-api</artifactId>
 			  <version>4.0.0</version>
 			</dependency>
-			<!--This should be the implementation of jakarta.xml.bind-api -->
+			<!--
+			  This should be the implementation of jakarta.xml.bind-api
+			  (https://stackoverflow.com/a/72151763/529286) 
+			-->
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 			  <artifactId>jaxb-impl</artifactId>
-			  <version>4.0.0</version>
+			  <version>4.0.3</version>
 			</dependency>
 
 			<!-- Spring annotations that were supported JDK<11 -->
