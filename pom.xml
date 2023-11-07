@@ -7,7 +7,7 @@
 	<parent>
 	  <groupId>uk.ac.rothamsted.knetminer</groupId>
 	  <artifactId>knetminer-common</artifactId>
-	  <version>4.0</version>
+	  <version>5.0</version>
 	</parent>  
 
    <groupId>net.sourceforge.ondex</groupId>
@@ -66,18 +66,14 @@
 		 <lucene.version>6.6.0</lucene.version>
 			
 		 <!-- Used by neo4j-related components -->
-		 <rdf2neo.version>5.0</rdf2neo.version>  
+		 <rdf2neo.version>5.1</rdf2neo.version>  
 			
-		 <slf4j.version>1.7.36</slf4j.version>
+		 <slf4j.version>2.0.9</slf4j.version>
 			
-     <jena.version>4.7.0</jena.version>
+     <jena.version>4.9.0</jena.version>
      
      <!-- This is used when we want to override rdf-common -->
      <!-- rdfutils.version>xxx</rdfutils.version -->
-
-		<!-- TODO: realign with rdf-common -->
-		<jutils.version>13.0</jutils.version>		
-		<springframework.version>6.0.11</springframework.version>
 
 	 </properties>
 
@@ -194,11 +190,6 @@
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-failsafe-plugin</artifactId>
-							<!-- 
-								This happens in M5: https://issues.apache.org/jira/browse/SUREFIRE-1809
-								They've a workaround, but it's quicker to wait for M6 
-							-->
-							<version>3.0.0-M8</version>
 							<configuration>
 								<trimStackTrace>false</trimStackTrace>
 								<argLine>-XX:MaxRAM=4G -Dondex.dir=${basedir}/data -Dfile.encoding=UTF-8</argLine>
@@ -228,13 +219,13 @@
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-project-info-reports-plugin</artifactId>
-							<version>2.1.2</version>
+							<version>3.4.5</version>
 						</plugin>
 						
 						<plugin>
 						  <groupId>org.codehaus.mojo</groupId>
 						  <artifactId>taglist-maven-plugin</artifactId>
-						  <version>2.4</version>
+						  <version>3.0</version>
 						</plugin>
 
 						
@@ -358,7 +349,7 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.2.3</version>
+        <version>1.4.11</version>
       </dependency>
 			
 			<!-- Since JDK 11, we need this as a separate lib -->
@@ -374,7 +365,7 @@
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 			  <artifactId>jaxb-impl</artifactId>
-			  <version>4.0.3</version>
+			  <version>4.0.4</version>
 			</dependency>
 
 			<!-- Spring annotations that were supported JDK<11 -->
@@ -386,7 +377,7 @@
 			<dependency>             
         <groupId>javax.annotation</groupId>
         <artifactId>jsr250-api</artifactId>
-        <version>1.0</version>
+        <version>1.3.2</version>
 			</dependency>  
                 
       <dependency>
@@ -404,13 +395,13 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 			  <artifactId>commons-collections4</artifactId>
-			  <version>4.1</version>
+			  <version>4.4</version>
 			</dependency>
 										
       <dependency>
        <groupId>net.sourceforge.jexcelapi</groupId>
        <artifactId>jxl</artifactId>
-       <version>2.6.10</version>
+       <version>2.6.12</version>
       </dependency>
          
 			<dependency>
@@ -430,35 +421,7 @@
 				<artifactId>lucene-analyzers-common</artifactId>
 				<version>${lucene.version}</version>
 			</dependency>
-				 
-			<dependency>
-				<!-- Cute utility that allows for quick handling of exceptions (eg, checked/unchecked wrapping) -->
-				<groupId>com.machinezoo.noexception</groupId>
-				<artifactId>noexception</artifactId>
-				<version>1.3.2</version>
-			</dependency>      
-				
-			<dependency>
-			  <groupId>org.apache.commons</groupId>
-			  <artifactId>commons-lang3</artifactId>
-			  <version>3.5</version>
-			</dependency>
-			
-			<dependency>
-			  <groupId>commons-io</groupId>
-			  <artifactId>commons-io</artifactId>
-			  <version>2.8.0</version>
-			</dependency>				
-			              				
 
-      <!-- TODO: This is prehistoric, needs to be removed -->
-      <!--         
-      <dependency>
-        <groupId>com.hp.hpl.jena</groupId>
-        <artifactId>jena</artifactId>
-        <version>2.5.7</version>
-      </dependency>
-      -->
 
 			<!-- 
 				The lib with main components in one bundle only.
@@ -521,12 +484,12 @@
       <dependency>
         <groupId>org.codehaus.woodstox</groupId>
         <artifactId>stax2-api</artifactId>
-        <version>4.2</version>
+        <version>4.2.2</version>
       </dependency>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
 			  <artifactId>cxf-wstx-msv-validation</artifactId>
-				<!-- was 2.2.6 First that works is 2.2.11 -->
+				<!-- was 2.2.6 First that works is 2.2.11, 2.2 is the last on Central -->
 			  <version>2.2</version>
 			</dependency>
 			
@@ -539,16 +502,8 @@
 			<dependency>
 				<groupId>com.opencsv</groupId>
 				<artifactId>opencsv</artifactId>
-				<version>5.1</version>
+				<version>5.8</version>
 			</dependency>
-
-			<!-- TODO: remove? Was used by Kegg
-			<dependency>
-			  <groupId>axis</groupId>
-			  <artifactId>axis</artifactId>
-			  <version>1.3</version>
-			</dependency>
-			-->
 			
 			<dependency>
 				<groupId>xerces</groupId>
@@ -565,14 +520,14 @@
       <dependency>
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
-				<version>1.15.3</version>
+				<version>1.16.2</version>
       </dependency>
       
       <!-- TODO: would be good to replace all the uses of this with picocli, at the moment we use both -->
 			<dependency>
 				<groupId>commons-cli</groupId>
 				<artifactId>commons-cli</artifactId>
-				<version>1.4</version>
+				<version>1.6.0</version>
 			</dependency>			
 			
     </dependencies>
