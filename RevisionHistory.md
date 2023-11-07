@@ -3,6 +3,7 @@
 *This file was last reviewed on 2023-11-07*. **Please, keep this note up to date**.
 
 ## 7.0.2-SNAPSHOT
+* Current snapshot.
 
 ## 7.0.1
 * Various dependencies upgraded.
