@@ -294,7 +294,7 @@ public class GraphLabelsUtils
 	
 	/**
 	 * 
-	 * Core function to select the best name for a set, giving priority based on a couple of criterion (see below).
+	 * Core function to select the best name for a set, giving priority based on a couple of criteria (see below).
 	 * 
 	 * By default, it chooses a name by considering this order of priority: 
 	 * 
@@ -372,7 +372,7 @@ public class GraphLabelsUtils
 	}
 
 	/**
-	 * Same as {@link #filterAccessionsFromNames(ONDEXConcept), but returns the stream of filtered names, which 
+	 * Same as {@link #filterAccessionsFromNames(ONDEXConcept)}, but returns the stream of filtered names, which 
 	 * might be more efficient if you need to further process it.
 	 */
 	public static Stream<ConceptName> filterAccessionsFromNamesAsStream ( ONDEXConcept concept )
@@ -382,12 +382,12 @@ public class GraphLabelsUtils
 
 	
 	/**
-	 * This is the real implementation of {@link #filterAccessionsFromNames(ONDEXConcept)}, which is used by 
+	 * This is the real implementation of {@link #filterAccessionsFromNames(ONDEXConcept, String)}, which is used by 
 	 * {@link #getBestName(ONDEXConcept, boolean)}. It considers the case where a best name has already been selected 
 	 * (eg, for displaying), but it might be one of the accessions, so, it goes on with filtering only if it is indeed
 	 * an accession.
 	 * 
-	 * @param selectedName: a name that has been picked from the concept's names. This MUST be one of the names, else
+	 * @param selectedName a name that has been picked from the concept's names. This MUST be one of the names, else
 	 *        the method won't work.
 	 *        
 	 * @return if selectedName is one of the concept's accessions, or the concept has only one name (ie, the already
