@@ -1,12 +1,12 @@
 # Notes about migration to Java 17
 
 ## Still pending
-  * Neo4 isn't compatible with J17, this prevents a number of tests from
+  * OK Neo4 isn't compatible with J17, this prevents a number of tests from
     working, at the moment Neo4j-related components were disabled from
     Ondex. 
 
-  * The desktop app shows [this error][10] sometimes. It doesn't seem to affect
-    functionality, likely it will go away with the next JDK 17.
+  * OK The desktop app initiallt showed [this error][10] sometimes. It doesn't seem to affect
+    functionality, seems to be fine now.
 
 [10]: https://bugs.openjdk.org/browse/JDK-8283347
 
