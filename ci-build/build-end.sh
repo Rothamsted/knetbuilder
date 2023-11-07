@@ -31,4 +31,4 @@ echo -e "\n\n\tTriggering RRes deployment\n"
   
 job='ondex_rres_deployment'
 curl --user "$KNET_JENKINS_USER:$KNET_JENKINS_TOKEN" -X POST -o - --fail \
-     "https://knetminer.org/build/job/$job/build"
+     "https://knetminer.com/build/job/$job/build"
