@@ -16,6 +16,8 @@ SELECT DISTINCT ?label ?propertyName ?isRelation
 			( '*' rdfs:label false )
 			( '*' rdfs:label true )
 			( '*' bk:evidence true )
+			( '*' bk:ondexId false )
+			( '*' bk:ondexId true )
 			
 			# New Neo 4.3 indexing at label/relation-type level
 	  	( '*' '_type_' false)
