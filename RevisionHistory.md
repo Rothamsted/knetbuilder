@@ -1,9 +1,10 @@
 # Revision History
 
-*This file was last reviewed on 2023-11-07*. **Please, keep this note up to date**.
+*This file was last reviewed on 2024-02-07*. **Please, keep this note up to date**.
 
 ## 7.0.2-SNAPSHOT
-* Current snapshot.
+* Current snapshot
+* Neo4j exporter: ondexId added to the indexes.
 
 ## 7.0.1
 * Various dependencies upgraded.
