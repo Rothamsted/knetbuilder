@@ -66,12 +66,14 @@ public class OndexRDFUtils
 		.map ( StringUtils::trimToNull )
 		.map ( String::toLowerCase )
 		// To prevent cases like GO_GO:1234
-		.filter ( a -> !a.startsWith ( classPartNew ) )
 		.map ( OndexRDFUtils::idEncode )
 		.map ( a -> forceIdAddition ? a + "_" + id : a )
 		.orElse ( "" + id );
-				
-		return ns + classPartNew + "_" + idPart;
+					
+		return ns 
+			// To prevent cases like GO_GO:1234
+			+ (idPart.startsWith ( classPartNew ) ? "" : classPartNew + "_" )
+			+ idPart;
 	}
 	
 	/**
@@ -84,6 +86,7 @@ public class OndexRDFUtils
 
 	/**
 	 * Don't use an ID, assuming the acc parameter is non empty.
+	 * @throws NullPointerException when acc is null
 	 * @throws IllegalArgumentException when acc is empty.
 	 * 
 	 * This is a wrapper of {@link #iri(String, String, String, int, boolean)}.
