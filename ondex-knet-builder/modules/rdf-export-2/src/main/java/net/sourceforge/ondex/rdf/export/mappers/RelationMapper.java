@@ -93,8 +93,12 @@ public class RelationMapper extends ONDEXEntityMapper<ONDEXRelation>
 			// Let's make something simpler of this ugly/long thing 
 			attrPart = IdUtils.hashUriSignature ( attrPart ); 
 			
-			// The last parameter won't be used in this case
-			return OndexRDFUtils.iri ( ns, rtPart, fromPart + '_' + toPart + '_' + attrPart, -1 );
+			// TODO: some tests? In 2024, we added forceIdAddition = true (in the wrapped call)
+			// so now all the concept URIs have the ONDEX ID added. This sad decision was due to 
+			// too many unmerged nodes and relations, which caused too many mismatches
+			// between the OXL and the RDF/Neo4j data.
+			
+			return OndexRDFUtils.iri ( ns, rtPart, fromPart + '_' + toPart, rel.getId () );
 		}				
 	}
 	

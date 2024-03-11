@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.Model;
 
@@ -44,6 +45,11 @@ public class ConceptMapper extends ONDEXEntityMapper<ONDEXConcept>
 				.ofNullable ( c.getOfType () )
 				.flatMap ( cc -> Optional.ofNullable ( cc.getId () ) )
 				.orElse ( null );
+			
+			// TODO: some tests? In 2024, we added forceIdAddition = true (in the wrapped call)
+			// so now all the concept URIs have the ONDEX ID added. This sad decision was due to 
+			// too many unmerged nodes and relations, which caused too many mismatches
+			// between the OXL and the RDF/Neo4j data.
 			
 			return OndexRDFUtils.iri ( ns, ccPart, c.getPID (), c.getId () );
 		}				

@@ -141,9 +141,10 @@ public class URIAdditionPluginTest
 			
 			assertNotNull ( "URI value for " + concept.getPID () + " is null!", uri );
 			assertTrue ( "URI format for " + concept.getPID () + " is wrong (namespace)", uri.startsWith ( instanceNamespaceConst ) );
+			
 			assertTrue ( 
 				"URI format for " + concept.getPID () + " is wrong (ID)",
-				uri.endsWith ( ( concept.getOfType ().getId () + "_" + concept.getPID () ).toLowerCase () ) 
+				uri.endsWith ( ( concept.getOfType ().getId () + "_" + concept.getPID () ).toLowerCase () + "_" + concept.getId () ) 
 			);
 		});
 		
@@ -158,8 +159,8 @@ public class URIAdditionPluginTest
 		assertTrue ( 
 			"URI format for A->B is wrong (ID)", 
 			uri.matches ( 
-				// reltype_from_to_attrs
-				"^http://.+" + relAB.getOfType ().getId ().toLowerCase () + "_.+_.+_?.*" 
+				// reltype_from_to_ondexId
+				"^http://.+" + relAB.getOfType ().getId ().toLowerCase () + "(_.+){3}" 
 			) 
 		);
 	}

@@ -7,10 +7,12 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.sourceforge.ondex.core.ConceptName;
 import uk.ac.ebi.utils.ids.IdUtils;
+import uk.ac.ebi.utils.objects.XValidate;
 
 /**
  * Utilities to deal with RDF in ONDEX.
@@ -42,37 +44,59 @@ public class OndexRDFUtils
 	/**
 	 * makes an uri using its main parts and doing some massaging of them.
 	 * 
-	 * @param ns: the namespace, the first part of the URI
-	 * @param classPart: the classPart is turned into lower-case and then prefixed to id. If it's null 
+	 * @param ns the namespace, the first part of the URI
+	 * 
+	 * @param classPart the classPart is turned into lower-case and then prefixed to id. If it's null 
 	 * (after {@link StringUtils#trimToNull(String)}), "generic" is used as the class part of the IRI.
-	 * @param acc. This is concatenated to classPart using '_' as separator, after processing 
+	 * 
+	 * @param acc This is concatenated to classPart using '_' as separator, after processing 
 	 * via {@link #idEncode(String)} and lower-case conversion.
+	 * 
+	 * @param id to be appended to the result, when acc is null/empty or when forceIdPart is true.
 	 *  
+	 */
+	public static String iri ( String ns, String classPart, String acc, int id, boolean forceIdAddition )
+	{
+		String classPartNew = Optional.ofNullable ( classPart )
+		.map ( StringUtils::trimToNull )
+		.map ( String::toLowerCase )
+		.orElse ( "generic" );
+		
+		String idPart = Optional.ofNullable ( acc )
+		.map ( StringUtils::trimToNull )
+		.map ( String::toLowerCase )
+		// To prevent cases like GO_GO:1234
+		.filter ( a -> !a.startsWith ( classPartNew ) )
+		.map ( OndexRDFUtils::idEncode )
+		.map ( a -> forceIdAddition ? a + "_" + id : a )
+		.orElse ( "" + id );
+				
+		return ns + classPartNew + "_" + idPart;
+	}
+	
+	/**
+	 * Defaults to forceIdAddition = true
 	 */
 	public static String iri ( String ns, String classPart, String acc, int id )
 	{
-		classPart = StringUtils.trimToNull ( classPart );
-		if ( classPart == null ) 
-			classPart = "generic";
-		else 
-			classPart = classPart.toLowerCase ();
-		
-		String idPart = StringUtils.trimToNull ( acc );
-		if ( idPart == null ) 
-			idPart = String.valueOf ( id );
-		else
-		{
-			idPart = idPart.toLowerCase ();
-			// To prevent cases like GO_GO:1234
-			if ( idPart.startsWith ( classPart ) ) classPart = null;
-			idPart = idEncode ( idPart );
-		}
-		
-		StringBuilder sb = new StringBuilder ( ns );
-		if ( classPart != null ) sb.append ( classPart ).append ( '_' );
-		sb.append ( idPart );
-		
-		return sb.toString ();
+		return iri ( ns, classPart, acc, id, true );
+	}
+
+	/**
+	 * Don't use an ID, assuming the acc parameter is non empty.
+	 * @throws IllegalArgumentException when acc is empty.
+	 * 
+	 * This is a wrapper of {@link #iri(String, String, String, int, boolean)}.
+	 */
+	public static String iri ( String ns, String classPart, String acc )
+	{
+		Validate.notBlank (
+			acc, 
+			"iri( '%s', '%s', '%s') can't support empty accession without ID",
+			ns, classPart, acc
+		);
+		// The ID isn't used, so we can pass whatever value
+		return iri ( ns, classPart, acc, -1, false );
 	}
 	
 

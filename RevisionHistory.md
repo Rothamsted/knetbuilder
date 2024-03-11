@@ -3,7 +3,8 @@
 *This file was last reviewed on 2024-02-07*. **Please, keep this note up to date**.
 
 ## 7.0.2-SNAPSHOT
-* Current snapshot
+* **IMPORTANT**: RDF Exporter and components relying on URI generation for
+  concepts and relations: URIs are now built using the ONDEX internal integer ID.
 * Neo4j exporter: ondexId added to the indexes.
 
 ## 7.0.1

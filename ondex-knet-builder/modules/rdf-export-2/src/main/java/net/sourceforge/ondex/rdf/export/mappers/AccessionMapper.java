@@ -34,7 +34,7 @@ public class AccessionMapper extends BeanRdfMapper<ConceptAccession>
 			String dsPart = Optional.ofNullable ( acc.getElementOf () ).map ( DataSource::getId ).orElse ( "generic" );
 			
 			// The accession is always present, so -1 will never be used
-			return OndexRDFUtils.iri ( ns + "accsn_", dsPart, accValue, -1 );
+			return OndexRDFUtils.iri ( ns + "accsn_", dsPart, accValue );
 		}		
 	}
 	
