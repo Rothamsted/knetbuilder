@@ -313,7 +313,7 @@
 			<repository>
 				<id>knetminer-repo</id>
 				<name>Rothamsted Maven Repo</name>
-				<url>https://knetminer.com/artifactory/repository/maven-public/</url>
+				<url>https://knetminer.rothamsted.ac.uk/artifactory/repository/maven-public/</url>
 			  <snapshots><enabled>true</enabled></snapshots>
 			  <releases><enabled>true</enabled></releases>
 			</repository>
