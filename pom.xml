@@ -317,6 +317,15 @@
 			  <snapshots><enabled>true</enabled></snapshots>
 			  <releases><enabled>true</enabled></releases>
 			</repository>
+
+			<repository>
+				<!-- For reading only-->
+				<id>knetminer-nova-repo</id>
+				<name>KnetMiner Nova Repo</name>
+				<url>https://artifactory.knetminer.com/public</url>
+			  <snapshots><enabled>true</enabled></snapshots>
+			  <releases><enabled>true</enabled></releases>
+			</repository>
 						                 
 	 </repositories>
 	 
