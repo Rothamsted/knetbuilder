@@ -21,6 +21,9 @@
 		</developer>
 	</developers>
 
+	<properties>
+		<neo4j.server.version>5.26.8</neo4j.server.version>
+	</properties>
 
 	<dependencies>
 
