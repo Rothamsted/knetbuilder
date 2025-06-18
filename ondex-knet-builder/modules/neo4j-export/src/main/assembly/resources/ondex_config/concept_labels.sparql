@@ -13,6 +13,5 @@ SELECT ?label
 	UNION {
 	  # it's always instance of concept 
 	  BIND ( bk:Concept AS ?label )
-	  BIND ( ?iri AS ?iri )
 	} 
 }
