@@ -5,7 +5,7 @@
     working, at the moment Neo4j-related components were disabled from
     Ondex. 
 
-  * OK The desktop app initiallt showed [this error][10] sometimes. It doesn't seem to affect
+  * OK The desktop app initially showed [this error][10] sometimes. It doesn't seem to affect
     functionality, seems to be fine now.
 
 [10]: https://bugs.openjdk.org/browse/JDK-8283347
