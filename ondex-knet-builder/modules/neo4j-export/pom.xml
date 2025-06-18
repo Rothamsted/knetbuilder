@@ -48,6 +48,7 @@
 			<artifactId>rdf2neo</artifactId>
 			<scope>test</scope>
 		</dependency>
+				
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -55,6 +56,15 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+  		<groupId>org.apache.jena</groupId>
+			<artifactId>apache-jena-libs</artifactId>
+	    <version>5.4.0</version>
+			<type>pom</type>
+			<scope>test</scope>	    
+		</dependency>
+
 
 		<dependency>
 			<groupId>net.sourceforge.ondex.modules</groupId>
@@ -120,7 +130,7 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
 					<systemPropertyVariables>
-						<neo4j.server.boltPort>${neo4j.server.boltPort}</neo4j.server.boltPort>						
+						<neo4j.server.boltPort>${neo4j.server.boltPort}</neo4j.server.boltPort>												
 					</systemPropertyVariables>
       		<environmentVariables>
       			<!-- this is to re-use the config shipped to the final binary with integration tests. -->
