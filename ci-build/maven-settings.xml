@@ -1,0 +1,23 @@
+<settings 
+	xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"
+>
+  <servers>
+    
+    <server>
+			<id>knetminer-rres-repo</id>
+			<!-- This is to be set in your OS or CI system -->
+      <username>${env.KNET_REPO_USER}</username>
+      <password>${env.KNET_REPO_PASSWORD}</password>
+	  </server>
+
+    <server>
+			<id>knetminer-rres-repo-snapshots</id>
+      <username>${env.KNET_REPO_USER}</username>
+      <password>${env.KNET_REPO_PASSWORD}</password>
+	  </server>
+    
+  </servers>
+  
+</settings>

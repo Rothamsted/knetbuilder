@@ -11,6 +11,7 @@ ondex.log
 # These are auto-downloaded by the CI
 /ci-build/build.sh
 /ci-build/install.sh
-/ci-build/maven-settings.xml
+Disable if you have your own
+#/ci-build/maven-settings.xml
 # Created by GH Actions
 /settings.xml 

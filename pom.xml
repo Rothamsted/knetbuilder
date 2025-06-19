@@ -308,6 +308,21 @@
    <profiles>
    </profiles>
 
+		<distributionManagement>
+
+			<repository>
+				<id>knetminer-rres-repo</id>
+				<name>Rothamsted Maven Repo</name>
+				<url>https://knetminer.rothamsted.ac.uk/artifactory/repository/maven-public/</url>
+			</repository>
+			<snapshotRepository>
+				<id>knetminer-rres-repo-snapshots</id>
+				<name>Rothamsted Maven Repo</name>
+				<url>https://knetminer.rothamsted.ac.uk/artifactory/repository/maven-snapshots/</url>
+			</snapshotRepository>
+		
+		</distributionManagement>
+
 	 <repositories>
 			<repository>
 				<id>knetminer-repo</id>
