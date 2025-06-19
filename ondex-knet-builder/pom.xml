@@ -23,16 +23,4 @@
     <module>mini-integration-tests</module>
    </modules>
    
-	 <repositories>
-	  <!-- 
-	  	This needs to be mentioned here too, since sometimes you want to build
-	  	from this subtree only. 
-	  -->
-		<repository>
-			<id>knetminer-repo</id>
-			<name>Rothamsted Maven Repo</name>
-			<url>https://knetminer.com/artifactory/repository/maven-public/</url>
-		  <snapshots><enabled>true</enabled></snapshots>
-		</repository>
-	 </repositories>   
 </project>
