@@ -9,6 +9,8 @@
 
 	<bean id = "owlMapper" parent = "defaultOwlMapper" class = "net.sourceforge.ondex.parser.owl.OWLInfMapper">
 
+		<property name = "withOboIsInferred" value = "true" />
+
 		<!-- The top classes to start from -->
 		<property name = "rootsScanner">
 			<bean class = "net.sourceforge.ondex.parser.CompositeScanner">

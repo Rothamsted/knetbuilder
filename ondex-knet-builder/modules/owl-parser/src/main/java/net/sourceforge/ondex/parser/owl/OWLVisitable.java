@@ -1,11 +1,9 @@
 package net.sourceforge.ondex.parser.owl;
 
-import static info.marcobrandizi.rdfutils.jena.JenaGraphUtils.JENAUTILS;
-import static info.marcobrandizi.rdfutils.namespaces.NamespaceUtils.iri;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.jena.ontology.OntClass;
-import org.apache.jena.ontology.OntModel;
-import org.apache.jena.rdf.model.Property;
 
 import net.sourceforge.ondex.parser.Visitable;
 
@@ -22,12 +20,8 @@ import net.sourceforge.ondex.parser.Visitable;
  */
 public class OWLVisitable implements Visitable<OntClass>
 {
-	protected String visitedProp = iri ( "odx:isProcessedNode" );
-	
-	public OWLVisitable ( String visitedProp ) {
-		this.visitedProp = iri ( visitedProp );
-	}
-
+	private Set<String> visitedClassUris = new HashSet<> ();
+		
 	public OWLVisitable () {
 	}
 
@@ -35,22 +29,14 @@ public class OWLVisitable implements Visitable<OntClass>
 	@Override
 	public boolean isVisited ( OntClass ontCls )
 	{
-		return
-			JENAUTILS.getObject ( ontCls.getModel (), ontCls.getURI (), visitedProp, true ) 
-			.flatMap ( JENAUTILS::literal2Boolean )
-			.orElse ( false );
+		return visitedClassUris.contains ( ontCls.getURI () );
 	}
 
 	@Override
 	public boolean setVisited ( OntClass ontCls, boolean isVisited )
 	{
-		boolean oldValue = this.isVisited ( ontCls );
-		if ( oldValue == isVisited ) return oldValue;
-		
-		OntModel m = ontCls.getOntModel ();
-		Property pisVisited = m.getProperty ( visitedProp );
-		ontCls.removeAll ( pisVisited );
-		ontCls.addLiteral ( pisVisited, isVisited );
-		return oldValue;
+		if ( isVisited ) return !visitedClassUris.add ( ontCls.getURI () );
+		return visitedClassUris.remove ( ontCls.getURI () );
 	}
+	
 }

@@ -26,18 +26,21 @@ import net.sourceforge.ondex.core.ONDEXGraph;
 import net.sourceforge.ondex.core.memory.MemoryONDEXGraph;
 import net.sourceforge.ondex.parser.ConceptClassMapper;
 import net.sourceforge.ondex.parser.ExploringMapper;
+import net.sourceforge.ondex.parser.Visitable;
 import uk.ac.ebi.utils.exceptions.ExceptionUtils;
 import uk.ac.ebi.utils.exceptions.UncheckedFileNotFoundException;
 import uk.ac.ebi.utils.opt.io.IOUtils;
 
 /**
- * <p>This is the top level mapper/parser. Usually a class of this type is configured via 
- * <a href = "https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html">Spring Beans</a>, 
+ * <p>This is the top level mapper/parser. Usually a class of this type, or more likely, {@link OWLInfMapper}, 
+ * is configured via <a href = "https://docs.spring.io/spring/docs/current/spring-framework-reference/html/beans.html">Spring Beans</a>, 
  * equipping it with mappers that are specific to the ontology type that is being parsed and mapped to ONDEX.</p>
  * 
  * This maps a {@link OntModel Jena Ontology Model} into an ONDEXGraph containing the corresponding ontology.
  *
  * <p>See examples in tests and default configurations.</p>
+ * 
+ * <p><b>Warning</b>: with recent versions of Jena, likely, you'll want to use {@link OWLInfMapper} in place of this.</p>
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>4 Apr 2017</dd></dl>
@@ -48,7 +51,7 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 	private static Logger slog = LoggerFactory.getLogger ( OWLMapper.class );
 	
-	private OWLVisitable visitableHelper = new OWLVisitable ();  
+	private OWLVisitable visitableHelper;  
 	
 	public ONDEXGraph map2Graph ( OntModel model )
 	{
@@ -97,6 +100,8 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 	@Override
 	public Stream<ONDEXConcept> map ( OntModel source, ONDEXGraph graph )
 	{
+		this.visitableHelper = new OWLVisitable ();
+		
 		ConceptClassMapper<OntClass> ccmap = this.getConceptClassMapper ();
 		if ( ccmap instanceof OWLTopConceptClassMapper )
 		{
@@ -214,6 +219,10 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 		return super.scanTree ( rootItem, topItem, graph );
 	}
 
+	/**
+	 * The {@link Visitable} implementation for this is based on {@link OWLVisitable}. 
+	 * The visited states are reset when {@link #map(OntModel, ONDEXGraph)} is called. 
+	 */
 	public boolean isVisited ( OntClass ontCls )
 	{
 		return visitableHelper.isVisited ( ontCls );

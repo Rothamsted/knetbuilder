@@ -2,7 +2,9 @@ package net.sourceforge.ondex.parser.owl;
 
 import java.util.stream.Stream;
 
+import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.update.UpdateAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +14,12 @@ import net.sourceforge.ondex.core.ONDEXConcept;
 import net.sourceforge.ondex.core.ONDEXGraph;
 
 /**
- * Pre-process owl:Axiom constructs with oboInOwl:is_inferred, so that the corresponding inferred relations are
- * available in the model to be mapped like the others 
+ * Pre-processes the original OWL dataset to add needed things.
+ * 
+ * See {@link #isWithExplicitOwlClasses()}, {@link #isWithOboIsInferred()}.
+ * 
+ * <b>Warning</b>: with recent Jena versions, you will likely want to use this with
+ * {@link #isWithExplicitOwlClasses()}, and not {@link OWLMapper}.
  *
  * @author brandizi
  * <dl><dt>Date:</dt><dd>31 May 2017</dd></dl>
@@ -23,22 +29,103 @@ public class OWLInfMapper extends OWLMapper
 {
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 
+	private boolean withExplicitOwlClasses = true,
+		withOboIsInferred = false;
+	
 	@Override
 	public Stream<ONDEXConcept> map ( OntModel model, ONDEXGraph graph )
 	{
+		this.doOboIsInferred ( model );
+		this.doExplicitOwlClasses ( model );
+		return super.map ( model, graph );
+	}
+
+	private void doOboIsInferred ( OntModel model )
+	{
+		if ( !this.isWithOboIsInferred () ) return;
+
 		log.info ( "Preprocessing inference annotations, please wait..." );
 		String sparul =
-			NamespaceUtils.asSPARQLProlog ()
-			+ "\n\nINSERT { ?child rdfs:subClassOf ?parent }\n"
-		  + "WHERE { \n"
-		  + "  ?ax a owl:Axiom;\n"
-		  + "      owl:annotatedProperty rdfs:subClassOf;\n"
-		  + "      owl:annotatedSource ?child;\n"
-		  + "			 owl:annotatedTarget ?parent;\n"
-		  + "      oboInOwl:is_inferred 'true'"
-		  + "}";
+			NamespaceUtils.asSPARQLProlog () +
+			"""
+					
+			INSERT { ?child rdfs:subClassOf ?parent }
+			WHERE { 
+			  ?ax a owl:Axiom;
+			      owl:annotatedProperty rdfs:subClassOf;
+			      owl:annotatedSource ?child;
+			      owl:annotatedTarget ?parent;
+			      oboInOwl:is_inferred 'true'
+			}""";
 		UpdateAction.parseExecute ( sparul, model );
-		return super.map ( model, graph );
+		log.info ( "Inference annotation processed." );
+	}	
+	
+	private void doExplicitOwlClasses ( OntModel model )
+	{
+		if ( !this.isWithExplicitOwlClasses () ) return;
+
+		log.info ( "Adding explicit rdf:type owl:Class statements, please wait..." );
+		String sparul =
+			NamespaceUtils.asSPARQLProlog () + 
+			"""
+					
+      INSERT { ?child rdf:type owl:Class }
+      WHERE {
+        ?child rdfs:subClassOf ?parent.
+        FILTER NOT EXISTS { ?x rdf:type owl:Class }
+      }					
+			""";
+		UpdateAction.parseExecute ( sparul, model );
+		log.info ( "owl:Class statements added." );
+	}
+	
+	/**
+	 * Looks for statements like {@code ?child rdfs:subClassOf ?parent} and adds 
+	 * {@code ?child rdf:type owl:Class} if it doesn't already exists. This tweak is made
+	 * necessary by recent releases of Jena, which, when used with {@link OntModelSpec#OWL_MEM},
+	 * doesn't accept to create an {@link OntClass} from a URI, unless the URI is explicitly 
+	 * qualified as an OWL class.
+	 * 
+	 * This flag is true by default, since you will need it in most cases.
+	 */
+	public boolean isWithExplicitOwlClasses ()
+	{
+		return withExplicitOwlClasses;
+	}
+
+	public void setWithExplicitOwlClasses ( boolean withExplicitOwlClasses )
+	{
+		this.withExplicitOwlClasses = withExplicitOwlClasses;
+	}
+
+	
+	/**
+	 * Pre-processes owl:Axiom constructs with oboInOwl:is_inferred, so that the corresponding inferred relations are
+	 * available in the model to be mapped like the others.
+	 * 
+	 * Namely, it looks for this OBO-in-OWL specific pattern:
+	 *
+	 * <pre>
+	 * ?ax a owl:Axiom;
+	 *   owl:annotatedProperty rdfs:subClassOf;
+	 *	 owl:annotatedSource ?child;
+	 *	 owl:annotatedTarget ?parent;
+	 *	 oboInOwl:is_inferred 'true'
+	 * </pre>
+	 * 
+	 * and adds {@code ?child rdfs:subClassOf ?parent}.
+	 * 
+	 * This flag is false by default.
+	 */
+	public boolean isWithOboIsInferred ()
+	{
+		return withOboIsInferred;
+	}
+
+	public void setWithOboIsInferred ( boolean withOboIsInferred )
+	{
+		this.withOboIsInferred = withOboIsInferred;
 	}
 
 }

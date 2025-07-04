@@ -190,7 +190,7 @@ public class MappersTest
 	
 	
 	@Test
-	public void testSpringBootstrap () throws IOException
+	public void testSpringBootstrap ()
 	{
 		try ( ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext ( "mappings_ex.xml" ); )
 		{

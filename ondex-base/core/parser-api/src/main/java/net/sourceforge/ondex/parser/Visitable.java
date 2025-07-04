@@ -37,4 +37,23 @@ public interface Visitable<T>
 	public default boolean setVisited ( T value ) {
 		return this.setVisited ( value, true );
 	}
+	
+	/**
+	 * TODO: never used! It's just an experiment!
+	 * 
+	 * Implements this {@link Visitable} by making it a delegate of another one.
+	 * 
+	 * This can be useful with components like {@link CompositeStreamMapper}, which might track all
+	 * its visited sources in one place and let their component use it.
+	 * 
+	 * The default implementation throws {@link UnsupportedOperationException}, we can't implement
+	 * this in an interface.
+	 * 
+	 */
+	public default void setDelegateVisitable ( Visitable<? extends T> delegate )
+	{
+		throw new UnsupportedOperationException (
+			"setDelegateVisitable() isn't available by default" 
+		);
+	}
 }

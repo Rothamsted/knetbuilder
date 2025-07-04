@@ -25,7 +25,7 @@
 	
 	
 	<!-- The base mapper parses an ontology top-down, starting from the ontology root classes -->
-	<bean id = "defaultOwlMapper" class = "net.sourceforge.ondex.parser.owl.OWLMapper">
+	<bean id = "defaultOwlMapper" class = "net.sourceforge.ondex.parser.owl.OWLInfMapper">
 		<property name="conceptClassMapper" ref = "conceptClassMapper" />
 		<property name="conceptMapper" ref = "conceptMapper" />
 		<property name="rootsScanner" ref = "rootsScanner" />
