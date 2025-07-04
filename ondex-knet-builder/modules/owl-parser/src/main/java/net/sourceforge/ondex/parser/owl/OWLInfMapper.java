@@ -40,6 +40,10 @@ public class OWLInfMapper extends OWLMapper
 		return super.map ( model, graph );
 	}
 
+	/**
+	 * Called by {@link #map(OntModel, ONDEXGraph)}, check {@link #isWithOboIsInferred()}
+	 * and possibly tweaks the model correspondingly, via SPARUL.
+	 */
 	private void doOboIsInferred ( OntModel model )
 	{
 		if ( !this.isWithOboIsInferred () ) return;
@@ -61,6 +65,10 @@ public class OWLInfMapper extends OWLMapper
 		log.info ( "Inference annotation processed." );
 	}	
 	
+	/**
+	 * Called by {@link #map(OntModel, ONDEXGraph)}, check {@link #isWithExplicitOwlClasses()}
+	 * and possibly tweaks the model correspondingly, via SPARUL.
+	 */
 	private void doExplicitOwlClasses ( OntModel model )
 	{
 		if ( !this.isWithExplicitOwlClasses () ) return;
