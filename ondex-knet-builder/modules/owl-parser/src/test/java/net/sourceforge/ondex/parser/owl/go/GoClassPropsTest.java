@@ -4,12 +4,9 @@ import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.Closeable;
-
 import org.apache.jena.ontology.OntModel;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
