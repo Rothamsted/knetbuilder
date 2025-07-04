@@ -209,31 +209,46 @@ public class OWLMapper extends ExploringMapper<OntModel, OntClass>
 	 * {@link ExploringMapper#scanTree(OntClass, OntClass, ONDEXGraph) the parent tree scanning}. 
 	 * This avoids to be trapped in loops produced by relations like rdfs:subClassOf.
 	 * 
+	 * <b>WARNING</b>: the parent's method actually uses the 
+	 * {@link LinkerConfiguration#getScanner() scanners} from the {@link #getLinkers() configured linkers}
+	 * for this. In the OWL parser, we took the shortcut of centralising this in  
+	 * {@link #isVisited(OntModel) the container mapper} (ie, this hereby class) and to leave the
+	 * component scanners with their void implementation. That's because in our case this approach is faster
+	 * and simpler.
+	 * 
+	 * TODO: this has become a little mess, but Ondex is legacy software that we plan to abandon ASAP, so
+	 * we won't make this mechanism better, as it normally would need.
+	 * 
 	 */
 	@Override
 	protected ONDEXConcept scanTree ( OntClass rootItem, OntClass topItem, ONDEXGraph graph )
 	{
-		if ( this.isVisited ( rootItem ) ) return null;
-		this.setVisited ( rootItem );
+		if ( this.isOntClassVisited ( rootItem ) ) return null;
+		this.setOntClassVisited ( rootItem );
 
 		return super.scanTree ( rootItem, topItem, graph );
 	}
 
 	/**
-	 * The {@link Visitable} implementation for this is based on {@link OWLVisitable}. 
-	 * The visited states are reset when {@link #map(OntModel, ONDEXGraph)} is called. 
+	 * This is based based on {@link OWLVisitable}. 
+	 * The visited states are reset when {@link #map(OntModel, ONDEXGraph)} is called.
+	 * 
+	 * <b>WARNING<b> this <b>is not</b> like {@link #isVisited(OntModel)}, the default {@link Visitable}
+	 * for this hereby class, which is left with its de-facto void implementation, see 
+	 * {@link #scanTree(OntClass, OntClass, ONDEXGraph)} for details.
+	 * 
 	 */
-	public boolean isVisited ( OntClass ontCls )
+	public boolean isOntClassVisited ( OntClass ontCls )
 	{
 		return visitableHelper.isVisited ( ontCls );
 	}
 
-	public boolean setVisited ( OntClass ontCls, boolean isVisited )
+	public boolean setOntClassVisited ( OntClass ontCls, boolean isVisited )
 	{
 		return visitableHelper.setVisited ( ontCls, isVisited );
 	}
 
-	public boolean setVisited ( OntClass value )
+	public boolean setOntClassVisited ( OntClass value )
 	{
 		return visitableHelper.setVisited ( value );
 	}

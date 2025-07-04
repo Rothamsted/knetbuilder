@@ -28,7 +28,7 @@ import net.sourceforge.ondex.core.ONDEXRelation;
  *
  * <p>Further options and details are available, see the method's comments below.</p>
  * 
- * @see InvertingRelationMapper, which can be useful when you follow relations like subclassOf and you want to map
+ * @see InvertingRelationMapper which can be useful when you follow relations like subclassOf and you want to map
  * them as is-a.
  *
  * @author brandizi
@@ -121,9 +121,15 @@ public class ExploringMapper<S, SI> implements StreamMapper<S, ONDEXConcept>
 	}
 
 	/**
-	 * Starts from a root and recurse the exploration based on the {@link #getLinkers() linkers}, as explained above.
+	 * Starts from a root and recurses the exploration based on the {@link #getLinkers() linkers}, as explained above.
 	 * the topItem is used to determine if we're at the first level of recursion and this is used to realise the behaviour of
 	 * {@link LinkerConfiguration#isExcludeFirstLevel()}.
+	 * 
+	 * <b>Warning</b>: this makes uses the {@link Visitable} methods of the {@link LinkerConfiguration#getScanner() scanner components}
+	 * returned by {@link #getLinkers()} to verify if a SI item has been processed or not. However, for this to work, you must
+	 * override the default implementations such methods, since this is de-facto void.
+	 * 
+	 * In the OWL parser, we use a different approach, which is based on a container tracker of visited elements.
 	 * 
 	 */
 	@SuppressWarnings ( "unchecked" )
