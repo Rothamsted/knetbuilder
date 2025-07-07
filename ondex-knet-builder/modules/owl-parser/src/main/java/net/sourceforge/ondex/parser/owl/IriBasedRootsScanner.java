@@ -53,7 +53,7 @@ public class IriBasedRootsScanner implements Scanner<OntModel, OntClass>
 		String topClsIri = this.getTopClassIri ();
 		OntClass ontClass = Optional.ofNullable ( model.getOntClass ( topClsIri ) )
 			.orElseThrow ( () -> new NullPointerException ( 
-				"There is no OWL class for the URI '" + topClsIri + "', plese review the OWL parser configuration" ) 
+				"There is no OWL class for the URI '" + topClsIri + "', please review the OWL parser configuration" ) 
 		);		
 		return Collections.singleton ( ontClass )
 			.stream ()

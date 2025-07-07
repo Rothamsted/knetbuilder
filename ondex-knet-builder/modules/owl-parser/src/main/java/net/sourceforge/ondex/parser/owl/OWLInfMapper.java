@@ -2,6 +2,7 @@ package net.sourceforge.ondex.parser.owl;
 
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
@@ -68,23 +69,83 @@ public class OWLInfMapper extends OWLMapper
 	/**
 	 * Called by {@link #map(OntModel, ONDEXGraph)}, check {@link #isWithExplicitOwlClasses()}
 	 * and possibly tweaks the model correspondingly, via SPARUL.
+	 * 
+	 * TODO: write specific tests for the OWL constructs.
 	 */
 	private void doExplicitOwlClasses ( OntModel model )
 	{
 		if ( !this.isWithExplicitOwlClasses () ) return;
 
 		log.info ( "Adding explicit rdf:type owl:Class statements, please wait..." );
-		String sparul =
-			NamespaceUtils.asSPARQLProlog () + 
-			"""
+		
+		Stream.of (
+			Pair.of (
+				"? subClassOf ?parent -> ?parent",
+				"""
+				INSERT { ?parent a owl:Class }
+	      WHERE {
+	        ?child rdfs:subClassOf ?parent.
+	        FILTER NOT EXISTS { ?parent a owl:Class }
+	      }				
+				"""
+			),
+			
+			Pair.of (
+				"?child subClassOf ? -> ?child",
+				"""
+				INSERT { ?child a owl:Class }
+	      WHERE {
+	        ?child rdfs:subClassOf ?parent.
+	        FILTER NOT EXISTS { ?child a owl:Class }
+	      }				
+				"""
+			),
+			
+			Pair.of (
+				"(some|all)ValuesFrom targets",
+				"""
+				INSERT { ?target a owl:Class }
+        WHERE {
+          ?r a owl:Restriction;
+            # owl:onProperty ?p
+				    owl:someValuesFrom|owl:allValuesFrom ?target
+
+					FILTER ( isIRI ( ?target ) )
+					FILTER ( !STRSTARTS ( STR ( ?target ), STR ( xsd: ) ) )
+
+					FILTER NOT EXISTS { ?target a owl:Class }
+        }
+				"""
+			),
+			
+			Pair.of (
+				"intersectionOf targets",
+				"""
+				INSERT { ?target a owl:Class }
+        WHERE {
+          ?r owl:intersectionOf ?classes.
+          ?classes rdf:rest*/rdf:first ?target 
+
+					FILTER ( isIRI ( ?target ) )
+					FILTER ( !STRSTARTS ( STR ( ?target ), STR ( xsd: ) ) )
 					
-      INSERT { ?child rdf:type owl:Class }
-      WHERE {
-        ?child rdfs:subClassOf ?parent.
-        FILTER NOT EXISTS { ?x rdf:type owl:Class }
-      }					
-			""";
-		UpdateAction.parseExecute ( sparul, model );
+					FILTER NOT EXISTS { ?target a owl:Class }
+        }
+				"""
+			)
+			
+		)
+		.map ( descr -> { 
+			var title = descr.getLeft ();
+			var sparul = descr.getRight ();
+			return Pair.of ( title, NamespaceUtils.asSPARQLProlog () + "\n\n" + sparul ); 
+		})
+		.forEach ( descr -> {  
+			var title = descr.getLeft ();
+			var sparul = descr.getRight ();
+			log.info ( "Processing: {}", title );
+			UpdateAction.parseExecute ( sparul, model );
+		});		
 		log.info ( "owl:Class statements added." );
 	}
 	
