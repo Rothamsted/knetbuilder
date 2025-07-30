@@ -31,7 +31,7 @@ public class OWLInfMapper extends OWLMapper
 	private Logger log = LoggerFactory.getLogger ( this.getClass () );
 
 	private boolean withExplicitOwlClasses = true,
-		withOboIsInferred = false;
+		withOboIsInferred = true;
 	
 	@Override
 	public Stream<ONDEXConcept> map ( OntModel model, ONDEXGraph graph )
@@ -185,7 +185,7 @@ public class OWLInfMapper extends OWLMapper
 	 * 
 	 * and adds {@code ?child rdfs:subClassOf ?parent}.
 	 * 
-	 * This flag is false by default.
+	 * This flag is true by default.
 	 */
 	public boolean isWithOboIsInferred ()
 	{

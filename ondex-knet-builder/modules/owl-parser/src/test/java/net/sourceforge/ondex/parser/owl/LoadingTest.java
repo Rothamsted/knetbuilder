@@ -21,7 +21,7 @@ public class LoadingTest
 	public void testLoad () throws Exception
 	{
 		String owlDir = "/tmp";
-		ONDEXGraph g = load ( "go_cfg.xml", owlDir + "/go.owl" );
+		ONDEXGraph g = load ( "po_cfg.xml", owlDir + "/po.owl" );
 		
 		Export.exportOXL ( g, "/tmp/loading_test.oxl" );
 	}
