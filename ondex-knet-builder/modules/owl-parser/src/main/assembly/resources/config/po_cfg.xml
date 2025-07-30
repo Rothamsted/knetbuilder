@@ -14,6 +14,8 @@
 	-->
 	<bean id = "owlMapper" parent = "defaultOwlMapper">
 
+		<property name = "withOboIsInferred" value = "true" />
+
 		<!-- The top classes to start from -->
 
 		<property name = "rootsScanner">
