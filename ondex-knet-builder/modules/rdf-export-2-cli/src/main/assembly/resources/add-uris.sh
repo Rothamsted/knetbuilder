@@ -25,9 +25,9 @@ fi
 #
 ###
 
-cd `dirname "$0"`
-mydir=`pwd`
-cd "$workdir"
+cd "$(dirname "$0")"
+mydir="$(pwd)"
+cd "$mydir"
 
 # Additional .jar files or other CLASSPATH directories can be set with this.
 # (see http://kevinboone.net/classpath.html for details)  
