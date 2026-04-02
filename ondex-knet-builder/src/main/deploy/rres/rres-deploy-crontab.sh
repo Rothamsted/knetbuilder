@@ -19,4 +19,4 @@ script_url="https://raw.githubusercontent.com/Rothamsted/knetbuilder/master/onde
 # --fail-with-body not available on RRes
 # Accept: is as per https://stackoverflow.com/questions/18126559
 #
-bash <(curl -H "Accept: application/vnd.github.v3.raw" --fail -o -o "$script_url")
+bash <(curl -H "Accept: application/vnd.github.v3.raw" --fail -o - "$script_url")
