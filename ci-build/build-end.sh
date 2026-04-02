@@ -24,11 +24,14 @@ cd "$MYDIR"
 # over-complicate things, this is a rare case (eg, during tests against the CI pipeline)
 #
 
+# TODO: remove. We replaced this with crontab-based polling, see 
+# ondex-knet-builder/src/main/deploy/rres/rres-deploy-crontab.sh
+
 # Jenkins will do internal stuff, such as updating download links and deploying
 # on our servers.
 #
-echo -e "\n\n\tTriggering RRes deployment\n"
+# echo -e "\n\n\tTriggering RRes deployment\n"
   
-job='ondex_rres_deployment'
-curl --user "$KNET_JENKINS_USER:$KNET_JENKINS_TOKEN" -X POST -o - --fail \
-     "https://knetminer.rothamsted.ac.uk/build/job/$job/build"
+# job='ondex_rres_deployment'
+# curl --user "$KNET_JENKINS_USER:$KNET_JENKINS_TOKEN" -X POST -o - --fail \
+#     "https://knetminer.rothamsted.ac.uk/build/job/$job/build"
